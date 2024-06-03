@@ -8,9 +8,12 @@ import Box from '@mui/joy/Box';
 import InfoCard from '../components/InfoCard';
 import Header from '../components/Layout/Header';
 
+import notebookMetadata from '../assets/metadata/notebook-metadata.json';
+
 const Notebooks = () => {
     return (
         <CssVarsProvider disableTransitionOnChange>
+            <CssBaseline />
             <Box
                 component="main"
                 sx={{
@@ -29,10 +32,15 @@ const Notebooks = () => {
                         borderColor: 'divider',
                     }}
                 >
-                    <Header title='Notebooks' subtitle='Find your notebook here.' />
                     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                        <InfoCard title="Yosemite" subtitle="CA" tags={["NP", "NPS"]} contents="This is a short description..." />
-                        <InfoCard title="Yosemite" subtitle="CA" tags={["NP"]} contents="This is a short description..." />
+                        <Header title='Notebooks' subtitle='Find your notebook here.' />
+                        {notebookMetadata.map((notebook) => (
+                            <InfoCard
+                                title={notebook.title}
+                                subtitle={notebook.author}
+                                tags={notebook.tags}
+                                contents={notebook.contents} />
+                        ))}
                     </Stack>
                 </Stack>
             </Box>

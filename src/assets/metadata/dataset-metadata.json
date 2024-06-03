@@ -1,0 +1,20 @@
+[
+    {
+        "title": "dataset 1",
+        "author": "Author 1",
+        "tags": ["GeoAI", "Machine Learning"],
+        "contents": "abcd"
+    },
+    {
+        "title": "dataset 2",
+        "author": "Author 2",
+        "tags": ["GeoAI"],
+        "contents": "abcd"
+    },
+    {
+        "title": "dataset 3",
+        "author": "Author 3",
+        "tags": ["OSM"],
+        "contents": "abcd"
+    }
+]
