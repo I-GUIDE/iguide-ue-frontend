@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import Root from "./routes/root";
 import ErrorPage from "./error-page";
+
+import Root from "./routes/root";
+import Datasets from "./routes/datasets";
+import Notebooks from "./routes/notebooks";
 
 import {
     createBrowserRouter,
@@ -14,6 +16,16 @@ const router = createBrowserRouter([
         path: "/",
         element: <Root />,
         errorElement: <ErrorPage />,
+        children: [
+            {
+                path: "/datasets",
+                element: <Datasets />,
+            },
+            {
+                path: "/notebooks",
+                element: <Notebooks />,
+            },
+        ]
     },
 ]);
 
