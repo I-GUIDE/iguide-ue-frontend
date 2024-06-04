@@ -43,6 +43,7 @@ export default function InfoCard(props) {
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                     {props.tags.map((tag) => (
                         <Chip
+                            key={tag}
                             variant="outlined"
                             color="primary"
                             size="sm"

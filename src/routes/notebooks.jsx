@@ -69,6 +69,7 @@ const Notebooks = () => {
                             <Header title='Notebooks' subtitle='Find your notebook here.' />
                             {notebookMetadata.map((notebook) => (
                                 <InfoCard
+                                    key={notebook.id}
                                     title={notebook.title}
                                     subtitle={notebook.author}
                                     tags={notebook.tags}
