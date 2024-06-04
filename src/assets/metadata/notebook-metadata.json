@@ -1,20 +1,20 @@
 [
     {
-        "id": "1",
+        "id": "nb1",
         "title": "notebook 1",
         "author": "Author 1",
         "tags": ["GeoAI", "Machine Learning"],
         "contents": "abcd"
     },
     {
-        "id": "2",
+        "id": "nb2",
         "title": "notebook 2",
         "author": "Author 2",
         "tags": ["GeoAI"],
         "contents": "abcd"
     },
     {
-        "id": "3",
+        "id": "nb3",
         "title": "notebook 3",
         "author": "Author 3",
         "tags": ["OSM"],
