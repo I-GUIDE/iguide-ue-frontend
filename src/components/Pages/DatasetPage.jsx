@@ -5,19 +5,19 @@ import { Link } from '@mui/joy';
 
 import Header from '../Layout/Header';
 
-import Notebooks from '../../assets/metadata/notebook-metadata.json';
+import Datasets from '../../assets/metadata/dataset-metadata.json';
 
-function NotebookPage() {
+function DatasetPage() {
     const [text, setText] = useState("");
-    const [relatedDatasets, setRelatedDatasets] = useState([]);
+    const [relatedNotebooks, setRelatedNotebooks] = useState([]);
     const id = useParams().id;
 
     // Generate individual notebook page
     useEffect(() => {
-        for (var i = 0; i < Notebooks.length; i++) {
-            var obj = Notebooks[i];
+        for (var i = 0; i < Datasets.length; i++) {
+            var obj = Datasets[i];
             if (obj.id == id) {
-                setRelatedDatasets(obj['related-datasets']);
+                setRelatedNotebooks(obj['related-notebooks']);
                 setText(obj.title);
             }
         }
@@ -26,20 +26,20 @@ function NotebookPage() {
     return (
         <div className="content">
             <Header title={id} subtitle={text} />
-            <div className="project-text">Related dataset(s):</div>
-            {relatedDatasets.map((dataset) => (
+            <div className="project-text">Related notebook(s):</div>
+            {relatedNotebooks.map((notebook) => (
                 <Link
                     underline="none"
-                    href={"/datasets/" + dataset}
+                    href={"/notebooks/" + notebook}
                     sx={{ color: 'text.tertiary' }}
                 >
-                    {dataset}
+                    {notebook}
                 </Link>
             ))}
             <div className="project-text">
                 <Link
                     underline="none"
-                    href="/notebooks"
+                    href="/datasets"
                     sx={{ color: 'text.tertiary' }}
                 >
                     Go Back
@@ -49,4 +49,4 @@ function NotebookPage() {
     )
 }
 
-export default NotebookPage;
+export default DatasetPage;
