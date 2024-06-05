@@ -18,10 +18,9 @@ export default function InfoCard(props) {
                 '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
             }}
         >
-            <AspectRatio ratio="1" sx={{ width: "10%" }}>
+            <AspectRatio ratio="1" sx={{ width: "15%" }}>
                 <img
-                    src="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90"
-                    srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
+                    src={props.thumbnailImage}
                     loading="lazy"
                     alt=""
                 />
