@@ -5,6 +5,7 @@ import ErrorPage from "./error-page";
 import Root from "./routes/root";
 import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
+import NotebookPage from "./components/Pages/NotebookPage"
 
 import {
     createBrowserRouter,
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: "/notebooks",
                 element: <Notebooks />,
+            },
+            {
+                path: "/notebooks/:id",
+                element: <NotebookPage />,
             },
         ]
     },

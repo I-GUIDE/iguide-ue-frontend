@@ -4,20 +4,23 @@
         "title": "notebook 1",
         "author": "Author 1",
         "tags": ["GeoAI", "Machine Learning"],
-        "contents": "abcd"
+        "contents": "abcd",
+        "related-datasets": ["ds1"]
     },
     {
         "id": "nb2",
         "title": "notebook 2",
         "author": "Author 2",
         "tags": ["GeoAI"],
-        "contents": "abcd"
+        "contents": "abcd",
+        "related-datasets": ["ds1", "ds2"]
     },
     {
         "id": "nb3",
         "title": "notebook 3",
         "author": "Author 3",
         "tags": ["OSM"],
-        "contents": "abcd"
+        "contents": "abcd",
+        "related-datasets": ["ds2", "ds3"]
     }
 ]
