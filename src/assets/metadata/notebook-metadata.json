@@ -5,7 +5,8 @@
         "author": "Author 1",
         "tags": ["GeoAI", "Machine Learning"],
         "contents": "abcd",
-        "related-datasets": ["ds1"]
+        "related-datasets": ["ds1"],
+        "external-link": ""
     },
     {
         "id": "nb2",
@@ -13,7 +14,8 @@
         "author": "Author 2",
         "tags": ["GeoAI"],
         "contents": "abcd",
-        "related-datasets": ["ds1", "ds2"]
+        "related-datasets": ["ds1", "ds2"],
+        "external-link": ""
     },
     {
         "id": "nb3",
@@ -21,6 +23,7 @@
         "author": "Author 3",
         "tags": ["OSM"],
         "contents": "abcd",
-        "related-datasets": ["ds2", "ds3"]
+        "related-datasets": ["ds2", "ds3"],
+        "external-link": ""
     }
 ]
