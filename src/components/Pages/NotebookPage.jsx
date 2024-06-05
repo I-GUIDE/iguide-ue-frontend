@@ -15,6 +15,7 @@ import Chip from '@mui/joy/Chip';
 import Button from '@mui/joy/Button';
 
 import Notebooks from '../../assets/metadata/notebook-metadata.json';
+import './NotebookIFrame.css';
 
 function NotebookPage() {
     const [title, setTitle] = useState("")
@@ -22,6 +23,7 @@ function NotebookPage() {
     const [abstract, setAbstract] = useState("")
     const [tags, setTags] = useState([])
     const [relatedDatasets, setRelatedDatasets] = useState([]);
+    const [htmlNotebook, setHtmlNotebook] = useState("")
     const id = useParams().id;
 
     // Generate individual notebook page
@@ -33,7 +35,8 @@ function NotebookPage() {
                 setTitle(obj.title);
                 setAuthor(obj.author);
                 setAbstract(obj.contents);
-                setTags(obj.tags)
+                setTags(obj.tags);
+                setHtmlNotebook(obj['html-notebook'])
             }
         }
     });
@@ -129,7 +132,9 @@ function NotebookPage() {
                         </Stack>
                     </Grid>
                     <Grid xs={8}>
-
+                        <div className="standards-page">
+                            <iframe class="responsive-iframe" src={htmlNotebook}></iframe>
+                        </div>
                     </Grid>
                 </Grid>
             </Box>

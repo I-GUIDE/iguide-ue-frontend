@@ -1,29 +1,32 @@
 [
     {
         "id": "nb1",
-        "title": "notebook 1",
-        "author": "Author 1",
-        "tags": ["GeoAI", "Machine Learning"],
-        "contents": "abcd",
+        "title": "Choropleth Maps - Data Classification and Visualization",
+        "author": "Fangzheng Lyu",
+        "tags": ["Map", "Data visualization"],
+        "contents": "Choropleth map visually depicts quantitative data through shaded or patterned areas representing different values or categories across geographical regions or areas.",
         "related-datasets": ["ds1"],
+        "html-notebook": "/src/assets/html_notebooks/Choropleth_Maps.html",
         "external-link": ""
     },
     {
         "id": "nb2",
-        "title": "notebook 2",
-        "author": "Author 2",
-        "tags": ["GeoAI"],
-        "contents": "abcd",
+        "title": "Data Collection",
+        "author": "Fangzheng Lyu",
+        "tags": ["Data collection"],
+        "contents": "This notebook includes the data collection process for three datasets including US Census Tract Shapefile data, American Community Survey (ACS) Data, and Twitter data.",
         "related-datasets": ["ds1", "ds2"],
+        "html-notebook": "/src/assets/html_notebooks/Data_Collection.html",
         "external-link": ""
     },
     {
         "id": "nb3",
-        "title": "notebook 3",
-        "author": "Author 3",
-        "tags": ["OSM"],
-        "contents": "abcd",
+        "title": "National-level Analysis using Twitter Data",
+        "author": "Fangzheng Lyu",
+        "tags": ["National-level analysis", "Data collection"],
+        "contents": "This notebook provides a workflow for national-scale analysis of human sentiments of heat exposure using location-based social media Twitter data.",
         "related-datasets": ["ds2", "ds3"],
+        "html-notebook": "/src/assets/html_notebooks/National_Level_Analysis.html",
         "external-link": ""
     }
 ]
