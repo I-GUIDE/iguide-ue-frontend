@@ -75,7 +75,8 @@ const Notebooks = () => {
                                     title={notebook.title}
                                     subtitle={notebook.author}
                                     tags={notebook.tags}
-                                    contents={notebook.contents} />
+                                    contents={notebook.contents}
+                                    thumbnailImage={notebook['thumbnail-image']} />
                             ))}
                         </Stack>
                     </Grid>
