@@ -34,7 +34,7 @@ export default function InfoCard(props) {
                     <Link
                         overlay
                         underline="none"
-                        href="#interactive-card"
+                        href={"/" + props.cardtype + "/" + props.pageid}
                         sx={{ color: 'text.tertiary' }}
                     >
                         {props.subtitle}
