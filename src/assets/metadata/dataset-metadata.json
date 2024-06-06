@@ -1,12 +1,15 @@
 [
     {
         "id": "ds1",
-        "title": "dataset 1",
-        "author": "Author 1",
-        "tags": ["GeoAI", "Machine Learning"],
-        "contents": "abcd",
+        "title": "Data for \"Mapping dynamic human sentiments of heat exposure with location-based social media data\"",
+        "author": "Fangzheng Lyu; Lixuanwu Zhou; Jinwoo Park; Furqan Baig; Shaowen Wang",
+        "tags": ["Social media", "Sentiment analysis"],
+        "contents": "This dataset contains all the datasets used in the study conducted for the research publication titled \"Mapping dynamic human sentiments of heat exposure with location-based social media data\".",
         "related-notebooks": ["nb1"],
-        "external-link": ""
+        "external-link": "https://databank.illinois.edu/datasets/IDB-9405860",
+        "direct-download-link": "https://databank.illinois.edu/datafiles/o7o1v/download",
+        "size": "2.25 MB",
+        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
     },
     {
         "id": "ds2",
@@ -15,7 +18,10 @@
         "tags": ["GeoAI"],
         "contents": "abcd",
         "related-notebooks": ["nb2", "nb3"],
-        "external-link": ""
+        "external-link": "",
+        "direct-download-link": "",
+        "size": "",
+        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
     },
     {
         "id": "ds3",
@@ -24,6 +30,9 @@
         "tags": ["OSM"],
         "contents": "abcd",
         "related-notebooks": ["nb3"],
-        "external-link": ""
+        "external-link": "",
+        "direct-download-link": "",
+        "size": "",
+        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
     }
 ]
