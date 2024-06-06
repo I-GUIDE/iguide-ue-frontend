@@ -83,27 +83,25 @@ function DatasetPage() {
                                 <Typography>
                                     {abstract}
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                                    <Typography
-                                        id="notebook-tags"
-                                        level="h5"
-                                        fontWeight="lg"
-                                        mb={1}
+                                <Typography
+                                    id="notebook-tags"
+                                    level="h5"
+                                    fontWeight="lg"
+                                    mb={1}
+                                >
+                                    Tags:
+                                </Typography>
+                                {tags.map((tag) => (
+                                    <Chip
+                                        key={tag}
+                                        variant="outlined"
+                                        color="primary"
+                                        size="sm"
+                                        sx={{ pointerEvents: 'none' }}
                                     >
-                                        Tags:
-                                    </Typography>
-                                    {tags.map((tag) => (
-                                        <Chip
-                                            key={tag}
-                                            variant="outlined"
-                                            color="primary"
-                                            size="sm"
-                                            sx={{ pointerEvents: 'none' }}
-                                        >
-                                            {tag}
-                                        </Chip>
-                                    ))}
-                                </Box>
+                                        {tag}
+                                    </Chip>
+                                ))}
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                                     <Button size="sm">
                                         <Link
