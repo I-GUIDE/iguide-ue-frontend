@@ -51,7 +51,7 @@ function NotebookPage() {
                     sx={{
                         height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
                         display: 'grid',
-                        gridTemplateColumns: { xs: 'auto', md: '100%'},
+                        gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
@@ -76,27 +76,25 @@ function NotebookPage() {
                                 <Typography>
                                     {abstract}
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                                    <Typography
-                                        id="notebook-tags"
-                                        level="h5"
-                                        fontWeight="lg"
-                                        mb={1}
+                                <Typography
+                                    id="notebook-tags"
+                                    level="h5"
+                                    fontWeight="lg"
+                                    mb={1}
+                                >
+                                    Tags:
+                                </Typography>
+                                {tags.map((tag) => (
+                                    <Chip
+                                        key={tag}
+                                        variant="outlined"
+                                        color="primary"
+                                        size="sm"
+                                        sx={{ pointerEvents: 'none' }}
                                     >
-                                        Tags:
-                                    </Typography>
-                                    {tags.map((tag) => (
-                                        <Chip
-                                            key={tag}
-                                            variant="outlined"
-                                            color="primary"
-                                            size="sm"
-                                            sx={{ pointerEvents: 'none' }}
-                                        >
-                                            {tag}
-                                        </Chip>
-                                    ))}
-                                </Box>
+                                        {tag}
+                                    </Chip>
+                                ))}
                                 <Typography
                                     id="notebook-ds"
                                     level="h5"
