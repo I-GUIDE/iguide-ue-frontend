@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { CopyBlock, dracula } from "react-code-blocks";
 
 import { Link } from '@mui/joy';
 import Stack from '@mui/joy/Stack';
@@ -19,14 +20,18 @@ import Datasets from '../../assets/metadata/dataset-metadata.json';
 import './NotebookIFrame.css';
 
 function DatasetPage() {
-    const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
-    const [abstract, setAbstract] = useState("")
-    const [tags, setTags] = useState([])
+    const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState('');
+    const [abstract, setAbstract] = useState('');
+    const [tags, setTags] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+    const [externalLink, setExternalLink] = useState('');
+    const [directDownloadLink, setDirectDownloadLink] = useState('');
+    const [size, setSize] = useState('');
     const id = useParams().id;
+    const [downloadInstruction, setDownloadInstruction] = useState('');
 
-    // Generate individual notebook page
+    // Set the params needed to generate individual notebook page
     useEffect(() => {
         for (var i = 0; i < Datasets.length; i++) {
             var obj = Datasets[i];
@@ -36,6 +41,10 @@ function DatasetPage() {
                 setAuthor(obj.author);
                 setAbstract(obj.contents);
                 setTags(obj.tags);
+                setExternalLink(obj['external-link']);
+                setDirectDownloadLink(obj['direct-download-link']);
+                setSize(obj.size);
+                setDownloadInstruction('! wget ' + directDownloadLink);
             }
         }
     });
@@ -49,7 +58,7 @@ function DatasetPage() {
                     sx={{
                         height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
                         display: 'grid',
-                        gridTemplateColumns: { xs: 'auto', md: '100%'},
+                        gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
@@ -65,7 +74,7 @@ function DatasetPage() {
                             borderColor: 'divider',
                         }}
                     >
-                        <Grid xs={4}>
+                        <Grid xs={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <Typography level="h1">{title}</Typography>
                                 <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
@@ -94,6 +103,50 @@ function DatasetPage() {
                                             {tag}
                                         </Chip>
                                     ))}
+                                </Box>
+                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                    <Button size="sm">
+                                        <Link
+                                            underline="none"
+                                            href={externalLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            sx={{ color: 'inherit' }}
+                                        >
+                                            Access Data Details
+                                        </Link>
+                                    </Button>
+                                </Box>
+                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                    <Button size="sm">
+                                        <Link
+                                            underline="none"
+                                            href={directDownloadLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            sx={{ color: 'inherit' }}
+                                        >
+                                            Download Data ({size})
+                                        </Link>
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Typography
+                                        id="download-jupyterhub"
+                                        level="h6"
+                                        fontWeight="lg"
+                                        mb={1}
+                                    >
+                                        To download the data on I-GUIDE Platform JupyterHub:
+                                    </Typography>
+                                    <CopyBlock
+                                        language={'shell'}
+                                        text={downloadInstruction}
+                                        showLineNumbers={false}
+                                        theme={dracula}
+                                        wrapLines={true}
+                                        codeBlock
+                                    />
                                 </Box>
                                 <Typography
                                     id="notebook-ds"
@@ -130,8 +183,6 @@ function DatasetPage() {
                                     </Button>
                                 </Box>
                             </Stack>
-                        </Grid>
-                        <Grid xs={8}>
                         </Grid>
                     </Grid>
                 </Box>

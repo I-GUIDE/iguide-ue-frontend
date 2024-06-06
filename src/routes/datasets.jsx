@@ -76,7 +76,8 @@ const Datasets = () => {
                                         title={dataset.title}
                                         subtitle={dataset.author}
                                         tags={dataset.tags}
-                                        contents={dataset.contents} />
+                                        contents={dataset.contents}
+                                        thumbnailImage={dataset['thumbnail-image']} />
                                 ))}
                             </Stack>
                         </Grid>
