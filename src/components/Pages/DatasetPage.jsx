@@ -17,7 +17,7 @@ import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 
 import Datasets from '../../assets/metadata/dataset-metadata.json';
-import Notebooks from '../../assets/metadata/notebook-metadata.json'
+import Notebooks from '../../assets/metadata/notebook-metadata.json';
 import { extractValueFromJSON } from '../../helpers/helper';
 import './NotebookIFrame.css';
 
