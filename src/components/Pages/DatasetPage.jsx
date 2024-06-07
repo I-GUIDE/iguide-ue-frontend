@@ -16,14 +16,17 @@ import Chip from '@mui/joy/Chip';
 import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 
+import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
 import Datasets from '../../assets/metadata/dataset-metadata.json';
 import Notebooks from '../../assets/metadata/notebook-metadata.json';
-import { extractValueFromJSON } from '../../helpers/helper';
+import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
 import './NotebookIFrame.css';
 
 function DatasetPage() {
     const [title, setTitle] = useState('');
-    const [author, setAuthor] = useState('');
+    const [authors, setAuthors] = useState([]);
     const [abstract, setAbstract] = useState('');
     const [tags, setTags] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
@@ -40,7 +43,7 @@ function DatasetPage() {
             if (obj.id == id) {
                 setRelatedNotebooks(obj['related-notebooks']);
                 setTitle(obj.title);
-                setAuthor(obj.author);
+                setAuthors(obj.authors);
                 setAbstract(obj.contents);
                 setTags(obj.tags);
                 setExternalLink(obj['external-link']);
@@ -80,7 +83,7 @@ function DatasetPage() {
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <Typography level="h1">{title}</Typography>
                                 <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
-                                    Created by {author}
+                                    Created by {printListWithDelimiter(authors, ',')}
                                 </Typography>
                                 <Typography>
                                     {abstract}
@@ -113,7 +116,8 @@ function DatasetPage() {
                                             rel="noopener noreferrer"
                                             sx={{ color: 'inherit' }}
                                         >
-                                            Access Data Details
+                                            Access Data Details&nbsp;
+                                            <ExitToAppIcon/>
                                         </Link>
                                     </Button>
                                 </Box>
@@ -126,7 +130,8 @@ function DatasetPage() {
                                             rel="noopener noreferrer"
                                             sx={{ color: 'inherit' }}
                                         >
-                                            Download Data ({size})
+                                            Download Data ({size})&nbsp;
+                                            <CloudDownloadOutlinedIcon/>
                                         </Link>
                                     </Button>
                                 </Box>

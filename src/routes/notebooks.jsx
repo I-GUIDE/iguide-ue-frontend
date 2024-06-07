@@ -27,9 +27,11 @@ const unique_tag_list = []
 const unique_author_list = []
 {
     notebookMetadata.map(metadata => {
-        if (!unique_author_list.includes(metadata.author)) {
-            unique_author_list.push(metadata.author)
-        }
+        metadata.authors.map(author => {
+            if (!unique_author_list.includes(author)) {
+                unique_author_list.push(author)
+            }
+        })
     })
 }
 
@@ -76,7 +78,7 @@ const Notebooks = () => {
                                         cardtype="notebooks"
                                         pageid={notebook.id}
                                         title={notebook.title}
-                                        subtitle={notebook.author}
+                                        subtitle={notebook.authors}
                                         tags={notebook.tags}
                                         contents={notebook.contents}
                                         thumbnailImage={notebook['thumbnail-image']} />

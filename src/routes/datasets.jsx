@@ -27,9 +27,11 @@ const unique_tag_list = []
 const unique_author_list = []
 {
     datasetMetadata.map(metadata => {
-        if (!unique_author_list.includes(metadata.author)) {
-            unique_author_list.push(metadata.author)
-        }
+        metadata.authors.map(author => {
+            if (!unique_author_list.includes(author)) {
+                unique_author_list.push(author)
+            }
+        })
     })
 }
 
@@ -74,7 +76,7 @@ const Datasets = () => {
                                         cardtype="datasets"
                                         pageid={dataset.id}
                                         title={dataset.title}
-                                        subtitle={dataset.author}
+                                        subtitle={dataset.authors}
                                         tags={dataset.tags}
                                         contents={dataset.contents}
                                         thumbnailImage={dataset['thumbnail-image']} />

@@ -2,49 +2,49 @@
     {
         "id": "ds1",
         "title": "Twitter data",
-        "author": "GISer",
+        "authors": ["Fangzheng Lyu", "Furqan Baig"],
         "tags": ["Twitter", "Big data", "Raw data"],
         "contents": "This dataset contains all the datasets used in the study conducted for the research publication titled \"Mapping dynamic human sentiments of heat exposure with location-based social media data\".",
         "related-notebooks": ["nb2", "nb3", "nb4"],
         "external-link": "https://figshare.com/articles/dataset/Data_Sample_for_Mapping_Dynamic_Human_Sentiments_of_Heat_Exposure_with_Location-Based_Social_Media_Data_/21780065",
         "direct-download-link": "https://figshare.com/ndownloader/files/38650880",
         "size": "2.26 GB",
-        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
+        "thumbnail-image": "/src/assets/images/dataset_images/5411373.png"
     },
     {
         "id": "ds2",
         "title": "Heat Dictionary",
-        "author": "Author 2",
+        "authors": ["Fangzheng Lyu"],
         "tags": ["Heat dictionary", "Twitter"],
         "contents": "",
         "related-notebooks": ["nb2", "nb3", "nb4"],
         "external-link": "",
         "direct-download-link": "",
         "size": "",
-        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
+        "thumbnail-image": "/src/assets/images/dataset_images/5411373.png"
     },
     {
         "id": "ds3",
         "title": "County Level US Boundary Shapefile",
-        "author": "Author 3",
+        "authors": ["US Census Bureau"],
         "tags": ["US", "Boundary", "Shapefile"],
         "contents": "",
         "related-notebooks": ["nb2"],
         "external-link": "",
         "direct-download-link": "",
         "size": "",
-        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
+        "thumbnail-image": "/src/assets/images/dataset_images/5411373.png"
     },
     {
         "id": "ds4",
         "title": "Census tract level Chicago Boundary Shapefile",
-        "author": "Author 4",
+        "authors": ["US Census Bureau"],
         "tags": ["Chicago", "Boundary", "Shapefile"],
         "contents": "",
         "related-notebooks": ["nb3", "nb4"],
         "external-link": "",
         "direct-download-link": "",
         "size": "",
-        "thumbnail-image": "/src/assets/images/notebook_images/choropleth-map.png"
+        "thumbnail-image": "/src/assets/images/dataset_images/5411373.png"
     }
 ]
