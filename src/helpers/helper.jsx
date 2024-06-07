@@ -11,3 +11,11 @@ export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
     const index = jsonData.findIndex(entry => entry[fieldIn] == valueIn);
     return jsonData[index][fieldOut];
 }
+
+export function printListWithDelimiter(yourList, yourDelimiter) {
+    let returnStr = '';
+    for (var idx in yourList) {
+        returnStr += (yourList[idx] + yourDelimiter + ' ')
+    }
+    return returnStr.slice(0, - 2);
+}

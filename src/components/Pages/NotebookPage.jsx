@@ -17,12 +17,12 @@ import Container from '@mui/joy/Container';
 
 import Datasets from '../../assets/metadata/dataset-metadata.json';
 import Notebooks from '../../assets/metadata/notebook-metadata.json';
-import { extractValueFromJSON } from '../../helpers/helper';
+import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
 import './NotebookIFrame.css';
 
 function NotebookPage() {
     const [title, setTitle] = useState("")
-    const [author, setAuthor] = useState("")
+    const [authors, setAuthors] = useState([])
     const [abstract, setAbstract] = useState("")
     const [tags, setTags] = useState([])
     const [relatedDatasets, setRelatedDatasets] = useState([]);
@@ -36,7 +36,7 @@ function NotebookPage() {
             if (obj.id == id) {
                 setRelatedDatasets(obj['related-datasets']);
                 setTitle(obj.title);
-                setAuthor(obj.author);
+                setAuthors(obj.authors);
                 setAbstract(obj.contents);
                 setTags(obj.tags);
                 setHtmlNotebook(obj['html-notebook'])
@@ -73,7 +73,7 @@ function NotebookPage() {
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <Typography level="h1">{title}</Typography>
                                 <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
-                                    Created by {author}
+                                    Created by {printListWithDelimiter(authors, ',')}
                                 </Typography>
                                 <Typography>
                                     {abstract}

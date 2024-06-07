@@ -8,6 +8,8 @@ import Chip from '@mui/joy/Chip';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 
+import { printListWithDelimiter } from '../helpers/helper';
+
 export default function InfoCard(props) {
     return (
         <Card
@@ -36,7 +38,7 @@ export default function InfoCard(props) {
                         href={"/" + props.cardtype + "/" + props.pageid}
                         sx={{ color: 'text.tertiary' }}
                     >
-                        {props.subtitle}
+                        {printListWithDelimiter(props.subtitle, ',')}
                     </Link>
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
