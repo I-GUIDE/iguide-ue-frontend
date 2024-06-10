@@ -61,13 +61,7 @@ const Datasets = () => {
                             borderColor: 'divider',
                         }}
                     >
-                        <Grid xs={3}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <Filter filterList={unique_tag_list} filterType="tags" />
-                                <Filter filterList={unique_author_list} filterType="authors" />
-                            </Stack>
-                        </Grid>
-                        <Grid xs={9}>
+                        <Grid xs={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <Header title='Datasets' subtitle='Find your dataset here.' />
                                 {datasetMetadata.map((dataset) => (
