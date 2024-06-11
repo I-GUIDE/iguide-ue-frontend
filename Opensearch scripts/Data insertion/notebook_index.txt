@@ -1,0 +1,19 @@
+PUT /notebooks
+{
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "keyword" },
+      "title": { "type": "text" },
+      "authors": { "type": "text" },
+      "tags": { "type": "text" },
+      "contents": { "type": "text" },
+      "related-datasets": { "type": "text" },
+      "html-notebook": { "type": "text" },
+      "external-link": { "type": "text" },
+      "thumbnail-image": { "type": "text" }
+    }
+  }
+}
