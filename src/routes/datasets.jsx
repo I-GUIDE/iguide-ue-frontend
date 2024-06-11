@@ -9,9 +9,10 @@ import Container from '@mui/joy/Container';
 
 import InfoCard from '../components/InfoCard';
 import Header from '../components/Layout/Header';
-import Filter from '../components/Filter';
 
-import datasetMetadata from '../assets/metadata/dataset-metadata.json';
+import { DataRetriever } from '../utils/DataRetriever';
+
+const datasetMetadata = DataRetriever('datasets');
 
 const unique_tag_list = []
 {
@@ -78,32 +79,8 @@ const Datasets = () => {
                             </Stack>
                         </Grid>
                     </Grid>
-
-                    {/* Leave the code for future responsive design */}
-                    {/* <Stack
-                    sx={{
-                        backgroundColor: 'background.surface',
-                        px: { xs: 2, md: 4 },
-                        py: 2,
-                        borderBottom: '1px solid',
-                        borderColor: 'divider',
-                    }}
-                >
-                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                        <Header title='Notebooks' subtitle='Find your dataset here.' />
-                        {datasetMetadata.map((dataset) => (
-                            <InfoCard
-                                title={dataset.title}
-                                subtitle={dataset.author}
-                                tags={dataset.tags}
-                                contents={dataset.contents} />
-                        ))}
-                    </Stack>
-                </Stack> */}
-
                 </Box>
             </Container>
-
         </CssVarsProvider>
     )
 }

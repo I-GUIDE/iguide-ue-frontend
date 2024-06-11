@@ -19,9 +19,8 @@ import Container from '@mui/joy/Container';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-import Datasets from '../../assets/metadata/dataset-metadata.json';
-import Notebooks from '../../assets/metadata/notebook-metadata.json';
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
+import { DataRetriever } from '../../utils/DataRetriever';
 import './NotebookIFrame.css';
 
 function DatasetPage() {
@@ -35,6 +34,8 @@ function DatasetPage() {
     const [size, setSize] = useState('');
     const id = useParams().id;
     const [downloadInstruction, setDownloadInstruction] = useState('');
+    const Datasets = DataRetriever('datasets');
+    const Notebooks = DataRetriever('notebooks');
 
     // Set the params needed to generate individual notebook page
     useEffect(() => {
