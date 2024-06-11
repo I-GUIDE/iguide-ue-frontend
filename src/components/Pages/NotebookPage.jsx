@@ -15,9 +15,8 @@ import Chip from '@mui/joy/Chip';
 import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 
-import Datasets from '../../assets/metadata/dataset-metadata.json';
-import Notebooks from '../../assets/metadata/notebook-metadata.json';
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
+import { DataRetriever } from '../../utils/DataRetriever';
 import './NotebookIFrame.css';
 
 function NotebookPage() {
@@ -28,6 +27,8 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [htmlNotebook, setHtmlNotebook] = useState("")
     const id = useParams().id;
+    const Datasets = DataRetriever('datasets');
+    const Notebooks = DataRetriever('notebooks');
 
     // Generate individual notebook page
     useEffect(() => {
