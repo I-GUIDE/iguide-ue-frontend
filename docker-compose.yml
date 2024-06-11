@@ -1,0 +1,9 @@
+services:
+  app:
+    image: data-with-notebooks:v0.1
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - default
