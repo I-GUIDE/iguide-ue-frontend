@@ -12,7 +12,7 @@ import Header from '../components/Layout/Header';
 
 import { DataRetriever } from '../utils/DataRetriever';
 
-const notebookMetadata = DataRetriever('notebooks');
+const notebookMetadata = await DataRetriever('notebooks');
 
 const unique_tag_list = []
 {
