@@ -1,5 +1,3 @@
-version: '0.1'
-
 services:
   app:
     image: data-with-notebooks:v0.1
