@@ -67,6 +67,30 @@ app.get('/api/resources', async (req, res) => {
   }
 });
 
+app.post('/search', async (req, res) => {
+  const { keyword } = req.body;
+
+  try {
+    const searchResponse = await client.search({
+      index: 'resources', // Replace with your index name
+      body: {
+        query: {
+          multi_match: {
+            query: keyword,
+            fields: ['title', 'contents', 'tags'], // Adjust fields as needed
+          },
+        },
+      },
+    });
+
+    const results = searchResponse.body.hits.hits.map(hit => hit._source);
+    res.json(results);
+  } catch (error) {
+    console.error('Error querying OpenSearch:', error);
+    res.status(500).json({ error: 'Error querying OpenSearch' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
