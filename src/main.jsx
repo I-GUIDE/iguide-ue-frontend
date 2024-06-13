@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client'
 import ErrorPage from "./error-page";
 
 import Root from "./routes/root";
+import Home from "./routes/home";
 import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
 import NotebookPage from "./components/Pages/NotebookPage";
-import DatasetPage from "./components/Pages/DatasetPage"
+import DatasetPage from "./components/Pages/DatasetPage";
 
 import {
     createBrowserRouter,
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
+            {
+                path: "/home",
+                element: <Home />,
+            },
             {
                 path: "/datasets",
                 element: <Datasets />,
