@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { StyledEngineProvider } from '@mui/material/styles';
 
+import { CssVarsProvider } from '@mui/joy/styles';
+import CssBaseline from '@mui/joy/CssBaseline';
+
 import FormControl from '@mui/joy/FormControl';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
@@ -9,7 +12,7 @@ import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
-const Home = () =>  {
+const Home = () => {
     // define search data
     const [data, setData] = useState({
         content: '',
@@ -76,7 +79,8 @@ const Home = () =>  {
     };
 
     return (
-        <StyledEngineProvider injectFirst>
+        <CssVarsProvider disableTransitionOnChange>
+            <CssBaseline />
             <Container maxWidth="xl">
                 <Box
                     component="main"
@@ -147,7 +151,7 @@ const Home = () =>  {
                     </Grid>
                 </Box>
             </Container>
-        </StyledEngineProvider>
+        </CssVarsProvider>
     )
 }
 
