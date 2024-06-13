@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyBlock, dracula } from "react-code-blocks";
+
 import { Link } from '@mui/joy';
 import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
@@ -16,6 +17,7 @@ import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
 import { DataRetriever } from '../../utils/DataRetriever';
 import './NotebookIFrame.css';
@@ -35,8 +37,8 @@ function DatasetPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const Datasets = await DataRetriever('datasets');
-            const Notebooks = await DataRetriever('notebooks');
+            const Datasets = await DataRetriever('dataset');
+            const Notebooks = await DataRetriever('notebook');
             setNotebooks(Notebooks);
 
             for (const obj of Datasets) {
