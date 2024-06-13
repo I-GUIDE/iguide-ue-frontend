@@ -7,6 +7,8 @@
         "contents": "This notebook includes the data collection process for three datasets including US Census Tract Shapefile data, American Community Survey (ACS) Data, and Twitter data.",
         "related-datasets": [],
         "html-notebook": "/html_notebooks/Data_Collection.html",
+        "notebook-repo": "https://github.com/I-GUIDE/data-with-notebooks-inventory",
+        "notebook-file": "Data Collection.ipynb",
         "external-link": "",
         "thumbnail-image": "/images/notebook_images/data-collection.png"
     },
@@ -18,6 +20,8 @@
         "contents": "This notebook provides a workflow for national-scale analysis of human sentiments of heat exposure using location-based social media Twitter data.",
         "related-datasets": ["ds1", "ds2", "ds3"],
         "html-notebook": "/html_notebooks/National_Level_Analysis.html",
+        "notebook-repo": "https://github.com/I-GUIDE/data-with-notebooks-inventory",
+        "notebook-file": "National-level Analysis.ipynb",
         "external-link": "",
         "thumbnail-image": "/images/notebook_images/national-level.png"
     },
@@ -29,6 +33,8 @@
         "contents": "Evaluating Twitter-based heat exposure dynamics can be analyzed at a finer temporal resolution. This notebook looks into how the heat exposure changes on September 26, 2021 at fine temporal granularity.",
         "related-datasets": ["ds1", "ds2", "ds4"],
         "html-notebook": "/html_notebooks/Hourly_Analysis.html",
+        "notebook-repo": "https://github.com/I-GUIDE/data-with-notebooks-inventory",
+        "notebook-file": "Hourly Analysis.ipynb",
         "external-link": "",
         "thumbnail-image": "/images/notebook_images/hourly-analysis.png"
     },
@@ -40,6 +46,8 @@
         "contents": "Choropleth map visually depicts quantitative data through shaded or patterned areas representing different values or categories across geographical regions or areas.",
         "related-datasets": ["ds1", "ds2", "ds4"],
         "html-notebook": "/html_notebooks/Choropleth_Maps.html",
+        "notebook-repo": "https://github.com/I-GUIDE/data-with-notebooks-inventory",
+        "notebook-file": "Choropleth Maps.ipynb",
         "external-link": "",
         "thumbnail-image": "/images/notebook_images/choropleth-map.png"
     }
