@@ -12,7 +12,7 @@ import Header from '../components/Layout/Header';
 
 import { DataRetriever } from '../utils/DataRetriever';
 
-const datasetMetadata = await DataRetriever('datasets');
+const datasetMetadata = await DataRetriever('dataset');
 
 const unique_tag_list = []
 {

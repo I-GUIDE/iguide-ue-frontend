@@ -12,11 +12,11 @@ import Header from '../components/Layout/Header';
 
 import { DataRetriever } from '../utils/DataRetriever';
 
-const notebookMetadata = await DataRetriever('notebook');
+const publicationMetadata = await DataRetriever('publication');
 
 const unique_tag_list = []
 {
-    notebookMetadata.map(metadata => {
+    publicationMetadata.map(metadata => {
         metadata.tags.map(tag => {
             if (!unique_tag_list.includes(tag)) {
                 unique_tag_list.push(tag)
@@ -27,7 +27,7 @@ const unique_tag_list = []
 
 const unique_author_list = []
 {
-    notebookMetadata.map(metadata => {
+    publicationMetadata.map(metadata => {
         metadata.authors.map(author => {
             if (!unique_author_list.includes(author)) {
                 unique_author_list.push(author)
@@ -36,14 +36,12 @@ const unique_author_list = []
     })
 }
 
-
-const Notebooks = () => {
+const Datasets = () => {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
             <Container maxWidth="xl">
                 <Box
-                    maxWidth="xl"
                     component="main"
                     sx={{
                         height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
@@ -66,17 +64,17 @@ const Notebooks = () => {
                     >
                         <Grid xs={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <Header title='Notebooks' subtitle='Find your notebook here.' />
-                                {notebookMetadata.map((notebook) => (
+                                <Header title='Publications' subtitle='Find your publication here.' />
+                                {publicationMetadata.map((publication) => (
                                     <InfoCard
-                                        key={notebook.id}
-                                        cardtype={notebook['resource-type']+'s'}
-                                        pageid={notebook.id}
-                                        title={notebook.title}
-                                        subtitle={notebook.authors}
-                                        tags={notebook.tags}
-                                        contents={notebook.contents}
-                                        thumbnailImage={notebook['thumbnail-image']} />
+                                        key={publication.id}
+                                        cardtype={publication['resource-type']+'s'}
+                                        pageid={publication.id}
+                                        title={publication.title}
+                                        subtitle={publication.authors}
+                                        tags={publication.tags}
+                                        contents={publication.contents}
+                                        thumbnailImage={publication['thumbnail-image']} />
                                 ))}
                             </Stack>
                         </Grid>
@@ -87,4 +85,4 @@ const Notebooks = () => {
     )
 }
 
-export default Notebooks;
+export default Datasets;

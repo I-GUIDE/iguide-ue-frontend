@@ -19,31 +19,31 @@ import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/help
 import { DataRetriever } from '../../utils/DataRetriever';
 import './NotebookIFrame.css';
 
-function NotebookPage() {
-    const [title, setTitle] = useState("")
-    const [authors, setAuthors] = useState([])
-    const [abstract, setAbstract] = useState("")
-    const [tags, setTags] = useState([])
-    const [relatedDatasets, setRelatedDatasets] = useState([]);
-    const [htmlNotebook, setHtmlNotebook] = useState("")
+function PublicationPage() {
+    const [title, setTitle] = useState('');
+    const [authors, setAuthors] = useState([]);
+    const [abstract, setAbstract] = useState('');
+    const [tags, setTags] = useState([]);
+    const [relatedNotebooks, setRelatedNotebooks] = useState([]);
     const id = useParams().id;
-    const [datasets, setDatasets] = useState([]);
+    const [notebooks, setNotebooks] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const Datasets = await DataRetriever('dataset');
             const Notebooks = await DataRetriever('notebook');
-            setDatasets(Datasets);
+            const Publications = await DataRetriever('publication');
+            setNotebooks(Notebooks);
 
-            for (var i = 0; i < Notebooks.length; i++) {
-                var obj = Notebooks[i];
-                if (obj.id == id) {
-                    setRelatedDatasets(obj['related-datasets']);
+            for (const obj of Publications) {
+                if (obj.id === id) {
+                    setRelatedNotebooks(obj['related-notebooks']);
                     setTitle(obj.title);
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
-                    setHtmlNotebook(obj['html-notebook'])
+                    setExternalLink(obj['external-link']);
+                    break;
                 }
             }
         };
@@ -75,7 +75,7 @@ function NotebookPage() {
                             borderColor: 'divider',
                         }}
                     >
-                        <Grid xs={4}>
+                        <Grid xs={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <Typography level="h1">{title}</Typography>
                                 <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
@@ -109,18 +109,19 @@ function NotebookPage() {
                                     fontWeight="lg"
                                     mb={1}
                                 >
-                                    Related datasets:
+                                    Related notebooks:
                                 </Typography>
                                 <List aria-labelledby="decorated-list-demo">
-                                    {relatedDatasets.map((dataset) => (
+                                    {relatedNotebooks.map((notebook) => (
                                         <Link
+                                            key={notebook}
                                             underline="none"
-                                            href={"/datasets/" + dataset}
+                                            href={`/notebooks/${notebook}`}
                                             sx={{ color: 'text.tertiary' }}
                                         >
                                             <ListItem>
                                                 <ListItemButton>
-                                                    {extractValueFromJSON('id', dataset, 'title', datasets)}
+                                                    {extractValueFromJSON('id', notebook, 'title', notebooks)}
                                                 </ListItemButton>
                                             </ListItem>
                                         </Link>
@@ -130,7 +131,7 @@ function NotebookPage() {
                                     <Button size="sm">
                                         <Link
                                             underline="none"
-                                            href="/notebooks"
+                                            href="/publications"
                                             sx={{ color: 'inherit' }}
                                         >
                                             Go Back
@@ -139,16 +140,12 @@ function NotebookPage() {
                                 </Box>
                             </Stack>
                         </Grid>
-                        <Grid xs={8}>
-                            <div className="standards-page">
-                                <iframe class="responsive-iframe" src={htmlNotebook}></iframe>
-                            </div>
-                        </Grid>
                     </Grid>
                 </Box>
             </Container>
         </CssVarsProvider>
-    )
+    );
 }
 
-export default NotebookPage;
+export default PublicationPage;
+
