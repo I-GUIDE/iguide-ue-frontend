@@ -11,6 +11,9 @@ import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
+import Stack from '@mui/joy/Stack';
+
+import InfoCard from '../components/InfoCard';
 
 const Home = () => {
     // define search data
@@ -18,6 +21,8 @@ const Home = () => {
         content: '',
         status: 'initial',
     });
+
+    const [searchResults, setSearchResults] = useState([]);
 
     // Function that handles searching keyword, return the results
     async function search(keyword) {
@@ -38,36 +43,17 @@ const Home = () => {
         const results = await response.json();
         console.log('Search results:', results);
 
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '';
-
-        if (!Array.isArray(results)) {
-            console.error('Results is not an array:', results);
-            resultsDiv.innerHTML = '<p>Error retrieving results</p>';
-            return;
-        }
-
-        if (results.length === 0) {
-            resultsDiv.innerHTML = '<p>No results found</p>';
-        } else {
-            results.forEach(result => {
-                const resultDiv = document.createElement('div');
-                resultDiv.className = 'result';
-                resultDiv.innerHTML = `
-              <h2>${result.title}</h2>
-              <p>${result.contents}</p>
-              <p><strong>Tags:</strong> ${result.tags.join(', ')}</p>
-            `;
-                resultsDiv.appendChild(resultDiv);
-            });
-        }
+        return results;
     }
 
     // Function that handles submit event... need more implementation
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         setData((current) => ({ ...current, status: 'loading' }));
-        search(data['content'])
+        const temp = await search(data['content']);
+        console.log("search results set before: ", temp)
+        setSearchResults(temp);
+        console.log("search results set: ", searchResults)
         try {
             // Replace timeout with real backend operation
             setTimeout(() => {
@@ -146,7 +132,36 @@ const Home = () => {
                                 </FormControl>
                             </form>
 
-                            <div id="results"></div>
+                            {/* <div id="results">{searchResults}</div> */}
+                            <div>{console.log(searchResults)}</div>
+                            <Grid
+                                container
+                                rowSpacing={2}
+                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                                sx={{
+                                    backgroundColor: 'inherit',
+                                    px: { xs: 2, md: 4 },
+                                    py: 2,
+                                    borderBottom: '1px solid',
+                                    borderColor: 'divider',
+                                }}
+                            >
+                                <Grid xs={12}>
+                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                        {searchResults.map((result) => (
+                                            <InfoCard
+                                                key={result.id}
+                                                cardtype={result['resource-type']+'s'}
+                                                pageid={result.id}
+                                                title={result.title}
+                                                subtitle={result.authors}
+                                                tags={result.tags}
+                                                contents={result.contents}
+                                                thumbnailImage={result['thumbnail-image']} />
+                                        ))}
+                                    </Stack>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Box>
