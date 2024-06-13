@@ -25,48 +25,26 @@ const client = new Client({
 });
 
 app.get('/api/resources', async (req, res) => {
-  const dataName = req.query.data_name;
+  const type = req.query.data_name;
 
   try {
-    if (dataName === 'notebooks') {
-      const notebookResponse = await client.search({
+    const resourceResponse = await client.search({
         index: 'resources',
         body: {
           query: {
-            prefix: {
-              id: 'n',
+            term: {
+              'resource-type': type,
             },
           },
         },
       });
 
-      if (notebookResponse.body.hits.total.value === 0) {
-        res.status(404).json({ message: 'No notebook found' });
+      if (resourceResponse.body.hits.total.value === 0) {
+        res.status(404).json({ message: 'No resource found' });
         return;
       }
-      const notebooks = notebookResponse.body.hits.hits.map(hit => hit._source);
-      res.json(notebooks);
-    } else if (dataName === 'datasets') {
-      const datasetResponse = await client.search({
-        index: 'resources',
-        body: {
-          query: {
-            prefix: {
-              id: 'ds',
-            },
-          },
-        },
-      });
-
-      if (datasetResponse.body.hits.total.value === 0) {
-        res.status(404).json({ message: 'No dataset found' });
-        return;
-      }
-      const datasets = datasetResponse.body.hits.hits.map(hit => hit._source);
-      res.json(datasets);
-    } else {
-      res.status(400).json({ message: 'Wrong data_name!' });
-    }
+      const resources = resourceResponse.body.hits.hits.map(hit => hit._source);
+      res.json(resources);
   } catch (error) {
     console.error('Error querying OpenSearch:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -125,7 +103,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
