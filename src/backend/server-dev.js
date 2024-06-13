@@ -1,16 +1,17 @@
-// backend/server.js
 const express = require('express');
-const { Client } = require('@opensearch-project/opensearch');
-const cors = require('cors');
-const AWS = require('aws-sdk');
+const { S3Client } = require('@aws-sdk/client-s3');
+const { Upload } = require('@aws-sdk/lib-storage');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const { Client } = require('@opensearch-project/opensearch');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+dotenv.config();
 
 const client = new Client({
   node: 'https://10.0.147.91:9200', // Your OpenSearch endpoint
@@ -82,7 +83,7 @@ app.post('/search', async (req, res) => {
         query: {
           multi_match: {
             query: keyword,
-            //fields: ['title', 'contents', 'tags', 'authors'], // Adjust fields as needed
+            fields: ['title', 'contents', 'tags'], // Adjust fields as needed
           },
         },
       },
@@ -96,24 +97,20 @@ app.post('/search', async (req, res) => {
   }
 });
 
-
-
-dotenv.config();
-
-app.use(cors());
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const s3Client = new S3Client({
     region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
 });
 
 const upload = multer({
     storage: multerS3({
-        s3: s3,
+        s3: s3Client,
         bucket: process.env.AWS_BUCKET_NAME,
         acl: 'public-read',
         key: function (req, file, cb) {
-            //cb(null, Date.now().toString() + path.extname(file.originalname)); // use Date.now() for unique file keys
             cb(null, file.originalname); // Preserve original file name
         }
     })
@@ -128,9 +125,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
     });
 });
 
-
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
 
