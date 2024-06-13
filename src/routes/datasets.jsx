@@ -68,7 +68,7 @@ const Datasets = () => {
                                 {datasetMetadata.map((dataset) => (
                                     <InfoCard
                                         key={dataset.id}
-                                        cardtype="datasets"
+                                        cardtype={dataset['resource-type']+'s'}
                                         pageid={dataset.id}
                                         title={dataset.title}
                                         subtitle={dataset.authors}

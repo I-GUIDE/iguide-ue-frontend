@@ -70,7 +70,7 @@ const Notebooks = () => {
                                 {notebookMetadata.map((notebook) => (
                                     <InfoCard
                                         key={notebook.id}
-                                        cardtype="notebooks"
+                                        cardtype={notebook['resource-type']+'s'}
                                         pageid={notebook.id}
                                         title={notebook.title}
                                         subtitle={notebook.authors}
