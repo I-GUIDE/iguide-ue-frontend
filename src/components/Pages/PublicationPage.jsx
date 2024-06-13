@@ -25,8 +25,10 @@ function PublicationPage() {
     const [abstract, setAbstract] = useState('');
     const [tags, setTags] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+    const [relatedDatasets, setRelatedDatasets] = useState([]);
     const id = useParams().id;
     const [notebooks, setNotebooks] = useState([]);
+    const [datasets, setDatsets] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,6 +40,7 @@ function PublicationPage() {
             for (const obj of Publications) {
                 if (obj.id === id) {
                     setRelatedNotebooks(obj['related-notebooks']);
+                    setRelatedDatasets(obj['related-datasets']);
                     setTitle(obj.title);
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
