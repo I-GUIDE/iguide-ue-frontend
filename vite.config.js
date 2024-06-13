@@ -8,6 +8,9 @@ export default defineConfig({
         port: 80,
         strictPort: true,
     },
+    build: {
+        target: 'esnext' //browsers can handle the latest ES features
+    },
     server: {
         port: 80,
         strictPort: true,

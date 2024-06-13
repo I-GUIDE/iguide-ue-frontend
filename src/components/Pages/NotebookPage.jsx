@@ -27,23 +27,28 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [htmlNotebook, setHtmlNotebook] = useState("")
     const id = useParams().id;
-    const Datasets = DataRetriever('datasets');
-    const Notebooks = DataRetriever('notebooks');
+    const [datasets, setDatasets] = useState([]);
 
-    // Generate individual notebook page
     useEffect(() => {
-        for (var i = 0; i < Notebooks.length; i++) {
-            var obj = Notebooks[i];
-            if (obj.id == id) {
-                setRelatedDatasets(obj['related-datasets']);
-                setTitle(obj.title);
-                setAuthors(obj.authors);
-                setAbstract(obj.contents);
-                setTags(obj.tags);
-                setHtmlNotebook(obj['html-notebook'])
+        const fetchData = async () => {
+            const Datasets = await DataRetriever('datasets');
+            const Notebooks = await DataRetriever('notebooks');
+            setDatasets(Datasets);
+
+            for (var i = 0; i < Notebooks.length; i++) {
+                var obj = Notebooks[i];
+                if (obj.id == id) {
+                    setRelatedDatasets(obj['related-datasets']);
+                    setTitle(obj.title);
+                    setAuthors(obj.authors);
+                    setAbstract(obj.contents);
+                    setTags(obj.tags);
+                    setHtmlNotebook(obj['html-notebook'])
+                }
             }
-        }
-    });
+        };
+        fetchData();
+    }, [id]);
 
     return (
         <CssVarsProvider disableTransitionOnChange>
@@ -115,7 +120,7 @@ function NotebookPage() {
                                         >
                                             <ListItem>
                                                 <ListItemButton>
-                                                    {extractValueFromJSON('id', dataset, 'title', Datasets)}
+                                                    {extractValueFromJSON('id', dataset, 'title', datasets)}
                                                 </ListItemButton>
                                             </ListItem>
                                         </Link>
