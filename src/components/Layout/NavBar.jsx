@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks']];
+const pages = [['Home', '/home'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications']];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function NavBar() {
@@ -87,7 +87,7 @@ function NavBar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <Link to={page[1]} style={{ textDecoration: 'none' }}>
+                                <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
                                     <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
                                         <Typography textAlign="center">{page[0]}</Typography>
                                     </MenuItem>
@@ -113,7 +113,7 @@ function NavBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Link to={page[1]} style={{ textDecoration: 'none' }}>
+                            <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
                                 <Button
                                     key={page[0]}
                                     onClick={handleCloseNavMenu}

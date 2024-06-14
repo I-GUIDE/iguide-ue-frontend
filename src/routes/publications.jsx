@@ -12,11 +12,11 @@ import Header from '../components/Layout/Header';
 
 import { DataRetriever } from '../utils/DataRetrieval';
 
-const datasetMetadata = await DataRetriever('dataset');
+const publicationMetadata = await DataRetriever('publication');
 
 const unique_tag_list = []
 {
-    datasetMetadata.map(metadata => {
+    publicationMetadata.map(metadata => {
         metadata.tags.map(tag => {
             if (!unique_tag_list.includes(tag)) {
                 unique_tag_list.push(tag)
@@ -27,7 +27,7 @@ const unique_tag_list = []
 
 const unique_author_list = []
 {
-    datasetMetadata.map(metadata => {
+    publicationMetadata.map(metadata => {
         metadata.authors.map(author => {
             if (!unique_author_list.includes(author)) {
                 unique_author_list.push(author)
@@ -64,17 +64,17 @@ const Datasets = () => {
                     >
                         <Grid xs={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <Header title='Datasets' subtitle='Find your dataset here.' />
-                                {datasetMetadata.map((dataset) => (
+                                <Header title='Publications' subtitle='Find your publication here.' />
+                                {publicationMetadata.map((publication) => (
                                     <InfoCard
-                                        key={dataset.id}
-                                        cardtype={dataset['resource-type']+'s'}
-                                        pageid={dataset.id}
-                                        title={dataset.title}
-                                        subtitle={dataset.authors}
-                                        tags={dataset.tags}
-                                        contents={dataset.contents}
-                                        thumbnailImage={dataset['thumbnail-image']} />
+                                        key={publication.id}
+                                        cardtype={publication['resource-type']+'s'}
+                                        pageid={publication.id}
+                                        title={publication.title}
+                                        subtitle={publication.authors}
+                                        tags={publication.tags}
+                                        contents={publication.contents}
+                                        thumbnailImage={publication['thumbnail-image']} />
                                 ))}
                             </Stack>
                         </Grid>

@@ -1,0 +1,8 @@
+services:
+  app:
+    image: data-with-notebooks:v0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
