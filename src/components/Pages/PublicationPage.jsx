@@ -16,7 +16,7 @@ import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
-import { DataRetriever } from '../../utils/DataRetriever';
+import { DataRetriever } from '../../utils/DataRetrieval';
 import './NotebookIFrame.css';
 
 function PublicationPage() {

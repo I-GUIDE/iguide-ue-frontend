@@ -14,6 +14,7 @@ import Container from '@mui/joy/Container';
 import Stack from '@mui/joy/Stack';
 
 import InfoCard from '../components/InfoCard';
+import { DataSearcher } from '../utils/DataRetrieval';
 
 const Home = () => {
     // define search data
@@ -50,7 +51,7 @@ const Home = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setData((current) => ({ ...current, status: 'loading' }));
-        const temp = await search(data['content']);
+        const temp = await DataSearcher(data['content']);
         console.log("search results set before: ", temp)
         setSearchResults(temp);
         console.log("search results set: ", searchResults)

@@ -10,7 +10,7 @@ import Container from '@mui/joy/Container';
 import InfoCard from '../components/InfoCard';
 import Header from '../components/Layout/Header';
 
-import { DataRetriever } from '../utils/DataRetriever';
+import { DataRetriever } from '../utils/DataRetrieval';
 
 const datasetMetadata = await DataRetriever('dataset');
 
