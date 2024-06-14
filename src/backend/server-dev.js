@@ -16,9 +16,10 @@ dotenv.config();
 os_node = process.env.OPENSEARCH_NODE
 os_usr = process.env.OPENSEARCH_USERNAME
 os_pswd = process.env.OPENSEARCH_PASSWORD
+console.log(os_node, os_usr, os_pswd);
 
 const client = new Client({
-  node: os_node, // OpenSearch endpoint
+  node: os_node, // Your OpenSearch endpoint
   auth: {
     username: os_usr,
     password: os_pswd,
@@ -60,12 +61,12 @@ app.post('/search', async (req, res) => {
 
   try {
     const searchResponse = await client.search({
-      index: 'resources', 
+      index: 'resources', // Replace with your index name
       body: {
         query: {
           multi_match: {
             query: keyword,
-            fields: ['title', 'contents', 'tags'], 
+            fields: ['title', 'contents', 'tags'], // Adjust fields as needed
           },
         },
       },
@@ -93,7 +94,7 @@ const upload = multer({
         bucket: process.env.AWS_BUCKET_NAME,
         acl: 'public-read',
         key: function (req, file, cb) {
-            cb(null, file.originalname);
+            cb(null, file.originalname); // Preserve original file name
         }
     })
 });
@@ -107,7 +108,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
