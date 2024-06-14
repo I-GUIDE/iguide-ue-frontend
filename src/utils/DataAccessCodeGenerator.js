@@ -24,12 +24,12 @@ function identifyInputType(inputString) {
     }
 }
 
-export function generateDataAccessCode(input, action) {
+export function generateDataAccessCode(input, platform) {
     const inputType = identifyInputType(input);
 
     let responseMessage;
 
-    if (action === 'python') {
+    if (platform === 'python') {
         if (inputType === "URL") {
             responseMessage = `from urllib.request import urlretrieve\nurlretrieve("${input}")`;
         } else if (inputType === "S3 Bucket Name") {
@@ -44,7 +44,7 @@ export function generateDataAccessCode(input, action) {
         } else {
             responseMessage = "Invalid Input";
         }
-    } else if (action === 'iguide') {
+    } else if (platform === 'iguide') {
         responseMessage = `download_to_notebook("${input}")`;
     } else {
         responseMessage = "Invalid Action";
@@ -55,6 +55,6 @@ export function generateDataAccessCode(input, action) {
 
 // Example usage:
 const input = "data/test";
-const action = "python";
-const message = generateDataAccessCode(input, action);
+const platform = "python";
+const message = generateDataAccessCode(input, platform);
 console.log(message);
