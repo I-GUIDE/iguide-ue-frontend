@@ -74,7 +74,7 @@
             "Boundary",
             "Shapefile"
         ],
-        "contents": "The cartographic boundary files are simplified representations of selected geographic areas from the Census Bureau’s MAF/TIGER geographic database. These boundary files are specifically designed for small scale thematic mapping. The cartographic boundary files are available in shapefile. A shapefile is a geospatial data format for use in geographic information system (GIS) software. This dataset includes boundary shapefiles for the Chicago, US region at census tract level."",
+        "contents": "The cartographic boundary files are simplified representations of selected geographic areas from the Census Bureau’s MAF/TIGER geographic database. These boundary files are specifically designed for small scale thematic mapping. The cartographic boundary files are available in shapefile. A shapefile is a geospatial data format for use in geographic information system (GIS) software. This dataset includes boundary shapefiles for the Chicago, US region at census tract level.",
         "related-notebooks": [
             "nb3",
             "nb4"
