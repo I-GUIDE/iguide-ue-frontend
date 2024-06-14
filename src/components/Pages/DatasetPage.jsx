@@ -19,7 +19,7 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
-import { DataRetriever } from '../../utils/DataRetriever';
+import { DataRetriever } from '../../utils/DataRetrieval';
 import './NotebookIFrame.css';
 
 function DatasetPage() {
