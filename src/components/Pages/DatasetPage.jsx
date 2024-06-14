@@ -15,13 +15,11 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import Chip from '@mui/joy/Chip';
 import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
-
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-import Datasets from '../../assets/metadata/dataset-metadata.json';
-import Notebooks from '../../assets/metadata/notebook-metadata.json';
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
+import { DataRetriever } from '../../utils/DataRetrieval';
 import './NotebookIFrame.css';
 
 function DatasetPage() {
@@ -33,26 +31,33 @@ function DatasetPage() {
     const [externalLink, setExternalLink] = useState('');
     const [directDownloadLink, setDirectDownloadLink] = useState('');
     const [size, setSize] = useState('');
-    const id = useParams().id;
     const [downloadInstruction, setDownloadInstruction] = useState('');
+    const id = useParams().id;
+    const [notebooks, setNotebooks] = useState([]);
 
-    // Set the params needed to generate individual notebook page
     useEffect(() => {
-        for (var i = 0; i < Datasets.length; i++) {
-            var obj = Datasets[i];
-            if (obj.id == id) {
-                setRelatedNotebooks(obj['related-notebooks']);
-                setTitle(obj.title);
-                setAuthors(obj.authors);
-                setAbstract(obj.contents);
-                setTags(obj.tags);
-                setExternalLink(obj['external-link']);
-                setDirectDownloadLink(obj['direct-download-link']);
-                setSize(obj.size);
-                setDownloadInstruction('! wget ' + directDownloadLink);
+        const fetchData = async () => {
+            const Datasets = await DataRetriever('dataset');
+            const Notebooks = await DataRetriever('notebook');
+            setNotebooks(Notebooks);
+
+            for (const obj of Datasets) {
+                if (obj.id === id) {
+                    setRelatedNotebooks(obj['related-notebooks']);
+                    setTitle(obj.title);
+                    setAuthors(obj.authors);
+                    setAbstract(obj.contents);
+                    setTags(obj.tags);
+                    setExternalLink(obj['external-link']);
+                    setDirectDownloadLink(obj['direct-download-link']);
+                    setSize(obj.size);
+                    setDownloadInstruction('! wget ' + obj['direct-download-link']);
+                    break;
+                }
             }
-        }
-    });
+        };
+        fetchData();
+    }, [id]);
 
     return (
         <CssVarsProvider disableTransitionOnChange>
@@ -117,7 +122,7 @@ function DatasetPage() {
                                             sx={{ color: 'inherit' }}
                                         >
                                             Access Data Details&nbsp;
-                                            <ExitToAppIcon/>
+                                            <ExitToAppIcon />
                                         </Link>
                                     </Button>
                                 </Box>
@@ -131,7 +136,7 @@ function DatasetPage() {
                                             sx={{ color: 'inherit' }}
                                         >
                                             Download Data ({size})&nbsp;
-                                            <CloudDownloadOutlinedIcon/>
+                                            <CloudDownloadOutlinedIcon />
                                         </Link>
                                     </Button>
                                 </Box>
@@ -164,13 +169,14 @@ function DatasetPage() {
                                 <List aria-labelledby="decorated-list-demo">
                                     {relatedNotebooks.map((notebook) => (
                                         <Link
+                                            key={notebook}
                                             underline="none"
-                                            href={"/notebooks/" + notebook}
+                                            href={`/notebooks/${notebook}`}
                                             sx={{ color: 'text.tertiary' }}
                                         >
                                             <ListItem>
                                                 <ListItemButton>
-                                                    {extractValueFromJSON('id', notebook, 'title', Notebooks)}
+                                                    {extractValueFromJSON('id', notebook, 'title', notebooks)}
                                                 </ListItemButton>
                                             </ListItem>
                                         </Link>
@@ -193,7 +199,8 @@ function DatasetPage() {
                 </Box>
             </Container>
         </CssVarsProvider>
-    )
+    );
 }
 
 export default DatasetPage;
+
