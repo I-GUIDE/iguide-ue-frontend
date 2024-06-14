@@ -13,11 +13,16 @@ app.use(cors());
 app.use(express.json());
 dotenv.config();
 
+os_node = process.env.OPENSEARCH_NODE
+os_usr = process.env.OPENSEARCH_USERNAME
+os_pswd = process.env.OPENSEARCH_PASSWORD
+console.log(os_node, os_usr, os_pswd);
+
 const client = new Client({
-  node: 'https://10.0.147.91:9200', // Your OpenSearch endpoint
+  node: os_node, // Your OpenSearch endpoint
   auth: {
-    username: 'admin',
-    password: 'Iiguidedwn2024',
+    username: os_usr,
+    password: os_pswd,
   },
   ssl: {
     rejectUnauthorized: false, // Use this only if you encounter SSL certificate issues
