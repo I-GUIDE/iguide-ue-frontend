@@ -35,8 +35,6 @@ export default function ItemList(props) {
         retrieveData();
     }, [])
 
-    console.log(metadataList)
-
     if (error) {
         return <div>Error: {error.message}</div>;
     }
