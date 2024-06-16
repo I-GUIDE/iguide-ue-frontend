@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { Link } from 'react-router-dom';
 
-const pages = [['Home', '/home'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['OCR', '/ocrs']];
+const pages = [['Home', '/home'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['OER', '/oers']];
 
 export default function NavBar() {
     const Popup = styled(Popper)({
@@ -56,7 +56,7 @@ export default function NavBar() {
                         component="img"
                         sx={{ height: 40, mx: 2 }}
                         alt="Logo"
-                        src="images/Logo.png"
+                        src="/images/Logo.png"
                     />
                 </Box>
                 <Button
@@ -125,7 +125,7 @@ export default function NavBar() {
                         component="img"
                         sx={{ height: 40, mx: 2 }}
                         alt="Logo"
-                        src="images/Logo.png"
+                        src="/images/Logo.png"
                     />
                 </Box>
 
