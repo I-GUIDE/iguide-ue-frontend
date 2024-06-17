@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { CopyBlock, dracula } from "react-code-blocks";
 
-import { Link } from '@mui/joy';
 import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
-import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
-import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { DataRetriever } from '../../utils/DataRetrieval';
 import './NotebookIFrame.css';
@@ -19,6 +14,8 @@ import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import CodeSnippet from '../../components/ResourcePagesComps/CodeSnippet';
+import ActionList from '../../components/ResourcePagesComps/ActionsList';
+import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
 
 function DatasetPage() {
     const [title, setTitle] = useState('');
@@ -78,50 +75,13 @@ function DatasetPage() {
                         }}
                     >
                         <Grid xs={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} />
-                            <CapsuleList title="Tags" items={tags} />
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Button size="sm">
-                                        <Link
-                                            underline="none"
-                                            href={externalLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            sx={{ color: 'inherit' }}
-                                        >
-                                            Access Data Details&nbsp;
-                                            <ExitToAppIcon />
-                                        </Link>
-                                    </Button>
-                                </Box>
-                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Button size="sm">
-                                        <Link
-                                            underline="none"
-                                            href={directDownloadLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            sx={{ color: 'inherit' }}
-                                        >
-                                            Download Data ({size})&nbsp;
-                                            <CloudDownloadOutlinedIcon />
-                                        </Link>
-                                    </Button>
-                                </Box>
+                                <MainContent title={title} authors={authors} contents={abstract} />
+                                <CapsuleList title="Tags" items={tags} />
+                                <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
                                 <CodeSnippet directDownloadLink={directDownloadLink} />
                                 <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
-                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <Button size="sm">
-                                        <Link
-                                            underline="none"
-                                            href="/datasets"
-                                            sx={{ color: 'inherit' }}
-                                        >
-                                            Go Back
-                                        </Link>
-                                    </Button>
-                                </Box>
+                                <GoBackButton parentPage="/datasets" />
                             </Stack>
                         </Grid>
                     </Grid>
