@@ -186,7 +186,7 @@ function DatasetPage() {
                                     <Button size="sm">
                                         <Link
                                             underline="none"
-                                            href="/notebooks"
+                                            href="/datasets"
                                             sx={{ color: 'inherit' }}
                                         >
                                             Go Back

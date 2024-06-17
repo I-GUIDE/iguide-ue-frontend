@@ -133,8 +133,6 @@ const Home = () => {
                                 </FormControl>
                             </form>
 
-                            {/* <div id="results">{searchResults}</div> */}
-                            <div>{console.log(searchResults)}</div>
                             <Grid
                                 container
                                 rowSpacing={2}
@@ -155,7 +153,7 @@ const Home = () => {
                                                 cardtype={result['resource-type']+'s'}
                                                 pageid={result.id}
                                                 title={result.title}
-                                                subtitle={result.authors}
+                                                authors={result.authors}
                                                 tags={result.tags}
                                                 contents={result.contents}
                                                 thumbnailImage={result['thumbnail-image']} />
