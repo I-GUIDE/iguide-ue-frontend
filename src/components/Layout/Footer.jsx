@@ -11,7 +11,7 @@ import CardContent from '@mui/joy/CardContent';
 export default function Footer(props) {
     return (
         <Box
-            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0 }}
+            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 200 }}
         >
             <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
                 <CardCover>
