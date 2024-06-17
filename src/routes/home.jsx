@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StyledEngineProvider } from '@mui/material/styles';
 
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -12,6 +11,10 @@ import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 import Stack from '@mui/joy/Stack';
+import Card from '@mui/joy/Card';
+import CardCover from '@mui/joy/CardCover';
+import CardContent from '@mui/joy/CardContent';
+import SearchIcon from '@mui/icons-material/Search';
 
 import InfoCard from '../components/InfoCard';
 import { DataSearcher } from '../utils/DataRetrieval';
@@ -68,29 +71,20 @@ const Home = () => {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
-            <Container maxWidth="xl">
-                <Box
-                    component="main"
-                    sx={{
-                        height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
-                        display: 'grid',
-                        gridTemplateColumns: { xs: 'auto', md: '100%' },
-                        gridTemplateRows: 'auto 1fr auto',
-                    }}
-                >
-                    <Grid
-                        container
-                        rowSpacing={2}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                        sx={{
-                            backgroundColor: 'inherit',
-                            px: { xs: 2, md: 4 },
-                            py: 2,
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
-                        }}
-                    >
-                        <Grid xs={12}>
+            <Box
+                sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0 }}
+            >
+                <Card component="li" sx={{ borderRadius: 0, minWidth: 300, height: 200, flexGrow: 1 }}>
+                    <CardCover>
+                        <img
+                            src="/images/yellow-blue.png"
+                            srcSet="/images/yellow-blue.png 2x"
+                            loading="lazy"
+                            alt=""
+                        />
+                    </CardCover>
+                    <CardContent sx={{ justifyContent: 'center' }}>
+                        <Container maxWidth="md">
                             <form onSubmit={handleSubmit} id="demo">
                                 <FormControl>
                                     <Input
@@ -105,13 +99,12 @@ const Home = () => {
                                         error={data.status === 'failure'}
                                         endDecorator={
                                             <Button
-                                                variant="solid"
-                                                color="primary"
+                                                variant="plain"
                                                 loading={data.status === 'loading'}
                                                 type="submit"
                                                 sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                             >
-                                                Search
+                                                <SearchIcon />
                                             </Button>
                                         }
                                     />
@@ -119,51 +112,44 @@ const Home = () => {
                                         <FormHelperText
                                             sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
                                         >
-                                            Oops! something went wrong, please try again later.
-                                        </FormHelperText>
-                                    )}
-
-                                    {data.status === 'sent' && (
-                                        <FormHelperText
-                                            sx={(theme) => ({ color: theme.vars.palette.primary[400] })}
-                                        >
-                                            You are all set!
+                                            Oops! Something went wrong, please try again later.
                                         </FormHelperText>
                                     )}
                                 </FormControl>
                             </form>
-
-                            <Grid
-                                container
-                                rowSpacing={2}
-                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                                sx={{
-                                    backgroundColor: 'inherit',
-                                    px: { xs: 2, md: 4 },
-                                    py: 2,
-                                    borderBottom: '1px solid',
-                                    borderColor: 'divider',
-                                }}
-                            >
-                                <Grid xs={12}>
-                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                        {searchResults.map((result) => (
-                                            <InfoCard
-                                                key={result.id}
-                                                cardtype={result['resource-type']+'s'}
-                                                pageid={result.id}
-                                                title={result.title}
-                                                authors={result.authors}
-                                                tags={result.tags}
-                                                contents={result.contents}
-                                                thumbnailImage={result['thumbnail-image']} />
-                                        ))}
-                                    </Stack>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        </Container>
+                    </CardContent>
+                </Card>
+            </Box>
+            <Container maxWidth="xl">
+                <Grid
+                    container
+                    rowSpacing={2}
+                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                    sx={{
+                        backgroundColor: 'inherit',
+                        px: { xs: 2, md: 4 },
+                        py: 2,
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                    }}
+                >
+                    <Grid xs={12}>
+                        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                            {searchResults.map((result) => (
+                                <InfoCard
+                                    key={result.id}
+                                    cardtype={result['resource-type'] + 's'}
+                                    pageid={result.id}
+                                    title={result.title}
+                                    authors={result.authors}
+                                    tags={result.tags}
+                                    contents={result.contents}
+                                    thumbnailImage={result['thumbnail-image']} />
+                            ))}
+                        </Stack>
                     </Grid>
-                </Box>
+                </Grid>
             </Container>
         </CssVarsProvider>
     )
