@@ -15,6 +15,7 @@ import Card from '@mui/joy/Card';
 import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
+import Typography from '@mui/joy/Typography';
 
 import InfoCard from '../components/InfoCard';
 import { DataSearcher } from '../utils/DataRetrieval';
@@ -27,37 +28,16 @@ const Home = () => {
     });
 
     const [searchResults, setSearchResults] = useState([]);
-
-    // Function that handles searching keyword, return the results
-    async function search(keyword) {
-        console.log("keyword", keyword)
-        const response = await fetch('http://149.165.169.173:5000/search', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ keyword }),
-        });
-
-        if (!response.ok) {
-            console.error('Error with search request:', response.statusText);
-            return;
-        }
-
-        const results = await response.json();
-        console.log('Search results:', results);
-
-        return results;
-    }
+    const [hasResults, setHasResults] = useState(false);
 
     // Function that handles submit event... need more implementation
     const handleSubmit = async (event) => {
         event.preventDefault();
         setData((current) => ({ ...current, status: 'loading' }));
-        const temp = await DataSearcher(data['content']);
-        console.log("search results set before: ", temp)
-        setSearchResults(temp);
-        console.log("search results set: ", searchResults)
+        const returnResults = await DataSearcher(data['content']);
+        setSearchResults(returnResults);
+        setHasResults(true);
+
         try {
             // Replace timeout with real backend operation
             setTimeout(() => {
@@ -85,6 +65,13 @@ const Home = () => {
                     </CardCover>
                     <CardContent sx={{ justifyContent: 'center' }}>
                         <Container maxWidth="md">
+                            <Typography
+                                level="h1"
+                                textColor={'#fff'}
+                                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}
+                            >
+                                I-GUIDE Platform
+                            </Typography>
                             <form onSubmit={handleSubmit} id="demo">
                                 <FormControl>
                                     <Input
@@ -121,36 +108,51 @@ const Home = () => {
                     </CardContent>
                 </Card>
             </Box>
-            <Container maxWidth="xl">
-                <Grid
-                    container
-                    rowSpacing={2}
-                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            {hasResults
+                ? <Container maxWidth="xl">
+                    <Grid
+                        container
+                        rowSpacing={2}
+                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                        sx={{
+                            backgroundColor: 'inherit',
+                            px: { xs: 2, md: 4 },
+                            py: 2,
+                            borderBottom: '1px solid',
+                            borderColor: 'divider',
+                        }}
+                    >
+                        <Grid xs={12}>
+                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                {searchResults.map((result) => (
+                                    <InfoCard
+                                        key={result.id}
+                                        cardtype={result['resource-type'] + 's'}
+                                        pageid={result.id}
+                                        title={result.title}
+                                        authors={result.authors}
+                                        tags={result.tags}
+                                        contents={result.contents}
+                                        thumbnailImage={result['thumbnail-image']} />
+                                ))}
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </Container>
+                : <Box
+                    component="main"
                     sx={{
-                        backgroundColor: 'inherit',
-                        px: { xs: 2, md: 4 },
-                        py: 2,
-                        borderBottom: '1px solid',
-                        borderColor: 'divider',
+                        minHeight: 'calc(100vh - 390px)', // 350px is the height of the NavBar, header, and footer
+                        display: 'grid',
+                        gridTemplateColumns: { xs: 'auto', md: '100%' },
+                        gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
-                    <Grid xs={12}>
-                        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                            {searchResults.map((result) => (
-                                <InfoCard
-                                    key={result.id}
-                                    cardtype={result['resource-type'] + 's'}
-                                    pageid={result.id}
-                                    title={result.title}
-                                    authors={result.authors}
-                                    tags={result.tags}
-                                    contents={result.contents}
-                                    thumbnailImage={result['thumbnail-image']} />
-                            ))}
-                        </Stack>
-                    </Grid>
-                </Grid>
-            </Container>
+                    <Typography level="body-md">
+                        Will display all featured results...
+                    </Typography>
+                </Box>
+            }
         </CssVarsProvider>
     )
 }
