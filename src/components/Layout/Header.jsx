@@ -38,6 +38,5 @@ export default function Header(props) {
                 </CardContent>
             </Card>
         </Box>
-
     );
 }
