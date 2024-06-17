@@ -4,6 +4,7 @@ import AspectRatio from '@mui/joy/AspectRatio';
 import Link from '@mui/joy/Link';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
+import CardOverflow from '@mui/joy/CardOverflow';
 import Chip from '@mui/joy/Chip';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
@@ -18,6 +19,29 @@ export default function InfoCard(props) {
     const pageid = props.pageid;
     const tags = props.tags;
     const contents = props.contents;
+
+    var categoryColor = '';
+    var categoryName = '';
+    switch (cardType) {
+        case 'datasets':
+            categoryName = 'dataset';
+            categoryColor = 'primary';
+            break;
+        case 'notebooks':
+            categoryName = 'notebook';
+            categoryColor = 'success';
+            break;
+        case 'publications':
+            categoryName = 'publication';
+            categoryColor = 'warning';
+            break;
+        case 'oers':
+            categoryName = 'Educational Resource';
+            categoryColor = 'danger';
+            break;
+        default:
+            console.log("error");
+    }
 
     return (
         <Card
@@ -63,7 +87,7 @@ export default function InfoCard(props) {
                         WebkitBoxOrient: "vertical",
                         m: 0.5
                     }}>
-                    {authors.length == 1 ? 'Author:' : 'Authors:'}&nbsp;
+                    {authors.length == 1 ? 'Contributor:' : 'Contributors:'}&nbsp;
                     <Link
                         overlay
                         underline="none"
@@ -105,6 +129,23 @@ export default function InfoCard(props) {
                     ))}
                 </Box>
             </CardContent>
+            <CardOverflow
+                variant="soft"
+                color={categoryColor}
+                sx={{
+                    px: 0.2,
+                    writingMode: 'vertical-rl',
+                    justifyContent: 'center',
+                    fontSize: 'xs',
+                    fontWeight: 'xl',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    borderLeft: '1px solid',
+                    borderColor: 'divider',
+                }}
+            >
+                {categoryName}
+            </CardOverflow>
         </Card>
     );
 }
