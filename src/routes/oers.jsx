@@ -7,7 +7,7 @@ const OERS = () => {
         <ItemList
             dataType='oer'
             title='Open Educational Resources'
-            subtitle='Find your open Educational resources here'
+            subtitle='Find your open educational resources here'
         />
     )
 }
