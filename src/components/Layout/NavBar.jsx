@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { Link } from 'react-router-dom';
 
-const pages = [['Home', '/home'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['OER', '/oers']];
+const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 
 export default function NavBar() {
     const Popup = styled(Popper)({
