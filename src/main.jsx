@@ -8,10 +8,10 @@ import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
 import Publications from "./routes/publications";
 import OERS from './routes/oers';
-import NotebookPage from "./components/Pages/NotebookPage";
-import DatasetPage from "./components/Pages/DatasetPage";
-import PublicationPage from "./components/Pages/PublicationPage";
-import OERPage from './components/Pages/OERPage';
+import NotebookPage from "./routes/ResourcePages/NotebookPage";
+import DatasetPage from "./routes/ResourcePages/DatasetPage";
+import PublicationPage from "./routes/ResourcePages/PublicationPage";
+import OERPage from './routes/ResourcePages/OERPage';
 
 import {
     createBrowserRouter,
