@@ -8,19 +8,17 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
-import Typography from '@mui/joy/Typography';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import Chip from '@mui/joy/Chip';
 import Button from '@mui/joy/Button';
 import Container from '@mui/joy/Container';
 import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
 import { DataRetriever } from '../../utils/DataRetrieval';
 import './NotebookIFrame.css';
+import MainContent from '../../components/ResourcePagesComps/MainContent';
+import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
+import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
+import CodeSnippet from '../../components/ResourcePagesComps/CodeSnippet';
 
 function DatasetPage() {
     const [title, setTitle] = useState('');
@@ -31,15 +29,11 @@ function DatasetPage() {
     const [externalLink, setExternalLink] = useState('');
     const [directDownloadLink, setDirectDownloadLink] = useState('');
     const [size, setSize] = useState('');
-    const [downloadInstruction, setDownloadInstruction] = useState('');
     const id = useParams().id;
-    const [notebooks, setNotebooks] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const Datasets = await DataRetriever('dataset');
-            const Notebooks = await DataRetriever('notebook');
-            setNotebooks(Notebooks);
 
             for (const obj of Datasets) {
                 if (obj.id === id) {
@@ -51,7 +45,6 @@ function DatasetPage() {
                     setExternalLink(obj['external-link']);
                     setDirectDownloadLink(obj['direct-download-link']);
                     setSize(obj.size);
-                    setDownloadInstruction('! wget ' + obj['direct-download-link']);
                     break;
                 }
             }
@@ -85,33 +78,9 @@ function DatasetPage() {
                         }}
                     >
                         <Grid xs={12}>
+                            <MainContent title={title} authors={authors} contents={abstract} />
+                            <CapsuleList title="Tags" items={tags} />
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <Typography level="h1">{title}</Typography>
-                                <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
-                                    Created by {printListWithDelimiter(authors, ',')}
-                                </Typography>
-                                <Typography>
-                                    {abstract}
-                                </Typography>
-                                <Typography
-                                    id="notebook-tags"
-                                    level="h5"
-                                    fontWeight="lg"
-                                    mb={1}
-                                >
-                                    Tags:
-                                </Typography>
-                                {tags.map((tag) => (
-                                    <Chip
-                                        key={tag}
-                                        variant="outlined"
-                                        color="primary"
-                                        size="sm"
-                                        sx={{ pointerEvents: 'none' }}
-                                    >
-                                        {tag}
-                                    </Chip>
-                                ))}
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                                     <Button size="sm">
                                         <Link
@@ -140,48 +109,8 @@ function DatasetPage() {
                                         </Link>
                                     </Button>
                                 </Box>
-                                <Box>
-                                    <Typography
-                                        id="download-jupyterhub"
-                                        level="h6"
-                                        fontWeight="lg"
-                                        mb={1}
-                                    >
-                                        To download the data on I-GUIDE Platform JupyterHub:
-                                    </Typography>
-                                    <CopyBlock
-                                        language={'shell'}
-                                        text={downloadInstruction}
-                                        showLineNumbers={false}
-                                        theme={dracula}
-                                        wrapLines={true}
-                                        codeBlock
-                                    />
-                                </Box>
-                                <Typography
-                                    id="notebook-ds"
-                                    level="h5"
-                                    fontWeight="lg"
-                                    mb={1}
-                                >
-                                    Related notebooks:
-                                </Typography>
-                                <List aria-labelledby="decorated-list-demo">
-                                    {relatedNotebooks.map((notebook) => (
-                                        <Link
-                                            key={notebook}
-                                            underline="none"
-                                            href={`/notebooks/${notebook}`}
-                                            sx={{ color: 'text.tertiary' }}
-                                        >
-                                            <ListItem>
-                                                <ListItemButton>
-                                                    {extractValueFromJSON('id', notebook, 'title', notebooks)}
-                                                </ListItemButton>
-                                            </ListItem>
-                                        </Link>
-                                    ))}
-                                </List>
+                                <CodeSnippet directDownloadLink={directDownloadLink} />
+                                <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                                     <Button size="sm">
                                         <Link
