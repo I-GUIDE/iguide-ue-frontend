@@ -47,7 +47,7 @@ export default function ItemList(props) {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 350px)', // 350px is the height of the NavBar, header, and footer
+                        minHeight: 'calc(100vh - 420px)', // 420px is the height of the NavBar, header, and footer
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',

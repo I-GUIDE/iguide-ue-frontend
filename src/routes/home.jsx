@@ -68,9 +68,9 @@ const Home = () => {
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
             <Box
-                sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0 }}
+                sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 200 }}
             >
-                <Card component="li" sx={{ borderRadius: 0, minWidth: 300, height: 200, flexGrow: 1 }}>
+                <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
                     <CardCover>
                         <img
                             src="/images/yellow-blue.png"
@@ -129,8 +129,10 @@ const Home = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 390px)', // 390px is the height of the NavBar, search bar, and footer
+                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
                             display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
                         }}
                     >
                         <Grid
@@ -167,8 +169,10 @@ const Home = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 390px)', // 390px is the height of the NavBar, search bar, and footer
+                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
                             display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
                         }}
                     >
                         <Grid
@@ -184,15 +188,8 @@ const Home = () => {
                         >
                             <Typography
                                 level="h3"
-                                id="card-description"
-                                sx={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: "1",
-                                    WebkitBoxOrient: "vertical",
-                                    m: 0.5
-                                }}>
+                                sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
+                            >
                                 Featured Resources
                             </Typography>
                             <Grid
@@ -206,10 +203,10 @@ const Home = () => {
                                         key={dataset.id}
                                         xs={12}
                                         sm={6}
-                                        md={4}
+                                        md={3}
                                         direction="row"
                                         justifyContent="center"
-                                        alignItems="center"
+                                        alignItems="flex-start"
                                         sx={{ p: 4 }}
                                     >
                                         <FeaturedCard
