@@ -16,6 +16,7 @@ import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedRes
 import CodeSnippet from '../../components/ResourcePagesComps/CodeSnippet';
 import ActionList from '../../components/ResourcePagesComps/ActionsList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
+import Header from '../../components/Layout/Header';
 
 function DatasetPage() {
     const [title, setTitle] = useState('');
@@ -52,11 +53,12 @@ function DatasetPage() {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
+            <Header title="Dataset" subtitle="Individual Dataset" />
             <Container maxWidth="xl">
                 <Box
                     component="main"
                     sx={{
-                        height: 'calc(100vh - 55px)', // 55px is the height of the NavBar
+                        minHeight: 'calc(100vh - 420px)', // 55px is the height of the NavBar
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
