@@ -1,23 +1,31 @@
 import * as React from 'react';
 
 import Link from '@mui/joy/Link';
-import Box from '@mui/joy/Box';
+import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
+import Box from '@mui/joy/Box';
 
 export default function GoBackButton(props) {
     const parentPage = props.parentPage;
 
     return (
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-            <Button size="sm">
-                <Link
-                    underline="none"
-                    href={parentPage}
-                    sx={{ color: 'inherit' }}
-                >
-                    Go Back
-                </Link>
-            </Button>
-        </Box>
+        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+            <Box
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-end"
+                spacing={1}
+            >
+                <Button size="sm">
+                    <Link
+                        underline="none"
+                        href={parentPage}
+                        sx={{ color: 'inherit' }}
+                    >
+                        Go Back
+                    </Link>
+                </Button>
+            </Box>
+        </Stack>
     )
 }
