@@ -44,32 +44,42 @@ export default function ItemList(props) {
             <CssBaseline />
             <Header title={title} subtitle={subtitle} />
             <Container maxWidth="xl">
-                <Grid
-                    container
-                    rowSpacing={2}
-                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                <Box
+                    component="main"
                     sx={{
-                        backgroundColor: 'inherit',
-                        px: { xs: 2, md: 4 },
-                        py: 2,
-                        borderBottom: '1px solid',
-                        borderColor: 'divider',
+                        minHeight: 'calc(100vh - 350px)', // 350px is the height of the NavBar, header, and footer
+                        display: 'grid',
+                        gridTemplateColumns: { xs: 'auto', md: '100%' },
+                        gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
-                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                        {metadataList.map((dataset) => (
-                            <InfoCard
-                                key={dataset.id}
-                                cardtype={dataset['resource-type'] + 's'}
-                                pageid={dataset.id}
-                                title={dataset.title}
-                                authors={dataset.authors}
-                                tags={dataset.tags}
-                                contents={dataset.contents}
-                                thumbnailImage={dataset['thumbnail-image']} />
-                        ))}
-                    </Stack>
-                </Grid>
+                    <Grid
+                        container
+                        rowSpacing={2}
+                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                        sx={{
+                            backgroundColor: 'inherit',
+                            px: { xs: 2, md: 4 },
+                            py: 2,
+                            borderBottom: '1px solid',
+                            borderColor: 'divider',
+                        }}
+                    >
+                        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                            {metadataList.map((dataset) => (
+                                <InfoCard
+                                    key={dataset.id}
+                                    cardtype={dataset['resource-type'] + 's'}
+                                    pageid={dataset.id}
+                                    title={dataset.title}
+                                    authors={dataset.authors}
+                                    tags={dataset.tags}
+                                    contents={dataset.contents}
+                                    thumbnailImage={dataset['thumbnail-image']} />
+                            ))}
+                        </Stack>
+                    </Grid>
+                </Box>
             </Container>
         </CssVarsProvider>
     )
