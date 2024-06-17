@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -18,7 +18,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
 
 import InfoCard from '../components/InfoCard';
-import { DataSearcher } from '../utils/DataRetrieval';
+import FeaturedCard from '../components/FeaturedCard';
+import { DataSearcher, featuredResourcesRetriever } from '../utils/DataRetrieval';
 
 const Home = () => {
     // define search data
@@ -29,6 +30,21 @@ const Home = () => {
 
     const [searchResults, setSearchResults] = useState([]);
     const [hasResults, setHasResults] = useState(false);
+
+    const [featuredResources, setFeaturedResources] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        async function retrieveFeaturedData() {
+            try {
+                const data = await featuredResourcesRetriever();
+                setFeaturedResources(data);
+            } catch (error) {
+                setError(error);
+            }
+        }
+        retrieveFeaturedData();
+    }, [])
 
     // Function that handles submit event... need more implementation
     const handleSubmit = async (event) => {
@@ -110,48 +126,105 @@ const Home = () => {
             </Box>
             {hasResults
                 ? <Container maxWidth="xl">
-                    <Grid
-                        container
-                        rowSpacing={2}
-                        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                    <Box
+                        component="main"
                         sx={{
-                            backgroundColor: 'inherit',
-                            px: { xs: 2, md: 4 },
-                            py: 2,
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
+                            minHeight: 'calc(100vh - 390px)', // 390px is the height of the NavBar, search bar, and footer
+                            display: 'grid',
                         }}
                     >
-                        <Grid xs={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                {searchResults.map((result) => (
-                                    <InfoCard
-                                        key={result.id}
-                                        cardtype={result['resource-type'] + 's'}
-                                        pageid={result.id}
-                                        title={result.title}
-                                        authors={result.authors}
-                                        tags={result.tags}
-                                        contents={result.contents}
-                                        thumbnailImage={result['thumbnail-image']} />
-                                ))}
-                            </Stack>
+                        <Grid
+                            container
+                            rowSpacing={2}
+                            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                            sx={{
+                                backgroundColor: 'inherit',
+                                px: { xs: 2, md: 4 },
+                                py: 2,
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
+                            }}
+                        >
+                            <Grid xs={12}>
+                                <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                    {searchResults.map((result) => (
+                                        <InfoCard
+                                            key={result.id}
+                                            cardtype={result['resource-type'] + 's'}
+                                            pageid={result.id}
+                                            title={result.title}
+                                            authors={result.authors}
+                                            tags={result.tags}
+                                            contents={result.contents}
+                                            thumbnailImage={result['thumbnail-image']} />
+                                    ))}
+                                </Stack>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Box>
                 </Container>
-                : <Box
-                    component="main"
-                    sx={{
-                        minHeight: 'calc(100vh - 390px)', // 350px is the height of the NavBar, header, and footer
-                        display: 'grid',
-                        gridTemplateColumns: { xs: 'auto', md: '100%' },
-                        gridTemplateRows: 'auto 1fr auto',
-                    }}
-                >
-                    <Typography level="body-md">
-                        Will display all featured results...
-                    </Typography>
-                </Box>
+                : <Container maxWidth="xl">
+                    <Box
+                        component="main"
+                        sx={{
+                            minHeight: 'calc(100vh - 390px)', // 390px is the height of the NavBar, search bar, and footer
+                            display: 'grid',
+                        }}
+                    >
+                        <Grid
+                            container
+                            justifyContent="center"
+                            sx={{
+                                backgroundColor: 'inherit',
+                                px: 1,
+                                py: 4,
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
+                            }}
+                        >
+                            <Typography
+                                level="h3"
+                                id="card-description"
+                                sx={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: "1",
+                                    WebkitBoxOrient: "vertical",
+                                    m: 0.5
+                                }}>
+                                Featured Resources
+                            </Typography>
+                            <Grid
+                                container
+                                direction="row"
+                                xs={12}
+                            >
+                                {featuredResources.map((dataset) => (
+                                    <Grid
+                                        container
+                                        key={dataset.id}
+                                        xs={12}
+                                        sm={6}
+                                        md={4}
+                                        direction="row"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        sx={{ p: 4 }}
+                                    >
+                                        <FeaturedCard
+                                            key={dataset.id}
+                                            cardtype={dataset['resource-type'] + 's'}
+                                            pageid={dataset.id}
+                                            title={dataset.title}
+                                            authors={dataset.authors}
+                                            thumbnailImage={dataset['thumbnail-image']} />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Container>
             }
         </CssVarsProvider>
     )

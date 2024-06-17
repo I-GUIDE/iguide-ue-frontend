@@ -49,12 +49,12 @@ export default function InfoCard(props) {
             orientation="horizontal"
             sx={{
                 width: "100%",
-                height: 280,
+                height: 220,
                 '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
             }}
         >
             {/* Only display the thumbnail when the width is wider than 900px */}
-            <AspectRatio ratio="1" sx={{ width: 240, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+            <AspectRatio ratio="1" sx={{ width: 190, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
                 <img
                     src={thumbnailImage}
                     loading="lazy"
