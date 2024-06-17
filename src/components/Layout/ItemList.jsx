@@ -73,7 +73,7 @@ export default function ItemList(props) {
                                         cardtype={dataset['resource-type'] + 's'}
                                         pageid={dataset.id}
                                         title={dataset.title}
-                                        subtitle={dataset.authors}
+                                        authors={dataset.authors}
                                         tags={dataset.tags}
                                         contents={dataset.contents}
                                         thumbnailImage={dataset['thumbnail-image']} />
