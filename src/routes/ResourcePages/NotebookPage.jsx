@@ -79,28 +79,20 @@ function NotebookPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <MainContent title={title} authors={authors} contents={abstract} />
-                            </Stack>
+                            <MainContent title={title} authors={authors} contents={abstract} />
                         </Grid>
 
                         <Grid sm={12} md={4}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <CapsuleList title="Tags" items={tags} />
-                                <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
-                                <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
-                                <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
-                            </Stack>
+                            <CapsuleList title="Tags" items={tags} />
+                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                            <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
+                            <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                         </Grid>
                         <Grid sm={12} md={8}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
-                            </Stack>
+                            <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
                         </Grid>
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <GoBackButton parentPage="/notebooks" />
-                            </Stack>
+                            <GoBackButton parentPage="/notebooks" />
                         </Grid>
                     </Grid>
                 </Box>
