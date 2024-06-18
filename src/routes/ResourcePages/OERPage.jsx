@@ -86,7 +86,7 @@ function OERPage() {
                         </Grid>
 
                         <Grid md={12}>
-                            <GoBackButton parentPage="/oers" />
+                            <GoBackButton parentPage="/oers" parentPageName="Educational Resources" />
                         </Grid>
                     </Grid>
                 </Box>

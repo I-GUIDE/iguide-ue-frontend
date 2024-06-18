@@ -8,6 +8,7 @@ import Divider from '@mui/joy/Divider';
 
 export default function GoBackButton(props) {
     const parentPage = props.parentPage;
+    const parentPageName = props.parentPageName;
 
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -24,7 +25,7 @@ export default function GoBackButton(props) {
                         href={parentPage}
                         sx={{ color: 'inherit' }}
                     >
-                        Go Back
+                        Go Back to All {parentPageName}
                     </Link>
                 </Button>
             </Box>
