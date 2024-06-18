@@ -6,11 +6,13 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
+import Typography from '@mui/joy/Typography';
 
 import InfoCard from '../InfoCard';
 import Header from './Header';
 
 import { DataRetriever } from '../../utils/DataRetrieval';
+import { arrayLength } from '../../helpers/helper';
 
 export default function ItemList(props) {
     const dataType = props.dataType;
@@ -20,6 +22,7 @@ export default function ItemList(props) {
     const [metadataList, setMetadataList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [resultLength, setResultLength] = useState(null);
 
     useEffect(() => {
         async function retrieveData() {
@@ -27,6 +30,7 @@ export default function ItemList(props) {
                 const data = await DataRetriever(dataType);
                 setMetadataList(data);
                 setLoading(false);
+                setResultLength(arrayLength(data));
             } catch (error) {
                 setError(error);
                 setLoading(false);
@@ -66,6 +70,15 @@ export default function ItemList(props) {
                         }}
                     >
                         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                            {
+                                resultLength > 1
+                                    ? <Typography>
+                                        Showing {resultLength} results
+                                    </Typography>
+                                    : <Typography>
+                                        Showing {resultLength} result
+                                    </Typography>
+                            }
                             {metadataList?.map((dataset) => (
                                 <InfoCard
                                     key={dataset.id}
