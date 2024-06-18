@@ -27,7 +27,7 @@ export default function RelatedResourcesList(props) {
     }, []);
 
     // If DataRetriever has returned result, but the result is not an Array, don't render anything.
-    if (isFinished && !Array.isArray(relatedResourcesIds) || relatedResourcesIds.length == 0) {
+    if (isFinished && !Array.isArray(relatedResourcesIds) || (Array.isArray(relatedResourcesIds) && relatedResourcesIds.length == 0)) {
         return null;
     }
 
@@ -45,7 +45,7 @@ export default function RelatedResourcesList(props) {
             <List aria-labelledby="decorated-list-demo">
                 {relatedResourcesIds.map((relatedResourcesId) => (
                     <Link key={relatedResourcesId} href={'/notebooks/${relatedResourcesId}'} sx={{ color: 'text.tertiary' }}>
-                        <Typography sx={{ textDecoration: 'underline', py: 1 }}>
+                        <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 1 }}>
                             {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
                         </Typography>
                     </Link>
