@@ -46,7 +46,7 @@ export default function ActionList(props) {
                                 rel="noopener noreferrer"
                                 sx={{ color: 'inherit' }}
                             >
-                                Access Metadata&nbsp;<ExitToAppIcon />
+                                Access Data Source&nbsp;<ExitToAppIcon />
                             </Link>
                         </Button>
                     }
