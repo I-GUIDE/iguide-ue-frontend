@@ -32,7 +32,7 @@ export default function CapsuleList(props) {
                         key={item}
                         variant="outlined"
                         color="primary"
-                        size="sm"
+                        size="md"
                         sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
                     >
                         {item}

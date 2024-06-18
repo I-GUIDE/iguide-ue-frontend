@@ -3,7 +3,6 @@ import * as React from 'react';
 import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
-import Chip from '@mui/joy/Chip';
 import Box from '@mui/joy/Box';
 import { CopyBlock, dracula } from "react-code-blocks";
 
@@ -28,6 +27,7 @@ export default function CodeSnippet(props) {
                 >
                     Data direct access
                 </Typography>
+                <Divider inset="none" />
                 <Tabs aria-label="Basic tabs" defaultValue={0}>
                     <TabList>
                         <Tab>I-GUIDE Platform</Tab>
