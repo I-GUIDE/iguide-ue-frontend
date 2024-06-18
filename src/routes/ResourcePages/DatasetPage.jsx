@@ -86,8 +86,9 @@ function DatasetPage() {
 
                         <Grid sm={12} md={6}>
                             <CapsuleList title="Tags" items={tags} />
+                            <ActionList title="Data Exploration" externalLink={externalLink} externalLinkText="Access Data Source"
+                                directDownloadLink={directDownloadLink} directDownloadLinkText="Download Data" size={size} />
                             <CodeSnippet directDownloadLink={directDownloadLink} />
-                            <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
                         </Grid>
                         <Grid sm={12} md={6}>
                             <RelatedResourcesList title="Related Notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
