@@ -72,28 +72,20 @@ function PublicationPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <MainContent title={title} authors={authors} contents={abstract} />
-                            </Stack>
+                            <MainContent title={title} authors={authors} contents={abstract} />
                         </Grid>
 
                         <Grid sm={12} md={6}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <CapsuleList title="Tags" items={tags} />
-                            </Stack>
+                            <CapsuleList title="Tags" items={tags} />
                         </Grid>
                         <Grid sm={12} md={6}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
-                                <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
-                                <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
-                            </Stack>
+                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                            <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
+                            <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
                         </Grid>
 
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <GoBackButton parentPage="/publication" />
-                            </Stack>
+                            <GoBackButton parentPage="/publication" />
                         </Grid>
                     </Grid>
                 </Box>

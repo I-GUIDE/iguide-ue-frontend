@@ -80,30 +80,22 @@ function DatasetPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <MainContent title={title} authors={authors} contents={abstract} />
-                            </Stack>
+                            <MainContent title={title} authors={authors} contents={abstract} />
                         </Grid>
 
                         <Grid sm={12} md={6}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <CapsuleList title="Tags" items={tags} />
-                                <CodeSnippet directDownloadLink={directDownloadLink} />
-                                <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
-                            </Stack>
+                            <CapsuleList title="Tags" items={tags} />
+                            <CodeSnippet directDownloadLink={directDownloadLink} />
+                            <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
                         </Grid>
                         <Grid sm={12} md={6}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
-                                <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
-                                <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
-                            </Stack>
+                            <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
+                            <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
+                            <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                         </Grid>
 
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <GoBackButton parentPage="/datasets" />
-                            </Stack>
+                            <GoBackButton parentPage="/datasets" />
                         </Grid>
                     </Grid>
                 </Box>
