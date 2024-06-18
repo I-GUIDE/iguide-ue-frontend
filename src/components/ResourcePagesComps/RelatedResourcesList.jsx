@@ -6,7 +6,7 @@ import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
 import Link from '@mui/joy/Link';
 
-import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
+import { extractValueFromJSON } from '../../helpers/helper';
 import { DataRetriever } from '../../utils/DataRetrieval';
 
 export default function RelatedResourcesList(props) {
