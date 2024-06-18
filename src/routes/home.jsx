@@ -16,6 +16,7 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
+import Link from '@mui/joy/Link';
 
 import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
@@ -29,8 +30,9 @@ const Home = () => {
         status: 'initial',
     });
 
+    const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [hasResults, setHasResults] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
     const [searchResultLength, setSearchResultLength] = useState(null);
 
     const [featuredResources, setFeaturedResources] = useState([]);
@@ -52,9 +54,10 @@ const Home = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setData((current) => ({ ...current, status: 'loading' }));
+        setSearchTerm(data['content']);
         const returnResults = await DataSearcher(data['content']);
         setSearchResults(returnResults);
-        setHasResults(true);
+        setHasSearched(true);
         setSearchResultLength(arrayLength(returnResults));
 
         try {
@@ -127,58 +130,9 @@ const Home = () => {
                     </CardContent>
                 </Card>
             </Box>
-            {hasResults
+            {!hasSearched
+                // By default, users should see the featured resources
                 ? <Container maxWidth="xl">
-                    <Box
-                        component="main"
-                        sx={{
-                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
-                            display: 'grid',
-                            gridTemplateColumns: { xs: 'auto', md: '100%' },
-                            gridTemplateRows: 'auto 1fr auto',
-                        }}
-                    >
-                        <Grid
-                            container
-                            rowSpacing={2}
-                            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                            sx={{
-                                backgroundColor: 'inherit',
-                                px: { xs: 2, md: 4 },
-                                pt: 4,
-                                pb: 8,
-                                borderBottom: '1px solid',
-                                borderColor: 'divider',
-                            }}
-                        >
-                            <Grid xs={12}>
-                                <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                    {
-                                        searchResultLength > 1
-                                            ? <Typography>
-                                                Showing {searchResultLength} results
-                                            </Typography>
-                                            : <Typography>
-                                                Showing {searchResultLength} result
-                                            </Typography>
-                                    }
-                                    {searchResults?.map((result) => (
-                                        <InfoCard
-                                            key={result.id}
-                                            cardtype={result['resource-type'] + 's'}
-                                            pageid={result.id}
-                                            title={result.title}
-                                            authors={result.authors}
-                                            tags={result.tags}
-                                            contents={result.contents}
-                                            thumbnailImage={result['thumbnail-image']} />
-                                    ))}
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Container>
-                : <Container maxWidth="xl">
                     <Box
                         component="main"
                         sx={{
@@ -231,6 +185,82 @@ const Home = () => {
                                             thumbnailImage={dataset['thumbnail-image']} />
                                     </Grid>
                                 ))}
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Container>
+                // When there is a search action, shows the returned results
+                : <Container maxWidth="xl">
+                    <Box
+                        component="main"
+                        sx={{
+                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
+                            display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
+                        }}
+                    >
+                        <Grid
+                            container
+                            rowSpacing={2}
+                            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                            sx={{
+                                backgroundColor: 'inherit',
+                                px: { xs: 2, md: 4 },
+                                pt: 4,
+                                pb: 8,
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
+                            }}
+                        > <Grid xs={12}>
+                                <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                    {/* Search result summary and "clear search button" */}
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
+                                        spacing={2}
+                                    >
+                                        {
+                                            searchResultLength > 1
+                                                ? <Typography>
+                                                    Search "{searchTerm}", return {searchResultLength} results
+                                                </Typography>
+                                                : <Typography>
+                                                    Search "{searchTerm}", return {searchResultLength} result
+                                                </Typography>
+                                        }
+                                        <Box
+                                            direction="row"
+                                            justifyContent="flex-start"
+                                            alignItems="flex-end"
+                                            spacing={1}
+                                        >
+                                            {
+                                                searchResultLength > 0
+                                                    ? <Button key="clear-search" size="sm" variant='outlined' onClick={() => setHasSearched(false)}>
+                                                        Clear Search
+                                                    </Button>
+                                                    : <Button key="clear-search" size="sm" variant='outlined' onClick={() => setHasSearched(false)}>
+                                                        Try Again
+                                                    </Button>
+                                            }
+                                        </Box>
+                                    </Stack>
+
+                                    {/* Search result list */}
+                                    {searchResults?.map((result) => (
+                                        <InfoCard
+                                            key={result.id}
+                                            cardtype={result['resource-type'] + 's'}
+                                            pageid={result.id}
+                                            title={result.title}
+                                            authors={result.authors}
+                                            tags={result.tags}
+                                            contents={result.contents}
+                                            thumbnailImage={result['thumbnail-image']} />
+                                    ))}
+                                </Stack>
                             </Grid>
                         </Grid>
                     </Box>
