@@ -84,7 +84,7 @@ function OERPage() {
                         </Grid>
                         <Grid sm={12} md={6}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                                <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
                                 <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
                                 <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
                             </Stack>

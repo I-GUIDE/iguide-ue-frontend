@@ -27,7 +27,7 @@ export default function CapsuleList(props) {
                 alignItems="flex-end"
                 spacing={1}
             >
-                {items.map((item) => (
+                {items?.map((item) => (
                     <Chip
                         key={item}
                         variant="outlined"

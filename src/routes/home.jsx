@@ -149,7 +149,7 @@ const Home = () => {
                         >
                             <Grid xs={12}>
                                 <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                    {searchResults.map((result) => (
+                                    {searchResults?.map((result) => (
                                         <InfoCard
                                             key={result.id}
                                             cardtype={result['resource-type'] + 's'}
@@ -197,7 +197,7 @@ const Home = () => {
                                 direction="row"
                                 xs={12}
                             >
-                                {featuredResources.map((dataset) => (
+                                {featuredResources?.map((dataset) => (
                                     <Grid
                                         container
                                         key={dataset.id}

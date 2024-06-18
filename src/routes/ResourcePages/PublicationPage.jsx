@@ -84,7 +84,7 @@ function PublicationPage() {
                         </Grid>
                         <Grid sm={12} md={6}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                                <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
                                 <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                                 <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
                             </Stack>
