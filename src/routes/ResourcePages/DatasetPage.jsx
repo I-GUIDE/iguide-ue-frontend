@@ -9,7 +9,6 @@ import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
 import { DataRetriever } from '../../utils/DataRetrieval';
-import './NotebookIFrame.css';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';

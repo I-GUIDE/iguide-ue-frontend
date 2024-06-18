@@ -9,13 +9,11 @@ import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
 import { DataRetriever } from '../../utils/DataRetrieval';
-import './NotebookIFrame.css';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
 import Header from '../../components/Layout/Header';
-import './NotebookIFrame.css';
 
 function OERPage() {
     const [title, setTitle] = useState('');
@@ -25,7 +23,6 @@ function OERPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
-    const [htmlNotebook, setHtmlNotebook] = useState("")
     const id = useParams().id;
 
     useEffect(() => {
@@ -41,7 +38,6 @@ function OERPage() {
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
-                    setHtmlNotebook(obj['html-notebook'])
                     break;
                 }
             }
