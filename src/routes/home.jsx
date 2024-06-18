@@ -20,6 +20,7 @@ import Typography from '@mui/joy/Typography';
 import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
 import { DataSearcher, featuredResourcesRetriever } from '../utils/DataRetrieval';
+import { arrayLength } from '../helpers/helper';
 
 const Home = () => {
     // define search data
@@ -30,6 +31,7 @@ const Home = () => {
 
     const [searchResults, setSearchResults] = useState([]);
     const [hasResults, setHasResults] = useState(false);
+    const [searchResultLength, setSearchResultLength] = useState(null);
 
     const [featuredResources, setFeaturedResources] = useState([]);
     const [error, setError] = useState(null);
@@ -53,6 +55,7 @@ const Home = () => {
         const returnResults = await DataSearcher(data['content']);
         setSearchResults(returnResults);
         setHasResults(true);
+        setSearchResultLength(arrayLength(returnResults));
 
         try {
             // Replace timeout with real backend operation
@@ -149,6 +152,15 @@ const Home = () => {
                         >
                             <Grid xs={12}>
                                 <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                    {
+                                        searchResultLength > 1
+                                            ? <Typography>
+                                                Showing {searchResultLength} results
+                                            </Typography>
+                                            : <Typography>
+                                                Showing {searchResultLength} result
+                                            </Typography>
+                                    }
                                     {searchResults?.map((result) => (
                                         <InfoCard
                                             key={result.id}
