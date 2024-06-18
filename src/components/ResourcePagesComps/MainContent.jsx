@@ -26,12 +26,12 @@ export default function MainContent(props) {
                     backgroundColor: 'inherit',
                 }}
             >
-                <Grid sm={12} md={8}>
+                <Grid xs={12} md={8}>
                     <Typography>
                         {contents}
                     </Typography>
                 </Grid>
-                <Grid sm={12} md={4}>
+                <Grid xs={12} md={4}>
                     <AspectRatio variant="outlined" maxHeight={280} sx={{ px: 2 }}>
                         <img
                             src={thumbnailImage}

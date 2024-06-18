@@ -71,7 +71,7 @@ export default function NotebookViewer(props) {
                         rel="noopener noreferrer"
                         sx={{ color: 'inherit' }}
                     >
-                        Access Notebook on I-GUIDE Platform&nbsp;<ExitToAppIcon />
+                        Run This Notebook&nbsp;<ExitToAppIcon />
                     </Link>
                 </Button>&nbsp;(Login Required)
             </Box>

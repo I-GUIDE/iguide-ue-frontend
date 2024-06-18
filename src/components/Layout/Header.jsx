@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
-import { Container } from '@mui/joy';
+import Container from '@mui/joy/Container';
 
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
