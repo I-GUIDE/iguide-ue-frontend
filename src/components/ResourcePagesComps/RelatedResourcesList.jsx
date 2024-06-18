@@ -6,7 +6,7 @@ import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
 import Link from '@mui/joy/Link';
 
-import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
+import { extractValueFromJSON } from '../../helpers/helper';
 import { DataRetriever } from '../../utils/DataRetrieval';
 
 export default function RelatedResourcesList(props) {
@@ -44,7 +44,7 @@ export default function RelatedResourcesList(props) {
             <Divider inset="none" />
             <List aria-labelledby="decorated-list-demo">
                 {relatedResourcesIds?.map((relatedResourcesId) => (
-                    <Link key={relatedResourcesId} href={'/notebooks/${relatedResourcesId}'} sx={{ color: 'text.tertiary' }}>
+                    <Link key={relatedResourcesId} href={'/' + relatedResourceType + 's/' + relatedResourcesId} sx={{ color: 'text.tertiary' }}>
                         <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 0.5 }}>
                             {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
                         </Typography>

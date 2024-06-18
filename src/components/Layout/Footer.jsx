@@ -37,10 +37,11 @@ export default function Footer(props) {
                             </Grid>
                             <Grid xs={8} md={5}>
                                 <Typography level="h3" textColor="#fff" sx={{ py: 1 }}>
-                                    I-GUIDE All right reserved
+                                    © 2024 I-GUIDE All Rights Reserved
                                 </Typography>
                                 <Typography level="body-xs" textColor="#fff" sx={{ py: 1 }}>
-                                    Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE) is supported by the National Science Foundation
+                                    Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE)
+                                    is supported by the National Science Foundation.
                                 </Typography>
                             </Grid>
                             <Grid xs={12} md={5}>

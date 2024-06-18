@@ -69,6 +69,4 @@ export default function ActionList(props) {
     } else {
         return (null)
     }
-
-
 }
