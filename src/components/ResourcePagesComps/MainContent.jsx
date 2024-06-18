@@ -15,24 +15,23 @@ export default function MainContent(props) {
 
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-            <Typography level="h1">{title}</Typography>
-            <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
-                Contributed by {printListWithDelimiter(authors, ',')}
-            </Typography>
             <Grid
                 container
                 rowSpacing={2}
-                sx={{
-                    backgroundColor: 'inherit',
-                }}
+                columnSpacing={8}
+                alignItems="center"
             >
                 <Grid xs={12} md={8}>
-                    <Typography>
+                    <Typography level="h1" sx={{ py: 1 }}>{title}</Typography>
+                    <Typography level="h4" sx={{ py: 1 }}>
+                        Contributed by {printListWithDelimiter(authors, ',')}
+                    </Typography>
+                    <Typography sx={{ py: 1 }}>
                         {contents}
                     </Typography>
                 </Grid>
                 <Grid xs={12} md={4}>
-                    <AspectRatio variant="outlined" maxHeight={280} sx={{ px: 2 }}>
+                    <AspectRatio variant="outlined" maxHeight={280} sx={{ py: 1 }}>
                         <img
                             src={thumbnailImage}
                             loading="lazy"
