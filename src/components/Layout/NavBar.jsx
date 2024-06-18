@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
@@ -9,8 +11,6 @@ import { Popper } from '@mui/base/Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-
-import { Link } from 'react-router-dom';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 
@@ -128,7 +128,6 @@ export default function NavBar() {
                         src="/images/Logo.png"
                     />
                 </Box>
-
                 {pages?.map((page) => (
                     <Box key={page[1]} sx={{ width: 'flex' }}>
                         <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
