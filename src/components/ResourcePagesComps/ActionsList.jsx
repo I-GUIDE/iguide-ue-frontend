@@ -11,13 +11,16 @@ import CloudDownloadOutlinedIcon from '@mui/icons-material/CloudDownloadOutlined
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export default function ActionList(props) {
+    const title = props.title;
     const externalLink = props.externalLink;
     const directDownloadLink = props.directDownloadLink;
     const size = props.size;
+    const externalLinkText = props.externalLinkText;
+    const directDownloadLinkText = props.directDownloadLinkText;
 
-    const hasExternalLink = externalLink !== "";
-    const hasDirectDownloadLink = directDownloadLink !== "";
-    const hasSize = size !== "";
+    const hasExternalLink = (externalLink && externalLink !== "");
+    const hasDirectDownloadLink = (directDownloadLink && directDownloadLink !== "");
+    const hasSize = (size && size !== "");
 
     if (hasExternalLink || hasDirectDownloadLink) {
         return (
@@ -28,7 +31,7 @@ export default function ActionList(props) {
                     fontWeight="lg"
                     mb={1}
                 >
-                    Data Exploration
+                    {title}
                 </Typography>
                 <Divider inset="none" />
                 <Box
@@ -38,7 +41,7 @@ export default function ActionList(props) {
                     spacing={1}
                 >
                     {hasExternalLink &&
-                        <Button color="warning" size="sm" sx={{ my: 1, mx: 0.5 }}>
+                        <Button color="success" size="sm" sx={{ my: 1, mx: 0.5 }}>
                             <Link
                                 underline="none"
                                 href={externalLink}
@@ -46,12 +49,12 @@ export default function ActionList(props) {
                                 rel="noopener noreferrer"
                                 sx={{ color: 'inherit' }}
                             >
-                                Access Data Source&nbsp;<ExitToAppIcon />
+                                {externalLinkText}&nbsp;<ExitToAppIcon />
                             </Link>
                         </Button>
                     }
                     {hasDirectDownloadLink &&
-                        <Button color="danger" size="sm" sx={{ my: 1, mx: 0.5 }}>
+                        <Button color="warning" size="sm" sx={{ my: 1, mx: 0.5 }}>
                             <Link
                                 underline="none"
                                 href={directDownloadLink}
@@ -59,7 +62,7 @@ export default function ActionList(props) {
                                 rel="noopener noreferrer"
                                 sx={{ color: 'inherit' }}
                             >
-                                Download Data {hasSize && '(' + size + ')'}&nbsp;<CloudDownloadOutlinedIcon />
+                                {directDownloadLinkText}&nbsp;{hasSize && '(' + size + ')'}&nbsp;<CloudDownloadOutlinedIcon />
                             </Link>
                         </Button>
                     }

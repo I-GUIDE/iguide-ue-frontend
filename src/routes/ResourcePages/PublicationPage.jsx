@@ -12,6 +12,7 @@ import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
+import ActionList from '../../components/ResourcePagesComps/ActionsList';
 import Header from '../../components/Layout/Header';
 
 function PublicationPage() {
@@ -22,6 +23,9 @@ function PublicationPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedOERs, setRelatedOERs] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+    const [externalLink, setExternalLink] = useState('');
+    const [directDownloadLink, setDirectDownloadLink] = useState('');
+    const [size, setSize] = useState('');
     const [thumbnailImage, setThumbnailImage] = useState('');
     const id = useParams().id;
 
@@ -38,6 +42,9 @@ function PublicationPage() {
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
+                    setExternalLink(obj['external-link']);
+                    setDirectDownloadLink(obj['direct-download-link']);
+                    setSize(obj.size);
                     setThumbnailImage(obj['thumbnail-image']);
                     break;
                 }
@@ -78,6 +85,8 @@ function PublicationPage() {
 
                         <Grid sm={12} md={6}>
                             <CapsuleList title="Tags" items={tags} />
+                            <ActionList title="Publication Exploration" externalLink={externalLink} externalLinkText="Access Publication"
+                                directDownloadLink={directDownloadLink} directDownloadLinkText="Download Paper" size={size} />
                         </Grid>
                         <Grid sm={12} md={6}>
                             <RelatedResourcesList title="Related Datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
