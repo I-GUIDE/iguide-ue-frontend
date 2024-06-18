@@ -13,10 +13,9 @@ import './NotebookIFrame.css';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
-import CodeSnippet from '../../components/ResourcePagesComps/CodeSnippet';
-import ActionList from '../../components/ResourcePagesComps/ActionsList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
 import Header from '../../components/Layout/Header';
+import './NotebookIFrame.css';
 
 function NotebookPage() {
     const [title, setTitle] = useState('');
