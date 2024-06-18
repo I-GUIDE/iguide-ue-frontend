@@ -14,7 +14,7 @@ export default function MainContent(props) {
     const thumbnailImage = props.thumbnailImage;
 
     return (
-        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+        <Stack sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
             <Grid
                 container
                 rowSpacing={2}

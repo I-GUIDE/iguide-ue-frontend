@@ -25,7 +25,7 @@ export default function CodeSnippet(props) {
                     fontWeight="lg"
                     mb={1}
                 >
-                    Data direct access
+                    Direct Data Access
                 </Typography>
                 <Divider inset="none" />
                 <Tabs aria-label="Basic tabs" defaultValue={0}>
