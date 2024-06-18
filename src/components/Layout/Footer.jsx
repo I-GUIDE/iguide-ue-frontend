@@ -48,16 +48,16 @@ export default function Footer() {
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid xs={7}>
+                                <Grid xs={8}>
                                     <Typography level="h5" textColor="#fff" sx={{ py: 1 }}>
-                                        © 2024 I-GUIDE All Rights Reserved
+                                        © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
                                     </Typography>
                                     <Typography level="body-xs" textColor="#fff" sx={{ py: 1 }}>
                                         Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE)
                                         is supported by the National Science Foundation.
                                     </Typography>
                                 </Grid>
-                                <Grid xs={3}>
+                                <Grid xs={2}>
                                     <Stack
                                         direction="row"
                                         justifyContent="flex-start"
