@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -13,8 +12,8 @@ import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
+import NotebookViewer from '../../components/ResourcePagesComps/NotebookViewer';
 import Header from '../../components/Layout/Header';
-import './NotebookIFrame.css';
 
 function NotebookPage() {
     const [title, setTitle] = useState('');
@@ -24,7 +23,9 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedOERs, setRelatedOERs] = useState([]);
-    const [htmlNotebook, setHtmlNotebook] = useState("");
+    const [repoUrl, setRepoUrl] = useState('');
+    const [notebookFile, setNotebookFile] = useState('');
+    const [thumbnailImage, setThumbnailImage] = useState('');
     const id = useParams().id;
 
     useEffect(() => {
@@ -40,7 +41,9 @@ function NotebookPage() {
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
-                    setHtmlNotebook(obj['html-notebook']);
+                    setRepoUrl(obj['notebook-repo']);
+                    setNotebookFile(obj['notebook-file']);
+                    setThumbnailImage(obj['thumbnail-image']);
                     break;
                 }
             }
@@ -75,31 +78,20 @@ function NotebookPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <MainContent title={title} authors={authors} contents={abstract} />
-                            </Stack>
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
                         </Grid>
 
                         <Grid sm={12} md={4}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <CapsuleList title="Tags" items={tags} />
-                                <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
-                                <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
-                                <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
-                            </Stack>
+                            <CapsuleList title="Tags" items={tags} />
+                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                            <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
+                            <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                         </Grid>
                         <Grid sm={12} md={8}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <div className="standards-page">
-                                    <iframe className="responsive-iframe" src={htmlNotebook}></iframe>
-                                </div>
-                            </Stack>
+                            <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
                         </Grid>
-
                         <Grid md={12}>
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <GoBackButton parentPage="/notebooks" />
-                            </Stack>
+                            <GoBackButton parentPage="/notebooks" />
                         </Grid>
                     </Grid>
                 </Box>
