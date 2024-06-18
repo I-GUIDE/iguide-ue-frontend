@@ -32,7 +32,7 @@ export default function RelatedResourcesList(props) {
     }
 
     return (
-        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
             <Typography
                 id=""
                 level="h5"

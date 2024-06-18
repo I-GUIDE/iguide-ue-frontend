@@ -47,7 +47,7 @@ export default function NotebookViewer(props) {
     }
 
     return (
-        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+        <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
             <Typography
                 id="notebook-tags"
                 level="h5"
@@ -75,11 +75,9 @@ export default function NotebookViewer(props) {
                     </Link>
                 </Button>&nbsp;(Login Required)
             </Box>
-            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                <div className="standards-page">
-                    <iframe style={iFrameStyle} src={notebookUrl}></iframe>
-                </div>
-            </Stack>
+            <div className="standards-page">
+                <iframe style={iFrameStyle} src={notebookUrl}></iframe>
+            </div>
         </Stack>
     )
 }
