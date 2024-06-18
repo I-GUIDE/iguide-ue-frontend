@@ -48,7 +48,6 @@ export async function DataSearcher(keyword) {
     }
 
     const results = await response.json();
-    console.log('Search results:', results);
 
     return results;
 }
