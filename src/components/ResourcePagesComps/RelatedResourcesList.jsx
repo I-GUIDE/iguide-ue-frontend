@@ -45,7 +45,7 @@ export default function RelatedResourcesList(props) {
             <List aria-labelledby="decorated-list-demo">
                 {relatedResourcesIds.map((relatedResourcesId) => (
                     <Link key={relatedResourcesId} href={'/notebooks/${relatedResourcesId}'} sx={{ color: 'text.tertiary' }}>
-                        <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 1 }}>
+                        <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 0.5 }}>
                             {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
                         </Typography>
                     </Link>
