@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -23,6 +22,7 @@ function OERPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+    const [thumbnailImage, setThumbnailImage] = useState('');
     const id = useParams().id;
 
     useEffect(() => {
@@ -38,6 +38,7 @@ function OERPage() {
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
+                    setThumbnailImage(obj['thumbnail-image']);
                     break;
                 }
             }
@@ -72,7 +73,7 @@ function OERPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} />
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
                         </Grid>
 
                         <Grid sm={12} md={6}>

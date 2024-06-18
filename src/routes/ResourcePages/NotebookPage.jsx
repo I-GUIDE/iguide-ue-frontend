@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -24,9 +23,9 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedOERs, setRelatedOERs] = useState([]);
-    const [htmlNotebook, setHtmlNotebook] = useState('');
     const [repoUrl, setRepoUrl] = useState('');
     const [notebookFile, setNotebookFile] = useState('');
+    const [thumbnailImage, setThumbnailImage] = useState('');
     const id = useParams().id;
 
     useEffect(() => {
@@ -42,9 +41,9 @@ function NotebookPage() {
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
                     setTags(obj.tags);
-                    setHtmlNotebook(obj['html-notebook']);
                     setRepoUrl(obj['notebook-repo']);
                     setNotebookFile(obj['notebook-file']);
+                    setThumbnailImage(obj['thumbnail-image']);
                     break;
                 }
             }
@@ -79,7 +78,7 @@ function NotebookPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} />
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
                         </Grid>
 
                         <Grid sm={12} md={4}>

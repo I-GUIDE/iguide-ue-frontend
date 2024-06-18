@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Stack from '@mui/joy/Stack';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -28,6 +27,7 @@ function DatasetPage() {
     const [externalLink, setExternalLink] = useState('');
     const [directDownloadLink, setDirectDownloadLink] = useState('');
     const [size, setSize] = useState('');
+    const [thumbnailImage, setThumbnailImage] = useState('');
     const id = useParams().id;
 
     useEffect(() => {
@@ -46,6 +46,7 @@ function DatasetPage() {
                     setExternalLink(obj['external-link']);
                     setDirectDownloadLink(obj['direct-download-link']);
                     setSize(obj.size);
+                    setThumbnailImage(obj['thumbnail-image']);
                     break;
                 }
             }
@@ -80,7 +81,7 @@ function DatasetPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} />
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
                         </Grid>
 
                         <Grid sm={12} md={6}>
@@ -105,4 +106,3 @@ function DatasetPage() {
 }
 
 export default DatasetPage;
-
