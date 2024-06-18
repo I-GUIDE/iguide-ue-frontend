@@ -24,6 +24,8 @@ function DatasetPage() {
     const [abstract, setAbstract] = useState('');
     const [tags, setTags] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+    const [relatedPublications, setRelatedPublicatons] = useState([]);
+    const [relatedOERs, setRelatedOERs] = useState([]);
     const [externalLink, setExternalLink] = useState('');
     const [directDownloadLink, setDirectDownloadLink] = useState('');
     const [size, setSize] = useState('');
@@ -36,6 +38,7 @@ function DatasetPage() {
             for (const obj of Datasets) {
                 if (obj.id === id) {
                     setRelatedNotebooks(obj['related-notebooks']);
+                    setRelatedPublicatons(obj['related-pubulications']);
                     setTitle(obj.title);
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
@@ -76,13 +79,29 @@ function DatasetPage() {
                             borderColor: 'divider',
                         }}
                     >
-                        <Grid xs={12}>
+                        <Grid md={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <MainContent title={title} authors={authors} contents={abstract} />
+                            </Stack>
+                        </Grid>
+
+                        <Grid sm={12} md={6}>
+                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <CapsuleList title="Tags" items={tags} />
-                                <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
                                 <CodeSnippet directDownloadLink={directDownloadLink} />
+                                <ActionList externalLink={externalLink} directDownloadLink={directDownloadLink} size={size} />
+                            </Stack>
+                        </Grid>
+                        <Grid sm={12} md={6}>
+                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <RelatedResourcesList title="Related notebooks" relatedResourcesIds={relatedNotebooks} relatedResourceType="notebook" />
+                                <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
+                                <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
+                            </Stack>
+                        </Grid>
+
+                        <Grid md={12}>
+                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <GoBackButton parentPage="/datasets" />
                             </Stack>
                         </Grid>

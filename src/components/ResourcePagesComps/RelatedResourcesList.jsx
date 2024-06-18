@@ -4,9 +4,7 @@ import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton from '@mui/joy/ListItemButton';
-import { Link } from '@mui/joy';
+import Link from '@mui/joy/Link';
 
 import { extractValueFromJSON, printListWithDelimiter } from '../../helpers/helper';
 import { DataRetriever } from '../../utils/DataRetrieval';
@@ -28,6 +26,11 @@ export default function RelatedResourcesList(props) {
         fetchData();
     }, []);
 
+    // If DataRetriever has returned result, but the result is not an Array, don't render anything.
+    if (isFinished && !Array.isArray(relatedResourcesIds) || relatedResourcesIds.length == 0) {
+        return null;
+    }
+
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
             <Typography
@@ -41,17 +44,10 @@ export default function RelatedResourcesList(props) {
             <Divider inset="none" />
             <List aria-labelledby="decorated-list-demo">
                 {relatedResourcesIds.map((relatedResourcesId) => (
-                    <Link
-                        key={relatedResourcesId}
-                        underline="none"
-                        href={`/notebooks/${relatedResourcesId}`}
-                        sx={{ color: 'text.tertiary' }}
-                    >
-                        <ListItem>
-                            <ListItemButton>
-                                {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
-                            </ListItemButton>
-                        </ListItem>
+                    <Link key={relatedResourcesId} href={'/notebooks/${relatedResourcesId}'} sx={{ color: 'text.tertiary' }}>
+                        <Typography sx={{ textDecoration: 'underline', py: 1 }}>
+                            {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
+                        </Typography>
                     </Link>
                 ))}
             </List>

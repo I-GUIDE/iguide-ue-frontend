@@ -4,12 +4,14 @@ import Link from '@mui/joy/Link';
 import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
+import Divider from '@mui/joy/Divider';
 
 export default function GoBackButton(props) {
     const parentPage = props.parentPage;
 
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+            <Divider inset="none" />
             <Box
                 direction="row"
                 justifyContent="flex-start"
