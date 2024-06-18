@@ -39,6 +39,7 @@ function DatasetPage() {
                 if (obj.id === id) {
                     setRelatedNotebooks(obj['related-notebooks']);
                     setRelatedPublicatons(obj['related-pubulications']);
+                    setRelatedOERs(obj['related-oers']);
                     setTitle(obj.title);
                     setAuthors(obj.authors);
                     setAbstract(obj.contents);
