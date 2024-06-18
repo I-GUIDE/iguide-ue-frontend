@@ -28,7 +28,7 @@ export default function ActionList(props) {
                     fontWeight="lg"
                     mb={1}
                 >
-                    Actions
+                    Data Exploration
                 </Typography>
                 <Divider inset="none" />
                 <Box
@@ -46,7 +46,7 @@ export default function ActionList(props) {
                                 rel="noopener noreferrer"
                                 sx={{ color: 'inherit' }}
                             >
-                                Access Data Details&nbsp;<ExitToAppIcon />
+                                Access Metadata&nbsp;<ExitToAppIcon />
                             </Link>
                         </Button>
                     }

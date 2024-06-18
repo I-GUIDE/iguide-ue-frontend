@@ -83,9 +83,9 @@ function NotebookPage() {
 
                         <Grid sm={12} md={4}>
                             <CapsuleList title="Tags" items={tags} />
-                            <RelatedResourcesList title="Related datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
-                            <RelatedResourcesList title="Related publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
-                            <RelatedResourcesList title="Related educational resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
+                            <RelatedResourcesList title="Related Datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
+                            <RelatedResourcesList title="Related Publications" relatedResourcesIds={relatedPublications} relatedResourceType="publication" />
+                            <RelatedResourcesList title="Related Educational Resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                         </Grid>
                         <Grid sm={12} md={8}>
                             <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
