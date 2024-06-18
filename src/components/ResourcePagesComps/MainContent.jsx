@@ -14,7 +14,7 @@ export default function MainContent(props) {
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
             <Typography level="h1">{title}</Typography>
             <Typography level="h3" fontSize="xl" sx={{ mb: 0.5 }}>
-                Created by {printListWithDelimiter(authors, ',')}
+                Contributed by {printListWithDelimiter(authors, ',')}
             </Typography>
             <Typography>
                 {contents}
