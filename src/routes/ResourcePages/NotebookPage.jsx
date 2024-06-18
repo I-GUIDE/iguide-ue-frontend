@@ -13,8 +13,8 @@ import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
+import NotebookViewer from '../../components/ResourcePagesComps/NotebookViewer';
 import Header from '../../components/Layout/Header';
-import './NotebookIFrame.css';
 
 function NotebookPage() {
     const [title, setTitle] = useState('');
@@ -24,7 +24,9 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedOERs, setRelatedOERs] = useState([]);
-    const [htmlNotebook, setHtmlNotebook] = useState("");
+    const [htmlNotebook, setHtmlNotebook] = useState('');
+    const [repoUrl, setRepoUrl] = useState('');
+    const [notebookFile, setNotebookFile] = useState('');
     const id = useParams().id;
 
     useEffect(() => {
@@ -41,6 +43,8 @@ function NotebookPage() {
                     setAbstract(obj.contents);
                     setTags(obj.tags);
                     setHtmlNotebook(obj['html-notebook']);
+                    setRepoUrl(obj['notebook-repo']);
+                    setNotebookFile(obj['notebook-file']);
                     break;
                 }
             }
@@ -90,12 +94,9 @@ function NotebookPage() {
                         </Grid>
                         <Grid sm={12} md={8}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                <div className="standards-page">
-                                    <iframe className="responsive-iframe" src={htmlNotebook}></iframe>
-                                </div>
+                                <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
                             </Stack>
                         </Grid>
-
                         <Grid md={12}>
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
                                 <GoBackButton parentPage="/notebooks" />
