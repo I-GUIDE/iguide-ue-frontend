@@ -66,7 +66,7 @@ export default function ItemList(props) {
                         }}
                     >
                         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                            {metadataList.map((dataset) => (
+                            {metadataList?.map((dataset) => (
                                 <InfoCard
                                     key={dataset.id}
                                     cardtype={dataset['resource-type'] + 's'}

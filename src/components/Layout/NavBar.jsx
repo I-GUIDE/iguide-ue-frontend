@@ -100,7 +100,7 @@ export default function NavBar() {
                             onKeyDown={handleListKeyDown}
                             sx={{ boxShadow: 'md' }}
                         >
-                            {pages.map((page) => (
+                            {pages?.map((page) => (
                                 <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
                                     <MenuItem key={page[0]}>
                                         <Typography textAlign="center">{page[0]}</Typography>
@@ -129,7 +129,7 @@ export default function NavBar() {
                     />
                 </Box>
 
-                {pages.map((page) => (
+                {pages?.map((page) => (
                     <Box key={page[1]} sx={{ width: 'flex' }}>
                         <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
                             <Button

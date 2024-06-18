@@ -116,7 +116,7 @@ export default function InfoCard(props) {
                     alignItems="flex-end"
                     spacing={1}
                 >
-                    {tags.map((tag) => (
+                    {tags?.map((tag) => (
                         <Chip
                             key={tag}
                             variant="outlined"
