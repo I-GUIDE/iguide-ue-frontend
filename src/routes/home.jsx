@@ -190,7 +190,7 @@ const Home = () => {
                                 level="h3"
                                 sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
                             >
-                                Featured Resources
+                                Highlights
                             </Typography>
                             <Grid
                                 container
