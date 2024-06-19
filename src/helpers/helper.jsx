@@ -25,3 +25,16 @@ export function printListWithDelimiter(listOfItems, delimiter) {
     }
     return returnStr.slice(0, - 2);
 }
+
+/**
+ * Print a list as a string with the given delimiter
+ * @param {Array<string>} listOfItems the list of item
+ * @return {Int} the length of the array. If the object is undefine or not an array, return 0.
+ */
+export function arrayLength(listOfItems) {
+    if (!listOfItems || !Array.isArray(listOfItems)) {
+        return 0;
+    }
+
+    return listOfItems.length;
+}

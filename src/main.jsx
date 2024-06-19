@@ -7,9 +7,11 @@ import Home from "./routes/home";
 import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
 import Publications from "./routes/publications";
-import NotebookPage from "./components/Pages/NotebookPage";
-import DatasetPage from "./components/Pages/DatasetPage";
-import PublicationPage from "./components/Pages/PublicationPage";
+import OERS from './routes/oers';
+import NotebookPage from "./routes/ResourcePages/NotebookPage";
+import DatasetPage from "./routes/ResourcePages/DatasetPage";
+import PublicationPage from "./routes/ResourcePages/PublicationPage";
+import OERPage from './routes/ResourcePages/OERPage';
 
 import {
     createBrowserRouter,
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "/home",
+                path: "/",
                 element: <Home />,
             },
             {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
             {
                 path: "/publications/:id",
                 element: <PublicationPage />,
+            },
+            {
+                path: "/oers",
+                element: <OERS />,
+            },
+            {
+                path: "/oers/:id",
+                element: <OERPage />,
             },
         ]
     },
