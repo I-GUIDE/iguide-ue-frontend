@@ -1,162 +1,149 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-const pages = [['Home', '/home'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications']];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import Box from '@mui/joy/Box';
+import Typography from '@mui/joy/Typography';
+import Stack from '@mui/joy/Stack';
+import Button from '@mui/joy/Button';
+import MenuItem from '@mui/joy/MenuItem';
+import MenuList from '@mui/joy/MenuList';
+import { Popper } from '@mui/base/Popper';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { styled } from '@mui/joy/styles';
+import MenuIcon from '@mui/icons-material/Menu';
+import { AspectRatio } from '@mui/joy';
 
-function NavBar() {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
+export default function NavBar() {
+    const Popup = styled(Popper)({
+        zIndex: 1000,
+    });
+
+    const buttonRef = React.useRef(null);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const handleListKeyDown = (event) => {
+        if (event.key === 'Tab') {
+            setOpen(false);
+        } else if (event.key === 'Escape') {
+            buttonRef.current.focus();
+            setOpen(false);
+        }
     };
 
     return (
-        <AppBar position="static">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    {/* When page is wide */}
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.2rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
+        <Box
+            sx={{
+                height: 70,
+                pt: 1,
+                mx: 2,
+                display: 'auto'
+            }}
+        >
+            {/* When page is narrower than 600px */}
+            <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={1}
+                sx={{ display: { xs: 'flex', sm: 'none' } }}
+            >
+                <Link to={'https://i-guide.io'} style={{ textDecoration: 'none' }}>
+                    <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                    />
+                </Link>
+                <Button
+                    ref={buttonRef}
+                    id="composition-button"
+                    aria-controls={'composition-menu'}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    variant="outlined"
+                    color="neutral"
+                    onClick={() => {
+                        setOpen(!open);
+                    }}
+                >
+                    <MenuIcon />
+                </Button>
+                <Popup
+                    role={undefined}
+                    id="composition-menu"
+                    open={open}
+                    anchorEl={buttonRef.current}
+                    disablePortal
+                    modifiers={[
+                        {
+                            name: 'offset',
+                            options: {
+                                offset: [0, 4],
+                            },
+                        },
+                    ]}
+                >
+                    <ClickAwayListener
+                        onClickAway={(event) => {
+                            if (event.target !== buttonRef.current) {
+                                handleClose();
+                            }
                         }}
                     >
-                        Data with Notebooks
-                    </Typography>
-
-                    {/* When page is narrow, display menu as a dropdown */}
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
+                        <MenuList
+                            variant="outlined"
+                            onKeyDown={handleListKeyDown}
+                            sx={{ boxShadow: 'md' }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
-                        >
-                            {pages.map((page) => (
+                            {pages?.map((page) => (
                                 <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
-                                    <MenuItem key={page[0]} onClick={handleCloseNavMenu}>
+                                    <MenuItem key={page[0]}>
                                         <Typography textAlign="center">{page[0]}</Typography>
                                     </MenuItem>
                                 </Link>
                             ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.2rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        Data with Notebooks
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
-                                <Button
-                                    key={page[0]}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    {page[0]}
-                                </Button>
-                            </Link>
-                        ))}
-                    </Box>
+                        </MenuList>
+                    </ClickAwayListener>
+                </Popup>
+            </Stack>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
+            {/* When page is wider than 600px */}
+            <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={1}
+                sx={{ display: { xs: 'none', sm: 'flex' } }}
+            >
+                <Link to={'https://i-guide.io'} style={{ textDecoration: 'none' }}>
+                    <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                    />
+                </Link>
+                {pages?.map((page) => (
+                    <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
+                        <Button
+                            key={page[0]}
+                            variant="plain"
+                            color="neutral"
+                            size="sm"
+                            sx={{ alignSelf: 'center' }}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
+                            {page[0]}
+                        </Button>
+                    </Link>
+                ))}
+            </Stack>
+        </Box>
     );
 }
-export default NavBar;
