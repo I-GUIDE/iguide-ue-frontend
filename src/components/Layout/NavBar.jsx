@@ -11,6 +11,7 @@ import { Popper } from '@mui/base/Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
+import { AspectRatio } from '@mui/joy';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 
@@ -39,7 +40,8 @@ export default function NavBar() {
         <Box
             sx={{
                 height: 70,
-                p: 2,
+                pt: 1,
+                mx: 2,
                 display: 'auto'
             }}
         >
@@ -51,14 +53,14 @@ export default function NavBar() {
                 spacing={1}
                 sx={{ display: { xs: 'flex', sm: 'none' } }}
             >
-                <Box sx={{ width: 'flex' }}>
+                <Link to={'https://i-guide.io'} style={{ textDecoration: 'none' }}>
                     <Box
                         component="img"
-                        sx={{ height: 40, mx: 2 }}
+                        sx={{ height: 40, mt: 1, px: 2 }}
                         alt="Logo"
                         src="/images/Logo.png"
                     />
-                </Box>
+                </Link>
                 <Button
                     ref={buttonRef}
                     id="composition-button"
@@ -120,28 +122,26 @@ export default function NavBar() {
                 spacing={1}
                 sx={{ display: { xs: 'none', sm: 'flex' } }}
             >
-                <Box sx={{ width: 'flex' }}>
+                <Link to={'https://i-guide.io'} style={{ textDecoration: 'none' }}>
                     <Box
                         component="img"
-                        sx={{ height: 40, mx: 2 }}
+                        sx={{ height: 40, mt: 1, px: 2 }}
                         alt="Logo"
                         src="/images/Logo.png"
                     />
-                </Box>
+                </Link>
                 {pages?.map((page) => (
-                    <Box key={page[1]} sx={{ width: 'flex' }}>
-                        <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
-                            <Button
-                                key={page[0]}
-                                variant="plain"
-                                color="neutral"
-                                size="sm"
-                                sx={{ alignSelf: 'center' }}
-                            >
-                                {page[0]}
-                            </Button>
-                        </Link>
-                    </Box>
+                    <Link key={page[1]} to={page[1]} style={{ textDecoration: 'none' }}>
+                        <Button
+                            key={page[0]}
+                            variant="plain"
+                            color="neutral"
+                            size="sm"
+                            sx={{ alignSelf: 'center' }}
+                        >
+                            {page[0]}
+                        </Button>
+                    </Link>
                 ))}
             </Stack>
         </Box>

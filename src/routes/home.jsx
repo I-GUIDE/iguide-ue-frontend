@@ -16,7 +16,6 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
-import Link from '@mui/joy/Link';
 
 import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
@@ -74,7 +73,7 @@ const Home = () => {
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
             <Box
-                sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 200 }}
+                sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 170 }}
             >
                 <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
                     <CardCover>
@@ -85,12 +84,12 @@ const Home = () => {
                             alt=""
                         />
                     </CardCover>
-                    <CardContent sx={{ justifyContent: 'center' }}>
+                    <CardContent sx={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Container maxWidth="md">
                             <Typography
                                 level="h1"
                                 textColor={'#fff'}
-                                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}
+                                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 2 }}
                             >
                                 I-GUIDE Platform
                             </Typography>
@@ -98,7 +97,7 @@ const Home = () => {
                                 <FormControl>
                                     <Input
                                         sx={{ '--Input-decoratorChildHeight': '45px' }}
-                                        placeholder="Search here"
+                                        placeholder="Search..."
                                         type="text"
                                         required
                                         value={data.content}
@@ -136,7 +135,7 @@ const Home = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
+                            minHeight: 'calc(100vh - 440px)', // 440px is the combined height of the NavBar, search bar, and footer
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -194,7 +193,7 @@ const Home = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 470px)', // 470px is the height of the NavBar, search bar, and footer
+                            minHeight: 'calc(100vh - 440px)', // 440px is the height of the NavBar, search bar, and footer
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -224,10 +223,10 @@ const Home = () => {
                                         {
                                             searchResultLength > 1
                                                 ? <Typography>
-                                                    Search "{searchTerm}", return {searchResultLength} results
+                                                    Searched "{searchTerm}", returned {searchResultLength} results
                                                 </Typography>
                                                 : <Typography>
-                                                    Search "{searchTerm}", return {searchResultLength} result
+                                                    Searched "{searchTerm}", returned {searchResultLength} result
                                                 </Typography>
                                         }
                                         <Box

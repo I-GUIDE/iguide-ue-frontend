@@ -10,12 +10,9 @@ import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
-import { printListWithDelimiter } from '../helpers/helper';
-
 export default function FeaturedCard(props) {
     const thumbnailImage = props.thumbnailImage;
     const title = props.title;
-    const authors = props.authors;
     const cardType = props.cardtype;
     const pageid = props.pageid;
 
@@ -43,7 +40,7 @@ export default function FeaturedCard(props) {
     }
 
     return (
-        <Card variant="outlined" sx={{ width: 320, minHeight: 350 }}>
+        <Card variant="outlined" sx={{ width: 320, minHeight: 300 }}>
             <CardOverflow>
                 <AspectRatio ratio="2">
                     <img
@@ -70,15 +67,14 @@ export default function FeaturedCard(props) {
                 </IconButton>
             </CardOverflow>
             <CardContent>
-                <Typography level="title-md">{title}</Typography>
-                <Typography level="body-sm">
+                <Typography level="title-md" textColor='#000' sx={{ py: 1 }}>
                     <Link
                         overlay
                         underline="none"
                         href={"/" + cardType + "/" + pageid}
                         sx={{ color: 'text.tertiary' }}
                     >
-                        {printListWithDelimiter(authors, ',')}
+                        {title}
                     </Link>
                 </Typography>
             </CardContent>
