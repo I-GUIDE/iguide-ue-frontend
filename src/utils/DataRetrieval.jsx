@@ -1,12 +1,16 @@
 /**
- * Retrieve data from the database based on the resource type. It will return all the data entry with the
- * provided resource type.
+ * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
  * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or
  * 'educational-material'.
+ * @param {string} [sortBy='_score'] - The field to sort the resources by. Defaults to '_score'.
+ * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
+ * @param {int} [from=0] - The starting index for pagination. Defaults to 0.
+ * @param {int} [size=10] - The number of resources to fetch. Defaults to 10.
  * @return {Promise<Array<Dict>>} an array of all data entries with the provided resource type.
+ * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function DataRetriever(resourceType) {
-    const response = await fetch('http://149.165.169.173:5000/api/resources?data_name=' + resourceType);
+export async function DataRetriever(resourceType, sortBy = '_score', order = 'desc', from = 0, size = 10) {
+    const response = await fetch(`http://149.165.169.173:5000/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`);
     if (!response.ok) {
         throw new Error('Error fetching ${data_name}: ${response.statusText}');
     }
