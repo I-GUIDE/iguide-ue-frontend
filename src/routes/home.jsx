@@ -22,12 +22,15 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
 import Pagination from '@mui/material/Pagination';
 
 import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
 import { DataSearcher, featuredResourcesRetriever, getResourceCount } from '../utils/DataRetrieval';
 import { arrayLength } from '../helpers/helper';
+import { RESOURCE_TYPE_COLORS } from '../values/ResourceTypes';
 
 const Home = () => {
     // define search data
@@ -40,6 +43,8 @@ const Home = () => {
     const [searchTerm, setSearchTerm] = useState('');
     // the term that users just typed. It will be assigned to searchTerm soon
     const [nextSearchTerm, setNextSearchTerm] = useState('');
+    // the search will only return results from given category if it's not 'any'
+    const [searchCategory, setSearchCategory] = useState('any');
     const [searchResults, setSearchResults] = useState([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [searchResultLength, setSearchResultLength] = useState(null);
@@ -98,8 +103,8 @@ const Home = () => {
     useEffect(() => {
         async function retrieveSearchData(startingIdx) {
             try {
-                const returnResults = await DataSearcher(searchTerm, null, '_id', 'desc', startingIdx, itemsPerPage);
-                const resourceCount = await getResourceCount('any', searchTerm);
+                const returnResults = await DataSearcher(searchTerm, searchCategory, '_id', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await getResourceCount(searchCategory, searchTerm);
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(resourceCount / itemsPerPage));
@@ -112,7 +117,7 @@ const Home = () => {
         if (searchTerm && searchTerm !== '') {
             retrieveSearchData(currentStartingIdx);
         }
-    }, [currentStartingIdx, searchTerm])
+    }, [currentStartingIdx, searchTerm, searchCategory])
 
     // When users click the pagination, update current starting index
     const handlePageClick = (event, value) => {
@@ -121,6 +126,11 @@ const Home = () => {
         setCurrentStartingIdx(newStartingIdx);
         setCurrentPage(value);
     };
+
+    // When user select a different category in the search bar
+    const handleSelectChange = (event, value) => {
+        setSearchCategory(value);
+    }
 
     return (
         <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -148,29 +158,48 @@ const Home = () => {
                                     I-GUIDE Platform
                                 </Typography>
                                 <form onSubmit={handleSubmit} id="demo">
+                                    <Input
+                                        key="search"
+                                        variant="plain"
+                                        color={RESOURCE_TYPE_COLORS[searchCategory]}
+                                        sx={{ '--Input-decoratorChildHeight': '45px' }}
+                                        placeholder="Search..."
+                                        type="text"
+                                        required
+                                        value={nextSearchTerm}
+                                        onChange={(event) => {
+                                            setData({ content: event.target.value, status: 'initial' })
+                                            setNextSearchTerm(event.target.value)
+                                        }}
+                                        error={data.status === 'failure'}
+                                        startDecorator={
+                                            <Select
+                                                defaultValue="any"
+                                                value={searchCategory}
+                                                variant="plain"
+                                                color={RESOURCE_TYPE_COLORS[searchCategory]}
+                                                onChange={handleSelectChange}
+                                            >
+                                                <Option value="any">All Resources</Option>
+                                                <Option value="dataset">Dataset</Option>
+                                                <Option value="notebook">Notebook</Option>
+                                                <Option value="publication">Publication</Option>
+                                                <Option value="oer">Educational Resource</Option>
+                                            </Select>
+                                        }
+                                        endDecorator={
+                                            <Button
+                                                variant="plain"
+                                                color={RESOURCE_TYPE_COLORS[searchCategory]}
+                                                loading={data.status === 'loading'}
+                                                type="submit"
+                                                sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                                            >
+                                                <SearchIcon />
+                                            </Button>
+                                        }
+                                    />
                                     <FormControl>
-                                        <Input
-                                            sx={{ '--Input-decoratorChildHeight': '45px' }}
-                                            placeholder="Search..."
-                                            type="text"
-                                            required
-                                            value={nextSearchTerm}
-                                            onChange={(event) => {
-                                                setData({ content: event.target.value, status: 'initial' })
-                                                setNextSearchTerm(event.target.value)
-                                            }}
-                                            error={data.status === 'failure'}
-                                            endDecorator={
-                                                <Button
-                                                    variant="plain"
-                                                    loading={data.status === 'loading'}
-                                                    type="submit"
-                                                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                                                >
-                                                    <SearchIcon />
-                                                </Button>
-                                            }
-                                        />
                                         {data.status === 'failure' && (
                                             <FormHelperText
                                                 sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
@@ -277,7 +306,7 @@ const Home = () => {
                                             spacing={2}
                                         >
                                             {
-                                                numberOfTotalItems > 1
+                                                numberOfTotalItems > 0
                                                     ? <Typography>
                                                         Searched "{searchTerm}", returned {currentStartingIdx + 1}-{currentStartingIdx + searchResultLength} of {numberOfTotalItems}
                                                     </Typography>
@@ -296,8 +325,9 @@ const Home = () => {
                                                     size="sm"
                                                     variant='outlined'
                                                     onClick={() => {
-                                                        setHasSearched(false)
-                                                        setNextSearchTerm('')
+                                                        setHasSearched(false);
+                                                        setNextSearchTerm('');
+                                                        setSearchCategory('any');
                                                     }}>
                                                     Reset
                                                 </Button>
