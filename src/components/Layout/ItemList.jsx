@@ -38,12 +38,14 @@ export default function ItemList(props) {
     const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
     const itemsPerPage = 5;
 
+    // When users select a new page or when there is a change of total items,
+    //   retrieve the data
     useEffect(() => {
         async function retrieveData(startingIdx) {
             try {
                 const resourceCount = await getResourceCount(dataType);
                 const data = await DataRetriever(dataType, '_id', 'desc', startingIdx, itemsPerPage);
-                
+
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
                 setMetadataList(data);
@@ -55,12 +57,12 @@ export default function ItemList(props) {
             }
         }
         retrieveData(currentStartingIdx);
-    }, [currentStartingIdx, numberOfTotalItems])
+    }, [currentStartingIdx, numberOfTotalItems, dataType])
 
     const handlePageClick = (event, value) => {
-        const newOffset = (value - 1) * itemsPerPage;
-        console.log(`User requested page number ${value}, which is offset ${newOffset}`);
-        setCurrentStartingIdx(newOffset);
+        const newStartingIdx = (value - 1) * itemsPerPage;
+        console.log(`User requested page number ${value}, which is offset ${newStartingIdx}`);
+        setCurrentStartingIdx(newStartingIdx);
         setCurrentPage(value);
     };
 
@@ -99,15 +101,9 @@ export default function ItemList(props) {
                             }}
                         >
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
-                                {
-                                    numberOfTotalItems > 1
-                                        ? <Typography>
-                                            Showing {resultLength} out of {numberOfTotalItems} results
-                                        </Typography>
-                                        : <Typography>
-                                            Showing {resultLength} out of {numberOfTotalItems} result
-                                        </Typography>
-                                }
+                                <Typography>
+                                    Showing {currentStartingIdx + 1}-{currentStartingIdx + resultLength} of {numberOfTotalItems}
+                                </Typography>
                                 {metadataList?.map((dataset) => (
                                     <InfoCard
                                         key={dataset.id}
