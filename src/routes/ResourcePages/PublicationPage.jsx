@@ -95,7 +95,7 @@ function PublicationPage() {
                         </Grid>
 
                         <Grid md={12}>
-                            <GoBackButton parentPage="/publications" parentPageName='Publications' />
+                            <GoBackButton parentPage="/publications" parentPageName='Publications' resourceType="publication" />
                         </Grid>
                     </Grid>
                 </Box>

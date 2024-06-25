@@ -6,9 +6,10 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
-
 import IconButton from '@mui/joy/IconButton';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+
+import { RESOURCE_TYPE_COLORS, RESOURCE_TYPE_NAMES } from '../values/ResourceTypes';
 
 export default function FeaturedCard(props) {
     const thumbnailImage = props.thumbnailImage;
@@ -16,28 +17,8 @@ export default function FeaturedCard(props) {
     const cardType = props.cardtype;
     const pageid = props.pageid;
 
-    var categoryColor = '';
-    var categoryName = '';
-    switch (cardType) {
-        case 'datasets':
-            categoryName = 'dataset';
-            categoryColor = 'primary';
-            break;
-        case 'notebooks':
-            categoryName = 'notebook';
-            categoryColor = 'success';
-            break;
-        case 'publications':
-            categoryName = 'publication';
-            categoryColor = 'warning';
-            break;
-        case 'oers':
-            categoryName = 'Educational Resource';
-            categoryColor = 'danger';
-            break;
-        default:
-            console.log("error");
-    }
+    const categoryColor = RESOURCE_TYPE_COLORS[cardType];
+    const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
     return (
         <Card variant="outlined" sx={{ width: 320, minHeight: 300 }}>
