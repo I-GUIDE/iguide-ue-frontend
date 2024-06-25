@@ -36,7 +36,10 @@ const Home = () => {
         status: 'initial',
     });
 
+    // the term that will be immediately passed to the database for search
     const [searchTerm, setSearchTerm] = useState('');
+    // the term that users just typed. It will be assigned to searchTerm soon
+    const [nextSearchTerm, setNextSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [hasSearched, setHasSearched] = useState(false);
     const [searchResultLength, setSearchResultLength] = useState(null);
@@ -69,15 +72,20 @@ const Home = () => {
     // Function that handles submit events. This function will update the search
     //   term and set hasSearched to true.
     const handleSubmit = async (event) => {
+        // Use preventDefault here to prevent the submit event from happening
+        //   because we need to set some states below.
         event.preventDefault();
+        if (nextSearchTerm !== searchTerm) {
+            setCurrentStartingIdx(0)
+        }
         setData((current) => ({ ...current, status: 'loading' }));
-        setSearchTerm(data['content']);
+        setSearchTerm(nextSearchTerm);
         setHasSearched(true);
 
         try {
             // Replace timeout with real backend operation
             setTimeout(() => {
-                setData({ content: '', status: 'sent' });
+                setData((current) => ({ ...current, status: 'sent' }));
             }, 100);
         } catch (error) {
             setData((current) => ({ ...current, status: 'failure' }));
@@ -146,10 +154,11 @@ const Home = () => {
                                             placeholder="Search..."
                                             type="text"
                                             required
-                                            value={data.content}
-                                            onChange={(event) =>
+                                            value={nextSearchTerm}
+                                            onChange={(event) => {
                                                 setData({ content: event.target.value, status: 'initial' })
-                                            }
+                                                setNextSearchTerm(event.target.value)
+                                            }}
                                             error={data.status === 'failure'}
                                             endDecorator={
                                                 <Button
@@ -282,7 +291,14 @@ const Home = () => {
                                                 alignItems="flex-end"
                                                 spacing={1}
                                             >
-                                                <Button key="clear-search" size="sm" variant='outlined' onClick={() => setHasSearched(false)}>
+                                                <Button
+                                                    key="clear-search"
+                                                    size="sm"
+                                                    variant='outlined'
+                                                    onClick={() => {
+                                                        setHasSearched(false)
+                                                        setNextSearchTerm('')
+                                                    }}>
                                                     Reset
                                                 </Button>
                                             </Box>
