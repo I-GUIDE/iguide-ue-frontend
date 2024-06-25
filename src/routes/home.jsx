@@ -181,7 +181,7 @@ const Home = () => {
                         <Box
                             component="main"
                             sx={{
-                                minHeight: 'calc(100vh - 440px)', // 440px is the combined height of the NavBar, search bar, and footer
+                                minHeight: 'calc(100vh - 445px)', // 450px is the combined height of the NavBar, search bar, and footer
                                 display: 'grid',
                                 gridTemplateColumns: { xs: 'auto', md: '100%' },
                                 gridTemplateRows: 'auto 1fr auto',
@@ -239,7 +239,7 @@ const Home = () => {
                         <Box
                             component="main"
                             sx={{
-                                minHeight: 'calc(100vh - 440px)', // 440px is the height of the NavBar, search bar, and footer
+                                minHeight: 'calc(100vh - 445px)', // 450px is the height of the NavBar, search bar, and footer
                                 display: 'grid',
                                 gridTemplateColumns: { xs: 'auto', md: '100%' },
                                 gridTemplateRows: 'auto 1fr auto',
