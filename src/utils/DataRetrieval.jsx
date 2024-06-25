@@ -12,7 +12,7 @@
 export async function DataRetriever(resourceType, sortBy = '_score', order = 'desc', from = 0, size = 10) {
     const response = await fetch(`http://149.165.169.173:5000/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`);
     if (!response.ok) {
-        throw new Error('Error fetching ${data_name}: ${response.statusText}');
+        throw new Error(`Error fetching ${resourceType}: ${response.statusText}`);
     }
     const data = await response.json();
     return data;
@@ -54,4 +54,30 @@ export async function DataSearcher(keyword) {
     const results = await response.json();
 
     return results;
+}
+
+/**
+ * Fetches the count of resources based on the specified resource type and/or keywords.
+ * @async
+ * @function getResourceCount
+ * @param {string} [resourceType] - The type of resources to count. Optional. If 'any', it matches all resource types.
+ * @param {string} [keywords] - Search keywords to count the resources. Optional.
+ * @returns {Promise<number>} A promise that resolves to the count of resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function getResourceCount(resourceType, keywords) {
+    const response = await fetch('http://149.165.169.173:5000/api/resource-count', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ resourceType, keywords })
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch resource count');
+    }
+
+    const data = await response.json();
+    return data.count;
 }
