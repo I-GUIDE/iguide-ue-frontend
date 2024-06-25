@@ -6,7 +6,8 @@ export const RESOURCE_TYPE_COLORS = {
     "publication": "warning",
     "publications": "warning",
     "oer": "danger",
-    "oers": "danger"
+    "oers": "danger",
+    "any": "neutral"
 }
 
 export const RESOURCE_TYPE_NAMES = {
