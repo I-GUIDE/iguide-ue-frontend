@@ -42,10 +42,9 @@ export default function ItemList(props) {
         async function retrieveData(startingIdx) {
             try {
                 const resourceCount = await getResourceCount(dataType);
-                // const resourceCount = 10;
                 const data = await DataRetriever(dataType, '_id', 'desc', startingIdx, itemsPerPage);
+                
                 setNumberOfTotalItems(resourceCount);
-
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
                 setMetadataList(data);
                 setLoading(false);
