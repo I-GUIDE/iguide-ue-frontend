@@ -8,6 +8,7 @@
  * @return {string} the value of fieldOut
  */
 export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
+    console.log(jsonData)
     const index = jsonData.findIndex(entry => entry[fieldIn] == valueIn);
     return jsonData[index][fieldOut];
 }

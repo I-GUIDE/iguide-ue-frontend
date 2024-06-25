@@ -10,6 +10,7 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 
 import { printListWithDelimiter } from '../helpers/helper';
+import { RESOURCE_TYPE_COLORS, RESOURCE_TYPE_NAMES } from '../values/ResourceTypes';
 
 export default function InfoCard(props) {
     const thumbnailImage = props.thumbnailImage;
@@ -20,28 +21,8 @@ export default function InfoCard(props) {
     const tags = props.tags;
     const contents = props.contents;
 
-    var categoryColor = '';
-    var categoryName = '';
-    switch (cardType) {
-        case 'datasets':
-            categoryName = 'dataset';
-            categoryColor = 'primary';
-            break;
-        case 'notebooks':
-            categoryName = 'notebook';
-            categoryColor = 'success';
-            break;
-        case 'publications':
-            categoryName = 'publication';
-            categoryColor = 'warning';
-            break;
-        case 'oers':
-            categoryName = 'Educational Resource';
-            categoryColor = 'danger';
-            break;
-        default:
-            console.log("error");
-    }
+    const categoryColor = RESOURCE_TYPE_COLORS[cardType];
+    const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
     return (
         <Card
