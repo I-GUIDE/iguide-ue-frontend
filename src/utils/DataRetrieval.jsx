@@ -33,27 +33,43 @@ export async function featuredResourcesRetriever() {
 }
 
 /**
- * Retrieve data based on the search keyword.
- * @param {string} keyword the keyword that users search.
- * @return {Promise<Array<Dict>>} an array of all data entries containing the search keyword.
+ * Searches for resources based on a keyword, with optional resource type, sorting, and pagination.
+ * @async
+ * @function searchResources
+ * @param {string} keyword - The keyword to search for in resources.
+ * @param {string} [resourceType=null] - The type of resources to filter by. Defaults to null, which means no filtering by type.
+ * @param {string} [sortBy='_score'] - The field to sort the search results by. Defaults to '_score'.
+ * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
+ * @param {number} [from=0] - The starting index for pagination. Defaults to 0.
+ * @param {number} [size=10] - The number of resources to return. Defaults to 10.
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search results.
+ * @throws {Error} Throws an error if the search operation fails.
  */
-export async function DataSearcher(keyword) {
-    const response = await fetch('http://149.165.169.173:5000/search', {
+export async function DataSearcher(keyword, resourceType = null, sortBy = '_score', order = 'desc', from = 0, size = 10) {
+    const body = {
+        keyword,
+        sort_by: sortBy,
+        order,
+        from,
+        size,
+    };
+
+    if (resourceType) {
+        body.resource_type = resourceType;
+    }
+
+    const response = await fetch('http://149.165.169.173:5000/api/search', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ keyword }),
+        body: JSON.stringify(body),
     });
 
     if (!response.ok) {
-        console.error('Error with search request:', response.statusText);
-        return;
+        throw new Error('Failed to search resources');
     }
-
-    const results = await response.json();
-
-    return results;
+    return response.json();
 }
 
 /**
