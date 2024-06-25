@@ -6,8 +6,7 @@ import Stack from '@mui/joy/Stack';
 import List from '@mui/joy/List';
 import Link from '@mui/joy/Link';
 
-import { extractValueFromJSON } from '../../helpers/helper';
-import { DataRetriever } from '../../utils/DataRetrieval';
+import { fetchResourcesByField } from '../../utils/DataRetrieval';
 
 export default function RelatedResourcesList(props) {
     const title = props.title;
@@ -19,12 +18,16 @@ export default function RelatedResourcesList(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const resources = await DataRetriever(relatedResourceType);
-            setRelatedResources(resources);
-            setIsFinished(true);
+            if (relatedResourcesIds) {
+                if (relatedResourcesIds.length !== 0) {
+                    const resources = await fetchResourcesByField('id', relatedResourcesIds);
+                    setRelatedResources(resources);
+                }
+                setIsFinished(true);
+            }
         };
         fetchData();
-    }, []);
+    }, [relatedResourcesIds]);
 
     // If DataRetriever has returned result, but the result is not an Array, don't render anything.
     if (isFinished && !Array.isArray(relatedResourcesIds) || (Array.isArray(relatedResourcesIds) && relatedResourcesIds.length == 0)) {
@@ -43,10 +46,10 @@ export default function RelatedResourcesList(props) {
             </Typography>
             <Divider inset="none" />
             <List aria-labelledby="decorated-list-demo">
-                {relatedResourcesIds?.map((relatedResourcesId) => (
-                    <Link key={relatedResourcesId} href={'/' + relatedResourceType + 's/' + relatedResourcesId} sx={{ color: 'text.tertiary' }}>
+                {relatedResources?.map((relatedResource) => (
+                    <Link key={relatedResource.id} href={'/' + relatedResource['resource-type'] + 's/' + relatedResource.id} sx={{ color: 'text.tertiary' }}>
                         <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 0.5 }}>
-                            {isFinished && extractValueFromJSON('id', relatedResourcesId, 'title', relatedResources)}
+                            {isFinished && relatedResource.title}
                         </Typography>
                     </Link>
                 ))}

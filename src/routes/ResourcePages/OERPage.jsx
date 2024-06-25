@@ -7,7 +7,7 @@ import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
-import { DataRetriever } from '../../utils/DataRetrieval';
+import { fetchResourcesByField } from '../../utils/DataRetrieval';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
@@ -27,21 +27,18 @@ function OERPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const OERs = await DataRetriever('oer');
+            const thisResourceList = await fetchResourcesByField('id', [id]);
+            // Since the function returns an Array, we extract the content using idx 0
+            const thisResource = thisResourceList[0];
 
-            for (const obj of OERs) {
-                if (obj.id === id) {
-                    setRelatedDatasets(obj['related-datasets']);
-                    setRelatedPublicatons(obj['related-pubulications']);
-                    setRelatedNotebooks(obj['related-notebooks']);
-                    setTitle(obj.title);
-                    setAuthors(obj.authors);
-                    setAbstract(obj.contents);
-                    setTags(obj.tags);
-                    setThumbnailImage(obj['thumbnail-image']);
-                    break;
-                }
-            }
+            setRelatedDatasets(thisResource['related-datasets']);
+            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedNotebooks(thisResource['related-notebooks']);
+            setTitle(thisResource.title);
+            setAuthors(thisResource.authors);
+            setAbstract(thisResource.contents);
+            setTags(thisResource.tags);
+            setThumbnailImage(thisResource['thumbnail-image']);
         };
         fetchData();
     }, [id]);

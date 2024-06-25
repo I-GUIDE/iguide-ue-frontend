@@ -7,7 +7,7 @@ import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
-import { DataRetriever } from '../../utils/DataRetrieval';
+import { fetchResourcesByField } from '../../utils/DataRetrieval';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
@@ -30,23 +30,20 @@ function NotebookPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const Notebooks = await DataRetriever('notebook');
+            const thisResourceList = await fetchResourcesByField('id', [id]);
+            // Since the function returns an Array, we extract the content using idx 0
+            const thisResource = thisResourceList[0];
 
-            for (const obj of Notebooks) {
-                if (obj.id === id) {
-                    setRelatedDatasets(obj['related-datasets']);
-                    setRelatedPublicatons(obj['related-pubulications']);
-                    setRelatedOERs(obj['related-oers']);
-                    setTitle(obj.title);
-                    setAuthors(obj.authors);
-                    setAbstract(obj.contents);
-                    setTags(obj.tags);
-                    setRepoUrl(obj['notebook-repo']);
-                    setNotebookFile(obj['notebook-file']);
-                    setThumbnailImage(obj['thumbnail-image']);
-                    break;
-                }
-            }
+            setRelatedDatasets(thisResource['related-datasets']);
+            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedOERs(thisResource['related-oers']);
+            setTitle(thisResource.title);
+            setAuthors(thisResource.authors);
+            setAbstract(thisResource.contents);
+            setTags(thisResource.tags);
+            setRepoUrl(thisResource['notebook-repo']);
+            setNotebookFile(thisResource['notebook-file']);
+            setThumbnailImage(thisResource['thumbnail-image']);
         };
         fetchData();
     }, [id]);

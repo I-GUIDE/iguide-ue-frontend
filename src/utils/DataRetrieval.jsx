@@ -97,3 +97,23 @@ export async function getResourceCount(resourceType, keywords) {
     const data = await response.json();
     return data.count;
 }
+
+/**
+ * Fetches resources by a specified field and array of values from the backend.
+ *
+ * @async
+ * @function fetchResourcesByField
+ * @param {string} field - The field to query.
+ * @param {Array<string>} values - The array of values to match.
+ * @returns {Promise<Array<Object>>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchResourcesByField(field, values) {
+    const valueString = values.join(',');
+    const response = await fetch(`http://149.165.169.173:5000/api/resources/${field}/${valueString}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch resources');
+    }
+    return response.json();
+  }
+  
