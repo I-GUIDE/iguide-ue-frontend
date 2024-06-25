@@ -7,7 +7,7 @@ import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
-import { DataRetriever } from '../../utils/DataRetrieval';
+import { fetchResourcesByField } from '../../utils/DataRetrieval';
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
@@ -32,24 +32,21 @@ function DatasetPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const Datasets = await DataRetriever('dataset');
+            const thisResourceList = await fetchResourcesByField('id', [id]);
+            // Since the function returns an Array, we extract the content using idx 0
+            const thisResource = thisResourceList[0];
 
-            for (const obj of Datasets) {
-                if (obj.id === id) {
-                    setRelatedNotebooks(obj['related-notebooks']);
-                    setRelatedPublicatons(obj['related-pubulications']);
-                    setRelatedOERs(obj['related-oers']);
-                    setTitle(obj.title);
-                    setAuthors(obj.authors);
-                    setAbstract(obj.contents);
-                    setTags(obj.tags);
-                    setExternalLink(obj['external-link']);
-                    setDirectDownloadLink(obj['direct-download-link']);
-                    setSize(obj.size);
-                    setThumbnailImage(obj['thumbnail-image']);
-                    break;
-                }
-            }
+            setRelatedNotebooks(thisResource['related-notebooks']);
+            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedOERs(thisResource['related-oers']);
+            setTitle(thisResource.title);
+            setAuthors(thisResource.authors);
+            setAbstract(thisResource.contents);
+            setTags(thisResource.tags);
+            setExternalLink(thisResource['external-link']);
+            setDirectDownloadLink(thisResource['direct-download-link']);
+            setSize(thisResource.size);
+            setThumbnailImage(thisResource['thumbnail-image']);
         };
         fetchData();
     }, [id]);
