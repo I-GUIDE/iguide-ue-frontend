@@ -1,6 +1,6 @@
 services:
   app:
-    image: data-with-notebooks:v0.1
+    image: iguide-ux-dev
     build:
       context: .
       dockerfile: Dockerfile
