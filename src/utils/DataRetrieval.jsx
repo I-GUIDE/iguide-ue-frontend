@@ -1,3 +1,5 @@
+const BACKEND_URL_PORT = "https://backend.i-guide.io:3000"
+
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
  * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or
@@ -10,7 +12,7 @@
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function DataRetriever(resourceType, sortBy = '_score', order = 'desc', from = 0, size = 10) {
-    const response = await fetch(`http://149.165.169.173:5000/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`);
+    const response = await fetch(`${BACKEND_URL_PORT}/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`);
     if (!response.ok) {
         throw new Error(`Error fetching ${resourceType}: ${response.statusText}`);
     }
@@ -24,9 +26,9 @@ export async function DataRetriever(resourceType, sortBy = '_score', order = 'de
  * @return {Promise<Array<Dict>>} an array of all data entries with the field 'featured' as true.
  */
 export async function featuredResourcesRetriever() {
-    const response = await fetch('http://149.165.169.173:5000/api/featured-resources');
+    const response = await fetch(`${BACKEND_URL_PORT}/api/featured-resources`);
     if (!response.ok) {
-        throw new Error('Error fetching featured resources: ${response.statusText}');
+        throw new Error(`Error fetching featured resources: ${response.statusText}`);
     }
     const data = await response.json();
     return data;
@@ -58,7 +60,7 @@ export async function DataSearcher(keyword, resourceType = 'any', sortBy = '_sco
         body.resource_type = resourceType;
     }
 
-    const response = await fetch('http://149.165.169.173:5000/api/search', {
+    const response = await fetch(`${BACKEND_URL_PORT}/api/search`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -82,7 +84,7 @@ export async function DataSearcher(keyword, resourceType = 'any', sortBy = '_sco
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function getResourceCount(resourceType, keywords) {
-    const response = await fetch('http://149.165.169.173:5000/api/resource-count', {
+    const response = await fetch(`${BACKEND_URL_PORT}/api/resource-count`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -110,7 +112,7 @@ export async function getResourceCount(resourceType, keywords) {
  */
 export async function fetchResourcesByField(field, values) {
     const valueString = values.join(',');
-    const response = await fetch(`http://149.165.169.173:5000/api/resources/${field}/${valueString}`);
+    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/${field}/${valueString}`);
     if (!response.ok) {
       throw new Error('Failed to fetch resources');
     }
