@@ -54,3 +54,6 @@ Temporary Items
 
 #environment variables that stores the credentials
 .src/backend/.env
+
+# Ignore the SSL cert files
+nginx-config/*.pem
