@@ -14,6 +14,9 @@ import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
 import UserProfile from './routes/userprofile';
 
+import { AuthProvider } from 'react-oidc-context';
+import { IDENTITY_CONFIG } from './utils/authConst';
+
 import {
     createBrowserRouter,
     RouterProvider,
@@ -69,8 +72,19 @@ const router = createBrowserRouter([
     },
 ]);
 
+const oidcConfig = {
+    authority: IDENTITY_CONFIG.authority,
+    client_id: IDENTITY_CONFIG.client_id,
+    redirect_uri: IDENTITY_CONFIG.redirect_uri,
+    response_type: 'code',
+    scope: 'openid profile email'
+};
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <RouterProvider router={router} />
+        <AuthProvider {...oidcConfig}>
+            {console.log(oidcConfig.authority)}
+            <RouterProvider router={router} />
+        </AuthProvider>
     </React.StrictMode>,
 )
