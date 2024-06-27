@@ -22,15 +22,20 @@ export default function Root() {
     }
 
     if (auth.error) {
-        return <div>Oops... {auth.error.message}</div>;
+        return (
+            <div>
+                <p>An error occurred during authentication:</p>
+                <pre>{auth.error.message}</pre>
+            </div>
+        );
     }
 
     if (auth.isAuthenticated) {
         return (
-        <div>
-            Hello {auth.user?.profile.sub}{" "}
-            <button onClick={() => void auth.removeUser()}>Log out</button>
-        </div>
+            <div>
+                Hello {auth.user?.profile.sub}{" "}
+                <button onClick={() => void auth.removeUser()}>Log out</button>
+            </div>
         );
     }
 
