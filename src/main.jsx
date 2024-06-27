@@ -79,6 +79,7 @@ const router = createBrowserRouter([
 const oidcConfig = {
     authority: IDENTITY_CONFIG.authority,
     client_id: IDENTITY_CONFIG.client_id,
+    client_secret: import.meta.env.VITE_REACT_APP_IDENTITY_CLIENT_SECRET,
     redirect_uri: IDENTITY_CONFIG.redirect_uri,
     response_type: 'code',
     scope: 'openid profile email'
