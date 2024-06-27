@@ -85,9 +85,13 @@ const oidcConfig = {
     scope: 'openid profile email'
 };
 
+function onSigninCallback() {
+    window.location.href = "/";
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <AuthProvider {...oidcConfig}>
+        <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
             {console.log(oidcConfig.authority)}
             <RouterProvider router={router} />
         </AuthProvider>
