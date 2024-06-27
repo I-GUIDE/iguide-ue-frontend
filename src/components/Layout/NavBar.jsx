@@ -11,7 +11,8 @@ import { Popper } from '@mui/base/Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AspectRatio } from '@mui/joy';
+
+import { useAuth } from "react-oidc-context";
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 
@@ -35,6 +36,45 @@ export default function NavBar() {
             setOpen(false);
         }
     };
+
+    function LoginButton() {
+        const auth = useAuth();
+
+        switch (auth.activeNavigator) {
+            case "signinSilent":
+                return <div>Signing you in...</div>;
+            case "signoutRedirect":
+                return <div>Signing you out...</div>;
+        }
+
+        if (auth.isLoading) {
+            return <div>Loading...</div>;
+        }
+
+        if (auth.error) {
+            return (
+                <div>
+                    <p>An error occurred during authentication:</p>
+                    <pre>{auth.error.message}</pre>
+                </div>
+            );
+        }
+
+        if (auth.isAuthenticated) {
+            return (
+                <Button onClick={() => void auth.removeUser()}>
+                    Log out {auth.user?.profile.given_name}
+                </Button>
+            );
+        }
+
+        return (
+            <Button onClick={() => void auth.signinRedirect()} size="lg" variant={'outlined'} color="primary">
+                Login
+            </Button>
+        )
+    }
+
 
     return (
         <Box
@@ -165,11 +205,15 @@ export default function NavBar() {
                         </Link>
                     ))}
                 </Stack>
-                <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
+                {/* <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
                     <Button size="lg" variant={'outlined'} color="primary">
                         Login
                     </Button>
-                </Link>
+                </Link> */}
+                <LoginButton />
+                {/* <Button onClick={() => void auth.signinRedirect()} size="lg" variant={'outlined'} color="primary">
+                    Login
+                </Button> */}
             </Stack>
         </Box>
     );

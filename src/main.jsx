@@ -64,10 +64,10 @@ const router = createBrowserRouter([
                 path: "/oers/:id",
                 element: <OERPage />,
             },
-            {
-                path: "/user_profile",
-                element: <UserProfile />,
-            },
+            // {
+            //     path: "/user_profile",
+            //     element: <UserProfile />,
+            // },
             {
                 path: "/cilogon-callback",
                 element: <UserProfile />,
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
 const oidcConfig = {
     authority: IDENTITY_CONFIG.authority,
     client_id: IDENTITY_CONFIG.client_id,
-    client_secret: import.meta.env.VITE_REACT_APP_IDENTITY_CLIENT_SECRET,
+    client_secret: IDENTITY_CONFIG.client_secret,
     redirect_uri: IDENTITY_CONFIG.redirect_uri,
     response_type: 'code',
     scope: 'openid profile email',
@@ -104,7 +104,6 @@ const onSigninCallback = (_user) => {
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <AuthProvider {...oidcConfig} onSigninCallback={onSigninCallback}>
-            {console.log(oidcConfig.authority)}
             <RouterProvider router={router} />
         </AuthProvider>
     </React.StrictMode>,
