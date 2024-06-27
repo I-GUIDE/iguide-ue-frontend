@@ -68,6 +68,10 @@ const router = createBrowserRouter([
                 path: "/user_profile",
                 element: <UserProfile />,
             },
+            {
+                path: "/cilogon-callback",
+                element: <UserProfile />,
+            },
         ]
     },
 ]);
