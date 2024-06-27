@@ -15,7 +15,7 @@ import OERPage from './routes/ResourcePages/OERPage';
 import UserProfile from './routes/userprofile';
 
 import { AuthProvider } from 'react-oidc-context';
-import { IDENTITY_CONFIG } from './utils/authConst';
+import { IDENTITY_CONFIG, METADATA_OIDC } from './utils/authConst';
 
 import {
     createBrowserRouter,
@@ -82,7 +82,15 @@ const oidcConfig = {
     client_secret: import.meta.env.VITE_REACT_APP_IDENTITY_CLIENT_SECRET,
     redirect_uri: IDENTITY_CONFIG.redirect_uri,
     response_type: 'code',
-    scope: 'openid profile email'
+    scope: 'openid profile email',
+    metadata: {
+        authorization_endpoint: METADATA_OIDC.authorization_endpoint,
+        token_endpoint: METADATA_OIDC.token_endpoint,
+        revocation_endpoint: METADATA_OIDC.revocation_endpoint,
+        introspection_endpoint: METADATA_OIDC.introspection_endpoint,
+        userinfo_endpoint: METADATA_OIDC.userinfo_endpoint,
+        jwks_uri: METADATA_OIDC.jwks_uri,
+    },
 };
 
 const onSigninCallback = (_user) => {

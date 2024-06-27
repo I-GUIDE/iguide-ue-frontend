@@ -16,12 +16,12 @@ export const IDENTITY_CONFIG = {
 
 export const METADATA_OIDC = {
     issuer: "https://identityserver",
-    jwks_uri: import.meta.env.VITE_REACT_APP_AUTH_URL + "/.well-known/openid-configuration/jwks",
-    authorization_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/authorize",
-    token_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/token",
-    userinfo_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/userinfo",
+    jwks_uri: import.meta.env.VITE_REACT_APP_AUTH_URL + "/oauth2/certs",
+    authorization_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/authorize",
+    token_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/oauth2/token",
+    userinfo_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/oauth2/userinfo",
     end_session_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/endsession",
     check_session_iframe: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/checksession",
-    revocation_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/revocation",
-    introspection_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/connect/introspect"
+    revocation_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/oauth2/revoke",
+    introspection_endpoint: import.meta.env.VITE_REACT_APP_AUTH_URL + "/oauth2/introspect"
 };
