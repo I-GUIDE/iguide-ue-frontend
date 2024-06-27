@@ -52,8 +52,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-#environment variables that stores the credentials
-.src/backend/.env
-
 # Ignore the SSL cert files
 nginx-config/*.pem
+
+# Ignore any .env files, but leave the example alone
+.env*
+!.env.example
