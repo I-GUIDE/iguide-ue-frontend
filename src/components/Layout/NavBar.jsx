@@ -68,7 +68,7 @@ export default function NavBar() {
                     spacing={1}
                     sx={{ display: { xs: 'flex', sm: 'none' } }}
                 >
-                    <Link key="login" to={'#'} style={{ textDecoration: 'none' }}>
+                    <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
                         <Button size="lg" variant={'outlined'} color="primary">
                             Login
                         </Button>
@@ -165,7 +165,7 @@ export default function NavBar() {
                         </Link>
                     ))}
                 </Stack>
-                <Link key="login" to={'#'} style={{ textDecoration: 'none' }}>
+                <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
                     <Button size="lg" variant={'outlined'} color="primary">
                         Login
                     </Button>
