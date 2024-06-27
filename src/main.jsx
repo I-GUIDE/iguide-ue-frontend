@@ -85,8 +85,12 @@ const oidcConfig = {
     scope: 'openid profile email'
 };
 
-function onSigninCallback() {
-    window.location.href = "/";
+const onSigninCallback = (_user) => {
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    )
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
