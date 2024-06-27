@@ -130,6 +130,8 @@ const Home = () => {
     // When user select a different category in the search bar
     const handleSelectChange = (event, value) => {
         setSearchCategory(value);
+        setCurrentPage(1);
+        setCurrentStartingIdx(0);
     }
 
     return (
