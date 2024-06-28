@@ -18,7 +18,7 @@ const UserProfile = () => {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
-            <Header title="Erick Li" subtitle="Happy Person" />
+            <Header title="User Profile" subtitle="Who are you?" />
             <Container maxWidth="xl">
                 <Box
                     component="main"

@@ -9,9 +9,7 @@ export default function Root() {
     return (
         <StyledEngineProvider injectFirst>
             <NavBar />
-            <div id="outlet">
-                <Outlet />
-            </div>
+            <Outlet />
             <Footer />
         </StyledEngineProvider>
     )
