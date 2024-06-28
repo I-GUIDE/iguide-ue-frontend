@@ -79,19 +79,20 @@ const router = createBrowserRouter([
 ]);
 
 const oidcConfig = {
-    authority: IDENTITY_CONFIG.authority,
+    authority: "https://cilogon.org/.well-known/openid-configuration",
     client_id: IDENTITY_CONFIG.client_id,
     client_secret: IDENTITY_CONFIG.client_secret,
     redirect_uri: IDENTITY_CONFIG.redirect_uri,
     response_type: 'code',
     scope: 'openid profile email',
+    loadUserInfo: false,
     metadata: {
-        authorization_endpoint: METADATA_OIDC.authorization_endpoint,
-        token_endpoint: METADATA_OIDC.token_endpoint,
-        revocation_endpoint: METADATA_OIDC.revocation_endpoint,
-        introspection_endpoint: METADATA_OIDC.introspection_endpoint,
-        userinfo_endpoint: METADATA_OIDC.userinfo_endpoint,
-        jwks_uri: METADATA_OIDC.jwks_uri,
+        authorization_endpoint: "https://cilogon.org/authorize",
+        token_endpoint: "https://cilogon.org/oauth2/token",
+        revocation_endpoint: "https://cilogon.org/oauth2/revoke",
+        introspection_endpoint: "https://cilogon.org/oauth2/introspect",
+        userinfo_endpoint: "https://cilogon.org/oauth2/userinfo",
+        jwks_uri: "https://cilogon.org/oauth2/certs",
     },
 };
 
