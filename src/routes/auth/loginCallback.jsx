@@ -5,20 +5,15 @@ import { Navigate } from "react-router-dom";
 
 export default function AuthCallback() {
     const auth = useAuth();
-    // const navigate = useNavigate();
     const [isAuth, setIsAuth] = useState(false);
 
     useEffect(() => {
         console.log(auth)
         if (auth.isAuthenticated) {
-            setIsAuth(true)   
-            // navigate('/user_profile');
+            setIsAuth(true);
         } else {
-            setIsAuth(false)
+            setIsAuth(false);
         }
-        // auth.isAuthenticated.then(() => {
-        //     navigate('/userprofile');
-        // });
     }, [auth]);
 
     if (isAuth) {
@@ -26,5 +21,4 @@ export default function AuthCallback() {
     } else {
         return <div>Processing signin...</div>;
     }
-    
 }
