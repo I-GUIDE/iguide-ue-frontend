@@ -14,6 +14,8 @@ import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
 import UserProfile from './routes/userprofile';
 
+import AuthCallback from './routes/auth/loginCallback';
+
 import { AuthProvider } from 'react-oidc-context';
 import { IDENTITY_CONFIG, METADATA_OIDC } from './utils/authConst';
 
@@ -64,13 +66,13 @@ const router = createBrowserRouter([
                 path: "/oers/:id",
                 element: <OERPage />,
             },
-            // {
-            //     path: "/user_profile",
-            //     element: <UserProfile />,
-            // },
+            {
+                path: "/user_profile",
+                element: <UserProfile />,
+            },
             {
                 path: "/cilogon-callback",
-                element: <UserProfile />,
+                element: <AuthCallback />,
             },
         ]
     },
