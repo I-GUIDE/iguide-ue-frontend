@@ -54,6 +54,7 @@ Temporary Items
 
 # Ignore the SSL cert files
 nginx-config/*.pem
+nginx-config/nginx.conf
 
 # Ignore any .env files, but leave the example alone
 .env*
