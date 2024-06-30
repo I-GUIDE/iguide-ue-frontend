@@ -8,30 +8,10 @@ import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 
-import { useAuth } from "react-oidc-context";
-
 export default function UserCard(props) {
-    const auth = useAuth();
-
-    if (auth.isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (auth.error) {
-        return (
-            <div>
-                <p>An error occurred during authentication:</p>
-                <pre>{auth.error.message}</pre>
-            </div>
-        );
-    }
-
-    if (!auth.isAuthenticated) {
-        return (
-            <Typography>
-                Please login...
-            </Typography>
-        );
+    const user = props.user;
+    if (user) {
+        console.log('profile', user.passport)
     }
 
     return (
@@ -67,10 +47,10 @@ export default function UserCard(props) {
                 </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {auth.user?.profile.name}
+                        {user ? user.passport.user.name : "no name"}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {auth.user?.profile.email}
+                        {user ? user.passport.user.sub : "no sub"}
                     </Typography>
                     <Sheet
                         sx={{

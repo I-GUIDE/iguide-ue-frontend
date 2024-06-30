@@ -54,8 +54,12 @@ Temporary Items
 
 # Ignore the SSL cert files
 nginx-config/*.pem
-nginx-config/nginx.conf
 
 # Ignore any .env files, but leave the example alone
 .env*
 !.env.example
+
+# Ignore any test files
+docker-compose.test.yml
+Dockerfile.test
+nginx-config/nginx.test.conf
