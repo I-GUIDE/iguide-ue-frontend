@@ -12,11 +12,12 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { useAuth } from "react-oidc-context";
-
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
+const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
-export default function NavBar() {
+export default function NavBar(props) {
+    const user = props.user
+
     const Popup = styled(Popper)({
         zIndex: 1000,
     });
@@ -37,42 +38,31 @@ export default function NavBar() {
         }
     };
 
-    function LoginButton() {
-        const auth = useAuth();
+    // Redirect users to the auth backend for login
+    const login = () => {
+        window.open(AUTH_BACKEND_URL + "/login", "_self");
+    }
 
-        switch (auth.activeNavigator) {
-            case "signinSilent":
-                return <div>Signing you in...</div>;
-            case "signoutRedirect":
-                return <div>Signing you out...</div>;
-        }
+    // Redirect users to auth backend for logout
+    const logout =() => {
+        window.open(AUTH_BACKEND_URL + "/logout", "_self");
+    };
 
-        if (auth.isLoading) {
-            return <div>Loading...</div>;
-        }
-
-        if (auth.error) {
+    // If the user is logged in, display the logout button, otherwise login
+    function AuthButton() {
+        if (user && user.passport) {
             return (
-                <div>
-                    <p>An error occurred during authentication:</p>
-                    <pre>{auth.error.message}</pre>
-                </div>
-            );
-        }
-
-        if (auth.isAuthenticated) {
-            return (
-                <Button onClick={() => void auth.removeUser()}>
-                    Log out {auth.user?.profile.given_name}
+                <Button onClick={logout} size="lg" variant={'outlined'} color="primary">
+                    Logout
                 </Button>
-            );
+            )
+        } else {
+            return (
+                <Button onClick={login} size="lg" variant={'outlined'} color="primary">
+                    Login
+                </Button>
+            )
         }
-
-        return (
-            <Button onClick={() => void auth.signinRedirect()} size="lg" variant={'outlined'} color="primary">
-                Login
-            </Button>
-        )
     }
 
 
@@ -108,11 +98,7 @@ export default function NavBar() {
                     spacing={1}
                     sx={{ display: { xs: 'flex', sm: 'none' } }}
                 >
-                    <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
-                        <Button size="lg" variant={'outlined'} color="primary">
-                            Login
-                        </Button>
-                    </Link>
+                    <AuthButton />
                     <Button
                         size="lg"
                         ref={buttonRef}
@@ -205,15 +191,7 @@ export default function NavBar() {
                         </Link>
                     ))}
                 </Stack>
-                {/* <Link key="login" to={'/user_profile'} style={{ textDecoration: 'none' }}>
-                    <Button size="lg" variant={'outlined'} color="primary">
-                        Login
-                    </Button>
-                </Link> */}
-                <LoginButton />
-                {/* <Button onClick={() => void auth.signinRedirect()} size="lg" variant={'outlined'} color="primary">
-                    Login
-                </Button> */}
+                <AuthButton />
             </Stack>
         </Box>
     );

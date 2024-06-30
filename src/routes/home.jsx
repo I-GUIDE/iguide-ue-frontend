@@ -30,7 +30,7 @@ import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
 import { DataSearcher, featuredResourcesRetriever, getResourceCount } from '../utils/DataRetrieval';
 import { arrayLength } from '../helpers/helper';
-import { RESOURCE_TYPE_COLORS } from '../values/ResourceTypes';
+import { RESOURCE_TYPE_COLORS } from '../configs/ResourceTypes';
 
 const Home = () => {
     // define search data

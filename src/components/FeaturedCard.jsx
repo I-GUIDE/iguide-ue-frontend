@@ -9,7 +9,7 @@ import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
-import { RESOURCE_TYPE_COLORS, RESOURCE_TYPE_NAMES } from '../values/ResourceTypes';
+import { RESOURCE_TYPE_COLORS, RESOURCE_TYPE_NAMES } from '../configs/ResourceTypes';
 
 export default function FeaturedCard(props) {
     const thumbnailImage = props.thumbnailImage;

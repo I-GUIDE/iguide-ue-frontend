@@ -1,20 +1,19 @@
 import React from 'react';
 
+import { useOutletContext } from 'react-router-dom';
+
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
-import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
 import Container from '@mui/joy/Container';
 
 import UserCard from '../components/UserCard';
 import Header from '../components/Layout/Header';
 
 const UserProfile = () => {
+    // OutletContext retrieving the user object to display user info
+    const [user, setUser] = useOutletContext();
+
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
@@ -29,7 +28,7 @@ const UserProfile = () => {
                         gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
-                    <UserCard />
+                    <UserCard user={user}/>
                 </Box>
             </Container>
         </CssVarsProvider>

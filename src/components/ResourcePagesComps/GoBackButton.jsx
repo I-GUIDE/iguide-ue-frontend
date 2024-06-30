@@ -6,7 +6,7 @@ import Button from '@mui/joy/Button';
 import Box from '@mui/joy/Box';
 import Divider from '@mui/joy/Divider';
 
-import { RESOURCE_TYPE_COLORS } from '../../values/ResourceTypes';
+import { RESOURCE_TYPE_COLORS } from '../../configs/ResourceTypes';
 
 export default function GoBackButton(props) {
     const parentPage = props.parentPage;
