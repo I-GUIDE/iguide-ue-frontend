@@ -10,6 +10,7 @@ const https = require('https');
 const router = require("express").Router();
 const fs = require('fs');
 require('dotenv').config();
+const { Issuer, Strategy } = require('openid-client');
 
 const credentials = {
      key: fs.readFileSync('credentials/privkey.pem'),
@@ -49,8 +50,6 @@ app.use(passport.session());
 
 app.use("/", authRoute)
 
-const { Issuer, Strategy } = require('openid-client');
-
 passport.serializeUser(function (user, done) {
      console.log('-----------------------------');
      console.log('serialize user');
@@ -73,12 +72,12 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
           client_secret: CLIENT_SECRET,
           redirect_uris: [REDIRECT_URL],
           response_types: ['code'],
-
+          scope: 'openid profile email org.cilogon.userinfo',
      });
 
      passport.use(
           'oidc',
-          new Strategy({ client, passReqToCallback: true }, (req, tokenSet, userinfo, done) => {
+          new Strategy({ client, passReqToCallback: true, loadUserInfo: true, }, (req, tokenSet, userinfo, done) => {
                console.log("tokenSet", tokenSet);
                console.log("userinfo", userinfo);
                req.session.tokenSet = tokenSet;
