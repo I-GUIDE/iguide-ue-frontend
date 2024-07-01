@@ -6,8 +6,15 @@ const helmet = require('helmet');
 const passport = require('passport')
 const authRoute = require('./routes')
 const http = require("http");
+const https = require('https');
 const router = require("express").Router();
+const fs = require('fs');
 require('dotenv').config();
+
+const credentials = {
+     key: fs.readFileSync('credentials/privkey.pem'),
+     cert: fs.readFileSync('credentials/fullchain.pem')
+};
 
 const app = express();
 
@@ -60,31 +67,34 @@ passport.deserializeUser(function (user, done) {
      done(null, user);
 });
 
-Issuer.discover(DISCOVERY_URL)
-     .then(function (oidcIssuer) {
-          var client = new oidcIssuer.Client({
-               client_id: CLIENT_ID,
-               client_secret: CLIENT_SECRET,
-               redirect_uris: [REDIRECT_URL],
-               response_types: ['code'],
+Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
+     var client = new oidcIssuer.Client({
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          redirect_uris: [REDIRECT_URL],
+          response_types: ['code'],
 
-          });
+     });
 
-          passport.use(
-               'oidc',
-               new Strategy({ client, passReqToCallback: true }, (req, tokenSet, userinfo, done) => {
-                    console.log("tokenSet", tokenSet);
-                    console.log("userinfo", userinfo);
-                    req.session.tokenSet = tokenSet;
-                    req.session.userinfo = userinfo;
-                    return done(null, tokenSet.claims());
-               })
-          );
-     }
-);
+     passport.use(
+          'oidc',
+          new Strategy({ client, passReqToCallback: true }, (req, tokenSet, userinfo, done) => {
+               console.log("tokenSet", tokenSet);
+               console.log("userinfo", userinfo);
+               req.session.tokenSet = tokenSet;
+               req.session.userinfo = userinfo;
+               return done(null, tokenSet.claims());
+          })
+     );
+});
 
-const httpServer = http.createServer(app)
-//const server= https.createServer(options,app).listen(3003);
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
 httpServer.listen(80, () => {
-     console.log(`Http Server Running on port 3004`)
+     console.log(`Http Server Running on port 80`)
+});
+
+httpsServer.listen(8443, () => {
+     console.log(`Https Server Running on port 8443`)
 });
