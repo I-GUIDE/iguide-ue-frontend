@@ -10,7 +10,7 @@ router.get('/login',
         console.log('/Start login handler');
         next();
     },
-    passport.authenticate('oidc', { scope: "openid profile email" }
+    passport.authenticate('oidc', { scope: "openid profile email org.cilogon.userinfo" }
     )
 );
 
