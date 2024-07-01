@@ -252,7 +252,7 @@ const Home = () => {
                                     {featuredResources?.map((dataset) => (
                                         <Grid
                                             container
-                                            key={dataset.id}
+                                            key={dataset._id}
                                             xs={12}
                                             sm={6}
                                             md={3}
@@ -262,9 +262,9 @@ const Home = () => {
                                             sx={{ p: 4 }}
                                         >
                                             <FeaturedCard
-                                                key={dataset.id}
+                                                key={dataset._id}
                                                 cardtype={dataset['resource-type'] + 's'}
-                                                pageid={dataset.id}
+                                                pageid={dataset._id}
                                                 title={dataset.title}
                                                 authors={dataset.authors}
                                                 thumbnailImage={dataset['thumbnail-image']} />
@@ -339,9 +339,9 @@ const Home = () => {
                                         {/* Search result list */}
                                         {searchResults?.map((result) => (
                                             <InfoCard
-                                                key={result.id}
+                                                key={result._id}
                                                 cardtype={result['resource-type'] + 's'}
-                                                pageid={result.id}
+                                                pageid={result._id}
                                                 title={result.title}
                                                 authors={result.authors}
                                                 tags={result.tags}

@@ -32,7 +32,7 @@ function DatasetPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const thisResourceList = await fetchResourcesByField('id', [id]);
+            const thisResourceList = await fetchResourcesByField('_id', [id]);
             // Since the function returns an Array, we extract the content using idx 0
             const thisResource = thisResourceList[0];
 

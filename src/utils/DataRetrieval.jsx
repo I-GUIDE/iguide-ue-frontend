@@ -1,4 +1,4 @@
-const BACKEND_URL_PORT = "https://backend.i-guide.io:3000"
+const BACKEND_URL_PORT = "https://backend.i-guide.io:5000"
 
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].

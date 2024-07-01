@@ -45,6 +45,7 @@ export default function ItemList(props) {
             try {
                 const resourceCount = await getResourceCount(dataType);
                 const data = await DataRetriever(dataType, '_id', 'desc', startingIdx, itemsPerPage);
+                console.log("data", data)
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
@@ -106,9 +107,9 @@ export default function ItemList(props) {
                                 </Typography>
                                 {metadataList?.map((dataset) => (
                                     <InfoCard
-                                        key={dataset.id}
+                                        key={dataset._id}
                                         cardtype={dataset['resource-type'] + 's'}
-                                        pageid={dataset.id}
+                                        pageid={dataset._id}
                                         title={dataset.title}
                                         authors={dataset.authors}
                                         tags={dataset.tags}
