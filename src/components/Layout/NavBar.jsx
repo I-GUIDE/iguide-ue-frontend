@@ -16,7 +16,7 @@ const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/noteboo
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 export default function NavBar(props) {
-    const user = props.user
+    const isAuthenticated = props.isAuthenticated;
 
     const Popup = styled(Popper)({
         zIndex: 1000,
@@ -50,7 +50,7 @@ export default function NavBar(props) {
 
     // If the user is logged in, display the logout button, otherwise login
     function AuthButton() {
-        if (user && user.passport) {
+        if (isAuthenticated) {
             return (
                 <Button onClick={logout} size="lg" variant={'outlined'} color="primary">
                     Logout
