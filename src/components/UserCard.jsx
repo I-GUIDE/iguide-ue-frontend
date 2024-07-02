@@ -24,7 +24,6 @@ export default function UserCard(props) {
     React.useEffect(() => {
         const handleCheckUser = async () => {
             if (userInfo.sub) {
-                console.log('userinfo.sub', userInfo.sub)
                 const userExists = await checkUser(userInfo.sub);
                 if (userExists) {
                     console.log('Found the user from our database');
@@ -50,18 +49,9 @@ export default function UserCard(props) {
                 orientation="horizontal"
                 sx={{
                     width: "100%",
-                    height: 220,
                     '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
                 }}
             >
-                <AspectRatio flex ratio="1" maxHeight={182} sx={{ minWidth: 182 }}>
-                    <img
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-                        srcSet="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286&dpr=2 2x"
-                        loading="lazy"
-                        alt=""
-                    />
-                </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
                         {userInfo.given_name ? userInfo.given_name : "Given name unknown"}&nbsp;
@@ -71,7 +61,7 @@ export default function UserCard(props) {
                         {userInfo.email ? userInfo.email : null}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {userInfo.affiliation ? userInfo.affiliation : null}
+                        {userInfo.idp_name ? userInfo.idp_name : "Independent User"}
                     </Typography>
                     <Sheet
                         sx={{
@@ -105,10 +95,10 @@ export default function UserCard(props) {
                     </Sheet>
                     <Box sx={{ display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
                         <Button variant="outlined" color="neutral">
-                            Past contributions
+                            View Contributions
                         </Button>
                         <Button variant="solid" color="primary">
-                            Contribute!
+                            Contribute Now!
                         </Button>
                     </Box>
                 </CardContent>
