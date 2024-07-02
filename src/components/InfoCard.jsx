@@ -97,17 +97,22 @@ export default function InfoCard(props) {
                     alignItems="flex-end"
                     spacing={1}
                 >
-                    {tags?.map((tag) => (
-                        <Chip
-                            key={tag}
-                            variant="outlined"
-                            color="primary"
-                            size="sm"
-                            sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
-                        >
-                            {tag}
-                        </Chip>
-                    ))}
+                    {tags?.map((tag) => {
+                        // Make sure that the tag only renders when it has content
+                        if (tag && tag !== '') {
+                            return (
+                                <Chip
+                                    key={tag}
+                                    variant="outlined"
+                                    color="primary"
+                                    size="sm"
+                                    sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
+                                >
+                                    {tag}
+                                </Chip>
+                            )
+                        }
+                    })}
                 </Box>
             </CardContent>
             <CardOverflow
