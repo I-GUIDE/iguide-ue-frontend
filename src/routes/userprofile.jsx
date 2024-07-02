@@ -54,7 +54,6 @@ const UserProfile = () => {
                             {isAuthenticated ? <UserCard userInfo={userInfo} /> : <LoginCard />}
                         </Stack>
                     </Grid>
-
                 </Box>
             </Container>
         </CssVarsProvider>
