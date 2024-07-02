@@ -20,7 +20,7 @@ export default function RelatedResourcesList(props) {
         const fetchData = async () => {
             if (relatedResourcesIds) {
                 if (relatedResourcesIds.length !== 0) {
-                    const resources = await fetchResourcesByField('id', relatedResourcesIds);
+                    const resources = await fetchResourcesByField('_id', relatedResourcesIds);
                     setRelatedResources(resources);
                 }
                 setIsFinished(true);
@@ -47,7 +47,7 @@ export default function RelatedResourcesList(props) {
             <Divider inset="none" />
             <List aria-labelledby="decorated-list-demo">
                 {relatedResources?.map((relatedResource) => (
-                    <Link key={relatedResource.id} href={'/' + relatedResource['resource-type'] + 's/' + relatedResource.id} sx={{ color: 'text.tertiary' }}>
+                    <Link key={relatedResource._id} href={'/' + relatedResource['resource-type'] + 's/' + relatedResource._id} sx={{ color: 'text.tertiary' }}>
                         <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 0.5 }}>
                             {isFinished && relatedResource.title}
                         </Typography>

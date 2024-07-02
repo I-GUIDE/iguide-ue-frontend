@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ErrorPage from "./error-page";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Home from "./routes/home";
@@ -12,11 +12,8 @@ import NotebookPage from "./routes/ResourcePages/NotebookPage";
 import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
-
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
+import UserProfile from './routes/userprofile';
+import ErrorPage from "./error-page";
 
 const router = createBrowserRouter([
     {
@@ -59,6 +56,10 @@ const router = createBrowserRouter([
             {
                 path: "/oers/:id",
                 element: <OERPage />,
+            },
+            {
+                path: "/user_profile",
+                element: <UserProfile />,
             },
         ]
     },

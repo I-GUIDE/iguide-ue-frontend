@@ -53,8 +53,16 @@ Temporary Items
 .apdisk
 
 # Ignore the SSL cert files
-nginx-config/*.pem
+*.pem
 
 # Ignore any .env files, but leave the example alone
 .env*
 !.env.example
+
+# Ignore any test files
+docker-compose.test.yml
+Dockerfile.test
+nginx-config/nginx.test.conf
+
+# Ignore certbot
+certbot/*
