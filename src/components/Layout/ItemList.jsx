@@ -45,7 +45,6 @@ export default function ItemList(props) {
             try {
                 const resourceCount = await getResourceCount(dataType);
                 const data = await DataRetriever(dataType, '_id', 'desc', startingIdx, itemsPerPage);
-                console.log("data", data)
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
