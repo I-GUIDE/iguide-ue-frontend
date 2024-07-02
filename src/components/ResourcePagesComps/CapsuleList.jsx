@@ -10,6 +10,11 @@ export default function CapsuleList(props) {
     const title = props.title;
     const items = props.items;
 
+    // If items object doesn't exist, or it only has one empty item, return null
+    if (!items || (items.length == 1 && items[0] == '')) {
+        return null;
+    }
+
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
             <Typography
@@ -27,17 +32,22 @@ export default function CapsuleList(props) {
                 alignItems="flex-end"
                 spacing={1}
             >
-                {items?.map((item) => (
-                    <Chip
-                        key={item}
-                        variant="outlined"
-                        color="primary"
-                        size="md"
-                        sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
-                    >
-                        {item}
-                    </Chip>
-                ))}
+                {items?.map((item) => {
+                    // Make sure that the item only renders when it has content
+                    if (item && item !== '') {
+                        return (
+                            <Chip
+                                key={item}
+                                variant="outlined"
+                                color="primary"
+                                size="md"
+                                sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
+                            >
+                                {item}
+                            </Chip>
+                        )
+                    }
+                })}
             </Box>
         </Stack>
     )
