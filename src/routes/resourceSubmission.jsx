@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
 import Stack from '@mui/joy/Stack';
+import Alert from '@mui/joy/Alert';
 import Grid from '@mui/joy/Grid';
 import Card from '@mui/joy/Card';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -23,6 +24,9 @@ import { styled } from '@mui/joy';
 
 import Header from '../components/Layout/Header';
 
+const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
+
+
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -35,52 +39,59 @@ const VisuallyHiddenInput = styled('input')`
   width: 1px;
 `;
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('thumbnail-input').addEventListener('change', function () {
-        const fileInput = document.getElementById('thumbnail-input');
-        const file = fileInput.files[0];
-        const preview = document.getElementById('thumbnail-preview');
 
-        if (file) {
-            if (!file.type.startsWith('image/')) {
-                alert('Please select a valid image file.');
-                fileInput.value = '';
-                preview.src = '';
-                preview.classList.add('hidden');
-                return;
-            }
+const ResourceSubmission = () => {
+    const [authors, setAuthors] = useState([]);
+    const [contents, setContents] = useState();
+    const [directDownloadLink, setDirectDownloadLink] = useState();
+    const [externalLink, setExternalLink] = useState();
+    const [externalLinkOer, setExternalLinkOer] = useState();
+    const [externalLinkPublication, setExternalLinkPublication] = useState();
+    const [notebookFile, setNotebookFile] = useState();
+    const [notebookRepo, setNotebookRepo] = useState();
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
+    const [resourceTypeSelected, setResourceTypeSelected] = useState("");
+    const [thumbnailImageFile, setThumbnailImageFile] = useState();
+    const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState();
+
+    const handleResourceTypeChange = (event, newResourceType) => {
+        setResourceTypeSelected(newResourceType);
+    };
+
+    const handleThumbnailImageUpload = (event) => {
+        const thumbnailFile = event.target.files[0];
+        console.log("thumbnail", thumbnailFile);
+        if (!thumbnailFile.type.startsWith('image/')) {
+            alert('We only accept an image here!');
+            setThumbnailImageFile(null);
+            setThumbnailImageFileURL(null);
+            return null;
         }
-    });
+        setThumbnailImageFile(thumbnailFile);
+        setThumbnailImageFileURL(URL.createObjectURL(thumbnailFile));
+    }
 
-    document.getElementById('resourceForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = {};
 
-        const fileInput = document.getElementById('thumbnail-input');
-        const file = fileInput.files[0];
-
-        if (file) {
+        if (thumbnailImageFile) {
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', thumbnailImageFile);
 
-            const response = await fetch('http://149.165.154.200:5001/api/upload-thumbnail', {
+            console.log(formData)
+
+            const response = await fetch(`${USER_BACKEND_URL}/api/upload-thumbnail`, {
                 method: 'POST',
                 body: formData,
             });
 
             const result = await response.json();
-            document.getElementById('thumbnail-image').value = result.url;
+            data['thumbnail-image'] = result.url;
         }
 
-        const formData = new FormData(e.target);
-        const data = {};
-
+        const formData = new FormData(event.target);
+        
         formData.forEach((value, key) => {
             if (key === 'authors' || key === 'tags') {
                 data[key] = value.split(',').map(item => item.trim());
@@ -102,7 +113,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         data['related-resources'] = relatedResources;
 
-        const response = await fetch('http://149.165.154.200:5001/api/resources', {
+        console.log("data", data)
+
+        const response = await fetch(`${USER_BACKEND_URL}/api/resources`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -112,96 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const result = await response.json();
         console.log(result);
-    });
-
-    document.getElementById('addRelatedResource').addEventListener('click', function () {
-        const relatedResourceDiv = document.createElement('div');
-        relatedResourceDiv.classList.add('related-resource', 'input-field');
-
-        const resourceTypeSelect = document.createElement('select');
-        resourceTypeSelect.name = 'related-resource-type';
-        resourceTypeSelect.innerHTML = `
-  <option value="notebook">Notebook</option>
-  <option value="dataset">Dataset</option>
-  <option value="publication">Publication</option>
-  <option value="oer">Open Educational Resource</option>
-`;
-
-        const resourceTypeLabel = document.createElement('label');
-        resourceTypeLabel.innerText = 'Resource Type';
-        relatedResourceDiv.appendChild(resourceTypeLabel);
-
-        const resourceTitleInput = document.createElement('input');
-        resourceTitleInput.type = 'text';
-        resourceTitleInput.name = 'related-resource-title';
-        resourceTitleInput.placeholder = 'Search related resource...';
-
-        const resourceDropdown = document.createElement('div');
-        resourceDropdown.classList.add('related-resource-dropdown');
-
-        relatedResourceDiv.appendChild(resourceTypeSelect);
-        relatedResourceDiv.appendChild(resourceTitleInput);
-        relatedResourceDiv.appendChild(resourceDropdown);
-        document.getElementById('relatedResourcesSection').appendChild(relatedResourceDiv);
-
-        resourceTitleInput.addEventListener('input', async function () {
-            const keyword = this.value;
-            const resourceType = resourceTypeSelect.value;
-            if (keyword.length > 2) {
-                const response = await fetch('http://149.165.154.200:5001/api/search', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        keyword: keyword,
-                        resource_type: resourceType
-                    })
-                });
-                const results = await response.json();
-                resourceDropdown.innerHTML = '';
-                results.forEach(result => {
-                    const option = document.createElement('div');
-                    option.textContent = result.title;
-                    option.addEventListener('click', function () {
-                        resourceTitleInput.value = result.title;
-                        resourceDropdown.style.display = 'none';
-                    });
-                    resourceDropdown.appendChild(option);
-                });
-                resourceDropdown.style.display = 'block';
-            } else {
-                resourceDropdown.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('removeRelatedResource').addEventListener('click', function () {
-        const relatedResources = document.querySelectorAll('.related-resource');
-        if (relatedResources.length > 0) {
-            const lastRelatedResource = relatedResources[relatedResources.length - 1];
-            lastRelatedResource.remove();
-        }
-    });
-});
-
-const ResourceSubmission = () => {
-    const [resourceTypeSelected, setResourceTypeSelected] = React.useState("");
-    const [thumbnailImageFile, setThumbnailImageFile] = React.useState(null);
-
-    const handleResourceTypeChange = (event, newResourceType) => {
-        setResourceTypeSelected(newResourceType);
-    };
-
-    const handleThumbnailImageUpload = (event) => {
-        const thumbnailFile = event.target.files[0];
-        console.log("thumbnail", thumbnailFile);
-        if (!thumbnailFile.type.startsWith('image/')) {
-            alert('Please select a valid image file.');
-            setThumbnailImageFile(null);
-            return;
-        }
-        setThumbnailImageFile(URL.createObjectURL(thumbnailFile));
     }
 
     return (
@@ -244,7 +167,7 @@ const ResourceSubmission = () => {
                                 Add your new contribution
                             </Typography>
                             <Divider inset="none" />
-                            <form id="resourceForm">
+                            <form onSubmit={handleSubmit} name="resourceForm">
                                 <CardContent
                                     sx={{
                                         display: 'grid',
@@ -255,9 +178,8 @@ const ResourceSubmission = () => {
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Resource type</FormLabel>
                                         <Select
-                                            id="resource-type"
+                                            name="resource-type"
                                             placeholder="Select a resource type"
-                                            name="rt"
                                             required
                                             sx={{ minWidth: 200 }}
                                             onChange={handleResourceTypeChange}
@@ -271,20 +193,20 @@ const ResourceSubmission = () => {
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Resource title</FormLabel>
-                                        <Input id="title" required />
+                                        <Input name="title" required />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Authors (comma-separated)</FormLabel>
-                                        <Input id="authors" placeholder="Author 1, Author 2, ..." />
+                                        <Input name="authors" placeholder="Author 1, Author 2, ..." />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Tags (comma-separated)</FormLabel>
-                                        <Input id="tags" placeholder="Tag 1, Tag 2, ..." />
+                                        <Input name="tags" placeholder="Tag 1, Tag 2, ..." />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Content</FormLabel>
                                         <Textarea
-                                            id="content"
+                                            name="content"
                                             minRows={4}
                                             maxRows={10}
                                         />
@@ -292,43 +214,43 @@ const ResourceSubmission = () => {
                                     {resourceTypeSelected === "dataset" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>External link</FormLabel>
-                                            <Input id="external-link" />
+                                            <Input name="external-link" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "dataset" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>Direct download link</FormLabel>
-                                            <Input id="direct-download-link" />
+                                            <Input name="direct-download-link" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "dataset" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>Data size</FormLabel>
-                                            <Input id="size" />
+                                            <Input name="size" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "notebook" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>Notebook GitHub repo URL</FormLabel>
-                                            <Input id="notebook-repo" />
+                                            <Input name="notebook-repo" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "notebook" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>Notebook filename (.ipynb)</FormLabel>
-                                            <Input id="notebook-file" />
+                                            <Input name="notebook-file" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "publication" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>External link</FormLabel>
-                                            <Input id="external-link-publication" />
+                                            <Input name="external-link-publication" />
                                         </FormControl>
                                     }
                                     {resourceTypeSelected === "oer" &&
                                         <FormControl sx={{ gridColumn: '1/-1' }}>
                                             <FormLabel>External link</FormLabel>
-                                            <Input id="external-link-oer" />
+                                            <Input name="external-link-oer" />
                                         </FormControl>
                                     }
                                     <FormControl>
@@ -339,16 +261,17 @@ const ResourceSubmission = () => {
                                             tabIndex={-1}
                                             variant="outlined"
                                             color="neutral"
+                                            name="thumbnail-image"
                                         >
                                             Upload an image
                                             <VisuallyHiddenInput type="file" onChange={handleThumbnailImageUpload} />
                                         </Button>
-                                        {thumbnailImageFile &&
+                                        {thumbnailImageFileURL &&
                                             <div>
                                                 <Typography>Thumbnail preview</Typography>
                                                 <AspectRatio ratio="1" sx={{ width: 190 }}>
                                                     <img
-                                                        src={thumbnailImageFile}
+                                                        src={thumbnailImageFileURL}
                                                         loading="lazy"
                                                         alt="thumbnail-preview"
                                                     />
@@ -357,7 +280,7 @@ const ResourceSubmission = () => {
                                         }
                                     </FormControl>
                                     <CardActions sx={{ gridColumn: '1/-1' }}>
-                                        <Button variant="solid" color="primary">
+                                        <Button type="submit" variant="solid" color="primary">
                                             Submit this contribution
                                         </Button>
                                     </CardActions>
