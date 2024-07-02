@@ -14,4 +14,4 @@ RUN yarn install
 CMD [ "npx", "nodemon", "-r", "dotenv/config", "auth_server.js" ]
 
 # Exposing server port
-EXPOSE 3000
+EXPOSE 3000 8443
