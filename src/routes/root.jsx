@@ -6,9 +6,11 @@ import NavBar from '../components/Layout/NavBar.jsx';
 import Footer from '../components/Layout/Footer.jsx';
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const BACKEND_URL_PORT = "https://backend.i-guide.io:5000"
 
 export default function Root() {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+    const [hasLocalProfile, setHasLocalProfile] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState(null);
 
     // Check if the user existed in the auth backend, if yes, setUser
