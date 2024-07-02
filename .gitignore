@@ -63,3 +63,6 @@ Temporary Items
 docker-compose.test.yml
 Dockerfile.test
 nginx-config/nginx.test.conf
+
+# Ignore certbot
+certbot/*
