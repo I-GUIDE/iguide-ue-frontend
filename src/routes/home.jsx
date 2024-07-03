@@ -299,7 +299,7 @@ const Home = () => {
                                 }}
                             >
                                 <Grid xs={12}>
-                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
                                         {/* Search result summary and "clear search button" */}
                                         <Stack
                                             direction="row"
@@ -354,7 +354,7 @@ const Home = () => {
                                         justifyContent="center"
                                         alignItems="center"
                                         spacing={2}
-                                        sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}
+                                        sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
                                     >
                                         <Pagination count={numberOfPages} color="primary" page={currentPage} onChange={handlePageClick} />
                                     </Stack>

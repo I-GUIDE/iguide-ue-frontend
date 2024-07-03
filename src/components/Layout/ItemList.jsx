@@ -91,6 +91,7 @@ export default function ItemList(props) {
                             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                             justifyContent="center"
                             alignItems="center"
+                            direction="column"
                             sx={{
                                 backgroundColor: 'inherit',
                                 px: { xs: 2, md: 4 },
@@ -100,7 +101,7 @@ export default function ItemList(props) {
                                 borderColor: 'divider',
                             }}
                         >
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}>
+                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
                                 <Typography>
                                     Showing {currentStartingIdx + 1}-{currentStartingIdx + resultLength} of {numberOfTotalItems}
                                 </Typography>
@@ -121,7 +122,7 @@ export default function ItemList(props) {
                                 justifyContent="center"
                                 alignItems="center"
                                 spacing={2}
-                                sx={{ px: { xs: 2, md: 4 }, pt: 2, minHeight: 0 }}
+                                sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
                             >
                                 <Pagination count={numberOfPages} color="primary" page={currentPage} onChange={handlePageClick} />
                             </Stack>
