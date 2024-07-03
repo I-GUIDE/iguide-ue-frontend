@@ -97,7 +97,7 @@ export default function UserCard(props) {
                         <Button variant="outlined" color="neutral">
                             View Contributions
                         </Button>
-                        <Button variant="solid" color="primary">
+                        <Button component="a" href="/resource_submission" variant="solid" color="primary">
                             Contribute Now!
                         </Button>
                     </Box>

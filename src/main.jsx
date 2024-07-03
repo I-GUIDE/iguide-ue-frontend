@@ -13,6 +13,7 @@ import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
 import UserProfile from './routes/userprofile';
+import ResourceSubmission from './routes/resourceSubmission';
 import ErrorPage from "./error-page";
 
 const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             {
                 path: "/user_profile",
                 element: <UserProfile />,
+            },
+            {
+                path: "/resource_submission",
+                element: <ResourceSubmission />,
             },
         ]
     },
