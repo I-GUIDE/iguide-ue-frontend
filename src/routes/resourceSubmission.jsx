@@ -1,11 +1,11 @@
 import React, { useState, useEffect, setState } from 'react';
 
+import { useOutletContext } from 'react-router-dom';
+
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
-import Stack from '@mui/joy/Stack';
-import Alert from '@mui/joy/Alert';
 import Grid from '@mui/joy/Grid';
 import Card from '@mui/joy/Card';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -28,9 +28,9 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 import Header from '../components/Layout/Header';
+import LoginCard from '../components/LoginCard';
 
 const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
-
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -53,6 +53,8 @@ const ResourceSubmission = () => {
     const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
     const [currentSearchTerm, setCurrentSearchTerm] = useState('');
     const [currentResourceType, setCurrentResourceType] = useState('');
+
+    const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
 
     useEffect(() => {
         const fetchSearchData = async (resourceType, keyword) => {
@@ -86,7 +88,8 @@ const ResourceSubmission = () => {
             alert('please enter the title!')
             return;
         }
-        setRelatedResources([...relatedResources, {type: currentResourceType, title: currentSearchTerm}]);
+        console.log('userinfo', userInfo)
+        setRelatedResources([...relatedResources, { type: currentResourceType, title: currentSearchTerm }]);
         setCurrentResourceType('');
         setCurrentSearchTerm('');
         console.log("Added one, now: ", relatedResources)
@@ -149,16 +152,12 @@ const ResourceSubmission = () => {
         formData.forEach((value, key) => {
             if (key === 'authors' || key === 'tags') {
                 data[key] = value.split(',').map(item => item.trim());
-            } else if (key === 'created_by') {
-                if (!data.metadata) {
-                    data.metadata = {};
-                }
-                data.metadata.created_by = value;
             } else {
                 data[key] = value;
             }
         });
 
+        data.metadata = {created_by: userInfo.sub};
         data['related-resources'] = relatedResources;
 
         console.log("data", data)
@@ -173,6 +172,43 @@ const ResourceSubmission = () => {
 
         const result = await response.json();
         console.log(result);
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <CssVarsProvider disableTransitionOnChange>
+                <CssBaseline />
+                <Header title="Resource Submission" subtitle="Thanks for your contributions!" />
+                <Container maxWidth="xl">
+                    <Box
+                        component="main"
+                        sx={{
+                            minHeight: 'calc(100vh - 420px)', // 55px is the height of the NavBar
+                            display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
+                        }}
+                    >
+                        <Grid
+                            container
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            direction="column"
+                            sx={{
+                                minHeight: 'calc(100vh - 420px)',
+                                backgroundColor: 'inherit',
+                                px: { xs: 2, md: 4 },
+                                pt: 4,
+                                pb: 8,
+                            }}
+                        >
+                            <LoginCard />
+                        </Grid>
+                    </Box>
+                </Container>
+            </CssVarsProvider>
+        )
     }
 
     return (
