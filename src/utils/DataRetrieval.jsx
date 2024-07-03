@@ -114,8 +114,7 @@ export async function fetchResourcesByField(field, values) {
     const valueString = values.join(',');
     const response = await fetch(`${BACKEND_URL_PORT}/api/resources/${field}/${valueString}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch resources');
+        throw new Error('Failed to fetch resources');
     }
     return response.json();
-  }
-  
+}
