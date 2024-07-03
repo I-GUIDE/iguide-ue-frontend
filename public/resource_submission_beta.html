@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I-GUIDE Knowledge Sharing</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <style>
+    .hidden { display: none; }
+    .related-resource { margin-bottom: 10px; }
+    .related-resource-dropdown {
+      position: absolute;
+      z-index: 1000;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      display: none;
+    }
+    .thumbnail-preview {
+      margin-top: 10px;
+      max-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>I-GUIDE Knowledge Sharing</h1>
+    <form id="resourceForm" class="col s12" novalidate>
+      <div class="input-field col s12">
+        <input type="text" id="created_by" name="created_by" required>
+        <label for="created_by">Created By</label>
+      </div>
+      <div class="input-field col s12">
+        <select id="resource-type" name="resource-type" required>
+          <option value="" disabled selected>Choose your option</option>
+          <option value="notebook">Notebook</option>
+          <option value="dataset">Dataset</option>
+          <option value="publication">Publication</option>
+          <option value="oer">Open Educational Resource</option>
+        </select>
+        <label for="resource-type">Resource Type</label>
+      </div>
+
+      
+
+      <div class="input-field col s12">
+        <input type="text" id="title" name="title" required>
+        <label for="title">Title</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input type="text" id="authors" name="authors" required>
+        <label for="authors">Authors (comma-separated)</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input type="text" id="tags" name="tags" required>
+        <label for="tags">Tags (comma-separated)</label>
+      </div>
+
+      <div class="input-field col s12">
+        <textarea id="contents" name="contents" class="materialize-textarea" required></textarea>
+        <label for="contents">Contents</label>
+      </div>
+
+      <div id="notebookFields" class="hidden">
+        <div class="input-field col s12">
+          <input type="text" id="notebook-repo" name="notebook-repo">
+          <label for="notebook-repo">Notebook Repo</label>
+        </div>
+
+        <div class="input-field col s12">
+          <input type="text" id="notebook-file" name="notebook-file">
+          <label for="notebook-file">Notebook File</label>
+        </div>
+      </div>
+
+      <div id="datasetFields" class="hidden">
+        <div class="input-field col s12">
+          <input type="text" id="external-link" name="external-link">
+          <label for="external-link">External Link</label>
+        </div>
+
+        <div class="input-field col s12">
+          <input type="text" id="direct-download-link" name="direct-download-link">
+          <label for="direct-download-link">Direct Download Link</label>
+        </div>
+
+        <div class="input-field col s12">
+          <input type="text" id="size" name="size">
+          <label for="size">Size</label>
+        </div>
+      </div>
+
+      <div id="publicationFields" class="hidden">
+        <div class="input-field col s12">
+          <input type="text" id="external-link-publication" name="external-link-publication">
+          <label for="external-link-publication">External Link</label>
+        </div>
+      </div>
+
+      <div id="oerFields" class="hidden">
+        <div class="input-field col s12">
+          <input type="text" id="external-link-oer" name="external-link-oer">
+          <label for="external-link-oer">External Link</label>
+        </div>
+      </div>
+
+      <div class="file-field input-field col s12">
+        <div class="btn">
+          <span>Upload Thumbnail</span>
+          <input type="file" name="thumbnail" id="thumbnail-input" accept="image/*" required>
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <img id="thumbnail-preview" class="thumbnail-preview hidden" src="" alt="Thumbnail Preview">
+      <input type="hidden" id="thumbnail-image" name="thumbnail-image">
+
+      <div id="relatedResourcesSection">
+        <h5>Related Resources</h5>
+        <button type="button" id="addRelatedResource" class="btn">+</button>
+        <button type="button" id="removeRelatedResource" class="btn red">-</button>
+      </div>
+
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+
+      document.getElementById('resource-type').addEventListener('change', function() {
+        const resourceType = this.value;
+        document.getElementById('notebookFields').classList.add('hidden');
+        document.getElementById('datasetFields').classList.add('hidden');
+        document.getElementById('publicationFields').classList.add('hidden');
+        document.getElementById('oerFields').classList.add('hidden');
+
+        if (resourceType === 'notebook') {
+          document.getElementById('notebookFields').classList.remove('hidden');
+        } else if (resourceType === 'dataset') {
+          document.getElementById('datasetFields').classList.remove('hidden');
+        } else if (resourceType === 'publication') {
+          document.getElementById('publicationFields').classList.remove('hidden');
+        } else if (resourceType === 'oer') {
+          document.getElementById('oerFields').classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('thumbnail-input').addEventListener('change', function() {
+        const fileInput = document.getElementById('thumbnail-input');
+        const file = fileInput.files[0];
+        const preview = document.getElementById('thumbnail-preview');
+
+        if (file) {
+          if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            fileInput.value = '';
+            preview.src = '';
+            preview.classList.add('hidden');
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      document.getElementById('resourceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById('thumbnail-input');
+        const file = fileInput.files[0];
+
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          const response = await fetch('http://149.165.154.200:5001/api/upload-thumbnail', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const result = await response.json();
+          document.getElementById('thumbnail-image').value = result.url;
+        }
+
+        const formData = new FormData(e.target);
+        const data = {};
+
+        formData.forEach((value, key) => {
+          if (key === 'authors' || key === 'tags') {
+            data[key] = value.split(',').map(item => item.trim());
+          } else if (key === 'created_by') {
+            // Include created_by in metadata
+            if (!data.metadata) {
+              data.metadata = {};
+            }
+            data.metadata.created_by = value;
+          } else {
+            data[key] = value;
+          }
+        });
+
+        const relatedResources = [];
+        document.querySelectorAll('.related-resource').forEach(div => {
+          const type = div.querySelector('select[name="related-resource-type"]').value;
+          const title = div.querySelector('input[name="related-resource-title"]').value;
+          relatedResources.push({ type, title });
+        });
+        data['related-resources'] = relatedResources;
+
+        console.log('the data is', data)
+
+        const response = await fetch('http://149.165.154.200:5001/api/resources', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log(result);
+      });
+
+      document.getElementById('addRelatedResource').addEventListener('click', function() {
+        const relatedResourceDiv = document.createElement('div');
+        relatedResourceDiv.classList.add('related-resource', 'input-field', 'col', 's12');
+
+        const resourceTypeSelect = document.createElement('select');
+        resourceTypeSelect.name = 'related-resource-type';
+        resourceTypeSelect.innerHTML = `
+          <option value="notebook">Notebook</option>
+          <option value="dataset">Dataset</option>
+          <option value="publication">Publication</option>
+          <option value="oer">Open Educational Resource</option>
+        `;
+
+        const resourceTypeLabel = document.createElement('label');
+        resourceTypeLabel.innerText = 'Resource Type';
+        relatedResourceDiv.appendChild(resourceTypeLabel);
+
+        const resourceTitleInput = document.createElement('input');
+        resourceTitleInput.type = 'text';
+        resourceTitleInput.name = 'related-resource-title';
+        resourceTitleInput.placeholder = 'Search related resource...';
+
+        const resourceDropdown = document.createElement('div');
+        resourceDropdown.classList.add('related-resource-dropdown');
+
+        relatedResourceDiv.appendChild(resourceTypeSelect);
+        relatedResourceDiv.appendChild(resourceTitleInput);
+        relatedResourceDiv.appendChild(resourceDropdown);
+        document.getElementById('relatedResourcesSection').appendChild(relatedResourceDiv);
+
+        M.FormSelect.init(resourceTypeSelect);
+
+        resourceTitleInput.addEventListener('input', async function() {
+          const keyword = this.value;
+          const resourceType = resourceTypeSelect.value;
+          if (keyword.length > 2) {
+            const response = await fetch('http://149.165.154.200:5001/api/search', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                keyword: keyword,
+                resource_type: resourceType
+              })
+            });
+            const results = await response.json();
+            resourceDropdown.innerHTML = '';
+            results.forEach(result => {
+              const option = document.createElement('div');
+              option.textContent = result.title;
+              option.addEventListener('click', function() {
+                resourceTitleInput.value = result.title;
+                resourceDropdown.style.display = 'none';
+              });
+              resourceDropdown.appendChild(option);
+            });
+            resourceDropdown.style.display = 'block';
+          } else {
+            resourceDropdown.style.display = 'none';
+          }
+        });
+      });
+
+      document.getElementById('removeRelatedResource').addEventListener('click', function() {
+        const relatedResources = document.querySelectorAll('.related-resource');
+        if (relatedResources.length > 0) {
+          const lastRelatedResource = relatedResources[relatedResources.length - 1];
+          lastRelatedResource.remove();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
