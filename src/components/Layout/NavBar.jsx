@@ -5,12 +5,15 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
+import ButtonGroup from '@mui/joy/ButtonGroup';
+import IconButton from '@mui/joy/IconButton';
 import MenuItem from '@mui/joy/MenuItem';
 import MenuList from '@mui/joy/MenuList';
 import { Popper } from '@mui/base/Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
@@ -44,7 +47,7 @@ export default function NavBar(props) {
     }
 
     // Redirect users to auth backend for logout
-    const logout =() => {
+    const logout = () => {
         window.open(AUTH_BACKEND_URL + "/logout", "_self");
     };
 
@@ -52,9 +55,22 @@ export default function NavBar(props) {
     function AuthButton() {
         if (isAuthenticated) {
             return (
-                <Button onClick={logout} size="lg" variant={'outlined'} color="primary">
-                    Logout
-                </Button>
+                <ButtonGroup
+                    color="primary"
+                    disabled={false}
+                    orientation="horizontal"
+                    size="lg"
+                    variant="outlined"
+                >
+                    <Link to={'/user_profile'} style={{ textDecoration: 'none' }}>
+                        <IconButton>
+                            <AccountCircleIcon size='lg' color='primary' />
+                        </IconButton>
+                    </Link>
+                    <Button onClick={logout} >
+                        Logout
+                    </Button>
+                </ButtonGroup>
             )
         } else {
             return (
