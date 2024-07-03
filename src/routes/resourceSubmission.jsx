@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, setState } from 'react';
 
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -21,6 +21,11 @@ import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
 import Textarea from '@mui/joy/Textarea';
 import { styled } from '@mui/joy';
+import Table from '@mui/joy/Table';
+import Autocomplete from '@mui/joy/Autocomplete';
+
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import Header from '../components/Layout/Header';
 
@@ -41,20 +46,69 @@ const VisuallyHiddenInput = styled('input')`
 
 
 const ResourceSubmission = () => {
-    const [authors, setAuthors] = useState([]);
-    const [contents, setContents] = useState();
-    const [directDownloadLink, setDirectDownloadLink] = useState();
-    const [externalLink, setExternalLink] = useState();
-    const [externalLinkOer, setExternalLinkOer] = useState();
-    const [externalLinkPublication, setExternalLinkPublication] = useState();
-    const [notebookFile, setNotebookFile] = useState();
-    const [notebookRepo, setNotebookRepo] = useState();
-
     const [resourceTypeSelected, setResourceTypeSelected] = useState("");
     const [thumbnailImageFile, setThumbnailImageFile] = useState();
     const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState();
+    const [relatedResources, setRelatedResources] = useState([]);
+    const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
+    const [currentSearchTerm, setCurrentSearchTerm] = useState('');
+    const [currentResourceType, setCurrentResourceType] = useState('');
+
+    useEffect(() => {
+        const fetchSearchData = async (resourceType, keyword) => {
+            console.log('res keyword', resourceType, keyword)
+            if (resourceType && resourceType !== '' && keyword.length > 2) {
+                const response = await fetch(`${USER_BACKEND_URL}/api/search`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        keyword: keyword,
+                        resource_type: resourceType
+                    })
+                });
+                const results = await response.json();
+                setReturnedRelatedResourceTitle(results);
+            } else {
+                setReturnedRelatedResourceTitle([]);
+            }
+        };
+        fetchSearchData(currentResourceType, currentSearchTerm);
+    }, [currentResourceType, currentSearchTerm]);
+
+    const handleAddingOneRelatedResources = () => {
+        if (!currentResourceType || currentResourceType === '') {
+            alert('please select a resource type!')
+            return;
+        }
+        if (!currentSearchTerm || currentSearchTerm === '') {
+            alert('please enter the title!')
+            return;
+        }
+        setRelatedResources([...relatedResources, {type: currentResourceType, title: currentSearchTerm}]);
+        setCurrentResourceType('');
+        setCurrentSearchTerm('');
+        console.log("Added one, now: ", relatedResources)
+    }
+
+    const handleRemovingOneRelatedResources = (idx) => {
+        let newArray = [...relatedResources];
+        newArray.splice(idx, 1);
+        setRelatedResources(newArray);
+        console.log("Removing one, now: ", relatedResources)
+    }
+
+    const handleRelatedResourceTypeChange = (value) => {
+        setCurrentResourceType(value);
+    };
+
+    const handleRelatedResourceTitleChange = (value) => {
+        setCurrentSearchTerm(value);
+    };
 
     const handleResourceTypeChange = (event, newResourceType) => {
+        console.log('rt', newResourceType, event)
         setResourceTypeSelected(newResourceType);
     };
 
@@ -91,7 +145,7 @@ const ResourceSubmission = () => {
         }
 
         const formData = new FormData(event.target);
-        
+
         formData.forEach((value, key) => {
             if (key === 'authors' || key === 'tags') {
                 data[key] = value.split(',').map(item => item.trim());
@@ -105,12 +159,6 @@ const ResourceSubmission = () => {
             }
         });
 
-        const relatedResources = [];
-        document.querySelectorAll('.related-resource').forEach(div => {
-            const type = div.querySelector('select[name="related-resource-type"]').value;
-            const title = div.querySelector('input[name="related-resource-title"]').value;
-            relatedResources.push({ type, title });
-        });
         data['related-resources'] = relatedResources;
 
         console.log("data", data)
@@ -159,7 +207,7 @@ const ResourceSubmission = () => {
                             variant="outlined"
                             sx={{
                                 maxHeight: 'max-content',
-                                maxWidth: '600px',
+                                maxWidth: '900px',
                                 width: '100%'
                             }}
                         >
@@ -171,7 +219,7 @@ const ResourceSubmission = () => {
                                 <CardContent
                                     sx={{
                                         display: 'grid',
-                                        gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+                                        // gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
                                         gap: 1.5,
                                     }}
                                 >
@@ -253,7 +301,7 @@ const ResourceSubmission = () => {
                                             <Input name="external-link-oer" />
                                         </FormControl>
                                     }
-                                    <FormControl>
+                                    <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Upload thumbnail image</FormLabel>
                                         <Button
                                             component="label"
@@ -279,12 +327,73 @@ const ResourceSubmission = () => {
                                             </div>
                                         }
                                     </FormControl>
+                                    <Grid sx={{ gridColumn: '1/-1' }}>
+                                        <FormLabel>Related Resources</FormLabel>
+                                        <Table>
+                                            <thead>
+                                                <tr>
+                                                    <th style={{ width: '30%' }} align="left">Type</th>
+                                                    <th style={{ width: '65%' }} align="left">Title</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {relatedResources.map((x, i) => (
+                                                    <tr key={i}>
+                                                        <td align="left" >
+                                                            <p>{x.type}</p>
+                                                        </td>
+                                                        <td align="left" >
+                                                            <p>{x.title}</p>
+                                                        </td>
+                                                        <td align="left">
+                                                            {relatedResources.length !== 0 && (
+                                                                <RemoveIcon
+                                                                    onClick={() => handleRemovingOneRelatedResources(i)}
+                                                                    style={{
+                                                                        marginRight: "10px",
+                                                                        marginTop: "4px",
+                                                                        cursor: "pointer"
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                                <td align="left">
+                                                    <Select
+                                                        placeholder="Type"
+                                                        value={currentResourceType}
+                                                        onChange={(e, newValue) => handleRelatedResourceTypeChange(newValue)}
+                                                    >
+                                                        <Option value="dataset">Dataset</Option>
+                                                        <Option value="notebook">Notebook</Option>
+                                                        <Option value="publication">Publication</Option>
+                                                        <Option value="oer">Educational Resource</Option>
+                                                    </Select>
+                                                </td>
+                                                <td align="left">
+                                                    <Autocomplete
+                                                        freeSolo
+                                                        value={currentSearchTerm}
+                                                        placeholder="Type anything"
+                                                        options={returnedRelatedResourceTitle.map((option) => option.title)}
+                                                        onInputChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
+                                                    />
+                                                </td>
+                                                <td align="left">
+                                                    <AddIcon
+                                                        onClick={handleAddingOneRelatedResources}
+                                                        style={{ marginTop: "4px", cursor: "pointer" }}
+                                                    />
+                                                </td>
+                                            </tbody>
+                                        </Table>
+                                    </Grid>
                                     <CardActions sx={{ gridColumn: '1/-1' }}>
                                         <Button type="submit" variant="solid" color="primary">
                                             Submit this contribution
                                         </Button>
                                     </CardActions>
-
                                 </CardContent>
                             </form>
                         </Card>
