@@ -1,4 +1,4 @@
-import React, { useState, useEffect, setState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useOutletContext } from 'react-router-dom';
 
@@ -29,6 +29,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
+import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
 const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
 
@@ -53,12 +54,12 @@ const ResourceSubmission = () => {
     const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
     const [currentSearchTerm, setCurrentSearchTerm] = useState('');
     const [currentResourceType, setCurrentResourceType] = useState('');
+    const [submissionStatus, setSubmissionStatus] = useState('no submission');
 
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
 
     useEffect(() => {
         const fetchSearchData = async (resourceType, keyword) => {
-            console.log('res keyword', resourceType, keyword)
             if (resourceType && resourceType !== '' && keyword.length > 2) {
                 const response = await fetch(`${USER_BACKEND_URL}/api/search`, {
                     method: 'POST',
@@ -88,7 +89,6 @@ const ResourceSubmission = () => {
             alert('please enter the title!')
             return;
         }
-        console.log('userinfo', userInfo)
         setRelatedResources([...relatedResources, { type: currentResourceType, title: currentSearchTerm }]);
         setCurrentResourceType('');
         setCurrentSearchTerm('');
@@ -111,13 +111,11 @@ const ResourceSubmission = () => {
     };
 
     const handleResourceTypeChange = (event, newResourceType) => {
-        console.log('rt', newResourceType, event)
         setResourceTypeSelected(newResourceType);
     };
 
     const handleThumbnailImageUpload = (event) => {
         const thumbnailFile = event.target.files[0];
-        console.log("thumbnail", thumbnailFile);
         if (!thumbnailFile.type.startsWith('image/')) {
             alert('We only accept an image here!');
             setThumbnailImageFile(null);
@@ -135,8 +133,6 @@ const ResourceSubmission = () => {
         if (thumbnailImageFile) {
             const formData = new FormData();
             formData.append('file', thumbnailImageFile);
-
-            console.log(formData)
 
             const response = await fetch(`${USER_BACKEND_URL}/api/upload-thumbnail`, {
                 method: 'POST',
@@ -172,6 +168,11 @@ const ResourceSubmission = () => {
 
         const result = await response.json();
         console.log(result);
+        if (result && result.message === 'Resource registered successfully') {
+            setSubmissionStatus('success');
+        } else {
+            setSubmissionStatus('failed')
+        }
     }
 
     if (!isAuthenticated) {
@@ -204,6 +205,45 @@ const ResourceSubmission = () => {
                             }}
                         >
                             <LoginCard />
+                        </Grid>
+                    </Box>
+                </Container>
+            </CssVarsProvider>
+        )
+    }
+
+    if (submissionStatus !== 'no submission') {
+        return (
+            <CssVarsProvider disableTransitionOnChange>
+                <CssBaseline />
+                <Header title="Resource Submission" subtitle="Thanks for your contributions!" />
+                <Container maxWidth="xl">
+                    <Box
+                        component="main"
+                        sx={{
+                            minHeight: 'calc(100vh - 420px)', // 55px is the height of the NavBar
+                            display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
+                        }}
+                    >
+                        <Grid
+                            container
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            direction="column"
+                            sx={{
+                                minHeight: 'calc(100vh - 420px)',
+                                backgroundColor: 'inherit',
+                                px: { xs: 2, md: 4 },
+                                pt: 4,
+                                pb: 8,
+                            }}
+                        >
+                            <Typography>
+                                <SubmissionStatusCard submissionStatus={submissionStatus} />
+                            </Typography>
                         </Grid>
                     </Box>
                 </Container>
