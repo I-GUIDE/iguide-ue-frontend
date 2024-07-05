@@ -328,9 +328,9 @@ const ResourceSubmission = () => {
                                         <Input name="tags" placeholder="Tag 1, Tag 2, ..." />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Content</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <Textarea
-                                            name="content"
+                                            name="contents"
                                             minRows={4}
                                             maxRows={10}
                                         />
