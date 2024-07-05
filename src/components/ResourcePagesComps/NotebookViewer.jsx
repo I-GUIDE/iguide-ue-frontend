@@ -36,15 +36,18 @@ function get_openwith_url(repo_url, notebook_filename) {
 export default function NotebookViewer(props) {
     const repoUrl = props.repoUrl;
     const notebookFile = props.notebookFile;
+    const htmlNotebook = props.htmlNotebook;
 
     let notebookUrl = '';
     let iGuidePlatformUrl = '';
 
     // Render the notebook only when the HTML notebook is unavailable
-    if (repoUrl != '') {
+    if (htmlNotebook && htmlNotebook !== '') {
+        notebookUrl = htmlNotebook;
+    } else if (repoUrl && repoUrl !== '') {
         notebookUrl = get_notebook_html(repoUrl, notebookFile);
-        iGuidePlatformUrl = get_openwith_url(repoUrl, notebookFile);
     }
+    iGuidePlatformUrl = get_openwith_url(repoUrl, notebookFile);
 
     return (
         <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>

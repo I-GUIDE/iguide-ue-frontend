@@ -23,6 +23,7 @@ function NotebookPage() {
     const [relatedDatasets, setRelatedDatasets] = useState([]);
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedOERs, setRelatedOERs] = useState([]);
+    const [htmlNotebook, setHtmlNotebook] = useState('');
     const [repoUrl, setRepoUrl] = useState('');
     const [notebookFile, setNotebookFile] = useState('');
     const [thumbnailImage, setThumbnailImage] = useState('');
@@ -44,6 +45,7 @@ function NotebookPage() {
             setRepoUrl(thisResource['notebook-repo']);
             setNotebookFile(thisResource['notebook-file']);
             setThumbnailImage(thisResource['thumbnail-image']);
+            setHtmlNotebook(thisResource['html-notebook']);
         };
         fetchData();
     }, [id]);
@@ -85,7 +87,7 @@ function NotebookPage() {
                             <RelatedResourcesList title="Related Educational Resources" relatedResourcesIds={relatedOERs} relatedResourceType="oer" />
                         </Grid>
                         <Grid sm={12} md={8}>
-                            <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} />
+                            <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} htmlNotebook={htmlNotebook} />
                         </Grid>
                         <Grid md={12}>
                             <GoBackButton parentPage="/notebooks" parentPageName="Notebooks" resourceType="notebook" />
