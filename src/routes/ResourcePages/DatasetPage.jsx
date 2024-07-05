@@ -37,7 +37,7 @@ function DatasetPage() {
             const thisResource = thisResourceList[0];
 
             setRelatedNotebooks(thisResource['related-notebooks']);
-            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedPublicatons(thisResource['related-publications']);
             setRelatedOERs(thisResource['related-oers']);
             setTitle(thisResource.title);
             setAuthors(thisResource.authors);

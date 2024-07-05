@@ -32,7 +32,7 @@ function OERPage() {
             const thisResource = thisResourceList[0];
 
             setRelatedDatasets(thisResource['related-datasets']);
-            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedPublicatons(thisResource['related-publications']);
             setRelatedNotebooks(thisResource['related-notebooks']);
             setTitle(thisResource.title);
             setAuthors(thisResource.authors);
