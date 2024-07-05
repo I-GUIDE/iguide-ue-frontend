@@ -36,7 +36,7 @@ function NotebookPage() {
             const thisResource = thisResourceList[0];
 
             setRelatedDatasets(thisResource['related-datasets']);
-            setRelatedPublicatons(thisResource['related-pubulications']);
+            setRelatedPublicatons(thisResource['related-publications']);
             setRelatedOERs(thisResource['related-oers']);
             setTitle(thisResource.title);
             setAuthors(thisResource.authors);
