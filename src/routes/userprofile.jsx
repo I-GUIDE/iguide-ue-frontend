@@ -163,39 +163,41 @@ const UserProfile = () => {
                             width="100%"
                         >
                             <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
-                            <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
-                                <Typography level="h3">Your contributions</Typography>
-                                <Typography>
-                                    Showing {currentStartingIdx + 1}-
-                                    {currentStartingIdx + resultLength} of {numberOfTotalItems}
-                                </Typography>
-                                {metadataList?.map((dataset) => (
-                                    <InfoCard
-                                        key={dataset._id}
-                                        cardtype={dataset["resource-type"] + "s"}
-                                        pageid={dataset._id}
-                                        title={dataset.title}
-                                        authors={dataset.authors}
-                                        tags={dataset.tags}
-                                        contents={dataset.contents}
-                                        thumbnailImage={dataset["thumbnail-image"]}
+                            {numberOfTotalItems > 0 && <>
+                                <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
+                                    <Typography level="h3">Your contributions</Typography>
+                                    <Typography>
+                                        Showing {currentStartingIdx + 1}-
+                                        {currentStartingIdx + resultLength} of {numberOfTotalItems}
+                                    </Typography>
+                                    {metadataList?.map((dataset) => (
+                                        <InfoCard
+                                            key={dataset._id}
+                                            cardtype={dataset["resource-type"] + "s"}
+                                            pageid={dataset._id}
+                                            title={dataset.title}
+                                            authors={dataset.authors}
+                                            tags={dataset.tags}
+                                            contents={dataset.contents}
+                                            thumbnailImage={dataset["thumbnail-image"]}
+                                        />
+                                    ))}
+                                </Stack>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    spacing={2}
+                                    sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
+                                >
+                                    <Pagination
+                                        count={numberOfPages}
+                                        color="primary"
+                                        page={currentPage}
+                                        onChange={handlePageClick}
                                     />
-                                ))}
-                            </Stack>
-                            <Stack
-                                direction="row"
-                                justifyContent="center"
-                                alignItems="center"
-                                spacing={2}
-                                sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
-                            >
-                                <Pagination
-                                    count={numberOfPages}
-                                    color="primary"
-                                    page={currentPage}
-                                    onChange={handlePageClick}
-                                />
-                            </Stack>
+                                </Stack>
+                            </>}
                         </Stack>
                     </Grid>
                     {/* </Box> */}
