@@ -118,3 +118,57 @@ export async function fetchResourcesByField(field, values) {
     }
     return response.json();
 }
+
+/**
+ * Fetches the count of resources by a specified field and array of values from the backend.
+ *
+ * @async
+ * @function fetchResourceCountByField
+ * @param {string} field - The field to query.
+ * @param {Array<string>} values - The array of values to match.
+ * @returns {Promise<number>} A promise that resolves to the JSON response containing the count of resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchResourceCountByField(field, values) {
+    const encodedValues = values.map(value => encodeURIComponent(value)).join(',');
+    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/count/${field}/${encodedValues}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch resource count');
+    }
+    const data = await response.json();
+    return data.count;
+}
+
+/**
+ * Fetches resources created by a specified contributor from the backend with optional sorting and pagination.
+ *
+ * @async
+ * @function fetchResourcesByContributor
+ * @param {string} openid - The openid of the contributor.
+ * @param {string} [sortBy='_score'] - The field to sort the resources by. Defaults to '_score'.
+ * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
+ * @param {number} [from=0] - The starting index for pagination. Defaults to 0.
+ * @param {number} [size=15] - The number of resources to fetch. Defaults to 15.
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchResourcesByContributor(openid, sortBy = '_score', order = 'desc', from = 0, size = 5) {
+    const response = await fetch(`${BACKEND_URL_PORT}/api/searchByCreator`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            openid,
+            sort_by: sortBy,
+            order: order,
+            from: from,
+            size: size,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch resources');
+    }
+    return response.json();
+}
