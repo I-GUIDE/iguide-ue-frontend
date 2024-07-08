@@ -66,17 +66,17 @@ export default function Footer() {
                                         sx={{ display: 'flex' }}
                                     >
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" style={{ textDecoration: 'none' }}>
+                                            <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                                 <YouTubeIcon sx={{ color: blue[50] }} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://x.com/NSFiGUIDE'} target="_blank" style={{ textDecoration: 'none' }}>
+                                            <Link href={'https://x.com/NSFiGUIDE'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                                 <XIcon sx={{ color: blue[50] }} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" style={{ textDecoration: 'none' }}>
+                                            <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                                 <LinkedInIcon sx={{ color: blue[50] }} />
                                             </Link>
                                         </Box>

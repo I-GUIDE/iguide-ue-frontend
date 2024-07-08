@@ -28,7 +28,7 @@ export default function OerExternalLinkList(props) {
             <Divider inset="none" />
             <List aria-labelledby="decorated-list-demo">
                 {oerExternalLinks?.map((oerExternalLink, idx) => (
-                    <Link key={idx} href={oerExternalLink.url} sx={{ color: 'text.tertiary' }}>
+                    <Link key={idx} target="_blank" rel="noopener noreferrer" href={oerExternalLink.url} sx={{ color: 'text.tertiary' }}>
                         <Typography textColor="#0f64c8" sx={{ textDecoration: 'underline', py: 0.5 }}>
                             {oerExternalLink.title}
                         </Typography>
