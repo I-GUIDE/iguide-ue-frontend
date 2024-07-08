@@ -434,12 +434,6 @@ const ResourceSubmission = () => {
                                             <Input name="external-link-publication" />
                                         </FormControl>
                                     }
-                                    {resourceTypeSelected === "oer" &&
-                                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                                            <FormLabel>External link</FormLabel>
-                                            <Input name="external-link-oer" />
-                                        </FormControl>
-                                    }
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
                                         <FormLabel>Upload thumbnail image</FormLabel>
                                         <Button

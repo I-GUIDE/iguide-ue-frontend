@@ -12,6 +12,7 @@ import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
 import GoBackButton from '../../components/ResourcePagesComps/GoBackButton';
+import OerExternalLinkList from '../../components/ResourcePagesComps/OerExternalLinkList';
 import Header from '../../components/Layout/Header';
 
 function OERPage() {
@@ -23,6 +24,7 @@ function OERPage() {
     const [relatedPublications, setRelatedPublicatons] = useState([]);
     const [relatedNotebooks, setRelatedNotebooks] = useState([]);
     const [thumbnailImage, setThumbnailImage] = useState('');
+    const [oerExternalLinks, setOerExternalLinks] = useState([]);
     const id = useParams().id;
 
     useEffect(() => {
@@ -39,6 +41,7 @@ function OERPage() {
             setAbstract(thisResource.contents);
             setTags(thisResource.tags);
             setThumbnailImage(thisResource['thumbnail-image']);
+            setOerExternalLinks(thisResource['oer-external-links']);
         };
         fetchData();
     }, [id]);
@@ -75,6 +78,7 @@ function OERPage() {
 
                         <Grid sm={12} md={6}>
                             <CapsuleList title="Tags" items={tags} />
+                            <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
                         </Grid>
                         <Grid sm={12} md={6}>
                             <RelatedResourcesList title="Related Datasets" relatedResourcesIds={relatedDatasets} relatedResourceType="dataset" />
