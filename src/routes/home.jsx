@@ -103,7 +103,7 @@ const Home = () => {
     useEffect(() => {
         async function retrieveSearchData(startingIdx) {
             try {
-                const returnResults = await DataSearcher(searchTerm, searchCategory, '_id', 'desc', startingIdx, itemsPerPage);
+                const returnResults = await DataSearcher(searchTerm, searchCategory, 'prioritize_title_author', 'desc', startingIdx, itemsPerPage);
                 const resourceCount = await getResourceCount(searchCategory, searchTerm);
 
                 setNumberOfTotalItems(resourceCount);
