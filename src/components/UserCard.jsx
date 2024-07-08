@@ -7,12 +7,15 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
+import Stack from '@mui/joy/Stack';
+import PersonIcon from '@mui/icons-material/Person';
 
 import { addUser, checkUser } from '../utils/UserManager';
 import '../utils/UserManager';
 
 export default function UserCard(props) {
     const userInfo = props.userInfo;
+    const numberOfContributions = props.numberOfContributions;
 
     // Save the user information from CILogon to the local DB
     const saveUserToLocalDB = () => {
@@ -52,6 +55,15 @@ export default function UserCard(props) {
                     '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
                 }}
             >
+                <AspectRatio flex ratio="1" maxHeight={182} sx={{ minWidth: 182 }}>
+                    {/* <img
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+                        srcSet="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286&dpr=2 2x"
+                        loading="lazy"
+                        alt=""
+                    /> */}
+                    <PersonIcon />
+                </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
                         {userInfo.given_name ? userInfo.given_name : "Given name unknown"}&nbsp;
@@ -76,9 +88,9 @@ export default function UserCard(props) {
                     >
                         <div>
                             <Typography level="body-xs" fontWeight="lg">
-                                Contributions
+                                {numberOfContributions > 1 ? "Contributions" : "Contribution"}
                             </Typography>
-                            <Typography fontWeight="lg">10</Typography>
+                            <Typography fontWeight="lg">{numberOfContributions}</Typography>
                         </div>
                         <div>
                             <Typography level="body-xs" fontWeight="lg">
@@ -93,14 +105,11 @@ export default function UserCard(props) {
                             <Typography fontWeight="lg">10.0</Typography>
                         </div>
                     </Sheet>
-                    <Box sx={{ display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
-                        <Button variant="outlined" color="neutral">
-                            View Contributions
-                        </Button>
+                    <Stack direction="row" spacing={2} justifyContent="flex-end">
                         <Button component="a" href="/resource_submission" variant="solid" color="primary">
                             Contribute Now!
                         </Button>
-                    </Box>
+                    </Stack>
                 </CardContent>
             </Card>
         </Box>
