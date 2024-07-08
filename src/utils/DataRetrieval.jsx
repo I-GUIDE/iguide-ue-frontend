@@ -40,14 +40,14 @@ export async function featuredResourcesRetriever() {
  * @function searchResources
  * @param {string} keyword - The keyword to search for in resources.
  * @param {string} [resourceType=null] - The type of resources to filter by. Defaults to any, which means no filtering by type.
- * @param {string} [sortBy='_score'] - The field to sort the search results by. Defaults to '_score'.
+ * @param {string} [sortBy='_score'] - The field to sort the search results by. Defaults to 'prioritize_title_author'.
  * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
  * @param {number} [from=0] - The starting index for pagination. Defaults to 0.
  * @param {number} [size=10] - The number of resources to return. Defaults to 10.
  * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search results.
  * @throws {Error} Throws an error if the search operation fails.
  */
-export async function DataSearcher(keyword, resourceType = 'any', sortBy = '_score', order = 'desc', from = 0, size = 10) {
+export async function DataSearcher(keyword, resourceType = 'any', sortBy = 'prioritize_title_author', order = 'desc', from = 0, size = 10) {
     const body = {
         keyword,
         sort_by: sortBy,
