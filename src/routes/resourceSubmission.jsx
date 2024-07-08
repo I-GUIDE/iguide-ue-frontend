@@ -23,9 +23,11 @@ import Textarea from '@mui/joy/Textarea';
 import { styled } from '@mui/joy';
 import Table from '@mui/joy/Table';
 import Autocomplete from '@mui/joy/Autocomplete';
+import IconButton from '@mui/joy/IconButton';
 
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import SearchIcon from '@mui/icons-material/Search';
 
 import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
@@ -48,12 +50,20 @@ const VisuallyHiddenInput = styled('input')`
 
 const ResourceSubmission = () => {
     const [resourceTypeSelected, setResourceTypeSelected] = useState("");
+
     const [thumbnailImageFile, setThumbnailImageFile] = useState();
     const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState();
+
     const [relatedResources, setRelatedResources] = useState([]);
     const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
     const [currentSearchTerm, setCurrentSearchTerm] = useState('');
     const [currentResourceType, setCurrentResourceType] = useState('');
+
+    const [oerExternalLinks, setOerExternalLinks] = useState([]);
+    const [currentOerExternalLinkType, setCurrentOerExternalLinkType] = useState('');
+    const [currentOerExternalLinkURL, setCurrentOerExternalLinkURL] = useState('');
+    const [currentOerExternalLinkTitle, setCurrentOerExternalLinkTitle] = useState('');
+
     const [submissionStatus, setSubmissionStatus] = useState('no submission');
 
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
@@ -80,36 +90,6 @@ const ResourceSubmission = () => {
         fetchSearchData(currentResourceType, currentSearchTerm);
     }, [currentResourceType, currentSearchTerm]);
 
-    const handleAddingOneRelatedResources = () => {
-        if (!currentResourceType || currentResourceType === '') {
-            alert('please select a resource type!')
-            return;
-        }
-        if (!currentSearchTerm || currentSearchTerm === '') {
-            alert('please enter the title!')
-            return;
-        }
-        setRelatedResources([...relatedResources, { type: currentResourceType, title: currentSearchTerm }]);
-        setCurrentResourceType('');
-        setCurrentSearchTerm('');
-        console.log("Added one, now: ", relatedResources)
-    }
-
-    const handleRemovingOneRelatedResources = (idx) => {
-        let newArray = [...relatedResources];
-        newArray.splice(idx, 1);
-        setRelatedResources(newArray);
-        console.log("Removing one, now: ", relatedResources)
-    }
-
-    const handleRelatedResourceTypeChange = (value) => {
-        setCurrentResourceType(value);
-    };
-
-    const handleRelatedResourceTitleChange = (value) => {
-        setCurrentSearchTerm(value);
-    };
-
     const handleResourceTypeChange = (event, newResourceType) => {
         setResourceTypeSelected(newResourceType);
     };
@@ -125,6 +105,83 @@ const ResourceSubmission = () => {
         setThumbnailImageFile(thumbnailFile);
         setThumbnailImageFileURL(URL.createObjectURL(thumbnailFile));
     }
+
+
+
+    const handleAddingOneRelatedResource = () => {
+        if (!currentResourceType || currentResourceType === '') {
+            alert('please select a resource type!')
+            return;
+        }
+        if (!currentSearchTerm || currentSearchTerm === '') {
+            alert('please enter the title!')
+            return;
+        }
+        setRelatedResources([...relatedResources, { type: currentResourceType, title: currentSearchTerm }]);
+        setCurrentResourceType('');
+        setCurrentSearchTerm('');
+        console.log("Added one, now: ", relatedResources)
+    }
+
+    const handleRemovingOneRelatedResource = (idx) => {
+        let newArray = [...relatedResources];
+        newArray.splice(idx, 1);
+        setRelatedResources(newArray);
+        console.log("Removing one, now: ", relatedResources)
+    }
+
+    const handleRelatedResourceTypeChange = (value) => {
+        setCurrentResourceType(value);
+    };
+
+    const handleRelatedResourceTitleChange = (value) => {
+        setCurrentSearchTerm(value);
+    };
+
+
+
+    const handleAddingOneOerExternalLink = () => {
+        if (!currentOerExternalLinkType || currentOerExternalLinkType === '') {
+            alert('please select a resource type!')
+            return;
+        }
+        if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === '') {
+            alert('please enter the title!')
+            return;
+        }
+        setOerExternalLinks([...oerExternalLinks, { type: currentOerExternalLinkType, url: currentOerExternalLinkURL, title: currentOerExternalLinkTitle }]);
+        setCurrentOerExternalLinkType('');
+        setCurrentOerExternalLinkURL('');
+        setCurrentOerExternalLinkTitle('');
+        console.log("Added one, now: ", oerExternalLinks)
+    }
+
+    const handleRemovingOneOerExternalLink = (idx) => {
+        let newArray = [...oerExternalLinks];
+        newArray.splice(idx, 1);
+        setOerExternalLinks(newArray);
+        console.log("Removing one, now: ", oerExternalLinks)
+    }
+
+    const handleOerExternalLinkTypeChange = (value) => {
+        setCurrentOerExternalLinkType(value);
+    };
+
+    const handleOerExternalLinkSearchTitle = async () => {
+        const url = currentOerExternalLinkURL;
+
+        if (url) {
+            const response = await fetch(`${USER_BACKEND_URL}/api/retrieve-title?url=${encodeURIComponent(url)}`);
+            if (!response.ok) {
+                alert('Retrieve website title failed... please input the title manually!')
+                return;
+            }
+            const data = await response.json();
+            console.log('search return', data.title)
+            setCurrentOerExternalLinkTitle(data.title);
+        }
+    }
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -153,8 +210,13 @@ const ResourceSubmission = () => {
             }
         });
 
-        data.metadata = {created_by: userInfo.sub};
+        data.metadata = { created_by: userInfo.sub };
         data['related-resources'] = relatedResources;
+
+        if (resourceTypeSelected === 'oer') {
+            data['oer-external-links'] = oerExternalLinks;
+        }
+        
 
         console.log("data", data)
 
@@ -300,7 +362,7 @@ const ResourceSubmission = () => {
                                     }}
                                 >
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Resource type</FormLabel>
+                                        <FormLabel>Resource type (required)</FormLabel>
                                         <Select
                                             name="resource-type"
                                             placeholder="Select a resource type"
@@ -316,23 +378,24 @@ const ResourceSubmission = () => {
                                         </Select>
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Resource title</FormLabel>
+                                        <FormLabel>Resource title (required)</FormLabel>
                                         <Input name="title" required />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Authors (comma-separated)</FormLabel>
-                                        <Input name="authors" placeholder="Author 1, Author 2, ..." />
+                                        <FormLabel>Authors (comma-separated) (required)</FormLabel>
+                                        <Input name="authors" placeholder="Author 1, Author 2, ..." required />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Tags (comma-separated)</FormLabel>
-                                        <Input name="tags" placeholder="Tag 1, Tag 2, ..." />
+                                        <FormLabel>Tags (comma-separated) (required)</FormLabel>
+                                        <Input name="tags" placeholder="Tag 1, Tag 2, ..." required />
                                     </FormControl>
                                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Description (required)</FormLabel>
                                         <Textarea
                                             name="contents"
                                             minRows={4}
                                             maxRows={10}
+                                            required
                                         />
                                     </FormControl>
                                     {resourceTypeSelected === "dataset" &&
@@ -424,7 +487,7 @@ const ResourceSubmission = () => {
                                                         <td align="left">
                                                             {relatedResources.length !== 0 && (
                                                                 <RemoveIcon
-                                                                    onClick={() => handleRemovingOneRelatedResources(i)}
+                                                                    onClick={() => handleRemovingOneRelatedResource(i)}
                                                                     style={{
                                                                         marginRight: "10px",
                                                                         marginTop: "4px",
@@ -458,13 +521,92 @@ const ResourceSubmission = () => {
                                                 </td>
                                                 <td align="left">
                                                     <AddIcon
-                                                        onClick={handleAddingOneRelatedResources}
+                                                        onClick={handleAddingOneRelatedResource}
                                                         style={{ marginTop: "4px", cursor: "pointer" }}
                                                     />
                                                 </td>
                                             </tbody>
                                         </Table>
                                     </Grid>
+
+
+                                    {/* External links */}
+                                    {resourceTypeSelected === "oer" &&
+                                        <Grid sx={{ gridColumn: '1/-1' }}>
+                                            <FormLabel>Educational Resource External Links</FormLabel>
+                                            <Table>
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{ width: '20%' }} align="left">Type</th>
+                                                        <th style={{ width: '30%' }} align="left">URL</th>
+                                                        <th style={{ width: '5%' }} align="left"></th>
+                                                        <th style={{ width: '40%' }} align="left">Title</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {oerExternalLinks.map((x, i) => (
+                                                        <tr key={i}>
+                                                            <td align="left" >
+                                                                <p>{x.type}</p>
+                                                            </td>
+                                                            <td align="left" >
+                                                                <p>{x.url}</p>
+                                                            </td>
+                                                            <td align="left" >
+                                                                <p></p>
+                                                            </td>
+                                                            <td align="left" >
+                                                                <p>{x.title}</p>
+                                                            </td>
+                                                            <td align="left">
+                                                                {oerExternalLinks.length !== 0 && (
+                                                                    <RemoveIcon
+                                                                        onClick={() => handleRemovingOneOerExternalLink(i)}
+                                                                        style={{
+                                                                            marginRight: "10px",
+                                                                            marginTop: "4px",
+                                                                            cursor: "pointer"
+                                                                        }}
+                                                                    />
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                    <td align="left">
+                                                        <Select
+                                                            placeholder="Type"
+                                                            value={currentOerExternalLinkType}
+                                                            onChange={(e, newValue) => handleOerExternalLinkTypeChange(newValue)}
+                                                        >
+                                                            <Option value="slides">Slides</Option>
+                                                            <Option value="bok">Body of Knowledge</Option>
+                                                            <Option value="oer">Open Educational Resources</Option>
+                                                            <Option value="course">Course</Option>
+                                                            <Option value="webpage">Webpage</Option>
+                                                        </Select>
+                                                    </td>
+                                                    <td align="left">
+                                                        <Input value={currentOerExternalLinkURL} onChange={(event) => setCurrentOerExternalLinkURL(event.target.value)} />
+                                                    </td>
+                                                    <td align="left">
+                                                        <IconButton variant="outlined" onClick={handleOerExternalLinkSearchTitle}>
+                                                            <SearchIcon />
+                                                        </IconButton>
+                                                    </td>
+                                                    <td align="left">
+                                                        <Input value={currentOerExternalLinkTitle} onChange={(event) => setCurrentOerExternalLinkTitle(event.target.value)} />
+                                                    </td>
+                                                    <td align="left">
+                                                        <AddIcon
+                                                            onClick={handleAddingOneOerExternalLink}
+                                                            style={{ marginTop: "4px", cursor: "pointer" }}
+                                                        />
+                                                    </td>
+                                                </tbody>
+                                            </Table>
+                                        </Grid>
+                                    }
+
                                     <CardActions sx={{ gridColumn: '1/-1' }}>
                                         <Button type="submit" variant="solid" color="primary">
                                             Submit this contribution
