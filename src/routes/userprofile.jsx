@@ -16,6 +16,16 @@ import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Pagination from '@mui/material/Pagination';
+import IconButton from '@mui/joy/IconButton';
+import DialogTitle from '@mui/joy/DialogTitle';
+import DialogContent from '@mui/joy/DialogContent';
+import DialogActions from '@mui/joy/DialogActions';
+import Modal from '@mui/joy/Modal';
+import ModalDialog from '@mui/joy/ModalDialog';
+import DeleteForever from '@mui/icons-material/DeleteForever';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+import Divider from '@mui/joy/Divider';
+import Button from '@mui/joy/Button';
 
 import UserCard from "../components/UserCard";
 import Header from "../components/Layout/Header";
@@ -82,6 +92,10 @@ const UserProfile = () => {
     const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
+    const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
+    const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
+
     const itemsPerPage = 5;
 
     // When users select a new page or when there is a change of total items,
@@ -119,6 +133,31 @@ const UserProfile = () => {
 
     if (error) {
         return <div>Error: {error.message}</div>;
+    }
+
+    async function handleElementDelete(elementId) {
+        console.log('Deleting...', elementId)
+        try {
+            const response = await fetch(`https://backend.i-guide.io:5000/api/resources/${elementId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Error deleting resource');
+            }
+
+            setDeleteMetadataId(undefined);
+            setDeleteMetadataTitle(undefined);
+
+            const result = await response.json();
+            // When the deletion was successful, rerender the list
+            if (result && result.message === 'Resource deleted successfully') {
+                setNumberOfTotalItems(numberOfTotalItems - 1);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error deleting resource');
+        }
     }
 
     return (
@@ -170,18 +209,68 @@ const UserProfile = () => {
                                         Showing {currentStartingIdx + 1}-
                                         {currentStartingIdx + resultLength} of {numberOfTotalItems}
                                     </Typography>
-                                    {metadataList?.map((dataset) => (
-                                        <InfoCard
-                                            key={dataset._id}
-                                            cardtype={dataset["resource-type"] + "s"}
-                                            pageid={dataset._id}
-                                            title={dataset.title}
-                                            authors={dataset.authors}
-                                            tags={dataset.tags}
-                                            contents={dataset.contents}
-                                            thumbnailImage={dataset["thumbnail-image"]}
-                                        />
+                                    {metadataList?.map((metadata, idx) => (
+                                        <Grid container spacing={2} columns={16} sx={{ flexGrow: 1 }}>
+                                            <Grid xs={15}>
+                                                <InfoCard
+                                                    key={metadata._id}
+                                                    cardtype={metadata["resource-type"] + "s"}
+                                                    pageid={metadata._id}
+                                                    title={metadata.title}
+                                                    authors={metadata.authors}
+                                                    tags={metadata.tags}
+                                                    contents={metadata.contents}
+                                                    thumbnailImage={metadata["thumbnail-image"]}
+                                                />
+                                            </Grid>
+                                            <Grid xs={1}>
+                                                <IconButton
+                                                    color="danger"
+                                                    size="lg"
+                                                    onClick={() => {
+                                                        setDeleteMetadataTitle(metadata.title);
+                                                        setDeleteMetadataId(metadata._id)
+                                                        console.log('Attempting to delete:', metadata.title, metadata._id)
+                                                    }}
+                                                >
+                                                    <DeleteForever />
+                                                </IconButton>
+                                            </Grid>
+                                        </Grid>
                                     ))}
+                                    <Modal
+                                        open={!!deleteMetadataTitle && !!deleteMetadataId}
+                                        onClose={() => {
+                                            setDeleteMetadataId(undefined);
+                                            setDeleteMetadataTitle(undefined);
+                                        }}
+                                    >
+                                        <ModalDialog variant="outlined" role="alertdialog">
+                                            <DialogTitle>
+                                                <WarningRoundedIcon />
+                                                Confirmation
+                                            </DialogTitle>
+                                            <Divider />
+                                            <DialogContent>
+                                                Are you sure you want to delete "{deleteMetadataTitle}"? This deletion is permanent!
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button variant="solid" color="danger" onClick={() => handleElementDelete(deleteMetadataId)}>
+                                                    Delete
+                                                </Button>
+                                                <Button
+                                                    variant="plain"
+                                                    color="neutral"
+                                                    onClick={() => {
+                                                        setDeleteMetadataId(undefined);
+                                                        setDeleteMetadataTitle(undefined);
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </DialogActions>
+                                        </ModalDialog>
+                                    </Modal>
                                 </Stack>
                                 <Stack
                                     direction="row"
