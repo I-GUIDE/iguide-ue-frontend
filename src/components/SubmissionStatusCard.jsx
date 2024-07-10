@@ -29,10 +29,16 @@ export default function SubmissionStatusCard(props) {
             >
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {submissionStatus === 'success' ? "Thank you for your contribution!" : "Submission failed..." }
+                        {
+                            submissionStatus === 'success' ? "Thank you for your contribution!" : (
+                                submissionStatus === 'success-delete-failed' ?
+                                    "Your contribution is updated, but we failed to delete the old copy" :
+                                    "Submission failed..."
+                            )
+                        }
                     </Typography>
-                    <Divider inset="none" />
-                    <Box sx={{ display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
+                    <Divider />
+                    <Box sx={{ py: 2, display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
                         <Button component="a" href="/" variant="outlined" color="neutral">
                             Go back to homepage
                         </Button>

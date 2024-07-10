@@ -27,6 +27,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import Divider from '@mui/joy/Divider';
 import Button from '@mui/joy/Button';
+import Link from '@mui/joy/Link';
 
 import UserCard from "../components/UserCard";
 import Header from "../components/Layout/Header";
@@ -236,15 +237,14 @@ const UserProfile = () => {
                                                     >
                                                         <DeleteForever />
                                                     </IconButton>
-                                                    <IconButton
-                                                        color="primary"
-                                                        size="lg"
-                                                        onClick={() => {
-                                                            console.log('Attempting to edit:', metadata.title, metadata._id)
-                                                        }}
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
+                                                    <Link href={"/resource_update/" + metadata._id} style={{ textDecoration: 'none' }}>
+                                                        <IconButton
+                                                            color="primary"
+                                                            size="lg"
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </Link>
                                                 </Grid>
                                             </Grid>
                                         ))}

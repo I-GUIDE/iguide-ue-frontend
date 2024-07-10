@@ -172,3 +172,18 @@ export async function fetchResourcesByContributor(openid, sortBy = '_score', ord
     }
     return response.json();
 }
+
+export async function fetchRelatedResourceTitles(type, ids) {
+    const idString = ids.join(',');
+    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/${type}/${idString}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch resources');
+    }
+    const results = await response.json();
+    let nameArray = [];
+    results.map((res) => (
+        nameArray.push(res.title)
+    ))
+
+    return nameArray;
+}

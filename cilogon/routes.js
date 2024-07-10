@@ -28,7 +28,7 @@ router.get('/logout', function (req, res) {
 });
 
 router.get("/", (req, res) => {
-    res.send(" <a href='/login'>Log In with OAuth 2.0 Provider </a>")
+    res.send("Login failed...")
 });
 
 router.get("/auth-validation", function (req, res) {
