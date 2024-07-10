@@ -36,7 +36,7 @@ export default function ItemList(props) {
     const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     // When users select a new page or when there is a change of total items,
     //   retrieve the data

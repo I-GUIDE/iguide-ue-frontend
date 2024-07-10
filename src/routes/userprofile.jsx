@@ -96,7 +96,7 @@ const UserProfile = () => {
     const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
     const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     // When users select a new page or when there is a change of total items,
     //   retrieve the data
