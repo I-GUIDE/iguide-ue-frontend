@@ -216,7 +216,7 @@ const ResourceSubmission = () => {
         if (resourceTypeSelected === 'oer') {
             data['oer-external-links'] = oerExternalLinks;
         }
-        
+
 
         console.log("data", data)
 
@@ -492,33 +492,35 @@ const ResourceSubmission = () => {
                                                         </td>
                                                     </tr>
                                                 ))}
-                                                <td align="left">
-                                                    <Select
-                                                        placeholder="Type"
-                                                        value={currentResourceType}
-                                                        onChange={(e, newValue) => handleRelatedResourceTypeChange(newValue)}
-                                                    >
-                                                        <Option value="dataset">Dataset</Option>
-                                                        <Option value="notebook">Notebook</Option>
-                                                        <Option value="publication">Publication</Option>
-                                                        <Option value="oer">Educational Resource</Option>
-                                                    </Select>
-                                                </td>
-                                                <td align="left">
-                                                    <Autocomplete
-                                                        freeSolo
-                                                        value={currentSearchTerm}
-                                                        placeholder="Type anything"
-                                                        options={returnedRelatedResourceTitle.map((option) => option.title)}
-                                                        onInputChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
-                                                    />
-                                                </td>
-                                                <td align="left">
-                                                    <AddIcon
-                                                        onClick={handleAddingOneRelatedResource}
-                                                        style={{ marginTop: "4px", cursor: "pointer" }}
-                                                    />
-                                                </td>
+                                                <tr>
+                                                    <td align="left">
+                                                        <Select
+                                                            placeholder="Type"
+                                                            value={currentResourceType}
+                                                            onChange={(e, newValue) => handleRelatedResourceTypeChange(newValue)}
+                                                        >
+                                                            <Option value="dataset">Dataset</Option>
+                                                            <Option value="notebook">Notebook</Option>
+                                                            <Option value="publication">Publication</Option>
+                                                            <Option value="oer">Educational Resource</Option>
+                                                        </Select>
+                                                    </td>
+                                                    <td align="left">
+                                                        <Autocomplete
+                                                            freeSolo
+                                                            value={currentSearchTerm}
+                                                            placeholder="Type anything"
+                                                            options={returnedRelatedResourceTitle.map((option) => option.title)}
+                                                            onInputChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
+                                                        />
+                                                    </td>
+                                                    <td align="left">
+                                                        <AddIcon
+                                                            onClick={handleAddingOneRelatedResource}
+                                                            style={{ marginTop: "4px", cursor: "pointer" }}
+                                                        />
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </Table>
                                     </Grid>
@@ -566,36 +568,38 @@ const ResourceSubmission = () => {
                                                             </td>
                                                         </tr>
                                                     ))}
-                                                    <td align="left">
-                                                        <Select
-                                                            placeholder="Type"
-                                                            value={currentOerExternalLinkType}
-                                                            onChange={(e, newValue) => handleOerExternalLinkTypeChange(newValue)}
-                                                        >
-                                                            <Option value="slides">Slides</Option>
-                                                            <Option value="bok">Body of Knowledge</Option>
-                                                            <Option value="oer">Open Educational Resources</Option>
-                                                            <Option value="course">Course</Option>
-                                                            <Option value="webpage">Webpage</Option>
-                                                        </Select>
-                                                    </td>
-                                                    <td align="left">
-                                                        <Input value={currentOerExternalLinkURL} onChange={(event) => setCurrentOerExternalLinkURL(event.target.value)} />
-                                                    </td>
-                                                    <td align="left">
-                                                        <IconButton variant="outlined" onClick={handleOerExternalLinkSearchTitle}>
-                                                            <SearchIcon />
-                                                        </IconButton>
-                                                    </td>
-                                                    <td align="left">
-                                                        <Input value={currentOerExternalLinkTitle} onChange={(event) => setCurrentOerExternalLinkTitle(event.target.value)} />
-                                                    </td>
-                                                    <td align="left">
-                                                        <AddIcon
-                                                            onClick={handleAddingOneOerExternalLink}
-                                                            style={{ marginTop: "4px", cursor: "pointer" }}
-                                                        />
-                                                    </td>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <Select
+                                                                placeholder="Type"
+                                                                value={currentOerExternalLinkType}
+                                                                onChange={(e, newValue) => handleOerExternalLinkTypeChange(newValue)}
+                                                            >
+                                                                <Option value="slides">Slides</Option>
+                                                                <Option value="bok">Body of Knowledge</Option>
+                                                                <Option value="oer">Open Educational Resources</Option>
+                                                                <Option value="course">Course</Option>
+                                                                <Option value="webpage">Webpage</Option>
+                                                            </Select>
+                                                        </td>
+                                                        <td align="left">
+                                                            <Input value={currentOerExternalLinkURL} onChange={(event) => setCurrentOerExternalLinkURL(event.target.value)} />
+                                                        </td>
+                                                        <td align="left">
+                                                            <IconButton variant="outlined" onClick={handleOerExternalLinkSearchTitle}>
+                                                                <SearchIcon />
+                                                            </IconButton>
+                                                        </td>
+                                                        <td align="left">
+                                                            <Input value={currentOerExternalLinkTitle} onChange={(event) => setCurrentOerExternalLinkTitle(event.target.value)} />
+                                                        </td>
+                                                        <td align="left">
+                                                            <AddIcon
+                                                                onClick={handleAddingOneOerExternalLink}
+                                                                style={{ marginTop: "4px", cursor: "pointer" }}
+                                                            />
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </Table>
                                         </Grid>
