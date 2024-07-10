@@ -23,6 +23,7 @@ import DialogActions from '@mui/joy/DialogActions';
 import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import DeleteForever from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import Divider from '@mui/joy/Divider';
 import Button from '@mui/joy/Button';
@@ -171,125 +172,134 @@ const UserProfile = () => {
                     />
                 )}
                 <Container maxWidth="xl">
-                    {/* <Box
+                    <Box
                         component="main"
                         sx={{
-                            minHeight: "calc(100vh - 420px)", // 55px is the height of the NavBar
+                            minHeight: "calc(100vh - 425px)", // 55px is the height of the NavBar
                             display: "grid",
                             gridTemplateColumns: { xs: "auto", md: "100%" },
                             gridTemplateRows: "auto 1fr auto",
                         }}
-                    > */}
-                    <Grid
-                        container
-                        display="flex"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        direction="column"
-                        sx={{
-                            minHeight: "calc(100vh - 425px)",
-                            backgroundColor: "inherit",
-                            px: { xs: 2, md: 4 },
-                            pt: 4,
-                            pb: 8,
-                        }}
                     >
-                        <Stack
+                        <Grid
+                            container
+                            display="flex"
+                            justifyContent="flex-start"
+                            alignItems="center"
                             direction="column"
-                            justifyContent="center"
-                            alignItems="flex-start"
-                            spacing={2}
-                            width="100%"
+                            sx={{
+                                minHeight: "calc(100vh - 425px)",
+                                backgroundColor: "inherit",
+                                px: { xs: 2, md: 4 },
+                                pt: 4,
+                                pb: 8,
+                            }}
                         >
-                            <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
-                            {numberOfTotalItems > 0 && <>
-                                <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
-                                    <Typography level="h3">Your contributions</Typography>
-                                    <Typography>
-                                        Showing {currentStartingIdx + 1}-
-                                        {currentStartingIdx + resultLength} of {numberOfTotalItems}
-                                    </Typography>
-                                    {metadataList?.map((metadata, idx) => (
-                                        <Grid container spacing={2} columns={16} sx={{ flexGrow: 1 }}>
-                                            <Grid xs={15}>
-                                                <InfoCard
-                                                    key={metadata._id}
-                                                    cardtype={metadata["resource-type"] + "s"}
-                                                    pageid={metadata._id}
-                                                    title={metadata.title}
-                                                    authors={metadata.authors}
-                                                    tags={metadata.tags}
-                                                    contents={metadata.contents}
-                                                    thumbnailImage={metadata["thumbnail-image"]}
-                                                />
+                            <Stack
+                                direction="column"
+                                justifyContent="center"
+                                alignItems="flex-start"
+                                spacing={2}
+                                width="100%"
+                            >
+                                <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
+                                {numberOfTotalItems > 0 && <>
+                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
+                                        <Typography level="h3">Your contributions</Typography>
+                                        <Typography>
+                                            Showing {currentStartingIdx + 1}-
+                                            {currentStartingIdx + resultLength} of {numberOfTotalItems}
+                                        </Typography>
+                                        {metadataList?.map((metadata, idx) => (
+                                            <Grid container spacing={2} columns={16} sx={{ flexGrow: 1 }}>
+                                                <Grid xs={15}>
+                                                    <InfoCard
+                                                        key={metadata._id}
+                                                        cardtype={metadata["resource-type"] + "s"}
+                                                        pageid={metadata._id}
+                                                        title={metadata.title}
+                                                        authors={metadata.authors}
+                                                        tags={metadata.tags}
+                                                        contents={metadata.contents}
+                                                        thumbnailImage={metadata["thumbnail-image"]}
+                                                    />
+                                                </Grid>
+                                                <Grid xs={1}>
+                                                    <IconButton
+                                                        color="danger"
+                                                        size="lg"
+                                                        onClick={() => {
+                                                            setDeleteMetadataTitle(metadata.title);
+                                                            setDeleteMetadataId(metadata._id);
+                                                            console.log('Attempting to delete:', metadata.title, metadata._id);
+                                                        }}
+                                                    >
+                                                        <DeleteForever />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        color="primary"
+                                                        size="lg"
+                                                        onClick={() => {
+                                                            console.log('Attempting to edit:', metadata.title, metadata._id)
+                                                        }}
+                                                    >
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Grid>
                                             </Grid>
-                                            <Grid xs={1}>
-                                                <IconButton
-                                                    color="danger"
-                                                    size="lg"
-                                                    onClick={() => {
-                                                        setDeleteMetadataTitle(metadata.title);
-                                                        setDeleteMetadataId(metadata._id)
-                                                        console.log('Attempting to delete:', metadata.title, metadata._id)
-                                                    }}
-                                                >
-                                                    <DeleteForever />
-                                                </IconButton>
-                                            </Grid>
-                                        </Grid>
-                                    ))}
-                                    <Modal
-                                        open={!!deleteMetadataTitle && !!deleteMetadataId}
-                                        onClose={() => {
-                                            setDeleteMetadataId(undefined);
-                                            setDeleteMetadataTitle(undefined);
-                                        }}
+                                        ))}
+                                        <Modal
+                                            open={!!deleteMetadataTitle && !!deleteMetadataId}
+                                            onClose={() => {
+                                                setDeleteMetadataId(undefined);
+                                                setDeleteMetadataTitle(undefined);
+                                            }}
+                                        >
+                                            <ModalDialog variant="outlined" role="alertdialog">
+                                                <DialogTitle>
+                                                    <WarningRoundedIcon />
+                                                    Confirmation
+                                                </DialogTitle>
+                                                <Divider />
+                                                <DialogContent>
+                                                    Are you sure you want to delete "{deleteMetadataTitle}"? This deletion is permanent!
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button variant="solid" color="danger" onClick={() => handleElementDelete(deleteMetadataId)}>
+                                                        Delete
+                                                    </Button>
+                                                    <Button
+                                                        variant="plain"
+                                                        color="neutral"
+                                                        onClick={() => {
+                                                            setDeleteMetadataId(undefined);
+                                                            setDeleteMetadataTitle(undefined);
+                                                        }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </DialogActions>
+                                            </ModalDialog>
+                                        </Modal>
+                                    </Stack>
+                                    <Stack
+                                        direction="row"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        spacing={2}
+                                        sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
                                     >
-                                        <ModalDialog variant="outlined" role="alertdialog">
-                                            <DialogTitle>
-                                                <WarningRoundedIcon />
-                                                Confirmation
-                                            </DialogTitle>
-                                            <Divider />
-                                            <DialogContent>
-                                                Are you sure you want to delete "{deleteMetadataTitle}"? This deletion is permanent!
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button variant="solid" color="danger" onClick={() => handleElementDelete(deleteMetadataId)}>
-                                                    Delete
-                                                </Button>
-                                                <Button
-                                                    variant="plain"
-                                                    color="neutral"
-                                                    onClick={() => {
-                                                        setDeleteMetadataId(undefined);
-                                                        setDeleteMetadataTitle(undefined);
-                                                    }}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </DialogActions>
-                                        </ModalDialog>
-                                    </Modal>
-                                </Stack>
-                                <Stack
-                                    direction="row"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    spacing={2}
-                                    sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
-                                >
-                                    <Pagination
-                                        count={numberOfPages}
-                                        color="primary"
-                                        page={currentPage}
-                                        onChange={handlePageClick}
-                                    />
-                                </Stack>
-                            </>}
-                        </Stack>
-                    </Grid>
-                    {/* </Box> */}
+                                        <Pagination
+                                            count={numberOfPages}
+                                            color="primary"
+                                            page={currentPage}
+                                            onChange={handlePageClick}
+                                        />
+                                    </Stack>
+                                </>}
+                            </Stack>
+                        </Grid>
+                    </Box>
                 </Container>
             </JoyCssVarsProvider>
         </MaterialCssVarsProvider>
