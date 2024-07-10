@@ -56,7 +56,7 @@ const Home = () => {
     const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
 
     // When the state of hasSearched changed, check if hasSearched is false. If
     //   it is false, retrieve the featured resources.
