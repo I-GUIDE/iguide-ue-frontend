@@ -182,7 +182,7 @@ const Home = () => {
                                                 color={RESOURCE_TYPE_COLORS[searchCategory]}
                                                 onChange={handleSelectChange}
                                             >
-                                                <Option value="any">All Knowledge Elements</Option>
+                                                <Option value="any">All Elements</Option>
                                                 <Option value="dataset">Dataset</Option>
                                                 <Option value="notebook">Notebook</Option>
                                                 <Option value="publication">Publication</Option>
