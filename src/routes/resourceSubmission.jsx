@@ -57,7 +57,8 @@ const ResourceSubmission = () => {
     const [relatedResources, setRelatedResources] = useState([]);
     const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
     const [currentSearchTerm, setCurrentSearchTerm] = useState('');
-    const [currentResourceType, setCurrentResourceType] = useState('');
+    const [currentRelatedResourceTitle, setCurrentRelatedResourceTitle] = useState();
+    const [currentRelatedResourceType, setCurrentRelatedResourceType] = useState('');
 
     const [oerExternalLinks, setOerExternalLinks] = useState([]);
     const [currentOerExternalLinkType, setCurrentOerExternalLinkType] = useState('');
@@ -87,8 +88,8 @@ const ResourceSubmission = () => {
                 setReturnedRelatedResourceTitle([]);
             }
         };
-        fetchSearchData(currentResourceType, currentSearchTerm);
-    }, [currentResourceType, currentSearchTerm]);
+        fetchSearchData(currentRelatedResourceType, currentSearchTerm);
+    }, [currentRelatedResourceType, currentSearchTerm]);
 
     const handleResourceTypeChange = (event, newResourceType) => {
         setResourceTypeSelected(newResourceType);
@@ -109,16 +110,17 @@ const ResourceSubmission = () => {
 
 
     const handleAddingOneRelatedResource = () => {
-        if (!currentResourceType || currentResourceType === '') {
-            alert('please select a resource type!')
+        if (!currentRelatedResourceType || currentRelatedResourceType === '') {
+            alert('Please select a resource type!')
             return;
         }
-        if (!currentSearchTerm || currentSearchTerm === '') {
-            alert('please enter the title!')
+        if (!currentRelatedResourceTitle || currentRelatedResourceTitle === '') {
+            alert('Please type and select a resource title from the dropdown!')
             return;
         }
-        setRelatedResources([...relatedResources, { type: currentResourceType, title: currentSearchTerm }]);
-        setCurrentResourceType('');
+        setRelatedResources([...relatedResources, { type: currentRelatedResourceType, title: currentRelatedResourceTitle }]);
+        setCurrentRelatedResourceType('');
+        setCurrentRelatedResourceTitle('');
         setCurrentSearchTerm('');
         console.log("Added one, now: ", relatedResources)
     }
@@ -131,22 +133,24 @@ const ResourceSubmission = () => {
     }
 
     const handleRelatedResourceTypeChange = (value) => {
-        setCurrentResourceType(value);
+        setCurrentRelatedResourceType(value);
     };
 
     const handleRelatedResourceTitleChange = (value) => {
-        setCurrentSearchTerm(value);
+        setCurrentRelatedResourceTitle(value);
     };
 
-
+    const handleRelatedResourceTitleInputChange = (value) => {
+        setCurrentSearchTerm(value);
+    }
 
     const handleAddingOneOerExternalLink = () => {
         if (!currentOerExternalLinkType || currentOerExternalLinkType === '') {
-            alert('please select a resource type!')
+            alert('Please select a resource type!')
             return;
         }
         if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === '') {
-            alert('please enter the title!')
+            alert('Please enter a title!')
             return;
         }
         setOerExternalLinks([...oerExternalLinks, { type: currentOerExternalLinkType, url: currentOerExternalLinkURL, title: currentOerExternalLinkTitle }]);
@@ -496,7 +500,7 @@ const ResourceSubmission = () => {
                                                     <td align="left">
                                                         <Select
                                                             placeholder="Type"
-                                                            value={currentResourceType}
+                                                            value={currentRelatedResourceType}
                                                             onChange={(e, newValue) => handleRelatedResourceTypeChange(newValue)}
                                                         >
                                                             <Option value="dataset">Dataset</Option>
@@ -508,10 +512,14 @@ const ResourceSubmission = () => {
                                                     <td align="left">
                                                         <Autocomplete
                                                             freeSolo
-                                                            value={currentSearchTerm}
-                                                            placeholder="Type anything"
+                                                            placeholder="Type and select from the dropdown"
                                                             options={returnedRelatedResourceTitle.map((option) => option.title)}
-                                                            onInputChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
+                                                            value={currentRelatedResourceTitle}
+                                                            onChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
+                                                            inputValue={currentSearchTerm}
+                                                            onInputChange={(event, newInputValue) => {
+                                                                handleRelatedResourceTitleInputChange(newInputValue);
+                                                            }}
                                                         />
                                                     </td>
                                                     <td align="left">
