@@ -34,7 +34,7 @@ function PublicationPage() {
             const thisResourceList = await fetchResourcesByField('_id', [id]);
             // Since the function returns an Array, we extract the content using idx 0
             const thisResource = thisResourceList[0];
-            console.log(thisResource, 'tr')
+            console.log('Element returned: ', thisResource);
 
             setRelatedDatasets(thisResource['related-datasets']);
             setRelatedOERs(thisResource['related-oers']);

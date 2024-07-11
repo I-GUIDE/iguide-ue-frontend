@@ -50,6 +50,11 @@ export default function NotebookViewer(props) {
     } else if (repoUrl && repoUrl !== '') {
         notebookUrl = get_notebook_html(repoUrl, notebookFile);
     }
+
+    // Don't render if the notebook doesn't exist...
+    if (!notebookUrl || notebookUrl === '') {
+        return null;
+    }
     iGuidePlatformUrl = get_openwith_url(repoUrl, notebookFile);
 
     return (

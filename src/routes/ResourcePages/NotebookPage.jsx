@@ -34,6 +34,7 @@ function NotebookPage() {
             const thisResourceList = await fetchResourcesByField('_id', [id]);
             // Since the function returns an Array, we extract the content using idx 0
             const thisResource = thisResourceList[0];
+            console.log('Element returned: ', thisResource);
 
             setRelatedDatasets(thisResource['related-datasets']);
             setRelatedPublicatons(thisResource['related-publications']);
