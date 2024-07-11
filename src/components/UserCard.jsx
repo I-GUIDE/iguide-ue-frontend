@@ -92,7 +92,7 @@ export default function UserCard(props) {
                             </Typography>
                             <Typography fontWeight="lg">{numberOfContributions}</Typography>
                         </div>
-                        <div>
+                        {/* <div>
                             <Typography level="body-xs" fontWeight="lg">
                                 Followers
                             </Typography>
@@ -103,7 +103,7 @@ export default function UserCard(props) {
                                 Rating
                             </Typography>
                             <Typography fontWeight="lg">10.0</Typography>
-                        </div>
+                        </div> */}
                     </Sheet>
                     <Stack direction="row" spacing={2} justifyContent="flex-end">
                         <Button component="a" href="/resource_submission" variant="solid" color="primary">
