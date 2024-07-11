@@ -34,6 +34,8 @@ import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
 import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
+import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES } from '../configs/ResourceTypes';
+
 import { fetchResourcesByField, fetchRelatedResourceTitles } from '../utils/DataRetrieval';
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
@@ -575,7 +577,7 @@ const ResourceUpdate = () => {
                                                 {relatedResources.map((x, i) => (
                                                     <tr key={i}>
                                                         <td align="left" >
-                                                            <p>{x.type}</p>
+                                                            <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
                                                         </td>
                                                         <td align="left" >
                                                             <p>{x.title}</p>
@@ -649,7 +651,7 @@ const ResourceUpdate = () => {
                                                     {oerExternalLinks.map((x, i) => (
                                                         <tr key={i}>
                                                             <td align="left" >
-                                                                <p>{x.type}</p>
+                                                                <p>{OER_EXTERNAL_LINK_TYPES[x.type]}</p>
                                                             </td>
                                                             <td align="left" >
                                                                 <p>{x.url}</p>

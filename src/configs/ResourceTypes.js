@@ -20,3 +20,11 @@ export const RESOURCE_TYPE_NAMES = {
     "oer": "Educational Resource",
     "oers": "Educational Resource"
 }
+
+export const OER_EXTERNAL_LINK_TYPES = {
+    "slides": "Slides",
+    "bok": "Body of Knowledge",
+    "oer": "Open Edu Res",
+    "course": "Course",
+    "webpage": "Webpage"
+}

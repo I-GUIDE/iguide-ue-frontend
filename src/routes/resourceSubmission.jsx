@@ -33,6 +33,8 @@ import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
 import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
+import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES } from '../configs/ResourceTypes';
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
 const VisuallyHiddenInput = styled('input')`
@@ -477,7 +479,7 @@ const ResourceSubmission = () => {
                                                 {relatedResources.map((x, i) => (
                                                     <tr key={i}>
                                                         <td align="left" >
-                                                            <p>{x.type}</p>
+                                                            <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
                                                         </td>
                                                         <td align="left" >
                                                             <p>{x.title}</p>
@@ -551,7 +553,7 @@ const ResourceSubmission = () => {
                                                     {oerExternalLinks.map((x, i) => (
                                                         <tr key={i}>
                                                             <td align="left" >
-                                                                <p>{x.type}</p>
+                                                                <p>{OER_EXTERNAL_LINK_TYPES[x.type]}</p>
                                                             </td>
                                                             <td align="left" >
                                                                 <p>{x.url}</p>
