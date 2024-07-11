@@ -25,6 +25,7 @@ import Typography from '@mui/joy/Typography';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Pagination from '@mui/material/Pagination';
+import Chip from '@mui/joy/Chip';
 
 import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
@@ -156,6 +157,11 @@ const Home = () => {
                                     level="h1"
                                     textColor={'#fff'}
                                     sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 2 }}
+                                    endDecorator={
+                                        <Chip component="span" size="sm">
+                                            BETA
+                                        </Chip>
+                                    }
                                 >
                                     I-GUIDE Platform
                                 </Typography>
