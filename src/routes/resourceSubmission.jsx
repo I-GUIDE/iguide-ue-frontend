@@ -467,7 +467,7 @@ const ResourceSubmission = () => {
                                         }
                                     </FormControl>
                                     <Grid sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Related Resources</FormLabel>
+                                        <FormLabel>Related Elements</FormLabel>
                                         <Table>
                                             <thead>
                                                 <tr>

@@ -182,7 +182,7 @@ const ResourceUpdate = () => {
     }
 
 
-    // Related resources...
+    // Related elements...
     const handleAddingOneRelatedResource = () => {
         if (!currentRelatedResourceType || currentRelatedResourceType === '') {
             alert('Please select a resource type!')
@@ -565,7 +565,7 @@ const ResourceUpdate = () => {
                                         }
                                     </FormControl>
                                     <Grid sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Related Resources</FormLabel>
+                                        <FormLabel>Related Elements</FormLabel>
                                         <Table>
                                             <thead>
                                                 <tr>
