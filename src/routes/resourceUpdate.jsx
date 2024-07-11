@@ -36,7 +36,7 @@ import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
 import { fetchResourcesByField, fetchRelatedResourceTitles } from '../utils/DataRetrieval';
 
-const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
+const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -308,7 +308,7 @@ const ResourceUpdate = () => {
         if (result && result.message === 'Resource registered successfully') {
             console.log('Deleting...', id)
             try {
-                const response = await fetch(`https://backend.i-guide.io:5000/api/resources/${id}`, {
+                const response = await fetch(`https://backend-dev.i-guide.io:5000/api/resources/${id}`, {
                     method: 'DELETE',
                 });
 

@@ -33,7 +33,7 @@ import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
 import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
-const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
+const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);

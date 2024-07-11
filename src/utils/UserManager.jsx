@@ -1,4 +1,4 @@
-const USER_BACKEND_URL = "https://backend.i-guide.io:5000"
+const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
 export async function fetchUser(uid) {
     const openid = encodeURIComponent(uid);
