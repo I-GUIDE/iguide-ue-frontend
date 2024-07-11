@@ -417,7 +417,7 @@ const ResourceUpdate = () => {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
-            <Header title="Resource Update" subtitle="Thanks for your contributions!" />
+            <Header title="Update Your Contribution" subtitle="Thanks for your contributions!" />
             <Container maxWidth="xl">
                 <Box
                     component="main"
