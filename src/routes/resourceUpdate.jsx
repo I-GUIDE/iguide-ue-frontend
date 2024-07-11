@@ -121,13 +121,13 @@ const ResourceUpdate = () => {
                     relatedResourcesArray.push({ type: 'notebook', title: res })
                 ));
             }
-            if (thisResource['related-publications'] && thisResource['related-datasets'].length > 0) {
+            if (thisResource['related-publications'] && thisResource['related-publications'].length > 0) {
                 const resNames = await fetchRelatedResourceTitles('_id', thisResource['related-publications']);
                 resNames.map((res) => (
                     relatedResourcesArray.push({ type: 'publication', title: res })
                 ));
             }
-            if (thisResource['related-oers'] && thisResource['related-datasets'].length > 0) {
+            if (thisResource['related-oers'] && thisResource['related-oers'].length > 0) {
                 const resNames = await fetchRelatedResourceTitles('_id', thisResource['related-oers']);
                 resNames.map((res) => (
                     relatedResourcesArray.push({ type: 'oer', title: res })
