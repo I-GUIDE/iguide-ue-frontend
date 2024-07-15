@@ -37,6 +37,8 @@ import InfoCard from "../components/InfoCard";
 import { fetchResourceCountByField, fetchResourcesByContributor } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
+const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+
 const UserProfile = () => {
     // OutletContext retrieving the user object to display user info
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
