@@ -316,7 +316,7 @@ const ResourceUpdate = () => {
         if (result && result.message === 'Resource registered successfully') {
             console.log('Deleting...', id)
             try {
-                const response = await fetch(`https://backend-dev.i-guide.io:5000/api/resources/${id}`, {
+                const response = await fetch(`${USER_BACKEND_URL}/api/resources/${id}`, {
                     method: 'DELETE',
                 });
 

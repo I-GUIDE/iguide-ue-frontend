@@ -140,7 +140,7 @@ const UserProfile = () => {
     async function handleElementDelete(elementId) {
         console.log('Deleting...', elementId)
         try {
-            const response = await fetch(`https://backend-dev.i-guide.io:5000/api/resources/${elementId}`, {
+            const response = await fetch(`${USER_BACKEND_URL}/api/resources/${elementId}`, {
                 method: 'DELETE',
             });
 
