@@ -189,11 +189,13 @@ const ResourceSubmission = () => {
         event.preventDefault();
         const data = {};
 
+        // When the user forgets to save the new related element, app will ask the user to submit it
         if (currentRelatedResourceTitle && currentRelatedResourceTitle !== '') {
             alert('You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!');
             return;
         }
 
+        // When the user forgets to save the new educational element link, app will ask the user to submit it
         if ((currentOerExternalLinkURL && currentOerExternalLinkURL !== '') || (currentOerExternalLinkTitle && currentOerExternalLinkTitle !== '')) {
             alert('You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!');
             return;
@@ -229,8 +231,7 @@ const ResourceSubmission = () => {
             data['oer-external-links'] = oerExternalLinks;
         }
 
-
-        console.log("data", data)
+        console.log("Data soon to be submitted", data)
 
         const response = await fetch(`${USER_BACKEND_URL}/api/resources`, {
             method: 'PUT',
@@ -249,6 +250,7 @@ const ResourceSubmission = () => {
         }
     }
 
+    // If the user is not authenticated/logged in, they will be redirected to the login page
     if (!isAuthenticated) {
         return (
             <CssVarsProvider disableTransitionOnChange>
@@ -286,6 +288,7 @@ const ResourceSubmission = () => {
         )
     }
 
+    // After submission, show users the submission status. 
     if (submissionStatus !== 'no submission') {
         return (
             <CssVarsProvider disableTransitionOnChange>
