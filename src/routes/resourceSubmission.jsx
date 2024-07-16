@@ -25,7 +25,7 @@ import Table from '@mui/joy/Table';
 import Autocomplete from '@mui/joy/Autocomplete';
 import IconButton from '@mui/joy/IconButton';
 
-import AddIcon from '@mui/icons-material/Add';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -34,6 +34,7 @@ import LoginCard from '../components/LoginCard';
 import SubmissionStatusCard from '../components/SubmissionStatusCard';
 
 import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES } from '../configs/ResourceTypes';
+import { fetchAllTitlesByElementType } from '../utils/DataRetrieval';
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
@@ -58,6 +59,7 @@ const ResourceSubmission = () => {
 
     const [relatedResources, setRelatedResources] = useState([]);
     const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] = useState([]);
+    const relatedResourceDropdownLoading = returnedRelatedResourceTitle.length === 0;
     const [currentSearchTerm, setCurrentSearchTerm] = useState('');
     const [currentRelatedResourceTitle, setCurrentRelatedResourceTitle] = useState();
     const [currentRelatedResourceType, setCurrentRelatedResourceType] = useState('');
@@ -72,26 +74,16 @@ const ResourceSubmission = () => {
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
 
     useEffect(() => {
-        const fetchSearchData = async (resourceType, keyword) => {
-            if (resourceType && resourceType !== '' && keyword.length > 2) {
-                const response = await fetch(`${USER_BACKEND_URL}/api/search`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        keyword: keyword,
-                        resource_type: resourceType
-                    })
-                });
-                const results = await response.json();
-                setReturnedRelatedResourceTitle(results);
+        const getAllTitlesByElementType = async (resourceType) => {
+            if (resourceType && resourceType !== '') {
+                const returnedTitles = await fetchAllTitlesByElementType(resourceType);
+                setReturnedRelatedResourceTitle(returnedTitles);
             } else {
                 setReturnedRelatedResourceTitle([]);
             }
-        };
-        fetchSearchData(currentRelatedResourceType, currentSearchTerm);
-    }, [currentRelatedResourceType, currentSearchTerm]);
+        }
+        getAllTitlesByElementType(currentRelatedResourceType);
+    }, [currentRelatedResourceType]);
 
     const handleResourceTypeChange = (event, newResourceType) => {
         setResourceTypeSelected(newResourceType);
@@ -148,7 +140,11 @@ const ResourceSubmission = () => {
 
     const handleAddingOneOerExternalLink = () => {
         if (!currentOerExternalLinkType || currentOerExternalLinkType === '') {
-            alert('Please select a resource type!')
+            alert('Please select an external link type!')
+            return;
+        }
+        if (!currentOerExternalLinkURL || currentOerExternalLinkURL === '') {
+            alert('Please enter a URL!')
             return;
         }
         if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === '') {
@@ -192,6 +188,16 @@ const ResourceSubmission = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = {};
+
+        if (currentRelatedResourceTitle && currentRelatedResourceTitle !== '') {
+            alert('You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!');
+            return;
+        }
+
+        if ((currentOerExternalLinkURL && currentOerExternalLinkURL !== '') || (currentOerExternalLinkTitle && currentOerExternalLinkTitle !== '')) {
+            alert('You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!');
+            return;
+        }
 
         if (thumbnailImageFile) {
             const formData = new FormData();
@@ -466,13 +472,15 @@ const ResourceSubmission = () => {
                                             </div>
                                         }
                                     </FormControl>
+
+                                    {/* Related elements */}
                                     <Grid sx={{ gridColumn: '1/-1' }}>
-                                        <FormLabel>Related Elements</FormLabel>
+                                        <FormLabel>Related elements</FormLabel>
                                         <Table>
                                             <thead>
                                                 <tr>
-                                                    <th style={{ width: '30%' }} align="left">Type</th>
-                                                    <th style={{ width: '65%' }} align="left">Title</th>
+                                                    <th style={{ width: '25%' }} align="left">Type</th>
+                                                    <th style={{ width: '70%' }} align="left">Title</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -512,22 +520,26 @@ const ResourceSubmission = () => {
                                                         </Select>
                                                     </td>
                                                     <td align="left">
-                                                        <Autocomplete
-                                                            freeSolo
-                                                            placeholder="Type and select from the dropdown"
-                                                            options={returnedRelatedResourceTitle.map((option) => option.title)}
-                                                            value={currentRelatedResourceTitle}
-                                                            onChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
-                                                            inputValue={currentSearchTerm}
-                                                            onInputChange={(event, newInputValue) => {
-                                                                handleRelatedResourceTitleInputChange(newInputValue);
-                                                            }}
-                                                        />
+                                                        <FormControl id="asynchronous-demo">
+                                                            <Autocomplete
+                                                                placeholder="Type and select from the dropdown"
+                                                                disabled={!currentRelatedResourceType || currentRelatedResourceType === ''}
+                                                                loading={relatedResourceDropdownLoading}
+                                                                options={returnedRelatedResourceTitle}
+                                                                value={currentRelatedResourceTitle || null}
+                                                                onChange={(e, newValue) => handleRelatedResourceTitleChange(newValue)}
+                                                                inputValue={currentSearchTerm}
+                                                                onInputChange={(e, newInputValue) => {
+                                                                    handleRelatedResourceTitleInputChange(newInputValue);
+                                                                }}
+                                                            />
+                                                        </FormControl>
                                                     </td>
                                                     <td align="left">
-                                                        <AddIcon
+                                                        <LibraryAddIcon
                                                             onClick={handleAddingOneRelatedResource}
                                                             style={{ marginTop: "4px", cursor: "pointer" }}
+                                                            color="danger"
                                                         />
                                                     </td>
                                                 </tr>
@@ -539,7 +551,7 @@ const ResourceSubmission = () => {
                                     {/* External links */}
                                     {resourceTypeSelected === "oer" &&
                                         <Grid sx={{ gridColumn: '1/-1' }}>
-                                            <FormLabel>Educational Resource External Links</FormLabel>
+                                            <FormLabel>Educational resource external links</FormLabel>
                                             <Table>
                                                 <thead>
                                                     <tr>
@@ -604,9 +616,10 @@ const ResourceSubmission = () => {
                                                             <Input value={currentOerExternalLinkTitle} onChange={(event) => setCurrentOerExternalLinkTitle(event.target.value)} />
                                                         </td>
                                                         <td align="left">
-                                                            <AddIcon
+                                                            <LibraryAddIcon
                                                                 onClick={handleAddingOneOerExternalLink}
                                                                 style={{ marginTop: "4px", cursor: "pointer" }}
+                                                                color="danger"
                                                             />
                                                         </td>
                                                     </tr>

@@ -187,3 +187,20 @@ export async function fetchRelatedResourceTitles(type, ids) {
 
     return nameArray;
 }
+
+/**
+ * Fetches all titles of elements of a specified type from the backend.
+ *
+ * @async
+ * @function fetchAllTitlesByElementType
+ * @param {string} elementType - The type of resources to fetch titles for.
+ * @returns {Promise<Array<string>>} A promise that resolves to an array of all titles.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchAllTitlesByElementType(elementType) {
+    const response = await fetch(`${BACKEND_URL_PORT}/api/elements/titles?element_type=${elementType}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch titles');
+    }
+    return response.json();
+}
