@@ -10,6 +10,27 @@ import '../utils/UserManager';
 
 export default function SubmissionStatusCard(props) {
     const submissionStatus = props.submissionStatus;
+    let submissionStatusText = '';
+
+    switch (submissionStatus) {
+        case 'initial-succeeded':
+            submissionStatusText = 'Thank you for your contribution! You are all set!';
+            break;
+        case 'initial-failed':
+            submissionStatusText = 'Contribution failed. Please try again!';
+            break;
+        case 'update-succeeded':
+            submissionStatusText = 'Thank you for your update! You are all set!';
+            break;
+        case 'update-succeeded-delete-failed':
+            submissionStatusText = 'Your contribution is updated, but we failed to delete the old copy!';
+            break;
+        case 'update-failed':
+            submissionStatusText = 'Your update failed, but we still have the old copy!';
+            break;
+        default:
+            submissionStatusText = 'Submission status unknown...';
+    }
 
     return (
         <Box
@@ -27,15 +48,9 @@ export default function SubmissionStatusCard(props) {
                     '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
                 }}
             >
-                <CardContent>
+                <CardContent sx={{ alignItems: 'center', textAlign: 'center' }}>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {
-                            submissionStatus === 'success' ? "Thank you for your contribution!" : (
-                                submissionStatus === 'success-delete-failed' ?
-                                    "Your contribution is updated, but we failed to delete the old copy" :
-                                    "Submission failed..."
-                            )
-                        }
+                        {submissionStatusText}
                     </Typography>
                     <Divider />
                     <Box sx={{ py: 2, display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
