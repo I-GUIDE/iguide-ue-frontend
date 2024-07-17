@@ -12,6 +12,7 @@ export default function SubmissionStatusCard(props) {
     const submissionStatus = props.submissionStatus;
     let submissionStatusText = '';
 
+    // Display the submission status
     switch (submissionStatus) {
         case 'initial-succeeded':
             submissionStatusText = 'Thank you for your contribution! You are all set!';
@@ -35,7 +36,7 @@ export default function SubmissionStatusCard(props) {
     return (
         <Box
             sx={{
-                width: '100%',
+                width: 500,
                 position: 'relative',
                 overflow: { xs: 'auto', sm: 'initial' },
             }}
@@ -49,9 +50,11 @@ export default function SubmissionStatusCard(props) {
                 }}
             >
                 <CardContent sx={{ alignItems: 'center', textAlign: 'center' }}>
-                    <Typography fontSize="xl" fontWeight="lg">
-                        {submissionStatusText}
-                    </Typography>
+                    <Box sx={{ py: 2, display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
+                        <Typography fontSize="xl" fontWeight="lg">
+                            {submissionStatusText}
+                        </Typography>
+                    </Box>
                     <Divider />
                     <Box sx={{ py: 2, display: 'flex', gap: 1.5, '& > button': { flex: 1 } }}>
                         <Button component="a" href="/" variant="outlined" color="neutral">
