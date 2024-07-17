@@ -83,6 +83,7 @@ export default function SubmissionCard(props) {
     const [notebookRepo, setNotebookRepo] = useState();
 
     const [publicationExternalLink, setPublicationExternalLink] = useState();
+    const [publicationDOI, setPublicationDOI] = useState();
 
     // If the submission type is 'update', load the existing element information.
     useEffect(() => {
@@ -106,6 +107,7 @@ export default function SubmissionCard(props) {
             setNotebookRepo(thisResource['notebook-repo']);
 
             setPublicationExternalLink(thisResource['external-link-publication']);
+            setPublicationDOI(thisResource['doi-publication']);
 
             let relatedResourcesArray = [];
             if (thisResource['related-datasets'] && thisResource['related-datasets'].length > 0) {
@@ -476,8 +478,14 @@ export default function SubmissionCard(props) {
                     }
                     {resourceTypeSelected === "publication" &&
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>External link</FormLabel>
+                            <FormLabel>Publication host link</FormLabel>
                             <Input name="external-link-publication" value={publicationExternalLink} onChange={(event) => setPublicationExternalLink(event.target.value)} />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "publication" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>DOI</FormLabel>
+                            <Input name="doi-publication" value={publicationExternalLink} onChange={(event) => setPublicationDOI(event.target.value)} />
                         </FormControl>
                     }
                     <FormControl sx={{ gridColumn: '1/-1' }}>
