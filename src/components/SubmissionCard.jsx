@@ -294,6 +294,11 @@ export default function SubmissionCard(props) {
             data['thumbnail-image'] = thumbnailImageFileURL;
         }
 
+        if (!data['thumbnail-image'] || data['thumbnail-image'] === '') {
+            alert('You have to upload a thumbnail image for your contribution!');
+            return;
+        }
+
         const formData = new FormData(event.target);
 
         formData.forEach((value, key) => {
@@ -446,56 +451,14 @@ export default function SubmissionCard(props) {
                             onChange={(event) => setContents(event.target.value)}
                         />
                     </FormControl>
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>External link</FormLabel>
-                            <Input name="external-link" value={datasetExternalLink} onChange={(event) => setDatasetExternalLink(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Direct download link</FormLabel>
-                            <Input name="direct-download-link" value={directDownloadLink} onChange={(event) => setDirectDownloadLink(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Data size</FormLabel>
-                            <Input name="size" value={dataSize} onChange={(event) => setDataSize(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "notebook" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook GitHub repo URL</FormLabel>
-                            <Input name="notebook-repo" value={notebookRepo} onChange={(event) => setNotebookRepo(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "notebook" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook filename (.ipynb)</FormLabel>
-                            <Input name="notebook-file" value={notebookFile} onChange={(event) => setNotebookFile(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "publication" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Publication host link</FormLabel>
-                            <Input name="external-link-publication" value={publicationExternalLink} onChange={(event) => setPublicationExternalLink(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "publication" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>DOI</FormLabel>
-                            <Input name="doi-publication" value={publicationExternalLink} onChange={(event) => setPublicationDOI(event.target.value)} />
-                        </FormControl>
-                    }
                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Upload thumbnail image</FormLabel>
+                        <FormLabel>Upload thumbnail image (required)</FormLabel>
                         <Button
                             component="label"
                             role={undefined}
                             tabIndex={-1}
                             variant="outlined"
-                            color="neutral"
+                            color="primary"
                             name="thumbnail-image"
                         >
                             Upload an image
@@ -514,6 +477,80 @@ export default function SubmissionCard(props) {
                             </div>
                         }
                     </FormControl>
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset host link (required)</FormLabel>
+                            <Input
+                                required
+                                name="external-link"
+                                value={datasetExternalLink}
+                                onChange={(event) => setDatasetExternalLink(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset direct download link</FormLabel>
+                            <Input
+                                name="direct-download-link"
+                                value={directDownloadLink}
+                                onChange={(event) => setDirectDownloadLink(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset size</FormLabel>
+                            <Input
+                                name="size"
+                                value={dataSize}
+                                onChange={(event) => setDataSize(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "notebook" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Notebook GitHub repo URL (required)</FormLabel>
+                            <Input
+                                required
+                                name="notebook-repo"
+                                value={notebookRepo}
+                                onChange={(event) => setNotebookRepo(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "notebook" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Notebook filename (.ipynb) (required)</FormLabel>
+                            <Input
+                                required
+                                name="notebook-file"
+                                value={notebookFile}
+                                onChange={(event) => setNotebookFile(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "publication" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Publication host link (required)</FormLabel>
+                            <Input
+                                required
+                                name="external-link-publication"
+                                value={publicationExternalLink}
+                                onChange={(event) => setPublicationExternalLink(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "publication" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>DOI</FormLabel>
+                            <Input
+                                name="doi-publication"
+                                value={publicationExternalLink}
+                                onChange={(event) => setPublicationDOI(event.target.value)}
+                            />
+                        </FormControl>
+                    }
 
                     {/* Related elements */}
                     <Grid sx={{ gridColumn: '1/-1' }}>
