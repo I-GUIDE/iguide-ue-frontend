@@ -21,7 +21,7 @@ const ResourceSubmission = () => {
         return (
             <CssVarsProvider disableTransitionOnChange>
                 <CssBaseline />
-                <Header title="Contribute a Knowledge Element" subtitle="Thanks for your contributions!" />
+                <Header title="Knowledge Contribution" subtitle="Thanks for your contributions!" />
                 <Container maxWidth="xl">
                     <Box
                         component="main"
