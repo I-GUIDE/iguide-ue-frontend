@@ -15,6 +15,18 @@ import { styled } from '@mui/joy/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+
+import Menu from '@mui/joy/Menu';
+
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListDivider from '@mui/joy/ListDivider';
+import MoreVert from '@mui/icons-material/MoreVert';
+import Edit from '@mui/icons-material/Edit';
+import DeleteForever from '@mui/icons-material/DeleteForever';
+import MenuButton from '@mui/joy/MenuButton';
+import Dropdown from '@mui/joy/Dropdown';
+
+
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
@@ -57,26 +69,52 @@ export default function NavBar(props) {
             return (
                 <ButtonGroup
                     color="primary"
-                    disabled={false}
                     orientation="horizontal"
-                    size="lg"
-                    variant="outlined"
+                    size="md"
+                    variant="plain"
+                    spacing="0.5rem"
                 >
-                    <Link to={'/user_profile'} style={{ textDecoration: 'none' }}>
-                        <IconButton>
-                            <AccountCircleIcon size='lg' color='primary' />
-                        </IconButton>
-                    </Link>
-                    <Button onClick={logout} >
-                        Logout
+                    <Button component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                        Launch JupyterHub
                     </Button>
+                    <Dropdown>
+                        <MenuButton color="primary">
+                            User Menu
+                        </MenuButton>
+                        <Menu placement="bottom-end" color="primary">
+                            <Link to={'/user_profile'} style={{ textDecoration: 'none' }}>
+                                <MenuItem>
+                                    My Profile
+                                </MenuItem>
+                            </Link>
+                            <MenuItem component="a" href="/resource_submission">
+                                Contribute
+                            </MenuItem>
+                            <ListDivider />
+                            <MenuItem variant="soft" onClick={logout}>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </Dropdown>
                 </ButtonGroup>
             )
         } else {
             return (
-                <Button onClick={login} size="lg" variant={'outlined'} color="primary">
-                    Login
-                </Button>
+                <ButtonGroup
+                    color="primary"
+                    orientation="horizontal"
+                    size="md"
+                    variant="plain"
+                    spacing="0.5rem"
+                >
+                    <Button component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                        Launch JupyterHub
+                    </Button>
+                    <Button onClick={login}>
+                        Login
+                    </Button>
+                </ButtonGroup>
+
             )
         }
     }
