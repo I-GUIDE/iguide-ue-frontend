@@ -21,6 +21,7 @@ import { styled } from '@mui/joy';
 import Table from '@mui/joy/Table';
 import Autocomplete from '@mui/joy/Autocomplete';
 import IconButton from '@mui/joy/IconButton';
+import Tooltip from '@mui/joy/Tooltip';
 
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import SearchIcon from '@mui/icons-material/Search';
@@ -29,7 +30,8 @@ import SubmissionStatusCard from './SubmissionStatusCard';
 
 import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES } from '../configs/ResourceTypes';
 
-import { fetchResourcesByField, fetchRelatedResourceTitles, fetchAllTitlesByElementType } from '../utils/DataRetrieval';
+import { fetchResourcesByField, fetchRelatedResourceTitles, fetchAllTitlesByElementType, getMetadataByDOI } from '../utils/DataRetrieval';
+import { printListWithDelimiter } from '../helpers/helper';
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
 
@@ -82,7 +84,7 @@ export default function SubmissionCard(props) {
     const [notebookFile, setNotebookFile] = useState();
     const [notebookRepo, setNotebookRepo] = useState();
 
-    const [publicationExternalLink, setPublicationExternalLink] = useState();
+    const [publicationDOI, setPublicationDOI] = useState();
 
     // If the submission type is 'update', load the existing element information.
     useEffect(() => {
@@ -105,7 +107,7 @@ export default function SubmissionCard(props) {
             setNotebookFile(thisResource['notebook-file']);
             setNotebookRepo(thisResource['notebook-repo']);
 
-            setPublicationExternalLink(thisResource['external-link-publication']);
+            setPublicationDOI(thisResource['external-link-publication']);
 
             let relatedResourcesArray = [];
             if (thisResource['related-datasets'] && thisResource['related-datasets'].length > 0) {
@@ -156,7 +158,7 @@ export default function SubmissionCard(props) {
 
     const handleResourceTypeChange = (event, newResourceType) => {
         setResourceTypeSelected(newResourceType);
-    };
+    }
 
     const handleThumbnailImageUpload = (event) => {
         const thumbnailFile = event.target.files[0];
@@ -197,7 +199,7 @@ export default function SubmissionCard(props) {
 
     const handleRelatedResourceTypeChange = (value) => {
         setCurrentRelatedResourceType(value);
-    };
+    }
 
     const handleRelatedResourceTitleChange = (value) => {
         setCurrentRelatedResourceTitle(value);
@@ -205,7 +207,7 @@ export default function SubmissionCard(props) {
         setCurrentRelatedResourceType('');
         setCurrentRelatedResourceTitle('');
         setCurrentSearchTerm('');
-    };
+    }
 
     const handleRelatedResourceTitleInputChange = (value) => {
         setCurrentSearchTerm(value);
@@ -242,7 +244,7 @@ export default function SubmissionCard(props) {
 
     const handleOerExternalLinkTypeChange = (value) => {
         setCurrentOerExternalLinkType(value);
-    };
+    }
 
     const handleOerExternalLinkSearchTitle = async () => {
         const url = currentOerExternalLinkURL;
@@ -257,6 +259,36 @@ export default function SubmissionCard(props) {
             console.log('search return', data.title)
             setCurrentOerExternalLinkTitle(data.title);
         }
+    }
+
+    const handleAutofillPublicationInfo = async () => {
+        if (!publicationDOI || publicationDOI === '') {
+            alert('Please enter the DOI first. Thank you!');
+            return;
+        }
+
+        const metadataDOI = await getMetadataByDOI(publicationDOI);
+        console.log('pub metadata', metadataDOI);
+
+        if (!metadataDOI) {
+            return;
+        }
+
+        // If we couldn't fetch the metadata via Crossref, do this...
+        if (metadataDOI === 'Publication not found') {
+            alert('We could not fetch the publication based on the DOI you provided. That could be due to the DOI not registered on Crossref or you have a typo in the DOI. If the DOI is correct, please manually input the publication metadata. Thank you!');
+            return;
+        }
+
+        const authorList = metadataDOI['author'];
+        let authorNameList = [];
+        for (let idx in authorList) {
+            authorNameList.push(authorList[idx].given + ' ' + authorList[idx].family);
+        }
+
+        setAuthors(printListWithDelimiter(authorNameList, ','));
+        setTitle(metadataDOI['title']);
+        setContents(metadataDOI['abstract']);
     }
 
 
@@ -290,6 +322,11 @@ export default function SubmissionCard(props) {
             data['thumbnail-image'] = result.url;
         } else {
             data['thumbnail-image'] = thumbnailImageFileURL;
+        }
+
+        if (!data['thumbnail-image'] || data['thumbnail-image'] === '') {
+            alert('You have to upload a thumbnail image for your contribution!');
+            return;
         }
 
         const formData = new FormData(event.target);
@@ -386,7 +423,7 @@ export default function SubmissionCard(props) {
                 >
                     {submissionType === 'update' ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Element type: (You cannot modify element type)</FormLabel>
+                            <FormLabel>Element type (You cannot modify element type)</FormLabel>
                             <Select
                                 name="resource-type"
                                 placeholder="Select an element type"
@@ -404,7 +441,7 @@ export default function SubmissionCard(props) {
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Element type: (Required)</FormLabel>
+                            <FormLabel>Element type (required)</FormLabel>
                             <Select
                                 name="resource-type"
                                 placeholder="Select an element type"
@@ -421,6 +458,55 @@ export default function SubmissionCard(props) {
                             </Select>
                         </FormControl>
                     }
+                    {resourceTypeSelected === "publication" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>DOI (required)</FormLabel>
+                            <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                                <Grid md>
+                                    <Input
+                                        required
+                                        name="external-link-publication"
+                                        value={publicationDOI}
+                                        onChange={(event) => setPublicationDOI(event.target.value)}
+                                    />
+                                </Grid>
+                                <Grid md="auto">
+                                    <Tooltip
+                                        placement="top-end"
+                                        variant="outlined"
+                                        color="primary"
+                                        arrow
+                                        title={
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    maxWidth: 320,
+                                                    justifyContent: 'center',
+                                                    p: 1,
+                                                }}
+                                            >
+                                                <Typography>
+                                                    Automatically retrieve publication information via Crossref.
+                                                    Please note that not all the fields will be available. Some 
+                                                    sources are not supported by Crossref. The abstract
+                                                    might need to be manually reformatted.
+                                                </Typography>
+                                            </Box>
+                                        }
+                                        size="lg"
+                                    >
+                                        <Button
+                                            variant='outlined'
+                                            onClick={handleAutofillPublicationInfo}
+                                        >
+                                            Autofill metadata
+                                        </Button>
+                                    </Tooltip>
+                                </Grid>
+                            </Grid>
+                        </FormControl>
+                    }
                     <FormControl sx={{ gridColumn: '1/-1' }}>
                         <FormLabel>Element title (required)</FormLabel>
                         <Input name="title" required value={title} onChange={(event) => setTitle(event.target.value)} />
@@ -434,7 +520,7 @@ export default function SubmissionCard(props) {
                         <Input name="tags" placeholder="Tag 1, Tag 2, ..." required value={tags} onChange={(event) => setTags(event.target.value)} />
                     </FormControl>
                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Description (required)</FormLabel>
+                        <FormLabel>Abstract (required)</FormLabel>
                         <Textarea
                             name="contents"
                             minRows={4}
@@ -444,50 +530,14 @@ export default function SubmissionCard(props) {
                             onChange={(event) => setContents(event.target.value)}
                         />
                     </FormControl>
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>External link</FormLabel>
-                            <Input name="external-link" value={datasetExternalLink} onChange={(event) => setDatasetExternalLink(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Direct download link</FormLabel>
-                            <Input name="direct-download-link" value={directDownloadLink} onChange={(event) => setDirectDownloadLink(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "dataset" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Data size</FormLabel>
-                            <Input name="size" value={dataSize} onChange={(event) => setDataSize(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "notebook" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook GitHub repo URL</FormLabel>
-                            <Input name="notebook-repo" value={notebookRepo} onChange={(event) => setNotebookRepo(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "notebook" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook filename (.ipynb)</FormLabel>
-                            <Input name="notebook-file" value={notebookFile} onChange={(event) => setNotebookFile(event.target.value)} />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "publication" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>External link</FormLabel>
-                            <Input name="external-link-publication" value={publicationExternalLink} onChange={(event) => setPublicationExternalLink(event.target.value)} />
-                        </FormControl>
-                    }
                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Upload thumbnail image</FormLabel>
+                        <FormLabel>Upload thumbnail image (required)</FormLabel>
                         <Button
                             component="label"
                             role={undefined}
                             tabIndex={-1}
                             variant="outlined"
-                            color="neutral"
+                            color="primary"
                             name="thumbnail-image"
                         >
                             Upload an image
@@ -506,6 +556,59 @@ export default function SubmissionCard(props) {
                             </div>
                         }
                     </FormControl>
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset host link (required)</FormLabel>
+                            <Input
+                                required
+                                name="external-link"
+                                value={datasetExternalLink}
+                                onChange={(event) => setDatasetExternalLink(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset direct download link</FormLabel>
+                            <Input
+                                name="direct-download-link"
+                                value={directDownloadLink}
+                                onChange={(event) => setDirectDownloadLink(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "dataset" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Dataset size</FormLabel>
+                            <Input
+                                name="size"
+                                value={dataSize}
+                                onChange={(event) => setDataSize(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "notebook" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Notebook GitHub repo URL (required)</FormLabel>
+                            <Input
+                                required
+                                name="notebook-repo"
+                                value={notebookRepo}
+                                onChange={(event) => setNotebookRepo(event.target.value)}
+                            />
+                        </FormControl>
+                    }
+                    {resourceTypeSelected === "notebook" &&
+                        <FormControl sx={{ gridColumn: '1/-1' }}>
+                            <FormLabel>Notebook filename (.ipynb) (required)</FormLabel>
+                            <Input
+                                required
+                                name="notebook-file"
+                                value={notebookFile}
+                                onChange={(event) => setNotebookFile(event.target.value)}
+                            />
+                        </FormControl>
+                    }
 
                     {/* Related elements */}
                     <Grid sx={{ gridColumn: '1/-1' }}>

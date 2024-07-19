@@ -1,4 +1,5 @@
-const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL
+const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
+import axios from 'axios';
 
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
@@ -213,4 +214,32 @@ export async function fetchAllTitlesByElementType(elementType) {
         throw new Error('Failed to fetch titles');
     }
     return response.json();
+}
+
+/**
+ * Fetches publication metadata via Crossref
+ *
+ * @async
+ * @function getMetadataByDOI
+ * @param {string} doi - The DOI of the publication
+ * @returns {Promise<Array<string>>} A promise that contains the metadata of the publication
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function getMetadataByDOI(doi) {
+    const encodedDOI = encodeURIComponent(doi)
+    try {
+        // Construct the CrossRef API URL
+        const url = `https://api.crossref.org/works/${encodedDOI}`;
+
+        // Make the HTTP request to the CrossRef API
+        const response = await axios.get(url);
+
+        // Extract metadata from the response
+        const metadata = response.data.message;
+
+        return metadata;
+    } catch (error) {
+        console.warn('Error fetching metadata:', error);
+        return 'Publication not found';
+    }
 }
