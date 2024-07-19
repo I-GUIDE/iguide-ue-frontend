@@ -282,8 +282,23 @@ export default function SubmissionCard(props) {
 
         const authorList = metadataDOI['author'];
         let authorNameList = [];
+
         for (let idx in authorList) {
-            authorNameList.push(authorList[idx].given + ' ' + authorList[idx].family);
+            let authorName = '';
+
+            // Case when it's an organization, aka no first and last name
+            if (!authorList[idx].given && !authorList[idx].family) {
+                if (authorList[idx].name) {
+                    authorName = authorList[idx].name;
+                } // If there is no name included... pass
+            } else if (!authorList[idx].given) {
+                authorName = authorList[idx].family;
+            } else if (!authorList[idx].family) {
+                authorName = authorList[idx].given;
+            } else {
+                authorName = authorList[idx].given + ' ' + authorList[idx].family;
+            }
+            authorNameList.push(authorName);
         }
 
         setAuthors(printListWithDelimiter(authorNameList, ','));
