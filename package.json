@@ -19,6 +19,7 @@
     "@mui/material": "^5.15.20",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@opensearch-project/opensearch": "^2.9.0",
+    "axios": "^1.7.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "oidc-client": "^1.11.5",
