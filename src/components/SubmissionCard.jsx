@@ -83,6 +83,7 @@ export default function SubmissionCard(props) {
 
     const [notebookFile, setNotebookFile] = useState();
     const [notebookRepo, setNotebookRepo] = useState();
+    const [notebookGitHubUrl, setNotebookGitHubUrl] = useState();
 
     const [publicationDOI, setPublicationDOI] = useState();
 
@@ -103,6 +104,8 @@ export default function SubmissionCard(props) {
             setDatasetExternalLink(thisResource['external-link']);
             setDirectDownloadLink(thisResource['direct-download-link']);
             setDataSize(thisResource.dataSize);
+
+            setNotebookGitHubUrl(thisResource['notebook-repo'] + '/blob/main/' + thisResource['notebook-file']);
 
             setNotebookFile(thisResource['notebook-file']);
             setNotebookRepo(thisResource['notebook-repo']);
@@ -174,22 +177,6 @@ export default function SubmissionCard(props) {
 
 
     // Related elements...
-    const handleAddingOneRelatedResource = () => {
-        if (!currentRelatedResourceType || currentRelatedResourceType === '') {
-            alert('Please select an element type!')
-            return;
-        }
-        if (!currentRelatedResourceTitle || currentRelatedResourceTitle === '') {
-            alert('Please type and select an element title from the dropdown!')
-            return;
-        }
-        setRelatedResources([...relatedResources, { type: currentRelatedResourceType, title: currentSearchTerm }]);
-        setCurrentRelatedResourceType('');
-        setCurrentRelatedResourceTitle('');
-        setCurrentSearchTerm('');
-        console.log("Added one, now: ", relatedResources)
-    }
-
     const handleRemovingOneRelatedResource = (idx) => {
         let newArray = [...relatedResources];
         newArray.splice(idx, 1);
@@ -349,6 +336,12 @@ export default function SubmissionCard(props) {
         formData.forEach((value, key) => {
             if (key === 'authors' || key === 'tags') {
                 data[key] = value.split(',').map(item => item.trim());
+            } else if (key === 'notebook-url') {
+                // Array[0]: the notebook repo url
+                // Array[1]: the notebook filename
+                const notebookUrlArray = value.split('/blob/main/');
+                data['notebook-repo'] = notebookUrlArray[0];
+                data['notebook-file'] = notebookUrlArray[1];
             } else {
                 data[key] = value;
             }
@@ -604,23 +597,12 @@ export default function SubmissionCard(props) {
                     }
                     {resourceTypeSelected === "notebook" &&
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook GitHub repo URL (required)</FormLabel>
+                            <FormLabel>Jupyter Notebook GitHub URL (required)</FormLabel>
                             <Input
                                 required
-                                name="notebook-repo"
-                                value={notebookRepo}
-                                onChange={(event) => setNotebookRepo(event.target.value)}
-                            />
-                        </FormControl>
-                    }
-                    {resourceTypeSelected === "notebook" &&
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Notebook filename (.ipynb) (required)</FormLabel>
-                            <Input
-                                required
-                                name="notebook-file"
-                                value={notebookFile}
-                                onChange={(event) => setNotebookFile(event.target.value)}
+                                name="notebook-url"
+                                value={notebookGitHubUrl}
+                                onChange={(event) => setNotebookGitHubUrl(event.target.value)}
                             />
                         </FormControl>
                     }
