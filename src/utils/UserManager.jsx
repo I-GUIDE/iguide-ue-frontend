@@ -10,8 +10,6 @@ export async function fetchUser(uid) {
     const openid = encodeURIComponent(uid);
     const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`);
 
-    console.log('USER_MANAGER: fetched a user - res', response);
-
     if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`)
     }
@@ -55,7 +53,48 @@ export async function addUser(uid, first_name, last_name, email, affiliation, bi
     }
 
     const result = await response.json();
-    console.log('USER_MANAGER: added a user', result)
+    console.log('USER_MANAGER: added a user', result, "user info", user)
+    return result;
+}
+
+/**
+ * Update a user
+ * @param {string} uid the OpenID of the user
+ * @param {string} first_name the first name of the user
+ * @param {string} last_name the last name of the user
+ * @param {string} email the work email of the user
+ * @param {string} affiliation the university of organization of the user
+ * @param {string} bio a short bio of the user
+ * @param {string} avatar_url the link to the profile picture
+ * @return {Promise<Array<Dict>>} information of whether the operation was successful
+ * @throws {Error} Throws an error if updating a user failed
+ */
+export async function updateUser(uid, first_name, last_name, email, affiliation, bio, avatar_url) {
+    const openId = encodeURIComponent(uid);
+    const user = {
+        openid: uid,
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        affiliation: affiliation,
+        bio: bio,
+        avatar_url: avatar_url
+    };
+
+    const response = await fetch(`${USER_BACKEND_URL}/api/users/${openId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    });
+
+    if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${error.message}`)
+    }
+
+    const result = await response.json();
+    console.log('USER_MANAGER: updated a user', result)
     return result;
 }
 
@@ -81,7 +120,7 @@ export async function deleteUser(uid) {
 }
 
 /**
- * Delete a user
+ * Verify the existence of a user
  * @param {string} uid the OpenID of the user
  * @return {Promise<boolean>} boolean value of whether the user exists
  */

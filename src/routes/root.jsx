@@ -10,7 +10,6 @@ const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL
 
 export default function Root() {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-    const [hasLocalProfile, setHasLocalProfile] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState(null);
 
     // Check if the user existed in the auth backend, if yes, setUser
@@ -26,9 +25,9 @@ export default function Root() {
                 },
             }).then((response) => {
                 if (response.status === 200) return response.json();
-                throw new Error("authentication has been failed!");
+                throw new Error("User not logged in via CILogon!");
             }).then((resObject) => {
-                console.log('root user res', resObject.isAuthenticated)
+                console.log('User is authenticated via CILogon', resObject.isAuthenticated)
                 setIsAuthenticated(resObject.isAuthenticated);
             }).catch((err) => {
                 console.log(err);
@@ -49,16 +48,16 @@ export default function Root() {
                 },
             }).then((response) => {
                 if (response.status === 200) return response.json();
-                throw new Error("authentication has been failed!");
+                throw new Error("CILogon has failed!");
             }).then((resObject) => {
-                console.log('userinfo', resObject.userInfo)
+                console.log('Getting user info from CILogon...', resObject.userInfo)
                 setUserInfo(resObject.userInfo);
             }).catch((err) => {
                 console.log(err);
             });
         };
         if (isAuthenticated) {
-            console.log("Logged in... getting user info...")
+            console.log("Logged in via CILogon")
             getUserInfo();
         } else {
             console.log("Not logged in")

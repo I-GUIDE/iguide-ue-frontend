@@ -12,7 +12,8 @@ import NotebookPage from "./routes/ResourcePages/NotebookPage";
 import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
-import UserProfile from './routes/userprofile';
+import UserProfile from './routes/userProfile';
+import UserProfileUpdate from './routes/userProfileUpdate';
 import ResourceSubmission from './routes/resourceSubmission';
 import ResourceUpdate from './routes/resourceUpdate';
 
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
             {
                 path: "/user_profile",
                 element: <UserProfile />,
+            },
+            {
+                path: "/user_profile_update",
+                element: <UserProfileUpdate />,
             },
             {
                 path: "/resource_submission",

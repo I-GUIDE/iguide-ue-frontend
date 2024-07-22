@@ -87,6 +87,11 @@ export default function NavBar(props) {
                                     My Profile
                                 </MenuItem>
                             </Link>
+                            <Link to={'/user_profile_update'} style={{ textDecoration: 'none' }}>
+                                <MenuItem>
+                                    Update Profile
+                                </MenuItem>
+                            </Link>
                             <MenuItem component="a" href="/resource_submission">
                                 Contribute
                             </MenuItem>
@@ -114,7 +119,6 @@ export default function NavBar(props) {
                         Login
                     </Button>
                 </ButtonGroup>
-
             )
         }
     }

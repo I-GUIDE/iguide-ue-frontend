@@ -19,7 +19,7 @@ export default function UserCard(props) {
 
     // Save the user information from CILogon to the local DB
     const saveUserToLocalDB = () => {
-        const ret_msg = addUser(userInfo.sub, userInfo.first_name, userInfo.last_name, userInfo.email, userInfo.affiliation, "");
+        const ret_msg = addUser(userInfo.sub, userInfo.given_name, userInfo.family_name, userInfo.email, userInfo.idp_name, "");
         console.log('saving user to the local db...', ret_msg);
     }
 
