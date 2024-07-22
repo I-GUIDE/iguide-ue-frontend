@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
@@ -10,6 +10,8 @@ import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import PersonIcon from '@mui/icons-material/Person';
 
+import UserProfileEditCard from './UserProfileEditCard';
+
 import { addUser, checkUser, fetchUser } from '../utils/UserManager';
 import '../utils/UserManager';
 
@@ -17,7 +19,8 @@ export default function UserCard(props) {
     const userInfo = props.userInfo;
     const numberOfContributions = props.numberOfContributions;
 
-    const [userInfoFromLocalDB, setUserInfoFromLocalDB] = React.useState();
+    const [userInfoFromLocalDB, setUserInfoFromLocalDB] = useState();
+    const [localUserInfoMissing, setLocalUserInfoMissing] = useState('unknown');
 
     // Save the user information from CILogon to the local DB
     const saveUserToLocalDB = async () => {
@@ -26,7 +29,7 @@ export default function UserCard(props) {
     }
 
     // Check if the user exists on the local DB, if not, add the user
-    React.useEffect(() => {
+    useEffect(() => {
         const handleCheckUser = async () => {
             if (userInfo.sub) {
                 const localUserExists = await checkUser(userInfo.sub);
@@ -38,6 +41,12 @@ export default function UserCard(props) {
                 }
                 const localUserInfo = await fetchUser(userInfo.sub);
                 setUserInfoFromLocalDB(localUserInfo);
+
+                if (localUserInfo.first_name && localUserInfo.last_name && localUserInfo.email && localUserInfo.affiliation) {
+                    setLocalUserInfoMissing('good');
+                } else {
+                    setLocalUserInfoMissing('missing');
+                }
             }
         };
         handleCheckUser();
@@ -46,6 +55,22 @@ export default function UserCard(props) {
     // If the user info from the local DB is still not available, wait...
     if (!userInfoFromLocalDB) {
         return;
+    }
+
+    if (localUserInfoMissing === 'unknwon') {
+        return;
+    } else if (localUserInfoMissing === 'missing') {
+        return (
+            <Box
+                sx={{
+                    width: '100%',
+                    position: 'relative',
+                    overflow: { xs: 'auto', sm: 'initial' },
+                }}
+            >
+                <UserProfileEditCard userProfileEditType="mandatory" />
+            </Box>
+        )
     }
 
     return (

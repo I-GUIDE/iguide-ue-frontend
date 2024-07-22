@@ -98,21 +98,13 @@ export default function UserProfileEditCard(props) {
         } else {
             avatar_url = profilePictureFileURL;
         }
-        
+
         const result = await updateUser(userInfo.sub, firstName, lastName, email, affiliation, bio, avatar_url);
 
-        if (userProfileEditType === 'update') {
-            if (result && result.message === 'User updated successfully') {
-                setUserProfileSubmissionStatus('update-succeeded');
-            } else {
-                setUserProfileSubmissionStatus('update-failed');
-            }
+        if (result && result.message === 'User updated successfully') {
+            setUserProfileSubmissionStatus('update-succeeded');
         } else {
-            if (result && result.message === 'User updated successfully') {
-                setUserProfileSubmissionStatus('update-succeeded');
-            } else {
-                setUserProfileSubmissionStatus('update-failed');
-            }
+            setUserProfileSubmissionStatus('update-failed');
         }
     }
 
@@ -133,14 +125,13 @@ export default function UserProfileEditCard(props) {
             }}
         >
             <Typography level="title-lg" >
-                Update your user profile
+                {userProfileEditType === 'mandatory' ? "Please fill out the required fields" : "Update your user profile"}
             </Typography>
             <Divider inset="none" />
             <form onSubmit={handleSubmit} name="resourceForm">
                 <CardContent
                     sx={{
                         display: 'grid',
-                        // gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
                         gap: 1.5,
                     }}
                 >

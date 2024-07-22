@@ -14,18 +14,9 @@ export default function UserProfileEditStatusCard(props) {
 
     // Display the submission status
     switch (userProfileSubmissionStatus) {
-        // case 'initial-succeeded':
-        //     submissionStatusText = 'Thank you for your contribution! You are all set!';
-        //     break;
-        // case 'initial-failed':
-        //     submissionStatusText = 'Contribution failed. Please try again!';
-        //     break;
         case 'update-succeeded':
             submissionStatusText = 'Thank you for updating your profile! You are all set!';
             break;
-        // case 'update-succeeded-delete-failed':
-        //     submissionStatusText = 'Your contribution is updated, but we failed to delete the old copy!';
-        //     break;
         case 'update-failed':
             submissionStatusText = 'Your profile update failed... Please try again later!';
             break;
