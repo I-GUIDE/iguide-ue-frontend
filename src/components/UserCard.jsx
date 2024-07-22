@@ -10,16 +10,18 @@ import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import PersonIcon from '@mui/icons-material/Person';
 
-import { addUser, checkUser } from '../utils/UserManager';
+import { addUser, checkUser, fetchUser } from '../utils/UserManager';
 import '../utils/UserManager';
 
 export default function UserCard(props) {
     const userInfo = props.userInfo;
     const numberOfContributions = props.numberOfContributions;
 
+    const [userInfoFromLocalDB, setUserInfoFromLocalDB] = React.useState();
+
     // Save the user information from CILogon to the local DB
-    const saveUserToLocalDB = () => {
-        const ret_msg = addUser(userInfo.sub, userInfo.given_name, userInfo.family_name, userInfo.email, userInfo.idp_name, "");
+    const saveUserToLocalDB = async () => {
+        const ret_msg = await addUser(userInfo.sub, userInfo.given_name, userInfo.family_name, userInfo.email, userInfo.idp_name, "");
         console.log('saving user to the local db...', ret_msg);
     }
 
@@ -27,17 +29,24 @@ export default function UserCard(props) {
     React.useEffect(() => {
         const handleCheckUser = async () => {
             if (userInfo.sub) {
-                const userExists = await checkUser(userInfo.sub);
-                if (userExists) {
+                const localUserExists = await checkUser(userInfo.sub);
+                if (localUserExists) {
                     console.log('Found the user from our database');
                 } else {
                     console.log('Couldn\'t find the user from our database...');
-                    saveUserToLocalDB();
+                    await saveUserToLocalDB();
                 }
+                const localUserInfo = await fetchUser(userInfo.sub);
+                setUserInfoFromLocalDB(localUserInfo);
             }
         };
         handleCheckUser();
     }, [userInfo]);
+
+    // If the user info from the local DB is still not available, wait...
+    if (!userInfoFromLocalDB) {
+        return;
+    }
 
     return (
         <Box
@@ -56,24 +65,31 @@ export default function UserCard(props) {
                 }}
             >
                 <AspectRatio flex ratio="1" maxHeight={182} sx={{ minWidth: 182 }}>
-                    {/* <img
-                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-                        srcSet="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286&dpr=2 2x"
-                        loading="lazy"
-                        alt=""
-                    /> */}
-                    <PersonIcon />
+                    {userInfoFromLocalDB['avatar_url']
+                        ?
+                        <img
+                            src={userInfoFromLocalDB['avatar_url']}
+                            srcSet={userInfoFromLocalDB['avatar_url'] + " 2x"}
+                            loading="lazy"
+                            alt=""
+                        />
+                        :
+                        <PersonIcon />
+                    }
                 </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {userInfo.given_name ? userInfo.given_name : "Given name unknown"}&nbsp;
-                        {userInfo.family_name ? userInfo.family_name : "Family name unknown"}
+                        {userInfoFromLocalDB.first_name ? userInfoFromLocalDB.first_name : "Given name unknown"}&nbsp;
+                        {userInfoFromLocalDB.last_name ? userInfoFromLocalDB.last_name : "Family name unknown"}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {userInfo.email ? userInfo.email : null}
+                        {userInfoFromLocalDB.email ? "E-mail: " + userInfoFromLocalDB.email : null}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {userInfo.idp_name ? userInfo.idp_name : "Independent User"}
+                        {userInfoFromLocalDB.affiliation ? "Affiliation: " + userInfoFromLocalDB.affiliation : null}
+                    </Typography>
+                    <Typography level="body-sm" fontWeight="md" textColor="text.tertiary">
+                        {userInfoFromLocalDB.bio ? "Bio: " + userInfoFromLocalDB.bio : null}
                     </Typography>
                     <Sheet
                         sx={{
