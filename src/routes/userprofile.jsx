@@ -41,7 +41,7 @@ const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 const UserProfile = () => {
     // OutletContext retrieving the user object to display user info
-    const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
+    const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo, localUserInfo, setLocalUserInfo] = useOutletContext();
 
     if (!isAuthenticated) {
         return (
@@ -99,6 +99,13 @@ const UserProfile = () => {
 
     const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
     const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
+
+    let displayedFirstName = '';
+    if (localUserInfo && localUserInfo.preferred_first_name) {
+        displayedFirstName = localUserInfo.preferred_first_name;
+    } else {
+        displayedFirstName = userInfo.given_name;
+    }
 
     const itemsPerPage = 10;
 
@@ -170,7 +177,7 @@ const UserProfile = () => {
                 <CssBaseline enableColorScheme />
                 {userInfo && (
                     <Header
-                        title={"Hello " + userInfo.given_name}
+                        title={"Hello " + displayedFirstName}
                         subtitle="Welcome to your user profile"
                     />
                 )}
@@ -198,7 +205,7 @@ const UserProfile = () => {
                                 pb: 8,
                             }}
                         >
-                            <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
+                            <UserCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />
                             <Stack
                                 direction="column"
                                 justifyContent="center"

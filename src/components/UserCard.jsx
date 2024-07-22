@@ -12,48 +12,30 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import UserProfileEditCard from './UserProfileEditCard';
 
-import { addUser, checkUser, fetchUser } from '../utils/UserManager';
 import '../utils/UserManager';
 
 export default function UserCard(props) {
-    const userInfo = props.userInfo;
+    const localUserInfo = props.localUserInfo;
     const numberOfContributions = props.numberOfContributions;
 
-    const [userInfoFromLocalDB, setUserInfoFromLocalDB] = useState();
     const [localUserInfoMissing, setLocalUserInfoMissing] = useState('unknown');
-
-    // Save the user information from CILogon to the local DB
-    const saveUserToLocalDB = async () => {
-        const ret_msg = await addUser(userInfo.sub, userInfo.given_name, userInfo.family_name, userInfo.email, userInfo.idp_name, "");
-        console.log('saving user to the local db...', ret_msg);
-    }
 
     // Check if the user exists on the local DB, if not, add the user
     useEffect(() => {
-        const handleCheckUser = async () => {
-            if (userInfo.sub) {
-                const localUserExists = await checkUser(userInfo.sub);
-                if (localUserExists) {
-                    console.log('Found the user from our database');
-                } else {
-                    console.log('Couldn\'t find the user from our database...');
-                    await saveUserToLocalDB();
-                }
-                const localUserInfo = await fetchUser(userInfo.sub);
-                setUserInfoFromLocalDB(localUserInfo);
-
-                if (localUserInfo.first_name && localUserInfo.last_name && localUserInfo.email && localUserInfo.affiliation) {
-                    setLocalUserInfoMissing('good');
-                } else {
-                    setLocalUserInfoMissing('missing');
-                }
+        const checkLocalUserInfo = async () => {
+            if (localUserInfo.first_name && localUserInfo.last_name && localUserInfo.email && localUserInfo.affiliation) {
+                setLocalUserInfoMissing('good');
+            } else {
+                setLocalUserInfoMissing('missing');
             }
         };
-        handleCheckUser();
-    }, [userInfo]);
+        if (localUserInfo) {
+            checkLocalUserInfo();
+        }
+    }, [localUserInfo]);
 
     // If the user info from the local DB is still not available, wait...
-    if (!userInfoFromLocalDB) {
+    if (!localUserInfo) {
         return;
     }
 
@@ -83,11 +65,11 @@ export default function UserCard(props) {
                 }}
             >
                 <AspectRatio flex ratio="1" maxHeight={182} sx={{ minWidth: 182 }}>
-                    {userInfoFromLocalDB['avatar_url']
+                    {localUserInfo['avatar_url']
                         ?
                         <img
-                            src={userInfoFromLocalDB['avatar_url']}
-                            srcSet={userInfoFromLocalDB['avatar_url'] + " 2x"}
+                            src={localUserInfo['avatar_url']}
+                            srcSet={localUserInfo['avatar_url'] + " 2x"}
                             loading="lazy"
                             alt=""
                         />
@@ -97,17 +79,18 @@ export default function UserCard(props) {
                 </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {userInfoFromLocalDB.first_name ? userInfoFromLocalDB.first_name : "Given name unknown"}&nbsp;
-                        {userInfoFromLocalDB.last_name ? userInfoFromLocalDB.last_name : "Family name unknown"}
+                        {/* When preferred first name is available, display the preferred one */}
+                        {localUserInfo.preferred_first_name ? localUserInfo.preferred_first_name : (localUserInfo.first_name ? localUserInfo.first_name : "First name unknown")}&nbsp;
+                        {localUserInfo.last_name ? localUserInfo.last_name : "Last name unknown"}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {userInfoFromLocalDB.email ? "E-mail: " + userInfoFromLocalDB.email : null}
+                        {localUserInfo.email ? "E-mail: " + localUserInfo.email : null}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {userInfoFromLocalDB.affiliation ? "Affiliation: " + userInfoFromLocalDB.affiliation : null}
+                        {localUserInfo.affiliation ? "Affiliation: " + localUserInfo.affiliation : null}
                     </Typography>
                     <Typography level="body-sm" fontWeight="md" textColor="text.tertiary">
-                        {userInfoFromLocalDB.bio ? "Bio: " + userInfoFromLocalDB.bio : null}
+                        {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
                     </Typography>
                     <Sheet
                         sx={{
