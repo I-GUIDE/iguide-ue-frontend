@@ -40,6 +40,7 @@ export default function UserProfileEditCard(props) {
     const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] = useState('no submission');
 
     const [firstName, setFirstName] = useState();
+    const [preferredFirstName, setPreferredFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [email, setEmail] = useState();
     const [affiliation, setAffiliation] = useState();
@@ -55,6 +56,7 @@ export default function UserProfileEditCard(props) {
             console.log('user info from db', userFromDB)
 
             setFirstName(userFromDB['first_name']);
+            setPreferredFirstName(userFromDB['preferred_first_name']);
             setLastName(userFromDB['last_name']);
             setEmail(userFromDB['email']);
             setAffiliation(userFromDB['affiliation']);
@@ -99,7 +101,7 @@ export default function UserProfileEditCard(props) {
             avatar_url = profilePictureFileURL;
         }
 
-        const result = await updateUser(userInfo.sub, firstName, lastName, email, affiliation, bio, avatar_url);
+        const result = await updateUser(userInfo.sub, firstName, preferredFirstName, lastName, email, affiliation, bio, avatar_url);
 
         if (result && result.message === 'User updated successfully') {
             setUserProfileSubmissionStatus('update-succeeded');
@@ -146,6 +148,10 @@ export default function UserProfileEditCard(props) {
                             <Input name="first_name" required value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                         </FormControl>
                     }
+                    <FormControl sx={{ gridColumn: '1/-1' }}>
+                        <FormLabel>Preferred first name</FormLabel>
+                        <Input name="preferred_first_name" value={preferredFirstName} onChange={(event) => setPreferredFirstName(event.target.value)} />
+                    </FormControl>
                     {lastName ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>Last name</FormLabel>

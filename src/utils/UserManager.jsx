@@ -69,11 +69,12 @@ export async function addUser(uid, first_name, last_name, email, affiliation, bi
  * @return {Promise<Array<Dict>>} information of whether the operation was successful
  * @throws {Error} Throws an error if updating a user failed
  */
-export async function updateUser(uid, first_name, last_name, email, affiliation, bio, avatar_url) {
+export async function updateUser(uid, first_name, preferred_first_name, last_name, email, affiliation, bio, avatar_url) {
     const openId = encodeURIComponent(uid);
     const user = {
         openid: uid,
         first_name: first_name,
+        preferred_first_name: preferred_first_name,
         last_name: last_name,
         email: email,
         affiliation: affiliation,
