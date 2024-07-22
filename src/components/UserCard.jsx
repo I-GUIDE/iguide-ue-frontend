@@ -57,19 +57,12 @@ export default function UserCard(props) {
         return;
     }
 
+    // If local user information is missing, ask them to fill out the info
     if (localUserInfoMissing === 'unknwon') {
         return;
     } else if (localUserInfoMissing === 'missing') {
         return (
-            <Box
-                sx={{
-                    width: '100%',
-                    position: 'relative',
-                    overflow: { xs: 'auto', sm: 'initial' },
-                }}
-            >
-                <UserProfileEditCard userProfileEditType="mandatory" />
-            </Box>
+            <UserProfileEditCard userProfileEditType="mandatory" />
         )
     }
 

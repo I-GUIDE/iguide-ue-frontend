@@ -187,7 +187,7 @@ const UserProfile = () => {
                         <Grid
                             container
                             display="flex"
-                            justifyContent="flex-start"
+                            justifyContent="center"
                             alignItems="center"
                             direction="column"
                             sx={{
@@ -198,6 +198,7 @@ const UserProfile = () => {
                                 pb: 8,
                             }}
                         >
+                            <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
                             <Stack
                                 direction="column"
                                 justifyContent="center"
@@ -205,7 +206,6 @@ const UserProfile = () => {
                                 spacing={2}
                                 width="100%"
                             >
-                                <UserCard userInfo={userInfo} numberOfContributions={numberOfTotalItems} />
                                 {numberOfTotalItems > 0 && <>
                                     <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
                                         <Typography level="h3">Your contributions</Typography>
