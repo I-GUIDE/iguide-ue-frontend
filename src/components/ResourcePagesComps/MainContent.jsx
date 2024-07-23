@@ -24,7 +24,7 @@ export default function MainContent(props) {
                 <Grid xs={12} md={8}>
                     <Typography level="h1" sx={{ py: 1 }}>{title}</Typography>
                     <Typography level="h4" sx={{ py: 1 }}>
-                        Contributed by {printListWithDelimiter(authors, ',')}
+                        Author{authors.length > 1 && 's'}: {printListWithDelimiter(authors, ',')}
                     </Typography>
                     <Typography sx={{ py: 1 }}>
                         {contents}

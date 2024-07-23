@@ -68,7 +68,7 @@ export default function InfoCard(props) {
                         WebkitBoxOrient: "vertical",
                         m: 0.5
                     }}>
-                    {authors.length == 1 ? 'Contributor:' : 'Contributors:'}&nbsp;
+                    Author{authors.length > 1 && 's'}:&nbsp;
                     <Link
                         overlay
                         underline="none"
