@@ -431,11 +431,11 @@ export default function SubmissionCard(props) {
                 >
                     {submissionType === 'update' ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Element type (You cannot modify element type)</FormLabel>
+                            <FormLabel>Element type</FormLabel>
                             <Select
                                 name="resource-type"
                                 placeholder="Select an element type"
-                                required
+                                disabled
                                 sx={{ minWidth: 200 }}
                                 onChange={handleResourceTypeChange}
                                 value={resourceTypeSelected}
