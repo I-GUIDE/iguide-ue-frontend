@@ -39,12 +39,17 @@ export default function UserProfileEditCard(props) {
 
     const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] = useState('no submission');
 
-    const [firstName, setFirstName] = useState();
+    const [firstNameFromDB, setFirstNameFromDB] = useState();
     const [preferredFirstName, setPreferredFirstName] = useState();
+    const [lastNameFromDB, setLastNameFromDB] = useState();
+    const [emailFromDB, setEmailFromDB] = useState();
+    const [affiliationFromDB, setAffiliationFromDB] = useState();
+    const [bio, setBio] = useState();
+
+    const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [email, setEmail] = useState();
     const [affiliation, setAffiliation] = useState();
-    const [bio, setBio] = useState();
 
     const [profilePictureFile, setProfilePictureFile] = useState();
     const [profilePictureFileURL, setProfilePictureFileURL] = useState();
@@ -55,10 +60,14 @@ export default function UserProfileEditCard(props) {
             const userFromDB = await fetchUser(userInfo.sub);
             console.log('user info from db', userFromDB)
 
+            setFirstNameFromDB(userFromDB['first_name']);
             setFirstName(userFromDB['first_name']);
             setPreferredFirstName(userFromDB['preferred_first_name']);
+            setLastNameFromDB(userFromDB['last_name']);
             setLastName(userFromDB['last_name']);
+            setEmailFromDB(userFromDB['email']);
             setEmail(userFromDB['email']);
+            setAffiliationFromDB(userFromDB['affiliation']);
             setAffiliation(userFromDB['affiliation']);
             setBio(userFromDB['bio']);
             setProfilePictureFileURL(userFromDB['avatar_url']);
@@ -137,10 +146,10 @@ export default function UserProfileEditCard(props) {
                         gap: 1.5,
                     }}
                 >
-                    {firstName ?
+                    {firstNameFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>First name</FormLabel>
-                            <Input name="first_name" disabled value={firstName} />
+                            <Input name="first_name" disabled value={firstNameFromDB} />
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
@@ -152,10 +161,10 @@ export default function UserProfileEditCard(props) {
                         <FormLabel>Preferred first name</FormLabel>
                         <Input name="preferred_first_name" value={preferredFirstName} onChange={(event) => setPreferredFirstName(event.target.value)} />
                     </FormControl>
-                    {lastName ?
+                    {lastNameFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>Last name</FormLabel>
-                            <Input name="last_name" disabled value={lastName} />
+                            <Input name="last_name" disabled value={lastNameFromDB} />
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
@@ -163,10 +172,10 @@ export default function UserProfileEditCard(props) {
                             <Input name="last_name" required value={lastName} onChange={(event) => setFirstName(event.target.value)} />
                         </FormControl>
                     }
-                    {email ?
+                    {emailFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>E-mail</FormLabel>
-                            <Input name="email" disabled value={email} />
+                            <Input name="email" disabled value={emailFromDB} />
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
@@ -174,10 +183,10 @@ export default function UserProfileEditCard(props) {
                             <Input name="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
                         </FormControl>
                     }
-                    {affiliation ?
+                    {affiliationFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>Affiliation</FormLabel>
-                            <Input name="affiliation" disabled value={affiliation} />
+                            <Input name="affiliation" disabled value={affiliationFromDB} />
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
