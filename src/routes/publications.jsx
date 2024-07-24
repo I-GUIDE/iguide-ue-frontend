@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ItemList from '../components/Layout/ItemList';
+import ElementList from '../components/Layout/ElementList';
 
 const Publications = () => {
     return (
-        <ItemList
-            dataType='publication'
+        <ElementList
+            dataType={['publication']}
             title='Publications'
             subtitle='Find your publications here'
         />

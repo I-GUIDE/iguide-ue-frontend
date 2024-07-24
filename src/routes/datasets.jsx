@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ItemList from '../components/Layout/ItemList';
+import ElementList from '../components/Layout/ElementList';
 
 const Datasets = () => {
     return (
-        <ItemList
-            dataType='dataset'
+        <ElementList
+            dataType={['dataset']}
             title='Datasets'
             subtitle='Find your datasets here'
         />

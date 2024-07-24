@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ItemList from '../components/Layout/ItemList';
+import ElementList from '../components/Layout/ElementList';
 
 const OERS = () => {
     return (
-        <ItemList
-            dataType='oer'
+        <ElementList
+            dataType={['oer']}
             title='Educational Resources'
             subtitle='Find your educational resources here'
         />

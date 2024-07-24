@@ -22,7 +22,9 @@ import Header from './Header';
 import { elementCounter, elementRetriever } from '../../utils/DataRetrieval';
 import { arrayLength } from '../../helpers/helper';
 
-export default function ItemList(props) {
+export default function ElementList(props) {
+    const fieldName = props.fieldName;
+    const matchValue = props.matchValue;
     const dataType = props.dataType;
     const title = props.title;
     const subtitle = props.subtitle;
@@ -43,8 +45,8 @@ export default function ItemList(props) {
     useEffect(() => {
         async function retrieveData(startingIdx) {
             try {
-                const data = await elementRetriever('resource-type', [dataType], null, '_id', 'desc', startingIdx, itemsPerPage);
-                const resourceCount = await elementCounter('resource-type', [dataType], null);
+                const data = await elementRetriever(fieldName, matchValue, dataType, '_id', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await elementCounter(fieldName, matchValue, dataType);
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
