@@ -84,7 +84,7 @@ export default function UserCard(props) {
                         {localUserInfo.last_name ? localUserInfo.last_name : "Last name unknown"}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
-                        {localUserInfo.email ? "E-mail: " + localUserInfo.email : null}
+                        {localUserInfo.email ? "Email: " + localUserInfo.email : null}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">
                         {localUserInfo.affiliation ? "Affiliation: " + localUserInfo.affiliation : null}

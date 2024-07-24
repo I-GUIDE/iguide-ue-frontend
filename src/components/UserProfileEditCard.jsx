@@ -174,12 +174,12 @@ export default function UserProfileEditCard(props) {
                     }
                     {emailFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>E-mail</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <Input name="email" disabled value={emailFromDB} />
                         </FormControl>
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>E-mail (required)</FormLabel>
+                            <FormLabel>Email (required)</FormLabel>
                             <Input name="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
                         </FormControl>
                     }
