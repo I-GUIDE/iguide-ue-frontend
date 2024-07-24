@@ -35,6 +35,7 @@ import LoginCard from "../components/LoginCard";
 import InfoCard from "../components/InfoCard";
 
 import { fetchResourceCountByField, fetchResourcesByContributor } from "../utils/DataRetrieval";
+import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
@@ -114,14 +115,8 @@ const UserProfile = () => {
     useEffect(() => {
         async function retrieveData(startingIdx) {
             if (userInfo.sub) {
-                const data = await fetchResourcesByContributor(
-                    userInfo.sub,
-                    '_score',
-                    "desc",
-                    startingIdx,
-                    itemsPerPage
-                );
-                const resourceCount = await fetchResourceCountByField('metadata.created_by', [userInfo.sub]);
+                const data = await elementRetriever('metadata.created_by', [userInfo.sub], null, '_score', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await elementCounter('metadata.created_by', [userInfo.sub], null);
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));

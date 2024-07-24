@@ -258,21 +258,20 @@ export async function getMetadataByDOI(doi) {
  * @throws {Error} If the request fails.
  */
 export async function elementRetriever(fieldName = '', matchValue = null, elementType = null, sortBy = '_score', order = 'desc', from = '0', size = '10') {
-    const forCounting = false;
     const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            fieldName,
-            matchValue,
-            elementType,
-            sortBy,
+            field_name: fieldName,
+            match_value: matchValue,
+            element_type: elementType,
+            sort_by: sortBy,
             order,
             from,
             size,
-            forCounting,
+            count_only: false,
         }),
     });
 
@@ -289,29 +288,20 @@ export async function elementRetriever(fieldName = '', matchValue = null, elemen
  * @param {string} [fieldName=''] - The name of the field in the element database.
  * @param {(string[]|null)} [matchValue=null] - The value used for filtering. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
  * @param {(string[]|null)} [elementType=null] - Type of the element. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
- * @param {string} [sortBy='_score'] - The field by which to sort the results.
- * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
- * @param {string} [from='0'] - The starting point of the results.
- * @param {string} [size='10'] - The number of results to retrieve.
  * @returns {Promise<Object|number>} The count of the elements.
  * @throws {Error} If the request fails.
  */
-export async function elementCount(fieldName = '', matchValue = null, elementType = null, sortBy = '_score', order = 'desc', from = '0', size = '10') {
-    const forCounting = true;
+export async function elementCounter(fieldName = '', matchValue = null, elementType = null) {
     const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            fieldName,
-            matchValue,
-            elementType,
-            sortBy,
-            order,
-            from,
-            size,
-            forCounting,
+            field_name: fieldName,
+            match_value: matchValue,
+            element_type: elementType,
+            count_only: true,
         }),
     });
 

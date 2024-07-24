@@ -19,7 +19,7 @@ import Pagination from '@mui/material/Pagination';
 import InfoCard from '../InfoCard';
 import Header from './Header';
 
-import { DataRetriever, getResourceCount } from '../../utils/DataRetrieval';
+import { elementCounter, elementRetriever } from '../../utils/DataRetrieval';
 import { arrayLength } from '../../helpers/helper';
 
 export default function ItemList(props) {
@@ -43,8 +43,8 @@ export default function ItemList(props) {
     useEffect(() => {
         async function retrieveData(startingIdx) {
             try {
-                const resourceCount = await getResourceCount(dataType);
-                const data = await DataRetriever(dataType, '_id', 'desc', startingIdx, itemsPerPage);
+                const data = await elementRetriever('resource-type', [dataType], null, '_id', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await elementCounter('resource-type', [dataType], null);
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
