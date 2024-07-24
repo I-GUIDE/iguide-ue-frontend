@@ -169,7 +169,7 @@ export default function UserProfileEditCard(props) {
                         :
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>Last name (required)</FormLabel>
-                            <Input name="last_name" required value={lastName} onChange={(event) => setFirstName(event.target.value)} />
+                            <Input name="last_name" required value={lastName} onChange={(event) => setLastName(event.target.value)} />
                         </FormControl>
                     }
                     {emailFromDB ?
