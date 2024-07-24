@@ -12,6 +12,8 @@ import NotebookPage from "./routes/ResourcePages/NotebookPage";
 import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from './routes/ResourcePages/OERPage';
+import Tag from './routes/tag';
+
 import UserProfile from './routes/userProfile';
 import UserProfileUpdate from './routes/userProfileUpdate';
 import ResourceSubmission from './routes/resourceSubmission';
@@ -60,6 +62,10 @@ const router = createBrowserRouter([
             {
                 path: "/oers/:id",
                 element: <OERPage />,
+            },
+            {
+                path: "/tag/:id",
+                element: <Tag />,
             },
             {
                 path: "/user_profile",

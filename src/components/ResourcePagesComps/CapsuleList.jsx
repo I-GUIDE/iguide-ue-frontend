@@ -3,8 +3,8 @@ import * as React from 'react';
 import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
-import Chip from '@mui/joy/Chip';
 import Box from '@mui/joy/Box';
+import Link from '@mui/joy/Link';
 
 export default function CapsuleList(props) {
     const title = props.title;
@@ -36,15 +36,16 @@ export default function CapsuleList(props) {
                     // Make sure that the item only renders when it has content
                     if (item && item !== '') {
                         return (
-                            <Chip
-                                key={item}
+                            <Link
                                 variant="outlined"
-                                color="primary"
-                                size="md"
-                                sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
+                                key={item}
+                                href={'/tag/' + item.toLowerCase()}
+                                fontSize="md"
+                                underline="none"
+                                sx={{ '--Link-gap': '0.5rem', my: 1, mx: 0.5, borderRadius: 'lg' }}
                             >
                                 {item}
-                            </Chip>
+                            </Link>
                         )
                     }
                 })}
