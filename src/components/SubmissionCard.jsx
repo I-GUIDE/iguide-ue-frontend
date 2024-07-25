@@ -87,6 +87,8 @@ export default function SubmissionCard(props) {
 
     const [publicationDOI, setPublicationDOI] = useState();
 
+    const [contributor, setContributor] = useState();
+
     // If the submission type is 'update', load the existing element information.
     useEffect(() => {
         const fetchData = async () => {
@@ -111,6 +113,12 @@ export default function SubmissionCard(props) {
             setNotebookRepo(thisResource['notebook-repo']);
 
             setPublicationDOI(thisResource['external-link-publication']);
+
+            if (thisResource.metadata) {
+                setContributor(thisResource.metadata.created_by);
+            } else {
+                setContributor(null);
+            }
 
             let relatedResourcesArray = [];
             if (thisResource['related-datasets'] && thisResource['related-datasets'].length > 0) {
@@ -408,6 +416,15 @@ export default function SubmissionCard(props) {
         )
     }
 
+    // If the user is not the contributor, deny access to the update form.
+    if (userInfo && userInfo.sub) {
+        if (!contributor || userInfo.sub !== contributor) {
+            return (
+                <SubmissionStatusCard submissionStatus="unauthorized" />
+            )
+        }
+    }
+
     return (
         <Card
             variant="outlined"
@@ -496,7 +513,7 @@ export default function SubmissionCard(props) {
                                             >
                                                 <Typography>
                                                     Automatically retrieve publication information via Crossref.
-                                                    Please note that not all the fields will be available. Some 
+                                                    Please note that not all the fields will be available. Some
                                                     sources are not supported by Crossref. The abstract
                                                     might need to be manually reformatted.
                                                 </Typography>

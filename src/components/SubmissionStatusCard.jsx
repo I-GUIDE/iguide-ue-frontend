@@ -29,6 +29,9 @@ export default function SubmissionStatusCard(props) {
         case 'update-failed':
             submissionStatusText = 'Your update failed, but we still have the old copy!';
             break;
+        case 'unauthorized':
+            submissionStatusText = 'You have to login as the contributor to update this element!';
+            break;
         default:
             submissionStatusText = 'Submission status unknown...';
     }
