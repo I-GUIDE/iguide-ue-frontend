@@ -10,7 +10,7 @@ import Link from '@mui/joy/Link';
 import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 
-import { blue } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 import XIcon from '@mui/icons-material/X';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -18,19 +18,11 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 export default function Footer() {
     return (
         <Box
-            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 200 }}
+            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 150 }}
         >
-            <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
-                <CardCover>
-                    <img
-                        src="/images/green-blue.png"
-                        srcSet="/images/green-blue.png 2x"
-                        loading="lazy"
-                        alt=""
-                    />
-                </CardCover>
+            <Card component="li" color="neutural" sx={{ borderRadius: 0, minWidth: 600, flexGrow: 1 }}>
                 <CardContent sx={{ justifyContent: 'center' }}>
-                    <Container maxWidth="lg">
+                    <Container maxWidth="xl">
                         <Grid container spacing={1}>
                             <Stack
                                 direction="row"
@@ -42,19 +34,24 @@ export default function Footer() {
                                     <Box sx={{ width: 'flex' }}>
                                         <Box
                                             component="img"
-                                            sx={{ height: 50, mx: 2 }}
+                                            sx={{ height: 75, mx: 2 }}
                                             alt="Logo"
                                             src="/images/nsf.png"
                                         />
                                     </Box>
                                 </Grid>
-                                <Grid xs={8}>
-                                    <Typography level="h5" textColor="#fff" sx={{ py: 1 }}>
+                                <Grid xs={4}>
+                                    <Typography level="h5" textColor="#606060" sx={{ py: 1 }}>
                                         © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
                                     </Typography>
-                                    <Typography level="body-xs" textColor="#fff" sx={{ py: 1 }}>
+                                    <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
                                         Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE)
                                         is supported by the National Science Foundation.
+                                    </Typography>
+                                </Grid>
+                                <Grid xs={4}>
+                                    <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
+                                        This material is based upon work supported by the National Science Foundation under award No. 2118329. Any opinions, findings, conclusions, or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
                                     </Typography>
                                 </Grid>
                                 <Grid xs={2}>
@@ -67,23 +64,23 @@ export default function Footer() {
                                     >
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <YouTubeIcon sx={{ color: blue[50] }} />
+                                                <YouTubeIcon sx={{ color: grey[700]}} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://x.com/NSFiGUIDE'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <XIcon sx={{ color: blue[50] }} />
+                                                <XIcon sx={{ color: grey[700]}} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <LinkedInIcon sx={{ color: blue[50] }} />
+                                                <LinkedInIcon sx={{ color: grey[700]}} />
                                             </Link>
                                         </Box>
                                     </Stack>
                                 </Grid>
                             </Stack>
-                            <Stack
+                            {/* <Stack
                                 direction="row"
                                 justifyContent="center"
                                 alignItems="center"
@@ -94,7 +91,7 @@ export default function Footer() {
                                         This material is based upon work supported by the National Science Foundation under award No. 2118329. Any opinions, findings, conclusions, or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
                                     </Typography>
                                 </Grid>
-                            </Stack>
+                            </Stack> */}
                         </Grid>
                     </Container>
                 </CardContent>

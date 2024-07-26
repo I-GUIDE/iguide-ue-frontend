@@ -26,7 +26,7 @@ const UserProfileUpdate = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 420px)', // 55px is the height of the NavBar
+                            minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -39,7 +39,7 @@ const UserProfileUpdate = () => {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: 'calc(100vh - 420px)',
+                                minHeight: 'calc(100vh - 375px)',
                                 backgroundColor: 'inherit',
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -62,7 +62,7 @@ const UserProfileUpdate = () => {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 420px)', // 55px is the height of the NavBar
+                        minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
@@ -75,7 +75,7 @@ const UserProfileUpdate = () => {
                         alignItems="center"
                         direction="column"
                         sx={{
-                            minHeight: 'calc(100vh - 420px)',
+                            minHeight: 'calc(100vh - 375px)',
                             backgroundColor: 'inherit',
                             px: { xs: 2, md: 4 },
                             pt: 4,
