@@ -417,7 +417,7 @@ export default function SubmissionCard(props) {
     }
 
     // If the user is not the contributor, deny access to the update form.
-    if (userInfo && userInfo.sub) {
+    if (submissionType === 'update' && userInfo && userInfo.sub) {
         if (!contributor || userInfo.sub !== contributor) {
             return (
                 <SubmissionStatusCard submissionStatus="unauthorized" />
