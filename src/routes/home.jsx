@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
     experimental_extendTheme as materialExtendTheme,
@@ -24,40 +25,29 @@ import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
-import Pagination from '@mui/material/Pagination';
 import Chip from '@mui/joy/Chip';
 
-import InfoCard from '../components/InfoCard';
 import FeaturedCard from '../components/FeaturedCard';
-import { DataSearcher, featuredResourcesRetriever, getResourceCount } from '../utils/DataRetrieval';
-import { arrayLength } from '../helpers/helper';
+import { featuredResourcesRetriever } from '../utils/DataRetrieval';
 import { RESOURCE_TYPE_COLORS } from '../configs/ResourceTypes';
 
-const Home = () => {
+function Home() {
     // define search data
     const [data, setData] = useState({
         content: '',
         status: 'initial',
     });
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
+
     // the term that will be immediately passed to the database for search
     const [searchTerm, setSearchTerm] = useState('');
-    // the term that users just typed. It will be assigned to searchTerm soon
-    const [nextSearchTerm, setNextSearchTerm] = useState('');
     // the search will only return results from given category if it's not 'any'
     const [searchCategory, setSearchCategory] = useState('any');
-    const [searchResults, setSearchResults] = useState([]);
-    const [hasSearched, setHasSearched] = useState(false);
-    const [searchResultLength, setSearchResultLength] = useState(null);
 
     const [featuredResources, setFeaturedResources] = useState([]);
     const [error, setError] = useState(null);
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
-    const [numberOfPages, setNumberOfPages] = useState(0);
-    const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-    const itemsPerPage = 10;
 
     // When the state of hasSearched changed, check if hasSearched is false. If
     //   it is false, retrieve the featured resources.
@@ -70,10 +60,8 @@ const Home = () => {
                 setError(error);
             }
         }
-        if (!hasSearched) {
-            retrieveFeaturedResources();
-        }
-    }, [hasSearched])
+        retrieveFeaturedResources();
+    }, [])
 
     // Function that handles submit events. This function will update the search
     //   term and set hasSearched to true.
@@ -81,58 +69,35 @@ const Home = () => {
         // Use preventDefault here to prevent the submit event from happening
         //   because we need to set some states below.
         event.preventDefault();
-        if (nextSearchTerm !== searchTerm) {
-            setCurrentStartingIdx(0)
-        }
-        setData((current) => ({ ...current, status: 'loading' }));
-        setSearchTerm(nextSearchTerm);
-        setHasSearched(true);
-
-        try {
-            // Replace timeout with real backend operation
-            setTimeout(() => {
-                setData((current) => ({ ...current, status: 'sent' }));
-            }, 100);
-        } catch (error) {
-            setData((current) => ({ ...current, status: 'failure' }));
-        }
+        setSearchParams({ keyword: searchTerm, type: searchCategory });
+        navigate(`/search-results?keyword=${encodeURIComponent(searchTerm)}&type=${searchCategory}`);
     };
 
-    // When there is an update on searchTerm (new search) or current starting
-    //   index (when users click another page), retrieve the search results
-    //   based on the current starting index.
-    useEffect(() => {
-        async function retrieveSearchData(startingIdx) {
-            try {
-                const returnResults = await DataSearcher(searchTerm, searchCategory, 'prioritize_title_author', 'desc', startingIdx, itemsPerPage);
-                const resourceCount = await getResourceCount(searchCategory, searchTerm);
+    // // When there is an update on searchTerm (new search) or current starting
+    // //   index (when users click another page), retrieve the search results
+    // //   based on the current starting index.
+    // useEffect(() => {
+    //     async function retrieveSearchData(startingIdx) {
+    //         try {
+    //             const returnResults = await DataSearcher(searchTerm, searchCategory, 'prioritize_title_author', 'desc', startingIdx, itemsPerPage);
+    //             const resourceCount = await getResourceCount(searchCategory, searchTerm);
 
-                setNumberOfTotalItems(resourceCount);
-                setNumberOfPages(Math.ceil(resourceCount / itemsPerPage));
-                setSearchResults(returnResults);
-                setSearchResultLength(arrayLength(returnResults));
-            } catch (error) {
-                setError(error);
-            }
-        }
-        if (searchTerm && searchTerm !== '') {
-            retrieveSearchData(currentStartingIdx);
-        }
-    }, [currentStartingIdx, searchTerm, searchCategory])
-
-    // When users click the pagination, update current starting index
-    const handlePageClick = (event, value) => {
-        const newStartingIdx = (value - 1) * itemsPerPage;
-        console.log(`User requested page number ${value}, which is offset ${newStartingIdx}`);
-        setCurrentStartingIdx(newStartingIdx);
-        setCurrentPage(value);
-    };
+    //             setNumberOfTotalItems(resourceCount);
+    //             setNumberOfPages(Math.ceil(resourceCount / itemsPerPage));
+    //             setSearchResults(returnResults);
+    //             setSearchResultLength(arrayLength(returnResults));
+    //         } catch (error) {
+    //             setError(error);
+    //         }
+    //     }
+    //     if (searchTerm && searchTerm !== '') {
+    //         retrieveSearchData(currentStartingIdx);
+    //     }
+    // }, [currentStartingIdx, searchTerm, searchCategory])
 
     // When user select a different category in the search bar
     const handleSelectChange = (event, value) => {
         setSearchCategory(value);
-        setCurrentPage(1);
-        setCurrentStartingIdx(0);
     }
 
     return (
@@ -174,10 +139,10 @@ const Home = () => {
                                         placeholder="Search..."
                                         type="text"
                                         required
-                                        value={nextSearchTerm}
+                                        value={searchTerm}
                                         onChange={(event) => {
                                             setData({ content: event.target.value, status: 'initial' })
-                                            setNextSearchTerm(event.target.value)
+                                            setSearchTerm(event.target.value)
                                         }}
                                         error={data.status === 'failure'}
                                         startDecorator={
@@ -221,154 +186,64 @@ const Home = () => {
                         </CardContent>
                     </Card>
                 </Box>
-                {!hasSearched
-                    // By default, users should see the featured resources
-                    ? <Container maxWidth="xl">
-                        <Box
-                            component="main"
+                <Container maxWidth="xl">
+                    <Box
+                        component="main"
+                        sx={{
+                            minHeight: 'calc(100vh - 395px)', // 450px is the combined height of the NavBar, search bar, and footer
+                            display: 'grid',
+                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                            gridTemplateRows: 'auto 1fr auto',
+                        }}
+                    >
+                        <Grid
+                            container
+                            justifyContent="center"
                             sx={{
-                                minHeight: 'calc(100vh - 395px)', // 450px is the combined height of the NavBar, search bar, and footer
-                                display: 'grid',
-                                gridTemplateColumns: { xs: 'auto', md: '100%' },
-                                gridTemplateRows: 'auto 1fr auto',
+                                backgroundColor: 'inherit',
+                                px: 1,
+                                py: 4,
+                                borderBottom: '1px solid',
+                                borderColor: 'divider',
                             }}
                         >
+                            <Typography
+                                level="h3"
+                                sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
+                            >
+                                Highlights
+                            </Typography>
                             <Grid
                                 container
-                                justifyContent="center"
-                                sx={{
-                                    backgroundColor: 'inherit',
-                                    px: 1,
-                                    py: 4,
-                                    borderBottom: '1px solid',
-                                    borderColor: 'divider',
-                                }}
+                                direction="row"
+                                xs={12}
                             >
-                                <Typography
-                                    level="h3"
-                                    sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
-                                >
-                                    Highlights
-                                </Typography>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    xs={12}
-                                >
-                                    {featuredResources?.map((dataset) => (
-                                        <Grid
-                                            container
-                                            key={dataset._id}
-                                            xs={12}
-                                            sm={6}
-                                            md={3}
-                                            direction="row"
-                                            justifyContent="center"
-                                            alignItems="flex-start"
-                                            sx={{ p: 4 }}
-                                        >
-                                            <FeaturedCard
-                                                key={dataset._id}
-                                                cardtype={dataset['resource-type'] + 's'}
-                                                pageid={dataset._id}
-                                                title={dataset.title}
-                                                authors={dataset.authors}
-                                                thumbnailImage={dataset['thumbnail-image']} />
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Container>
-                    // When there is a search action, shows the returned results
-                    : <Container maxWidth="xl">
-                        <Box
-                            component="main"
-                            sx={{
-                                minHeight: 'calc(100vh - 395px)', // 395px is the height of the NavBar, search bar, and footer
-                                display: 'grid',
-                                gridTemplateColumns: { xs: 'auto', md: '100%' },
-                                gridTemplateRows: 'auto 1fr auto',
-                            }}
-                        >
-                            <Grid
-                                container
-                                rowSpacing={2}
-                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                                sx={{
-                                    backgroundColor: 'inherit',
-                                    px: { xs: 2, md: 4 },
-                                    pt: 4,
-                                    pb: 8,
-                                    borderBottom: '1px solid',
-                                    borderColor: 'divider',
-                                }}
-                            >
-                                <Grid xs={12}>
-                                    <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
-                                        {/* Search result summary and "clear search button" */}
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="center"
-                                            spacing={2}
-                                        >
-                                            {
-                                                numberOfTotalItems > 0
-                                                    ? <Typography>
-                                                        Searched "{searchTerm}", returned {currentStartingIdx + 1}-{currentStartingIdx + searchResultLength} of {numberOfTotalItems}
-                                                    </Typography>
-                                                    : <Typography>
-                                                        Searched "{searchTerm}", no items matched your criteria.
-                                                    </Typography>
-                                            }
-                                            <Box
-                                                direction="row"
-                                                justifyContent="flex-start"
-                                                alignItems="flex-end"
-                                                spacing={1}
-                                            >
-                                                <Button
-                                                    key="clear-search"
-                                                    size="sm"
-                                                    variant='outlined'
-                                                    onClick={() => {
-                                                        setHasSearched(false);
-                                                        setNextSearchTerm('');
-                                                        setSearchCategory('any');
-                                                    }}>
-                                                    Reset
-                                                </Button>
-                                            </Box>
-                                        </Stack>
-
-                                        {/* Search result list */}
-                                        {searchResults?.map((result) => (
-                                            <InfoCard
-                                                key={result._id}
-                                                cardtype={result['resource-type'] + 's'}
-                                                pageid={result._id}
-                                                title={result.title}
-                                                authors={result.authors}
-                                                tags={result.tags}
-                                                contents={result.contents}
-                                                thumbnailImage={result['thumbnail-image']} />
-                                        ))}
-                                    </Stack>
-                                    <Stack
+                                {featuredResources?.map((dataset) => (
+                                    <Grid
+                                        container
+                                        key={dataset._id}
+                                        xs={12}
+                                        sm={6}
+                                        md={3}
                                         direction="row"
                                         justifyContent="center"
-                                        alignItems="center"
-                                        spacing={2}
-                                        sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
+                                        alignItems="flex-start"
+                                        sx={{ p: 4 }}
                                     >
-                                        <Pagination count={numberOfPages} color="primary" page={currentPage} onChange={handlePageClick} />
-                                    </Stack>
-                                </Grid>
+                                        <FeaturedCard
+                                            key={dataset._id}
+                                            cardtype={dataset['resource-type'] + 's'}
+                                            pageid={dataset._id}
+                                            title={dataset.title}
+                                            authors={dataset.authors}
+                                            thumbnailImage={dataset['thumbnail-image']}
+                                        />
+                                    </Grid>
+                                ))}
                             </Grid>
-                        </Box>
-                    </Container>
-                }
+                        </Grid>
+                    </Box>
+                </Container>
             </JoyCssVarsProvider>
         </MaterialCssVarsProvider>
     )
