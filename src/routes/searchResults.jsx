@@ -14,6 +14,7 @@ import FormControl from '@mui/joy/FormControl';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
+import IconButton from '@mui/joy/IconButton';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
@@ -188,6 +189,7 @@ function SearchResults() {
                                         placeholder="Search..."
                                         type="text"
                                         required
+                                        size="xl"
                                         value={nextSearchTerm}
                                         onChange={(event) => {
                                             setData({ content: event.target.value, status: 'initial' })
@@ -210,7 +212,8 @@ function SearchResults() {
                                             </Select>
                                         }
                                         endDecorator={
-                                            <Button
+                                            <IconButton
+                                                size="lg"
                                                 variant="plain"
                                                 color={RESOURCE_TYPE_COLORS[searchCategory]}
                                                 loading={data.status === 'loading'}
@@ -218,7 +221,7 @@ function SearchResults() {
                                                 sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                             >
                                                 <SearchIcon />
-                                            </Button>
+                                            </IconButton>
                                         }
                                     />
                                     <FormControl>

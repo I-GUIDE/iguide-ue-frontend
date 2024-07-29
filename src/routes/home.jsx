@@ -13,7 +13,7 @@ const materialTheme = materialExtendTheme();
 import FormControl from '@mui/joy/FormControl';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
-import Button from '@mui/joy/Button';
+import IconButton from '@mui/joy/IconButton';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
@@ -160,7 +160,8 @@ function Home() {
                                                 </Select>
                                             }
                                             endDecorator={
-                                                <Button
+                                                <IconButton
+                                                    size='lg'
                                                     variant="plain"
                                                     color={RESOURCE_TYPE_COLORS[searchCategory]}
                                                     loading={data.status === 'loading'}
@@ -168,7 +169,7 @@ function Home() {
                                                     sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                                                 >
                                                     <SearchIcon />
-                                                </Button>
+                                                </IconButton>
                                             }
                                         />
                                         <FormControl>
