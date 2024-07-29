@@ -21,7 +21,17 @@ export default function FeaturedCard(props) {
     const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
     return (
-        <Card variant="outlined" sx={{ width: 320, minHeight: 270 }}>
+        <Card
+            variant="outlined"
+            sx={{
+                width: 320,
+                minHeight: 270,
+                '&:hover': {
+                    borderColor: 'theme.vars.palette.primary.outlinedHoverBorder',
+                    transform: 'translateY(-2px)',
+                }
+            }}
+        >
             <CardOverflow>
                 <AspectRatio ratio="2">
                     <img
