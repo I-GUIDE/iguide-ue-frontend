@@ -55,6 +55,7 @@ function Home() {
             try {
                 const data = await featuredResourcesRetriever();
                 setFeaturedResources(data);
+                console.log(data)
             } catch (error) {
                 setError(error);
             }
@@ -109,7 +110,7 @@ function Home() {
                                 <Box
                                     component="main"
                                     sx={{
-                                        height: '30%', // 450px is the combined height of the NavBar, search bar, and footer
+                                        height: '25%',
                                         display: 'grid',
                                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                                         gridTemplateRows: 'auto 1fr auto',
@@ -184,7 +185,7 @@ function Home() {
                                 <Box
                                     component="main"
                                     sx={{
-                                        height: '70%', // 450px is the combined height of the NavBar, search bar, and footer
+                                        height: '75%',
                                         display: 'grid',
                                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                                         gridTemplateRows: 'auto 1fr auto',
@@ -231,6 +232,7 @@ function Home() {
                                                         pageid={dataset._id}
                                                         title={dataset.title}
                                                         authors={dataset.authors}
+                                                        contents={dataset.contents}
                                                         thumbnailImage={dataset['thumbnail-image']}
                                                     />
                                                 </Grid>
