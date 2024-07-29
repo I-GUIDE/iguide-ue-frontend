@@ -54,7 +54,8 @@ export default function InfoCard(props) {
                         WebkitLineClamp: "1",
                         WebkitBoxOrient: "vertical",
                         m: 0.5
-                    }}>
+                    }}
+                >
                     {title}
                 </Typography>
                 <Typography
@@ -67,7 +68,8 @@ export default function InfoCard(props) {
                         WebkitLineClamp: "1",
                         WebkitBoxOrient: "vertical",
                         m: 0.5
-                    }}>
+                    }}
+                >
                     Author{authors.length > 1 && 's'}:&nbsp;
                     <Link
                         overlay
