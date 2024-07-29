@@ -39,7 +39,7 @@ export default function CapsuleList(props) {
                             <Link
                                 variant="outlined"
                                 key={item}
-                                href={'/tag/' + item.toLowerCase()}
+                                href={'/tag/' + item}
                                 fontSize="md"
                                 underline="none"
                                 sx={{ '--Link-gap': '0.5rem', my: 1, mx: 0.5, borderRadius: 'lg' }}
