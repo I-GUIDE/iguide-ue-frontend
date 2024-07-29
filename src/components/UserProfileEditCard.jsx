@@ -40,7 +40,6 @@ export default function UserProfileEditCard(props) {
     const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] = useState('no submission');
 
     const [firstNameFromDB, setFirstNameFromDB] = useState();
-    const [preferredFirstName, setPreferredFirstName] = useState();
     const [lastNameFromDB, setLastNameFromDB] = useState();
     const [emailFromDB, setEmailFromDB] = useState();
     const [affiliationFromDB, setAffiliationFromDB] = useState();
@@ -62,7 +61,6 @@ export default function UserProfileEditCard(props) {
 
             setFirstNameFromDB(userFromDB['first_name']);
             setFirstName(userFromDB['first_name']);
-            setPreferredFirstName(userFromDB['preferred_first_name']);
             setLastNameFromDB(userFromDB['last_name']);
             setLastName(userFromDB['last_name']);
             setEmailFromDB(userFromDB['email']);
@@ -110,7 +108,7 @@ export default function UserProfileEditCard(props) {
             avatar_url = profilePictureFileURL;
         }
 
-        const result = await updateUser(userInfo.sub, firstName, preferredFirstName, lastName, email, affiliation, bio, avatar_url);
+        const result = await updateUser(userInfo.sub, firstName, lastName, email, affiliation, bio, avatar_url);
 
         if (result && result.message === 'User updated successfully') {
             setUserProfileSubmissionStatus('update-succeeded');
@@ -157,10 +155,6 @@ export default function UserProfileEditCard(props) {
                             <Input name="first_name" required value={firstName} onChange={(event) => setFirstName(event.target.value)} />
                         </FormControl>
                     }
-                    <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Preferred first name</FormLabel>
-                        <Input name="preferred_first_name" value={preferredFirstName} onChange={(event) => setPreferredFirstName(event.target.value)} />
-                    </FormControl>
                     {lastNameFromDB ?
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>Last name</FormLabel>

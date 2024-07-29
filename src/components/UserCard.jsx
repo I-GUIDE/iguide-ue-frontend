@@ -79,8 +79,7 @@ export default function UserCard(props) {
                 </AspectRatio>
                 <CardContent>
                     <Typography fontSize="xl" fontWeight="lg">
-                        {/* When preferred first name is available, display the preferred one */}
-                        {localUserInfo.preferred_first_name ? localUserInfo.preferred_first_name : (localUserInfo.first_name ? localUserInfo.first_name : "First name unknown")}&nbsp;
+                        {localUserInfo.first_name ? localUserInfo.first_name : "First name unknown"}&nbsp;
                         {localUserInfo.last_name ? localUserInfo.last_name : "Last name unknown"}
                     </Typography>
                     <Typography level="body-sm" fontWeight="lg" textColor="text.tertiary">

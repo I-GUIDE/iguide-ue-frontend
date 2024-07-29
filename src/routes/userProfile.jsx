@@ -101,12 +101,7 @@ const UserProfile = () => {
     const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
     const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
-    let displayedFirstName = '';
-    if (localUserInfo && localUserInfo.preferred_first_name) {
-        displayedFirstName = localUserInfo.preferred_first_name;
-    } else {
-        displayedFirstName = userInfo.given_name;
-    }
+    let displayedFirstName = userInfo.given_name;
 
     const itemsPerPage = 10;
 
