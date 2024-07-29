@@ -199,8 +199,6 @@ function Home() {
                                             backgroundColor: 'inherit',
                                             px: 1,
                                             py: 4,
-                                            borderBottom: '1px solid',
-                                            borderColor: 'divider',
                                         }}
                                     >
                                         <Typography

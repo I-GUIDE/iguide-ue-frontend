@@ -257,47 +257,36 @@ function SearchResults() {
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
                                 pb: 8,
-                                borderBottom: '1px solid',
-                                borderColor: 'divider',
                             }}
                         >
                             <Grid xs={12}>
                                 <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
                                     {/* Search result summary and "clear search button" */}
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        spacing={2}
-                                    >
-                                        {hasSearchParam &&
-                                            <>
-                                                {numberOfTotalItems > 0
-                                                    ? <Typography>
-                                                        Searched "{searchTerm}", returned {currentStartingIdx + 1}-{currentStartingIdx + arrayLength(searchResults)} of {numberOfTotalItems}
-                                                    </Typography>
-                                                    : <Typography>
-                                                        Searched "{searchTerm}", no items matched your criteria.
-                                                    </Typography>
-                                                }
-                                                < Box
-                                                    direction="row"
-                                                    justifyContent="flex-start"
-                                                    alignItems="flex-end"
-                                                    spacing={1}
-                                                >
-                                                    <Button
-                                                        key="clear-search"
-                                                        size="sm"
-                                                        variant='outlined'
-                                                        onClick={handleReset}
-                                                    >
-                                                        Reset
-                                                    </Button>
-                                                </Box>
-                                            </>
-                                        }
-                                    </Stack>
+                                    {hasSearchParam &&
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            spacing={2}
+                                        >
+                                            {numberOfTotalItems > 0
+                                                ? <Typography>
+                                                    Searched "{searchTerm}", returned {currentStartingIdx + 1}-{currentStartingIdx + arrayLength(searchResults)} of {numberOfTotalItems}
+                                                </Typography>
+                                                : <Typography>
+                                                    Searched "{searchTerm}", no items matched your criteria.
+                                                </Typography>
+                                            }
+                                            <Button
+                                                key="clear-search"
+                                                size="sm"
+                                                variant='outlined'
+                                                onClick={handleReset}
+                                            >
+                                                Reset
+                                            </Button>
+                                        </Stack>
+                                    }
 
                                     {/* Search result list */}
                                     {searchResults?.map((result) => (

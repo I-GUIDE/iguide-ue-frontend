@@ -99,8 +99,6 @@ export default function ElementList(props) {
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
                                 pb: 8,
-                                borderBottom: '1px solid',
-                                borderColor: 'divider',
                             }}
                         >
                             <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>

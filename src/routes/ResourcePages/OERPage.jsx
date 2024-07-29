@@ -69,8 +69,6 @@ function OERPage() {
                             backgroundColor: 'inherit',
                             px: { xs: 2, md: 4 },
                             py: 2,
-                            borderBottom: '1px solid',
-                            borderColor: 'divider',
                         }}
                     >
                         <Grid md={12}>
