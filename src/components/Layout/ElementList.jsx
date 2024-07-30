@@ -74,6 +74,17 @@ export default function ElementList(props) {
                 <JoyCssVarsProvider>
                     <CssBaseline enableColorScheme />
                     <Header title={"Error: " + error.message} />
+                    <Container maxWidth="xl">
+                        <Box
+                            component="main"
+                            sx={{
+                                minHeight: 'calc(100vh - 375px)', // 375px is the height of the NavBar, header, and footer
+                                display: 'grid',
+                                gridTemplateColumns: { xs: 'auto', md: '100%' },
+                                gridTemplateRows: 'auto 1fr auto',
+                            }}
+                        />
+                    </Container>
                 </JoyCssVarsProvider>
             </MaterialCssVarsProvider>
         )
