@@ -46,6 +46,8 @@ function Home() {
     const [searchCategory, setSearchCategory] = useState('any');
 
     const [featuredResources, setFeaturedResources] = useState([]);
+    const [hasFeaturedResources, setHasFeaturedResources] = useState(false);
+
     const [error, setError] = useState(null);
 
     // When the state of hasSearched changed, check if hasSearched is false. If
@@ -55,9 +57,14 @@ function Home() {
             try {
                 const data = await featuredResourcesRetriever();
                 setFeaturedResources(data);
-                console.log(data)
+                if (data.length > 0) {
+                    setHasFeaturedResources(true);
+                } else {
+                    setHasFeaturedResources(false);
+                }
             } catch (error) {
                 setError(error);
+                setHasFeaturedResources(false);
             }
         }
         retrieveFeaturedResources();
@@ -65,16 +72,16 @@ function Home() {
 
     // Function that handles submit events. This function will update the search
     //   term and set hasSearched to true.
-    const handleSubmit = async (event) => {
+    async function handleSubmit(event) {
         // Use preventDefault here to prevent the submit event from happening
         //   because we need to set some states below.
         event.preventDefault();
         setSearchParams({ keyword: searchTerm, type: searchCategory });
         navigate(`/search-results?keyword=${encodeURIComponent(searchTerm)}&type=${searchCategory}`);
-    };
+    }
 
     // When user select a different category in the search bar
-    const handleSelectChange = (event, value) => {
+    function handleSelectChange(event, value) {
         setSearchCategory(value);
     }
 
@@ -183,62 +190,64 @@ function Home() {
                                         </FormControl>
                                     </form>
                                 </Box>
-                                <Box
-                                    component="main"
-                                    sx={{
-                                        height: '75%',
-                                        display: 'grid',
-                                        gridTemplateColumns: { xs: 'auto', md: '100%' },
-                                        gridTemplateRows: 'auto 1fr auto',
-                                    }}
-                                >
-                                    <Grid
-                                        container
-                                        justifyContent="center"
+                                {hasFeaturedResources &&
+                                    <Box
+                                        component="main"
                                         sx={{
-                                            backgroundColor: 'inherit',
-                                            px: 1,
-                                            py: 4,
+                                            height: '75%',
+                                            display: 'grid',
+                                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                                            gridTemplateRows: 'auto 1fr auto',
                                         }}
                                     >
-                                        <Typography
-                                            level="h3"
-                                            textColor={'#fff'}
-                                            sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
-                                        >
-                                            Highlights
-                                        </Typography>
                                         <Grid
                                             container
-                                            direction="row"
-                                            xs={12}
+                                            justifyContent="center"
+                                            sx={{
+                                                backgroundColor: 'inherit',
+                                                px: 1,
+                                                py: 4,
+                                            }}
                                         >
-                                            {featuredResources?.map((dataset) => (
-                                                <Grid
-                                                    container
-                                                    key={dataset._id}
-                                                    xs={12}
-                                                    sm={6}
-                                                    md={3}
-                                                    direction="row"
-                                                    justifyContent="center"
-                                                    alignItems="flex-start"
-                                                    sx={{ p: 4 }}
-                                                >
-                                                    <FeaturedCard
+                                            <Typography
+                                                level="h3"
+                                                textColor={'#fff'}
+                                                sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', p: 2 }}
+                                            >
+                                                Highlights
+                                            </Typography>
+                                            <Grid
+                                                container
+                                                direction="row"
+                                                xs={12}
+                                            >
+                                                {featuredResources?.map((dataset) => (
+                                                    <Grid
+                                                        container
                                                         key={dataset._id}
-                                                        cardtype={dataset['resource-type'] + 's'}
-                                                        pageid={dataset._id}
-                                                        title={dataset.title}
-                                                        authors={dataset.authors}
-                                                        contents={dataset.contents}
-                                                        thumbnailImage={dataset['thumbnail-image']}
-                                                    />
-                                                </Grid>
-                                            ))}
+                                                        xs={12}
+                                                        sm={6}
+                                                        md={3}
+                                                        direction="row"
+                                                        justifyContent="center"
+                                                        alignItems="flex-start"
+                                                        sx={{ p: 4 }}
+                                                    >
+                                                        <FeaturedCard
+                                                            key={dataset._id}
+                                                            cardtype={dataset['resource-type'] + 's'}
+                                                            pageid={dataset._id}
+                                                            title={dataset.title}
+                                                            authors={dataset.authors}
+                                                            contents={dataset.contents}
+                                                            thumbnailImage={dataset['thumbnail-image']}
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Box>
+                                    </Box>
+                                }
                             </Container>
                         </CardContent>
                     </Card>
