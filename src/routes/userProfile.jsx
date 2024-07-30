@@ -29,12 +29,11 @@ import Divider from '@mui/joy/Divider';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 
-import UserCard from "../components/UserCard";
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import InfoCard from "../components/InfoCard";
+import UserProfileHeader from "../components/UserProfileHeader";
 
-import { fetchResourceCountByField, fetchResourcesByContributor } from "../utils/DataRetrieval";
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
@@ -101,8 +100,6 @@ const UserProfile = () => {
     const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
     const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
-    let displayedFirstName = userInfo.given_name;
-
     const itemsPerPage = 10;
 
     // When users select a new page or when there is a change of total items,
@@ -165,17 +162,12 @@ const UserProfile = () => {
         <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
             <JoyCssVarsProvider>
                 <CssBaseline enableColorScheme />
-                {userInfo && (
-                    <Header
-                        title="User Profile"
-                        subtitle=""
-                    />
-                )}
+                {userInfo && ( <UserProfileHeader localUserInfo={localUserInfo} /> )}
                 <Container maxWidth="xl">
                     <Box
                         component="main"
                         sx={{
-                            minHeight: "calc(100vh - 375px)", // 55px is the height of the NavBar
+                            minHeight: "calc(100vh - 520px)", // 55px is the height of the NavBar
                             display: "grid",
                             gridTemplateColumns: { xs: "auto", md: "100%" },
                             gridTemplateRows: "auto 1fr auto",
@@ -188,14 +180,13 @@ const UserProfile = () => {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: "calc(100vh - 375px)",
+                                minHeight: "calc(100vh - 520px)",
                                 backgroundColor: "inherit",
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
                                 pb: 8,
                             }}
                         >
-                            <UserCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />
                             <Stack
                                 direction="column"
                                 justifyContent="center"
