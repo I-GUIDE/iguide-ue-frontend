@@ -167,8 +167,8 @@ const UserProfile = () => {
                 <CssBaseline enableColorScheme />
                 {userInfo && (
                     <Header
-                        title={"Hello " + displayedFirstName}
-                        subtitle="Welcome to your user profile"
+                        title="User Profile"
+                        subtitle=""
                     />
                 )}
                 <Container maxWidth="xl">
