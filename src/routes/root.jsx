@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+
 import { StyledEngineProvider } from '@mui/material/styles';
 
 import NavBar from '../components/Layout/NavBar.jsx';
@@ -8,7 +9,6 @@ import Footer from '../components/Layout/Footer.jsx';
 import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
-const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const USE_DEMO_USER = (import.meta.env.VITE_USE_DEMO_USER === 'true');
 
 export default function Root() {
@@ -133,7 +133,7 @@ export default function Root() {
 
     return (
         <StyledEngineProvider injectFirst>
-            <NavBar isAuthenticated={isAuthenticated} />
+            <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
             <Outlet context={[isAuthenticated, setIsAuthenticated, userInfo, setUserInfo, localUserInfo, setLocalUserInfo]} />
             <Footer />
         </StyledEngineProvider>

@@ -6,32 +6,25 @@ import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
 import ButtonGroup from '@mui/joy/ButtonGroup';
-import IconButton from '@mui/joy/IconButton';
 import MenuItem from '@mui/joy/MenuItem';
 import MenuList from '@mui/joy/MenuList';
-import { Popper } from '@mui/base/Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { styled } from '@mui/joy/styles';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-
 import Menu from '@mui/joy/Menu';
-
-import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListDivider from '@mui/joy/ListDivider';
-import MoreVert from '@mui/icons-material/MoreVert';
-import Edit from '@mui/icons-material/Edit';
-import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
+import Avatar from '@mui/joy/Avatar';
 
+import { Popper } from '@mui/base/Popper';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 export default function NavBar(props) {
     const isAuthenticated = props.isAuthenticated;
+    const localUserInfo = props.localUserInfo;
 
     const Popup = styled(Popper)({
         zIndex: 1000,
@@ -74,12 +67,16 @@ export default function NavBar(props) {
                     variant="plain"
                     spacing="0.5rem"
                 >
-                    <Button component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
                         Launch JupyterHub
                     </Button>
                     <Dropdown>
                         <MenuButton color="primary">
-                            User Menu
+                            {localUserInfo && localUserInfo.avatar_url ?
+                                <Avatar variant="outlined" alt="User avatar" src={localUserInfo.avatar_url} />
+                                :
+                                <Avatar variant="outlined" />
+                            }
                         </MenuButton>
                         <Menu placement="bottom-end" color="primary">
                             <Link to={'/user_profile'} style={{ textDecoration: 'none' }}>
@@ -112,10 +109,10 @@ export default function NavBar(props) {
                     variant="plain"
                     spacing="0.5rem"
                 >
-                    <Button component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                    <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
                         Launch JupyterHub
                     </Button>
-                    <Button onClick={login}>
+                    <Button size="sm" color="primary" onClick={login}>
                         Login
                     </Button>
                 </ButtonGroup>
