@@ -9,11 +9,31 @@ import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const USE_DEMO_USER = (import.meta.env.VITE_USE_DEMO_USER === 'true');
 
 export default function Root() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const [localUserInfo, setLocalUserInfo] = useState(null);
+
+    const demoCILogonUser = {
+        email: "user@example.com",
+        family_name: "Person",
+        given_name: "Happy",
+        idp_name: "I-GUIDE",
+        iss: "https://cilogon.org",
+        sub: "http://cilogon.org/serverE/users/do-not-use",
+    }
+
+    const demoLocalUser = {
+        affiliation: "I-GUIDE",
+        avatar_url: "https://media.licdn.com/dms/image/D560BAQFiEtnyQGMPqg/company-logo_200_200/0/1688432335582/nsf_i_guide_logo?e=2147483647&v=beta&t=UtNQYXjEIdSjsDrsVrVuTf_d53Rb26QZqeImQNt19qw",
+        bio: "Hi! This is my bio.",
+        email: "user@example.com",
+        first_name: "Happy",
+        last_name: "Person",
+        openid: "http://cilogon.org/serverE/users/do-not-use",
+    }
 
     // Check if the user existed in the auth backend, if yes, setUser
     useEffect(() => {
@@ -36,7 +56,13 @@ export default function Root() {
                 console.log(err);
             });
         };
-        checkIfLoggedIn();
+
+        if (USE_DEMO_USER) {
+            console.log("Using demo user!")
+            setIsAuthenticated(true);
+        } else {
+            checkIfLoggedIn();
+        }
     }, []);
 
     useEffect(() => {
@@ -59,12 +85,18 @@ export default function Root() {
                 console.log(err);
             });
         };
-        if (isAuthenticated) {
-            console.log("Logged in via CILogon")
-            getUserInfo();
+
+        // If the demo user mode is on, set the demo user as user
+        if (USE_DEMO_USER) {
+            setUserInfo(demoCILogonUser);
         } else {
-            console.log("Not logged in")
-            setUserInfo({ userInfo: null })
+            if (isAuthenticated) {
+                console.log("Logged in via CILogon")
+                getUserInfo();
+            } else {
+                console.log("Not logged in")
+                setUserInfo({ userInfo: null })
+            }
         }
     }, [isAuthenticated]);
 
@@ -89,8 +121,13 @@ export default function Root() {
                 setLocalUserInfo(returnedLocalUser);
             }
         };
-        if (userInfo) {
-            handleCheckUser();
+
+        if (USE_DEMO_USER) {
+            setLocalUserInfo(demoLocalUser)
+        } else {
+            if (userInfo) {
+                handleCheckUser();
+            }
         }
     }, [userInfo]);
 
