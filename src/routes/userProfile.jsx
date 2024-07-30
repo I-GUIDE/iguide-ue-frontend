@@ -36,6 +36,7 @@ import UserProfileHeader from "../components/UserProfileHeader";
 
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
+import UserProfileContributionInfoCard from "../components/UserProfileContributionInfoCard";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
@@ -255,6 +256,7 @@ function UserProfile() {
                                 pb: 8,
                             }}
                         >
+                            <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />
                             <Stack
                                 direction="column"
                                 justifyContent="center"
