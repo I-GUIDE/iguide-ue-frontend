@@ -69,7 +69,14 @@ export default function ElementList(props) {
     };
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return (
+            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                <JoyCssVarsProvider>
+                    <CssBaseline enableColorScheme />
+                    <Header title={"Error: " + error.message} />
+                </JoyCssVarsProvider>
+            </MaterialCssVarsProvider>
+        )
     }
 
     return (

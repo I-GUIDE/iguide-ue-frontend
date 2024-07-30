@@ -90,7 +90,7 @@ export default function NavBar(props) {
                                 </MenuItem>
                             </Link>
                             <MenuItem component="a" href="/resource_submission">
-                                Contribute
+                                New Contribution
                             </MenuItem>
                             <ListDivider />
                             <MenuItem variant="soft" onClick={logout}>

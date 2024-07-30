@@ -18,33 +18,32 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 export default function UserProfileHeader(props) {
     const localUserInfo = props.localUserInfo;
 
-    const [localUserInfoMissing, setLocalUserInfoMissing] = useState('unknown');
-
-    // Check if the user exists on the local DB, if not, add the user
-    useEffect(() => {
-        const checkLocalUserInfo = async () => {
-            if (localUserInfo.first_name && localUserInfo.last_name && localUserInfo.email && localUserInfo.affiliation) {
-                setLocalUserInfoMissing('good');
-            } else {
-                setLocalUserInfoMissing('missing');
-            }
-        };
-        if (localUserInfo) {
-            checkLocalUserInfo();
-        }
-    }, [localUserInfo]);
-
     // If the user info from the local DB is still not available, wait...
     if (!localUserInfo) {
-        return;
-    }
-
-    // If local user information is missing, ask them to fill out the info
-    if (localUserInfoMissing === 'unknwon') {
-        return;
-    } else if (localUserInfoMissing === 'missing') {
         return (
-            <UserProfileEditCard userProfileEditType="mandatory" />
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 300 }}>
+                <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
+                    <CardCover>
+                        <img
+                            src="/images/green-blue.png"
+                            srcSet="/images/green-blue.png 2x"
+                            loading="lazy"
+                            alt=""
+                        />
+                    </CardCover>
+                    <CardContent sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Container maxWidth="xl">
+                            <Grid container sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <Stack sx={{ m: 3 }} spacing={1}>
+                                    <Typography level="h3" fontWeight="lg" textColor={'#fff'}>
+                                        Error fetching the user information. Please check back later.
+                                    </Typography>
+                                </Stack>
+                            </Grid>
+                        </Container>
+                    </CardContent>
+                </Card>
+            </Box >
         )
     }
 

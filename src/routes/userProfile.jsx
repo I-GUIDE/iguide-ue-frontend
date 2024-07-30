@@ -39,9 +39,61 @@ import { arrayLength } from "../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
-const UserProfile = () => {
+function UserProfile() {
     // OutletContext retrieving the user object to display user info
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo, localUserInfo, setLocalUserInfo] = useOutletContext();
+    const [localUserInfoMissing, setLocalUserInfoMissing] = useState('unknown');
+
+    const [metadataList, setMetadataList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [resultLength, setResultLength] = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
+    const [numberOfPages, setNumberOfPages] = useState(0);
+    const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
+    const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
+    const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
+
+    const itemsPerPage = 10;
+
+    // When users select a new page or when there is a change of total items,
+    //   retrieve the data
+    useEffect(() => {
+        async function retrieveData(startingIdx) {
+            if (userInfo.sub) {
+                const data = await elementRetriever('metadata.created_by', [userInfo.sub], null, '_score', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await elementCounter('metadata.created_by', [userInfo.sub], null);
+
+                setNumberOfTotalItems(resourceCount);
+                setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
+                setMetadataList(data);
+                setLoading(false);
+                setResultLength(arrayLength(data));
+            }
+        }
+        if (userInfo) {
+            retrieveData(currentStartingIdx);
+        }
+    }, [currentStartingIdx, numberOfTotalItems, userInfo]);
+
+    // Check if the user exists on the local DB, if not, add the user
+    useEffect(() => {
+        async function checkLocalUserInfo() {
+            if (localUserInfo.first_name && localUserInfo.last_name && localUserInfo.email && localUserInfo.affiliation) {
+                setLocalUserInfoMissing('good');
+            } else {
+                setLocalUserInfoMissing('missing');
+            }
+        }
+
+        console.log('here')
+        if (localUserInfo) {
+            checkLocalUserInfo();
+        }
+    }, [localUserInfo]);
 
     if (!isAuthenticated) {
         return (
@@ -87,54 +139,28 @@ const UserProfile = () => {
         );
     }
 
-    const [metadataList, setMetadataList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [resultLength, setResultLength] = useState(null);
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
-    const [numberOfPages, setNumberOfPages] = useState(0);
-    const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-
-    const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
-    const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
-
-    const itemsPerPage = 10;
-
-    // When users select a new page or when there is a change of total items,
-    //   retrieve the data
-    useEffect(() => {
-        async function retrieveData(startingIdx) {
-            if (userInfo.sub) {
-                const data = await elementRetriever('metadata.created_by', [userInfo.sub], null, '_score', 'desc', startingIdx, itemsPerPage);
-                const resourceCount = await elementCounter('metadata.created_by', [userInfo.sub], null);
-
-                setNumberOfTotalItems(resourceCount);
-                setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
-                setMetadataList(data);
-                setLoading(false);
-                setResultLength(arrayLength(data));
-            }
-        }
-        retrieveData(currentStartingIdx);
-    }, [currentStartingIdx, numberOfTotalItems, userInfo.sub]);
-
-    const handlePageClick = (event, value) => {
+    function handlePageClick(event, value) {
         const newStartingIdx = (value - 1) * itemsPerPage;
         console.log(
             `User requested page number ${value}, which is offset ${newStartingIdx}`
         );
         setCurrentStartingIdx(newStartingIdx);
         setCurrentPage(value);
-    };
+    }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return (
+            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                <JoyCssVarsProvider>
+                    <CssBaseline enableColorScheme />
+                    <Header title={"Error: " + error.message} />
+                </JoyCssVarsProvider>
+            </MaterialCssVarsProvider>
+        )
     }
 
     async function handleElementDelete(elementId) {
-        console.log('Deleting...', elementId)
+        console.log('Deleting...', elementId);
         try {
             const response = await fetch(`${USER_BACKEND_URL}/api/resources/${elementId}`, {
                 method: 'DELETE',
@@ -158,11 +184,53 @@ const UserProfile = () => {
         }
     }
 
+    // If local user information is missing, ask them to fill out the info
+    if (localUserInfoMissing === 'unknwon') {
+        return;
+    } else if (localUserInfoMissing === 'missing') {
+        return (
+            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                <JoyCssVarsProvider>
+                    <CssBaseline enableColorScheme />
+                    <Header title="Please fill out required fields" />
+                    <Container maxWidth="xl">
+                        <Box
+                            component="main"
+                            sx={{
+                                minHeight: "calc(100vh - 520px)", // 55px is the height of the NavBar
+                                display: "grid",
+                                gridTemplateColumns: { xs: "auto", md: "100%" },
+                                gridTemplateRows: "auto 1fr auto",
+                            }}
+                        >
+                            <Grid
+                                container
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                direction="column"
+                                sx={{
+                                    minHeight: "calc(100vh - 520px)",
+                                    backgroundColor: "inherit",
+                                    px: { xs: 2, md: 4 },
+                                    pt: 4,
+                                    pb: 8,
+                                }}
+                            >
+                                <UserProfileEditCard userProfileEditType="mandatory" />
+                            </Grid>
+                        </Box>
+                    </Container>
+                </JoyCssVarsProvider>
+            </MaterialCssVarsProvider>
+        )
+    }
+
     return (
         <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
             <JoyCssVarsProvider>
                 <CssBaseline enableColorScheme />
-                {userInfo && ( <UserProfileHeader localUserInfo={localUserInfo} /> )}
+                {userInfo && (<UserProfileHeader localUserInfo={localUserInfo} />)}
                 <Container maxWidth="xl">
                     <Box
                         component="main"
@@ -212,8 +280,7 @@ const UserProfile = () => {
                                                         authors={metadata.authors}
                                                         tags={metadata.tags}
                                                         contents={metadata.contents}
-                                                        thumbnailImage={metadata["thumbnail-image"]}
-                                                    />
+                                                        thumbnailImage={metadata["thumbnail-image"]} />
                                                 </Grid>
                                                 <Grid xs={1}>
                                                     <IconButton
@@ -283,8 +350,7 @@ const UserProfile = () => {
                                             count={numberOfPages}
                                             color="primary"
                                             page={currentPage}
-                                            onChange={handlePageClick}
-                                        />
+                                            onChange={handlePageClick} />
                                     </Stack>
                                 </>}
                             </Stack>
@@ -294,6 +360,6 @@ const UserProfile = () => {
             </JoyCssVarsProvider>
         </MaterialCssVarsProvider>
     );
-};
+}
 
 export default UserProfile;
