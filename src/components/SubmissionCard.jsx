@@ -25,6 +25,7 @@ import Tooltip from '@mui/joy/Tooltip';
 
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import SearchIcon from '@mui/icons-material/Search';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 
 import SubmissionStatusCard from './SubmissionStatusCard';
 
@@ -457,7 +458,46 @@ export default function SubmissionCard(props) {
                 >
                     {resourceTypeSelected === "publication" &&
                         <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>DOI (required)</FormLabel>
+                            <FormLabel>
+                                <Typography
+                                    level="title-sm"
+                                    endDecorator={
+                                        <Tooltip
+                                            placement="top-start"
+                                            variant="outlined"
+                                            arrow
+                                            title={
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        maxWidth: 320,
+                                                        justifyContent: 'center',
+                                                        p: 1,
+                                                    }}
+                                                >
+                                                    <Typography level="title-sm" sx={{ pb: 1 }}>
+                                                        You may provide the DOI of the publication and click "Autofill metadata" to
+                                                        automatically retrieve the information of the publication.
+                                                    </Typography>
+                                                    <Typography level="body-sm">
+                                                        Feature powered by Crossref. Please note that not all the fields are available.
+                                                        Some sources are not supported by Crossref.
+                                                        The abstract might need to be manually reformatted.
+                                                    </Typography>
+                                                </Box>
+                                            }
+                                            size="lg"
+                                        >
+                                            <InfoOutlined
+                                                size="lg"
+                                            />
+                                        </Tooltip>
+                                    }
+                                >
+                                    DOI (required)
+                                </Typography>
+                            </FormLabel>
                             <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                                 <Grid md>
                                     <Input
@@ -468,38 +508,12 @@ export default function SubmissionCard(props) {
                                     />
                                 </Grid>
                                 <Grid md="auto">
-                                    <Tooltip
-                                        placement="top-end"
-                                        variant="outlined"
-                                        color="primary"
-                                        arrow
-                                        title={
-                                            <Box
-                                                sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    maxWidth: 320,
-                                                    justifyContent: 'center',
-                                                    p: 1,
-                                                }}
-                                            >
-                                                <Typography>
-                                                    Automatically retrieve publication information via Crossref.
-                                                    Please note that not all the fields will be available. Some
-                                                    sources are not supported by Crossref. The abstract
-                                                    might need to be manually reformatted.
-                                                </Typography>
-                                            </Box>
-                                        }
-                                        size="lg"
+                                    <Button
+                                        variant='outlined'
+                                        onClick={handleAutofillPublicationInfo}
                                     >
-                                        <Button
-                                            variant='outlined'
-                                            onClick={handleAutofillPublicationInfo}
-                                        >
-                                            Autofill metadata
-                                        </Button>
-                                    </Tooltip>
+                                        Autofill metadata
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </FormControl>
