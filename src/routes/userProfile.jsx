@@ -33,6 +33,7 @@ import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import InfoCard from "../components/InfoCard";
 import UserProfileHeader from "../components/UserProfileHeader";
+import UserProfileEditCard from "../components/UserProfileEditCard";
 
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
