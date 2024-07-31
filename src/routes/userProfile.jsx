@@ -65,8 +65,8 @@ function UserProfile() {
     useEffect(() => {
         async function retrieveData(startingIdx) {
             if (userInfo.sub) {
-                const data = await elementRetriever('metadata.created_by', [userInfo.sub], null, '_score', 'desc', startingIdx, itemsPerPage);
-                const resourceCount = await elementCounter('metadata.created_by', [userInfo.sub], null);
+                const data = await elementRetriever('contributor', [userInfo.sub], null, '_score', 'desc', startingIdx, itemsPerPage);
+                const resourceCount = await elementCounter('contributor', [userInfo.sub], null);
 
                 setNumberOfTotalItems(resourceCount);
                 setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
