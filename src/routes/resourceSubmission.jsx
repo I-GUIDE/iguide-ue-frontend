@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -13,8 +13,10 @@ import LoginCard from '../components/LoginCard';
 
 import SubmissionCard from '../components/SubmissionCard';
 
-const ResourceSubmission = () => {
+export default function ResourceSubmission() {
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
+
+    const elementType = useParams().elementType;
 
     // If the user is not authenticated/logged in, they will be redirected to the login page
     if (!isAuthenticated) {
@@ -51,7 +53,7 @@ const ResourceSubmission = () => {
                     </Box>
                 </Container>
             </CssVarsProvider>
-        )
+        );
     }
 
     return (
@@ -82,14 +84,10 @@ const ResourceSubmission = () => {
                             pb: 8,
                         }}
                     >
-                        <SubmissionCard submissionType="initial" />
+                        <SubmissionCard submissionType="initial" elementType={elementType} />
                     </Grid>
                 </Box>
             </Container>
         </CssVarsProvider>
-    )
+    );
 }
-
-
-
-export default ResourceSubmission;

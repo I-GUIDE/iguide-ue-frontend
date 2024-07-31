@@ -82,7 +82,7 @@ const router = createBrowserRouter([
                 element: <UserProfileUpdate />,
             },
             {
-                path: "/resource_submission",
+                path: "/contribution/:elementType",
                 element: <ResourceSubmission />,
             },
             {

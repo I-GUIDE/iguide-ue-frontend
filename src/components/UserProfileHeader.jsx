@@ -105,9 +105,9 @@ export default function UserProfileHeader(props) {
                                         <Button component="a" href="/user_profile_update" variant="solid" size="sm" color="success" endDecorator={<EditIcon />}>
                                             Edit Profile
                                         </Button>
-                                        <Button component="a" href="/resource_submission" variant="solid" size="sm" color="warning" endDecorator={<LibraryAddIcon />}>
+                                        {/* <Button component="a" href="/resource_submission" variant="solid" size="sm" color="warning" endDecorator={<LibraryAddIcon />}>
                                             New Contribution
-                                        </Button>
+                                        </Button> */}
                                     </Stack>
                                 </Stack>
                             </Grid>

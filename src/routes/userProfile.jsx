@@ -90,7 +90,6 @@ function UserProfile() {
             }
         }
 
-        console.log('here')
         if (localUserInfo) {
             checkLocalUserInfo();
         }
@@ -267,7 +266,7 @@ function UserProfile() {
                                 pb: 8,
                             }}
                         >
-                            <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />
+                            {numberOfTotalItems && numberOfTotalItems === 0 && <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />}
                             <Stack
                                 direction="column"
                                 justifyContent="center"

@@ -89,8 +89,26 @@ export default function NavBar(props) {
                                     Update Profile
                                 </MenuItem>
                             </Link>
-                            <MenuItem component="a" href="/resource_submission">
+                            <ListDivider />
+                            <Typography
+                                level="body-xs"
+                                textTransform="uppercase"
+                                fontWeight="lg"
+                                sx={{ px: 1.5, py: 1 }}
+                            >
                                 New Contribution
+                            </Typography>
+                            <MenuItem component="a" href="/contribution/dataset">
+                                New Dataset
+                            </MenuItem>
+                            <MenuItem component="a" href="/contribution/notebook">
+                                New Notebook
+                            </MenuItem>
+                            <MenuItem component="a" href="/contribution/publication">
+                                New Publication
+                            </MenuItem>
+                            <MenuItem component="a" href="/contribution/oer">
+                                New Educational Resource
                             </MenuItem>
                             <ListDivider />
                             <MenuItem variant="soft" onClick={logout}>

@@ -10,6 +10,8 @@ import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 
+import { RESOURCE_TYPE_COLORS } from '../configs/ResourceTypes';
+
 import '../utils/UserManager';
 
 export default function UserProfileContributionInfoCard(props) {
@@ -24,7 +26,7 @@ export default function UserProfileContributionInfoCard(props) {
     return (
         <Box
             sx={{
-                width: '50%',
+                width: '60%',
                 position: 'relative',
                 overflow: { xs: 'auto', sm: 'initial' },
             }}
@@ -38,13 +40,24 @@ export default function UserProfileContributionInfoCard(props) {
                 }}
             >
                 <CardContent>
-                    <Stack direction="column" spacing={2} alignItems="center">
+                    <Stack direction="column" spacing={3} alignItems="center">
                         <Typography level="h3" fontWeight="lg">
                             Would you like to make a new knowledge contribution?
                         </Typography>
-                        <Button component="a" href="/resource_submission" variant="outlined" color="primary">
-                            New Contribution
-                        </Button>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Button component="a" href="/contribution/dataset" variant="outlined" color={RESOURCE_TYPE_COLORS["dataset"]}>
+                                New Dataset
+                            </Button>
+                            <Button component="a" href="/contribution/notebook" variant="outlined" color={RESOURCE_TYPE_COLORS["notebook"]}>
+                                New Notebook
+                            </Button>
+                            <Button component="a" href="/contribution/publication" variant="outlined" color={RESOURCE_TYPE_COLORS["publication"]}>
+                                New Publication
+                            </Button>
+                            <Button component="a" href="/contribution/oer" variant="outlined" color={RESOURCE_TYPE_COLORS["oer"]}>
+                                New Educational Resource
+                            </Button>
+                        </Stack>
                     </Stack>
                 </CardContent>
             </Card>

@@ -50,6 +50,7 @@ const VisuallyHiddenInput = styled('input')`
 export default function SubmissionCard(props) {
     const submissionType = props.submissionType;
     const elementId = props.elementId;
+    const elementType = props.elementType;
 
     const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
@@ -153,6 +154,12 @@ export default function SubmissionCard(props) {
             fetchData();
         }
     }, [elementId]);
+
+    useEffect(() => {
+        if (submissionType === 'initial') {
+            setResourceTypeSelected(elementType);
+        }
+    }, [elementType]);
 
     // When the current related element type changes, fetch a list of titles under that type.
     useEffect(() => {
@@ -355,6 +362,8 @@ export default function SubmissionCard(props) {
             }
         });
 
+        data['resource-type'] = resourceTypeSelected;
+
         data.metadata = { created_by: userInfo.sub };
         data['related-resources'] = relatedResources;
 
@@ -435,7 +444,7 @@ export default function SubmissionCard(props) {
             }}
         >
             <Typography level="title-lg" >
-                {submissionType === 'update' ? "Update your contribution" : "Submit a new contribution"}
+                {submissionType === 'update' ? "Update your contribution" : "Submit a new " + RESOURCE_TYPE_NAMES[elementType].toLowerCase()}
             </Typography>
             <Divider inset="none" />
             <form onSubmit={handleSubmit} name="resourceForm">
@@ -446,43 +455,6 @@ export default function SubmissionCard(props) {
                         gap: 1.5,
                     }}
                 >
-                    {submissionType === 'update' ?
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Element type</FormLabel>
-                            <Select
-                                name="resource-type"
-                                placeholder="Select an element type"
-                                disabled
-                                sx={{ minWidth: 200 }}
-                                onChange={handleResourceTypeChange}
-                                value={resourceTypeSelected}
-                            >
-                                <Option value="" disabled>Choose your option</Option>
-                                <Option value="dataset" disabled>Dataset</Option>
-                                <Option value="notebook" disabled>Notebook</Option>
-                                <Option value="publication" disabled>Publication</Option>
-                                <Option value="oer" disabled>Educational Resource</Option>
-                            </Select>
-                        </FormControl>
-                        :
-                        <FormControl sx={{ gridColumn: '1/-1' }}>
-                            <FormLabel>Element type (required)</FormLabel>
-                            <Select
-                                name="resource-type"
-                                placeholder="Select an element type"
-                                required
-                                sx={{ minWidth: 200 }}
-                                onChange={handleResourceTypeChange}
-                                value={resourceTypeSelected}
-                            >
-                                <Option value="" disabled>Choose your option</Option>
-                                <Option value="dataset">Dataset</Option>
-                                <Option value="notebook">Notebook</Option>
-                                <Option value="publication">Publication</Option>
-                                <Option value="oer">Educational Resource</Option>
-                            </Select>
-                        </FormControl>
-                    }
                     {resourceTypeSelected === "publication" &&
                         <FormControl sx={{ gridColumn: '1/-1' }}>
                             <FormLabel>DOI (required)</FormLabel>
