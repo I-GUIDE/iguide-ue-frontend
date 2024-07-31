@@ -10,6 +10,10 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Button from '@mui/joy/Button';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import Dropdown from '@mui/joy/Dropdown';
+import MenuItem from '@mui/joy/MenuItem';
 
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -105,9 +109,25 @@ export default function UserProfileHeader(props) {
                                         <Button component="a" href="/user_profile_update" variant="solid" size="sm" color="success" endDecorator={<EditIcon />}>
                                             Edit Profile
                                         </Button>
-                                        {/* <Button component="a" href="/resource_submission" variant="solid" size="sm" color="warning" endDecorator={<LibraryAddIcon />}>
-                                            New Contribution
-                                        </Button> */}
+                                        <Dropdown>
+                                            <MenuButton variant="solid" size="sm" color="warning" endDecorator={<LibraryAddIcon />}>
+                                                New Contribution
+                                            </MenuButton>
+                                            <Menu placement="bottom-end" color="primary">
+                                                <MenuItem component="a" href="/contribution/dataset">
+                                                    New Dataset
+                                                </MenuItem>
+                                                <MenuItem component="a" href="/contribution/notebook">
+                                                    New Notebook
+                                                </MenuItem>
+                                                <MenuItem component="a" href="/contribution/publication">
+                                                    New Publication
+                                                </MenuItem>
+                                                <MenuItem component="a" href="/contribution/oer">
+                                                    New Educational Resource
+                                                </MenuItem>
+                                            </Menu>
+                                        </Dropdown>
                                     </Stack>
                                 </Stack>
                             </Grid>

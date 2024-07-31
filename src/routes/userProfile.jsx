@@ -266,7 +266,7 @@ function UserProfile() {
                                 pb: 8,
                             }}
                         >
-                            {numberOfTotalItems && numberOfTotalItems === 0 && <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />}
+                            {numberOfTotalItems === 0 && <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />}
                             <Stack
                                 direction="column"
                                 justifyContent="center"
