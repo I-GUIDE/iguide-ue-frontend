@@ -1,15 +1,12 @@
 import React from 'react';
 
-import ElementList from '../components/Layout/ElementList';
+import ElementList from '../components/ElementList';
 
-const Datasets = () => {
+export default function Datasets() {
     return (
         <ElementList
             dataType={['dataset']}
             title='Datasets'
-            subtitle='Find your datasets here'
-        />
-    )
+            subtitle='Find your datasets here' />
+    );
 }
-
-export default Datasets;

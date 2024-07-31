@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import ElementList from '../components/Layout/ElementList';
+import ElementList from '../components/ElementList';
 
-function Tag() {
+export default function Tag() {
     const tagName = useParams().id;
 
     return (
@@ -15,5 +15,3 @@ function Tag() {
         />
     )
 }
-
-export default Tag;

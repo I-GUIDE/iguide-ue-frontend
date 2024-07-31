@@ -16,11 +16,11 @@ import Container from '@mui/joy/Container';
 import Typography from '@mui/joy/Typography';
 import Pagination from '@mui/material/Pagination';
 
-import InfoCard from '../InfoCard';
-import Header from './Header';
+import InfoCard from './InfoCard';
+import Header from './Layout/Header';
 
-import { elementCounter, elementRetriever } from '../../utils/DataRetrieval';
-import { arrayLength } from '../../helpers/helper';
+import { elementCounter, elementRetriever } from '../utils/DataRetrieval';
+import { arrayLength } from '../helpers/helper';
 
 export default function ElementList(props) {
     const fieldName = props.fieldName;

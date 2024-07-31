@@ -1,15 +1,12 @@
 import React from 'react';
 
-import ElementList from '../components/Layout/ElementList';
+import ElementList from '../components/ElementList';
 
-const Publications = () => {
+export default function Publications() {
     return (
         <ElementList
             dataType={['publication']}
             title='Publications'
-            subtitle='Find your publications here'
-        />
-    )
+            subtitle='Find your publications here' />
+    );
 }
-
-export default Publications;

@@ -1,15 +1,12 @@
 import React from 'react';
 
-import ElementList from '../components/Layout/ElementList';
+import ElementList from '../components/ElementList';
 
-const OERS = () => {
+export default function OERS() {
     return (
         <ElementList
             dataType={['oer']}
             title='Educational Resources'
-            subtitle='Find your educational resources here'
-        />
-    )
+            subtitle='Find your educational resources here' />
+    );
 }
-
-export default OERS;
