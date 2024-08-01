@@ -116,7 +116,7 @@ export default function SubmissionCard(props) {
 
             setPublicationDOI(thisResource['external-link-publication']);
 
-            setContributor(thisResource.contributor);
+            setContributor(thisResource['contributor-id']);
 
             let relatedResourcesArray = [];
             if (thisResource['related-datasets'] && thisResource['related-datasets'].length > 0) {
