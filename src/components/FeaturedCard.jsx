@@ -24,8 +24,8 @@ export default function FeaturedCard(props) {
         <Card
             variant="outlined"
             sx={{
-                width: 320,
-                minHeight: 270,
+                width: 300,
+                minHeight: 210,
                 '&:hover': {
                     borderColor: 'theme.vars.palette.primary.outlinedHoverBorder',
                     transform: 'translateY(-2px)',
@@ -48,9 +48,9 @@ export default function FeaturedCard(props) {
                     href={"/" + cardType + "/" + pageid}
                     sx={{ color: 'text.tertiary' }}
                 >
-                    <Stack spacing={0.5}>
+                    <Stack>
                         <Typography
-                            level="body-sm"
+                            level="title-sm"
                             textColor='#000'
                             sx={{
                                 overflow: 'hidden',
@@ -62,21 +62,7 @@ export default function FeaturedCard(props) {
                         >
                             {title}
                         </Typography>
-                        <Typography
-                            level="body-xs"
-                            textColor='#808080'
-                            sx={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: '-webkit-box',
-                                WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical',
-                            }}
-                        >
-                            {contents}
-                        </Typography>
                     </Stack>
-
                 </Link>
             </CardContent>
             <CardOverflow

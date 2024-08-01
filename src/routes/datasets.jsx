@@ -7,6 +7,7 @@ export default function Datasets() {
         <ElementList
             dataType={['dataset']}
             title='Datasets'
-            subtitle='Find your datasets here' />
+            subtitle='Find your datasets here'
+        />
     );
 }

@@ -7,6 +7,7 @@ export default function Publications() {
         <ElementList
             dataType={['publication']}
             title='Publications'
-            subtitle='Find your publications here' />
+            subtitle='Find your publications here'
+        />
     );
 }

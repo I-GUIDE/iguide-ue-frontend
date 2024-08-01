@@ -23,9 +23,11 @@ export default function MainContent(props) {
             >
                 <Grid xs={12} md={8}>
                     <Typography level="h1" sx={{ py: 1 }}>{title}</Typography>
-                    <Typography level="h4" sx={{ py: 1 }}>
-                        Author{authors.length > 1 && 's'}: {printListWithDelimiter(authors, ',')}
+                    <Typography sx={{ py: 1 }}>
+                        <Typography level="title-lg" >Author{authors.length > 1 && 's'}: </Typography>
+                        <Typography level="body-lg">{printListWithDelimiter(authors, ',')}</Typography>
                     </Typography>
+
                     <Typography sx={{ py: 1 }}>
                         {contents}
                     </Typography>

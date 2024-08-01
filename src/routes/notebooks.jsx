@@ -7,6 +7,7 @@ export default function Notebooks() {
         <ElementList
             dataType={['notebook']}
             title='Notebooks'
-            subtitle='Find your notebooks here' />
+            subtitle='Find your notebooks here'
+        />
     );
 }

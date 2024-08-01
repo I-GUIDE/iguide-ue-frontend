@@ -7,6 +7,7 @@ export default function OERS() {
         <ElementList
             dataType={['oer']}
             title='Educational Resources'
-            subtitle='Find your educational resources here' />
+            subtitle='Find your educational resources here'
+        />
     );
 }
