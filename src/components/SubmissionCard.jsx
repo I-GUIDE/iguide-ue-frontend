@@ -376,42 +376,33 @@ export default function SubmissionCard(props) {
 
         console.log("data to be submitted", data);
 
-        const response = await fetch(`${USER_BACKEND_URL}/api/resources`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-        console.log('submissionType', submissionType)
-
         if (submissionType === 'update') {
-            if (result && result.message === 'Resource registered successfully') {
-                console.log('Deleting...', elementId)
-                try {
-                    const response = await fetch(`${USER_BACKEND_URL}/api/resources/${elementId}`, {
-                        method: 'DELETE',
-                    });
+            const response = await fetch(`${USER_BACKEND_URL}/api/element/${elementId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-                    if (!response.ok) {
-                        throw new Error('Error deleting element');
-                    }
+            const result = await response.json();
+            console.log('Element update msg returned', result.message);
 
-                    const deleteResult = await response.json();
-                    // When the deletion was successful, rerender the list
-                    if (deleteResult && deleteResult.message === 'Resource deleted successfully') {
-                        setSubmissionStatus('update-succeeded');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    setSubmissionStatus('update-succeeded-delete-failed');
-                }
+            if (result && result.message === 'Element updated successfully') {
+                setSubmissionStatus('update-succeeded');
             } else {
                 setSubmissionStatus('update-failed');
             }
         } else if (submissionType === 'initial') {
+            const response = await fetch(`${USER_BACKEND_URL}/api/resources`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
             console.log('initial submission, msg', result);
             if (result && result.message === 'Resource registered successfully') {
                 setSubmissionStatus('initial-succeeded');
