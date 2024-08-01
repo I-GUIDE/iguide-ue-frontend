@@ -149,7 +149,7 @@ export default function UserProfileEditCard(props) {
                 <CardContent
                     sx={{
                         display: 'grid',
-                        gap: 1.5,
+                        gap: 2,
                     }}
                 >
                     {firstNameFromDB ?

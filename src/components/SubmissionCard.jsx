@@ -442,7 +442,6 @@ export default function SubmissionCard(props) {
             variant="outlined"
             sx={{
                 maxHeight: 'max-content',
-                maxWidth: '900px',
                 width: '100%'
             }}
         >
@@ -454,8 +453,8 @@ export default function SubmissionCard(props) {
                 <CardContent
                     sx={{
                         display: 'grid',
-                        // gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
-                        gap: 1.5,
+                        gridTemplateColumns: 'repeat(2, minmax(80px, 1fr))',
+                        gap: 2,
                     }}
                 >
                     {resourceTypeSelected === "publication" &&
