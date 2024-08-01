@@ -15,6 +15,8 @@ import Button from '@mui/joy/Button';
 import Textarea from '@mui/joy/Textarea';
 import { styled } from '@mui/joy';
 
+import { IMAGE_SIZE_LIMIT } from '../configs/ResourceTypes';
+
 import UserProfileEditStatusCard from './UserProfileEditStatusCard';
 import { fetchUser, updateUser } from '../utils/UserManager';
 
@@ -78,7 +80,13 @@ export default function UserProfileEditCard(props) {
     const handleProfilePictureUpload = (event) => {
         const profilePicture = event.target.files[0];
         if (!profilePicture.type.startsWith('image/')) {
-            alert('We only accept an image here!');
+            alert('Please upload an image!');
+            setProfilePictureFile(null);
+            setProfilePictureFileURL(null);
+            return null;
+        }
+        if (profilePicture.size > IMAGE_SIZE_LIMIT) {
+            alert('Please upload an image smaller than 5MB!');
             setProfilePictureFile(null);
             setProfilePictureFileURL(null);
             return null;
@@ -190,7 +198,7 @@ export default function UserProfileEditCard(props) {
                     }
 
                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Upload your profile picture</FormLabel>
+                        <FormLabel>Upload profile picture {"(< 5MB)"}</FormLabel>
                         <Button
                             component="label"
                             role={undefined}

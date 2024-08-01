@@ -28,3 +28,5 @@ export const OER_EXTERNAL_LINK_TYPES = {
     "course": "Course",
     "webpage": "Webpage"
 }
+
+export const IMAGE_SIZE_LIMIT = 5000000;

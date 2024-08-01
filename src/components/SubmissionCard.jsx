@@ -29,7 +29,7 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 
 import SubmissionStatusCard from './SubmissionStatusCard';
 
-import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES } from '../configs/ResourceTypes';
+import { RESOURCE_TYPE_NAMES, OER_EXTERNAL_LINK_TYPES, IMAGE_SIZE_LIMIT } from '../configs/ResourceTypes';
 
 import { fetchResourcesByField, fetchRelatedResourceTitles, fetchAllTitlesByElementType, getMetadataByDOI } from '../utils/DataRetrieval';
 import { printListWithDelimiter } from '../helpers/helper';
@@ -178,7 +178,13 @@ export default function SubmissionCard(props) {
     const handleThumbnailImageUpload = (event) => {
         const thumbnailFile = event.target.files[0];
         if (!thumbnailFile.type.startsWith('image/')) {
-            alert('We only accept an image here!');
+            alert('Please upload an image!');
+            setThumbnailImageFile(null);
+            setThumbnailImageFileURL(null);
+            return null;
+        }
+        if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
+            alert('Please upload an image smaller than 5MB!');
             setThumbnailImageFile(null);
             setThumbnailImageFileURL(null);
             return null;
@@ -538,7 +544,7 @@ export default function SubmissionCard(props) {
                         />
                     </FormControl>
                     <FormControl sx={{ gridColumn: '1/-1' }}>
-                        <FormLabel>Upload thumbnail image (required)</FormLabel>
+                        <FormLabel>Upload thumbnail image {"(< 5MB)"} (required)</FormLabel>
                         <Button
                             component="label"
                             role={undefined}
