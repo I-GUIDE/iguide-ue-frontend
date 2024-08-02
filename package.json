@@ -11,27 +11,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^8.13.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
     "@mui/joy": "^5.0.0-beta.36",
     "@mui/material": "^5.15.20",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
-    "@opensearch-project/opensearch": "^2.9.0",
     "axios": "^1.7.2",
-    "localforage": "^1.10.0",
-    "match-sorter": "^6.3.4",
-    "oidc-client": "^1.11.5",
-    "oidc-client-ts": "^3.0.1",
     "react": "^18.2.0",
     "react-code-blocks": "^0.1.6",
     "react-dom": "^18.2.0",
     "react-jdenticon": "^1.2.0",
-    "react-oidc-context": "^3.1.0",
-    "react-router-dom": "^6.24.0",
-    "sort-by": "^1.2.0",
-    "styled-components": "^6.1.11"
+    "react-router-dom": "^6.24.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
