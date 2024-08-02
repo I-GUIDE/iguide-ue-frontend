@@ -28,7 +28,7 @@ export default function MainContent(props) {
                     {contributors && contributors.length > 0 &&
                         <Typography sx={{ py: 1 }}>
                             <Typography level="title-lg" >Contributor{contributors.length > 1 && 's'}: </Typography>
-                            <Typography level="body-lg">{printListWithDelimiter(authors, ',')}</Typography>
+                            <Typography level="body-lg">{printListWithDelimiter(contributors, ',')}</Typography>
                         </Typography>
                     }
                     {authors && authors.length > 0 &&

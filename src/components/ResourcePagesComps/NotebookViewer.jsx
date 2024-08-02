@@ -38,6 +38,10 @@ export default function NotebookViewer(props) {
     const notebookFile = props.notebookFile;
     const htmlNotebook = props.htmlNotebook;
 
+    if (!htmlNotebook && !notebookFile) {
+        return null;
+    }
+
     let isUsingNbconvert = false;
 
     let notebookUrl = '';
@@ -47,8 +51,10 @@ export default function NotebookViewer(props) {
     if (htmlNotebook && htmlNotebook !== '') {
         notebookUrl = htmlNotebook;
         isUsingNbconvert = true;
-    } else if (repoUrl && repoUrl !== '') {
+    } else if (notebookFile && notebookFile !== '' && repoUrl && repoUrl !== '') {
         notebookUrl = get_notebook_html(repoUrl, notebookFile);
+    } else {
+        return null;
     }
 
     // Don't render if the notebook doesn't exist...
