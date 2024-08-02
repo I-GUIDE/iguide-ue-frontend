@@ -309,7 +309,14 @@ export default function SearchResults() {
                                     spacing={2}
                                     sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}
                                 >
-                                    {numberOfPages > 0 && <Pagination count={numberOfPages} color="primary" page={currentPage} onChange={handlePageClick} />}
+                                    {numberOfPages > 0 &&
+                                        <Pagination
+                                            count={numberOfPages}
+                                            color="primary"
+                                            page={currentPage}
+                                            onChange={handlePageClick}
+                                        />
+                                    }
                                 </Stack>
                             </Grid>
                         </Grid>

@@ -402,7 +402,8 @@ export default function UserProfile() {
                                             count={numberOfPages}
                                             color="primary"
                                             page={currentPage}
-                                            onChange={handlePageClick} />
+                                            onChange={handlePageClick}
+                                        />
                                     </Stack>
                                 </>}
                             </Stack>
