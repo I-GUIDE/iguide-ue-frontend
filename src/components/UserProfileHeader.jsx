@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+import Jdenticon from 'react-jdenticon';
 
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
@@ -15,7 +17,6 @@ import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import MenuItem from '@mui/joy/MenuItem';
 
-import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 
@@ -68,12 +69,12 @@ export default function UserProfileHeader(props) {
                             <Grid xs={3}>
                                 <Stack sx={{ m: 3, justifyContent: 'center', alignItems: 'center' }}>
                                     <AspectRatio
-                                        ratio="3/4"
+                                        ratio="1"
                                         variant="outlined"
                                         sx={{
-                                            width: 150,
+                                            width: 200,
                                             bgcolor: 'background.level2',
-                                            borderRadius: 'md',
+                                            borderRadius: 'lg',
                                         }}
                                     >
                                         {localUserInfo['avatar_url']
@@ -85,7 +86,7 @@ export default function UserProfileHeader(props) {
                                                 alt="user profile photo"
                                             />
                                             :
-                                            <PersonIcon />
+                                            <Jdenticon size="200" value={localUserInfo.openid} />
                                         }
                                     </AspectRatio>
                                 </Stack>
