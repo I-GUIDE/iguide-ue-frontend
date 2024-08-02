@@ -28,6 +28,8 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import Divider from '@mui/joy/Divider';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
+import Card from '@mui/joy/Card';
+import CardContent from '@mui/joy/CardContent';
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
@@ -37,7 +39,6 @@ import UserProfileEditCard from "../components/UserProfileEditCard";
 
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
-import UserProfileContributionInfoCard from "../components/UserProfileContributionInfoCard";
 
 import { DEFAULT_BODY_HEIGHT, USER_PROFILE_BODY_HEIGHT } from "../configs/ResourceTypes";
 
@@ -269,7 +270,42 @@ export default function UserProfile() {
                                 pb: 8,
                             }}
                         >
-                            {numberOfTotalItems === 0 && <UserProfileContributionInfoCard localUserInfo={localUserInfo} numberOfContributions={numberOfTotalItems} />}
+                            {numberOfTotalItems === 0 &&
+                                <Box
+                                    sx={{
+                                        position: 'relative',
+                                        overflow: 'auto',
+                                        display: 'flex'
+                                    }}
+                                >
+                                    <Card
+                                        variant="outlined"
+                                        orientation="horizontal"
+                                        sx={{
+                                            width: "100%",
+                                            '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
+                                        }}
+                                    >
+                                        <CardContent>
+                                            <Grid
+                                                container
+                                                spacing={2}
+                                            >
+                                                <Grid
+                                                    xs={12}
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    display="flex"
+                                                >
+                                                    <Typography level="title-lg">
+                                                        You currently don't have any contribution...
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            }
                             <Stack
                                 direction="column"
                                 justifyContent="center"
@@ -295,7 +331,8 @@ export default function UserProfile() {
                                                         authors={metadata.authors}
                                                         tags={metadata.tags}
                                                         contents={metadata.contents}
-                                                        thumbnailImage={metadata["thumbnail-image"]} />
+                                                        thumbnailImage={metadata["thumbnail-image"]}
+                                                    />
                                                 </Grid>
                                                 <Grid xs={1}>
                                                     <IconButton
@@ -365,7 +402,8 @@ export default function UserProfile() {
                                             count={numberOfPages}
                                             color="primary"
                                             page={currentPage}
-                                            onChange={handlePageClick} />
+                                            onChange={handlePageClick}
+                                        />
                                     </Stack>
                                 </>}
                             </Stack>
