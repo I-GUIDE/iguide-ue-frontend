@@ -30,3 +30,8 @@ export const OER_EXTERNAL_LINK_TYPES = {
 }
 
 export const IMAGE_SIZE_LIMIT = 5000000;
+
+export const HOME_BODY_HEIGHT = 'calc(100vh - 240px)';
+export const DEFAULT_BODY_HEIGHT = 'calc(100vh - 355px)';
+export const USER_PROFILE_BODY_HEIGHT = 'calc(100vh - 500px)';
+export const SEARCH_RESULTS_BODY_HEIGHT = 'calc(100vh - 375px)';

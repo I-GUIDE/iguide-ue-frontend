@@ -11,11 +11,11 @@ import Grid from '@mui/joy/Grid';
 
 import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
-
 import SubmissionCard from '../components/SubmissionCard';
 
+import { DEFAULT_BODY_HEIGHT } from '../configs/ResourceTypes';
 
-const ResourceUpdate = () => {
+export default function ResourceUpdate() {
     const id = useParams().id;
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
 
@@ -29,7 +29,7 @@ const ResourceUpdate = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -42,7 +42,7 @@ const ResourceUpdate = () => {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: 'calc(100vh - 375px)',
+                                minHeight: DEFAULT_BODY_HEIGHT,
                                 backgroundColor: 'inherit',
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -54,43 +54,41 @@ const ResourceUpdate = () => {
                     </Box>
                 </Container>
             </CssVarsProvider>
-        )
+        );
     }
 
-return (
-    <CssVarsProvider disableTransitionOnChange>
-        <CssBaseline />
-        <Header title="Update Your Contribution" subtitle="Thanks for your contributions!" />
-        <Container maxWidth="xl">
-            <Box
-                component="main"
-                sx={{
-                    minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
-                    display: 'grid',
-                    gridTemplateColumns: { xs: 'auto', md: '100%' },
-                    gridTemplateRows: 'auto 1fr auto',
-                }}
-            >
-                <Grid
-                    container
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    direction="column"
+    return (
+        <CssVarsProvider disableTransitionOnChange>
+            <CssBaseline />
+            <Header title="Update Your Contribution" subtitle="Thanks for your contributions!" />
+            <Container maxWidth="xl">
+                <Box
+                    component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 375px)',
-                        backgroundColor: 'inherit',
-                        px: { xs: 2, md: 4 },
-                        pt: 4,
-                        pb: 8,
+                        minHeight: DEFAULT_BODY_HEIGHT,
+                        display: 'grid',
+                        gridTemplateColumns: { xs: 'auto', md: '100%' },
+                        gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
-                    <SubmissionCard submissionType="update" elementId={id} />
-                </Grid>
-            </Box>
-        </Container>
-    </CssVarsProvider>
-)
+                    <Grid
+                        container
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        direction="column"
+                        sx={{
+                            minHeight: DEFAULT_BODY_HEIGHT,
+                            backgroundColor: 'inherit',
+                            px: { xs: 2, md: 4 },
+                            pt: 4,
+                            pb: 8,
+                        }}
+                    >
+                        <SubmissionCard submissionType="update" elementId={id} />
+                    </Grid>
+                </Box>
+            </Container>
+        </CssVarsProvider>
+    );
 }
-
-export default ResourceUpdate;

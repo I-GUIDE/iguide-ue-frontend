@@ -8,6 +8,8 @@ import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 
 import { fetchResourcesByField } from '../../utils/DataRetrieval';
+import { DEFAULT_BODY_HEIGHT } from '../../configs/ResourceTypes';
+
 import MainContent from '../../components/ResourcePagesComps/MainContent';
 import CapsuleList from '../../components/ResourcePagesComps/CapsuleList';
 import RelatedResourcesList from '../../components/ResourcePagesComps/RelatedResourcesList';
@@ -60,7 +62,7 @@ function PublicationPage() {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                        minHeight: DEFAULT_BODY_HEIGHT,
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',

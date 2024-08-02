@@ -10,10 +10,11 @@ import Grid from '@mui/joy/Grid';
 
 import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
-
 import UserProfileEditCard from '../components/UserProfileEditCard';
 
-const UserProfileUpdate = () => {
+import { DEFAULT_BODY_HEIGHT } from '../configs/ResourceTypes';
+
+export default function UserProfileUpdate() {
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
 
     // If the user is not authenticated/logged in, they will be redirected to the login page
@@ -26,7 +27,7 @@ const UserProfileUpdate = () => {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -39,7 +40,7 @@ const UserProfileUpdate = () => {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: 'calc(100vh - 375px)',
+                                minHeight: DEFAULT_BODY_HEIGHT,
                                 backgroundColor: 'inherit',
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -51,7 +52,7 @@ const UserProfileUpdate = () => {
                     </Box>
                 </Container>
             </CssVarsProvider>
-        )
+        );
     }
 
     return (
@@ -62,7 +63,7 @@ const UserProfileUpdate = () => {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                        minHeight: DEFAULT_BODY_HEIGHT,
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
@@ -75,21 +76,17 @@ const UserProfileUpdate = () => {
                         alignItems="center"
                         direction="column"
                         sx={{
-                            minHeight: 'calc(100vh - 375px)',
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             backgroundColor: 'inherit',
                             px: { xs: 2, md: 4 },
                             pt: 4,
                             pb: 8,
                         }}
                     >
-                        <UserProfileEditCard userProfileEditType="update"/>
+                        <UserProfileEditCard userProfileEditType="update" />
                     </Grid>
                 </Box>
             </Container>
         </CssVarsProvider>
-    )
+    );
 }
-
-
-
-export default UserProfileUpdate;

@@ -7,7 +7,6 @@ import Card from '@mui/joy/Card';
 import Grid from '@mui/joy/Grid';
 import Stack from '@mui/joy/Stack';
 import Link from '@mui/joy/Link';
-import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 
 import { grey } from '@mui/material/colors';
@@ -18,7 +17,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 export default function Footer() {
     return (
         <Box
-            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 150 }}
+            sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 130 }}
         >
             <Card component="li" color="neutural" sx={{ borderRadius: 0, minWidth: 600, flexGrow: 1 }}>
                 <CardContent sx={{ justifyContent: 'center' }}>
@@ -30,14 +29,16 @@ export default function Footer() {
                                 alignItems="center"
                                 spacing={2}
                             >
-                                <Grid xs={2}>
+                                <Grid xs={1}>
                                     <Box sx={{ width: 'flex' }}>
-                                        <Box
-                                            component="img"
-                                            sx={{ height: 75, mx: 2 }}
-                                            alt="Logo"
-                                            src="/images/nsf.png"
-                                        />
+                                        <Link href={'https://www.nsf.gov/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                            <Box
+                                                component="img"
+                                                sx={{ height: 75, mx: 2 }}
+                                                alt="Logo"
+                                                src="/images/nsf.png"
+                                            />
+                                        </Link>
                                     </Box>
                                 </Grid>
                                 <Grid xs={4}>
@@ -49,7 +50,7 @@ export default function Footer() {
                                         is supported by the National Science Foundation.
                                     </Typography>
                                 </Grid>
-                                <Grid xs={4}>
+                                <Grid xs={5}>
                                     <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
                                         This material is based upon work supported by the National Science Foundation under award No. 2118329. Any opinions, findings, conclusions, or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
                                     </Typography>
@@ -64,34 +65,22 @@ export default function Footer() {
                                     >
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <YouTubeIcon sx={{ color: grey[700]}} />
+                                                <YouTubeIcon sx={{ color: grey[700] }} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://x.com/NSFiGUIDE'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <XIcon sx={{ color: grey[700]}} />
+                                                <XIcon sx={{ color: grey[700] }} />
                                             </Link>
                                         </Box>
                                         <Box sx={{ width: 'flex', px: 0.5 }}>
                                             <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <LinkedInIcon sx={{ color: grey[700]}} />
+                                                <LinkedInIcon sx={{ color: grey[700] }} />
                                             </Link>
                                         </Box>
                                     </Stack>
                                 </Grid>
                             </Stack>
-                            {/* <Stack
-                                direction="row"
-                                justifyContent="center"
-                                alignItems="center"
-                                spacing={2}
-                            >
-                                <Grid xs={12} md={9}>
-                                    <Typography level="body-xs" textColor="#fff" sx={{ py: 1 }}>
-                                        This material is based upon work supported by the National Science Foundation under award No. 2118329. Any opinions, findings, conclusions, or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
-                                    </Typography>
-                                </Grid>
-                            </Stack> */}
                         </Grid>
                     </Container>
                 </CardContent>

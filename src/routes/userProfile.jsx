@@ -39,9 +39,11 @@ import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 import UserProfileContributionInfoCard from "../components/UserProfileContributionInfoCard";
 
+import { DEFAULT_BODY_HEIGHT, USER_PROFILE_BODY_HEIGHT } from "../configs/ResourceTypes";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
-function UserProfile() {
+export default function UserProfile() {
     // OutletContext retrieving the user object to display user info
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo, localUserInfo, setLocalUserInfo] = useOutletContext();
     const [localUserInfoMissing, setLocalUserInfoMissing] = useState('unknown');
@@ -105,7 +107,7 @@ function UserProfile() {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: "calc(100vh - 375px)", // 55px is the height of the NavBar
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             display: "grid",
                             gridTemplateColumns: { xs: "auto", md: "100%" },
                             gridTemplateRows: "auto 1fr auto",
@@ -118,7 +120,7 @@ function UserProfile() {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: "calc(100vh - 375px)",
+                                minHeight: DEFAULT_BODY_HEIGHT,
                                 backgroundColor: "inherit",
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -159,7 +161,7 @@ function UserProfile() {
                         <Box
                             component="main"
                             sx={{
-                                minHeight: 'calc(100vh - 375px)', // 375px is the height of the NavBar, header, and footer
+                                minHeight: DEFAULT_BODY_HEIGHT,
                                 display: 'grid',
                                 gridTemplateColumns: { xs: 'auto', md: '100%' },
                                 gridTemplateRows: 'auto 1fr auto',
@@ -209,7 +211,7 @@ function UserProfile() {
                         <Box
                             component="main"
                             sx={{
-                                minHeight: "calc(100vh - 520px)", // 55px is the height of the NavBar
+                                minHeight: USER_PROFILE_BODY_HEIGHT,
                                 display: "grid",
                                 gridTemplateColumns: { xs: "auto", md: "100%" },
                                 gridTemplateRows: "auto 1fr auto",
@@ -222,7 +224,7 @@ function UserProfile() {
                                 alignItems="center"
                                 direction="column"
                                 sx={{
-                                    minHeight: "calc(100vh - 520px)",
+                                    minHeight: USER_PROFILE_BODY_HEIGHT,
                                     backgroundColor: "inherit",
                                     px: { xs: 2, md: 4 },
                                     pt: 4,
@@ -247,7 +249,7 @@ function UserProfile() {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: "calc(100vh - 520px)", // 55px is the height of the NavBar
+                            minHeight: USER_PROFILE_BODY_HEIGHT,
                             display: "grid",
                             gridTemplateColumns: { xs: "auto", md: "100%" },
                             gridTemplateRows: "auto 1fr auto",
@@ -260,7 +262,7 @@ function UserProfile() {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: "calc(100vh - 520px)",
+                                minHeight: USER_PROFILE_BODY_HEIGHT,
                                 backgroundColor: "inherit",
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -374,5 +376,3 @@ function UserProfile() {
         </MaterialCssVarsProvider>
     );
 }
-
-export default UserProfile;

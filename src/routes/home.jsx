@@ -28,7 +28,7 @@ import Chip from '@mui/joy/Chip';
 
 import FeaturedCard from '../components/FeaturedCard';
 import { featuredResourcesRetriever } from '../utils/DataRetrieval';
-import { RESOURCE_TYPE_COLORS } from '../configs/ResourceTypes';
+import { RESOURCE_TYPE_COLORS, HOME_BODY_HEIGHT } from '../configs/ResourceTypes';
 
 function Home() {
     // define search data
@@ -92,14 +92,14 @@ function Home() {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 260px)', // 450px is the combined height of the NavBar, search bar, and footer
+                        minHeight: HOME_BODY_HEIGHT,
                         // display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
                     }}
                 >
                     <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
-                        <CardCover sx={{ minHeight: 'calc(100vh - 260px)' }}>
+                        <CardCover sx={{ minHeight: HOME_BODY_HEIGHT }}>
                             <img
                                 src="/images/earth-and-space.png"
                                 loading="lazy"
@@ -110,7 +110,7 @@ function Home() {
                             sx={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                minHeight: 'calc(100vh - 260px)'
+                                minHeight: HOME_BODY_HEIGHT
                             }}
                         >
                             <Container maxWidth="lg">

@@ -10,8 +10,9 @@ import Grid from '@mui/joy/Grid';
 
 import Header from '../components/Layout/Header';
 import LoginCard from '../components/LoginCard';
-
 import SubmissionCard from '../components/SubmissionCard';
+
+import { DEFAULT_BODY_HEIGHT } from '../configs/ResourceTypes';
 
 export default function ResourceSubmission() {
     const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] = useOutletContext();
@@ -28,7 +29,7 @@ export default function ResourceSubmission() {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -41,7 +42,7 @@ export default function ResourceSubmission() {
                             alignItems="center"
                             direction="column"
                             sx={{
-                                minHeight: 'calc(100vh - 375px)',
+                                minHeight: DEFAULT_BODY_HEIGHT,
                                 backgroundColor: 'inherit',
                                 px: { xs: 2, md: 4 },
                                 pt: 4,
@@ -64,7 +65,7 @@ export default function ResourceSubmission() {
                 <Box
                     component="main"
                     sx={{
-                        minHeight: 'calc(100vh - 375px)', // 55px is the height of the NavBar
+                        minHeight: DEFAULT_BODY_HEIGHT,
                         display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
@@ -77,7 +78,7 @@ export default function ResourceSubmission() {
                         alignItems="center"
                         direction="column"
                         sx={{
-                            minHeight: 'calc(100vh - 375px)',
+                            minHeight: DEFAULT_BODY_HEIGHT,
                             backgroundColor: 'inherit',
                             px: { xs: 2, md: 4 },
                             pt: 4,

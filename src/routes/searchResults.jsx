@@ -32,9 +32,9 @@ import Chip from '@mui/joy/Chip';
 import InfoCard from '../components/InfoCard';
 import { DataSearcher, getResourceCount } from '../utils/DataRetrieval';
 import { arrayLength } from '../helpers/helper';
-import { RESOURCE_TYPE_COLORS } from '../configs/ResourceTypes';
+import { RESOURCE_TYPE_COLORS, SEARCH_RESULTS_BODY_HEIGHT } from '../configs/ResourceTypes';
 
-function SearchResults() {
+export default function SearchResults() {
     // define search data
     const [data, setData] = useState({
         content: '',
@@ -242,7 +242,7 @@ function SearchResults() {
                     <Box
                         component="main"
                         sx={{
-                            minHeight: 'calc(100vh - 395px)', // 395px is the height of the NavBar, search bar, and footer
+                            minHeight: SEARCH_RESULTS_BODY_HEIGHT,
                             display: 'grid',
                             gridTemplateColumns: { xs: 'auto', md: '100%' },
                             gridTemplateRows: 'auto 1fr auto',
@@ -319,5 +319,3 @@ function SearchResults() {
         </MaterialCssVarsProvider >
     )
 }
-
-export default SearchResults;
