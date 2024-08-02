@@ -53,7 +53,7 @@ export default function UserProfileHeader(props) {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 300 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 300 }}>
             <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
                 <CardCover>
                     <img
@@ -64,15 +64,15 @@ export default function UserProfileHeader(props) {
                     />
                 </CardCover>
                 <CardContent sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Container maxWidth="xl">
+                    <Container maxWidth="md">
                         <Grid container sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Grid xs={3}>
-                                <Stack sx={{ m: 3, justifyContent: 'center', alignItems: 'center' }}>
+                            <Grid xs={12} md={3}>
+                                <Stack sx={{ m: 2, justifyContent: 'center', alignItems: 'center' }}>
                                     <AspectRatio
                                         ratio="1"
                                         variant="outlined"
                                         sx={{
-                                            width: 200,
+                                            width: 150,
                                             bgcolor: 'background.level2',
                                             borderRadius: 'lg',
                                         }}
@@ -91,8 +91,16 @@ export default function UserProfileHeader(props) {
                                     </AspectRatio>
                                 </Stack>
                             </Grid>
-                            <Grid xs={9}>
-                                <Stack sx={{ m: 3 }} spacing={1}>
+                            <Grid xs={12} md={9}>
+                                <Stack
+                                    direction="column"
+                                    sx={{ m: 3 }}
+                                    spacing={0.5}
+                                    alignItems={{
+                                        xs: "center",
+                                        md: "flex-start"
+                                    }}
+                                >
                                     <Typography level="h1" fontWeight="lg" textColor={'#fff'}>
                                         {localUserInfo.first_name ? localUserInfo.first_name : "First name unknown"}&nbsp;
                                         {localUserInfo.last_name ? localUserInfo.last_name : "Last name unknown"}
