@@ -72,7 +72,7 @@ function OERPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} elementType="oer" />
                         </Grid>
 
                         <Grid sm={12} md={6}>

@@ -12,6 +12,7 @@ export default function MainContent(props) {
     const authors = props.authors;
     const contents = props.contents;
     const thumbnailImage = props.thumbnailImage;
+    const elementType = props.elementType;
 
     return (
         <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -34,11 +35,24 @@ export default function MainContent(props) {
                 </Grid>
                 <Grid xs={12} md={4}>
                     <AspectRatio variant="outlined" maxHeight={280} sx={{ py: 1 }}>
-                        <img
+                        {thumbnailImage ?
+                            <img
+                                src={thumbnailImage}
+                                loading="lazy"
+                                alt="thumbnail"
+                            />
+                            :
+                            <img
+                                src={`/default-images/${elementType}.png`}
+                                loading="lazy"
+                                alt="deafult-thumbnail"
+                            />
+                        }
+                        {/* <img
                             src={thumbnailImage}
                             loading="lazy"
                             alt="thumbnail"
-                        />
+                        /> */}
                     </AspectRatio>
                 </Grid>
             </Grid>

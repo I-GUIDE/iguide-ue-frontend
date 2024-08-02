@@ -36,11 +36,19 @@ export default function InfoCard(props) {
         >
             {/* Only display the thumbnail when the width is wider than 900px */}
             <AspectRatio ratio="1" sx={{ width: 190, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
-                <img
-                    src={thumbnailImage}
-                    loading="lazy"
-                    alt="thumbnail"
-                />
+                {thumbnailImage ?
+                    <img
+                        src={thumbnailImage}
+                        loading="lazy"
+                        alt="thumbnail"
+                    />
+                    :
+                    <img
+                        src={`/default-images/${cardType}.png`}
+                        loading="lazy"
+                        alt="deafult-thumbnail"
+                    />
+                }
             </AspectRatio>
 
             <CardContent>

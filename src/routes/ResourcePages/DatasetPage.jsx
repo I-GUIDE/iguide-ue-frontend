@@ -77,7 +77,7 @@ function DatasetPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} />
+                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} elementType="dataset" />
                         </Grid>
 
                         <Grid sm={12} md={6}>
