@@ -18,16 +18,13 @@ export default function SubmissionStatusCard(props) {
             submissionStatusText = 'Thank you for your contribution! You are all set!';
             break;
         case 'initial-failed':
-            submissionStatusText = 'Contribution failed. Please try again!';
+            submissionStatusText = 'Submission failed. Please try again!';
             break;
         case 'update-succeeded':
             submissionStatusText = 'Thank you for your update! You are all set!';
             break;
-        case 'update-succeeded-delete-failed':
-            submissionStatusText = 'Your contribution is updated, but we failed to delete the old copy!';
-            break;
         case 'update-failed':
-            submissionStatusText = 'Your update failed, but we still have the old copy!';
+            submissionStatusText = 'Your update failed. Pleaase try again!';
             break;
         case 'unauthorized':
             submissionStatusText = 'You have to login as the contributor to update this element!';
