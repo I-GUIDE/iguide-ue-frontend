@@ -295,7 +295,8 @@ export default function UserProfile() {
                                                         authors={metadata.authors}
                                                         tags={metadata.tags}
                                                         contents={metadata.contents}
-                                                        thumbnailImage={metadata["thumbnail-image"]} />
+                                                        thumbnailImage={metadata["thumbnail-image"]}
+                                                    />
                                                 </Grid>
                                                 <Grid xs={1}>
                                                     <IconButton
