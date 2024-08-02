@@ -47,19 +47,6 @@ export default function NavBar(props) {
         setOpen(inOpen);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleListKeyDown = (event) => {
-        if (event.key === 'Tab') {
-            setOpen(false);
-        } else if (event.key === 'Escape') {
-            buttonRef.current.focus();
-            setOpen(false);
-        }
-    };
-
     // Redirect users to the auth backend for login
     const login = () => {
         window.open(AUTH_BACKEND_URL + "/login", "_self");
@@ -69,6 +56,24 @@ export default function NavBar(props) {
     const logout = () => {
         window.open(AUTH_BACKEND_URL + "/logout", "_self");
     };
+
+    function UserAvatar() {
+        if (localUserInfo) {
+            if (localUserInfo.avatar_url) {
+                return (
+                    <Avatar variant="outlined" alt="User avatar" src={localUserInfo.avatar_url} />
+                )
+            } else {
+                return (
+                    <Avatar>
+                        <Jdenticon size="200" value={localUserInfo.openid} />
+                    </Avatar>
+                )
+            }
+        } else {
+            <Avatar variant="outlined" />
+        }
+    }
 
     // If the user is logged in, display the logout button, otherwise login
     function AuthButton() {
@@ -86,11 +91,7 @@ export default function NavBar(props) {
                     </Button>
                     <Dropdown>
                         <MenuButton color="primary">
-                            {localUserInfo && localUserInfo.avatar_url ?
-                                <Avatar variant="outlined" alt="User avatar" src={localUserInfo.avatar_url} />
-                                :
-                                <Jdenticon size="200" value={localUserInfo.openid} />
-                            }
+                            <UserAvatar />
                         </MenuButton>
                         <Menu placement="bottom-end" color="primary">
                             <Link to={'/user-profile'} style={{ textDecoration: 'none' }}>
@@ -166,7 +167,7 @@ export default function NavBar(props) {
                             Update Profile
                         </ListItem>
                     </Link>
-                    <Divider sx={{ my: 1 }}/>
+                    <Divider sx={{ my: 1 }} />
                     <Typography
                         level="body-xs"
                         textTransform="uppercase"

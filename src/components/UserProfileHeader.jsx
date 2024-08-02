@@ -19,9 +19,31 @@ import MenuItem from '@mui/joy/MenuItem';
 
 import EditIcon from '@mui/icons-material/Edit';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function UserProfileHeader(props) {
     const localUserInfo = props.localUserInfo;
+
+    function UserProfile() {
+        if (localUserInfo) {
+            if (localUserInfo.avatar_url) {
+                return (
+                    <img
+                        src={localUserInfo['avatar_url']}
+                        srcSet={localUserInfo['avatar_url'] + " 2x"}
+                        loading="lazy"
+                        alt="user profile photo"
+                    />
+                )
+            } else {
+                return (
+                    <Jdenticon size="200" value={localUserInfo.openid} />
+                )
+            }
+        } else {
+            <PersonIcon />
+        }
+    }
 
     // If the user info from the local DB is still not available, wait...
     if (!localUserInfo) {
@@ -77,17 +99,7 @@ export default function UserProfileHeader(props) {
                                             borderRadius: 'lg',
                                         }}
                                     >
-                                        {localUserInfo['avatar_url']
-                                            ?
-                                            <img
-                                                src={localUserInfo['avatar_url']}
-                                                srcSet={localUserInfo['avatar_url'] + " 2x"}
-                                                loading="lazy"
-                                                alt="user profile photo"
-                                            />
-                                            :
-                                            <Jdenticon size="200" value={localUserInfo.openid} />
-                                        }
+                                        <UserProfile />
                                     </AspectRatio>
                                 </Stack>
                             </Grid>
