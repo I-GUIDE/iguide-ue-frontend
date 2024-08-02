@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
+import Jdenticon from 'react-jdenticon';
+
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
@@ -75,7 +77,7 @@ export default function NavBar(props) {
                             {localUserInfo && localUserInfo.avatar_url ?
                                 <Avatar variant="outlined" alt="User avatar" src={localUserInfo.avatar_url} />
                                 :
-                                <Avatar variant="outlined" />
+                                <Jdenticon size="200" value={localUserInfo.openid} />
                             }
                         </MenuButton>
                         <Menu placement="bottom-end" color="primary">
