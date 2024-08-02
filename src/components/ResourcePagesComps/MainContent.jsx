@@ -9,6 +9,7 @@ import { printListWithDelimiter } from '../../helpers/helper';
 
 export default function MainContent(props) {
     const title = props.title;
+    const contributors = props.contributors;
     const authors = props.authors;
     const contents = props.contents;
     const thumbnailImage = props.thumbnailImage;
@@ -24,11 +25,18 @@ export default function MainContent(props) {
             >
                 <Grid xs={12} md={8}>
                     <Typography level="h1" sx={{ py: 1 }}>{title}</Typography>
-                    <Typography sx={{ py: 1 }}>
-                        <Typography level="title-lg" >Author{authors.length > 1 && 's'}: </Typography>
-                        <Typography level="body-lg">{printListWithDelimiter(authors, ',')}</Typography>
-                    </Typography>
-
+                    {contributors && contributors.length > 0 &&
+                        <Typography sx={{ py: 1 }}>
+                            <Typography level="title-lg" >Contributor{contributors.length > 1 && 's'}: </Typography>
+                            <Typography level="body-lg">{printListWithDelimiter(authors, ',')}</Typography>
+                        </Typography>
+                    }
+                    {authors && authors.length > 0 &&
+                        <Typography sx={{ py: 1 }}>
+                            <Typography level="title-lg" >Author{authors.length > 1 && 's'}: </Typography>
+                            <Typography level="body-lg">{printListWithDelimiter(authors, ',')}</Typography>
+                        </Typography>
+                    }
                     <Typography sx={{ py: 1 }}>
                         {contents}
                     </Typography>

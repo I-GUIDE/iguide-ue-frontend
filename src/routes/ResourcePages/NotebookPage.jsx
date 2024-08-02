@@ -18,6 +18,7 @@ import Header from '../../components/Layout/Header';
 function NotebookPage() {
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
+    const [contributors, setContributors] = useState([]);
     const [abstract, setAbstract] = useState('');
     const [tags, setTags] = useState([]);
     const [relatedDatasets, setRelatedDatasets] = useState([]);
@@ -34,13 +35,13 @@ function NotebookPage() {
             const thisResourceList = await fetchResourcesByField('_id', [id]);
             // Since the function returns an Array, we extract the content using idx 0
             const thisResource = thisResourceList[0];
-            console.log('Element returned: ', thisResource);
 
             setRelatedDatasets(thisResource['related-datasets']);
             setRelatedPublicatons(thisResource['related-publications']);
             setRelatedOERs(thisResource['related-oers']);
             setTitle(thisResource.title);
             setAuthors(thisResource.authors);
+            setContributors(thisResource['contributor-name']);
             setAbstract(thisResource.contents);
             setTags(thisResource.tags);
             setRepoUrl(thisResource['notebook-repo']);
@@ -76,7 +77,14 @@ function NotebookPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} elementType="notebook" />
+                            <MainContent
+                                title={title}
+                                authors={authors}
+                                contributors={contributors}
+                                contents={abstract}
+                                thumbnailImage={thumbnailImage}
+                                elementType="notebook"
+                            />
                         </Grid>
 
                         <Grid sm={12} md={4}>

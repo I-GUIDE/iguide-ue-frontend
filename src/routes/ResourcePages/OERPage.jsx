@@ -18,6 +18,7 @@ import Header from '../../components/Layout/Header';
 function OERPage() {
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
+    const [contributors, setContributors] = useState([]);
     const [abstract, setAbstract] = useState('');
     const [tags, setTags] = useState([]);
     const [relatedDatasets, setRelatedDatasets] = useState([]);
@@ -32,13 +33,13 @@ function OERPage() {
             const thisResourceList = await fetchResourcesByField('_id', [id]);
             // Since the function returns an Array, we extract the content using idx 0
             const thisResource = thisResourceList[0];
-            console.log('Element returned: ', thisResource);
 
             setRelatedDatasets(thisResource['related-datasets']);
             setRelatedPublicatons(thisResource['related-publications']);
             setRelatedNotebooks(thisResource['related-notebooks']);
             setTitle(thisResource.title);
             setAuthors(thisResource.authors);
+            setContributors(thisResource['contributor-name']);
             setAbstract(thisResource.contents);
             setTags(thisResource.tags);
             setThumbnailImage(thisResource['thumbnail-image']);
@@ -72,7 +73,14 @@ function OERPage() {
                         }}
                     >
                         <Grid md={12}>
-                            <MainContent title={title} authors={authors} contents={abstract} thumbnailImage={thumbnailImage} elementType="oer" />
+                            <MainContent
+                                title={title}
+                                authors={authors}
+                                contributors={contributors}
+                                contents={abstract}
+                                thumbnailImage={thumbnailImage}
+                                elementType="oer"
+                            />
                         </Grid>
 
                         <Grid sm={12} md={6}>
