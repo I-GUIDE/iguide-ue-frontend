@@ -394,8 +394,8 @@ export default function SubmissionCard(props) {
                 setSubmissionStatus('update-failed');
             }
         } else if (submissionType === 'initial') {
-            const response = await fetch(`${USER_BACKEND_URL}/api/resources`, {
-                method: 'PUT',
+            const response = await fetch(`${USER_BACKEND_URL}/api/element`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
