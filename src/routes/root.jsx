@@ -91,11 +91,9 @@ export default function Root() {
             setUserInfo(demoCILogonUser);
         } else {
             if (isAuthenticated) {
-                console.log("Logged in via CILogon")
                 getUserInfo();
             } else {
-                console.log("Not logged in")
-                setUserInfo({ userInfo: null })
+                setUserInfo({ userInfo: null });
             }
         }
     }, [isAuthenticated]);

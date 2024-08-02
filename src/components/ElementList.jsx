@@ -63,7 +63,6 @@ export default function ElementList(props) {
 
     const handlePageClick = (event, value) => {
         const newStartingIdx = (value - 1) * itemsPerPage;
-        console.log(`User requested page number ${value}, which is offset ${newStartingIdx}`);
         setCurrentStartingIdx(newStartingIdx);
         setCurrentPage(value);
     };
