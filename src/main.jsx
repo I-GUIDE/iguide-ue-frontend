@@ -74,11 +74,11 @@ const router = createBrowserRouter([
                 element: <Tag />,
             },
             {
-                path: "/user_profile",
+                path: "/user-profile",
                 element: <UserProfile />,
             },
             {
-                path: "/user_profile_update",
+                path: "/user-profile-update",
                 element: <UserProfileUpdate />,
             },
             {
@@ -86,7 +86,7 @@ const router = createBrowserRouter([
                 element: <ResourceSubmission />,
             },
             {
-                path: "/resource_update/:id",
+                path: "/element-update/:id",
                 element: <ResourceUpdate />,
             },
         ]

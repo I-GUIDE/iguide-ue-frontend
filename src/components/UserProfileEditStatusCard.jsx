@@ -51,7 +51,7 @@ export default function UserProfileEditStatusCard(props) {
                         <Button component="a" href="/" variant="outlined" color="neutral">
                             Go back to homepage
                         </Button>
-                        <Button component="a" href="/user_profile" variant="solid" color="primary">
+                        <Button component="a" href="/user-profile" variant="solid" color="primary">
                             Go to user profile
                         </Button>
                     </Box>

@@ -79,12 +79,12 @@ export default function NavBar(props) {
                             }
                         </MenuButton>
                         <Menu placement="bottom-end" color="primary">
-                            <Link to={'/user_profile'} style={{ textDecoration: 'none' }}>
+                            <Link to={'/user-profile'} style={{ textDecoration: 'none' }}>
                                 <MenuItem>
                                     My Profile
                                 </MenuItem>
                             </Link>
-                            <Link to={'/user_profile_update'} style={{ textDecoration: 'none' }}>
+                            <Link to={'/user-profile-update'} style={{ textDecoration: 'none' }}>
                                 <MenuItem>
                                     Update Profile
                                 </MenuItem>

@@ -107,7 +107,7 @@ export default function UserProfileHeader(props) {
                                         {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
                                     </Typography>
                                     <Stack direction="row" spacing={2} justifyContent="flex-start" sx={{ py: 2 }}>
-                                        <Button component="a" href="/user_profile_update" variant="solid" size="sm" color="success" endDecorator={<EditIcon />}>
+                                        <Button component="a" href="/user-profile-update" variant="solid" size="sm" color="success" endDecorator={<EditIcon />}>
                                             Edit Profile
                                         </Button>
                                         <Dropdown>

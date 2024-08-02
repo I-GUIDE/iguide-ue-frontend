@@ -16,7 +16,7 @@ router.get('/login',
 
 router.get('/cilogon-callback', (req, res, next) => {
     passport.authenticate('oidc', {
-        successRedirect: FRONTEND_URL + '/user_profile',
+        successRedirect: FRONTEND_URL + '/user-profile',
         failureRedirect: '/'
     })(req, res, next)
 });

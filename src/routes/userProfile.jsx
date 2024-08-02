@@ -309,7 +309,7 @@ export default function UserProfile() {
                                                     >
                                                         <DeleteForever />
                                                     </IconButton>
-                                                    <Link href={"/resource_update/" + metadata._id} style={{ textDecoration: 'none' }}>
+                                                    <Link href={"/element-update/" + metadata._id} style={{ textDecoration: 'none' }}>
                                                         <IconButton
                                                             color="primary"
                                                             size="lg"
