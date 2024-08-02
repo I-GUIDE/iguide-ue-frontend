@@ -19,68 +19,73 @@ export default function Footer() {
         <Box
             sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, minHeight: 130 }}
         >
-            <Card component="li" color="neutural" sx={{ borderRadius: 0, minWidth: 600, flexGrow: 1 }}>
+            <Card component="li" color="neutural" sx={{ borderRadius: 0, flexGrow: 1 }}>
                 <CardContent sx={{ justifyContent: 'center' }}>
-                    <Container maxWidth="xl">
-                        <Grid container spacing={1}>
-                            <Stack
-                                direction="row"
-                                justifyContent="center"
-                                alignItems="center"
-                                spacing={2}
-                            >
-                                <Grid xs={1}>
-                                    <Box sx={{ width: 'flex' }}>
-                                        <Link href={'https://www.nsf.gov/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                            <Box
-                                                component="img"
-                                                sx={{ height: 75, mx: 2 }}
-                                                alt="Logo"
-                                                src="/images/nsf.png"
-                                            />
+                    <Container maxWidth="xl" sx={{ flexGrow: 1 }}>
+                        <Grid
+                            container
+                            spacing={1}
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <Grid xs={12} sm={2} lg={1}>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Link href={'https://www.nsf.gov/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                        <Box
+                                            component="img"
+                                            sx={{ height: 75, mx: 2 }}
+                                            alt="Logo"
+                                            src="/images/nsf.png"
+                                        />
+                                    </Link>
+                                </Stack>
+                            </Grid>
+                            <Grid xs={12} sm={10} lg={4}>
+                                <Typography level="h5" textColor="#606060" sx={{ py: 1 }}>
+                                    © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
+                                </Typography>
+                                <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
+                                    Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE)
+                                    is supported by the National Science Foundation.
+                                </Typography>
+                            </Grid>
+                            <Grid xs={12} sm={9} lg={5}>
+                                <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
+                                    This material is based upon work supported by the National Science Foundation under award No. 2118329.
+                                    Any opinions, findings, conclusions, or recommendations expressed in this material are those of the
+                                    author(s) and do not necessarily reflect the views of the National Science Foundation.
+                                </Typography>
+                            </Grid>
+                            <Grid xs={12} sm={3} lg={2} >
+                                <Stack
+                                    direction="row"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    spacing={1}
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Box sx={{ width: 'flex', px: 0.5 }}>
+                                        <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                            <YouTubeIcon sx={{ color: grey[700] }} />
                                         </Link>
                                     </Box>
-                                </Grid>
-                                <Grid xs={4}>
-                                    <Typography level="h5" textColor="#606060" sx={{ py: 1 }}>
-                                        © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
-                                    </Typography>
-                                    <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
-                                        Institute for Geospatial Understanding through an Integrative Discovery Environment (I-GUIDE)
-                                        is supported by the National Science Foundation.
-                                    </Typography>
-                                </Grid>
-                                <Grid xs={5}>
-                                    <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
-                                        This material is based upon work supported by the National Science Foundation under award No. 2118329. Any opinions, findings, conclusions, or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
-                                    </Typography>
-                                </Grid>
-                                <Grid xs={2}>
-                                    <Stack
-                                        direction="row"
-                                        justifyContent="flex-start"
-                                        alignItems="center"
-                                        spacing={1}
-                                        sx={{ display: 'flex' }}
-                                    >
-                                        <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://www.youtube.com/@nsf-iguide'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <YouTubeIcon sx={{ color: grey[700] }} />
-                                            </Link>
-                                        </Box>
-                                        <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://x.com/NSFiGUIDE'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <XIcon sx={{ color: grey[700] }} />
-                                            </Link>
-                                        </Box>
-                                        <Box sx={{ width: 'flex', px: 0.5 }}>
-                                            <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                                                <LinkedInIcon sx={{ color: grey[700] }} />
-                                            </Link>
-                                        </Box>
-                                    </Stack>
-                                </Grid>
-                            </Stack>
+                                    <Box sx={{ width: 'flex', px: 0.5 }}>
+                                        <Link href={'https://x.com/NSFiGUIDE'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                            <XIcon sx={{ color: grey[700] }} />
+                                        </Link>
+                                    </Box>
+                                    <Box sx={{ width: 'flex', px: 0.5 }}>
+                                        <Link href={'https://www.linkedin.com/company/nsf-i-guide/'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                            <LinkedInIcon sx={{ color: grey[700] }} />
+                                        </Link>
+                                    </Box>
+                                </Stack>
+                            </Grid>
                         </Grid>
                     </Container>
                 </CardContent>
