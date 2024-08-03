@@ -37,7 +37,7 @@ export default function UserProfileHeader(props) {
                 )
             } else {
                 return (
-                    <Jdenticon size="200" value={localUserInfo.openid} />
+                    <Jdenticon size="150" value={localUserInfo.openid} />
                 )
             }
         } else {
