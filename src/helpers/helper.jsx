@@ -39,3 +39,21 @@ export function arrayLength(listOfItems) {
 
     return listOfItems.length;
 }
+
+/**
+ * Convert data URL to a file
+ * @param {string} dataURL the data URL object
+ * @param {string} filename filename
+ * @return {File} the file object converted from dataURL
+ */
+export function dataURLtoFile(dataURL, filename) {
+    var arr = dataURL.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[arr.length - 1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+}

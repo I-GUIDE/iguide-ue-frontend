@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useOutletContext } from 'react-router-dom';
+import AvatarEditor from 'react-avatar-editor';
 
 import Card from '@mui/joy/Card';
 import AspectRatio from '@mui/joy/AspectRatio';
+import Stack from '@mui/joy/Stack';
 import CardActions from '@mui/joy/CardActions';
 import CardContent from '@mui/joy/CardContent';
 import Divider from '@mui/joy/Divider';
@@ -13,12 +15,19 @@ import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
 import Textarea from '@mui/joy/Textarea';
+import Slider from '@mui/joy/Slider';
+import Modal from '@mui/joy/Modal';
+import DialogTitle from '@mui/joy/DialogTitle';
+import DialogContent from '@mui/joy/DialogContent';
+import DialogActions from '@mui/joy/DialogActions';
+import ModalDialog from '@mui/joy/ModalDialog';
 import { styled } from '@mui/joy';
 
 import { IMAGE_SIZE_LIMIT } from '../configs/ResourceTypes';
 
 import UserProfileEditStatusCard from './UserProfileEditStatusCard';
 import { fetchUser, updateUser } from '../utils/UserManager';
+import { dataURLtoFile } from '../helpers/helper';
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
@@ -53,7 +62,12 @@ export default function UserProfileEditCard(props) {
     const [affiliation, setAffiliation] = useState();
 
     const [profilePictureFile, setProfilePictureFile] = useState();
-    const [profilePictureFileURL, setProfilePictureFileURL] = useState();
+
+    const profilePictureEditor = useRef(null);
+    const [confirmedProfilePictureURL, setConfirmedProfilePictureURL] = useState();
+    const [profilePictureModal, setProfilePictureModal] = useState(false);
+    const [profilePictureScale, setProfilePictureScale] = useState(1);
+    const [newProfilePicture, setNewProfilePicture] = useState(false);
 
     useEffect(() => {
         const fetchUserInfoFromDB = async () => {
@@ -70,50 +84,64 @@ export default function UserProfileEditCard(props) {
             setAffiliationFromDB(userFromDB['affiliation']);
             setAffiliation(userFromDB['affiliation']);
             setBio(userFromDB['bio']);
-            setProfilePictureFileURL(userFromDB['avatar_url']);
+            // setProfilePictureFileURL(userFromDB['avatar_url']);
+            setConfirmedProfilePictureURL(userFromDB['avatar_url']);
         }
         if (userInfo.sub) {
             fetchUserInfoFromDB();
         }
     }, [userInfo]);
 
-    const handleProfilePictureUpload = (event) => {
+    // Read file to profilePictureFile
+    function handleProfilePictureUpload(event) {
         const profilePicture = event.target.files[0];
         if (!profilePicture.type.startsWith('image/')) {
             alert('Please upload an image!');
-            setProfilePictureFile(null);
-            setProfilePictureFileURL(null);
             return null;
         }
         if (profilePicture.size > IMAGE_SIZE_LIMIT) {
             alert('Please upload an image smaller than 5MB!');
-            setProfilePictureFile(null);
-            setProfilePictureFileURL(null);
             return null;
         }
         setProfilePictureFile(profilePicture);
-        setProfilePictureFileURL(URL.createObjectURL(profilePicture));
+        setProfilePictureModal(true);
     }
 
-    const handleSubmit = async (event) => {
+    // Change the scale in the editor
+    function handleScaleChange(event) {
+        const scale = parseFloat(event.target.value);
+        setProfilePictureScale(scale);
+    }
+
+    // Save the edited profile picture
+    function handleSavingEditedPicture() {
+        if (profilePictureEditor) {
+            const profilePictureCropped = profilePictureEditor.current?.getImageScaledToCanvas().toDataURL();
+            setConfirmedProfilePictureURL(profilePictureCropped);
+            setProfilePictureModal(false);
+            setNewProfilePicture(true);
+        }
+    }
+
+    async function handleSubmit(event) {
         event.preventDefault();
-        const data = {};
         let avatar_url = '';
 
-        // If user uploads a new profile picture, use the new one, otherwise, use the existing one.
-        if (profilePictureFile) {
+        // If the user uploads and confirms the new picture, use it.
+        if (newProfilePicture) {
             const formData = new FormData();
-            formData.append('file', profilePictureFile);
+            const confirmedProfilePictureFile = dataURLtoFile(confirmedProfilePictureURL, 'user-upload.png');
+            formData.append('file', confirmedProfilePictureFile);
 
             const response = await fetch(`${USER_BACKEND_URL}/api/upload-avatar`, {
                 method: 'POST',
                 body: formData,
             });
 
-            const result = await response.json();
-            avatar_url = result.url;
+            const profilePictureResult = await response.json();
+            avatar_url = profilePictureResult.url;
         } else {
-            avatar_url = profilePictureFileURL;
+            avatar_url = confirmedProfilePictureURL;
         }
 
         const result = await updateUser(userInfo.sub, firstName, lastName, email, affiliation, bio, avatar_url);
@@ -210,17 +238,76 @@ export default function UserProfileEditCard(props) {
                             Upload your profile picture
                             <VisuallyHiddenInput type="file" onChange={handleProfilePictureUpload} />
                         </Button>
-                        {profilePictureFileURL &&
-                            <div>
+                        <Modal
+                            aria-labelledby="modal-title"
+                            aria-describedby="modal-desc"
+                            open={profilePictureModal}
+                            onClose={() => setProfilePictureModal(false)}
+                            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <ModalDialog variant="outlined" role="alertdialog">
+                                <DialogTitle>
+                                    Edit your profile picture
+                                </DialogTitle>
+                                <Divider />
+                                <DialogContent>
+                                    <Stack spacing={2} sx={{ px: 3 }}>
+                                        <AvatarEditor
+                                            ref={profilePictureEditor}
+                                            image={profilePictureFile}
+                                            width={250}
+                                            height={250}
+                                            border={50}
+                                            scale={profilePictureScale}
+                                        />
+                                        <Stack
+                                            direction="row"
+                                            spacing={3}
+                                            alignItems="center"
+                                            justifyContent="center"
+                                        >
+                                            <Typography>
+                                                Zoom
+                                            </Typography>
+                                            <Slider
+                                                name="scale"
+                                                onChange={handleScaleChange}
+                                                min={1}
+                                                max={2}
+                                                step={0.01}
+                                                defaultValue={1}
+                                            />
+                                        </Stack>
+                                    </Stack>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button variant="solid" color="primary" onClick={handleSavingEditedPicture}>
+                                        Confirm
+                                    </Button>
+                                    <Button variant="plain" color="neutral" onClick={() => setProfilePictureModal(false)}>
+                                        Cancel
+                                    </Button>
+                                </DialogActions>
+                            </ModalDialog>
+                        </Modal>
+                        {confirmedProfilePictureURL &&
+                            <Stack sx={{ width: '50%' }}>
                                 <Typography>Profile picture preview</Typography>
-                                <AspectRatio ratio="1" sx={{ width: 190 }}>
+                                <AspectRatio
+                                    ratio="1"
+                                    variant="outlined"
+                                    sx={{
+                                        width: 150,
+                                        bgcolor: 'background.level2',
+                                        borderRadius: 'lg',
+                                    }}
+                                >
                                     <img
-                                        src={profilePictureFileURL}
-                                        loading="lazy"
-                                        alt="Profile picture preview"
+                                        alt="User profile picture"
+                                        src={confirmedProfilePictureURL}
                                     />
                                 </AspectRatio>
-                            </div>
+                            </Stack>
                         }
                     </FormControl>
                     <FormControl sx={{ gridColumn: '1/-1' }}>
