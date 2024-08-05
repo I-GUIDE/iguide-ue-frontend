@@ -24,27 +24,6 @@ import PersonIcon from '@mui/icons-material/Person';
 export default function UserProfileHeader(props) {
     const localUserInfo = props.localUserInfo;
 
-    function UserProfile() {
-        if (localUserInfo) {
-            if (localUserInfo.avatar_url) {
-                return (
-                    <img
-                        src={localUserInfo['avatar_url']}
-                        srcSet={localUserInfo['avatar_url'] + " 2x"}
-                        loading="lazy"
-                        alt="user profile photo"
-                    />
-                )
-            } else {
-                return (
-                    <Jdenticon size="150" value={localUserInfo.openid} />
-                )
-            }
-        } else {
-            <PersonIcon />
-        }
-    }
-
     // If the user info from the local DB is still not available, wait...
     if (!localUserInfo) {
         return (
@@ -99,7 +78,18 @@ export default function UserProfileHeader(props) {
                                             borderRadius: 'lg',
                                         }}
                                     >
-                                        <UserProfile />
+                                        {localUserInfo
+                                            ? (localUserInfo['avatar_url']
+                                                ? <img
+                                                    src={localUserInfo['avatar_url']}
+                                                    srcSet={localUserInfo['avatar_url'] + " 2x"}
+                                                    loading="lazy"
+                                                    alt="user profile photo"
+                                                />
+                                                : <Jdenticon size="150" value={localUserInfo.openid} />
+                                            )
+                                            : <PersonIcon />
+                                        }
                                     </AspectRatio>
                                 </Stack>
                             </Grid>
