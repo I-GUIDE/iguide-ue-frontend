@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useOutletContext } from 'react-router-dom';
+import AvatarEditor from 'react-avatar-editor';
 
 import Card from '@mui/joy/Card';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -13,12 +14,14 @@ import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Button from '@mui/joy/Button';
 import Textarea from '@mui/joy/Textarea';
+import Slider from '@mui/joy/Slider';
 import { styled } from '@mui/joy';
 
 import { IMAGE_SIZE_LIMIT } from '../configs/ResourceTypes';
 
 import UserProfileEditStatusCard from './UserProfileEditStatusCard';
 import { fetchUser, updateUser } from '../utils/UserManager';
+import { dataURLtoFile } from '../helpers/helper';
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
@@ -55,6 +58,10 @@ export default function UserProfileEditCard(props) {
     const [profilePictureFile, setProfilePictureFile] = useState();
     const [profilePictureFileURL, setProfilePictureFileURL] = useState();
 
+    const editor = useRef(null);
+    const [profilePictureScale, setProfilePictureScale] = useState(1);
+    const [profilePictureCropped, setProfilePictureCropped] = useState();
+
     useEffect(() => {
         const fetchUserInfoFromDB = async () => {
             console.log('fetching user info from DB...')
@@ -77,7 +84,12 @@ export default function UserProfileEditCard(props) {
         }
     }, [userInfo]);
 
-    const handleProfilePictureUpload = (event) => {
+    function handleScaleChange(event) {
+        const scale = parseFloat(event.target.value);
+        setProfilePictureScale(scale);
+    }
+
+    function handleProfilePictureUpload(event) {
         const profilePicture = event.target.files[0];
         if (!profilePicture.type.startsWith('image/')) {
             alert('Please upload an image!');
@@ -95,7 +107,7 @@ export default function UserProfileEditCard(props) {
         setProfilePictureFileURL(URL.createObjectURL(profilePicture));
     }
 
-    const handleSubmit = async (event) => {
+    async function handleSubmit(event) {
         event.preventDefault();
         const data = {};
         let avatar_url = '';
@@ -103,7 +115,10 @@ export default function UserProfileEditCard(props) {
         // If user uploads a new profile picture, use the new one, otherwise, use the existing one.
         if (profilePictureFile) {
             const formData = new FormData();
-            formData.append('file', profilePictureFile);
+            const theFile = dataURLtoFile(profilePictureCropped, 'user-upload.png');
+            // formData.append('file', profilePictureFile);
+            console.log('img file', theFile);
+            formData.append('file', theFile);
 
             const response = await fetch(`${USER_BACKEND_URL}/api/upload-avatar`, {
                 method: 'POST',
@@ -213,13 +228,36 @@ export default function UserProfileEditCard(props) {
                         {profilePictureFileURL &&
                             <div>
                                 <Typography>Profile picture preview</Typography>
-                                <AspectRatio ratio="1" sx={{ width: 190 }}>
+                                <AvatarEditor
+                                    ref={editor}
+                                    image={profilePictureFile}
+                                    width={250}
+                                    height={250}
+                                    border={50}
+                                    scale={profilePictureScale}
+                                />
+                                <Button onClick={() => {
+                                    if (editor) {
+                                        const profilePictureCropped = editor.current?.getImageScaledToCanvas().toDataURL()
+                                        setProfilePictureCropped(profilePictureCropped);
+                                    }
+                                }}>Save</Button>
+                                Zoom:{' '}
+                                <Slider
+                                    name="scale"
+                                    onChange={handleScaleChange}
+                                    min={1}
+                                    max={2}
+                                    step={0.01}
+                                    defaultValue={1}
+                                />
+                                {profilePictureCropped &&
                                     <img
-                                        src={profilePictureFileURL}
-                                        loading="lazy"
-                                        alt="Profile picture preview"
+                                        alt=""
+                                        src={profilePictureCropped}
                                     />
-                                </AspectRatio>
+                                }
+
                             </div>
                         }
                     </FormControl>
