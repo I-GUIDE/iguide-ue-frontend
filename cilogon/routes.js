@@ -10,8 +10,10 @@ router.get('/login',
         console.log('/Start login handler');
         next();
     },
-    passport.authenticate('oidc', { scope: "openid profile email org.cilogon.userinfo" }
-    )
+    passport.authenticate('oidc', {
+        scope: "openid profile email org.cilogon.userinfo",
+        initialidp: "urn:mace:incommon:uiuc.edu"
+    })
 );
 
 router.get('/cilogon-callback', (req, res, next) => {

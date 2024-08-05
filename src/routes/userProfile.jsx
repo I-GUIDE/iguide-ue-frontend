@@ -207,7 +207,7 @@ export default function UserProfile() {
             <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
                 <JoyCssVarsProvider>
                     <CssBaseline enableColorScheme />
-                    <Header title="Please fill out required fields" />
+                    <Header title="Please complete your profile" />
                     <Container maxWidth="xl">
                         <Box
                             component="main"
