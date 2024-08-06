@@ -57,3 +57,23 @@ export function dataURLtoFile(dataURL, filename) {
     }
     return new File([u8arr], filename, { type: mime });
 }
+
+/**
+ * Truncate a string with the option to add an end decorator
+ * @param {string} input the input string
+ * @param {Int} start starting index
+ * @param {Int} len the length of the output string
+ * @param {string} [endDecorator="..."] the end decorator after the truncated string
+ * @return {string} the truncated string with the optional end decorator
+ */
+export function stringTruncator(input, start, len, endDecorator="...") {
+    if (typeof input !== "string") {
+        return null;
+    }
+
+    if (input.length <= len) {
+        return input;
+    }
+
+    return (input.slice(start, len) + endDecorator);
+}

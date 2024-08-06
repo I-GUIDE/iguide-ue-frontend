@@ -10,7 +10,7 @@ import Chip from '@mui/joy/Chip';
 import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 
-import { printListWithDelimiter } from '../helpers/helper';
+import { printListWithDelimiter, stringTruncator } from '../helpers/helper';
 import { RESOURCE_TYPE_COLORS, RESOURCE_TYPE_NAMES } from '../configs/ResourceTypes';
 
 export default function InfoCard(props) {
@@ -31,10 +31,7 @@ export default function InfoCard(props) {
         tagsForNarrowWidth = tags.slice(0, 3);
     }
 
-    let contentsTruncated = contents;
-    if (contentsTruncated.length > 200) {
-        contentsTruncated = contents.substring(0, 200);
-    }
+    const contentsTruncated = stringTruncator(contents, 0, 200, "");
 
     return (
         <Card
@@ -127,6 +124,7 @@ export default function InfoCard(props) {
                         {tags?.map((tag) => {
                             // Make sure that the tag only renders when it has content
                             if (tag && tag !== '') {
+                                const displayTagName = stringTruncator(tag, 0, 30);
                                 return (
                                     <Chip
                                         key={tag}
@@ -135,7 +133,7 @@ export default function InfoCard(props) {
                                         size="sm"
                                         sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
                                     >
-                                        {tag}
+                                        {displayTagName}
                                     </Chip>
                                 )
                             }
@@ -156,6 +154,7 @@ export default function InfoCard(props) {
                         {tagsForNarrowWidth?.map((tag) => {
                             // Make sure that the tag only renders when it has content
                             if (tag && tag !== '') {
+                                const displayTagName = stringTruncator(tag, 0, 30);
                                 return (
                                     <Chip
                                         key={tag}
@@ -164,7 +163,7 @@ export default function InfoCard(props) {
                                         size="sm"
                                         sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
                                     >
-                                        {tag}
+                                        {displayTagName}
                                     </Chip>
                                 )
                             }
