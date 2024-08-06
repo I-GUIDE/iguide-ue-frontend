@@ -89,11 +89,13 @@ export default function SearchResults() {
             setData((current) => ({ ...current, status: 'loading' }));
             try {
                 const returnResults = await DataSearcher(searchTerm, searchCategory, 'prioritize_title_author', 'desc', currentStartingIdx, itemsPerPage);
-                const resourceCount = await getResourceCount(searchCategory, searchTerm);
 
-                setNumberOfTotalItems(resourceCount);
-                setNumberOfPages(Math.ceil(resourceCount / itemsPerPage));
-                setSearchResults(returnResults);
+                const returnElements = (returnResults.elements ? returnResults.elements : []);
+                const returnElementsCount = (returnResults["total_count"] ? returnResults["total_count"] : 0);
+
+                setNumberOfTotalItems(returnElementsCount);
+                setNumberOfPages(Math.ceil(returnElementsCount / itemsPerPage));
+                setSearchResults(returnElements);
 
                 // Replace timeout with real backend operation
                 setTimeout(() => {
