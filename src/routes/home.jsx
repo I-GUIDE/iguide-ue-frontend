@@ -86,7 +86,7 @@ export default function Home() {
                     component="main"
                     sx={{
                         minHeight: HOME_BODY_HEIGHT,
-                        // display: 'grid',
+                        display: 'grid',
                         gridTemplateColumns: { xs: 'auto', md: '100%' },
                         gridTemplateRows: 'auto 1fr auto',
                     }}
@@ -107,64 +107,71 @@ export default function Home() {
                             }}
                         >
                             <Container maxWidth="lg">
-                                <Box
-                                    component="main"
-                                    sx={{
-                                        height: '25%',
-                                        display: 'grid',
-                                        gridTemplateColumns: { xs: 'auto', md: '100%' },
-                                        gridTemplateRows: 'auto 1fr auto',
-                                    }}
+                                <Container
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    maxWidth="md"
                                 >
-                                    <Typography
-                                        level="h1"
-                                        textColor={'#fff'}
-                                        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 5 }}
-                                        endDecorator={
-                                            <Chip component="span" size="sm">
-                                                BETA
-                                            </Chip>
-                                        }
+                                    <Box
+                                        component="main"
+                                        sx={{
+                                            height: '25%',
+                                            display: 'grid',
+                                            gridTemplateColumns: { xs: 'auto', md: '100%' },
+                                            gridTemplateRows: 'auto 1fr auto',
+                                        }}
                                     >
-                                        I-GUIDE Platform
-                                    </Typography>
-                                    <form onSubmit={handleSubmit} id="iguide-search-form">
-                                        <Input
-                                            key="iguide-search-homepage"
-                                            required
-                                            variant="plain"
-                                            sx={{ '--Input-decoratorChildHeight': '50px' }}
-                                            placeholder="Search..."
-                                            type="text"
-                                            value={searchTerm}
-                                            onChange={(event) => {
-                                                setData({ content: event.target.value, status: 'initial' })
-                                                setSearchTerm(event.target.value)
-                                            }}
-                                            error={data.status === 'failure'}
+                                        <Typography
+                                            level="h1"
+                                            textColor={'#fff'}
+                                            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 5 }}
                                             endDecorator={
-                                                <IconButton
-                                                    size='lg'
-                                                    variant="plain"
-                                                    loading={data.status === 'loading'}
-                                                    type="submit"
-                                                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                                                >
-                                                    <SearchIcon />
-                                                </IconButton>
+                                                <Chip component="span" size="sm">
+                                                    BETA
+                                                </Chip>
                                             }
-                                        />
-                                        <FormControl>
-                                            {data.status === 'failure' && (
-                                                <FormHelperText
-                                                    sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
-                                                >
-                                                    Oops! Something went wrong, please try again later.
-                                                </FormHelperText>
-                                            )}
-                                        </FormControl>
-                                    </form>
-                                </Box>
+                                        >
+                                            I-GUIDE Platform
+                                        </Typography>
+                                        <form onSubmit={handleSubmit} id="iguide-search-form">
+                                            <Input
+                                                key="iguide-search-homepage"
+                                                required
+                                                variant="plain"
+                                                sx={{ '--Input-decoratorChildHeight': '50px' }}
+                                                placeholder="Search..."
+                                                type="text"
+                                                value={searchTerm}
+                                                onChange={(event) => {
+                                                    setData({ content: event.target.value, status: 'initial' })
+                                                    setSearchTerm(event.target.value)
+                                                }}
+                                                error={data.status === 'failure'}
+                                                endDecorator={
+                                                    <IconButton
+                                                        size='lg'
+                                                        variant="plain"
+                                                        loading={data.status === 'loading'}
+                                                        type="submit"
+                                                        sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                                                    >
+                                                        <SearchIcon />
+                                                    </IconButton>
+                                                }
+                                            />
+                                            <FormControl>
+                                                {data.status === 'failure' && (
+                                                    <FormHelperText
+                                                        sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
+                                                    >
+                                                        Oops! Something went wrong, please try again later.
+                                                    </FormHelperText>
+                                                )}
+                                            </FormControl>
+                                        </form>
+                                    </Box>
+                                </Container>
+                                
                                 {hasFeaturedResources &&
                                     <Box
                                         component="main"
