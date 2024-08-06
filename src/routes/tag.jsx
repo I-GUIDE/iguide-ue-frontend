@@ -6,14 +6,14 @@ import { stringTruncator } from '../helpers/helper';
 
 export default function Tag() {
     const tagName = useParams().id;
-    const displayTagName = stringTruncator(tagName, 0, 30);
+    const displayTagName = stringTruncator(tagName, 0, 25);
 
     return (
         <ElementList
             fieldName='tags'
             matchValue={[tagName]}
-            title={'Tag name: \"' + displayTagName + '\"'}
-            subtitle='Elements containing the given tag name'
+            title={'Tag: \"' + displayTagName + '\"'}
+            subtitle=""
         />
     )
 }

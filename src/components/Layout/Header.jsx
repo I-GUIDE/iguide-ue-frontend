@@ -9,6 +9,9 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 
 export default function Header(props) {
+    const title = props.title ? props.title : "";
+    const subtitle = props.subtitle ? props.subtitle : "";
+
     return (
         <Box
             sx={{ display: 'flex', flexWrap: 'wrap', p: 0, m: 0, height: 150 }}
@@ -24,14 +27,18 @@ export default function Header(props) {
                 </CardCover>
                 <CardContent>
                     <Container maxWidth="xl">
-                        <Stack sx={{ m: 3 }}>
-                            <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
-                                <Typography level="h2" textColor="#fff">
-                                    {props.title}
+                        <Stack spacing={1} sx={{ m: 3 }}>
+                            {title.length > 30 ?
+                                <Typography level="h3" textColor="#fff" >
+                                    {title}
                                 </Typography>
-                            </Stack>
+                                :
+                                <Typography level="h2" textColor="#fff">
+                                    {title}
+                                </Typography>
+                            }
                             <Typography level="body-md" textColor="#fff">
-                                {props.subtitle}
+                                {subtitle}
                             </Typography>
                         </Stack>
                     </Container>
