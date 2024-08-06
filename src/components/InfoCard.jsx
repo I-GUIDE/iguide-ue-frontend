@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import AspectRatio from '@mui/joy/AspectRatio';
+import Stack from '@mui/joy/Stack';
 import Link from '@mui/joy/Link';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
@@ -24,18 +25,29 @@ export default function InfoCard(props) {
     const categoryColor = RESOURCE_TYPE_COLORS[cardType];
     const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
+    // Only display the first 3 tags when the window is narrow
+    let tagsForNarrowWidth = tags;
+    if (tags && Array.isArray(tags) && tags.length > 3) {
+        tagsForNarrowWidth = tags.slice(0, 3);
+    }
+
+    let contentsTruncated = contents;
+    if (contentsTruncated.length > 200) {
+        contentsTruncated = contents.substring(0, 200);
+    }
+
     return (
         <Card
             variant="outlined"
             orientation="horizontal"
             sx={{
                 width: "100%",
-                height: 220,
+                minHeight: 220,
                 '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
             }}
         >
             {/* Only display the thumbnail when the width is wider than 900px */}
-            <AspectRatio ratio="1" sx={{ width: 190, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+            <AspectRatio ratio="1" sx={{ width: 190, display: { xs: 'none', md: 'flex' } }}>
                 {thumbnailImage ?
                     <img
                         src={thumbnailImage}
@@ -66,28 +78,28 @@ export default function InfoCard(props) {
                 >
                     {title}
                 </Typography>
-                <Typography
-                    level="title-md"
-                    aria-describedby="card-description"
-                    sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: "1",
-                        WebkitBoxOrient: "vertical",
-                        m: 0.5
-                    }}
+                <Link
+                    overlay
+                    underline="none"
+                    href={"/" + cardType + "/" + pageid}
+                    sx={{ color: 'text.tertiary' }}
                 >
-                    Author{authors.length > 1 && 's'}:&nbsp;
-                    <Link
-                        overlay
-                        underline="none"
-                        href={"/" + cardType + "/" + pageid}
-                        sx={{ color: 'text.tertiary' }}
+                    <Typography
+                        level="title-md"
+                        aria-describedby="card-description"
+                        sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: "1",
+                            WebkitBoxOrient: "vertical",
+                            m: 0.5
+                        }}
                     >
+                        Author{authors.length > 1 && 's'}:&nbsp;
                         {printListWithDelimiter(authors, ',')}
-                    </Link>
-                </Typography>
+                    </Typography>
+                </Link>
                 <Typography
                     level="body-sm"
                     sx={{
@@ -99,30 +111,70 @@ export default function InfoCard(props) {
                         m: 0.5
                     }}
                 >
-                    {contents}
+                    {contentsTruncated}
                 </Typography>
                 <Box
-                    direction="row"
                     justifyContent="flex-start"
-                    alignItems="flex-end"
                     spacing={1}
+                    sx={{ display: { xs: 'none', md: 'flex' } }}
                 >
-                    {tags?.map((tag) => {
-                        // Make sure that the tag only renders when it has content
-                        if (tag && tag !== '') {
-                            return (
-                                <Chip
-                                    key={tag}
-                                    variant="outlined"
-                                    color="primary"
-                                    size="sm"
-                                    sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
-                                >
-                                    {tag}
-                                </Chip>
-                            )
+                    <Stack
+                        direction="row"
+                        flexWrap="wrap"
+                        alignItems="center"
+                        useFlexGap
+                    >
+                        {tags?.map((tag) => {
+                            // Make sure that the tag only renders when it has content
+                            if (tag && tag !== '') {
+                                return (
+                                    <Chip
+                                        key={tag}
+                                        variant="outlined"
+                                        color="primary"
+                                        size="sm"
+                                        sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
+                                    >
+                                        {tag}
+                                    </Chip>
+                                )
+                            }
+                        })}
+                    </Stack>
+                </Box>
+                <Box
+                    justifyContent="flex-start"
+                    spacing={1}
+                    sx={{ display: { xs: 'flex', md: 'none' } }}
+                >
+                    <Stack
+                        direction="row"
+                        flexWrap="wrap"
+                        alignItems="center"
+                        useFlexGap
+                    >
+                        {tagsForNarrowWidth?.map((tag) => {
+                            // Make sure that the tag only renders when it has content
+                            if (tag && tag !== '') {
+                                return (
+                                    <Chip
+                                        key={tag}
+                                        variant="outlined"
+                                        color="primary"
+                                        size="sm"
+                                        sx={{ pointerEvents: 'none', my: 1, mx: 0.5 }}
+                                    >
+                                        {tag}
+                                    </Chip>
+                                )
+                            }
+                        })}
+                        {tags?.length > 3 &&
+                            <Typography>
+                                ...
+                            </Typography>
                         }
-                    })}
+                    </Stack>
                 </Box>
             </CardContent>
             <CardOverflow
