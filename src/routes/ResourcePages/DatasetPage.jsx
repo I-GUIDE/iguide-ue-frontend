@@ -103,7 +103,7 @@ function DatasetPage() {
                         </Grid>
 
                         <Grid md={12}>
-                            <GoBackButton parentPage="/datasets" parentPageName="Datasets" resourceType="dataset" />
+                            <GoBackButton parentPage="/datasets" parentPageName="Datasets" />
                         </Grid>
                     </Grid>
                 </Box>

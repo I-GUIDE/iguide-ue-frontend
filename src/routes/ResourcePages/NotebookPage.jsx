@@ -99,7 +99,7 @@ function NotebookPage() {
                             <NotebookViewer repoUrl={repoUrl} notebookFile={notebookFile} htmlNotebook={htmlNotebook} />
                         </Grid>
                         <Grid md={12}>
-                            <GoBackButton parentPage="/notebooks" parentPageName="Notebooks" resourceType="notebook" />
+                            <GoBackButton parentPage="/notebooks" parentPageName="Notebooks" />
                         </Grid>
                     </Grid>
                 </Box>
