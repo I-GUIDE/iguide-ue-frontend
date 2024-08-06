@@ -9,8 +9,6 @@ import Stack from '@mui/joy/Stack';
 import Button from '@mui/joy/Button';
 import ButtonGroup from '@mui/joy/ButtonGroup';
 import MenuItem from '@mui/joy/MenuItem';
-import MenuList from '@mui/joy/MenuList';
-import { styled } from '@mui/joy/styles';
 import Menu from '@mui/joy/Menu';
 import ListDivider from '@mui/joy/ListDivider';
 import MenuButton from '@mui/joy/MenuButton';
@@ -21,9 +19,7 @@ import List from '@mui/joy/List';
 import Divider from '@mui/joy/Divider';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
-
-import { Popper } from '@mui/base/Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import ModalClose from '@mui/joy/ModalClose';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
@@ -33,29 +29,27 @@ export default function NavBar(props) {
     const isAuthenticated = props.isAuthenticated;
     const localUserInfo = props.localUserInfo;
 
-    const Popup = styled(Popper)({
-        zIndex: 1000,
-    });
-
     const buttonRef = React.useRef(null);
     const [open, setOpen] = React.useState(false);
 
-    const toggleDrawer = (inOpen) => (event) => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-        setOpen(inOpen);
-    };
+    function toggleDrawer(inOpen) {
+        return (event) => {
+            if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+                return;
+            }
+            setOpen(inOpen);
+        };
+    }
 
     // Redirect users to the auth backend for login
-    const login = () => {
+    function login() {
         window.open(AUTH_BACKEND_URL + "/login", "_self");
     }
 
     // Redirect users to auth backend for logout
-    const logout = () => {
+    function logout() {
         window.open(AUTH_BACKEND_URL + "/logout", "_self");
-    };
+    }
 
     function UserAvatar() {
         if (localUserInfo) {
@@ -250,6 +244,7 @@ export default function NavBar(props) {
                         <MenuIcon />
                     </Button>
                     <Drawer open={open} onClose={toggleDrawer(false)}>
+                        <ModalClose />
                         <Box
                             role="presentation"
                             onClick={toggleDrawer(false)}
@@ -276,7 +271,6 @@ export default function NavBar(props) {
                         src="/images/Logo.png"
                     />
                 </Stack>
-
             </Stack>
 
             {/* When page is wider than 960px */}
