@@ -22,15 +22,13 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import Chip from '@mui/joy/Chip';
 
 import FeaturedCard from '../components/FeaturedCard';
 import { featuredResourcesRetriever } from '../utils/DataRetrieval';
-import { RESOURCE_TYPE_COLORS, HOME_BODY_HEIGHT } from '../configs/ResourceTypes';
+import { HOME_BODY_HEIGHT } from '../configs/ResourceTypes';
 
-function Home() {
+export default function Home() {
     // define search data
     const [data, setData] = useState({
         content: '',
@@ -78,11 +76,6 @@ function Home() {
         event.preventDefault();
         setSearchParams({ keyword: searchTerm, type: searchCategory });
         navigate(`/search-results?keyword=${encodeURIComponent(searchTerm)}&type=${searchCategory}`);
-    }
-
-    // When user select a different category in the search bar
-    function handleSelectChange(event, value) {
-        setSearchCategory(value);
     }
 
     return (
@@ -135,42 +128,24 @@ function Home() {
                                     >
                                         I-GUIDE Platform
                                     </Typography>
-                                    <form onSubmit={handleSubmit} id="demo">
+                                    <form onSubmit={handleSubmit} id="iguide-search-form">
                                         <Input
-                                            key="search"
+                                            key="iguide-search-homepage"
+                                            required
                                             variant="plain"
-                                            color={RESOURCE_TYPE_COLORS[searchCategory]}
                                             sx={{ '--Input-decoratorChildHeight': '50px' }}
                                             placeholder="Search..."
                                             type="text"
-                                            required
-                                            size="xl"
                                             value={searchTerm}
                                             onChange={(event) => {
                                                 setData({ content: event.target.value, status: 'initial' })
                                                 setSearchTerm(event.target.value)
                                             }}
                                             error={data.status === 'failure'}
-                                            startDecorator={
-                                                <Select
-                                                    defaultValue="any"
-                                                    value={searchCategory}
-                                                    variant="plain"
-                                                    color={RESOURCE_TYPE_COLORS[searchCategory]}
-                                                    onChange={handleSelectChange}
-                                                >
-                                                    <Option value="any">All Elements</Option>
-                                                    <Option value="dataset">Dataset</Option>
-                                                    <Option value="notebook">Notebook</Option>
-                                                    <Option value="publication">Publication</Option>
-                                                    <Option value="oer">Educational Resource</Option>
-                                                </Select>
-                                            }
                                             endDecorator={
                                                 <IconButton
                                                     size='lg'
                                                     variant="plain"
-                                                    color={RESOURCE_TYPE_COLORS[searchCategory]}
                                                     loading={data.status === 'loading'}
                                                     type="submit"
                                                     sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
@@ -256,5 +231,3 @@ function Home() {
         </MaterialCssVarsProvider>
     )
 }
-
-export default Home;

@@ -24,15 +24,16 @@ import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import Pagination from '@mui/material/Pagination';
 import Chip from '@mui/joy/Chip';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
 
 import InfoCard from '../components/InfoCard';
 import { DataSearcher, getResourceCount } from '../utils/DataRetrieval';
 import { arrayLength } from '../helpers/helper';
-import { RESOURCE_TYPE_COLORS, SEARCH_RESULTS_BODY_HEIGHT } from '../configs/ResourceTypes';
+import { SEARCH_RESULTS_BODY_HEIGHT } from '../configs/ResourceTypes';
 
 export default function SearchResults() {
     // define search data
@@ -184,38 +185,20 @@ export default function SearchResults() {
                                     <Input
                                         key="search"
                                         variant="plain"
-                                        color={RESOURCE_TYPE_COLORS[searchCategory]}
                                         sx={{ '--Input-decoratorChildHeight': '45px' }}
                                         placeholder="Search..."
                                         type="text"
                                         required
-                                        size="xl"
                                         value={nextSearchTerm}
                                         onChange={(event) => {
                                             setData({ content: event.target.value, status: 'initial' })
                                             setNextSearchTerm(event.target.value)
                                         }}
                                         error={data.status === 'failure'}
-                                        startDecorator={
-                                            <Select
-                                                defaultValue="any"
-                                                value={searchCategory}
-                                                variant="plain"
-                                                color={RESOURCE_TYPE_COLORS[searchCategory]}
-                                                onChange={handleSelectChange}
-                                            >
-                                                <Option value="any">All Elements</Option>
-                                                <Option value="dataset">Dataset</Option>
-                                                <Option value="notebook">Notebook</Option>
-                                                <Option value="publication">Publication</Option>
-                                                <Option value="oer">Educational Resource</Option>
-                                            </Select>
-                                        }
                                         endDecorator={
                                             <IconButton
                                                 size="lg"
                                                 variant="plain"
-                                                color={RESOURCE_TYPE_COLORS[searchCategory]}
                                                 loading={data.status === 'loading'}
                                                 type="submit"
                                                 sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
@@ -261,6 +244,54 @@ export default function SearchResults() {
                         >
                             <Grid xs={12}>
                                 <Stack spacing={2} sx={{ px: { xs: 2, md: 4, width: '100%' }, pt: 2, minHeight: 0 }}>
+                                    {/* Tabs for filtering element types */}
+                                    <Tabs
+                                        aria-label="Search-filter-by-types"
+                                        defaultValue="any"
+                                        value={searchCategory}
+                                        onChange={handleSelectChange}
+                                        sx={{ width: "100%" }}
+                                    >
+                                        <TabList
+                                            sx={{
+                                                overflow: 'auto',
+                                                scrollSnapType: 'x mandatory',
+                                                '&::-webkit-scrollbar': { display: 'none' },
+                                            }}
+                                        >
+                                            <Tab
+                                                value="any"
+                                                sx={{ flex: 'none', scrollSnapAlign: 'start' }}
+                                            >
+                                                All
+                                            </Tab>
+                                            <Tab
+                                                value="dataset"
+                                                sx={{ flex: 'none', scrollSnapAlign: 'start' }}
+                                            >
+                                                Datasets
+                                            </Tab>
+                                            <Tab
+                                                value="notebook"
+                                                sx={{ flex: 'none', scrollSnapAlign: 'start' }}
+                                            >
+                                                Notebooks
+                                            </Tab>
+                                            <Tab
+                                                value="publication"
+                                                sx={{ flex: 'none', scrollSnapAlign: 'start' }}
+                                            >
+                                                Publications
+                                            </Tab>
+                                            <Tab
+                                                value="oer"
+                                                sx={{ flex: 'none', scrollSnapAlign: 'start' }}
+                                            >
+                                                Educational Resources
+                                            </Tab>
+                                        </TabList>
+                                    </Tabs>
+                                    
                                     {/* Search result summary and "clear search button" */}
                                     {hasSearchParam &&
                                         <Stack
