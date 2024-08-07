@@ -95,14 +95,23 @@ export default function Home() {
                                         <Typography
                                             level="h1"
                                             textColor={'#fff'}
-                                            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 5 }}
+                                            sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', pt: 4, pb: 0.5 }}
                                             endDecorator={
                                                 <Chip component="span" size="sm">
                                                     BETA
                                                 </Chip>
                                             }
+                                            justifyContent="center"
                                         >
                                             I-GUIDE Platform
+                                        </Typography>
+                                        <Typography
+                                            level="title-md"
+                                            textColor={'#FCF5E5'}
+                                            sx={{ display: 'flex', flexDirection: 'row', pt: 0.5, pb: 4 }}
+                                            justifyContent="center"
+                                        >
+                                            Harnessing the Geospatial Data Revolution to Empower Convergence Science
                                         </Typography>
                                         <SearchBar />
                                     </Box>
