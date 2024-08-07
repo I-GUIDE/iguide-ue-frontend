@@ -81,11 +81,7 @@ export default function Home() {
               }}
             >
               <Container maxWidth="lg">
-                <Container
-                  alignItems="center"
-                  justifyContent="center"
-                  maxWidth="md"
-                >
+                <Container maxWidth="md">
                   <Box
                     component="main"
                     sx={{
