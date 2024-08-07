@@ -12,7 +12,6 @@ import { fetchResourcesByField } from "../../utils/DataRetrieval";
 
 export default function RelatedResourcesList(props) {
   const title = props.title;
-  const relatedResourceType = props.relatedResourceType;
   const relatedResourcesIds = props.relatedResourcesIds;
 
   const [relatedResources, setRelatedResources] = useState([]);
@@ -44,7 +43,7 @@ export default function RelatedResourcesList(props) {
 
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Typography id="" level="h5" fontWeight="lg" mb={1}>
+      <Typography level="h5" fontWeight="lg" mb={1}>
         {title}
       </Typography>
       <Divider inset="none" />
@@ -53,8 +52,8 @@ export default function RelatedResourcesList(props) {
           {relatedResources?.map((relatedResource) => (
             <Grid
               key={relatedResource._id}
-              xs={6}
-              md={4}
+              xs={12}
+              sm={6}
               display="flex"
               justifyContent="center"
               alignItems="center"

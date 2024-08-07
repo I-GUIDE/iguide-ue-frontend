@@ -92,31 +92,52 @@ export default function NotebookPage() {
               />
             </Grid>
 
-            <Grid xs={12} lg={5}>
+            {/* When the page is narrower than md */}
+            <Grid sx={{ display: { xs: "block", md: "none" } }} xs={12}>
               <CapsuleList title="Tags" items={tags} />
+              <NotebookViewer
+                repoUrl={repoUrl}
+                notebookFile={notebookFile}
+                htmlNotebook={htmlNotebook}
+              />
               <RelatedResourcesList
                 title="Related Datasets"
                 relatedResourcesIds={relatedDatasets}
-                relatedResourceType="dataset"
               />
               <RelatedResourcesList
                 title="Related Publications"
                 relatedResourcesIds={relatedPublications}
-                relatedResourceType="publication"
               />
               <RelatedResourcesList
                 title="Related Educational Resources"
                 relatedResourcesIds={relatedOERs}
-                relatedResourceType="oer"
               />
             </Grid>
-            <Grid xs={12} lg={7}>
+
+            {/* When the page is wider than md */}
+            <Grid sx={{ display: { xs: "none", md: "block" } }} md={5}>
+              <CapsuleList title="Tags" items={tags} />
+              <RelatedResourcesList
+                title="Related Datasets"
+                relatedResourcesIds={relatedDatasets}
+              />
+              <RelatedResourcesList
+                title="Related Publications"
+                relatedResourcesIds={relatedPublications}
+              />
+              <RelatedResourcesList
+                title="Related Educational Resources"
+                relatedResourcesIds={relatedOERs}
+              />
+            </Grid>
+            <Grid sx={{ display: { xs: "none", md: "block" } }} md={7}>
               <NotebookViewer
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
             </Grid>
+
             <Grid xs={12}>
               <GoBackButton
                 parentPage="/notebooks"

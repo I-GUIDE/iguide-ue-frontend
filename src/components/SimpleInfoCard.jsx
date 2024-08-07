@@ -7,6 +7,8 @@ import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import Box from "@mui/joy/Box";
+import Tooltip from "@mui/joy/Tooltip";
 
 import {
   RESOURCE_TYPE_COLORS,
@@ -24,63 +26,82 @@ export default function SimpleInfoCard(props) {
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        width: 300,
-        minHeight: minHeight,
-        "&:hover": {
-          borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-          transform: "translateY(-2px)",
-        },
-      }}
-    >
-      <CardOverflow>
-        <AspectRatio ratio="2">
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
-        </AspectRatio>
-      </CardOverflow>
-      <CardContent>
-        <Link
-          overlay
-          underline="none"
-          href={"/" + cardType + "/" + pageId}
-          sx={{ color: "text.tertiary" }}
+    <Tooltip
+      title={
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            maxWidth: 300,
+            justifyContent: "center",
+            p: 1,
+          }}
         >
-          <Stack>
-            <Typography
-              level="body-xs"
-              textColor="#000"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "2",
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              {title}
-            </Typography>
-          </Stack>
-        </Link>
-      </CardContent>
-      <CardOverflow
-        variant="soft"
-        color={categoryColor}
+          <Typography level="title-sm">{title}</Typography>
+        </Box>
+      }
+      variant="soft"
+      placement="top-end"
+      color={categoryColor}
+    >
+      <Card
+        variant="outlined"
         sx={{
-          px: 2,
-          py: 1,
-          justifyContent: "center",
-          fontSize: "xs",
-          fontWeight: "xl",
-          letterSpacing: "1px",
-          textTransform: "uppercase",
-          borderLeft: "1px solid",
-          borderColor: "divider",
+          width: 300,
+          minHeight: minHeight,
+          "&:hover": {
+            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+            transform: "translateY(-2px)",
+          },
         }}
       >
-        {categoryName}
-      </CardOverflow>
-    </Card>
+        <CardOverflow>
+          <AspectRatio ratio="2">
+            <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          </AspectRatio>
+        </CardOverflow>
+        <CardContent>
+          <Link
+            overlay
+            underline="none"
+            href={"/" + cardType + "/" + pageId}
+            sx={{ color: "text.tertiary" }}
+          >
+            <Stack>
+              <Typography
+                level="body-xs"
+                textColor="#000"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "2",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {title}
+              </Typography>
+            </Stack>
+          </Link>
+        </CardContent>
+        <CardOverflow
+          variant="soft"
+          color={categoryColor}
+          sx={{
+            px: 2,
+            py: 1,
+            justifyContent: "center",
+            fontSize: "xs",
+            fontWeight: "xl",
+            letterSpacing: "1px",
+            textTransform: "uppercase",
+            borderLeft: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          {categoryName}
+        </CardOverflow>
+      </Card>
+    </Tooltip>
   );
 }
