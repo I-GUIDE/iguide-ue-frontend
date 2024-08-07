@@ -21,6 +21,7 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ModalClose from '@mui/joy/ModalClose';
 import MenuIcon from '@mui/icons-material/Menu';
+import { AspectRatio } from '@mui/joy';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
@@ -76,12 +77,12 @@ export default function NavBar(props) {
                 <ButtonGroup
                     color="primary"
                     orientation="horizontal"
-                    size="md"
+                    size="sm"
                     variant="plain"
-                    spacing="0.5rem"
+                    spacing="0.01rem"
                 >
                     <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                        JupyterHub
+                        <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
                     </Button>
                     <Dropdown>
                         <MenuButton color="primary">
@@ -132,12 +133,12 @@ export default function NavBar(props) {
                 <ButtonGroup
                     color="primary"
                     orientation="horizontal"
-                    size="md"
+                    size="sm"
                     variant="plain"
-                    spacing="0.5rem"
+                    spacing="0.01rem"
                 >
                     <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                        JupyterHub
+                        <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
                     </Button>
                     <Button size="sm" color="primary" onClick={login}>
                         Login
