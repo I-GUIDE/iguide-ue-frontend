@@ -8,9 +8,9 @@
  * @return {string} the value of fieldOut
  */
 export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
-    console.log(jsonData)
-    const index = jsonData.findIndex(entry => entry[fieldIn] == valueIn);
-    return jsonData[index][fieldOut];
+  console.log(jsonData);
+  const index = jsonData.findIndex((entry) => entry[fieldIn] == valueIn);
+  return jsonData[index][fieldOut];
 }
 
 /**
@@ -20,11 +20,11 @@ export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
  * @return {string} the string with all the items separated by the given delimiter.
  */
 export function printListWithDelimiter(listOfItems, delimiter) {
-    let returnStr = '';
-    for (var idx in listOfItems) {
-        returnStr += (listOfItems[idx] + delimiter + ' ')
-    }
-    return returnStr.slice(0, - 2);
+  let returnStr = "";
+  for (var idx in listOfItems) {
+    returnStr += listOfItems[idx] + delimiter + " ";
+  }
+  return returnStr.slice(0, -2);
 }
 
 /**
@@ -33,11 +33,11 @@ export function printListWithDelimiter(listOfItems, delimiter) {
  * @return {Int} the length of the array. If the object is undefine or not an array, return 0.
  */
 export function arrayLength(listOfItems) {
-    if (!listOfItems || !Array.isArray(listOfItems)) {
-        return 0;
-    }
+  if (!listOfItems || !Array.isArray(listOfItems)) {
+    return 0;
+  }
 
-    return listOfItems.length;
+  return listOfItems.length;
 }
 
 /**
@@ -47,15 +47,15 @@ export function arrayLength(listOfItems) {
  * @return {File} the file object converted from dataURL
  */
 export function dataURLtoFile(dataURL, filename) {
-    var arr = dataURL.split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[arr.length - 1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
+  var arr = dataURL.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[arr.length - 1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
 }
 
 /**
@@ -66,14 +66,14 @@ export function dataURLtoFile(dataURL, filename) {
  * @param {string} [endDecorator="..."] the end decorator after the truncated string
  * @return {string} the truncated string with the optional end decorator
  */
-export function stringTruncator(input, start, len, endDecorator="...") {
-    if (typeof input !== "string") {
-        return null;
-    }
+export function stringTruncator(input, start, len, endDecorator = "...") {
+  if (typeof input !== "string") {
+    return null;
+  }
 
-    if (input.length <= len) {
-        return input;
-    }
+  if (input.length <= len) {
+    return input;
+  }
 
-    return (input.slice(start, len) + endDecorator);
+  return input.slice(start, len) + endDecorator;
 }

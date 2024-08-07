@@ -1,4 +1,4 @@
-const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
+const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 /**
  * Fetch the information of a user given a uid
@@ -7,16 +7,16 @@ const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL
  * @throws {Error} Throws an error if fetching the user failed.
  */
 export async function fetchUser(uid) {
-    const openid = encodeURIComponent(uid);
-    const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`);
+  const openid = encodeURIComponent(uid);
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`);
 
-    if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`)
-    }
+  if (!response.ok) {
+    throw new Error(`Error: ${response.statusText}`);
+  }
 
-    const result = await response.json();
-    console.log('USER_MANAGER: fetched a user', result);
-    return result;
+  const result = await response.json();
+  console.log("USER_MANAGER: fetched a user", result);
+  return result;
 }
 
 /**
@@ -30,31 +30,38 @@ export async function fetchUser(uid) {
  * @return {Promise<Array<Dict>>} information of whether the operation was successful
  * @throws {Error} Throws an error if adding a user failed
  */
-export async function addUser(uid, first_name, last_name, email, affiliation, bio) {
-    const user = {
-        openid: uid,
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        affiliation: affiliation,
-        bio: bio
-    };
+export async function addUser(
+  uid,
+  first_name,
+  last_name,
+  email,
+  affiliation,
+  bio
+) {
+  const user = {
+    openid: uid,
+    first_name: first_name,
+    last_name: last_name,
+    email: email,
+    affiliation: affiliation,
+    bio: bio,
+  };
 
-    const response = await fetch(`${USER_BACKEND_URL}/api/users`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    });
+  const response = await fetch(`${USER_BACKEND_URL}/api/users`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
 
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${error.message}`)
-    }
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${error.message}`);
+  }
 
-    const result = await response.json();
-    console.log('USER_MANAGER: added a user', result, "user info", user)
-    return result;
+  const result = await response.json();
+  console.log("USER_MANAGER: added a user", result, "user info", user);
+  return result;
 }
 
 /**
@@ -69,33 +76,41 @@ export async function addUser(uid, first_name, last_name, email, affiliation, bi
  * @return {Promise<Array<Dict>>} information of whether the operation was successful
  * @throws {Error} Throws an error if updating a user failed
  */
-export async function updateUser(uid, first_name, last_name, email, affiliation, bio, avatar_url) {
-    const openId = encodeURIComponent(uid);
-    const user = {
-        openid: uid,
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        affiliation: affiliation,
-        bio: bio,
-        avatar_url: avatar_url
-    };
+export async function updateUser(
+  uid,
+  first_name,
+  last_name,
+  email,
+  affiliation,
+  bio,
+  avatar_url
+) {
+  const openId = encodeURIComponent(uid);
+  const user = {
+    openid: uid,
+    first_name: first_name,
+    last_name: last_name,
+    email: email,
+    affiliation: affiliation,
+    bio: bio,
+    avatar_url: avatar_url,
+  };
 
-    const response = await fetch(`${USER_BACKEND_URL}/api/users/${openId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    });
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
 
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${error.message}`)
-    }
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${error.message}`);
+  }
 
-    const result = await response.json();
-    console.log('USER_MANAGER: updated a user', result)
-    return result;
+  const result = await response.json();
+  console.log("USER_MANAGER: updated a user", result);
+  return result;
 }
 
 /**
@@ -105,18 +120,18 @@ export async function updateUser(uid, first_name, last_name, email, affiliation,
  * @throws {Error} Throws an error if deleting a user failed
  */
 export async function deleteUser(uid) {
-    const openid = encodeURIComponent(uid);
-    const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`, {
-        method: 'DELETE'
-    });
+  const openid = encodeURIComponent(uid);
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`, {
+    method: "DELETE",
+  });
 
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${error.message}`)
-    }
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${error.message}`);
+  }
 
-    const result = await response.json();
-    console.log('USER_MANAGER: deleted a user', result)
-    return result;
+  const result = await response.json();
+  console.log("USER_MANAGER: deleted a user", result);
+  return result;
 }
 
 /**
@@ -125,9 +140,9 @@ export async function deleteUser(uid) {
  * @return {Promise<boolean>} boolean value of whether the user exists
  */
 export async function checkUser(uid) {
-    const openid = encodeURIComponent(uid);
-    const response = await fetch(`${USER_BACKEND_URL}/api/check_users/${openid}`);
-    const exists = await response.json();
+  const openid = encodeURIComponent(uid);
+  const response = await fetch(`${USER_BACKEND_URL}/api/check_users/${openid}`);
+  const exists = await response.json();
 
-    return exists;
+  return exists;
 }
