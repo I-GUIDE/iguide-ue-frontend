@@ -31,9 +31,9 @@ import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 
 import InfoCard from '../components/InfoCard';
-import { DataSearcher, getResourceCount } from '../utils/DataRetrieval';
+import { DataSearcher } from '../utils/DataRetrieval';
 import { arrayLength } from '../helpers/helper';
-import { SEARCH_RESULTS_BODY_HEIGHT } from '../configs/ResourceTypes';
+import { SEARCH_RESULTS_BODY_HEIGHT, RESOURCE_TYPE_NAMES } from '../configs/ResourceTypes';
 
 export default function SearchResults() {
     // define search data
@@ -304,10 +304,12 @@ export default function SearchResults() {
                                         >
                                             {numberOfTotalItems > 0
                                                 ? <Typography>
-                                                    Searched "{searchTerm}", returned {currentStartingIdx + 1}-{currentStartingIdx + arrayLength(searchResults)} of {numberOfTotalItems}
+                                                    Searched "{searchTerm}"{(searchCategory !== "any") && " under \"" + RESOURCE_TYPE_NAMES[searchCategory] + "\""},
+                                                    returned {currentStartingIdx + 1}-{currentStartingIdx + arrayLength(searchResults)} of {numberOfTotalItems}
                                                 </Typography>
                                                 : <Typography>
-                                                    Searched "{searchTerm}", no items matched your criteria.
+                                                    Searched "{searchTerm}"{(searchCategory !== "any") && " under \"" + RESOURCE_TYPE_NAMES[searchCategory] + "\""},
+                                                    no items matched your criteria.
                                                 </Typography>
                                             }
                                             <Button
