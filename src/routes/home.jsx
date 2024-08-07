@@ -18,7 +18,7 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
 
-import FeaturedCard from "../components/FeaturedCard";
+import SimpleInfoCard from "../components/SimpleInfoCard";
 import SearchBar from "../components/SearchBar";
 import { featuredResourcesRetriever } from "../utils/DataRetrieval";
 import { HOME_BODY_HEIGHT } from "../configs/ResourceTypes";
@@ -164,10 +164,10 @@ export default function Home() {
                         Highlights
                       </Typography>
                       <Grid container direction="row" xs={12}>
-                        {featuredResources?.map((dataset) => (
+                        {featuredResources?.map((featuredResource) => (
                           <Grid
                             container
-                            key={dataset._id}
+                            key={featuredResource._id}
                             xs={12}
                             sm={6}
                             md={3}
@@ -176,14 +176,15 @@ export default function Home() {
                             alignItems="flex-start"
                             sx={{ p: 4 }}
                           >
-                            <FeaturedCard
-                              key={dataset._id}
-                              cardtype={dataset["resource-type"] + "s"}
-                              pageid={dataset._id}
-                              title={dataset.title}
-                              authors={dataset.authors}
-                              contents={dataset.contents}
-                              thumbnailImage={dataset["thumbnail-image"]}
+                            <SimpleInfoCard
+                              key={featuredResource._id}
+                              cardtype={featuredResource["resource-type"] + "s"}
+                              pageId={featuredResource._id}
+                              title={featuredResource.title}
+                              thumbnailImage={
+                                featuredResource["thumbnail-image"]
+                              }
+                              minHeight={200}
                             />
                           </Grid>
                         ))}

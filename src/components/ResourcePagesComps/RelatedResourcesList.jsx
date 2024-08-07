@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
-import List from "@mui/joy/List";
-import Link from "@mui/joy/Link";
+import Box from "@mui/joy/Box";
+import Grid from "@mui/joy/Grid";
+
+import SimpleInfoCard from "../SimpleInfoCard";
 
 import { fetchResourcesByField } from "../../utils/DataRetrieval";
 
@@ -46,27 +48,28 @@ export default function RelatedResourcesList(props) {
         {title}
       </Typography>
       <Divider inset="none" />
-      <List aria-labelledby="decorated-list-demo">
-        {relatedResources?.map((relatedResource) => (
-          <Link
-            key={relatedResource._id}
-            href={
-              "/" +
-              relatedResource["resource-type"] +
-              "s/" +
-              relatedResource._id
-            }
-            sx={{ color: "text.tertiary" }}
-          >
-            <Typography
-              textColor="#0f64c8"
-              sx={{ textDecoration: "underline", py: 0.5 }}
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2}>
+          {relatedResources?.map((relatedResource) => (
+            <Grid
+              key={relatedResource._id}
+              xs={6}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              minHeight={180}
             >
-              {isFinished && relatedResource.title}
-            </Typography>
-          </Link>
-        ))}
-      </List>
+              <SimpleInfoCard
+                key={relatedResource._id}
+                cardtype={relatedResource["resource-type"] + "s"}
+                pageId={relatedResource._id}
+                title={relatedResource.title}
+                thumbnailImage={relatedResource["thumbnail-image"]}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Stack>
   );
 }

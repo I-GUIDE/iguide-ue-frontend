@@ -13,12 +13,12 @@ import {
   RESOURCE_TYPE_NAMES,
 } from "../configs/ResourceTypes";
 
-export default function FeaturedCard(props) {
+export default function SimpleInfoCard(props) {
   const thumbnailImage = props.thumbnailImage;
   const title = props.title;
-  const contents = props.contents;
   const cardType = props.cardtype;
-  const pageid = props.pageid;
+  const pageId = props.pageId;
+  const minHeight = props.minHeight;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -28,7 +28,7 @@ export default function FeaturedCard(props) {
       variant="outlined"
       sx={{
         width: 300,
-        minHeight: 210,
+        minHeight: minHeight,
         "&:hover": {
           borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
           transform: "translateY(-2px)",
@@ -44,12 +44,12 @@ export default function FeaturedCard(props) {
         <Link
           overlay
           underline="none"
-          href={"/" + cardType + "/" + pageid}
+          href={"/" + cardType + "/" + pageId}
           sx={{ color: "text.tertiary" }}
         >
           <Stack>
             <Typography
-              level="title-sm"
+              level="body-xs"
               textColor="#000"
               sx={{
                 overflow: "hidden",
