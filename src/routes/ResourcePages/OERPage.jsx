@@ -12,7 +12,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/ResourceTypes";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedResourcesList";
+import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
 import Header from "../../components/Layout/Header";
@@ -94,20 +94,17 @@ export default function OERPage() {
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
             <Grid xs={12} md={6}>
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Datasets"
-                relatedResourcesIds={relatedDatasets}
-                relatedResourceType="dataset"
+                relatedElements={relatedDatasets}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Publications"
-                relatedResourcesIds={relatedPublications}
-                relatedResourceType="publication"
+                relatedElements={relatedPublications}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Notebooks"
-                relatedResourcesIds={relatedNotebooks}
-                relatedResourceType="notebook"
+                relatedElements={relatedNotebooks}
               />
             </Grid>
 

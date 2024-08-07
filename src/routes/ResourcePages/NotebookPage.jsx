@@ -12,7 +12,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/ResourceTypes";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedResourcesList";
+import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
 import Header from "../../components/Layout/Header";
@@ -98,34 +98,34 @@ export default function NotebookPage() {
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Datasets"
-                relatedResourcesIds={relatedDatasets}
+                relatedElements={relatedDatasets}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Publications"
-                relatedResourcesIds={relatedPublications}
+                relatedElements={relatedPublications}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Educational Resources"
-                relatedResourcesIds={relatedOERs}
+                relatedElements={relatedOERs}
               />
             </Grid>
 
             {/* When the page is wider than md */}
             <Grid sx={{ display: { xs: "none", md: "block" } }} md={5}>
               <CapsuleList title="Tags" items={tags} />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Datasets"
-                relatedResourcesIds={relatedDatasets}
+                relatedElements={relatedDatasets}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Publications"
-                relatedResourcesIds={relatedPublications}
+                relatedElements={relatedPublications}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Educational Resources"
-                relatedResourcesIds={relatedOERs}
+                relatedElements={relatedOERs}
               />
             </Grid>
             <Grid sx={{ display: { xs: "none", md: "block" } }} md={7}>

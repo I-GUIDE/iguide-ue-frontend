@@ -12,7 +12,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/ResourceTypes";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedResourcesList";
+import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
 import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
@@ -104,20 +104,17 @@ export default function DatasetPage() {
               <CodeSnippet directDownloadLink={directDownloadLink} />
             </Grid>
             <Grid xs={12} md={6}>
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Notebooks"
-                relatedResourcesIds={relatedNotebooks}
-                relatedResourceType="notebook"
+                relatedElements={relatedNotebooks}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Publications"
-                relatedResourcesIds={relatedPublications}
-                relatedResourceType="publication"
+                relatedElements={relatedPublications}
               />
-              <RelatedResourcesList
+              <RelatedElementsList
                 title="Related Educational Resources"
-                relatedResourcesIds={relatedOERs}
-                relatedResourceType="oer"
+                relatedElements={relatedOERs}
               />
             </Grid>
 
