@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
     experimental_extendTheme as materialExtendTheme,
@@ -10,39 +9,21 @@ import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 const materialTheme = materialExtendTheme();
 
-import FormControl from '@mui/joy/FormControl';
-import FormHelperText from '@mui/joy/FormHelperText';
-import Input from '@mui/joy/Input';
-import IconButton from '@mui/joy/IconButton';
 import Box from '@mui/joy/Box';
 import Grid from '@mui/joy/Grid';
 import Container from '@mui/joy/Container';
 import Card from '@mui/joy/Card';
 import CardCover from '@mui/joy/CardCover';
 import CardContent from '@mui/joy/CardContent';
-import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/joy/Typography';
 import Chip from '@mui/joy/Chip';
 
 import FeaturedCard from '../components/FeaturedCard';
+import SearchBar from '../components/SearchBar';
 import { featuredResourcesRetriever } from '../utils/DataRetrieval';
 import { HOME_BODY_HEIGHT } from '../configs/ResourceTypes';
 
 export default function Home() {
-    // define search data
-    const [data, setData] = useState({
-        content: '',
-        status: 'initial',
-    });
-
-    const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
-
-    // the term that will be immediately passed to the database for search
-    const [searchTerm, setSearchTerm] = useState('');
-    // the search will only return results from given category if it's not 'any'
-    const [searchCategory, setSearchCategory] = useState('any');
-
     const [featuredResources, setFeaturedResources] = useState([]);
     const [hasFeaturedResources, setHasFeaturedResources] = useState(false);
 
@@ -67,16 +48,6 @@ export default function Home() {
         }
         retrieveFeaturedResources();
     }, [])
-
-    // Function that handles submit events. This function will update the search
-    //   term and set hasSearched to true.
-    async function handleSubmit(event) {
-        // Use preventDefault here to prevent the submit event from happening
-        //   because we need to set some states below.
-        event.preventDefault();
-        setSearchParams({ keyword: searchTerm, type: searchCategory });
-        navigate(`/search-results?keyword=${encodeURIComponent(searchTerm)}&type=${searchCategory}`);
-    }
 
     return (
         <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -108,7 +79,7 @@ export default function Home() {
                         >
                             <Container maxWidth="lg">
                                 <Container
-                                    alignContent="center"
+                                    alignItems="center"
                                     justifyContent="center"
                                     maxWidth="md"
                                 >
@@ -133,45 +104,10 @@ export default function Home() {
                                         >
                                             I-GUIDE Platform
                                         </Typography>
-                                        <form onSubmit={handleSubmit} id="iguide-search-form">
-                                            <Input
-                                                key="iguide-search-homepage"
-                                                required
-                                                variant="plain"
-                                                sx={{ '--Input-decoratorChildHeight': '50px' }}
-                                                placeholder="Search..."
-                                                type="text"
-                                                value={searchTerm}
-                                                onChange={(event) => {
-                                                    setData({ content: event.target.value, status: 'initial' })
-                                                    setSearchTerm(event.target.value)
-                                                }}
-                                                error={data.status === 'failure'}
-                                                endDecorator={
-                                                    <IconButton
-                                                        size='lg'
-                                                        variant="plain"
-                                                        loading={data.status === 'loading'}
-                                                        type="submit"
-                                                        sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                                                    >
-                                                        <SearchIcon />
-                                                    </IconButton>
-                                                }
-                                            />
-                                            <FormControl>
-                                                {data.status === 'failure' && (
-                                                    <FormHelperText
-                                                        sx={(theme) => ({ color: theme.vars.palette.danger[400] })}
-                                                    >
-                                                        Oops! Something went wrong, please try again later.
-                                                    </FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </form>
+                                        <SearchBar />
                                     </Box>
                                 </Container>
-                                
+
                                 {hasFeaturedResources &&
                                     <Box
                                         component="main"

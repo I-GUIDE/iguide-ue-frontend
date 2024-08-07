@@ -23,6 +23,8 @@ import ModalClose from '@mui/joy/ModalClose';
 import MenuIcon from '@mui/icons-material/Menu';
 import Tooltip from '@mui/joy/Tooltip';
 
+import SearchBar from '../SearchBar';
+
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
@@ -74,80 +76,54 @@ export default function NavBar(props) {
     function AuthButton() {
         if (isAuthenticated) {
             return (
-                <ButtonGroup
-                    color="primary"
-                    orientation="horizontal"
-                    size="sm"
-                    variant="plain"
-                    spacing="0.01rem"
-                >
-                    <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
-                        <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                            <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
-                        </Button>
-                    </Tooltip>
-                    <Dropdown>
-                        <MenuButton color="primary">
-                            <UserAvatar />
-                        </MenuButton>
-                        <Menu placement="bottom-end" color="primary">
-                            <Link to={'/user-profile'} style={{ textDecoration: 'none' }}>
-                                <MenuItem>
-                                    My Profile
-                                </MenuItem>
-                            </Link>
-                            <Link to={'/user-profile-update'} style={{ textDecoration: 'none' }}>
-                                <MenuItem>
-                                    Update Profile
-                                </MenuItem>
-                            </Link>
-                            <ListDivider />
-                            <Typography
-                                level="body-xs"
-                                textTransform="uppercase"
-                                fontWeight="lg"
-                                sx={{ px: 1.5, py: 1 }}
-                            >
-                                New Contribution
-                            </Typography>
-                            <MenuItem component="a" href="/contribution/dataset">
-                                New Dataset
+                <Dropdown>
+                    <MenuButton color="primary">
+                        <UserAvatar />
+                    </MenuButton>
+                    <Menu placement="bottom-end" color="primary">
+                        <Link to={'/user-profile'} style={{ textDecoration: 'none' }}>
+                            <MenuItem>
+                                My Profile
                             </MenuItem>
-                            <MenuItem component="a" href="/contribution/notebook">
-                                New Notebook
+                        </Link>
+                        <Link to={'/user-profile-update'} style={{ textDecoration: 'none' }}>
+                            <MenuItem>
+                                Update Profile
                             </MenuItem>
-                            <MenuItem component="a" href="/contribution/publication">
-                                New Publication
-                            </MenuItem>
-                            <MenuItem component="a" href="/contribution/oer">
-                                New Educational Resource
-                            </MenuItem>
-                            <ListDivider />
-                            <MenuItem onClick={logout}>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </Dropdown>
-                </ButtonGroup>
+                        </Link>
+                        <ListDivider />
+                        <Typography
+                            level="body-xs"
+                            textTransform="uppercase"
+                            fontWeight="lg"
+                            sx={{ px: 1.5, py: 1 }}
+                        >
+                            New Contribution
+                        </Typography>
+                        <MenuItem component="a" href="/contribution/dataset">
+                            New Dataset
+                        </MenuItem>
+                        <MenuItem component="a" href="/contribution/notebook">
+                            New Notebook
+                        </MenuItem>
+                        <MenuItem component="a" href="/contribution/publication">
+                            New Publication
+                        </MenuItem>
+                        <MenuItem component="a" href="/contribution/oer">
+                            New Educational Resource
+                        </MenuItem>
+                        <ListDivider />
+                        <MenuItem onClick={logout}>
+                            Logout
+                        </MenuItem>
+                    </Menu>
+                </Dropdown>
             )
         } else {
             return (
-                <ButtonGroup
-                    color="primary"
-                    orientation="horizontal"
-                    size="sm"
-                    variant="plain"
-                    spacing="0.01rem"
-                >
-                    <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
-                        <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                            <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
-                        </Button>
-                    </Tooltip>
-                    <Button size="sm" color="primary" onClick={login}>
-                        Login
-                    </Button>
-                </ButtonGroup>
+                <Button size="sm" color="primary" onClick={login}>
+                    Login
+                </Button>
             )
         }
     }
@@ -228,7 +204,7 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
                 spacing={2}
-                sx={{ display: { xs: 'flex', md: 'none' } }}
+                sx={{ display: { xs: 'flex', lg: 'none' } }}
             >
                 <Stack
                     direction="row"
@@ -249,12 +225,34 @@ export default function NavBar(props) {
                         <MenuIcon />
                     </Button>
                     <Drawer open={open} onClose={toggleDrawer(false)}>
-                        <ModalClose />
                         <Box
-                            role="presentation"
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                ml: 'auto',
+                                mt: 1,
+                                mr: 2,
+                            }}
+                        >
+                            <Typography
+                                component="label"
+                                htmlFor="close-icon"
+                                fontSize="sm"
+                                fontWeight="lg"
+                                sx={{ cursor: 'pointer' }}
+                            >
+                                Close
+                            </Typography>
+                            <ModalClose id="close-icon" sx={{ position: 'initial' }} />
+                        </Box>
+                        <Box sx={{ px: 2, py: 1 }}>
+                            <SearchBar onSearch={() => setOpen(false)}/>
+                        </Box>
+                        <Box
                             onClick={toggleDrawer(false)}
                             onKeyDown={toggleDrawer(false)}
-                            sx={{ p: 2 }}
+                            sx={{ px: 2, py: 1 }}
                         >
                             <List>
                                 {pages?.map((page) => (
@@ -283,7 +281,7 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
-                sx={{ display: { xs: 'none', md: 'flex' } }}
+                sx={{ display: { xs: 'none', lg: 'flex' } }}
             >
                 <Stack
                     direction="row"
@@ -312,7 +310,28 @@ export default function NavBar(props) {
                         </Link>
                     ))}
                 </Stack>
-                <AuthButton />
+                <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={0.1}
+                >
+                    <SearchBar />
+                    <ButtonGroup
+                        color="primary"
+                        orientation="horizontal"
+                        size="sm"
+                        variant="plain"
+                        spacing="0.1rem"
+                    >
+                        <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
+                            <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                                <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
+                            </Button>
+                        </Tooltip>
+                        <AuthButton />
+                    </ButtonGroup>
+                </Stack>
             </Stack>
         </Box>
     );
