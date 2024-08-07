@@ -54,6 +54,7 @@ export default function RelatedResourcesList(props) {
             <Grid
               key={relatedResource._id}
               xs={6}
+              md={4}
               display="flex"
               justifyContent="center"
               alignItems="center"

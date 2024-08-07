@@ -92,7 +92,7 @@ export default function NotebookPage() {
               />
             </Grid>
 
-            <Grid xs={12} md={4}>
+            <Grid xs={12} lg={5}>
               <CapsuleList title="Tags" items={tags} />
               <RelatedResourcesList
                 title="Related Datasets"
@@ -110,7 +110,7 @@ export default function NotebookPage() {
                 relatedResourceType="oer"
               />
             </Grid>
-            <Grid xs={12} md={8}>
+            <Grid xs={12} lg={7}>
               <NotebookViewer
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}
