@@ -80,7 +80,7 @@ export default function OERPage() {
               py: 2,
             }}
           >
-            <Grid md={12}>
+            <Grid xs={12}>
               <MainContent
                 title={title}
                 authors={authors}
@@ -91,11 +91,11 @@ export default function OERPage() {
               />
             </Grid>
 
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <RelatedResourcesList
                 title="Related Datasets"
                 relatedResourcesIds={relatedDatasets}
@@ -113,7 +113,7 @@ export default function OERPage() {
               />
             </Grid>
 
-            <Grid md={12}>
+            <Grid xs={12}>
               <GoBackButton
                 parentPage="/oers"
                 parentPageName="Educational Resources"

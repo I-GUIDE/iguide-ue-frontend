@@ -170,11 +170,11 @@ export default function Home() {
                             key={featuredResource._id}
                             xs={12}
                             sm={6}
-                            md={3}
+                            lg={3}
                             direction="row"
                             justifyContent="center"
-                            alignItems="flex-start"
-                            sx={{ p: 4 }}
+                            alignItems="center"
+                            sx={{ p: 2 }}
                           >
                             <SimpleInfoCard
                               key={featuredResource._id}
@@ -184,7 +184,7 @@ export default function Home() {
                               thumbnailImage={
                                 featuredResource["thumbnail-image"]
                               }
-                              minHeight={200}
+                              minHeight={"100%"}
                             />
                           </Grid>
                         ))}

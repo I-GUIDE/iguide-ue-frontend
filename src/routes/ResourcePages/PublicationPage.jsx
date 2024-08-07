@@ -81,7 +81,7 @@ export default function PublicationPage() {
               py: 2,
             }}
           >
-            <Grid md={12}>
+            <Grid xs={12}>
               <MainContent
                 title={title}
                 authors={authors}
@@ -92,7 +92,7 @@ export default function PublicationPage() {
               />
             </Grid>
 
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <ActionList
                 title="Publication Exploration"
@@ -103,7 +103,7 @@ export default function PublicationPage() {
                 size={size}
               />
             </Grid>
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <RelatedResourcesList
                 title="Related Datasets"
                 relatedResourcesIds={relatedDatasets}
@@ -121,7 +121,7 @@ export default function PublicationPage() {
               />
             </Grid>
 
-            <Grid md={12}>
+            <Grid xs={12}>
               <GoBackButton
                 parentPage="/publications"
                 parentPageName="Publications"

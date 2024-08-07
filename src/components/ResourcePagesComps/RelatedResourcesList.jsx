@@ -65,6 +65,7 @@ export default function RelatedResourcesList(props) {
                 pageId={relatedResource._id}
                 title={relatedResource.title}
                 thumbnailImage={relatedResource["thumbnail-image"]}
+                minHeight={"100%"}
               />
             </Grid>
           ))}

@@ -81,7 +81,7 @@ export default function NotebookPage() {
               py: 2,
             }}
           >
-            <Grid md={12}>
+            <Grid xs={12}>
               <MainContent
                 title={title}
                 authors={authors}
@@ -92,7 +92,7 @@ export default function NotebookPage() {
               />
             </Grid>
 
-            <Grid sm={12} md={4}>
+            <Grid xs={12} md={4}>
               <CapsuleList title="Tags" items={tags} />
               <RelatedResourcesList
                 title="Related Datasets"
@@ -110,14 +110,14 @@ export default function NotebookPage() {
                 relatedResourceType="oer"
               />
             </Grid>
-            <Grid sm={12} md={8}>
+            <Grid xs={12} md={8}>
               <NotebookViewer
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
             </Grid>
-            <Grid md={12}>
+            <Grid xs={12}>
               <GoBackButton
                 parentPage="/notebooks"
                 parentPageName="Notebooks"

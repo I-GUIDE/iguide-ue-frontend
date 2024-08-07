@@ -82,7 +82,7 @@ export default function DatasetPage() {
               py: 2,
             }}
           >
-            <Grid md={12}>
+            <Grid xs={12}>
               <MainContent
                 title={title}
                 authors={authors}
@@ -93,7 +93,7 @@ export default function DatasetPage() {
               />
             </Grid>
 
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <ActionList
                 title="Data Exploration"
@@ -105,7 +105,7 @@ export default function DatasetPage() {
               />
               <CodeSnippet directDownloadLink={directDownloadLink} />
             </Grid>
-            <Grid sm={12} md={6}>
+            <Grid xs={12} md={6}>
               <RelatedResourcesList
                 title="Related Notebooks"
                 relatedResourcesIds={relatedNotebooks}
@@ -123,7 +123,7 @@ export default function DatasetPage() {
               />
             </Grid>
 
-            <Grid md={12}>
+            <Grid xs={12}>
               <GoBackButton parentPage="/datasets" parentPageName="Datasets" />
             </Grid>
           </Grid>
