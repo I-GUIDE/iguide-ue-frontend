@@ -16,6 +16,7 @@ import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedRes
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
 import Header from "../../components/Layout/Header";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function NotebookPage() {
   const [title, setTitle] = useState("");
@@ -53,6 +54,8 @@ export default function NotebookPage() {
     };
     fetchData();
   }, [id]);
+
+  usePageTitle(title);
 
   return (
     <CssVarsProvider disableTransitionOnChange>

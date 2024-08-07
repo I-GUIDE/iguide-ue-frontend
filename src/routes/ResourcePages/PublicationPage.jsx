@@ -16,6 +16,7 @@ import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedRes
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import Header from "../../components/Layout/Header";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function PublicationPage() {
   const [title, setTitle] = useState("");
@@ -53,6 +54,8 @@ export default function PublicationPage() {
     };
     fetchData();
   }, [id]);
+
+  usePageTitle(title);
 
   return (
     <CssVarsProvider disableTransitionOnChange>

@@ -17,6 +17,7 @@ import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import Header from "../../components/Layout/Header";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function DatasetPage() {
   const [title, setTitle] = useState("");
@@ -54,6 +55,8 @@ export default function DatasetPage() {
     };
     fetchData();
   }, [id]);
+
+  usePageTitle(title);
 
   return (
     <CssVarsProvider disableTransitionOnChange>

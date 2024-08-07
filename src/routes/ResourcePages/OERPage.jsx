@@ -16,6 +16,7 @@ import RelatedResourcesList from "../../components/ResourcePagesComps/RelatedRes
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
 import Header from "../../components/Layout/Header";
+import usePageTitle from "../../hooks/usePageTitle";
 
 export default function OERPage() {
   const [title, setTitle] = useState("");
@@ -49,6 +50,8 @@ export default function OERPage() {
     };
     fetchData();
   }, [id]);
+
+  usePageTitle(title);
 
   return (
     <CssVarsProvider disableTransitionOnChange>

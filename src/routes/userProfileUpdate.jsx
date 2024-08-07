@@ -11,10 +11,13 @@ import Grid from "@mui/joy/Grid";
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import UserProfileEditCard from "../components/UserProfileEditCard";
+import usePageTitle from "../hooks/usePageTitle";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/ResourceTypes";
 
 export default function UserProfileUpdate() {
+  usePageTitle("Update User Profile");
+
   const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
     useOutletContext();
 

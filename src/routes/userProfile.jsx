@@ -36,6 +36,7 @@ import LoginCard from "../components/LoginCard";
 import InfoCard from "../components/InfoCard";
 import UserProfileHeader from "../components/UserProfileHeader";
 import UserProfileEditCard from "../components/UserProfileEditCard";
+import usePageTitle from "../hooks/usePageTitle";
 
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
@@ -48,6 +49,8 @@ import {
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 export default function UserProfile() {
+  usePageTitle("User Profile");
+
   // OutletContext retrieving the user object to display user info
   const [
     isAuthenticated,

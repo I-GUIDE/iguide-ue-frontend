@@ -11,10 +11,13 @@ import Grid from "@mui/joy/Grid";
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import SubmissionCard from "../components/SubmissionCard";
+import usePageTitle from "../hooks/usePageTitle";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/ResourceTypes";
 
 export default function ResourceSubmission() {
+  usePageTitle("Contribution");
+
   const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
     useOutletContext();
 

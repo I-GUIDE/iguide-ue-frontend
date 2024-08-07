@@ -37,6 +37,7 @@ import {
   SEARCH_RESULTS_BODY_HEIGHT,
   RESOURCE_TYPE_NAMES,
 } from "../configs/ResourceTypes";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function SearchResults() {
   // define search data
@@ -71,6 +72,8 @@ export default function SearchResults() {
 
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
+
+  usePageTitle(keywordParam);
 
   // When there is a new search param, update the search term and element type
   useEffect(() => {
