@@ -21,7 +21,7 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ModalClose from '@mui/joy/ModalClose';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AspectRatio } from '@mui/joy';
+import Tooltip from '@mui/joy/Tooltip';
 
 const pages = [['Home', '/'], ['Datasets', '/datasets'], ['Notebooks', '/notebooks'], ['Publications', '/publications'], ['Educational Resources', '/oers']];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
@@ -81,9 +81,11 @@ export default function NavBar(props) {
                     variant="plain"
                     spacing="0.01rem"
                 >
-                    <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                        <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
-                    </Button>
+                    <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
+                        <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                            <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
+                        </Button>
+                    </Tooltip>
                     <Dropdown>
                         <MenuButton color="primary">
                             <UserAvatar />
@@ -137,9 +139,11 @@ export default function NavBar(props) {
                     variant="plain"
                     spacing="0.01rem"
                 >
-                    <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
-                        <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
-                    </Button>
+                    <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
+                        <Button size="sm" component="a" href="https://jupyter.iguide.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                            <Avatar variant="plain" alt="jupyterhub" src="/images/Jupyter-logo.png" />
+                        </Button>
+                    </Tooltip>
                     <Button size="sm" color="primary" onClick={login}>
                         Login
                     </Button>
