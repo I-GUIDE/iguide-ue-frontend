@@ -7,7 +7,7 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 
-import { fetchResourcesByField } from "../../utils/DataRetrieval";
+import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { DEFAULT_BODY_HEIGHT } from "../../configs/ResourceTypes";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
@@ -20,6 +20,7 @@ import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 
 export default function DatasetPage() {
+  const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributors, setContributors] = useState([]);
@@ -32,27 +33,24 @@ export default function DatasetPage() {
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
-  const id = useParams().id;
 
   useEffect(() => {
-    const fetchData = async () => {
-      const thisResourceList = await fetchResourcesByField("_id", [id]);
-      // Since the function returns an Array, we extract the content using idx 0
-      const thisResource = thisResourceList[0];
+    async function fetchData() {
+      const thisElement = await fetchSingleElementDetails(id);
 
-      setRelatedNotebooks(thisResource["related-notebooks"]);
-      setRelatedPublicatons(thisResource["related-publications"]);
-      setRelatedOERs(thisResource["related-oers"]);
-      setTitle(thisResource.title);
-      setAuthors(thisResource.authors);
-      setContributors(thisResource["contributor-name"]);
-      setAbstract(thisResource.contents);
-      setTags(thisResource.tags);
-      setExternalLink(thisResource["external-link"]);
-      setDirectDownloadLink(thisResource["direct-download-link"]);
-      setSize(thisResource.size);
-      setThumbnailImage(thisResource["thumbnail-image"]);
-    };
+      setRelatedNotebooks(thisElement["related-notebooks"]);
+      setRelatedPublicatons(thisElement["related-publications"]);
+      setRelatedOERs(thisElement["related-oers"]);
+      setTitle(thisElement.title);
+      setAuthors(thisElement.authors);
+      setContributors(thisElement["contributor-name"]);
+      setAbstract(thisElement.contents);
+      setTags(thisElement.tags);
+      setExternalLink(thisElement["external-link"]);
+      setDirectDownloadLink(thisElement["direct-download-link"]);
+      setSize(thisElement.size);
+      setThumbnailImage(thisElement["thumbnail-image"]);
+    }
     fetchData();
   }, [id]);
 

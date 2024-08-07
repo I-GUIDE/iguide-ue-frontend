@@ -354,3 +354,25 @@ export async function elementCounter(
 
   return response.json();
 }
+
+/**
+ * Fetches a single element for element pages
+ *
+ * @async
+ * @function fetchSingleElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSingleElementDetails(elementId) {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/element/${elementId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch resources");
+  }
+  return response.json();
+}
