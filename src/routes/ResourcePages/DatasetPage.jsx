@@ -78,7 +78,8 @@ export default function DatasetPage() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              py: 2,
+              pt: 4,
+              pb: 8,
             }}
           >
             <Grid xs={12}>
