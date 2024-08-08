@@ -204,15 +204,16 @@ export default function SearchResults() {
                   textColor={"#fff"}
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    pb: 2,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    py: 1.5,
                   }}
                   endDecorator={
                     <Chip component="span" size="sm">
                       BETA
                     </Chip>
                   }
+                  justifyContent="center"
                 >
                   I-GUIDE Platform
                 </Typography>
