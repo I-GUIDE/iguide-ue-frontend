@@ -16,7 +16,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 export default function Footer() {
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, minHeight: 130 }}>
+    <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: 100 }}>
       <Card
         component="li"
         color="neutural"
@@ -45,7 +45,7 @@ export default function Footer() {
                   >
                     <Box
                       component="img"
-                      sx={{ height: 75, mx: 2 }}
+                      sx={{ height: 55, mx: 1 }}
                       alt="Logo"
                       src="/images/nsf.png"
                     />
@@ -53,17 +53,25 @@ export default function Footer() {
                 </Stack>
               </Grid>
               <Grid xs={12} sm={10} lg={4}>
-                <Typography level="h5" textColor="#606060" sx={{ py: 1 }}>
+                <Typography level="h5" textColor="#606060" sx={{ py: 0.2 }}>
                   © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
                 </Typography>
-                <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
+                <Typography
+                  level="body-xs"
+                  textColor="#606060"
+                  sx={{ py: 0.2 }}
+                >
                   Institute for Geospatial Understanding through an Integrative
                   Discovery Environment (I-GUIDE) is supported by the National
                   Science Foundation.
                 </Typography>
               </Grid>
               <Grid xs={12} sm={9} lg={5}>
-                <Typography level="body-xs" textColor="#606060" sx={{ py: 1 }}>
+                <Typography
+                  level="body-xs"
+                  textColor="#606060"
+                  sx={{ py: 0.2 }}
+                >
                   This material is based upon work supported by the National
                   Science Foundation under award No. 2118329. Any opinions,
                   findings, conclusions, or recommendations expressed in this
