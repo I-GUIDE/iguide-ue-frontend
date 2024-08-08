@@ -44,7 +44,7 @@ import { arrayLength } from "../helpers/helper";
 import {
   DEFAULT_BODY_HEIGHT,
   USER_PROFILE_BODY_HEIGHT,
-} from "../configs/ResourceTypes";
+} from "../configs/VarConfigs";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 

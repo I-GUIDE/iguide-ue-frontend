@@ -33,7 +33,7 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
-} from "../configs/ResourceTypes";
+} from "../configs/VarConfigs";
 
 import {
   fetchResourcesByField,

@@ -13,7 +13,7 @@ import LoginCard from "../components/LoginCard";
 import UserProfileEditCard from "../components/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/ResourceTypes";
+import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function UserProfileUpdate() {
   usePageTitle("Update User Profile");

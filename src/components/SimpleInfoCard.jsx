@@ -13,7 +13,7 @@ import Tooltip from "@mui/joy/Tooltip";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
-} from "../configs/ResourceTypes";
+} from "../configs/VarConfigs";
 
 export default function SimpleInfoCard(props) {
   const thumbnailImage = props.thumbnailImage;

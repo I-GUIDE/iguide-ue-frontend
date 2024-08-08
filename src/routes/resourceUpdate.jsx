@@ -14,7 +14,7 @@ import LoginCard from "../components/LoginCard";
 import SubmissionCard from "../components/SubmissionCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/ResourceTypes";
+import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function ResourceUpdate() {
   usePageTitle("Update Contribution");

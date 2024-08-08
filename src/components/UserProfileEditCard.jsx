@@ -23,7 +23,7 @@ import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { styled } from "@mui/joy";
 
-import { IMAGE_SIZE_LIMIT } from "../configs/ResourceTypes";
+import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
 import { fetchUser, updateUser } from "../utils/UserManager";

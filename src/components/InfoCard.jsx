@@ -14,7 +14,7 @@ import { printListWithDelimiter, stringTruncator } from "../helpers/helper";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
-} from "../configs/ResourceTypes";
+} from "../configs/VarConfigs";
 
 export default function InfoCard(props) {
   const thumbnailImage = props.thumbnailImage;

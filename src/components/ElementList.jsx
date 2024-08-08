@@ -22,7 +22,7 @@ import Header from "./Layout/Header";
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/ResourceTypes";
+import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function ElementList(props) {
   const fieldName = props.fieldName;

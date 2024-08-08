@@ -21,7 +21,7 @@ import Chip from "@mui/joy/Chip";
 import SimpleInfoCard from "../components/SimpleInfoCard";
 import SearchBar from "../components/SearchBar";
 import { featuredResourcesRetriever } from "../utils/DataRetrieval";
-import { HOME_BODY_HEIGHT } from "../configs/ResourceTypes";
+import { HOME_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function Home() {
   const [featuredResources, setFeaturedResources] = useState([]);

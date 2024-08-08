@@ -8,7 +8,7 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
-import { DEFAULT_BODY_HEIGHT } from "../../configs/ResourceTypes";
+import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";

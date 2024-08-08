@@ -36,7 +36,7 @@ import { arrayLength } from "../helpers/helper";
 import {
   SEARCH_RESULTS_BODY_HEIGHT,
   RESOURCE_TYPE_NAMES,
-} from "../configs/ResourceTypes";
+} from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
 export default function SearchResults() {
