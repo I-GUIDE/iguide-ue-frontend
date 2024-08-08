@@ -166,11 +166,12 @@ export default function Home() {
                             key={featuredResource._id}
                             xs={12}
                             sm={6}
-                            lg={3}
+                            md={4}
+                            lg={2.4}
                             direction="row"
                             justifyContent="center"
                             alignItems="center"
-                            sx={{ p: 2 }}
+                            sx={{ p: 1 }}
                           >
                             <SimpleInfoCard
                               key={featuredResource._id}

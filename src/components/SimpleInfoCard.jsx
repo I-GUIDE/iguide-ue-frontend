@@ -93,9 +93,8 @@ export default function SimpleInfoCard(props) {
             justifyContent: "center",
             fontSize: "xs",
             fontWeight: "xl",
-            letterSpacing: "1px",
+            letterSpacing: "0.3px",
             textTransform: "uppercase",
-            borderLeft: "1px solid",
             borderColor: "divider",
           }}
         >
