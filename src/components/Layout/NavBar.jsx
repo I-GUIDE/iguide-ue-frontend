@@ -49,7 +49,7 @@ export default function NavBar(props) {
   const localUserInfo = props.localUserInfo;
 
   const buttonRef = React.useRef(null);
-  const [open, setOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -59,7 +59,7 @@ export default function NavBar(props) {
       ) {
         return;
       }
-      setOpen(inOpen);
+      setDrawerOpen(inOpen);
     };
   }
 
@@ -241,14 +241,14 @@ export default function NavBar(props) {
                   id="composition-button"
                   aria-controls={"composition-menu"}
                   aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
+                  aria-expanded={drawerOpen ? "true" : undefined}
                   variant="plain"
                   color="neutral"
                   onClick={toggleDrawer(true)}
                 >
                   <MenuIcon />
                 </Button>
-                <Drawer open={open} onClose={toggleDrawer(false)}>
+                <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
                   <Box
                     sx={{
                       display: "flex",
@@ -271,7 +271,7 @@ export default function NavBar(props) {
                     <ModalClose id="close-icon" sx={{ position: "initial" }} />
                   </Box>
                   <Box sx={{ px: 2, py: 1 }}>
-                    <SearchBar onSearch={() => setOpen(false)} />
+                    <SearchBar onSearch={() => setDrawerOpen(false)} />
                   </Box>
                   <Box
                     onClick={toggleDrawer(false)}
