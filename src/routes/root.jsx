@@ -6,6 +6,13 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
 
+import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import Fab from "@mui/material/Fab";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Fade from "@mui/material/Fade";
+
 import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
@@ -146,9 +153,56 @@ export default function Root() {
     }
   }, [userInfo]);
 
+  function ScrollTop(props) {
+    const { children, window } = props;
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({
+      target: window ? window() : undefined,
+      disableHysteresis: true,
+      threshold: 100,
+    });
+
+    function handleClick(event) {
+      const anchor = (event.target.ownerDocument || document).querySelector(
+        "#back-to-top-anchor"
+      );
+
+      if (anchor) {
+        anchor.scrollIntoView({
+          block: "center",
+          behavior: "smooth",
+        });
+      }
+    }
+
+    return (
+      <Fade in={trigger}>
+        <Box
+          onClick={handleClick}
+          role="presentation"
+          sx={{ position: "fixed", bottom: 170, right: 20 }}
+        >
+          {children}
+        </Box>
+      </Fade>
+    );
+  }
+
+  ScrollTop.propTypes = {
+    children: PropTypes.element.isRequired,
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window: PropTypes.func,
+  };
+
   return (
     <StyledEngineProvider injectFirst>
       <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
+      <div id="back-to-top-anchor" />
       <Outlet
         context={[
           isAuthenticated,
@@ -159,6 +213,16 @@ export default function Root() {
           setLocalUserInfo,
         ]}
       />
+      <ScrollTop>
+        <Fab
+          sx={{ display: { xs: "none", md: "flex" } }}
+          size="small"
+          color="neutral"
+          aria-label="scroll back to top"
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
       <Footer />
     </StyledEngineProvider>
   );
