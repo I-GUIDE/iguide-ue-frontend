@@ -103,7 +103,18 @@ export default function NavBar(props) {
           <MenuButton color="primary">
             <UserAvatar />
           </MenuButton>
-          <Menu placement="bottom-end" color="primary">
+          <Menu
+            placement="bottom-end"
+            color="primary"
+            modifiers={[
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 15],
+                },
+              },
+            ]}
+          >
             <Link to={"/user-profile"} style={{ textDecoration: "none" }}>
               <MenuItem>My Profile</MenuItem>
             </Link>
