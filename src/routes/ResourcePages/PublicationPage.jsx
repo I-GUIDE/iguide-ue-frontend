@@ -17,6 +17,7 @@ import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
+import PageNav from "../../components/PageNav";
 
 export default function PublicationPage() {
   const id = useParams().id;
@@ -80,6 +81,11 @@ export default function PublicationPage() {
             }}
           >
             <Grid xs={12}>
+              <PageNav
+                parentPages={[["All Publications", "/publications"]]}
+                currentPage="Publication"
+                sx={{ px: { xs: 2, md: 4 } }}
+              />
               <MainContent
                 title={title}
                 authors={authors}

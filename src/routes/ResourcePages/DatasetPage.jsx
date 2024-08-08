@@ -18,6 +18,7 @@ import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
+import PageNav from "../../components/PageNav";
 
 export default function DatasetPage() {
   const id = useParams().id;
@@ -81,6 +82,11 @@ export default function DatasetPage() {
             }}
           >
             <Grid xs={12}>
+              <PageNav
+                parentPages={[["All Datasets", "/datasets"]]}
+                currentPage="Dataset"
+                sx={{ px: { xs: 2, md: 4 } }}
+              />
               <MainContent
                 title={title}
                 authors={authors}

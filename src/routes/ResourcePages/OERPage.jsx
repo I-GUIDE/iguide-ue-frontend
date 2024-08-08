@@ -17,6 +17,7 @@ import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
+import PageNav from "../../components/PageNav";
 
 export default function OERPage() {
   const id = useParams().id;
@@ -79,6 +80,11 @@ export default function OERPage() {
             }}
           >
             <Grid xs={12}>
+              <PageNav
+                parentPages={[["All Educational Resources", "/oers"]]}
+                currentPage="Educational Resource"
+                sx={{ px: { xs: 2, md: 4 } }}
+              />
               <MainContent
                 title={title}
                 authors={authors}

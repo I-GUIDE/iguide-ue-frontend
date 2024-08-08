@@ -17,6 +17,7 @@ import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
+import PageNav from "../../components/PageNav";
 
 export default function NotebookPage() {
   const id = useParams().id;
@@ -80,6 +81,11 @@ export default function NotebookPage() {
             }}
           >
             <Grid xs={12}>
+              <PageNav
+                parentPages={[["All Notebooks", "/notebooks"]]}
+                currentPage="Notebook"
+                sx={{ px: { xs: 2, md: 4 } }}
+              />
               <MainContent
                 title={title}
                 authors={authors}

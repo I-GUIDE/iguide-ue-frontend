@@ -18,6 +18,7 @@ import Pagination from "@mui/material/Pagination";
 
 import InfoCard from "./InfoCard";
 import Header from "./Layout/Header";
+import PageNav from "./PageNav";
 
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
@@ -136,10 +137,9 @@ export default function ElementList(props) {
                 spacing={2}
                 sx={{
                   px: { xs: 2, md: 4, width: "100%" },
-                  pt: 2,
-                  minHeight: 0,
                 }}
               >
+                <PageNav currentPage={"All " + title} sx={{ px: 0 }} />
                 <Typography>
                   Showing {currentStartingIdx + 1}-
                   {currentStartingIdx + resultLength} of {numberOfTotalItems}
