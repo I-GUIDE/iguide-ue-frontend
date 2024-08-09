@@ -488,7 +488,13 @@ export default function SubmissionCard(props) {
 
   // After submission, show users the submission status.
   if (submissionStatus !== "no submission") {
-    return <SubmissionStatusCard submissionStatus={submissionStatus} />;
+    return (
+      <SubmissionStatusCard
+        submissionStatus={submissionStatus}
+        submissionType={submissionType}
+        elementURI={"/" + resourceTypeSelected + "s/" + elementId}
+      />
+    );
   }
 
   // If the user is not the contributor, deny access to the update form.

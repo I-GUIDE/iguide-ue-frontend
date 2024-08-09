@@ -12,6 +12,9 @@ import "../utils/UserManager";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
+  const submissionType = props.submissionType;
+  const elementURI = props.elementURI;
+
   let submissionStatusText = "";
 
   // Display the submission status
@@ -58,31 +61,46 @@ export default function SubmissionStatusCard(props) {
       >
         <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
           <Box
-            sx={{ p: 2, display: "flex", gap: 1.5, "& > button": { flex: 1 } }}
+            sx={{
+              p: 0.5,
+              display: "flex",
+              gap: 1.5,
+              "& > button": { flex: 1 },
+            }}
           >
             <Typography level="h4">{submissionStatusText}</Typography>
           </Box>
-          <Divider />
           <Stack
             direction="row"
             flexWrap="wrap"
             alignItems="center"
             justifyContent="center"
-            spacing={2}
+            spacing={1}
             useFlexGap
-            sx={{ p: 2 }}
+            sx={{ p: 0.5 }}
           >
             <Button component="a" href="/" variant="outlined" color="neutral">
-              Go back to homepage
+              Homepage
             </Button>
             <Button
               component="a"
               href="/user-profile"
-              variant="solid"
+              variant="outlined"
               color="primary"
             >
-              Go to user profile
+              User profile
             </Button>
+            {submissionStatus !== "unauthorized" &&
+              submissionType === "update" && (
+                <Button
+                  component="a"
+                  href={elementURI}
+                  variant="solid"
+                  color="primary"
+                >
+                  View element
+                </Button>
+              )}
           </Stack>
         </CardContent>
       </Card>
