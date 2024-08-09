@@ -95,7 +95,12 @@ export default function OERPage() {
                   currentPage="Educational Resource"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
-                <ContributorOps elementId={id} contributorId={contributorId} />
+                <ContributorOps
+                  title={title}
+                  elementId={id}
+                  contributorId={contributorId}
+                  afterDeleteRedirection="/oers"
+                />
               </Stack>
               <MainContent
                 title={title}

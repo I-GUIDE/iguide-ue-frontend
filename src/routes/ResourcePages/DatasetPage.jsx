@@ -97,7 +97,12 @@ export default function DatasetPage() {
                   currentPage="Dataset"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
-                <ContributorOps elementId={id} contributorId={contributorId} />
+                <ContributorOps
+                  title={title}
+                  elementId={id}
+                  contributorId={contributorId}
+                  afterDeleteRedirection="/datasets"
+                />
               </Stack>
               <MainContent
                 title={title}

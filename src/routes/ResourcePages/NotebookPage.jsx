@@ -96,7 +96,12 @@ export default function NotebookPage() {
                   currentPage="Notebook"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
-                <ContributorOps elementId={id} contributorId={contributorId} />
+                <ContributorOps
+                  title={title}
+                  elementId={id}
+                  contributorId={contributorId}
+                  afterDeleteRedirection="/notebooks"
+                />
               </Stack>
               <MainContent
                 title={title}

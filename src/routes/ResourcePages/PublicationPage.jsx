@@ -96,7 +96,12 @@ export default function PublicationPage() {
                   currentPage="Publication"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
-                <ContributorOps elementId={id} contributorId={contributorId} />
+                <ContributorOps
+                  title={title}
+                  elementId={id}
+                  contributorId={contributorId}
+                  afterDeleteRedirection="/publications"
+                />
               </Stack>
               <MainContent
                 title={title}
