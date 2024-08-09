@@ -6,6 +6,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
+import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
@@ -18,12 +19,14 @@ import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternal
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
+import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
 
 export default function OERPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributors, setContributors] = useState([]);
+  const [contributorId, setContributorId] = useState();
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
@@ -42,6 +45,7 @@ export default function OERPage() {
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributors(thisElement["contributor-name"]);
+      setContributorId(thisElement["contributor-id"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setThumbnailImage(thisElement["thumbnail-image"]);
@@ -81,11 +85,18 @@ export default function OERPage() {
             }}
           >
             <Grid xs={12}>
-              <PageNav
-                parentPages={[["All Educational Resources", "/oers"]]}
-                currentPage="Educational Resource"
-                sx={{ px: { xs: 2, md: 4 } }}
-              />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <PageNav
+                  parentPages={[["All Educational Resources", "/oers"]]}
+                  currentPage="Educational Resource"
+                  sx={{ px: { xs: 2, md: 4 } }}
+                />
+                <ContributorOps elementId={id} contributorId={contributorId} />
+              </Stack>
               <MainContent
                 title={title}
                 authors={authors}

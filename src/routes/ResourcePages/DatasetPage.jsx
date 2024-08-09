@@ -6,6 +6,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
+import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
@@ -19,12 +20,14 @@ import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
+import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
 
 export default function DatasetPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributors, setContributors] = useState([]);
+  const [contributorId, setContributorId] = useState();
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
@@ -45,6 +48,7 @@ export default function DatasetPage() {
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributors(thisElement["contributor-name"]);
+      setContributorId(thisElement["contributor-id"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link"]);
@@ -83,11 +87,18 @@ export default function DatasetPage() {
             }}
           >
             <Grid xs={12}>
-              <PageNav
-                parentPages={[["All Datasets", "/datasets"]]}
-                currentPage="Dataset"
-                sx={{ px: { xs: 2, md: 4 } }}
-              />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <PageNav
+                  parentPages={[["All Datasets", "/datasets"]]}
+                  currentPage="Dataset"
+                  sx={{ px: { xs: 2, md: 4 } }}
+                />
+                <ContributorOps elementId={id} contributorId={contributorId} />
+              </Stack>
               <MainContent
                 title={title}
                 authors={authors}
