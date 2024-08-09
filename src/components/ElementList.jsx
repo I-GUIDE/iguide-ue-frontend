@@ -144,16 +144,16 @@ export default function ElementList(props) {
                   Showing {currentStartingIdx + 1}-
                   {currentStartingIdx + resultLength} of {numberOfTotalItems}
                 </Typography>
-                {metadataList?.map((dataset) => (
+                {metadataList?.map((metadata) => (
                   <InfoCard
-                    key={dataset._id}
-                    cardtype={dataset["resource-type"] + "s"}
-                    pageid={dataset._id}
-                    title={dataset.title}
-                    authors={dataset.authors}
-                    tags={dataset.tags}
-                    contents={dataset.contents}
-                    thumbnailImage={dataset["thumbnail-image"]}
+                    key={metadata._id}
+                    cardtype={metadata["resource-type"] + "s"}
+                    pageid={metadata._id}
+                    title={metadata.title}
+                    authors={metadata.authors}
+                    tags={metadata.tags}
+                    contents={metadata.contents}
+                    thumbnailImage={metadata["thumbnail-image"]}
                   />
                 ))}
               </Stack>

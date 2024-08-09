@@ -42,28 +42,33 @@ export default function InfoCard(props) {
       orientation="horizontal"
       sx={{
         width: "100%",
-        minHeight: 200,
+        minHeight: { xs: 150, md: 200 },
         "&:hover": {
           boxShadow: "md",
           borderColor: "neutral.outlinedHoverBorder",
         },
       }}
     >
-      {/* Only display the thumbnail when the width is wider than 900px */}
-      <AspectRatio
-        ratio="1"
-        sx={{ width: 180, display: { xs: "none", md: "flex" } }}
-      >
-        {thumbnailImage ? (
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
-        ) : (
-          <img
-            src={`/default-images/${cardType}.png`}
-            loading="lazy"
-            alt="deafult-thumbnail"
-          />
-        )}
-      </AspectRatio>
+      {/* Only display the thumbnail when the width is wider than sm */}
+      <CardOverflow>
+        <AspectRatio
+          ratio="1"
+          sx={{
+            width: { sm: 150, md: 200 },
+            display: { xs: "none", sm: "flex" },
+          }}
+        >
+          {thumbnailImage ? (
+            <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          ) : (
+            <img
+              src={`/default-images/${cardType}.png`}
+              loading="lazy"
+              alt="deafult-thumbnail"
+            />
+          )}
+        </AspectRatio>
+      </CardOverflow>
 
       <CardContent>
         <Typography
@@ -102,12 +107,28 @@ export default function InfoCard(props) {
             {printListWithDelimiter(authors, ",")}
           </Typography>
         </Link>
+
+        {/* Wide screen */}
         <Typography
           level="body-sm"
           sx={{
+            display: { xs: "none", md: "-webkit-box" },
             overflow: "hidden",
             textOverflow: "ellipsis",
-            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+            m: 0.5,
+          }}
+        >
+          {contents}
+        </Typography>
+        {/* Narrow screen */}
+        <Typography
+          level="body-sm"
+          sx={{
+            display: { xs: "-webkit-box", md: "none" },
+            overflow: "hidden",
+            textOverflow: "ellipsis",
             WebkitLineClamp: "2",
             WebkitBoxOrient: "vertical",
             m: 0.5,
