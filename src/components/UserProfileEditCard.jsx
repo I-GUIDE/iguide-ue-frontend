@@ -29,6 +29,8 @@ import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
 import { fetchUser, updateUser } from "../utils/UserManager";
 import { dataURLtoFile } from "../helpers/helper";
 
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 const VisuallyHiddenInput = styled("input")`
@@ -141,10 +143,13 @@ export default function UserProfileEditCard(props) {
       );
       formData.append("file", confirmedProfilePictureFile);
 
-      const response = await fetch(`${USER_BACKEND_URL}/api/upload-avatar`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/upload-avatar`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const profilePictureResult = await response.json();
       avatar_url = profilePictureResult.url;

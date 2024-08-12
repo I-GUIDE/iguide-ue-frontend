@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "./FetcherWithJWT";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 /**
@@ -47,7 +49,7 @@ export async function addUser(
     bio: bio,
   };
 
-  const response = await fetch(`${USER_BACKEND_URL}/api/users`, {
+  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,13 +98,16 @@ export async function updateUser(
     avatar_url: avatar_url,
   };
 
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
+  const response = await fetchWithAuth(
+    `${USER_BACKEND_URL}/api/users/${openId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    }
+  );
 
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${error.message}`);
