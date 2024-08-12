@@ -29,6 +29,8 @@ import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
+
 import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
@@ -404,10 +406,13 @@ export default function SubmissionCard(props) {
       const formData = new FormData();
       formData.append("file", thumbnailImageFile);
 
-      const response = await fetch(`${USER_BACKEND_URL}/api/upload-thumbnail`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/upload-thumbnail`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const result = await response.json();
       data["thumbnail-image"] = result.url;
@@ -448,7 +453,7 @@ export default function SubmissionCard(props) {
     console.log("data to be submitted", data);
 
     if (submissionType === "update") {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/element/${elementId}`,
         {
           method: "PUT",
@@ -468,7 +473,7 @@ export default function SubmissionCard(props) {
         setSubmissionStatus("update-failed");
       }
     } else if (submissionType === "initial") {
-      const response = await fetch(`${USER_BACKEND_URL}/api/element`, {
+      const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/element`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
