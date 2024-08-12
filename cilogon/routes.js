@@ -58,7 +58,7 @@ const getUserRole = async (user_id) => {
     if (response.body.hits.total.value === 0) {
       console.error('User not found');
       return null;
-    }else{
+    } else {
       return response.body.hits.hits[0]._source.role;
     }
   } catch (error) {
@@ -81,19 +81,21 @@ const storeRefreshToken = async (client, token, user_id) => {
 };
 
 const generateAccessToken = (user) => {
-    return jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
+  return jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
 };
 
 const generateRefreshToken = (user) => {
-    return jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: '7m' });
+  return jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: '7m' });
 };
 
 router.get('/login', function (req, res, next) {
   console.log('-----------------------------');
   console.log('/Start login handler');
   next();
-}, passport.authenticate('oidc', { scope: "openid profile email org.cilogon.userinfo",
-initialidp: "urn:mace:incommon:uiuc.edu" }));
+}, passport.authenticate('oidc', {
+  scope: "openid profile email org.cilogon.userinfo",
+  initialidp: "urn:mace:incommon:uiuc.edu"
+}));
 
 router.get('/cilogon-callback', async (req, res, next) => {
   passport.authenticate('oidc', async (err, user, info) => {
@@ -101,7 +103,7 @@ router.get('/cilogon-callback', async (req, res, next) => {
       console.log(err);
       return res.redirect(`/error`);
     }
-    if (!user){
+    if (!user) {
       return res.redirect(`/nouser`);
     }
     req.logIn(user, async function (err) {
@@ -124,9 +126,9 @@ router.get('/cilogon-callback', async (req, res, next) => {
       await storeRefreshToken(client, refreshToken, user.sub);
 
       // Set the tokens in cookies
-      res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' , sameSite: 'None', domain: target_domain, path: '/'});
+      res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
       res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
-      
+
       console.log("Setting cookies to: ", target_domain);
 
       res.redirect(`${FRONTEND_URL}/user-profile`);
@@ -135,8 +137,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
 });
 
 router.get('/logout', function (req, res) {
-  res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV === 'production' , sameSite: 'None', domain: target_domain, path: '/'});
-  res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production' , sameSite: 'None', domain: target_domain, path: '/'});
+  res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
+  res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
   req.session.destroy(function (err) {
     res.redirect(FRONTEND_URL);
   });
