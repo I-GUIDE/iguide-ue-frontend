@@ -1,13 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import ElementList from '../components/ElementList';
+import ElementList from "../components/ElementList";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Publications() {
-    return (
-        <ElementList
-            dataType={['publication']}
-            title='Publications'
-            subtitle='Find your publications here'
-        />
-    );
+  usePageTitle("Publications");
+
+  return (
+    <ElementList
+      dataType={["publication"]}
+      title="Publications"
+      subtitle="Find your publications here"
+    />
+  );
 }

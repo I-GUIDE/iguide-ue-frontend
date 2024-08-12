@@ -1,6 +1,6 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
-import axios from 'axios';
-import {fetchWithAuth} from "./FetcherWithJWT.jsx";
+import axios from "axios";
+import { fetchWithAuth } from "./FetcherWithJWT.jsx";
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
  * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or
@@ -12,13 +12,21 @@ import {fetchWithAuth} from "./FetcherWithJWT.jsx";
  * @return {Promise<Array<Dict>>} an array of all data entries with the provided resource type.
  * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function DataRetriever(resourceType, sortBy = '_score', order = 'desc', from = 0, size = 10) {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`);
-    if (!response.ok) {
-        throw new Error(`Error fetching ${resourceType}: ${response.statusText}`);
-    }
-    const data = await response.json();
-    return data;
+export async function DataRetriever(
+  resourceType,
+  sortBy = "_score",
+  order = "desc",
+  from = 0,
+  size = 10
+) {
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`
+  );
+  if (!response.ok) {
+    throw new Error(`Error fetching ${resourceType}: ${response.statusText}`);
+  }
+  const data = await response.json();
+  return data;
 }
 
 /**
@@ -27,12 +35,16 @@ export async function DataRetriever(resourceType, sortBy = '_score', order = 'de
  * @return {Promise<Array<Dict>>} an array of all data entries with the field 'featured' as true.
  */
 export async function featuredResourcesRetriever() {
-    const response = await fetchWithAuth(`${BACKEND_URL_PORT}/api/featured-resources`);
-    if (!response.ok) {
-        throw new Error(`Error fetching featured resources: ${response.statusText}`);
-    }
-    const data = await response.json();
-    return data;
+  const response = await fetchWithAuth(
+    `${BACKEND_URL_PORT}/api/featured-resources`
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error fetching featured resources: ${response.statusText}`
+    );
+  }
+  const data = await response.json();
+  return data;
 }
 
 /**
@@ -48,31 +60,38 @@ export async function featuredResourcesRetriever() {
  * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search results.
  * @throws {Error} Throws an error if the search operation fails.
  */
-export async function DataSearcher(keyword, resourceType = 'any', sortBy = 'prioritize_title_author', order = 'desc', from = 0, size = 10) {
-    const body = {
-        keyword,
-        sort_by: sortBy,
-        order,
-        from,
-        size,
-    };
+export async function DataSearcher(
+  keyword,
+  resourceType = "any",
+  sortBy = "prioritize_title_author",
+  order = "desc",
+  from = 0,
+  size = 10
+) {
+  const body = {
+    keyword,
+    sort_by: sortBy,
+    order,
+    from,
+    size,
+  };
 
-    if (resourceType) {
-        body.resource_type = resourceType;
-    }
+  if (resourceType) {
+    body.resource_type = resourceType;
+  }
 
-    const response = await fetch(`${BACKEND_URL_PORT}/api/search`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    });
+  const response = await fetch(`${BACKEND_URL_PORT}/api/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 
-    if (!response.ok) {
-        throw new Error('Failed to search resources');
-    }
-    return response.json();
+  if (!response.ok) {
+    throw new Error("Failed to search resources");
+  }
+  return response.json();
 }
 
 /**
@@ -85,20 +104,20 @@ export async function DataSearcher(keyword, resourceType = 'any', sortBy = 'prio
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function getResourceCount(resourceType, keywords) {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/resource-count`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ resourceType, keywords })
-    });
+  const response = await fetch(`${BACKEND_URL_PORT}/api/resource-count`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ resourceType, keywords }),
+  });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch resource count');
-    }
+  if (!response.ok) {
+    throw new Error("Failed to fetch resource count");
+  }
 
-    const data = await response.json();
-    return data.count;
+  const data = await response.json();
+  return data.count;
 }
 
 /**
@@ -112,12 +131,14 @@ export async function getResourceCount(resourceType, keywords) {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchResourcesByField(field, values) {
-    const valueString = values.join(',');
-    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/${field}/${valueString}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch resources');
-    }
-    return response.json();
+  const valueString = values.join(",");
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/resources/${field}/${valueString}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch resources");
+  }
+  return response.json();
 }
 
 /**
@@ -131,13 +152,17 @@ export async function fetchResourcesByField(field, values) {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchResourceCountByField(field, values) {
-    const encodedValues = values.map(value => encodeURIComponent(value)).join(',');
-    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/count/${field}/${encodedValues}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch resource count');
-    }
-    const data = await response.json();
-    return data.count;
+  const encodedValues = values
+    .map((value) => encodeURIComponent(value))
+    .join(",");
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/resources/count/${field}/${encodedValues}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch resource count");
+  }
+  const data = await response.json();
+  return data.count;
 }
 
 /**
@@ -153,25 +178,31 @@ export async function fetchResourceCountByField(field, values) {
  * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
  * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function fetchResourcesByContributor(openid, sortBy = '_score', order = 'desc', from = 0, size = 5) {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/searchByCreator`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            openid,
-            sort_by: sortBy,
-            order: order,
-            from: from,
-            size: size,
-        }),
-    });
+export async function fetchResourcesByContributor(
+  openid,
+  sortBy = "_score",
+  order = "desc",
+  from = 0,
+  size = 5
+) {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/searchByCreator`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      openid,
+      sort_by: sortBy,
+      order: order,
+      from: from,
+      size: size,
+    }),
+  });
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch resources');
-    }
-    return response.json();
+  if (!response.ok) {
+    throw new Error("Failed to fetch resources");
+  }
+  return response.json();
 }
 
 /**
@@ -185,18 +216,18 @@ export async function fetchResourcesByContributor(openid, sortBy = '_score', ord
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchRelatedResourceTitles(type, ids) {
-    const idString = ids.join(',');
-    const response = await fetch(`${BACKEND_URL_PORT}/api/resources/${type}/${idString}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch resources');
-    }
-    const results = await response.json();
-    let nameArray = [];
-    results.map((res) => (
-        nameArray.push(res.title)
-    ))
+  const idString = ids.join(",");
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/resources/${type}/${idString}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch resources");
+  }
+  const results = await response.json();
+  let nameArray = [];
+  results.map((res) => nameArray.push(res.title));
 
-    return nameArray;
+  return nameArray;
 }
 
 /**
@@ -209,11 +240,13 @@ export async function fetchRelatedResourceTitles(type, ids) {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchAllTitlesByElementType(elementType) {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/elements/titles?element_type=${elementType}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch titles');
-    }
-    return response.json();
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/elements/titles?element_type=${elementType}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch titles");
+  }
+  return response.json();
 }
 
 /**
@@ -226,22 +259,22 @@ export async function fetchAllTitlesByElementType(elementType) {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function getMetadataByDOI(doi) {
-    const encodedDOI = encodeURIComponent(doi)
-    try {
-        // Construct the CrossRef API URL
-        const url = `https://api.crossref.org/works/${encodedDOI}`;
+  const encodedDOI = encodeURIComponent(doi);
+  try {
+    // Construct the CrossRef API URL
+    const url = `https://api.crossref.org/works/${encodedDOI}`;
 
-        // Make the HTTP request to the CrossRef API
-        const response = await axios.get(url);
+    // Make the HTTP request to the CrossRef API
+    const response = await axios.get(url);
 
-        // Extract metadata from the response
-        const metadata = response.data.message;
+    // Extract metadata from the response
+    const metadata = response.data.message;
 
-        return metadata;
-    } catch (error) {
-        console.warn('Error fetching metadata:', error);
-        return 'Publication not found';
-    }
+    return metadata;
+  } catch (error) {
+    console.warn("Error fetching metadata:", error);
+    return "Publication not found";
+  }
 }
 
 /**
@@ -257,29 +290,37 @@ export async function getMetadataByDOI(doi) {
  * @returns {Promise<Object|number>} The retrieved elements.
  * @throws {Error} If the request fails.
  */
-export async function elementRetriever(fieldName = '', matchValue = null, elementType = null, sortBy = '_score', order = 'desc', from = '0', size = '10') {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            field_name: fieldName,
-            match_value: matchValue,
-            element_type: elementType,
-            sort_by: sortBy,
-            order,
-            from,
-            size,
-            count_only: false,
-        }),
-    });
+export async function elementRetriever(
+  fieldName = "",
+  matchValue = null,
+  elementType = null,
+  sortBy = "_score",
+  order = "desc",
+  from = "0",
+  size = "10"
+) {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      field_name: fieldName,
+      match_value: matchValue,
+      element_type: elementType,
+      sort_by: sortBy,
+      order,
+      from,
+      size,
+      count_only: false,
+    }),
+  });
 
-    if (!response.ok) {
-        throw new Error('Failed to retrieve elements');
-    }
+  if (!response.ok) {
+    throw new Error("Failed to retrieve elements");
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
@@ -291,23 +332,49 @@ export async function elementRetriever(fieldName = '', matchValue = null, elemen
  * @returns {Promise<Object|number>} The count of the elements.
  * @throws {Error} If the request fails.
  */
-export async function elementCounter(fieldName = '', matchValue = null, elementType = null) {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            field_name: fieldName,
-            match_value: matchValue,
-            element_type: elementType,
-            count_only: true,
-        }),
-    });
+export async function elementCounter(
+  fieldName = "",
+  matchValue = null,
+  elementType = null
+) {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      field_name: fieldName,
+      match_value: matchValue,
+      element_type: elementType,
+      count_only: true,
+    }),
+  });
 
-    if (!response.ok) {
-        throw new Error('Failed to retrieve elements');
-    }
+  if (!response.ok) {
+    throw new Error("Failed to retrieve elements");
+  }
 
-    return response.json();
+  return response.json();
+}
+
+/**
+ * Fetches a single element for element pages
+ *
+ * @async
+ * @function fetchSingleElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSingleElementDetails(elementId) {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/element/${elementId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch resources");
+  }
+  return response.json();
 }

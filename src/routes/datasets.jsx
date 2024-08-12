@@ -1,13 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import ElementList from '../components/ElementList';
+import ElementList from "../components/ElementList";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Datasets() {
-    return (
-        <ElementList
-            dataType={['dataset']}
-            title='Datasets'
-            subtitle='Find your datasets here'
-        />
-    );
+  usePageTitle("Datasets");
+
+  return (
+    <ElementList
+      dataType={["dataset"]}
+      title="Datasets"
+      subtitle="Find your datasets here"
+    />
+  );
 }
