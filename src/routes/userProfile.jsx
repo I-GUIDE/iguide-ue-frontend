@@ -41,6 +41,8 @@ import usePageTitle from "../hooks/usePageTitle";
 import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
+
 import {
   DEFAULT_BODY_HEIGHT,
   USER_PROFILE_BODY_HEIGHT,
@@ -207,7 +209,7 @@ export default function UserProfile() {
   async function handleElementDelete(elementId) {
     console.log("Deleting...", elementId);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/resources/${elementId}`,
         {
           method: "DELETE",
