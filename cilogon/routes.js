@@ -126,8 +126,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
       await storeRefreshToken(client, refreshToken, user.sub);
 
       // Set the tokens in cookies
-      res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
-      res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
+      res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
+      res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
 
       console.log("Setting cookies to: ", target_domain);
 
@@ -137,8 +137,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
 });
 
 router.get('/logout', function (req, res) {
-  res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
-  res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None', domain: target_domain, path: '/' });
+  res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
+  res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
   req.session.destroy(function (err) {
     res.redirect(FRONTEND_URL);
   });
