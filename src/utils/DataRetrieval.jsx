@@ -35,9 +35,7 @@ export async function DataRetriever(
  * @return {Promise<Array<Dict>>} an array of all data entries with the field 'featured' as true.
  */
 export async function featuredResourcesRetriever() {
-  const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/featured-resources`
-  );
+  const response = await fetch(`${BACKEND_URL_PORT}/api/featured-resources`);
   if (!response.ok) {
     throw new Error(
       `Error fetching featured resources: ${response.statusText}`
