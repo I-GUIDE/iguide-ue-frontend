@@ -1,4 +1,6 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+
 export async function fetchWithAuth(url, options = {}) {
   let res = await fetch(url, {
     ...options,
@@ -27,7 +29,8 @@ export async function refreshAccessToken() {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to refresh access token");
+    alert("Session expired. Please login again!");
+    window.open(AUTH_BACKEND_URL + "/logout", "_self");
   }
 
   const data = await res.json();

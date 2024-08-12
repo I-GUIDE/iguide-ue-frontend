@@ -15,6 +15,9 @@ const os_index = process.env.OPENSEARCH_INDEX;
 const user_index = process.env.USER_INDEX
 const target_domain = process.env.JWT_TARGET_DOMAIN;
 
+const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
+const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
+
 console.log('OpenSearch Node:', os_node);
 console.log('OpenSearch Username:', os_usr);
 console.log('OpenSearch Password:', os_pswd);
@@ -81,11 +84,11 @@ const storeRefreshToken = async (client, token, user_id) => {
 };
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
+  return jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, { expiresIn: access_token_expiration });
 };
 
 const generateRefreshToken = (user) => {
-  return jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: '7m' });
+  return jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: refresh_token_expiration });
 };
 
 router.get('/login', function (req, res, next) {
