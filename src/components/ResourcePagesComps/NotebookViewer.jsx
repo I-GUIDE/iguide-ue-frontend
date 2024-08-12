@@ -54,6 +54,14 @@ export default function NotebookViewer(props) {
     return null;
   }
 
+  // If notebook filename is not ipynb or html, do not render
+  if (
+    !notebookFile ||
+    (!notebookFile.endsWith("ipynb") && !notebookFile.endsWith("html"))
+  ) {
+    return null;
+  }
+
   let isUsingNbconvert = false;
 
   let notebookUrl = "";
@@ -63,7 +71,7 @@ export default function NotebookViewer(props) {
   if (htmlNotebook && htmlNotebook !== "") {
     notebookUrl = htmlNotebook;
     isUsingNbconvert = true;
-  } else if (notebookFile && notebookFile !== "" && repoUrl && repoUrl !== "") {
+  } else if (repoUrl && repoUrl !== "") {
     notebookUrl = get_notebook_html(repoUrl, notebookFile);
   } else {
     return null;

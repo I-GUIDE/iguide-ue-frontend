@@ -28,8 +28,6 @@ export default function ContributorOps(props) {
   const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
   const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
-  console.log("adr", afterDeleteRedirection);
-
   // OutletContext retrieving the user object to display user info
   const [
     isAuthenticated,
