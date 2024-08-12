@@ -1,6 +1,6 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from 'axios';
-
+import {fetchWithAuth} from "./FetcherWithJWT.jsx";
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
  * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or
@@ -27,7 +27,7 @@ export async function DataRetriever(resourceType, sortBy = '_score', order = 'de
  * @return {Promise<Array<Dict>>} an array of all data entries with the field 'featured' as true.
  */
 export async function featuredResourcesRetriever() {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/featured-resources`);
+    const response = await fetchWithAuth(`${BACKEND_URL_PORT}/api/featured-resources`);
     if (!response.ok) {
         throw new Error(`Error fetching featured resources: ${response.statusText}`);
     }
