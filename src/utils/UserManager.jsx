@@ -151,3 +151,10 @@ export async function checkUser(uid) {
 
   return exists;
 }
+
+export async function checkTokens() {
+  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
+    method: "GET",
+  });
+  console.log("Check tokens response: ", response);
+}

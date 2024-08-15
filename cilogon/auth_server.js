@@ -87,12 +87,12 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
   );
 });
 
-const httpServer = http.createServer(app);
+// const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
 
-/*httpServer.listen(80, () => {
-     console.log(`Http Server Running on port 80`)
-});*/
+// httpServer.listen(80, () => {
+//   console.log(`Http Server Running on port 80`)
+// });
 
 httpsServer.listen(8443, () => {
   console.log(`Https Server Running on port 8443`)

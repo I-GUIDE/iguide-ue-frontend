@@ -26,7 +26,7 @@ import { styled } from "@mui/joy";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
-import { fetchUser, updateUser } from "../utils/UserManager";
+import { fetchUser, updateUser, checkTokens } from "../utils/UserManager";
 import { dataURLtoFile } from "../helpers/helper";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
@@ -46,6 +46,8 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function UserProfileEditCard(props) {
+  checkTokens();
+
   const userProfileEditType = props.userProfileEditType;
 
   const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =

@@ -30,6 +30,7 @@ import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import SubmissionStatusCard from "./SubmissionStatusCard";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
+import { checkTokens } from "../utils/UserManager";
 
 import {
   RESOURCE_TYPE_NAMES,
@@ -60,6 +61,8 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
+  checkTokens();
+
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
