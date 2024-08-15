@@ -152,6 +152,10 @@ export async function checkUser(uid) {
   return exists;
 }
 
+/**
+ * Verify whether the refresh token has expired
+ * The checkTokens function will redirect users to /logout if the refresh token has expired.
+ */
 export async function checkTokens() {
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
