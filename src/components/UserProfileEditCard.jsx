@@ -46,7 +46,9 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function UserProfileEditCard(props) {
-  checkTokens();
+  useEffect(() => {
+    checkTokens();
+  }, []);
 
   const userProfileEditType = props.userProfileEditType;
 

@@ -61,7 +61,9 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
-  checkTokens();
+  useEffect(() => {
+    checkTokens();
+  }, []);
 
   const submissionType = props.submissionType;
   const elementId = props.elementId;
