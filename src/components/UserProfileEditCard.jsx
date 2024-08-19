@@ -26,8 +26,10 @@ import { styled } from "@mui/joy";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
-import { fetchUser, updateUser } from "../utils/UserManager";
+import { fetchUser, updateUser, checkTokens } from "../utils/UserManager";
 import { dataURLtoFile } from "../helpers/helper";
+
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
@@ -44,10 +46,20 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function UserProfileEditCard(props) {
+  useEffect(() => {
+    checkTokens();
+  }, []);
+
   const userProfileEditType = props.userProfileEditType;
 
-  const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
-    useOutletContext();
+  const [
+    isAuthenticated,
+    setIsAuthenticated,
+    userInfo,
+    setUserInfo,
+    localUserInfo,
+    setLocalUserInfo,
+  ] = useOutletContext();
 
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
     useState("no submission");
@@ -73,27 +85,22 @@ export default function UserProfileEditCard(props) {
   const [newProfilePicture, setNewProfilePicture] = useState(false);
 
   useEffect(() => {
-    const fetchUserInfoFromDB = async () => {
-      console.log("fetching user info from DB...");
-      const userFromDB = await fetchUser(userInfo.sub);
-      console.log("user info from db", userFromDB);
-
-      setFirstNameFromDB(userFromDB["first_name"]);
-      setFirstName(userFromDB["first_name"]);
-      setLastNameFromDB(userFromDB["last_name"]);
-      setLastName(userFromDB["last_name"]);
-      setEmailFromDB(userFromDB["email"]);
-      setEmail(userFromDB["email"]);
-      setAffiliationFromDB(userFromDB["affiliation"]);
-      setAffiliation(userFromDB["affiliation"]);
-      setBio(userFromDB["bio"]);
-      // setProfilePictureFileURL(userFromDB['avatar_url']);
-      setConfirmedProfilePictureURL(userFromDB["avatar_url"]);
+    const getLocalUserInfo = async () => {
+      setFirstNameFromDB(localUserInfo["first_name"]);
+      setFirstName(localUserInfo["first_name"]);
+      setLastNameFromDB(localUserInfo["last_name"]);
+      setLastName(localUserInfo["last_name"]);
+      setEmailFromDB(localUserInfo["email"]);
+      setEmail(localUserInfo["email"]);
+      setAffiliationFromDB(localUserInfo["affiliation"]);
+      setAffiliation(localUserInfo["affiliation"]);
+      setBio(localUserInfo["bio"]);
+      setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
-    if (userInfo.sub) {
-      fetchUserInfoFromDB();
+    if (localUserInfo.openid) {
+      getLocalUserInfo();
     }
-  }, [userInfo]);
+  }, [localUserInfo]);
 
   // Read file to profilePictureFile
   function handleProfilePictureUpload(event) {
@@ -141,10 +148,13 @@ export default function UserProfileEditCard(props) {
       );
       formData.append("file", confirmedProfilePictureFile);
 
-      const response = await fetch(`${USER_BACKEND_URL}/api/upload-avatar`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/upload-avatar`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const profilePictureResult = await response.json();
       avatar_url = profilePictureResult.url;

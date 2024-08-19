@@ -1,6 +1,6 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from "axios";
-
+import { fetchWithAuth } from "./FetcherWithJWT.jsx";
 /**
  * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
  * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or

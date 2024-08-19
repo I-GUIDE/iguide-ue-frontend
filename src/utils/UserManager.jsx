@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "./FetcherWithJWT";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 /**
@@ -47,7 +49,7 @@ export async function addUser(
     bio: bio,
   };
 
-  const response = await fetch(`${USER_BACKEND_URL}/api/users`, {
+  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -96,13 +98,16 @@ export async function updateUser(
     avatar_url: avatar_url,
   };
 
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
+  const response = await fetchWithAuth(
+    `${USER_BACKEND_URL}/api/users/${openId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    }
+  );
 
   if (!response.ok) {
     throw new Error(`Error: ${response.status} ${error.message}`);
@@ -145,4 +150,15 @@ export async function checkUser(uid) {
   const exists = await response.json();
 
   return exists;
+}
+
+/**
+ * Verify whether the refresh token has expired
+ * The checkTokens function will redirect users to /logout if the refresh token has expired.
+ */
+export async function checkTokens() {
+  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
+    method: "GET",
+  });
+  console.log("Check tokens response: ", response);
 }
