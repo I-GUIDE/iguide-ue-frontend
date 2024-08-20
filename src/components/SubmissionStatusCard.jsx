@@ -90,17 +90,16 @@ export default function SubmissionStatusCard(props) {
             >
               User profile
             </Button>
-            {submissionStatus !== "unauthorized" &&
-              submissionType === "update" && (
-                <Button
-                  component="a"
-                  href={elementURI}
-                  variant="solid"
-                  color="primary"
-                >
-                  View element
-                </Button>
-              )}
+            {submissionStatus !== "unauthorized" && elementURI && (
+              <Button
+                component="a"
+                href={elementURI}
+                variant="solid"
+                color="primary"
+              >
+                View element
+              </Button>
+            )}
           </Stack>
         </CardContent>
       </Card>
