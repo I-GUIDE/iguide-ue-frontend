@@ -63,7 +63,11 @@ export default function NotebookPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title="Notebooks" subtitle="Individual Notebook" />
+      <Header
+        title="Notebooks"
+        subtitle="Individual Notebook"
+        displayNewContributionButton={true}
+      />
       <Container maxWidth="xl">
         <Box
           component="main"

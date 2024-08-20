@@ -108,7 +108,11 @@ export default function ElementList(props) {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <Header title={title} subtitle={subtitle} />
+        <Header
+          title={title}
+          subtitle={subtitle}
+          displayNewContributionButton={true}
+        />
         <Container maxWidth="xl">
           <Box
             component="main"

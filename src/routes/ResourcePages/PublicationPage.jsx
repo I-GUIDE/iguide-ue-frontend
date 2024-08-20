@@ -63,7 +63,11 @@ export default function PublicationPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title="Publications" subtitle="Individual Publication" />
+      <Header
+        title="Publications"
+        subtitle="Individual Publication"
+        displayNewContributionButton={true}
+      />
       <Container maxWidth="xl">
         <Box
           component="main"

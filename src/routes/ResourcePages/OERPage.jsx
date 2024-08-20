@@ -62,6 +62,7 @@ export default function OERPage() {
       <Header
         title="Educational Resources"
         subtitle="Individual Educational Resource"
+        displayNewContributionButton={true}
       />
       <Container maxWidth="xl">
         <Box

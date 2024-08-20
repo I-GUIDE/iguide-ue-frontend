@@ -64,7 +64,11 @@ export default function DatasetPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title="Dataset" subtitle="Individual Dataset" />
+      <Header
+        title="Dataset"
+        subtitle="Individual Dataset"
+        displayNewContributionButton={true}
+      />
       <Container maxWidth="xl">
         <Box
           component="main"
