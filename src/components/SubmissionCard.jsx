@@ -104,6 +104,8 @@ export default function SubmissionCard(props) {
     setLocalUserInfo,
   ] = useOutletContext();
 
+  const [elementURI, setElementURI] = useState();
+
   const [title, setTitle] = useState();
   const [tags, setTags] = useState();
   const [authors, setAuthors] = useState();
@@ -127,7 +129,8 @@ export default function SubmissionCard(props) {
       const thisResourceList = await fetchResourcesByField("_id", [elementId]);
       // Since the function returns an Array, we extract the content using idx 0
       const thisResource = thisResourceList[0];
-      console.log("thisResource", thisResource);
+
+      setElementURI("/" + thisResource["resource-type"] + "s/" + elementId);
       setTitle(thisResource.title);
       setResourceTypeSelected(thisResource["resource-type"]);
       setTags(thisResource.tags.join(", "));
@@ -490,6 +493,9 @@ export default function SubmissionCard(props) {
       console.log("initial submission, msg", result);
       if (result && result.message === "Resource registered successfully") {
         setSubmissionStatus("initial-succeeded");
+        if (result.elementId) {
+          setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+        }
       } else {
         setSubmissionStatus("initial-failed");
       }
@@ -502,7 +508,7 @@ export default function SubmissionCard(props) {
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
         submissionType={submissionType}
-        elementURI={"/" + resourceTypeSelected + "s/" + elementId}
+        elementURI={elementURI}
       />
     );
   }
