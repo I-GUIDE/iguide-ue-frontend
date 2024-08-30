@@ -20,7 +20,7 @@ import InfoCard from "./InfoCard";
 import Header from "./Layout/Header";
 import PageNav from "./PageNav";
 
-import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
+import { elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
@@ -57,15 +57,10 @@ export default function ElementList(props) {
           startingIdx,
           itemsPerPage
         );
-        const resourceCount = await elementCounter(
-          fieldName,
-          matchValue,
-          dataType
-        );
 
-        setNumberOfTotalItems(resourceCount);
+        setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
-        setMetadataList(data);
+        setMetadataList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data));
       } catch (error) {

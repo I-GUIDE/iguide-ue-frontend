@@ -97,7 +97,7 @@ export default function UserProfileEditCard(props) {
       setBio(localUserInfo["bio"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
-    if (localUserInfo.openid) {
+    if (localUserInfo && localUserInfo.openid) {
       getLocalUserInfo();
     }
   }, [localUserInfo]);

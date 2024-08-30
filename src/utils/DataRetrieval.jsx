@@ -289,7 +289,7 @@ export async function getMetadataByDOI(doi) {
  * @throws {Error} If the request fails.
  */
 export async function elementRetriever(
-  fieldName = "",
+  fieldName = null,
   matchValue = null,
   elementType = null,
   sortBy = "_score",
@@ -297,56 +297,22 @@ export async function elementRetriever(
   from = "0",
   size = "10"
 ) {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      field_name: fieldName,
-      match_value: matchValue,
-      element_type: elementType,
-      sort_by: sortBy,
-      order,
-      from,
-      size,
-      count_only: false,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to retrieve elements");
+  let queries = "";
+  if (fieldName !== null) {
+    queries += `field-name=${fieldName}&match-value=${matchValue}`;
+  }
+  if (elementType !== null) {
+    queries += `&element-type=${elementType}`;
   }
 
-  return response.json();
-}
-
-/**
- * Retrieve element count from the database based on the provided parameters.
- *
- * @param {string} [fieldName=''] - The name of the field in the element database.
- * @param {(string[]|null)} [matchValue=null] - The value used for filtering. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
- * @param {(string[]|null)} [elementType=null] - Type of the element. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
- * @returns {Promise<Object|number>} The count of the elements.
- * @throws {Error} If the request fails.
- */
-export async function elementCounter(
-  fieldName = "",
-  matchValue = null,
-  elementType = null
-) {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/retrieve`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      field_name: fieldName,
-      match_value: matchValue,
-      element_type: elementType,
-      count_only: true,
-    }),
-  });
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/elements?` +
+      queries +
+      `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to retrieve elements");

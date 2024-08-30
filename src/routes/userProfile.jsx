@@ -38,7 +38,7 @@ import UserProfileHeader from "../components/UserProfileHeader";
 import UserProfileEditCard from "../components/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { elementCounter, elementRetriever } from "../utils/DataRetrieval";
+import { elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
@@ -93,15 +93,10 @@ export default function UserProfile() {
           startingIdx,
           itemsPerPage
         );
-        const resourceCount = await elementCounter(
-          "contributor",
-          [userInfo.sub],
-          null
-        );
 
-        setNumberOfTotalItems(resourceCount);
+        setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
-        setMetadataList(data);
+        setMetadataList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data));
       }
