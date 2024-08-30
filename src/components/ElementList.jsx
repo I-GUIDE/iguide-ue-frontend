@@ -62,7 +62,7 @@ export default function ElementList(props) {
         setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
         setMetadataList(data.elements);
         setLoading(false);
-        setResultLength(arrayLength(data));
+        setResultLength(arrayLength(data.elements));
       } catch (error) {
         setError(error);
         setLoading(false);
