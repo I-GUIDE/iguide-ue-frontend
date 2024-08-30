@@ -98,7 +98,7 @@ export default function UserProfile() {
         setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
         setMetadataList(data.elements);
         setLoading(false);
-        setResultLength(arrayLength(data));
+        setResultLength(arrayLength(data.elements));
       }
     }
     if (userInfo) {
