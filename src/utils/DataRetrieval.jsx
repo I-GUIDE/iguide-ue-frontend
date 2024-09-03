@@ -331,12 +331,15 @@ export async function elementRetriever(
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchSingleElementDetails(elementId) {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/element/${elementId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/elements/${elementId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch resources");
   }
