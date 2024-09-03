@@ -20,7 +20,7 @@ import Chip from "@mui/joy/Chip";
 
 import SimpleInfoCard from "../components/SimpleInfoCard";
 import SearchBar from "../components/SearchBar";
-import { featuredResourcesRetriever } from "../utils/DataRetrieval";
+import { getHomepageElements } from "../utils/DataRetrieval";
 import { HOME_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     async function retrieveFeaturedResources() {
       try {
-        const data = await featuredResourcesRetriever();
+        const data = await getHomepageElements();
         setFeaturedResources(data);
         if (data.length > 0) {
           setHasFeaturedResources(true);

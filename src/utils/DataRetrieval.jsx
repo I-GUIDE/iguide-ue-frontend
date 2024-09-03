@@ -30,12 +30,11 @@ export async function DataRetriever(
 }
 
 /**
- * Retrieve featured resources from the database. It will return all the data entry with the
- * field 'featured' as true.
- * @return {Promise<Array<Dict>>} an array of all data entries with the field 'featured' as true.
+ * Retrieve elements for the homepage from the database.
+ * @return {Promise<Array<Dict>>} an array of all elements for homepage.
  */
-export async function featuredResourcesRetriever() {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/featured-resources`);
+export async function getHomepageElements() {
+  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/homepage`);
   if (!response.ok) {
     throw new Error(
       `Error fetching featured resources: ${response.statusText}`
