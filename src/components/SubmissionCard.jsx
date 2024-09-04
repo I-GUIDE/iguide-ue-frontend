@@ -40,7 +40,6 @@ import {
 
 import {
   fetchSingleElementDetails,
-  fetchRelatedResourceTitles,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
 } from "../utils/DataRetrieval";
@@ -154,54 +153,30 @@ export default function SubmissionCard(props) {
       setContributor(thisElement["contributor-id"]);
 
       let relatedResourcesArray = [];
-      if (
-        thisElement["related-datasets"] &&
-        thisElement["related-datasets"].length > 0
-      ) {
-        const resNames = await fetchRelatedResourceTitles(
-          "_id",
-          thisElement["related-datasets"]
-        );
-        resNames.map((res) =>
-          relatedResourcesArray.push({ type: "dataset", title: res })
-        );
-      }
-      if (
-        thisElement["related-notebooks"] &&
-        thisElement["related-notebooks"].length > 0
-      ) {
-        const resNames = await fetchRelatedResourceTitles(
-          "_id",
-          thisElement["related-notebooks"]
-        );
-        resNames.map((res) =>
-          relatedResourcesArray.push({ type: "notebook", title: res })
-        );
-      }
-      if (
-        thisElement["related-publications"] &&
-        thisElement["related-publications"].length > 0
-      ) {
-        const resNames = await fetchRelatedResourceTitles(
-          "_id",
-          thisElement["related-publications"]
-        );
-        resNames.map((res) =>
-          relatedResourcesArray.push({ type: "publication", title: res })
-        );
-      }
-      if (
-        thisElement["related-oers"] &&
-        thisElement["related-oers"].length > 0
-      ) {
-        const resNames = await fetchRelatedResourceTitles(
-          "_id",
-          thisElement["related-oers"]
-        );
-        resNames.map((res) =>
-          relatedResourcesArray.push({ type: "oer", title: res })
-        );
-      }
+      thisElement["related-datasets"].map((re) =>
+        relatedResourcesArray.push({
+          type: re["resource-type"],
+          title: re.title,
+        })
+      );
+      thisElement["related-notebooks"].map((re) =>
+        relatedResourcesArray.push({
+          type: re["resource-type"],
+          title: re.title,
+        })
+      );
+      thisElement["related-publications"].map((re) =>
+        relatedResourcesArray.push({
+          type: re["resource-type"],
+          title: re.title,
+        })
+      );
+      thisElement["related-oers"].map((re) =>
+        relatedResourcesArray.push({
+          type: re["resource-type"],
+          title: re.title,
+        })
+      );
       setRelatedResources(relatedResourcesArray);
 
       setOerExternalLinks(thisElement["oer-external-links"]);

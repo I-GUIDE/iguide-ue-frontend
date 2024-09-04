@@ -65,31 +65,6 @@ export async function DataSearcher(
 }
 
 /**
- * Fetches the title of elements of a given ID.
- *
- * @async
- * @function fetchRelatedResourceTitles
- * @param {string} type - The type of resources to fetch titles for.
- * @param {Array<string>} ids - A list of IDs
- * @returns {Promise<Array<string>>} A promise that resolves to an array of all titles.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function fetchRelatedResourceTitles(type, ids) {
-  const idString = ids.join(",");
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/resources/${type}/${idString}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch resources");
-  }
-  const results = await response.json();
-  let nameArray = [];
-  results.map((res) => nameArray.push(res.title));
-
-  return nameArray;
-}
-
-/**
  * Fetches all titles of elements of a specified type from the backend.
  *
  * @async
