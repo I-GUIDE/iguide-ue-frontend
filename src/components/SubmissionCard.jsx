@@ -388,7 +388,7 @@ export default function SubmissionCard(props) {
       formData.append("file", thumbnailImageFile);
 
       const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/upload-thumbnail`,
+        `${USER_BACKEND_URL}/api/elements/thumbnail`,
         {
           method: "POST",
           body: formData,
