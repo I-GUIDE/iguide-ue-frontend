@@ -22,6 +22,7 @@ import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
 import IconButton from "@mui/joy/IconButton";
 import Tooltip from "@mui/joy/Tooltip";
+import FormHelperText from "@mui/joy/FormHelperText";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SearchIcon from "@mui/icons-material/Search";
@@ -117,6 +118,7 @@ export default function SubmissionCard(props) {
   const [notebookFile, setNotebookFile] = useState();
   const [notebookRepo, setNotebookRepo] = useState();
   const [notebookGitHubUrl, setNotebookGitHubUrl] = useState();
+  const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState();
 
@@ -357,6 +359,21 @@ export default function SubmissionCard(props) {
     setAuthors(printListWithDelimiter(authorNameList, ","));
     setTitle(metadataDOI["title"]);
     setContents(metadataDOI["abstract"]);
+  };
+
+  const handleNotebookGitHubUrlChange = (event) => {
+    const val = event.target.value;
+    setNotebookGitHubUrl(val);
+
+    // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
+    const validNotebookGitHubUrl = new RegExp(
+      "https://(www.)?github.com/.+/blob/.+/.+.ipynb"
+    );
+    if (val === "" || validNotebookGitHubUrl.test(val)) {
+      setNotebookGitHubUrlError(false);
+    } else {
+      setNotebookGitHubUrlError(true);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -679,13 +696,54 @@ export default function SubmissionCard(props) {
           )}
           {resourceTypeSelected === "notebook" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Jupyter Notebook GitHub URL (required)</FormLabel>
+              <FormLabel>
+                <Typography
+                  level="title-sm"
+                  endDecorator={
+                    <Tooltip
+                      placement="top-start"
+                      variant="outlined"
+                      arrow
+                      title={
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            maxWidth: 320,
+                            justifyContent: "center",
+                            p: 1,
+                          }}
+                        >
+                          <Typography
+                            level="title-sm"
+                            sx={{ pb: 1 }}
+                          ></Typography>
+                          <Typography level="body-sm"></Typography>
+                        </Box>
+                      }
+                      size="lg"
+                    >
+                      <InfoOutlined size="lg" />
+                    </Tooltip>
+                  }
+                >
+                  Jupyter Notebook GitHub URL (required)
+                </Typography>
+              </FormLabel>
               <Input
                 required
                 name="notebook-url"
+                placeholder="https://github.com/{repo}/blob/{branch}/{filename}.ipynb"
                 value={notebookGitHubUrl}
-                onChange={(event) => setNotebookGitHubUrl(event.target.value)}
+                error={notebookGitHubUrlError}
+                onChange={handleNotebookGitHubUrlChange}
               />
+              {notebookGitHubUrlError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The link format is invalid!
+                </FormHelperText>
+              )}
             </FormControl>
           )}
 
