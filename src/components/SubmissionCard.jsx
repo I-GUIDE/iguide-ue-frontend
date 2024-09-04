@@ -39,7 +39,6 @@ import {
 } from "../configs/VarConfigs";
 
 import {
-  fetchResourcesByField,
   fetchRelatedResourceTitles,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
@@ -126,79 +125,77 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisResourceList = await fetchResourcesByField("_id", [elementId]);
-      // Since the function returns an Array, we extract the content using idx 0
-      const thisResource = thisResourceList[0];
+      const thisElement = await fetchSingleElementDetails(id);
 
-      setElementURI("/" + thisResource["resource-type"] + "s/" + elementId);
-      setTitle(thisResource.title);
-      setResourceTypeSelected(thisResource["resource-type"]);
-      setTags(thisResource.tags.join(", "));
-      setAuthors(thisResource.authors.join(", "));
-      setContents(thisResource.contents);
-      setThumbnailImageFileURL(thisResource["thumbnail-image"]);
+      setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      setTitle(thisElement.title);
+      setResourceTypeSelected(thisElement["resource-type"]);
+      setTags(thisElement.tags.join(", "));
+      setAuthors(thisElement.authors.join(", "));
+      setContents(thisElement.contents);
+      setThumbnailImageFileURL(thisElement["thumbnail-image"]);
 
-      setDatasetExternalLink(thisResource["external-link"]);
-      setDirectDownloadLink(thisResource["direct-download-link"]);
-      setDataSize(thisResource.dataSize);
+      setDatasetExternalLink(thisElement["external-link"]);
+      setDirectDownloadLink(thisElement["direct-download-link"]);
+      setDataSize(thisElement.dataSize);
 
       setNotebookGitHubUrl(
-        thisResource["notebook-repo"] +
+        thisElement["notebook-repo"] +
           "/blob/main/" +
-          thisResource["notebook-file"]
+          thisElement["notebook-file"]
       );
 
-      setNotebookFile(thisResource["notebook-file"]);
-      setNotebookRepo(thisResource["notebook-repo"]);
+      setNotebookFile(thisElement["notebook-file"]);
+      setNotebookRepo(thisElement["notebook-repo"]);
 
-      setPublicationDOI(thisResource["external-link-publication"]);
+      setPublicationDOI(thisElement["external-link-publication"]);
 
-      setContributor(thisResource["contributor-id"]);
+      setContributor(thisElement["contributor-id"]);
 
       let relatedResourcesArray = [];
       if (
-        thisResource["related-datasets"] &&
-        thisResource["related-datasets"].length > 0
+        thisElement["related-datasets"] &&
+        thisElement["related-datasets"].length > 0
       ) {
         const resNames = await fetchRelatedResourceTitles(
           "_id",
-          thisResource["related-datasets"]
+          thisElement["related-datasets"]
         );
         resNames.map((res) =>
           relatedResourcesArray.push({ type: "dataset", title: res })
         );
       }
       if (
-        thisResource["related-notebooks"] &&
-        thisResource["related-notebooks"].length > 0
+        thisElement["related-notebooks"] &&
+        thisElement["related-notebooks"].length > 0
       ) {
         const resNames = await fetchRelatedResourceTitles(
           "_id",
-          thisResource["related-notebooks"]
+          thisElement["related-notebooks"]
         );
         resNames.map((res) =>
           relatedResourcesArray.push({ type: "notebook", title: res })
         );
       }
       if (
-        thisResource["related-publications"] &&
-        thisResource["related-publications"].length > 0
+        thisElement["related-publications"] &&
+        thisElement["related-publications"].length > 0
       ) {
         const resNames = await fetchRelatedResourceTitles(
           "_id",
-          thisResource["related-publications"]
+          thisElement["related-publications"]
         );
         resNames.map((res) =>
           relatedResourcesArray.push({ type: "publication", title: res })
         );
       }
       if (
-        thisResource["related-oers"] &&
-        thisResource["related-oers"].length > 0
+        thisElement["related-oers"] &&
+        thisElement["related-oers"].length > 0
       ) {
         const resNames = await fetchRelatedResourceTitles(
           "_id",
-          thisResource["related-oers"]
+          thisElement["related-oers"]
         );
         resNames.map((res) =>
           relatedResourcesArray.push({ type: "oer", title: res })
@@ -206,7 +203,7 @@ export default function SubmissionCard(props) {
       }
       setRelatedResources(relatedResourcesArray);
 
-      setOerExternalLinks(thisResource["oer-external-links"]);
+      setOerExternalLinks(thisElement["oer-external-links"]);
     };
     if (submissionType === "update") {
       fetchData();

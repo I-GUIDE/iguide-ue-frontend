@@ -1,33 +1,6 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from "axios";
 import { fetchWithAuth } from "./FetcherWithJWT.jsx";
-/**
- * Retrieve data from the database based on the resource type, [sortBy, order, from, and size].
- * @param {string} resourceType the resource type. Should be 'notebook', 'dataset', 'publication' or
- * 'educational-material'.
- * @param {string} [sortBy='_score'] - The field to sort the resources by. Defaults to '_score'.
- * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
- * @param {int} [from=0] - The starting index for pagination. Defaults to 0.
- * @param {int} [size=10] - The number of resources to fetch. Defaults to 10.
- * @return {Promise<Array<Dict>>} an array of all data entries with the provided resource type.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function DataRetriever(
-  resourceType,
-  sortBy = "_score",
-  order = "desc",
-  from = 0,
-  size = 10
-) {
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/resources?data_name=${resourceType}&sort_by=${sortBy}&order=${order}&from=${from}&size=${size}`
-  );
-  if (!response.ok) {
-    throw new Error(`Error fetching ${resourceType}: ${response.statusText}`);
-  }
-  const data = await response.json();
-  return data;
-}
 
 /**
  * Retrieve elements for the homepage from the database.
@@ -89,51 +62,6 @@ export async function DataSearcher(
     throw new Error("Failed to search resources");
   }
   return response.json();
-}
-
-/**
- * Fetches resources by a specified field and array of values from the backend.
- *
- * @async
- * @function fetchResourcesByField
- * @param {string} field - The field to query.
- * @param {Array<string>} values - The array of values to match.
- * @returns {Promise<Array<Object>>} A promise that resolves to the JSON response containing the resources.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function fetchResourcesByField(field, values) {
-  const valueString = values.join(",");
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/resources/${field}/${valueString}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch resources");
-  }
-  return response.json();
-}
-
-/**
- * Fetches the count of resources by a specified field and array of values from the backend.
- *
- * @async
- * @function fetchResourceCountByField
- * @param {string} field - The field to query.
- * @param {Array<string>} values - The array of values to match.
- * @returns {Promise<number>} A promise that resolves to the JSON response containing the count of resources.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function fetchResourceCountByField(field, values) {
-  const encodedValues = values
-    .map((value) => encodeURIComponent(value))
-    .join(",");
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/resources/count/${field}/${encodedValues}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch resource count");
-  }
-  const data = await response.json();
-  return data.count;
 }
 
 /**
