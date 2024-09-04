@@ -146,7 +146,7 @@ export async function deleteUser(uid) {
  */
 export async function checkUser(uid) {
   const openid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/check_users/${openid}`);
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}/valid`);
   const exists = await response.json();
 
   return exists;
