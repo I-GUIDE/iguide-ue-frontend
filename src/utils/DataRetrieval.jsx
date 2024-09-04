@@ -92,32 +92,6 @@ export async function DataSearcher(
 }
 
 /**
- * Fetches the count of resources based on the specified resource type and/or keywords.
- * @async
- * @function getResourceCount
- * @param {string} [resourceType] - The type of resources to count. Optional. If 'any', it matches all resource types.
- * @param {string} [keywords] - Search keywords to count the resources. Optional.
- * @returns {Promise<number>} A promise that resolves to the count of resources.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function getResourceCount(resourceType, keywords) {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/resource-count`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ resourceType, keywords }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch resource count");
-  }
-
-  const data = await response.json();
-  return data.count;
-}
-
-/**
  * Fetches resources by a specified field and array of values from the backend.
  *
  * @async
