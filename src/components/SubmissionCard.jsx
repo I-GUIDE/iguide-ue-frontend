@@ -39,6 +39,7 @@ import {
 } from "../configs/VarConfigs";
 
 import {
+  fetchSingleElementDetails,
   fetchRelatedResourceTitles,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
