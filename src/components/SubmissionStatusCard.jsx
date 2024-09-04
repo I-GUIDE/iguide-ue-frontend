@@ -30,7 +30,7 @@ export default function SubmissionStatusCard(props) {
       submissionStatusText = "Thank you for your update! You are all set!";
       break;
     case "update-failed":
-      submissionStatusText = "Your update failed. Pleaase try again!";
+      submissionStatusText = "Your update failed. Please try again!";
       break;
     case "unauthorized":
       submissionStatusText =
