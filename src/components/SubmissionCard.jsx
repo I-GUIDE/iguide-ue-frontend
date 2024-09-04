@@ -126,7 +126,7 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement = await fetchSingleElementDetails(elementId);
 
       setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
       setTitle(thisElement.title);
