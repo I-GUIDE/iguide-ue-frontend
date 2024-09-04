@@ -298,7 +298,7 @@ export default function SubmissionCard(props) {
 
     if (url) {
       const response = await fetch(
-        `${USER_BACKEND_URL}/api/retrieve-title?url=${encodeURIComponent(url)}`
+        `${USER_BACKEND_URL}/api/url-title/?url=${encodeURIComponent(url)}`
       );
       if (!response.ok) {
         alert(
