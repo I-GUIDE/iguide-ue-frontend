@@ -15,6 +15,8 @@ import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 
+import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 export default function ContributorOps(props) {
@@ -49,8 +51,8 @@ export default function ContributorOps(props) {
   async function handleElementDelete(elementId) {
     console.log("Deleting...", elementId);
     try {
-      const response = await fetch(
-        `${USER_BACKEND_URL}/api/resources/${elementId}`,
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/elements/${elementId}`,
         {
           method: "DELETE",
         }

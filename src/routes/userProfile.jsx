@@ -205,7 +205,7 @@ export default function UserProfile() {
     console.log("Deleting...", elementId);
     try {
       const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/resources/${elementId}`,
+        `${USER_BACKEND_URL}/api/elements/${elementId}`,
         {
           method: "DELETE",
         }
