@@ -714,11 +714,18 @@ export default function SubmissionCard(props) {
                             p: 1,
                           }}
                         >
-                          <Typography
-                            level="title-sm"
-                            sx={{ pb: 1 }}
-                          ></Typography>
-                          <Typography level="body-sm"></Typography>
+                          <Typography level="title-sm" sx={{ pb: 1 }}>
+                            This is a link to the notebook on GitHub you would
+                            like featured for this Knowledge Element
+                          </Typography>
+                          <Typography level="body-sm">
+                            {`You must link to one specific notebook for 
+                            our notebook preview to function correctly, but when the notebook is 
+                            opened on the I-GUIDE Platform the entire repo will be copied to the 
+                            user's environment. An example link may look like "https://github.com/
+                            <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                            `}
+                          </Typography>
                         </Box>
                       }
                       size="lg"
@@ -733,7 +740,7 @@ export default function SubmissionCard(props) {
               <Input
                 required
                 name="notebook-url"
-                placeholder="https://github.com/{repo}/blob/{branch}/{filename}.ipynb"
+                placeholder="https://github.com/<username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
                 value={notebookGitHubUrl}
                 error={notebookGitHubUrlError}
                 onChange={handleNotebookGitHubUrlChange}
