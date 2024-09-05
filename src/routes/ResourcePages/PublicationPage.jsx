@@ -50,7 +50,7 @@ export default function PublicationPage() {
       setContributorId(thisElement["contributor-id"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setExternalLink(thisElement["external-link"]);
+      setExternalLink(thisElement["external-link-publication"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
