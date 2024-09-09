@@ -32,6 +32,7 @@ export default function ElementList(props) {
   const title = props.title;
   const subtitle = props.subtitle;
   const icon = props.icon;
+  const showElementType = props.showElementType;
 
   const [metadataList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -157,6 +158,7 @@ export default function ElementList(props) {
                         tags={metadata.tags}
                         contents={metadata.contents}
                         thumbnailImage={metadata["thumbnail-image"]}
+                        showElementType={showElementType}
                       />
                     </Grid>
                   ))}

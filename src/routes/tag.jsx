@@ -16,7 +16,8 @@ export default function Tag() {
       fieldName="tags"
       matchValue={[tagName]}
       title={'Tag: "' + displayTagName + '"'}
-      subtitle=""
+      subtitle={'Elements with tag "' + displayTagName + '"'}
+      showElementType
     />
   );
 }
