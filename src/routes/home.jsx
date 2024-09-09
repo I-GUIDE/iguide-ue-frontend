@@ -168,23 +168,16 @@ export default function Home() {
               >
                 <TutorialCard
                   thumbnailImage="/images/charco-education.png"
-                  maxHeight="50px"
-                  minHeight="100%"
-                  width="100%"
                   title="Learn"
                   content="Dive into Kaggle courses, competitions & forums."
                 />
                 <TutorialCard
                   thumbnailImage="/images/charco-launch.png"
-                  minHeight="100%"
-                  width="100%"
                   title="Create"
                   content="Dive into Kaggle courses, competitions & forums."
                 />
                 <TutorialCard
                   thumbnailImage="/images/charco-photos.png"
-                  minHeight="100%"
-                  width="100%"
                   title="Contribute"
                   content="Dive into Kaggle courses, competitions & forums."
                 />

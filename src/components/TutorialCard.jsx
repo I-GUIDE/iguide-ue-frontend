@@ -1,29 +1,21 @@
 import * as React from "react";
 
 import AspectRatio from "@mui/joy/AspectRatio";
-import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
-import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
-import Box from "@mui/joy/Box";
-import Tooltip from "@mui/joy/Tooltip";
 
 export default function TutorialCard(props) {
   const thumbnailImage = props.thumbnailImage;
   const title = props.title;
   const content = props.content;
-  const minHeight = props.minHeight;
-  const width = props.width;
 
   return (
     <Card
       variant="plain"
       orientation="horizontal"
       sx={{
-        width: width,
-        minHeight: minHeight,
         maxHeight: "150px",
         bgcolor: "#fff",
         "&:hover": {
