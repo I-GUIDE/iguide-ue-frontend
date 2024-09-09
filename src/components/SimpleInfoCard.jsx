@@ -21,6 +21,7 @@ export default function SimpleInfoCard(props) {
   const cardType = props.cardtype;
   const pageId = props.pageId;
   const minHeight = props.minHeight;
+  const width = props.width;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -47,7 +48,8 @@ export default function SimpleInfoCard(props) {
       <Card
         variant="outlined"
         sx={{
-          width: 300,
+          width: width,
+          maxWidth: 250,
           minHeight: minHeight,
           "&:hover": {
             borderColor: "theme.vars.palette.primary.outlinedHoverBorder",

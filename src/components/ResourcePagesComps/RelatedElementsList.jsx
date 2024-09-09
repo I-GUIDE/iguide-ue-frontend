@@ -37,6 +37,7 @@ export default function RelatedElementsList(props) {
               justifyContent="center"
               alignItems="center"
               minHeight={180}
+              sx={{ p: 3 }}
             >
               <SimpleInfoCard
                 key={relatedElement.id}
@@ -44,7 +45,8 @@ export default function RelatedElementsList(props) {
                 pageId={relatedElement.id}
                 title={relatedElement.title}
                 thumbnailImage={relatedElement["thumbnail-image"]}
-                minHeight={"100%"}
+                minHeight="100%"
+                width="100%"
               />
             </Grid>
           ))}
