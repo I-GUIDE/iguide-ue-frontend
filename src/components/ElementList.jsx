@@ -31,6 +31,7 @@ export default function ElementList(props) {
   const dataType = props.dataType;
   const title = props.title;
   const subtitle = props.subtitle;
+  const icon = props.icon;
 
   const [metadataList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,7 @@ export default function ElementList(props) {
   const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -106,6 +107,7 @@ export default function ElementList(props) {
         <Header
           title={title}
           subtitle={subtitle}
+          icon={icon}
           displayNewContributionButton={true}
         />
         <Container maxWidth="xl">
@@ -143,18 +145,22 @@ export default function ElementList(props) {
                   Showing {currentStartingIdx + 1}-
                   {currentStartingIdx + resultLength} of {numberOfTotalItems}
                 </Typography>
-                {metadataList?.map((metadata) => (
-                  <InfoCard
-                    key={metadata._id}
-                    cardtype={metadata["resource-type"] + "s"}
-                    pageid={metadata._id}
-                    title={metadata.title}
-                    authors={metadata.authors}
-                    tags={metadata.tags}
-                    contents={metadata.contents}
-                    thumbnailImage={metadata["thumbnail-image"]}
-                  />
-                ))}
+                <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
+                  {metadataList?.map((metadata) => (
+                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                      <InfoCard
+                        key={metadata._id}
+                        cardtype={metadata["resource-type"] + "s"}
+                        pageid={metadata._id}
+                        title={metadata.title}
+                        authors={metadata.authors}
+                        tags={metadata.tags}
+                        contents={metadata.contents}
+                        thumbnailImage={metadata["thumbnail-image"]}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </Stack>
               <Stack
                 direction="row"

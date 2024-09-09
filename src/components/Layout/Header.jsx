@@ -19,6 +19,7 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 export default function Header(props) {
   const title = props.title ? props.title : "";
   const subtitle = props.subtitle ? props.subtitle : "";
+  const icon = props.icon;
   const displayNewContributionButton = props.displayNewContributionButton;
 
   const [
@@ -32,34 +33,36 @@ export default function Header(props) {
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, height: 150 }}>
-      <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
+      <Card
+        variant="plain"
+        component="li"
+        sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
+      >
         <CardCover>
           <img
-            src="/images/green-blue.png"
-            srcSet="/images/green-blue.png 2x"
+            src="/images/network-bg.png"
             loading="lazy"
-            alt=""
+            alt="Network with nodes and connections"
           />
         </CardCover>
         <CardContent>
           <Container maxWidth="xl">
             <Stack spacing={1} sx={{ m: 3 }}>
               {title.length > 30 ? (
-                <Typography level="h3" textColor="#fff">
+                <Typography level="h3" textColor="#000" startDecorator={icon}>
                   {title}
                 </Typography>
               ) : (
-                <Typography level="h2" textColor="#fff">
+                <Typography level="h2" textColor="#000" startDecorator={icon}>
                   {title}
                 </Typography>
               )}
-              {/* {isAuthenticated && displayNewContributionButton ? ( */}
               <Stack
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Typography level="body-md" textColor="#fff">
+                <Typography level="body-md" textColor="#696969">
                   {subtitle}
                 </Typography>
                 {isAuthenticated && displayNewContributionButton && (
