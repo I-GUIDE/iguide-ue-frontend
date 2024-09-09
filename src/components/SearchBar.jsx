@@ -55,7 +55,11 @@ export default function SearchBar(props) {
           required
           fullWidth
           variant="outlined"
-          sx={{ "--Input-decoratorChildHeight": "50px" }}
+          sx={{
+            "--Input-decoratorChildHeight": "50px",
+            "--Input-radius": "40px",
+            "--Input-paddingInline": "20px",
+          }}
           placeholder="Start your exploration..."
           type="text"
           value={searchTerm}
