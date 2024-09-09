@@ -24,7 +24,7 @@ export default function FeaturedElementsList(props) {
       sx={{
         backgroundColor: "inherit",
         px: { xs: 2, md: 4 },
-        py: 3,
+        py: 4,
       }}
     >
       <Stack
@@ -37,7 +37,8 @@ export default function FeaturedElementsList(props) {
         <Typography
           level="h3"
           sx={{
-            p: 2,
+            px: 2,
+            py: 1,
           }}
           startDecorator={icon}
         >
@@ -48,7 +49,13 @@ export default function FeaturedElementsList(props) {
           color="inherit"
           style={{ textDecoration: "none" }}
         >
-          <Typography sx={{ p: 2 }} startDecorator={<ArrowForwardIcon />}>
+          <Typography
+            sx={{
+              px: 2,
+              py: 1,
+            }}
+            startDecorator={<ArrowForwardIcon />}
+          >
             View All
           </Typography>
         </Link>
@@ -64,7 +71,10 @@ export default function FeaturedElementsList(props) {
             direction="column"
             justifyContent="center"
             alignItems="center"
-            sx={{ p: 3 }}
+            sx={{
+              px: 2,
+              py: 1,
+            }}
           >
             <SimpleInfoCard
               key={featuredElement._id}
