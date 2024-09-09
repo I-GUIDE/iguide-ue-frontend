@@ -161,6 +161,16 @@ export default function Home() {
             }}
           >
             <Container maxWidth="lg">
+              <Typography
+                level="h3"
+                textColor="#000"
+                sx={{
+                  px: 2,
+                  py: 0.5,
+                }}
+              >
+                What to do next?
+              </Typography>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={4}
