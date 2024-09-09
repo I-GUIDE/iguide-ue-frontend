@@ -10,6 +10,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
+import Grid from "@mui/joy/Grid";
 import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
 import Card from "@mui/joy/Card";
@@ -24,6 +25,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import SchoolIcon from "@mui/icons-material/School";
 
 import FeaturedElementsList from "../components/FeaturedElementsList";
+import TutorialCard from "../components/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import { getHomepageElements } from "../utils/DataRetrieval";
 import {
@@ -147,6 +149,48 @@ export default function Home() {
               </Container>
             </CardContent>
           </Card>
+          <Box
+            sx={{
+              bgcolor: "#fff",
+              display: "grid",
+              gridTemplateColumns: { xs: "auto", md: "100%" },
+              gridTemplateRows: "auto 1fr auto",
+              px: 4,
+              py: 2,
+            }}
+          >
+            <Container maxWidth="lg">
+              <Stack
+                direction={{ xs: "column", md: "row" }}
+                spacing={4}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <TutorialCard
+                  thumbnailImage="/images/charco-education.png"
+                  maxHeight="50px"
+                  minHeight="100%"
+                  width="100%"
+                  title="Learn"
+                  content="Dive into Kaggle courses, competitions & forums."
+                />
+                <TutorialCard
+                  thumbnailImage="/images/charco-launch.png"
+                  minHeight="100%"
+                  width="100%"
+                  title="Create"
+                  content="Dive into Kaggle courses, competitions & forums."
+                />
+                <TutorialCard
+                  thumbnailImage="/images/charco-photos.png"
+                  minHeight="100%"
+                  width="100%"
+                  title="Contribute"
+                  content="Dive into Kaggle courses, competitions & forums."
+                />
+              </Stack>
+            </Container>
+          </Box>
           <Box
             sx={{
               bgcolor: "#fafafa",
