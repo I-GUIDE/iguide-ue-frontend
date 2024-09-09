@@ -68,9 +68,8 @@ export default function Header(props) {
                 {isAuthenticated && displayNewContributionButton && (
                   <Dropdown>
                     <MenuButton
-                      variant="solid"
-                      size="sm"
-                      color="warning"
+                      variant="outlined"
+                      size="md"
                       endDecorator={<LibraryAddIcon />}
                     >
                       New Contribution
