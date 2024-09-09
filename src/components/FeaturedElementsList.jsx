@@ -7,7 +7,6 @@ import Link from "@mui/joy/Link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SimpleInfoCard from "./SimpleInfoCard";
-import { RESOURCE_TYPE_NAMES } from "../configs/VarConfigs";
 
 export default function FeaturedElementsList(props) {
   const featuredElements = props.featuredElements;
@@ -73,7 +72,7 @@ export default function FeaturedElementsList(props) {
             alignItems="center"
             sx={{
               px: 2,
-              py: 1,
+              py: { xs: 2, md: 1 },
             }}
           >
             <SimpleInfoCard
