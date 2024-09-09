@@ -4,11 +4,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
+import Stack from "@mui/joy/Stack";
+import Avatar from "@mui/joy/Avatar";
+import Grid from "@mui/joy/Grid";
 import IconButton from "@mui/joy/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function SearchBar(props) {
   const onSearch = props.onSearch;
+  const showSmartSearch = props.showSmartSearch;
   // define search data
   const [data, setData] = useState({
     content: "",
@@ -37,32 +41,50 @@ export default function SearchBar(props) {
 
   return (
     <form onSubmit={handleSubmit} id="iguide-search-form">
-      <Input
-        key="iguide-search"
-        required
-        variant="outlined"
-        sx={{ "--Input-decoratorChildHeight": "50px" }}
-        placeholder="Search all..."
-        type="text"
-        value={searchTerm}
-        onChange={(event) => {
-          setData({ content: event.target.value, status: "initial" });
-          setSearchTerm(event.target.value);
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: "center",
+          justifyContent: "center",
+          display: "flex",
+          gap: 2,
         }}
-        error={data.status === "failure"}
-        endDecorator={
-          <IconButton
-            size="lg"
-            variant="plain"
-            loading={data.status === "loading"}
-            type="submit"
-            sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-            onClick={onSearch}
-          >
-            <SearchIcon />
-          </IconButton>
-        }
-      />
+      >
+        <Input
+          key="iguide-search"
+          required
+          fullWidth
+          variant="outlined"
+          sx={{ "--Input-decoratorChildHeight": "50px" }}
+          placeholder="Start your exploration..."
+          type="text"
+          value={searchTerm}
+          onChange={(event) => {
+            setData({ content: event.target.value, status: "initial" });
+            setSearchTerm(event.target.value);
+          }}
+          error={data.status === "failure"}
+          endDecorator={
+            <IconButton
+              size="lg"
+              variant="plain"
+              loading={data.status === "loading"}
+              type="submit"
+              sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              onClick={onSearch}
+            >
+              <SearchIcon />
+            </IconButton>
+          }
+        />
+        {showSmartSearch && (
+          <Avatar
+            alt="Smart search button"
+            src="/images/smart-search-button.png"
+          />
+        )}
+      </Stack>
+
       <FormControl>
         {data.status === "failure" && (
           <FormHelperText
