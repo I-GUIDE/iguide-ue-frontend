@@ -52,7 +52,11 @@ export default function InfoCard(props) {
       <Card
         variant="outlined"
         color={categoryColor}
-        sx={{ width: 320, height: "100%", "--Card-radius": "25px" }}
+        sx={{
+          width: 300,
+          height: "100%",
+          "--Card-radius": "25px",
+        }}
       >
         <CardOverflow>
           <AspectRatio ratio="2">

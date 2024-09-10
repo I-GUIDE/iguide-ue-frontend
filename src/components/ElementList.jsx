@@ -146,23 +146,31 @@ export default function ElementList(props) {
                   Showing {currentStartingIdx + 1}-
                   {currentStartingIdx + resultLength} of {numberOfTotalItems}
                 </Typography>
-                <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
-                  {metadataList?.map((metadata) => (
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                      <InfoCard
-                        key={metadata._id}
-                        cardtype={metadata["resource-type"] + "s"}
-                        pageid={metadata._id}
-                        title={metadata.title}
-                        authors={metadata.authors}
-                        tags={metadata.tags}
-                        contents={metadata.contents}
-                        thumbnailImage={metadata["thumbnail-image"]}
-                        showElementType={showElementType}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
+                <Stack
+                  spacing={2}
+                  sx={{
+                    px: { xs: 2, md: 4, width: "100%" },
+                  }}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
+                    {metadataList?.map((metadata) => (
+                      <Grid key={metadata._id} size={{ xs: 12, sm: 6, md: 3 }}>
+                        <InfoCard
+                          cardtype={metadata["resource-type"] + "s"}
+                          pageid={metadata._id}
+                          title={metadata.title}
+                          authors={metadata.authors}
+                          tags={metadata.tags}
+                          contents={metadata.contents}
+                          thumbnailImage={metadata["thumbnail-image"]}
+                          showElementType={showElementType}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Stack>
               </Stack>
               <Stack
                 direction="row"

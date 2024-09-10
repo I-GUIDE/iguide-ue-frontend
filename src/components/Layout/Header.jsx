@@ -47,7 +47,7 @@ export default function Header(props) {
         </CardCover>
         <CardContent>
           <Container maxWidth="xl">
-            <Stack spacing={1} sx={{ m: 3 }}>
+            <Stack spacing={0.5} sx={{ px: 4, py: 2 }}>
               {title.length > 30 ? (
                 <Typography level="h3" textColor="#000" startDecorator={icon}>
                   {title}
@@ -58,9 +58,10 @@ export default function Header(props) {
                 </Typography>
               )}
               <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                spacing={1}
+                direction={{ xs: "column", md: "row" }}
+                justifyContent={{ xs: "center", md: "space-between" }}
+                alignItems={{ xs: "flex-start", md: "center" }}
               >
                 <Typography level="body-md" textColor="#696969">
                   {subtitle}
@@ -69,7 +70,7 @@ export default function Header(props) {
                   <Dropdown>
                     <MenuButton
                       variant="outlined"
-                      size="md"
+                      size="sm"
                       endDecorator={<LibraryAddIcon />}
                     >
                       New Contribution
