@@ -21,6 +21,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import PersonIcon from "@mui/icons-material/Person";
 
+import UserAvatar from "./UserAvatar";
+
 export default function UserProfileHeader(props) {
   const localUserInfo = props.localUserInfo;
 
@@ -72,7 +74,7 @@ export default function UserProfileHeader(props) {
           />
         </CardCover>
         <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
-          <Container maxWidth="md">
+          <Container maxWidth="xl">
             <Grid
               container
               sx={{ justifyContent: "center", alignItems: "center" }}
@@ -81,30 +83,7 @@ export default function UserProfileHeader(props) {
                 <Stack
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
-                  <AspectRatio
-                    ratio="1"
-                    variant="outlined"
-                    sx={{
-                      width: 150,
-                      bgcolor: "background.level2",
-                      borderRadius: "lg",
-                    }}
-                  >
-                    {localUserInfo ? (
-                      localUserInfo["avatar_url"] ? (
-                        <img
-                          src={localUserInfo["avatar_url"]}
-                          srcSet={localUserInfo["avatar_url"] + " 2x"}
-                          loading="lazy"
-                          alt="user profile photo"
-                        />
-                      ) : (
-                        <Jdenticon size="150" value={localUserInfo.openid} />
-                      )
-                    ) : (
-                      <PersonIcon />
-                    )}
-                  </AspectRatio>
+                  <UserAvatar localUserInfo={localUserInfo} size={150} />
                 </Stack>
               </Grid>
               <Grid xs={12} md={9}>

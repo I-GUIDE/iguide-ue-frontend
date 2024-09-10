@@ -34,6 +34,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/joy/Tooltip";
 
 import SearchBar from "../SearchBar";
+import UserAvatar from "../UserAvatar";
 
 const pages = [
   ["Home", "/"],
@@ -73,35 +74,13 @@ export default function NavBar(props) {
     window.open(AUTH_BACKEND_URL + "/logout", "_self");
   }
 
-  function UserAvatar() {
-    if (localUserInfo) {
-      if (localUserInfo.avatar_url) {
-        return (
-          <Avatar
-            variant="outlined"
-            alt="User avatar"
-            src={localUserInfo.avatar_url}
-          />
-        );
-      } else {
-        return (
-          <Avatar>
-            <Jdenticon size="200" value={localUserInfo.openid} />
-          </Avatar>
-        );
-      }
-    } else {
-      <Avatar variant="outlined" />;
-    }
-  }
-
   // If the user is logged in, display the logout button, otherwise login
   function AuthButton() {
     if (isAuthenticated) {
       return (
         <Dropdown>
           <MenuButton color="primary">
-            <UserAvatar />
+            <UserAvatar localUserInfo={localUserInfo} />
           </MenuButton>
           <Menu
             placement="bottom-end"
