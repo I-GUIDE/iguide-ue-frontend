@@ -77,7 +77,7 @@ export default function UserProfile() {
   const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
   const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -380,15 +380,17 @@ export default function UserProfile() {
                         {currentStartingIdx + resultLength} of{" "}
                         {numberOfTotalItems}
                       </Typography>
-                      {metadataList?.map((metadata, idx) => (
-                        <Grid
-                          key={metadata._id}
-                          container
-                          spacing={2}
-                          columns={16}
-                          sx={{ flexGrow: 1 }}
-                        >
-                          <Grid xs={15}>
+                      <Grid
+                        container
+                        spacing={2}
+                        columns={12}
+                        sx={{ flexGrow: 1 }}
+                      >
+                        {metadataList?.map((metadata, idx) => (
+                          <Grid
+                            size={{ xs: 12, sm: 6, md: 3 }}
+                            key={metadata._id}
+                          >
                             <InfoCard
                               cardtype={metadata["resource-type"] + "s"}
                               pageid={metadata._id}
@@ -400,33 +402,9 @@ export default function UserProfile() {
                               showElementType
                             />
                           </Grid>
-                          <Grid xs={1}>
-                            <IconButton
-                              color="danger"
-                              size="lg"
-                              onClick={() => {
-                                setDeleteMetadataTitle(metadata.title);
-                                setDeleteMetadataId(metadata._id);
-                                console.log(
-                                  "Attempting to delete:",
-                                  metadata.title,
-                                  metadata._id
-                                );
-                              }}
-                            >
-                              <DeleteForever />
-                            </IconButton>
-                            <Link
-                              href={"/element-update/" + metadata._id}
-                              style={{ textDecoration: "none" }}
-                            >
-                              <IconButton color="primary" size="lg">
-                                <EditIcon />
-                              </IconButton>
-                            </Link>
-                          </Grid>
-                        </Grid>
-                      ))}
+                        ))}
+                      </Grid>
+
                       <Modal
                         open={!!deleteMetadataTitle && !!deleteMetadataId}
                         onClose={() => {
