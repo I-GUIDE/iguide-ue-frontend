@@ -101,8 +101,29 @@ export default function UserProfile() {
         setResultLength(arrayLength(data.elements));
       }
     }
+    async function retrieveDemoData(startingIdx) {
+      const data = await elementRetriever(
+        null,
+        null,
+        "dataset",
+        "_id",
+        "desc",
+        startingIdx,
+        itemsPerPage
+      );
+
+      setNumberOfTotalItems(data["total-count"]);
+      setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
+      setMetadataList(data.elements);
+      setLoading(false);
+      setResultLength(arrayLength(data.elements));
+    }
     if (userInfo) {
-      retrieveData(currentStartingIdx);
+      if (userInfo.sub === "http://cilogon.org/serverE/users/do-not-use") {
+        retrieveDemoData(currentStartingIdx);
+      } else {
+        retrieveData(currentStartingIdx);
+      }
     }
   }, [currentStartingIdx, numberOfTotalItems, userInfo]);
 
@@ -361,6 +382,7 @@ export default function UserProfile() {
                       </Typography>
                       {metadataList?.map((metadata, idx) => (
                         <Grid
+                          key={metadata._id}
                           container
                           spacing={2}
                           columns={16}
@@ -368,7 +390,6 @@ export default function UserProfile() {
                         >
                           <Grid xs={15}>
                             <InfoCard
-                              key={metadata._id}
                               cardtype={metadata["resource-type"] + "s"}
                               pageid={metadata._id}
                               title={metadata.title}
@@ -376,6 +397,7 @@ export default function UserProfile() {
                               tags={metadata.tags}
                               contents={metadata.contents}
                               thumbnailImage={metadata["thumbnail-image"]}
+                              showElementType
                             />
                           </Grid>
                           <Grid xs={1}>
