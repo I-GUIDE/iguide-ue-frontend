@@ -16,18 +16,6 @@ import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Pagination from "@mui/material/Pagination";
-import IconButton from "@mui/joy/IconButton";
-import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
-import DialogActions from "@mui/joy/DialogActions";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
-import DeleteForever from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import Divider from "@mui/joy/Divider";
-import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
@@ -73,9 +61,6 @@ export default function UserProfile() {
   const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-
-  const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
-  const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
   const itemsPerPage = 12;
 
@@ -404,47 +389,6 @@ export default function UserProfile() {
                           </Grid>
                         ))}
                       </Grid>
-
-                      <Modal
-                        open={!!deleteMetadataTitle && !!deleteMetadataId}
-                        onClose={() => {
-                          setDeleteMetadataId(undefined);
-                          setDeleteMetadataTitle(undefined);
-                        }}
-                      >
-                        <ModalDialog variant="outlined" role="alertdialog">
-                          <DialogTitle>
-                            <WarningRoundedIcon />
-                            Confirmation
-                          </DialogTitle>
-                          <Divider />
-                          <DialogContent>
-                            Are you sure you want to delete "
-                            {deleteMetadataTitle}"? This deletion is permanent!
-                          </DialogContent>
-                          <DialogActions>
-                            <Button
-                              variant="solid"
-                              color="danger"
-                              onClick={() =>
-                                handleElementDelete(deleteMetadataId)
-                              }
-                            >
-                              Delete
-                            </Button>
-                            <Button
-                              variant="plain"
-                              color="neutral"
-                              onClick={() => {
-                                setDeleteMetadataId(undefined);
-                                setDeleteMetadataTitle(undefined);
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </DialogActions>
-                        </ModalDialog>
-                      </Modal>
                     </Stack>
                     <Stack
                       direction="row"
