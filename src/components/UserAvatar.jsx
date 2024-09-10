@@ -20,7 +20,7 @@ export default function UserAvatar(props) {
       );
     } else {
       return (
-        <Avatar>
+        <Avatar variant="outlined">
           <Jdenticon size="200" value={localUserInfo.openid} />
         </Avatar>
       );

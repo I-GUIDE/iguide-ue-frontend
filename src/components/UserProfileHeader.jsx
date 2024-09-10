@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import Jdenticon from "react-jdenticon";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
@@ -10,7 +8,6 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
@@ -19,12 +16,14 @@ import MenuItem from "@mui/joy/MenuItem";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import PersonIcon from "@mui/icons-material/Person";
 
 import UserAvatar from "./UserAvatar";
 
 export default function UserProfileHeader(props) {
   const localUserInfo = props.localUserInfo;
+  const contributionCount = props.contributionCount
+    ? props.contributionCount
+    : 0;
 
   // If the user info from the local DB is still not available, wait...
   if (!localUserInfo) {
@@ -67,10 +66,9 @@ export default function UserProfileHeader(props) {
       <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
         <CardCover>
           <img
-            src="/images/green-blue.png"
-            srcSet="/images/green-blue.png 2x"
+            src="/images/network-bg.png"
             loading="lazy"
-            alt=""
+            alt="Network with nodes and connections"
           />
         </CardCover>
         <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -86,7 +84,7 @@ export default function UserProfileHeader(props) {
                   <UserAvatar localUserInfo={localUserInfo} size={150} />
                 </Stack>
               </Grid>
-              <Grid xs={12} md={9}>
+              <Grid xs={12} md={6}>
                 <Stack
                   direction="column"
                   sx={{ m: 3 }}
@@ -96,7 +94,7 @@ export default function UserProfileHeader(props) {
                     md: "flex-start",
                   }}
                 >
-                  <Typography level="h1" fontWeight="lg" textColor={"#fff"}>
+                  <Typography level="h1" fontWeight="lg" textColor={"#000"}>
                     {localUserInfo.first_name
                       ? localUserInfo.first_name
                       : "First name unknown"}
@@ -108,7 +106,7 @@ export default function UserProfileHeader(props) {
                   <Typography
                     level="body-sm"
                     fontWeight="lg"
-                    textColor={"#fff"}
+                    textColor={"#000"}
                   >
                     {localUserInfo.email
                       ? "Email: " + localUserInfo.email
@@ -117,7 +115,7 @@ export default function UserProfileHeader(props) {
                   <Typography
                     level="body-sm"
                     fontWeight="lg"
-                    textColor={"#fff"}
+                    textColor={"#000"}
                   >
                     {localUserInfo.affiliation
                       ? "Affiliation: " + localUserInfo.affiliation
@@ -126,7 +124,7 @@ export default function UserProfileHeader(props) {
                   <Typography
                     level="body-sm"
                     fontWeight="md"
-                    textColor={"#fff"}
+                    textColor={"#000"}
                   >
                     {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
                   </Typography>
@@ -139,7 +137,7 @@ export default function UserProfileHeader(props) {
                     <Button
                       component="a"
                       href="/user-profile-update"
-                      variant="solid"
+                      variant="outlined"
                       size="sm"
                       color="success"
                       endDecorator={<EditIcon />}
@@ -148,7 +146,7 @@ export default function UserProfileHeader(props) {
                     </Button>
                     <Dropdown>
                       <MenuButton
-                        variant="solid"
+                        variant="outlined"
                         size="sm"
                         color="warning"
                         endDecorator={<LibraryAddIcon />}
@@ -175,6 +173,23 @@ export default function UserProfileHeader(props) {
                     </Dropdown>
                   </Stack>
                 </Stack>
+              </Grid>
+              <Grid xs={12} md={3}>
+                {contributionCount > 0 && (
+                  <Stack
+                    direction="column"
+                    sx={{ m: 3 }}
+                    spacing={1}
+                    alignItems="center"
+                  >
+                    <Typography level="h1" fontWeight="lg" textColor={"#000"}>
+                      {contributionCount}
+                    </Typography>
+                    <Typography level="h4" fontWeight="lg" textColor={"#000"}>
+                      Contribution{contributionCount > 1 && "s"}
+                    </Typography>
+                  </Stack>
+                )}
               </Grid>
             </Grid>
           </Container>

@@ -281,7 +281,12 @@ export default function UserProfile() {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        {userInfo && <UserProfileHeader localUserInfo={localUserInfo} />}
+        {userInfo && (
+          <UserProfileHeader
+            localUserInfo={localUserInfo}
+            contributionCount={numberOfTotalItems}
+          />
+        )}
         <Container maxWidth="xl">
           <Box
             component="main"
