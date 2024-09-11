@@ -18,10 +18,7 @@ export default function MainContent(props) {
   return (
     <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Grid container rowSpacing={2} columnSpacing={8} alignItems="center">
-        <Grid xs={12} md={8}>
-          <Typography level="h1" sx={{ py: 1 }}>
-            {title}
-          </Typography>
+        <Grid xs={12} md={7}>
           {contributors && contributors.length > 0 && (
             <Typography sx={{ py: 1 }}>
               <Typography level="title-lg">
@@ -32,20 +29,22 @@ export default function MainContent(props) {
               </Typography>
             </Typography>
           )}
+          <Typography level="h1" sx={{ py: 1 }}>
+            {title}
+          </Typography>
           {authors && authors.length > 0 && (
             <Typography sx={{ py: 1 }}>
-              <Typography level="title-lg">
-                Author{authors.length > 1 && "s"}:{" "}
-              </Typography>
               <Typography level="body-lg">
                 {printListWithDelimiter(authors, ",")}
               </Typography>
             </Typography>
           )}
-          <Typography sx={{ py: 1 }}>{contents}</Typography>
         </Grid>
-        <Grid xs={12} md={4}>
-          <AspectRatio variant="outlined" maxHeight={280} sx={{ py: 1 }}>
+        <Grid xs={12} md={5}>
+          <AspectRatio
+            variant="outlined"
+            sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+          >
             {thumbnailImage ? (
               <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
             ) : (
@@ -58,6 +57,10 @@ export default function MainContent(props) {
           </AspectRatio>
         </Grid>
       </Grid>
+      <Typography level="h4" sx={{ pt: 2 }}>
+        About
+      </Typography>
+      <Typography sx={{ py: 2 }}>{contents}</Typography>
     </Stack>
   );
 }
