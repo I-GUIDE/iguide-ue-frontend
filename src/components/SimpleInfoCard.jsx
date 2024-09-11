@@ -22,6 +22,7 @@ export default function SimpleInfoCard(props) {
   const pageId = props.pageId;
   const minHeight = props.minHeight;
   const width = props.width;
+  const showElementType = props.showElementType;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -47,6 +48,7 @@ export default function SimpleInfoCard(props) {
     >
       <Card
         variant="outlined"
+        color={categoryColor}
         sx={{
           width: width,
           maxWidth: 250,
@@ -86,22 +88,24 @@ export default function SimpleInfoCard(props) {
             </Stack>
           </Link>
         </CardContent>
-        <CardOverflow
-          variant="soft"
-          color={categoryColor}
-          sx={{
-            px: 2,
-            py: 1,
-            justifyContent: "center",
-            fontSize: "xs",
-            fontWeight: "xl",
-            letterSpacing: "0.3px",
-            textTransform: "uppercase",
-            borderColor: "divider",
-          }}
-        >
-          {categoryName}
-        </CardOverflow>
+        {showElementType && (
+          <CardOverflow
+            variant="soft"
+            color={categoryColor}
+            sx={{
+              px: 2,
+              py: 1,
+              justifyContent: "center",
+              fontSize: "xs",
+              fontWeight: "xl",
+              letterSpacing: "0.3px",
+              textTransform: "uppercase",
+              borderColor: "divider",
+            }}
+          >
+            {categoryName}
+          </CardOverflow>
+        )}
       </Card>
     </Tooltip>
   );
