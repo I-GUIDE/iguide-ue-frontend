@@ -34,24 +34,6 @@ import {
 } from "../configs/VarConfigs";
 
 export default function Home() {
-  const [featuredElements, fsetFeaturedElements] = useState([]);
-
-  const [error, setError] = useState(null);
-
-  // When the state of hasSearched changed, check if hasSearched is false. If
-  //   it is false, retrieve the featured resources.
-  useEffect(() => {
-    async function retrieveFeaturedElements() {
-      try {
-        const data = await getHomepageElements();
-        fsetFeaturedElements(data);
-      } catch (error) {
-        setError(error);
-      }
-    }
-    retrieveFeaturedElements();
-  }, []);
-
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -206,28 +188,32 @@ export default function Home() {
           >
             <Container maxWidth="lg">
               <FeaturedElementsList
-                featuredElements={featuredElements}
                 icon={<DatasetIcon />}
                 title="Datasets"
-                elementsPage="/datasets"
+                pageLink="/datasets"
+                type="dataset"
+                limit={4}
               />
               <FeaturedElementsList
-                featuredElements={featuredElements}
                 icon={<CodeIcon />}
                 title="Notebooks"
-                elementsPage="/notebooks"
+                pageLink="/notebooks"
+                type="notebook"
+                limit={4}
               />
               <FeaturedElementsList
-                featuredElements={featuredElements}
                 icon={<ArticleIcon />}
                 title="Publications"
-                elementsPage="/publications"
+                pageLink="/publications"
+                type="publication"
+                limit={4}
               />
               <FeaturedElementsList
-                featuredElements={featuredElements}
                 icon={<SchoolIcon />}
                 title="Educational Resources"
-                elementsPage="/oers"
+                pageLink="/oers"
+                type="oer"
+                limit={4}
               />
             </Container>
           </Box>

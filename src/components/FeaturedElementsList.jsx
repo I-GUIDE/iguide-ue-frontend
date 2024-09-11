@@ -7,12 +7,32 @@ import Link from "@mui/joy/Link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SimpleInfoCard from "./SimpleInfoCard";
+import { getHomepageElements } from "../utils/DataRetrieval";
 
 export default function FeaturedElementsList(props) {
-  const featuredElements = props.featuredElements;
   const icon = props.icon;
   const title = props.title;
-  const elementsPage = props.elementsPage;
+  const pageLink = props.pageLink;
+  const type = props.type;
+  const limit = props.limit;
+
+  const [featuredElements, fsetFeaturedElements] = useState([]);
+
+  const [error, setError] = useState(null);
+
+  // When the state of hasSearched changed, check if hasSearched is false. If
+  //   it is false, retrieve the featured resources.
+  useEffect(() => {
+    async function retrieveFeaturedElements() {
+      try {
+        const data = await getHomepageElements(type, limit);
+        fsetFeaturedElements(data);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    retrieveFeaturedElements();
+  }, []);
 
   return (
     <Grid
@@ -23,7 +43,7 @@ export default function FeaturedElementsList(props) {
       sx={{
         backgroundColor: "inherit",
         px: { xs: 2, md: 4 },
-        py: 4,
+        py: 3,
       }}
     >
       <Stack
@@ -31,35 +51,30 @@ export default function FeaturedElementsList(props) {
         sx={{
           justifyContent: "space-between",
           alignItems: "center",
+          px: 2,
+          py: 2,
         }}
       >
-        <Typography
-          level="h3"
-          sx={{
-            px: 2,
-            py: 1,
-          }}
-          startDecorator={icon}
-        >
+        <Typography level="h3" startDecorator={icon}>
           {title}
         </Typography>
         <Link
-          href={elementsPage}
+          href={pageLink}
           color="inherit"
           style={{ textDecoration: "none" }}
         >
-          <Typography
-            sx={{
-              px: 2,
-              py: 1,
-            }}
-            startDecorator={<ArrowForwardIcon />}
-          >
+          <Typography startDecorator={<ArrowForwardIcon />}>
             View All
           </Typography>
         </Link>
       </Stack>
-      <Grid container direction="row" justifyContent="center" xs={12}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        xs={12}
+        sx={{ px: 2 }}
+      >
         {featuredElements?.map((featuredElement) => (
           <Grid
             container
