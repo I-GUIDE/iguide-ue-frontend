@@ -379,11 +379,11 @@ export default function UserProfile() {
                         {metadataList?.map((metadata, idx) => (
                           <Grid
                             size={{ xs: 12, sm: 6, md: 3 }}
-                            key={metadata._id}
+                            key={metadata.id}
                           >
                             <InfoCard
                               cardtype={metadata["resource-type"] + "s"}
-                              pageid={metadata._id}
+                              pageid={metadata.id}
                               title={metadata.title}
                               authors={metadata.authors}
                               tags={metadata.tags}

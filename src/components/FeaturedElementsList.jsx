@@ -78,7 +78,7 @@ export default function FeaturedElementsList(props) {
         {featuredElements?.map((featuredElement) => (
           <Grid
             container
-            key={featuredElement._id}
+            key={featuredElement.id}
             xs={12}
             sm={6}
             md={3}
@@ -91,9 +91,9 @@ export default function FeaturedElementsList(props) {
             }}
           >
             <SimpleInfoCard
-              key={featuredElement._id}
+              key={featuredElement.id}
               cardtype={featuredElement["resource-type"] + "s"}
-              pageId={featuredElement._id}
+              pageId={featuredElement.id}
               title={featuredElement.title}
               thumbnailImage={featuredElement["thumbnail-image"]}
               minHeight="100%"

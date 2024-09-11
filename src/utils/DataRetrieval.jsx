@@ -130,7 +130,7 @@ export async function elementRetriever(
   fieldName = null,
   matchValue = null,
   elementType = null,
-  sortBy = "_score",
+  sortBy = "id",
   order = "desc",
   from = "0",
   size = "10"

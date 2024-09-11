@@ -156,10 +156,10 @@ export default function ElementList(props) {
                 >
                   <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
                     {metadataList?.map((metadata) => (
-                      <Grid key={metadata._id} size={{ xs: 12, sm: 6, md: 3 }}>
+                      <Grid key={metadata.id} size={{ xs: 12, sm: 6, md: 3 }}>
                         <InfoCard
                           cardtype={metadata["resource-type"] + "s"}
-                          pageid={metadata._id}
+                          pageid={metadata.id}
                           title={metadata.title}
                           authors={metadata.authors}
                           tags={metadata.tags}
