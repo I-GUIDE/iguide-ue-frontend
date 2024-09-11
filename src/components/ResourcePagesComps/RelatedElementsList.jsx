@@ -47,7 +47,6 @@ export default function RelatedElementsList(props) {
                 thumbnailImage={relatedElement["thumbnail-image"]}
                 minHeight="100%"
                 width="100%"
-                showElementType
               />
             </Grid>
           ))}
