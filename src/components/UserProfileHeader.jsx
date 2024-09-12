@@ -25,6 +25,8 @@ export default function UserProfileHeader(props) {
     ? props.contributionCount
     : 0;
 
+  console.log("hi");
+
   // If the user info from the local DB is still not available, wait...
   if (!localUserInfo) {
     return (
@@ -81,7 +83,11 @@ export default function UserProfileHeader(props) {
                 <Stack
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
-                  <UserAvatar localUserInfo={localUserInfo} size={150} />
+                  <UserAvatar
+                    link={localUserInfo["avatar_url"]}
+                    userId={localUserInfo.openid}
+                    size={150}
+                  />
                 </Stack>
               </Grid>
               <Grid xs={12} md={6}>

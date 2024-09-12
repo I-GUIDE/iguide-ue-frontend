@@ -80,7 +80,10 @@ export default function NavBar(props) {
       return (
         <Dropdown>
           <MenuButton color="primary">
-            <UserAvatar localUserInfo={localUserInfo} />
+            <UserAvatar
+              link={localUserInfo["avatar_url"]}
+              userId={localUserInfo.openid}
+            />
           </MenuButton>
           <Menu
             placement="bottom-end"

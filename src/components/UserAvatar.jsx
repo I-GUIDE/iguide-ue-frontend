@@ -5,27 +5,28 @@ import Jdenticon from "react-jdenticon";
 import Avatar from "@mui/joy/Avatar";
 
 export default function UserAvatar(props) {
-  const localUserInfo = props.localUserInfo;
+  const link = props.link;
+  const userId = props.userId;
   const size = props.size;
 
-  if (localUserInfo) {
-    if (localUserInfo.avatar_url) {
-      return (
-        <Avatar
-          variant="outlined"
-          alt="User avatar"
-          src={localUserInfo.avatar_url}
-          sx={{ width: size, height: size }}
-        />
-      );
-    } else {
-      return (
-        <Avatar variant="outlined">
-          <Jdenticon size="200" value={localUserInfo.openid} />
-        </Avatar>
-      );
-    }
-  } else {
-    return <Avatar variant="outlined" />;
+  if (!link) {
+    return (
+      <Avatar
+        variant="outlined"
+        alt="Generated avatar"
+        sx={{ width: size, height: size }}
+      >
+        <Jdenticon value={userId} />
+      </Avatar>
+    );
   }
+
+  return (
+    <Avatar
+      variant="outlined"
+      alt="User avatar"
+      src={link}
+      sx={{ width: size, height: size }}
+    />
+  );
 }
