@@ -13,7 +13,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
 import Header from "../../components/Layout/Header";
@@ -29,8 +29,9 @@ export default function OERPage() {
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+  const [relatedPublications, setRelatedPublicatons] = useState([]);
+  const [relatedOERs, setRelatedOERs] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
 
@@ -39,8 +40,9 @@ export default function OERPage() {
       const thisElement = await fetchSingleElementDetails(id);
 
       setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedNotebooks(thisElement["related-notebooks"]);
+      setRelatedPublicatons(thisElement["related-publications"]);
+      setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -111,22 +113,20 @@ export default function OERPage() {
               />
             </Grid>
 
-            <Grid xs={12} md={6}>
+            <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-              <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
             <Grid xs={12} md={6}>
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Notebooks"
-                relatedElements={relatedNotebooks}
+              <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
+            </Grid>
+            <Grid xs={12}>
+              <RelatedElements
+                relatedDatasets={relatedDatasets}
+                relatedNotebooks={relatedNotebooks}
+                relatedPublications={relatedPublications}
+                relatedOERs={relatedOERs}
+                xs={12}
+                md={6}
               />
             </Grid>
 
