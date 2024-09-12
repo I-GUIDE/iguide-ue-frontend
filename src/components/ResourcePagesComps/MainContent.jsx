@@ -29,7 +29,7 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
-        <Grid xs={12} md={7}>
+        <Grid xs={12} md={8}>
           <Stack direction="row" alignItems="center" spacing={2} sx={{ pb: 2 }}>
             <UserAvatar link={contributorAvatar} userId={contributorUserId} />
             <Stack direction="column">
@@ -48,7 +48,7 @@ export default function MainContent(props) {
             </Typography>
           )}
         </Grid>
-        <Grid xs={12} md={5}>
+        <Grid xs={12} md={4}>
           <AspectRatio
             variant="outlined"
             sx={{ py: 1, borderRadius: "lg", height: "100%" }}
