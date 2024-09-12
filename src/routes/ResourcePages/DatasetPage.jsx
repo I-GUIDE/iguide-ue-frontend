@@ -13,7 +13,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
@@ -29,6 +29,7 @@ export default function DatasetPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
+  const [relatedDatasets, setRelatedDatasets] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
@@ -41,6 +42,7 @@ export default function DatasetPage() {
     async function fetchData() {
       const thisElement = await fetchSingleElementDetails(id);
 
+      setRelatedDatasets(thisElement["related-datasets"]);
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
@@ -117,6 +119,9 @@ export default function DatasetPage() {
             </Grid>
 
             <Grid xs={12} md={6}>
+              <CodeSnippet directDownloadLink={directDownloadLink} />
+            </Grid>
+            <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <ActionList
                 title="Data Exploration"
@@ -126,22 +131,15 @@ export default function DatasetPage() {
                 directDownloadLinkText="Download Data"
                 size={size}
               />
-              <CodeSnippet directDownloadLink={directDownloadLink} />
             </Grid>
-            <Grid xs={12} md={6}>
-              <RelatedElementsList
-                title="Related Notebooks"
-                relatedElements={relatedNotebooks}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              xs={12}
+              md={6}
+            />
 
             <Grid xs={12}>
               <GoBackButton parentPage="/datasets" parentPageName="Datasets" />
