@@ -25,8 +25,6 @@ export default function UserProfileHeader(props) {
     ? props.contributionCount
     : 0;
 
-  console.log("hi");
-
   // If the user info from the local DB is still not available, wait...
   if (!localUserInfo) {
     return (

@@ -207,34 +207,6 @@ export default function UserProfile() {
     );
   }
 
-  async function handleElementDelete(elementId) {
-    console.log("Deleting...", elementId);
-    try {
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/elements/${elementId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error deleting resource");
-      }
-
-      setDeleteMetadataId(undefined);
-      setDeleteMetadataTitle(undefined);
-
-      const result = await response.json();
-      // When the deletion was successful, rerender the list
-      if (result && result.message === "Resource deleted successfully") {
-        setNumberOfTotalItems(numberOfTotalItems - 1);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error deleting resource");
-    }
-  }
-
   // If local user information is missing, ask them to fill out the info
   if (localUserInfoMissing === "unknwon") {
     return;
