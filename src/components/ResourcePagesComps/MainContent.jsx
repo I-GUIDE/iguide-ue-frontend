@@ -4,6 +4,8 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
+import Link from "@mui/joy/Link";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../UserAvatar";
@@ -12,6 +14,8 @@ export default function MainContent(props) {
   const title = props.title;
   const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
+  const doi = props.doi;
+  const contentsTitle = props.contentsTitle ? props.contentsTitle : "About";
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
   const elementType = props.elementType;
@@ -41,11 +45,25 @@ export default function MainContent(props) {
             {title}
           </Typography>
           {authors && authors.length > 0 && (
-            <Typography sx={{ py: 1 }}>
-              <Typography level="body-lg">
-                {printListWithDelimiter(authors, ",")}
-              </Typography>
+            <Typography level="body-lg" sx={{ py: 1 }}>
+              {printListWithDelimiter(authors, ",")}
             </Typography>
+          )}
+          {doi && (
+            <Link
+              href={doi}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="always"
+            >
+              <Typography
+                level="body-sm"
+                startDecorator={<OpenInNewIcon />}
+                sx={{ py: 1 }}
+              >
+                {doi}
+              </Typography>
+            </Link>
           )}
         </Grid>
         <Grid xs={12} md={4}>
@@ -66,7 +84,7 @@ export default function MainContent(props) {
         </Grid>
       </Grid>
       <Typography level="h4" sx={{ pt: 2 }}>
-        About
+        {contentsTitle}
       </Typography>
       <Typography sx={{ py: 2 }}>{contents}</Typography>
     </Stack>
