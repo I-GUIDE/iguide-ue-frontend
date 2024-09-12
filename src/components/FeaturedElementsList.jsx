@@ -95,6 +95,7 @@ export default function FeaturedElementsList(props) {
               cardtype={featuredElement["resource-type"] + "s"}
               pageId={featuredElement.id}
               title={featuredElement.title}
+              contents={featuredElement.contents}
               thumbnailImage={featuredElement["thumbnail-image"]}
               minHeight="100%"
               width="100%"
