@@ -382,20 +382,36 @@ export default function SearchResults() {
                       </Button>
                     </Stack>
                   )}
-
-                  {/* Search result list */}
-                  {searchResults?.map((result) => (
-                    <InfoCard
-                      key={result._id}
-                      cardtype={result["resource-type"] + "s"}
-                      pageid={result._id}
-                      title={result.title}
-                      authors={result.authors}
-                      tags={result.tags}
-                      contents={result.contents}
-                      thumbnailImage={result["thumbnail-image"]}
-                    />
-                  ))}
+                  <Stack
+                    spacing={2}
+                    sx={{
+                      px: { xs: 2, md: 4, width: "100%" },
+                    }}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Grid
+                      container
+                      spacing={2}
+                      columns={12}
+                      sx={{ flexGrow: 1 }}
+                    >
+                      {searchResults?.map((result) => (
+                        <Grid key={result.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                          <InfoCard
+                            key={result._id}
+                            cardtype={result["resource-type"] + "s"}
+                            pageid={result._id}
+                            title={result.title}
+                            authors={result.authors}
+                            tags={result.tags}
+                            contents={result.contents}
+                            thumbnailImage={result["thumbnail-image"]}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Stack>
                 </Stack>
                 <Stack
                   direction="row"
