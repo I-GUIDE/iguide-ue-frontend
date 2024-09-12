@@ -6,29 +6,37 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
 
 import { printListWithDelimiter } from "../../helpers/helper";
+import UserAvatar from "../UserAvatar";
 
 export default function MainContent(props) {
   const title = props.title;
-  const contributors = props.contributors;
+  const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
   const elementType = props.elementType;
 
+  const contributorAvatar = contributor["avatar-url"];
+  const contributorName = contributor.name;
+  const contributorUserId = contributor.id;
+
   return (
     <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Grid container rowSpacing={2} columnSpacing={8} alignItems="center">
+      <Grid
+        container
+        rowSpacing={2}
+        columnSpacing={8}
+        alignItems="flex-start"
+        sx={{ py: 2 }}
+      >
         <Grid xs={12} md={7}>
-          {contributors && contributors.length > 0 && (
-            <Typography sx={{ py: 1 }}>
-              <Typography level="title-lg">
-                Contributor{contributors.length > 1 && "s"}:{" "}
-              </Typography>
-              <Typography level="body-lg">
-                {printListWithDelimiter(contributors, ",")}
-              </Typography>
-            </Typography>
-          )}
+          <Stack direction="row" alignItems="center" spacing={2} sx={{ pb: 2 }}>
+            <UserAvatar link={contributorAvatar} userId={contributorUserId} />
+            <Stack direction="column">
+              <Typography level="title-lg">{contributorName}</Typography>
+              <Typography level="body-sm">Contributor</Typography>
+            </Stack>
+          </Stack>
           <Typography level="h1" sx={{ py: 1 }}>
             {title}
           </Typography>

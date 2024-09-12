@@ -25,8 +25,7 @@ export default function PublicationPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
-  const [contributors, setContributors] = useState([]);
-  const [contributorId, setContributorId] = useState();
+  const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
@@ -46,8 +45,7 @@ export default function PublicationPage() {
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
-      setContributors(thisElement["contributor-name"]);
-      setContributorId(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link-publication"]);
@@ -103,14 +101,14 @@ export default function PublicationPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributorId}
+                  contributorId={contributor.id}
                   afterDeleteRedirection="/publications"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                contributors={contributors}
+                contributor={contributor}
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="publication"

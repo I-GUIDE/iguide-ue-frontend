@@ -26,8 +26,7 @@ export default function DatasetPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
-  const [contributors, setContributors] = useState([]);
-  const [contributorId, setContributorId] = useState();
+  const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
@@ -47,8 +46,7 @@ export default function DatasetPage() {
       setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
-      setContributors(thisElement["contributor-name"]);
-      setContributorId(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link"]);
@@ -104,14 +102,14 @@ export default function DatasetPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributorId}
+                  contributorId={contributor.id}
                   afterDeleteRedirection="/datasets"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                contributors={contributors}
+                contributor={contributor}
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="dataset"
