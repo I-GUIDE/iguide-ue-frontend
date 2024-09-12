@@ -13,7 +13,7 @@ import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
 import Header from "../../components/Layout/Header";
@@ -29,6 +29,7 @@ export default function NotebookPage() {
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
+  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
   const [htmlNotebook, setHtmlNotebook] = useState("");
@@ -41,6 +42,7 @@ export default function NotebookPage() {
       const thisElement = await fetchSingleElementDetails(id);
 
       setRelatedDatasets(thisElement["related-datasets"]);
+      setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
@@ -116,48 +118,20 @@ export default function NotebookPage() {
             </Grid>
 
             {/* When the page is narrower than md */}
-            <Grid sx={{ display: { xs: "block", md: "none" } }} xs={12}>
+            <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
               <NotebookViewer
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
-
-            {/* When the page is wider than md */}
-            <Grid sx={{ display: { xs: "none", md: "block" } }} md={5}>
-              <CapsuleList title="Tags" items={tags} />
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
-            <Grid sx={{ display: { xs: "none", md: "block" } }} md={7}>
-              <NotebookViewer
-                repoUrl={repoUrl}
-                notebookFile={notebookFile}
-                htmlNotebook={htmlNotebook}
+              <RelatedElements
+                relatedDatasets={relatedDatasets}
+                relatedNotebooks={relatedNotebooks}
+                relatedPublications={relatedPublications}
+                relatedOERs={relatedOERs}
+                xs={12}
+                md={6}
               />
             </Grid>
 
