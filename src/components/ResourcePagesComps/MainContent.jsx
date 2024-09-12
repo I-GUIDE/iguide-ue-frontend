@@ -37,7 +37,7 @@ export default function MainContent(props) {
               <Typography level="body-sm">Contributor</Typography>
             </Stack>
           </Stack>
-          <Typography level="h1" sx={{ py: 1 }}>
+          <Typography level="h2" sx={{ py: 1 }}>
             {title}
           </Typography>
           {authors && authors.length > 0 && (
