@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Link } from "react-router-dom";
-import Jdenticon from "react-jdenticon";
 
 import {
   experimental_extendTheme as materialExtendTheme,
@@ -47,7 +46,7 @@ const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
-  const localUserInfo = props.localUserInfo;
+  const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
 
   const buttonRef = React.useRef(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
