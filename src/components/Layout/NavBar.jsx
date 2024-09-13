@@ -35,6 +35,8 @@ import Tooltip from "@mui/joy/Tooltip";
 import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 
+import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
+
 const pages = [
   ["Home", "/"],
   ["Datasets", "/datasets"],
@@ -196,7 +198,7 @@ export default function NavBar(props) {
         <AppBar position="sticky" color="inherit">
           <Box
             sx={{
-              height: 70,
+              height: NAVBAR_HEIGHT,
               pt: 1,
               mx: 2,
               display: "auto",

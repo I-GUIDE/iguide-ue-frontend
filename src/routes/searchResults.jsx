@@ -34,6 +34,7 @@ import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 import {
+  SEARCH_RESULTS_HEADER_HEIGHT,
   SEARCH_RESULTS_BODY_HEIGHT,
   RESOURCE_TYPE_NAMES,
 } from "../configs/VarConfigs";
@@ -181,7 +182,11 @@ export default function SearchResults() {
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box
-          sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, height: 170 }}
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            height: SEARCH_RESULTS_HEADER_HEIGHT,
+          }}
         >
           <Card
             component="li"

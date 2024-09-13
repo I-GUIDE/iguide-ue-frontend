@@ -14,9 +14,11 @@ import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
+import { FOOTER_HEIGHT } from "../../configs/VarConfigs";
+
 export default function Footer() {
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: 100 }}>
+    <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: FOOTER_HEIGHT }}>
       <Card
         component="li"
         color="neutural"

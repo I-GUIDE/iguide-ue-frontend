@@ -10,7 +10,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
-import Grid from "@mui/joy/Grid";
 import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
 import Card from "@mui/joy/Card";
@@ -27,9 +26,9 @@ import SchoolIcon from "@mui/icons-material/School";
 import FeaturedElementsList from "../components/FeaturedElementsList";
 import TutorialCard from "../components/TutorialCard";
 import SearchBar from "../components/SearchBar";
-import { getHomepageElements } from "../utils/DataRetrieval";
+
 import {
-  HOME_BODY_HEIGHT,
+  NO_HEADER_BODY_HEIGHT,
   HOME_SEARCH_SEC_HEIGHT,
 } from "../configs/VarConfigs";
 
@@ -41,7 +40,7 @@ export default function Home() {
         <Box
           component="main"
           sx={{
-            minHeight: HOME_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",

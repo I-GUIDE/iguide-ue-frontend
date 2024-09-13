@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 import UserAvatar from "./UserAvatar";
+import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
 
 export default function UserProfileHeader(props) {
   const localUserInfo = props.localUserInfo;
@@ -28,7 +29,15 @@ export default function UserProfileHeader(props) {
   // If the user info from the local DB is still not available, wait...
   if (!localUserInfo) {
     return (
-      <Box sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, height: 300 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          p: 0,
+          m: 0,
+          height: USER_PROFILE_HEADER_HEIGHT,
+        }}
+      >
         <Card
           component="li"
           sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
@@ -62,7 +71,15 @@ export default function UserProfileHeader(props) {
   }
 
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, minHeight: 300 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        p: 0,
+        m: 0,
+        minHeight: USER_PROFILE_HEADER_HEIGHT,
+      }}
+    >
       <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
         <CardCover>
           <img
