@@ -207,10 +207,6 @@ export default function SubmissionCard(props) {
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
 
-  const handleResourceTypeChange = (event, newResourceType) => {
-    setResourceTypeSelected(newResourceType);
-  };
-
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
@@ -510,6 +506,14 @@ export default function SubmissionCard(props) {
     }
   }
 
+  function RequiredFieldIndicator() {
+    return (
+      <Typography color="danger" level="title-lg">
+        *
+      </Typography>
+    );
+  }
+
   return (
     <Card
       variant="outlined"
@@ -522,6 +526,9 @@ export default function SubmissionCard(props) {
         {submissionType === "update"
           ? "Update your contribution"
           : "Submit a new " + RESOURCE_TYPE_NAMES[elementType].toLowerCase()}
+      </Typography>
+      <Typography level="body-sm">
+        Fields marked <RequiredFieldIndicator /> are required.
       </Typography>
       <Divider inset="none" />
       <form onSubmit={handleSubmit} name="resourceForm">
@@ -571,7 +578,8 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  Publication URL (DOI link preferred) (required)
+                  Publication URL (DOI link preferred){" "}
+                  <RequiredFieldIndicator />
                 </Typography>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -595,7 +603,9 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Element title (required)</FormLabel>
+            <FormLabel>
+              Title <RequiredFieldIndicator />
+            </FormLabel>
             <Input
               name="title"
               required
@@ -604,7 +614,9 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Authors (comma-separated) (required)</FormLabel>
+            <FormLabel>
+              Authors (comma-separated) <RequiredFieldIndicator />
+            </FormLabel>
             <Input
               name="authors"
               placeholder="Author 1, Author 2, ..."
@@ -614,7 +626,9 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Tags (comma-separated) (required)</FormLabel>
+            <FormLabel>
+              Tags (comma-separated) <RequiredFieldIndicator />
+            </FormLabel>
             <Input
               name="tags"
               placeholder="Tag 1, Tag 2, ..."
@@ -624,7 +638,9 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Abstract (required)</FormLabel>
+            <FormLabel>
+              Abstract <RequiredFieldIndicator />
+            </FormLabel>
             <Textarea
               name="contents"
               minRows={4}
@@ -635,7 +651,9 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Upload thumbnail image {"(< 5MB)"} (required)</FormLabel>
+            <FormLabel>
+              Thumbnail image {"(< 5MB)"} <RequiredFieldIndicator />
+            </FormLabel>
             <Button
               component="label"
               role={undefined}
@@ -665,7 +683,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Dataset host link (required)</FormLabel>
+              <FormLabel>
+                Dataset host link <RequiredFieldIndicator />
+              </FormLabel>
               <Input
                 required
                 name="external-link"
@@ -734,7 +754,7 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  Jupyter Notebook GitHub URL (required)
+                  Jupyter Notebook GitHub URL <RequiredFieldIndicator />
                 </Typography>
               </FormLabel>
               <Input
