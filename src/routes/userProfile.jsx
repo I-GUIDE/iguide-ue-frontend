@@ -73,7 +73,7 @@ export default function UserProfile() {
           "contributor",
           [userInfo.sub],
           null,
-          "_score",
+          "creation_time",
           "desc",
           startingIdx,
           itemsPerPage
@@ -91,7 +91,7 @@ export default function UserProfile() {
         null,
         null,
         "dataset",
-        "_id",
+        "creation_time",
         "desc",
         startingIdx,
         itemsPerPage

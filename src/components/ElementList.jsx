@@ -54,7 +54,7 @@ export default function ElementList(props) {
           fieldName,
           matchValue,
           dataType,
-          "_id",
+          "creation_time",
           "desc",
           startingIdx,
           itemsPerPage

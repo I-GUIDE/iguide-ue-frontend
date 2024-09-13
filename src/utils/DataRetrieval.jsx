@@ -119,7 +119,7 @@ export async function getMetadataByDOI(doi) {
  * @param {string} [fieldName=''] - The name of the field in the element database.
  * @param {(string[]|null)} [matchValue=null] - The value used for filtering. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
  * @param {(string[]|null)} [elementType=null] - Type of the element. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
- * @param {string} [sortBy='_score'] - The field by which to sort the results.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
  * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
  * @param {string} [from='0'] - The starting point of the results.
  * @param {string} [size='10'] - The number of results to retrieve.
@@ -130,7 +130,7 @@ export async function elementRetriever(
   fieldName = null,
   matchValue = null,
   elementType = null,
-  sortBy = "id",
+  sortBy = "creation_time",
   order = "desc",
   from = "0",
   size = "10"
