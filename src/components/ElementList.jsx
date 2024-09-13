@@ -68,7 +68,7 @@ export default function ElementList(props) {
         );
 
         setNumberOfTotalItems(data["total-count"]);
-        setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
