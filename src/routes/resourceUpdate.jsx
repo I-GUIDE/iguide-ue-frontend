@@ -14,7 +14,7 @@ import LoginCard from "../components/LoginCard";
 import SubmissionCard from "../components/SubmissionCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function ResourceUpdate() {
   usePageTitle("Update Contribution");
@@ -36,7 +36,7 @@ export default function ResourceUpdate() {
           <Box
             component="main"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
@@ -49,7 +49,7 @@ export default function ResourceUpdate() {
               alignItems="center"
               direction="column"
               sx={{
-                minHeight: DEFAULT_BODY_HEIGHT,
+                minHeight: NO_HEADER_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
                 pt: 4,
@@ -75,7 +75,7 @@ export default function ResourceUpdate() {
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -88,7 +88,7 @@ export default function ResourceUpdate() {
             alignItems="center"
             direction="column"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
               pt: 4,
