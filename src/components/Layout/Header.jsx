@@ -13,8 +13,9 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+
+import { HEADER_HEIGHT } from "../../configs/VarConfigs";
 
 export default function Header(props) {
   const title = props.title ? props.title : "";
@@ -32,7 +33,13 @@ export default function Header(props) {
   ] = useOutletContext();
 
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, height: 150 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        height: HEADER_HEIGHT,
+      }}
+    >
       <Card
         variant="plain"
         component="li"

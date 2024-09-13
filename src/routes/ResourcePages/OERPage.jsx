@@ -20,7 +20,7 @@ import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
-import ElementNotFound from "../ElementNotFound";
+import ErrorPage from "../../ErrorPage";
 
 export default function OERPage() {
   const id = useParams().id;
@@ -64,7 +64,9 @@ export default function OERPage() {
   usePageTitle(title);
 
   if (error) {
-    return <ElementNotFound />;
+    return (
+      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+    );
   }
 
   return (

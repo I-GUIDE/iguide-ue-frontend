@@ -1,6 +1,5 @@
 import React from "react";
-
-import { useNavigate } from "react-router-dom";
+import { useRouteError, useNavigate } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -13,24 +12,32 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 
-import Header from "../components/Layout/Header";
-import usePageTitle from "../hooks/usePageTitle";
+import usePageTitle from "./hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "./configs/VarConfigs";
 
-export default function ElementNotFound() {
-  usePageTitle("Datasets");
+export default function ErrorPage(props) {
+  usePageTitle("Error");
   const navigate = useNavigate();
+
+  const error = useRouteError();
+  {
+    error & console.error("Err msg", error);
+  }
+
+  const errorStatus = props.customStatus ? props.customStatus : error.status;
+  const errorStatusText = props.customStatusText
+    ? props.customStatusText
+    : error.statusText;
 
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title="Element not found" subtitle="" />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -43,7 +50,7 @@ export default function ElementNotFound() {
             alignItems="center"
             direction="column"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
               pt: 4,
@@ -61,16 +68,16 @@ export default function ElementNotFound() {
               }}
             >
               <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
-                <Box
+                <Stack
+                  spacing={1}
                   sx={{
-                    p: 0.5,
+                    p: 1,
                     display: "flex",
-                    gap: 1.5,
-                    "& > button": { flex: 1 },
                   }}
                 >
-                  <Typography level="h4"></Typography>
-                </Box>
+                  <Typography level="h2">{`${errorStatus}`}</Typography>
+                  <Typography level="title-lg">{`${errorStatusText} :(`}</Typography>
+                </Stack>
                 <Stack
                   direction="row"
                   flexWrap="wrap"

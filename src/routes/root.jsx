@@ -18,7 +18,9 @@ import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 
-export default function Root() {
+export default function Root(props) {
+  const customOutlet = props.customOutlet;
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [localUserInfo, setLocalUserInfo] = useState(null);
@@ -203,16 +205,20 @@ export default function Root() {
     <StyledEngineProvider injectFirst>
       <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
       <div id="back-to-top-anchor" />
-      <Outlet
-        context={[
-          isAuthenticated,
-          setIsAuthenticated,
-          userInfo,
-          setUserInfo,
-          localUserInfo,
-          setLocalUserInfo,
-        ]}
-      />
+      {customOutlet ? (
+        customOutlet
+      ) : (
+        <Outlet
+          context={[
+            isAuthenticated,
+            setIsAuthenticated,
+            userInfo,
+            setUserInfo,
+            localUserInfo,
+            setLocalUserInfo,
+          ]}
+        />
+      )}
       <ScrollTop>
         <Fab
           sx={{ display: { xs: "none", md: "flex" } }}
