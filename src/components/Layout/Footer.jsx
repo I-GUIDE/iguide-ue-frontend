@@ -13,6 +13,7 @@ import { grey } from "@mui/material/colors";
 import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import EmailIcon from "@mui/icons-material/Email";
 
 import { FOOTER_HEIGHT } from "../../configs/VarConfigs";
 
@@ -91,7 +92,17 @@ export default function Footer() {
                 >
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://www.youtube.com/@nsf-iguide"}
+                      href="mailto:help@i-guide.io"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <EmailIcon sx={{ color: grey[700] }} />
+                    </Link>
+                  </Box>
+                  <Box sx={{ width: "flex", px: 0.5 }}>
+                    <Link
+                      href="https://www.youtube.com/@nsf-iguide"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
@@ -101,7 +112,7 @@ export default function Footer() {
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://x.com/NSFiGUIDE"}
+                      href="https://x.com/NSFiGUIDE"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
@@ -111,7 +122,7 @@ export default function Footer() {
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://www.linkedin.com/company/nsf-i-guide/"}
+                      href="https://www.linkedin.com/company/nsf-i-guide/"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
