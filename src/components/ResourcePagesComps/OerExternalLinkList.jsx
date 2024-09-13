@@ -23,7 +23,6 @@ export default function OerExternalLinkList(props) {
 
   for (const idx in oerExternalLinks) {
     const item = oerExternalLinks[idx];
-    console.log(`${item.type}, ${item.title}, ${item.url}`);
 
     switch (item.type) {
       case "slides":
