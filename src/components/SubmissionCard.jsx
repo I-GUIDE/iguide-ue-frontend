@@ -330,7 +330,7 @@ export default function SubmissionCard(props) {
     // If we couldn't fetch the metadata via Crossref, do this...
     if (metadataDOI === "Publication not found") {
       alert(
-        "We could not fetch the publication based on the DOI you provided. That could be due to the DOI not registered on Crossref or you have a typo in the DOI. If the DOI is correct, please manually input the publication metadata. Thank you!"
+        "We could not fetch the metadata based on the URL you provided. That could be because the URL (if it's a DOI link) is not registered on Crossref, or the URL you provided is not a DOI link. Please manually input the publication information in the form. Thank you."
       );
       return;
     }
@@ -571,7 +571,7 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  DOI (required)
+                  Publication URL (DOI link preferred) (required)
                 </Typography>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
