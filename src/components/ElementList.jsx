@@ -14,6 +14,8 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
 import Pagination from "@mui/material/Pagination";
 
 import InfoCard from "./InfoCard";
@@ -39,10 +41,15 @@ export default function ElementList(props) {
   const [error, setError] = useState(null);
   const [resultLength, setResultLength] = useState(null);
 
+  const [ranking, setRanking] = useState({
+    sortBy: "creation_time",
+    order: "desc",
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
   const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
@@ -54,8 +61,8 @@ export default function ElementList(props) {
           fieldName,
           matchValue,
           dataType,
-          "creation_time",
-          "desc",
+          ranking.sortBy,
+          ranking.order,
           startingIdx,
           itemsPerPage
         );
@@ -71,13 +78,38 @@ export default function ElementList(props) {
       }
     }
     retrieveData(currentStartingIdx);
-  }, [currentStartingIdx, numberOfTotalItems, dataType]);
+  }, [currentStartingIdx, dataType, ranking]);
 
-  const handlePageClick = (event, value) => {
-    const newStartingIdx = (value - 1) * itemsPerPage;
+  function handlePageClick(event, newValue) {
+    const newStartingIdx = (newValue - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
-    setCurrentPage(value);
-  };
+    setCurrentPage(newValue);
+  }
+
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "newest":
+        setRanking({
+          sortBy: "creation_time",
+          order: "desc",
+        });
+        break;
+      case "most-popular":
+        setRanking({
+          sortBy: "click_count",
+          order: "desc",
+        });
+        break;
+      case "a-z":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      default:
+        console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
+  }
 
   if (error) {
     return (
@@ -142,10 +174,27 @@ export default function ElementList(props) {
                 }}
               >
                 <PageNav currentPage={"All " + title} sx={{ px: 0 }} />
-                <Typography>
-                  Showing {currentStartingIdx + 1}-
-                  {currentStartingIdx + resultLength} of {numberOfTotalItems}
-                </Typography>
+                <Stack
+                  spacing={1}
+                  direction={{ xs: "column", sm: "row" }}
+                  justifyContent={{ xs: "center", sm: "space-between" }}
+                  alignItems={{ xs: "flex-start", sm: "center" }}
+                >
+                  <Typography>
+                    Showing {currentStartingIdx + 1}-
+                    {currentStartingIdx + resultLength} of {numberOfTotalItems}
+                  </Typography>
+                  <Select
+                    defaultValue="newest"
+                    onChange={handleSortingChange}
+                    sx={{ width: 150 }}
+                  >
+                    <Option value="newest">Newest</Option>
+                    <Option value="most-popular">Most Popular</Option>
+                    <Option value="a-z">A-Z</Option>
+                  </Select>
+                </Stack>
+
                 <Stack
                   spacing={2}
                   sx={{
