@@ -143,20 +143,25 @@ export async function elementRetriever(
     queries += `&element-type=${elementType}`;
   }
 
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements?` +
-      queries +
-      `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
-    {
-      method: "GET",
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/elements?` +
+        queries +
+        `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve elements");
     }
-  );
 
-  if (!response.ok) {
-    throw new Error("Failed to retrieve elements");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of elements: ", error.message);
+    return "ERROR";
   }
-
-  return response.json();
 }
 
 /**
@@ -169,17 +174,23 @@ export async function elementRetriever(
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchSingleElementDetails(elementId) {
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements/${elementId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/elements/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch resources");
     }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch resources");
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single element: ", error.message);
+    return "ERROR";
   }
-  return response.json();
 }

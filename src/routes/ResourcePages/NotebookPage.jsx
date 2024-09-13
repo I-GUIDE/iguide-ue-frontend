@@ -20,6 +20,7 @@ import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
+import ElementNotFound from "../ElementNotFound";
 
 export default function NotebookPage() {
   const id = useParams().id;
@@ -36,10 +37,16 @@ export default function NotebookPage() {
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const thisElement = await fetchSingleElementDetails(id);
+
+      if (thisElement === "ERROR") {
+        setError(true);
+        return;
+      }
 
       setRelatedDatasets(thisElement["related-datasets"]);
       setRelatedNotebooks(thisElement["related-notebooks"]);
@@ -59,6 +66,10 @@ export default function NotebookPage() {
   }, [id]);
 
   usePageTitle(title);
+
+  if (error) {
+    return <ElementNotFound />;
+  }
 
   return (
     <CssVarsProvider disableTransitionOnChange>

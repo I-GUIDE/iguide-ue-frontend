@@ -21,13 +21,13 @@ import UserProfileUpdate from "./routes/userProfileUpdate";
 import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
 
-import ErrorPage from "./error-page";
+import Error from "./Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
