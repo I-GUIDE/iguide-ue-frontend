@@ -140,7 +140,7 @@ export default function Footer() {
                   spacing={1}
                   sx={{ display: "flex" }}
                 >
-                  <Link href="https://www.linkedin.com/company/nsf-i-guide/">
+                  <Link href="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
                   </Link>
                 </Stack>
