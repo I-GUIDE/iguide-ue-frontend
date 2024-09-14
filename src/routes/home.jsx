@@ -165,18 +165,21 @@ export default function Home() {
               >
                 <TutorialCard
                   thumbnailImage="/images/charco-education.png"
-                  title="Learn"
-                  content="Dive into Kaggle courses, competitions & forums."
+                  title="Join"
+                  content="Become a member of the I-GUIDE community"
+                  link="/user-profile"
                 />
                 <TutorialCard
                   thumbnailImage="/images/charco-launch.png"
-                  title="Create"
-                  content="Dive into Kaggle courses, competitions & forums."
+                  title="Learn"
+                  content="Explore the power of I-GUIDE Platform"
+                  link="/notebooks/87826fe9-1ef0-4ecb-b0d7-816159ffd30f"
                 />
                 <TutorialCard
                   thumbnailImage="/images/charco-photos.png"
                   title="Contribute"
-                  content="Dive into Kaggle courses, competitions & forums."
+                  content="Share knowledge with the community"
+                  link="/user-profile"
                 />
               </Stack>
             </Container>
