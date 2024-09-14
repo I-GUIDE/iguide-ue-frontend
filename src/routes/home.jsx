@@ -27,6 +27,8 @@ import FeaturedElementsList from "../components/FeaturedElementsList";
 import TutorialCard from "../components/TutorialCard";
 import SearchBar from "../components/SearchBar";
 
+const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
+
 import {
   NO_HEADER_BODY_HEIGHT,
   HOME_SEARCH_SEC_HEIGHT,
@@ -173,7 +175,7 @@ export default function Home() {
                   thumbnailImage="/images/charco-launch.png"
                   title="Learn"
                   content="Explore the power of I-GUIDE Platform"
-                  link="/notebooks/87826fe9-1ef0-4ecb-b0d7-816159ffd30f"
+                  link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
                 />
                 <TutorialCard
                   thumbnailImage="/images/charco-photos.png"
