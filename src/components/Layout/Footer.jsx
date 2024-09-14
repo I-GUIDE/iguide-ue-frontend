@@ -132,6 +132,19 @@ export default function Footer() {
                   </Box>
                 </Stack>
               </Grid>
+              <Grid xs={12}>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={1}
+                  sx={{ display: "flex" }}
+                >
+                  <Link href="https://www.linkedin.com/company/nsf-i-guide/">
+                    <Typography level="body-xs">Terms of Use</Typography>
+                  </Link>
+                </Stack>
+              </Grid>
             </Grid>
           </Container>
         </CardContent>

@@ -20,6 +20,7 @@ import UserProfile from "./routes/userProfile";
 import UserProfileUpdate from "./routes/userProfileUpdate";
 import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
+import TermsOfUse from "./routes/Legal/TermsOfUse";
 
 import ErrorPage from "./ErrorPage";
 
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
       {
         path: "/element-update/:id",
         element: <ResourceUpdate />,
+      },
+      {
+        path: "/terms-of-use",
+        element: <TermsOfUse />,
       },
     ],
   },
