@@ -10,7 +10,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
-import Grid from "@mui/joy/Grid";
+import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
@@ -18,37 +18,21 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
 
-import SimpleInfoCard from "../components/SimpleInfoCard";
+import DatasetIcon from "@mui/icons-material/Dataset";
+import CodeIcon from "@mui/icons-material/Code";
+import ArticleIcon from "@mui/icons-material/Article";
+import SchoolIcon from "@mui/icons-material/School";
+
+import FeaturedElementsList from "../components/FeaturedElementsList";
+import TutorialCard from "../components/TutorialCard";
 import SearchBar from "../components/SearchBar";
-import { getHomepageElements } from "../utils/DataRetrieval";
-import { HOME_BODY_HEIGHT } from "../configs/VarConfigs";
+
+import {
+  NO_HEADER_BODY_HEIGHT,
+  HOME_SEARCH_SEC_HEIGHT,
+} from "../configs/VarConfigs";
 
 export default function Home() {
-  const [featuredResources, setFeaturedResources] = useState([]);
-  const [hasFeaturedResources, setHasFeaturedResources] = useState(false);
-
-  const [error, setError] = useState(null);
-
-  // When the state of hasSearched changed, check if hasSearched is false. If
-  //   it is false, retrieve the featured resources.
-  useEffect(() => {
-    async function retrieveFeaturedResources() {
-      try {
-        const data = await getHomepageElements();
-        setFeaturedResources(data);
-        if (data.length > 0) {
-          setHasFeaturedResources(true);
-        } else {
-          setHasFeaturedResources(false);
-        }
-      } catch (error) {
-        setError(error);
-        setHasFeaturedResources(false);
-      }
-    }
-    retrieveFeaturedResources();
-  }, []);
-
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -56,142 +40,190 @@ export default function Home() {
         <Box
           component="main"
           sx={{
-            minHeight: HOME_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
           }}
         >
           <Card
+            variant="plain"
             component="li"
-            sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
+            sx={{
+              bgcolor: "#fff",
+              borderRadius: 0,
+              minWidth: 300,
+              flexGrow: 1,
+            }}
           >
-            <CardCover sx={{ minHeight: HOME_BODY_HEIGHT }}>
+            <CardCover>
               <img
-                src="/images/earth-and-space.png"
+                src="/images/network-bg.png"
                 loading="lazy"
-                alt="Earth with lights and dark space"
+                alt="Network with nodes and connections"
               />
             </CardCover>
             <CardContent
               sx={{
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: HOME_BODY_HEIGHT,
+                minHeight: HOME_SEARCH_SEC_HEIGHT,
               }}
             >
-              <Container maxWidth="lg">
-                <Container maxWidth="md">
-                  <Box
-                    component="main"
+              <Container maxWidth="md">
+                <Box
+                  component="main"
+                  sx={{
+                    height: "25%",
+                    display: "grid",
+                    gridTemplateColumns: { xs: "auto", md: "100%" },
+                    gridTemplateRows: "auto 1fr auto",
+                  }}
+                >
+                  <Typography
+                    level="h1"
+                    textColor={"#000"}
                     sx={{
-                      height: "25%",
-                      display: "grid",
-                      gridTemplateColumns: { xs: "auto", md: "100%" },
-                      gridTemplateRows: "auto 1fr auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "flex-start",
+                      pt: 4,
+                      pb: 0.5,
                     }}
+                    endDecorator={
+                      <Chip component="span" size="sm" color="primary">
+                        BETA
+                      </Chip>
+                    }
+                    justifyContent="center"
                   >
-                    <Typography
-                      level="h1"
-                      textColor={"#fff"}
+                    <Stack
+                      direction={{ sx: "column", sm: "row" }}
+                      spacing={0}
                       sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "flex-start",
-                        pt: 4,
-                        pb: 0.5,
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                      endDecorator={
-                        <Chip component="span" size="sm">
-                          BETA
-                        </Chip>
-                      }
-                      justifyContent="center"
                     >
-                      I-GUIDE Platform
-                    </Typography>
-                    <Typography
-                      level="title-md"
-                      textColor={"#FCF5E5"}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        pt: 0.5,
-                        pb: 4,
-                      }}
-                      justifyContent="center"
-                    >
-                      Harnessing the Geospatial Data Revolution to Empower
-                      Convergence Science
-                    </Typography>
-                    <SearchBar />
-                  </Box>
-                </Container>
-
-                {hasFeaturedResources && (
-                  <Box
-                    component="main"
+                      <img
+                        src="/images/iguide-word-color.png"
+                        loading="lazy"
+                        alt="I-GUIDE"
+                      />
+                      <img
+                        src="/images/platform-word-gray.png"
+                        loading="lazy"
+                        alt="Platform"
+                      />
+                    </Stack>
+                  </Typography>
+                  <Typography
+                    level="title-lg"
+                    textColor={"#696969"}
                     sx={{
-                      height: "75%",
-                      display: "grid",
-                      gridTemplateColumns: { xs: "auto", md: "100%" },
-                      gridTemplateRows: "auto 1fr auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      pt: 0.5,
+                      pb: 4,
                     }}
+                    justifyContent="center"
                   >
-                    <Grid
-                      container
-                      justifyContent="center"
-                      sx={{
-                        backgroundColor: "inherit",
-                        px: 1,
-                        py: 4,
-                      }}
-                    >
-                      <Typography
-                        level="h3"
-                        textColor={"#fff"}
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          p: 2,
-                        }}
-                      >
-                        Highlights
-                      </Typography>
-                      <Grid container direction="row" xs={12}>
-                        {featuredResources?.map((featuredResource) => (
-                          <Grid
-                            container
-                            key={featuredResource._id}
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={2.4}
-                            direction="row"
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{ p: 1 }}
-                          >
-                            <SimpleInfoCard
-                              key={featuredResource._id}
-                              cardtype={featuredResource["resource-type"] + "s"}
-                              pageId={featuredResource._id}
-                              title={featuredResource.title}
-                              thumbnailImage={
-                                featuredResource["thumbnail-image"]
-                              }
-                              minHeight={"100%"}
-                            />
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </Grid>
-                  </Box>
-                )}
+                    Harnessing the Geospatial Data Revolution to Empower
+                    Convergence Science
+                  </Typography>
+                  <SearchBar showSmartSearch />
+                </Box>
               </Container>
             </CardContent>
           </Card>
+          <Box
+            sx={{
+              bgcolor: "#fff",
+              display: "grid",
+              gridTemplateColumns: { xs: "auto", md: "100%" },
+              gridTemplateRows: "auto 1fr auto",
+              px: 4,
+              py: 2,
+            }}
+          >
+            <Container maxWidth="lg">
+              <Typography
+                level="h3"
+                textColor="#000"
+                sx={{
+                  px: 2,
+                  py: 0.5,
+                }}
+              >
+                What to do next?
+              </Typography>
+              <Stack
+                direction={{ xs: "column", md: "row" }}
+                spacing={4}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <TutorialCard
+                  thumbnailImage="/images/charco-education.png"
+                  title="Join"
+                  content="Become a member of the I-GUIDE community"
+                  link="/user-profile"
+                />
+                <TutorialCard
+                  thumbnailImage="/images/charco-launch.png"
+                  title="Learn"
+                  content="Explore the power of I-GUIDE Platform"
+                  link="/notebooks/87826fe9-1ef0-4ecb-b0d7-816159ffd30f"
+                />
+                <TutorialCard
+                  thumbnailImage="/images/charco-photos.png"
+                  title="Contribute"
+                  content="Share knowledge with the community"
+                  link="/user-profile"
+                />
+              </Stack>
+            </Container>
+          </Box>
+          <Box
+            sx={{
+              bgcolor: "#fafafa",
+              display: "grid",
+              gridTemplateColumns: { xs: "auto", md: "100%" },
+              gridTemplateRows: "auto 1fr auto",
+              pb: 8,
+            }}
+          >
+            <Container maxWidth="lg">
+              <FeaturedElementsList
+                icon={<DatasetIcon />}
+                title="Datasets"
+                pageLink="/datasets"
+                type="dataset"
+                limit={4}
+              />
+              <FeaturedElementsList
+                icon={<CodeIcon />}
+                title="Notebooks"
+                pageLink="/notebooks"
+                type="notebook"
+                limit={4}
+              />
+              <FeaturedElementsList
+                icon={<ArticleIcon />}
+                title="Publications"
+                pageLink="/publications"
+                type="publication"
+                limit={4}
+              />
+              <FeaturedElementsList
+                icon={<SchoolIcon />}
+                title="Educational Resources"
+                pageLink="/oers"
+                type="oer"
+                limit={4}
+              />
+            </Container>
+          </Box>
         </Box>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>

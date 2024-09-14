@@ -9,45 +9,50 @@ import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
-import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
-import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
-import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
+import ErrorPage from "../../ErrorPage";
 
 export default function NotebookPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
-  const [contributors, setContributors] = useState([]);
-  const [contributorId, setContributorId] = useState();
+  const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
+  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
   const [htmlNotebook, setHtmlNotebook] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const thisElement = await fetchSingleElementDetails(id);
 
+      if (thisElement === "ERROR") {
+        setError(true);
+        return;
+      }
+
       setRelatedDatasets(thisElement["related-datasets"]);
+      setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
-      setContributors(thisElement["contributor-name"]);
-      setContributorId(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setRepoUrl(thisElement["notebook-repo"]);
@@ -60,19 +65,20 @@ export default function NotebookPage() {
 
   usePageTitle(title);
 
+  if (error) {
+    return (
+      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+    );
+  }
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Notebooks"
-        subtitle="Individual Notebook"
-        displayNewContributionButton={true}
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -103,14 +109,14 @@ export default function NotebookPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributorId}
+                  contributorId={contributor.id}
                   afterDeleteRedirection="/notebooks"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                contributors={contributors}
+                contributor={contributor}
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="notebook"
@@ -118,55 +124,20 @@ export default function NotebookPage() {
             </Grid>
 
             {/* When the page is narrower than md */}
-            <Grid sx={{ display: { xs: "block", md: "none" } }} xs={12}>
-              <CapsuleList title="Tags" items={tags} />
-              <NotebookViewer
-                repoUrl={repoUrl}
-                notebookFile={notebookFile}
-                htmlNotebook={htmlNotebook}
-              />
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
-
-            {/* When the page is wider than md */}
-            <Grid sx={{ display: { xs: "none", md: "block" } }} md={5}>
-              <CapsuleList title="Tags" items={tags} />
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
-            <Grid sx={{ display: { xs: "none", md: "block" } }} md={7}>
-              <NotebookViewer
-                repoUrl={repoUrl}
-                notebookFile={notebookFile}
-                htmlNotebook={htmlNotebook}
-              />
-            </Grid>
-
             <Grid xs={12}>
-              <GoBackButton
-                parentPage="/notebooks"
-                parentPageName="Notebooks"
+              <CapsuleList title="Tags" items={tags} />
+              <NotebookViewer
+                repoUrl={repoUrl}
+                notebookFile={notebookFile}
+                htmlNotebook={htmlNotebook}
+              />
+              <RelatedElements
+                relatedDatasets={relatedDatasets}
+                relatedNotebooks={relatedNotebooks}
+                relatedPublications={relatedPublications}
+                relatedOERs={relatedOERs}
+                xs={12}
+                md={6}
               />
             </Grid>
           </Grid>

@@ -9,45 +9,49 @@ import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
-import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
-import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
-import ActionList from "../../components/ResourcePagesComps/ActionsList";
-import Header from "../../components/Layout/Header";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
+import ErrorPage from "../../ErrorPage";
 
 export default function PublicationPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
-  const [contributors, setContributors] = useState([]);
-  const [contributorId, setContributorId] = useState();
+  const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedOERs, setRelatedOERs] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
+  const [relatedPublications, setRelatedPublicatons] = useState([]);
+  const [relatedOERs, setRelatedOERs] = useState([]);
   const [externalLink, setExternalLink] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const thisElement = await fetchSingleElementDetails(id);
 
+      if (thisElement === "ERROR") {
+        setError(true);
+        return;
+      }
+
       setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedOERs(thisElement["related-oers"]);
       setRelatedNotebooks(thisElement["related-notebooks"]);
+      setRelatedPublicatons(thisElement["related-publications"]);
+      setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
-      setContributors(thisElement["contributor-name"]);
-      setContributorId(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link-publication"]);
@@ -60,19 +64,20 @@ export default function PublicationPage() {
 
   usePageTitle(title);
 
+  if (error) {
+    return (
+      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+    );
+  }
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Publications"
-        subtitle="Individual Publication"
-        displayNewContributionButton={true}
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -103,52 +108,33 @@ export default function PublicationPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributorId}
+                  contributorId={contributor.id}
                   afterDeleteRedirection="/publications"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                contributors={contributors}
+                doi={externalLink}
+                contributor={contributor}
+                contentsTitle="Abstract"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="publication"
               />
             </Grid>
 
-            <Grid xs={12} md={6}>
-              <CapsuleList title="Tags" items={tags} />
-              <ActionList
-                title="Publication Exploration"
-                externalLink={externalLink}
-                externalLinkText="Access Publication"
-                directDownloadLink={directDownloadLink}
-                directDownloadLinkText="Download Paper"
-                size={size}
-              />
-            </Grid>
-            <Grid xs={12} md={6}>
-              <RelatedElementsList
-                title="Related Datasets"
-                relatedElements={relatedDatasets}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-              <RelatedElementsList
-                title="Related Notebooks"
-                relatedElements={relatedNotebooks}
-              />
-            </Grid>
-
             <Grid xs={12}>
-              <GoBackButton
-                parentPage="/publications"
-                parentPageName="Publications"
-              />
+              <CapsuleList title="Tags" items={tags} />
             </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>

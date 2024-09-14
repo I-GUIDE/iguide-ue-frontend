@@ -16,18 +16,6 @@ import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Pagination from "@mui/material/Pagination";
-import IconButton from "@mui/joy/IconButton";
-import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
-import DialogActions from "@mui/joy/DialogActions";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
-import DeleteForever from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import Divider from "@mui/joy/Divider";
-import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
@@ -74,10 +62,7 @@ export default function UserProfile() {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
 
-  const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
-  const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
-
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -88,7 +73,7 @@ export default function UserProfile() {
           "contributor",
           [userInfo.sub],
           null,
-          "_score",
+          "creation_time",
           "desc",
           startingIdx,
           itemsPerPage
@@ -101,8 +86,29 @@ export default function UserProfile() {
         setResultLength(arrayLength(data.elements));
       }
     }
+    async function retrieveDemoData(startingIdx) {
+      const data = await elementRetriever(
+        null,
+        null,
+        "dataset",
+        "creation_time",
+        "desc",
+        startingIdx,
+        itemsPerPage
+      );
+
+      setNumberOfTotalItems(data["total-count"]);
+      setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
+      setMetadataList(data.elements);
+      setLoading(false);
+      setResultLength(arrayLength(data.elements));
+    }
     if (userInfo) {
-      retrieveData(currentStartingIdx);
+      if (userInfo.sub === "http://cilogon.org/serverE/users/do-not-use") {
+        retrieveDemoData(currentStartingIdx);
+      } else {
+        retrieveData(currentStartingIdx);
+      }
     }
   }, [currentStartingIdx, numberOfTotalItems, userInfo]);
 
@@ -201,34 +207,6 @@ export default function UserProfile() {
     );
   }
 
-  async function handleElementDelete(elementId) {
-    console.log("Deleting...", elementId);
-    try {
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/elements/${elementId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error deleting resource");
-      }
-
-      setDeleteMetadataId(undefined);
-      setDeleteMetadataTitle(undefined);
-
-      const result = await response.json();
-      // When the deletion was successful, rerender the list
-      if (result && result.message === "Resource deleted successfully") {
-        setNumberOfTotalItems(numberOfTotalItems - 1);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error deleting resource");
-    }
-  }
-
   // If local user information is missing, ask them to fill out the info
   if (localUserInfoMissing === "unknwon") {
     return;
@@ -275,7 +253,12 @@ export default function UserProfile() {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        {userInfo && <UserProfileHeader localUserInfo={localUserInfo} />}
+        {userInfo && (
+          <UserProfileHeader
+            localUserInfo={localUserInfo}
+            contributionCount={numberOfTotalItems}
+          />
+        )}
         <Container maxWidth="xl">
           <Box
             component="main"
@@ -359,92 +342,30 @@ export default function UserProfile() {
                         {currentStartingIdx + resultLength} of{" "}
                         {numberOfTotalItems}
                       </Typography>
-                      {metadataList?.map((metadata, idx) => (
-                        <Grid
-                          container
-                          spacing={2}
-                          columns={16}
-                          sx={{ flexGrow: 1 }}
-                        >
-                          <Grid xs={15}>
+                      <Grid
+                        container
+                        spacing={2}
+                        columns={12}
+                        sx={{ flexGrow: 1 }}
+                      >
+                        {metadataList?.map((metadata, idx) => (
+                          <Grid
+                            size={{ xs: 12, sm: 6, md: 3 }}
+                            key={metadata.id}
+                          >
                             <InfoCard
-                              key={metadata._id}
                               cardtype={metadata["resource-type"] + "s"}
-                              pageid={metadata._id}
+                              pageid={metadata.id}
                               title={metadata.title}
                               authors={metadata.authors}
                               tags={metadata.tags}
                               contents={metadata.contents}
                               thumbnailImage={metadata["thumbnail-image"]}
+                              showElementType
                             />
                           </Grid>
-                          <Grid xs={1}>
-                            <IconButton
-                              color="danger"
-                              size="lg"
-                              onClick={() => {
-                                setDeleteMetadataTitle(metadata.title);
-                                setDeleteMetadataId(metadata._id);
-                                console.log(
-                                  "Attempting to delete:",
-                                  metadata.title,
-                                  metadata._id
-                                );
-                              }}
-                            >
-                              <DeleteForever />
-                            </IconButton>
-                            <Link
-                              href={"/element-update/" + metadata._id}
-                              style={{ textDecoration: "none" }}
-                            >
-                              <IconButton color="primary" size="lg">
-                                <EditIcon />
-                              </IconButton>
-                            </Link>
-                          </Grid>
-                        </Grid>
-                      ))}
-                      <Modal
-                        open={!!deleteMetadataTitle && !!deleteMetadataId}
-                        onClose={() => {
-                          setDeleteMetadataId(undefined);
-                          setDeleteMetadataTitle(undefined);
-                        }}
-                      >
-                        <ModalDialog variant="outlined" role="alertdialog">
-                          <DialogTitle>
-                            <WarningRoundedIcon />
-                            Confirmation
-                          </DialogTitle>
-                          <Divider />
-                          <DialogContent>
-                            Are you sure you want to delete "
-                            {deleteMetadataTitle}"? This deletion is permanent!
-                          </DialogContent>
-                          <DialogActions>
-                            <Button
-                              variant="solid"
-                              color="danger"
-                              onClick={() =>
-                                handleElementDelete(deleteMetadataId)
-                              }
-                            >
-                              Delete
-                            </Button>
-                            <Button
-                              variant="plain"
-                              color="neutral"
-                              onClick={() => {
-                                setDeleteMetadataId(undefined);
-                                setDeleteMetadataTitle(undefined);
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </DialogActions>
-                        </ModalDialog>
-                      </Modal>
+                        ))}
+                      </Grid>
                     </Stack>
                     <Stack
                       direction="row"

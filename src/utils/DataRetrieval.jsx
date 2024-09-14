@@ -6,15 +6,17 @@ import { fetchWithAuth } from "./FetcherWithJWT.jsx";
  * Retrieve elements for the homepage from the database.
  * @return {Promise<Array<Dict>>} an array of all elements for homepage.
  */
-export async function getHomepageElements() {
-  const response = await fetch(`${BACKEND_URL_PORT}/api/elements/homepage`);
+export async function getHomepageElements(elementType, limit = 4) {
+  const response = await fetch(
+    `${BACKEND_URL_PORT}/api/elements/homepage?element-type=${elementType}&limit=${limit}`
+  );
   if (!response.ok) {
     throw new Error(
       `Error fetching featured resources: ${response.statusText}`
     );
   }
   const data = await response.json();
-  return data;
+  return data["elements"];
 }
 
 /**
@@ -117,7 +119,7 @@ export async function getMetadataByDOI(doi) {
  * @param {string} [fieldName=''] - The name of the field in the element database.
  * @param {(string[]|null)} [matchValue=null] - The value used for filtering. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
  * @param {(string[]|null)} [elementType=null] - Type of the element. If it provides an empty array, returns an empty array as result. If it provides "null", return everything.
- * @param {string} [sortBy='_score'] - The field by which to sort the results.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
  * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
  * @param {string} [from='0'] - The starting point of the results.
  * @param {string} [size='10'] - The number of results to retrieve.
@@ -128,7 +130,7 @@ export async function elementRetriever(
   fieldName = null,
   matchValue = null,
   elementType = null,
-  sortBy = "_score",
+  sortBy = "creation_time",
   order = "desc",
   from = "0",
   size = "10"
@@ -141,20 +143,25 @@ export async function elementRetriever(
     queries += `&element-type=${elementType}`;
   }
 
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements?` +
-      queries +
-      `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
-    {
-      method: "GET",
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/elements?` +
+        queries +
+        `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve elements");
     }
-  );
 
-  if (!response.ok) {
-    throw new Error("Failed to retrieve elements");
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of elements: ", error.message);
+    return "ERROR";
   }
-
-  return response.json();
 }
 
 /**
@@ -167,17 +174,23 @@ export async function elementRetriever(
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchSingleElementDetails(elementId) {
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements/${elementId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/elements/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch resources");
     }
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch resources");
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single element: ", error.message);
+    return "ERROR";
   }
-  return response.json();
 }

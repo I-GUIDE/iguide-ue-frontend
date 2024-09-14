@@ -14,6 +14,8 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
 import Pagination from "@mui/material/Pagination";
 
 import InfoCard from "./InfoCard";
@@ -31,17 +33,24 @@ export default function ElementList(props) {
   const dataType = props.dataType;
   const title = props.title;
   const subtitle = props.subtitle;
+  const icon = props.icon;
+  const showElementType = props.showElementType;
 
   const [metadataList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resultLength, setResultLength] = useState(null);
 
+  const [ranking, setRanking] = useState({
+    sortBy: "creation_time",
+    order: "desc",
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-  const itemsPerPage = 10;
+
+  const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -52,14 +61,14 @@ export default function ElementList(props) {
           fieldName,
           matchValue,
           dataType,
-          "_id",
-          "desc",
+          ranking.sortBy,
+          ranking.order,
           startingIdx,
           itemsPerPage
         );
 
         setNumberOfTotalItems(data["total-count"]);
-        setNumberOfPages(Math.ceil(numberOfTotalItems / itemsPerPage));
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
@@ -69,13 +78,38 @@ export default function ElementList(props) {
       }
     }
     retrieveData(currentStartingIdx);
-  }, [currentStartingIdx, numberOfTotalItems, dataType]);
+  }, [currentStartingIdx, dataType, ranking]);
 
-  const handlePageClick = (event, value) => {
-    const newStartingIdx = (value - 1) * itemsPerPage;
+  function handlePageClick(event, newValue) {
+    const newStartingIdx = (newValue - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
-    setCurrentPage(value);
-  };
+    setCurrentPage(newValue);
+  }
+
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "newest":
+        setRanking({
+          sortBy: "creation_time",
+          order: "desc",
+        });
+        break;
+      case "most-popular":
+        setRanking({
+          sortBy: "click_count",
+          order: "desc",
+        });
+        break;
+      case "a-z":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      default:
+        console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
+  }
 
   if (error) {
     return (
@@ -106,6 +140,7 @@ export default function ElementList(props) {
         <Header
           title={title}
           subtitle={subtitle}
+          icon={icon}
           displayNewContributionButton={true}
         />
         <Container maxWidth="xl">
@@ -139,22 +174,52 @@ export default function ElementList(props) {
                 }}
               >
                 <PageNav currentPage={"All " + title} sx={{ px: 0 }} />
-                <Typography>
-                  Showing {currentStartingIdx + 1}-
-                  {currentStartingIdx + resultLength} of {numberOfTotalItems}
-                </Typography>
-                {metadataList?.map((metadata) => (
-                  <InfoCard
-                    key={metadata._id}
-                    cardtype={metadata["resource-type"] + "s"}
-                    pageid={metadata._id}
-                    title={metadata.title}
-                    authors={metadata.authors}
-                    tags={metadata.tags}
-                    contents={metadata.contents}
-                    thumbnailImage={metadata["thumbnail-image"]}
-                  />
-                ))}
+                <Stack
+                  spacing={1}
+                  direction={{ xs: "column", sm: "row" }}
+                  justifyContent={{ xs: "center", sm: "space-between" }}
+                  alignItems={{ xs: "flex-start", sm: "center" }}
+                >
+                  <Typography>
+                    Showing {currentStartingIdx + 1}-
+                    {currentStartingIdx + resultLength} of {numberOfTotalItems}
+                  </Typography>
+                  <Select
+                    defaultValue="newest"
+                    onChange={handleSortingChange}
+                    sx={{ width: 150 }}
+                  >
+                    <Option value="newest">Newest</Option>
+                    <Option value="most-popular">Most Popular</Option>
+                    <Option value="a-z">A-Z</Option>
+                  </Select>
+                </Stack>
+
+                <Stack
+                  spacing={2}
+                  sx={{
+                    px: { xs: 2, md: 4, width: "100%" },
+                  }}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
+                    {metadataList?.map((metadata) => (
+                      <Grid key={metadata.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                        <InfoCard
+                          cardtype={metadata["resource-type"] + "s"}
+                          pageid={metadata.id}
+                          title={metadata.title}
+                          authors={metadata.authors}
+                          tags={metadata.tags}
+                          contents={metadata.contents}
+                          thumbnailImage={metadata["thumbnail-image"]}
+                          showElementType={showElementType}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Stack>
               </Stack>
               <Stack
                 direction="row"

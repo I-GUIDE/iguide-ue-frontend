@@ -9,27 +9,26 @@ import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
-import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElementsList from "../../components/ResourcePagesComps/RelatedElementsList";
+import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
-import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
-import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
+import ErrorPage from "../../ErrorPage";
 
 export default function DatasetPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
-  const [contributors, setContributors] = useState([]);
-  const [contributorId, setContributorId] = useState();
+  const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
+  const [relatedDatasets, setRelatedDatasets] = useState([]);
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
@@ -38,17 +37,24 @@ export default function DatasetPage() {
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     async function fetchData() {
       const thisElement = await fetchSingleElementDetails(id);
 
+      if (thisElement === "ERROR") {
+        setError(true);
+        return;
+      }
+
+      setRelatedDatasets(thisElement["related-datasets"]);
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
-      setContributors(thisElement["contributor-name"]);
-      setContributorId(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link"]);
@@ -61,19 +67,20 @@ export default function DatasetPage() {
 
   usePageTitle(title);
 
+  if (error) {
+    return (
+      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+    );
+  }
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Dataset"
-        subtitle="Individual Dataset"
-        displayNewContributionButton={true}
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -104,20 +111,23 @@ export default function DatasetPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributorId}
+                  contributorId={contributor.id}
                   afterDeleteRedirection="/datasets"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                contributors={contributors}
+                contributor={contributor}
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="dataset"
               />
             </Grid>
 
+            <Grid xs={12} md={6}>
+              <CodeSnippet directDownloadLink={directDownloadLink} />
+            </Grid>
             <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <ActionList
@@ -128,26 +138,15 @@ export default function DatasetPage() {
                 directDownloadLinkText="Download Data"
                 size={size}
               />
-              <CodeSnippet directDownloadLink={directDownloadLink} />
             </Grid>
-            <Grid xs={12} md={6}>
-              <RelatedElementsList
-                title="Related Notebooks"
-                relatedElements={relatedNotebooks}
-              />
-              <RelatedElementsList
-                title="Related Publications"
-                relatedElements={relatedPublications}
-              />
-              <RelatedElementsList
-                title="Related Educational Resources"
-                relatedElements={relatedOERs}
-              />
-            </Grid>
-
-            <Grid xs={12}>
-              <GoBackButton parentPage="/datasets" parentPageName="Datasets" />
-            </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>

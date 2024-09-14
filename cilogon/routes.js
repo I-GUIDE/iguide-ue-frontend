@@ -193,5 +193,17 @@ router.get("/userinfo", (req, res) => {
   }
 });
 
+router.get("/error", (req, res) => {
+  res.send("<p>We couldn't authenticate you due to an issue from CILogon</p>");
+});
+
+router.get("/nouser", (req, res) => {
+  res.send("<p>We couldn't proceed because CILogon didn't return a valid user.</p>");
+});
+
+router.get("/errorlogin", (req, res) => {
+  res.send("<p>We are having trouble logging you in.</p>");
+});
+
 module.exports = router;
 

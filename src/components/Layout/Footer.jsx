@@ -13,10 +13,13 @@ import { grey } from "@mui/material/colors";
 import XIcon from "@mui/icons-material/X";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import EmailIcon from "@mui/icons-material/Email";
+
+import { FOOTER_HEIGHT } from "../../configs/VarConfigs";
 
 export default function Footer() {
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: 100 }}>
+    <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: FOOTER_HEIGHT }}>
       <Card
         component="li"
         color="neutural"
@@ -89,7 +92,17 @@ export default function Footer() {
                 >
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://www.youtube.com/@nsf-iguide"}
+                      href="mailto:help@i-guide.io"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <EmailIcon sx={{ color: grey[700] }} />
+                    </Link>
+                  </Box>
+                  <Box sx={{ width: "flex", px: 0.5 }}>
+                    <Link
+                      href="https://www.youtube.com/@nsf-iguide"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
@@ -99,7 +112,7 @@ export default function Footer() {
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://x.com/NSFiGUIDE"}
+                      href="https://x.com/NSFiGUIDE"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
@@ -109,7 +122,7 @@ export default function Footer() {
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
                     <Link
-                      href={"https://www.linkedin.com/company/nsf-i-guide/"}
+                      href="https://www.linkedin.com/company/nsf-i-guide/"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
@@ -117,6 +130,19 @@ export default function Footer() {
                       <LinkedInIcon sx={{ color: grey[700] }} />
                     </Link>
                   </Box>
+                </Stack>
+              </Grid>
+              <Grid xs={12}>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={1}
+                  sx={{ display: "flex" }}
+                >
+                  <Link href="/terms-of-use">
+                    <Typography level="body-xs">Terms of Use</Typography>
+                  </Link>
                 </Stack>
               </Grid>
             </Grid>

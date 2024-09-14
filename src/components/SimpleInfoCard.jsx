@@ -10,6 +10,8 @@ import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 import Tooltip from "@mui/joy/Tooltip";
 
+import { stringTruncator } from "../helpers/helper";
+
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
@@ -18,12 +20,17 @@ import {
 export default function SimpleInfoCard(props) {
   const thumbnailImage = props.thumbnailImage;
   const title = props.title;
+  const contents = props.contents;
   const cardType = props.cardtype;
   const pageId = props.pageId;
   const minHeight = props.minHeight;
+  const width = props.width;
+  const showElementType = props.showElementType;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
+
+  const contentsTruncated = stringTruncator(contents, 0, 200, "");
 
   return (
     <Tooltip
@@ -46,8 +53,10 @@ export default function SimpleInfoCard(props) {
     >
       <Card
         variant="outlined"
+        color={categoryColor}
         sx={{
-          width: 300,
+          width: width,
+          maxWidth: 250,
           minHeight: minHeight,
           "&:hover": {
             borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
@@ -67,9 +76,9 @@ export default function SimpleInfoCard(props) {
             href={"/" + cardType + "/" + pageId}
             sx={{ color: "text.tertiary" }}
           >
-            <Stack>
+            <Stack spacing={1}>
               <Typography
-                level="body-xs"
+                level="body-sm"
                 textColor="#000"
                 sx={{
                   overflow: "hidden",
@@ -81,25 +90,39 @@ export default function SimpleInfoCard(props) {
               >
                 {title}
               </Typography>
+              <Typography
+                level="body-xs"
+                sx={{
+                  display: "-webkit-box",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  WebkitLineClamp: "2",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {contentsTruncated}
+              </Typography>
             </Stack>
           </Link>
         </CardContent>
-        <CardOverflow
-          variant="soft"
-          color={categoryColor}
-          sx={{
-            px: 2,
-            py: 1,
-            justifyContent: "center",
-            fontSize: "xs",
-            fontWeight: "xl",
-            letterSpacing: "0.3px",
-            textTransform: "uppercase",
-            borderColor: "divider",
-          }}
-        >
-          {categoryName}
-        </CardOverflow>
+        {showElementType && (
+          <CardOverflow
+            variant="soft"
+            color={categoryColor}
+            sx={{
+              px: 2,
+              py: 1,
+              justifyContent: "center",
+              fontSize: "xs",
+              fontWeight: "xl",
+              letterSpacing: "0.3px",
+              textTransform: "uppercase",
+              borderColor: "divider",
+            }}
+          >
+            {categoryName}
+          </CardOverflow>
+        )}
       </Card>
     </Tooltip>
   );

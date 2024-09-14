@@ -34,6 +34,7 @@ import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 import {
+  SEARCH_RESULTS_HEADER_HEIGHT,
   SEARCH_RESULTS_BODY_HEIGHT,
   RESOURCE_TYPE_NAMES,
 } from "../configs/VarConfigs";
@@ -181,7 +182,11 @@ export default function SearchResults() {
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box
-          sx={{ display: "flex", flexWrap: "wrap", p: 0, m: 0, height: 170 }}
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            height: SEARCH_RESULTS_HEADER_HEIGHT,
+          }}
         >
           <Card
             component="li"
@@ -382,20 +387,36 @@ export default function SearchResults() {
                       </Button>
                     </Stack>
                   )}
-
-                  {/* Search result list */}
-                  {searchResults?.map((result) => (
-                    <InfoCard
-                      key={result._id}
-                      cardtype={result["resource-type"] + "s"}
-                      pageid={result._id}
-                      title={result.title}
-                      authors={result.authors}
-                      tags={result.tags}
-                      contents={result.contents}
-                      thumbnailImage={result["thumbnail-image"]}
-                    />
-                  ))}
+                  <Stack
+                    spacing={2}
+                    sx={{
+                      px: { xs: 2, md: 4, width: "100%" },
+                    }}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Grid
+                      container
+                      spacing={2}
+                      columns={12}
+                      sx={{ flexGrow: 1 }}
+                    >
+                      {searchResults?.map((result) => (
+                        <Grid key={result.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                          <InfoCard
+                            key={result._id}
+                            cardtype={result["resource-type"] + "s"}
+                            pageid={result._id}
+                            title={result.title}
+                            authors={result.authors}
+                            tags={result.tags}
+                            contents={result.contents}
+                            thumbnailImage={result["thumbnail-image"]}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Stack>
                 </Stack>
                 <Stack
                   direction="row"

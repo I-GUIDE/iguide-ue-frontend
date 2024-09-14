@@ -13,7 +13,7 @@ import LoginCard from "../components/LoginCard";
 import SubmissionCard from "../components/SubmissionCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function ResourceSubmission() {
   usePageTitle("Contribution");
@@ -28,15 +28,11 @@ export default function ResourceSubmission() {
     return (
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
-        <Header
-          title="Knowledge Contribution"
-          subtitle="Thanks for your contributions!"
-        />
         <Container maxWidth="xl">
           <Box
             component="main"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
@@ -49,7 +45,7 @@ export default function ResourceSubmission() {
               alignItems="center"
               direction="column"
               sx={{
-                minHeight: DEFAULT_BODY_HEIGHT,
+                minHeight: NO_HEADER_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
                 pt: 4,
@@ -67,15 +63,11 @@ export default function ResourceSubmission() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Contribute a Knowledge Element"
-        subtitle="Thanks for your contributions!"
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -88,7 +80,7 @@ export default function ResourceSubmission() {
             alignItems="center"
             direction="column"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
               pt: 4,

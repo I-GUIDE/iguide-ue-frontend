@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Link } from "react-router-dom";
-import Jdenticon from "react-jdenticon";
 
 import {
   experimental_extendTheme as materialExtendTheme,
@@ -34,6 +33,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/joy/Tooltip";
 
 import SearchBar from "../SearchBar";
+import UserAvatar from "../UserAvatar";
+
+import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 
 const pages = [
   ["Home", "/"],
@@ -46,7 +48,7 @@ const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
-  const localUserInfo = props.localUserInfo;
+  const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
 
   const buttonRef = React.useRef(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -73,35 +75,16 @@ export default function NavBar(props) {
     window.open(AUTH_BACKEND_URL + "/logout", "_self");
   }
 
-  function UserAvatar() {
-    if (localUserInfo) {
-      if (localUserInfo.avatar_url) {
-        return (
-          <Avatar
-            variant="outlined"
-            alt="User avatar"
-            src={localUserInfo.avatar_url}
-          />
-        );
-      } else {
-        return (
-          <Avatar>
-            <Jdenticon size="200" value={localUserInfo.openid} />
-          </Avatar>
-        );
-      }
-    } else {
-      <Avatar variant="outlined" />;
-    }
-  }
-
   // If the user is logged in, display the logout button, otherwise login
   function AuthButton() {
     if (isAuthenticated) {
       return (
         <Dropdown>
           <MenuButton color="primary">
-            <UserAvatar />
+            <UserAvatar
+              link={localUserInfo["avatar_url"]}
+              userId={localUserInfo.openid}
+            />
           </MenuButton>
           <Menu
             placement="bottom-end"
@@ -215,7 +198,7 @@ export default function NavBar(props) {
         <AppBar position="sticky" color="inherit">
           <Box
             sx={{
-              height: 70,
+              height: NAVBAR_HEIGHT,
               pt: 1,
               mx: 2,
               display: "auto",

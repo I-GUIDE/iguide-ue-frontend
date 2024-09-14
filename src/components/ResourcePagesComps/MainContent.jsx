@@ -4,48 +4,73 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
+import Link from "@mui/joy/Link";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { printListWithDelimiter } from "../../helpers/helper";
+import UserAvatar from "../UserAvatar";
 
 export default function MainContent(props) {
   const title = props.title;
-  const contributors = props.contributors;
+  const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
+  const doi = props.doi;
+  const contentsTitle = props.contentsTitle ? props.contentsTitle : "About";
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
   const elementType = props.elementType;
 
+  const contributorAvatar = contributor["avatar-url"];
+  const contributorName = contributor.name;
+  const contributorUserId = contributor.id;
+
   return (
     <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Grid container rowSpacing={2} columnSpacing={8} alignItems="center">
+      <Grid
+        container
+        rowSpacing={2}
+        columnSpacing={8}
+        alignItems="flex-start"
+        sx={{ py: 2 }}
+      >
         <Grid xs={12} md={8}>
-          <Typography level="h1" sx={{ py: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={2} sx={{ pb: 2 }}>
+            <UserAvatar link={contributorAvatar} userId={contributorUserId} />
+            <Stack direction="column">
+              <Typography level="title-lg">{contributorName}</Typography>
+              <Typography level="body-sm">Contributor</Typography>
+            </Stack>
+          </Stack>
+          <Typography level="h2" sx={{ py: 1 }}>
             {title}
           </Typography>
-          {contributors && contributors.length > 0 && (
-            <Typography sx={{ py: 1 }}>
-              <Typography level="title-lg">
-                Contributor{contributors.length > 1 && "s"}:{" "}
-              </Typography>
-              <Typography level="body-lg">
-                {printListWithDelimiter(contributors, ",")}
-              </Typography>
-            </Typography>
-          )}
           {authors && authors.length > 0 && (
-            <Typography sx={{ py: 1 }}>
-              <Typography level="title-lg">
-                Author{authors.length > 1 && "s"}:{" "}
-              </Typography>
-              <Typography level="body-lg">
-                {printListWithDelimiter(authors, ",")}
-              </Typography>
+            <Typography level="body-lg" sx={{ py: 1 }}>
+              {printListWithDelimiter(authors, ",")}
             </Typography>
           )}
-          <Typography sx={{ py: 1 }}>{contents}</Typography>
+          {doi && (
+            <Link
+              href={doi}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="always"
+            >
+              <Typography
+                level="body-sm"
+                startDecorator={<OpenInNewIcon />}
+                sx={{ py: 1 }}
+              >
+                {doi}
+              </Typography>
+            </Link>
+          )}
         </Grid>
         <Grid xs={12} md={4}>
-          <AspectRatio variant="outlined" maxHeight={280} sx={{ py: 1 }}>
+          <AspectRatio
+            variant="outlined"
+            sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+          >
             {thumbnailImage ? (
               <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
             ) : (
@@ -58,6 +83,10 @@ export default function MainContent(props) {
           </AspectRatio>
         </Grid>
       </Grid>
+      <Typography level="h4" sx={{ pt: 2 }}>
+        {contentsTitle}
+      </Typography>
+      <Typography sx={{ py: 2 }}>{contents}</Typography>
     </Stack>
   );
 }
