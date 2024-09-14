@@ -122,7 +122,7 @@ export default function OERPage() {
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
             </Grid>
-            <Grid xs={12} md={6}>
+            <Grid xs={12}>
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
             <Grid xs={12}>
