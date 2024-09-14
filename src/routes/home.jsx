@@ -49,7 +49,12 @@ export default function Home() {
           <Card
             variant="plain"
             component="li"
-            sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
+            sx={{
+              bgcolor: "#fff",
+              borderRadius: 0,
+              minWidth: 300,
+              flexGrow: 1,
+            }}
           >
             <CardCover>
               <img
