@@ -115,7 +115,7 @@ router.get('/cilogon-callback', async (req, res, next) => {
       }
 
       // Retrieve user role from OpenSearch
-      const role = await getUserRole(user.sub) || 'untrusted_user'; // Default to 'user' if role not found
+      const role = await getUserRole(user.sub) || 10; // Default to 'user' if role not found
       console.log('user role: ', role);
 
       // Generate JWT token with role
