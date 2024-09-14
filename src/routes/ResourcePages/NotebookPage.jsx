@@ -9,14 +9,12 @@ import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
-import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
 import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
-import GoBackButton from "../../components/ResourcePagesComps/GoBackButton";
 import NotebookViewer from "../../components/ResourcePagesComps/NotebookViewer";
-import Header from "../../components/Layout/Header";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
@@ -76,16 +74,11 @@ export default function NotebookPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Notebooks"
-        subtitle="Individual Notebook"
-        displayNewContributionButton={true}
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -145,13 +138,6 @@ export default function NotebookPage() {
                 relatedOERs={relatedOERs}
                 xs={12}
                 md={6}
-              />
-            </Grid>
-
-            <Grid xs={12}>
-              <GoBackButton
-                parentPage="/notebooks"
-                parentPageName="Notebooks"
               />
             </Grid>
           </Grid>
