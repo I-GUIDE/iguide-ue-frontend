@@ -1,18 +1,17 @@
 import React from "react";
 
-import ElementList from "../components/ElementList";
-import usePageTitle from "../hooks/usePageTitle";
-
 import ArticleIcon from "@mui/icons-material/Article";
+
+import usePageTitle from "../hooks/usePageTitle";
+import ElementGridLayout from "../layouts/ElementGridLayout";
 
 export default function Publications() {
   usePageTitle("Publications");
 
   return (
-    <ElementList
-      dataType={["publication"]}
+    <ElementGridLayout
+      elementType="publication"
       title="Publications"
-      subtitle="Find your publications here"
       icon={<ArticleIcon />}
     />
   );

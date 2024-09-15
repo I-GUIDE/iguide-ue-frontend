@@ -1,18 +1,17 @@
 import React from "react";
 
-import ElementList from "../components/ElementList";
-import usePageTitle from "../hooks/usePageTitle";
-
 import CodeIcon from "@mui/icons-material/Code";
+
+import usePageTitle from "../hooks/usePageTitle";
+import ElementGridLayout from "../layouts/ElementGridLayout";
 
 export default function Notebooks() {
   usePageTitle("Notebooks");
 
   return (
-    <ElementList
-      dataType={["notebook"]}
+    <ElementGridLayout
+      elementType="notebook"
       title="Notebooks"
-      subtitle="Find your notebooks here"
       icon={<CodeIcon />}
     />
   );

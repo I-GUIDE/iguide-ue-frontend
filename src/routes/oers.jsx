@@ -1,18 +1,17 @@
 import React from "react";
 
-import ElementList from "../components/ElementList";
-import usePageTitle from "../hooks/usePageTitle";
-
 import SchoolIcon from "@mui/icons-material/School";
 
-export default function OERS() {
+import usePageTitle from "../hooks/usePageTitle";
+import ElementGridLayout from "../layouts/ElementGridLayout";
+
+export default function OERs() {
   usePageTitle("Educational Resources");
 
   return (
-    <ElementList
-      dataType={["oer"]}
+    <ElementGridLayout
+      elementType="oer"
       title="Educational Resources"
-      subtitle="Find your educational resources here"
       icon={<SchoolIcon />}
     />
   );

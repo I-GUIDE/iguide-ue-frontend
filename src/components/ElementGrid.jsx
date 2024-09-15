@@ -1,0 +1,232 @@
+import React, { useState, useEffect } from "react";
+
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from "@mui/material/styles";
+import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+const materialTheme = materialExtendTheme();
+
+import Stack from "@mui/joy/Stack";
+// Currently using mui Grid2 as Joy UI is still using legacy Grid
+import Grid from "@mui/material/Grid2";
+import Typography from "@mui/joy/Typography";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import Pagination from "@mui/material/Pagination";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+
+import InfoCard from "./InfoCard";
+
+import { elementRetriever } from "../utils/DataRetrieval";
+import { arrayLength } from "../helpers/helper";
+
+export default function ElementGrid(props) {
+  const headline = props.headline;
+  const fieldName = props.fieldName;
+  const matchValue = props.matchValue;
+  const elementType = props.elementType;
+  const noElementMsg = props.noElementMsg;
+  const showElementType = props.showElementType;
+
+  const [metadataList, setMetadataList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [resultLength, setResultLength] = useState(null);
+
+  const [ranking, setRanking] = useState({
+    sortBy: "creation_time",
+    order: "desc",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
+  const itemsPerPage = 12;
+
+  // When users select a new page or when there is a change of total items,
+  //   retrieve the data
+  useEffect(() => {
+    async function retrieveData(startingIdx) {
+      try {
+        const data = await elementRetriever(
+          fieldName,
+          matchValue,
+          elementType,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+    retrieveData(currentStartingIdx);
+  }, [currentStartingIdx, elementType, ranking]);
+
+  function handlePageClick(event, newValue) {
+    const newStartingIdx = (newValue - 1) * itemsPerPage;
+    setCurrentStartingIdx(newStartingIdx);
+    setCurrentPage(newValue);
+  }
+
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "newest":
+        setRanking({
+          sortBy: "creation_time",
+          order: "desc",
+        });
+        break;
+      case "most-popular":
+        setRanking({
+          sortBy: "click_count",
+          order: "desc",
+        });
+        break;
+      case "a-z":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      default:
+        console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
+  }
+
+  if (numberOfTotalItems === 0) {
+    return (
+      <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+        <JoyCssVarsProvider>
+          <CssBaseline enableColorScheme />
+          <Stack spacing={2} justifyContent="center" alignItems="center">
+            <Card
+              variant="outlined"
+              orientation="horizontal"
+              sx={{
+                width: "100%",
+                "&:hover": {
+                  boxShadow: "md",
+                  borderColor: "neutral.outlinedHoverBorder",
+                },
+              }}
+            >
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid
+                    xs={12}
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex"
+                  >
+                    <Typography level="title-lg">{noElementMsg}</Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Stack>
+        </JoyCssVarsProvider>
+      </MaterialCssVarsProvider>
+    );
+  }
+
+  return (
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider>
+        <CssBaseline enableColorScheme />
+        <Stack spacing={2}>
+          <Stack
+            direction="column"
+            justifyContent="center"
+            alignItems="flex-start"
+            spacing={2}
+            width="100%"
+          >
+            <Typography level="h3">{headline}</Typography>
+          </Stack>
+          <Stack
+            spacing={1}
+            direction={{ xs: "column", sm: "row" }}
+            justifyContent={{ xs: "center", sm: "space-between" }}
+            alignItems={{ xs: "flex-start", sm: "center" }}
+          >
+            <Typography>
+              Showing {currentStartingIdx + 1}-
+              {currentStartingIdx + resultLength} of {numberOfTotalItems}
+            </Typography>
+            <Select
+              defaultValue="newest"
+              onChange={handleSortingChange}
+              sx={{ width: 150 }}
+            >
+              <Option value="newest">Newest</Option>
+              <Option value="most-popular">Most Popular</Option>
+              <Option value="a-z">A-Z</Option>
+            </Select>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{ width: "100%" }}
+          >
+            <Grid
+              container
+              spacing={2}
+              columns={12}
+              sx={{ flexGrow: 1 }}
+              justifyContent="flex-start"
+            >
+              {metadataList?.map((metadata) => (
+                <Grid key={metadata.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <InfoCard
+                    cardtype={metadata["resource-type"] + "s"}
+                    pageid={metadata.id}
+                    title={metadata.title}
+                    authors={metadata.authors}
+                    tags={metadata.tags}
+                    contents={metadata.contents}
+                    thumbnailImage={metadata["thumbnail-image"]}
+                    showElementType={showElementType}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{
+              pt: 2,
+              minHeight: 0,
+            }}
+          >
+            <Pagination
+              count={numberOfPages}
+              color="primary"
+              page={currentPage}
+              onChange={handlePageClick}
+            />
+          </Stack>
+        </Stack>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
+  );
+}

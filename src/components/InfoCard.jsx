@@ -53,7 +53,7 @@ export default function InfoCard(props) {
         variant="outlined"
         color={categoryColor}
         sx={{
-          width: 300,
+          // width: 300,
           height: "100%",
           "--Card-radius": "25px",
         }}
