@@ -158,10 +158,9 @@ export default function ElementGrid(props) {
             <Typography level="h3">{headline}</Typography>
           </Stack>
           <Stack
-            spacing={1}
-            direction={{ xs: "column", sm: "row" }}
-            justifyContent={{ xs: "center", sm: "space-between" }}
-            alignItems={{ xs: "flex-start", sm: "center" }}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
             <Typography>
               Showing {currentStartingIdx + 1}-
