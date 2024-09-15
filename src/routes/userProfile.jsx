@@ -14,7 +14,6 @@ import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
-import Typography from "@mui/joy/Typography";
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
@@ -27,6 +26,7 @@ import {
   DEFAULT_BODY_HEIGHT,
   USER_PROFILE_BODY_HEIGHT,
 } from "../configs/VarConfigs";
+import { getNumberOfContributions } from "../utils/DataRetrieval";
 
 export default function UserProfile() {
   usePageTitle("User Profile");
@@ -51,8 +51,10 @@ export default function UserProfile() {
   useEffect(() => {
     if (userInfo) {
       if (userInfo.sub === "http://cilogon.org/serverE/users/do-not-use") {
+        setNumberOfTotalItems(0);
         setIsTesting(true);
       } else {
+        setNumberOfTotalItems(getNumberOfContributions(userInfo.sub));
         setIsTesting(false);
       }
     }
