@@ -92,6 +92,7 @@ export default function ContributorProfile() {
                   fieldName="contributor"
                   matchValue={userId}
                   noElementMsg="This user doesn't have any contribution"
+                  showElementType
                 />
               </Stack>
             </Grid>
