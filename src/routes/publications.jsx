@@ -12,6 +12,7 @@ export default function Publications() {
     <ElementGridLayout
       elementType="publication"
       title="Publications"
+      subtitle="Browse peer-reviewed publications that showcase cutting-edge research and insights in geospatial science and related fields."
       icon={<ArticleIcon />}
     />
   );

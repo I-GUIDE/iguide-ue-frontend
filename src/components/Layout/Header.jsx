@@ -1,19 +1,12 @@
 import * as React from "react";
 
-import { useOutletContext } from "react-router-dom";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import Dropdown from "@mui/joy/Dropdown";
-import MenuItem from "@mui/joy/MenuItem";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 import { HEADER_HEIGHT } from "../../configs/VarConfigs";
 import PageNav from "../PageNav";
@@ -24,16 +17,6 @@ export default function Header(props) {
   const icon = props.icon;
   const currentPage = props.currentPage;
   const parentPages = props.parentPages;
-  const displayNewContributionButton = props.displayNewContributionButton;
-
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
 
   return (
     <Box
@@ -57,12 +40,12 @@ export default function Header(props) {
         </CardCover>
         <CardContent>
           <Container maxWidth="xl">
-            <Stack spacing={0.5} sx={{ px: 4, py: 2 }}>
+            <Stack spacing={2} sx={{ px: 4, py: 2 }}>
               <PageNav
                 parentPages={parentPages}
                 currentPage={currentPage}
                 fontLevel="body-xs"
-                sx={{ px: 0, pb: 3 }}
+                sx={{ px: 0, pb: 2 }}
               />
               {title.length > 30 ? (
                 <Typography level="h3" textColor="#000" startDecorator={icon}>
@@ -73,41 +56,9 @@ export default function Header(props) {
                   {title}
                 </Typography>
               )}
-              <Stack
-                spacing={1}
-                direction={{ xs: "column", md: "row" }}
-                justifyContent={{ xs: "center", md: "space-between" }}
-                alignItems={{ xs: "flex-start", md: "center" }}
-              >
-                <Typography level="body-md" textColor="#696969">
-                  {subtitle}
-                </Typography>
-                {isAuthenticated && displayNewContributionButton && (
-                  <Dropdown>
-                    <MenuButton
-                      variant="outlined"
-                      size="sm"
-                      endDecorator={<LibraryAddIcon />}
-                    >
-                      New Contribution
-                    </MenuButton>
-                    <Menu placement="bottom-end" color="primary">
-                      <MenuItem component="a" href="/contribution/dataset">
-                        New Dataset
-                      </MenuItem>
-                      <MenuItem component="a" href="/contribution/notebook">
-                        New Notebook
-                      </MenuItem>
-                      <MenuItem component="a" href="/contribution/publication">
-                        New Publication
-                      </MenuItem>
-                      <MenuItem component="a" href="/contribution/oer">
-                        New Educational Resource
-                      </MenuItem>
-                    </Menu>
-                  </Dropdown>
-                )}
-              </Stack>
+              <Typography level="body-sm" textColor="#696969">
+                {subtitle}
+              </Typography>
             </Stack>
           </Container>
         </CardContent>

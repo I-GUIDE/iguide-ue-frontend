@@ -17,6 +17,7 @@ export default function ElementGridLayout(props) {
   const fieldName = props.fieldName;
   const matchValue = props.matchValue;
   const title = props.title;
+  const subtitle = props.subtitle;
   const pageNavName = props.pageNavName ? props.pageNavName : "All " + title;
   const icon = props.icon;
   const showElementType = props.showElementType;
@@ -26,8 +27,8 @@ export default function ElementGridLayout(props) {
       <CssBaseline />
       <Header
         title={title}
+        subtitle={subtitle}
         icon={icon}
-        displayNewContributionButton={true}
         currentPage={pageNavName}
       />
       <Container maxWidth="xl">
