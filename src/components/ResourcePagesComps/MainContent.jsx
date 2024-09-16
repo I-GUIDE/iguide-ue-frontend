@@ -5,6 +5,9 @@ import Stack from "@mui/joy/Stack";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
+import Card from "@mui/joy/Card";
+import CardCover from "@mui/joy/CardCover";
+import CardContent from "@mui/joy/CardContent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { printListWithDelimiter } from "../../helpers/helper";
@@ -23,6 +26,7 @@ export default function MainContent(props) {
   const contributorAvatar = contributor["avatar-url"];
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
+  const encodedUserId = encodeURIComponent(contributor.id);
 
   return (
     <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -34,13 +38,42 @@ export default function MainContent(props) {
         sx={{ py: 2 }}
       >
         <Grid xs={12} md={8}>
-          <Stack direction="row" alignItems="center" spacing={2} sx={{ pb: 2 }}>
-            <UserAvatar link={contributorAvatar} userId={contributorUserId} />
-            <Stack direction="column">
-              <Typography level="title-lg">{contributorName}</Typography>
-              <Typography level="body-sm">Contributor</Typography>
-            </Stack>
-          </Stack>
+          <Link
+            href={"/contributor/" + encodedUserId}
+            style={{ textDecoration: "none" }}
+          >
+            <Card
+              variant="plain"
+              orientation="horizontal"
+              sx={{
+                maxHeight: "150px",
+                bgcolor: "#fff",
+                p: 0,
+                "&:hover": {
+                  borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
+              <CardContent>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ pb: 2 }}
+                >
+                  <UserAvatar
+                    link={contributorAvatar}
+                    userId={contributorUserId}
+                  />
+                  <Stack direction="column">
+                    <Typography level="title-lg">{contributorName}</Typography>
+                    <Typography level="body-sm">Contributor</Typography>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Link>
           <Typography level="h2" sx={{ py: 1 }}>
             {title}
           </Typography>

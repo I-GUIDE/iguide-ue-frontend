@@ -1,17 +1,17 @@
 import React from "react";
 
-import ElementList from "../components/ElementList";
-import usePageTitle from "../hooks/usePageTitle";
 import DatasetIcon from "@mui/icons-material/Dataset";
+
+import usePageTitle from "../hooks/usePageTitle";
+import ElementGridLayout from "../layouts/ElementGridLayout";
 
 export default function Datasets() {
   usePageTitle("Datasets");
 
   return (
-    <ElementList
-      dataType={["dataset"]}
+    <ElementGridLayout
+      elementType="dataset"
       title="Datasets"
-      subtitle="Find your datasets here"
       icon={<DatasetIcon />}
     />
   );

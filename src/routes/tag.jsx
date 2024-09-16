@@ -1,9 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import ElementList from "../components/ElementList";
+import TagIcon from "@mui/icons-material/Tag";
+
 import { stringTruncator } from "../helpers/helper";
 import usePageTitle from "../hooks/usePageTitle";
+import ElementGridLayout from "../layouts/ElementGridLayout";
 
 export default function Tag() {
   const tagName = useParams().id;
@@ -12,11 +14,12 @@ export default function Tag() {
   usePageTitle(tagName);
 
   return (
-    <ElementList
+    <ElementGridLayout
       fieldName="tags"
       matchValue={[tagName]}
       title={'Tag: "' + displayTagName + '"'}
-      subtitle={'Elements with tag "' + displayTagName + '"'}
+      pageNavName={'Tag: "' + displayTagName + '"'}
+      icon={<TagIcon />}
       showElementType
     />
   );

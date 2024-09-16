@@ -133,7 +133,8 @@ export async function elementRetriever(
   sortBy = "creation_time",
   order = "desc",
   from = "0",
-  size = "10"
+  size = "10",
+  countOnly = false
 ) {
   let queries = "";
   if (fieldName !== null) {
@@ -147,7 +148,7 @@ export async function elementRetriever(
     const response = await fetch(
       `${BACKEND_URL_PORT}/api/elements?` +
         queries +
-        `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+        `&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}&count-only=${countOnly}`,
       {
         method: "GET",
       }
@@ -193,4 +194,27 @@ export async function fetchSingleElementDetails(elementId) {
     console.error("Error fetching a single element: ", error.message);
     return "ERROR";
   }
+}
+
+/**
+ * Get the number of contributions from a contributor
+ *
+ * @async
+ * @function getNumberOfContributions
+ * @param {string} uid - User ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the number.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function getNumberOfContributions(uid) {
+  const numberOfContributions = await elementRetriever(
+    "contributor",
+    uid,
+    null,
+    null,
+    null,
+    "0",
+    "0",
+    true
+  );
+  return Number(numberOfContributions);
 }
