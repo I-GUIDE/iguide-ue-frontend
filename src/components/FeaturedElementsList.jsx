@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from "@mui/material/styles";
+import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+const materialTheme = materialExtendTheme();
+
 import Stack from "@mui/joy/Stack";
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import SimpleInfoCard from "./SimpleInfoCard";
+import InfoCard from "./InfoCard";
 import { getHomepageElements } from "../utils/DataRetrieval";
 
 export default function FeaturedElementsList(props) {
@@ -35,74 +44,59 @@ export default function FeaturedElementsList(props) {
   }, []);
 
   return (
-    <Grid
-      container
-      rowSpacing={2}
-      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-      direction="column"
-      sx={{
-        backgroundColor: "inherit",
-        px: { xs: 2, md: 4 },
-        py: 3,
-      }}
-    >
-      <Stack
-        direction="row"
-        sx={{
-          justifyContent: "space-between",
-          alignItems: "center",
-          px: 2,
-          py: 2,
-        }}
-      >
-        <Typography level="h3" startDecorator={icon}>
-          {title}
-        </Typography>
-        <Link
-          href={pageLink}
-          color="inherit"
-          style={{ textDecoration: "none" }}
-        >
-          <Typography startDecorator={<ArrowForwardIcon />}>
-            View All
-          </Typography>
-        </Link>
-      </Stack>
-      <Grid
-        container
-        direction="row"
-        justifyContent="flex-start"
-        xs={12}
-        sx={{ px: 2 }}
-      >
-        {featuredElements?.map((featuredElement) => (
-          <Grid
-            container
-            key={featuredElement.id}
-            xs={12}
-            sm={6}
-            md={3}
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider>
+        <CssBaseline enableColorScheme />
+        <Stack spacing={2} sx={{ py: 2 }}>
+          <Stack
+            direction="row"
             sx={{
-              px: 2,
-              py: { xs: 2, md: 1 },
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <SimpleInfoCard
-              key={featuredElement.id}
-              cardtype={featuredElement["resource-type"] + "s"}
-              pageId={featuredElement.id}
-              title={featuredElement.title}
-              contents={featuredElement.contents}
-              thumbnailImage={featuredElement["thumbnail-image"]}
-              minHeight="100%"
-              width="100%"
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Grid>
+            <Typography level="h3" startDecorator={icon}>
+              {title}
+            </Typography>
+            <Link
+              href={pageLink}
+              color="inherit"
+              style={{ textDecoration: "none" }}
+            >
+              <Typography startDecorator={<ArrowForwardIcon />}>
+                View All
+              </Typography>
+            </Link>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+            sx={{ width: "100%" }}
+          >
+            <Grid
+              container
+              spacing={2}
+              columns={12}
+              sx={{ flexGrow: 1 }}
+              justifyContent="flex-start"
+            >
+              {featuredElements?.map((featuredElement) => (
+                <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <InfoCard
+                    cardtype={featuredElement["resource-type"] + "s"}
+                    pageid={featuredElement.id}
+                    title={featuredElement.title}
+                    contents={featuredElement.contents}
+                    thumbnailImage={featuredElement["thumbnail-image"]}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+        </Stack>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
 }

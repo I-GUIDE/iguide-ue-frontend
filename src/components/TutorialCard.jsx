@@ -25,6 +25,7 @@ export default function TutorialCard(props) {
             borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
             transform: "translateY(-2px)",
           },
+          p: 0,
         }}
       >
         <CardContent>
