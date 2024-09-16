@@ -23,6 +23,7 @@ import ResourceUpdate from "./routes/resourceUpdate";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 
 import ErrorPage from "./ErrorPage";
+import ContributorProfile from "./routes/contributorProfile";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/user-profile",
         element: <UserProfile />,
+      },
+      {
+        path: "/contributor/:id",
+        element: <ContributorProfile />,
       },
       {
         path: "/user-profile-update",

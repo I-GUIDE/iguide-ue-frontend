@@ -17,7 +17,6 @@ export async function fetchUser(uid) {
   }
 
   const result = await response.json();
-  console.log("USER_MANAGER: fetched a user", result);
   return result;
 }
 
@@ -62,7 +61,6 @@ export async function addUser(
   }
 
   const result = await response.json();
-  console.log("USER_MANAGER: added a user", result, "user info", user);
   return result;
 }
 
@@ -114,7 +112,6 @@ export async function updateUser(
   }
 
   const result = await response.json();
-  console.log("USER_MANAGER: updated a user", result);
   return result;
 }
 
@@ -135,7 +132,6 @@ export async function deleteUser(uid) {
   }
 
   const result = await response.json();
-  console.log("USER_MANAGER: deleted a user", result);
   return result;
 }
 
@@ -160,5 +156,4 @@ export async function checkTokens() {
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
-  console.log("Check tokens response: ", response);
 }

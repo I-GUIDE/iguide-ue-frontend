@@ -21,13 +21,14 @@ import UserAvatar from "./UserAvatar";
 import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
 
 export default function UserProfileHeader(props) {
-  const localUserInfo = props.localUserInfo;
+  const userInfo = props.userInfo;
+  const allowProfileOps = props.allowProfileOps;
   const contributionCount = props.contributionCount
     ? props.contributionCount
     : 0;
 
   // If the user info from the local DB is still not available, wait...
-  if (!localUserInfo) {
+  if (!userInfo) {
     return (
       <Box
         sx={{
@@ -99,8 +100,8 @@ export default function UserProfileHeader(props) {
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
                   <UserAvatar
-                    link={localUserInfo["avatar_url"]}
-                    userId={localUserInfo.openid}
+                    link={userInfo["avatar_url"]}
+                    userId={userInfo.openid}
                     size={150}
                   />
                 </Stack>
@@ -116,12 +117,12 @@ export default function UserProfileHeader(props) {
                   }}
                 >
                   <Typography level="h1" fontWeight="lg" textColor={"#000"}>
-                    {localUserInfo.first_name
-                      ? localUserInfo.first_name
+                    {userInfo.first_name
+                      ? userInfo.first_name
                       : "First name unknown"}
                     &nbsp;
-                    {localUserInfo.last_name
-                      ? localUserInfo.last_name
+                    {userInfo.last_name
+                      ? userInfo.last_name
                       : "Last name unknown"}
                   </Typography>
                   <Typography
@@ -129,17 +130,15 @@ export default function UserProfileHeader(props) {
                     fontWeight="lg"
                     textColor={"#000"}
                   >
-                    {localUserInfo.email
-                      ? "Email: " + localUserInfo.email
-                      : null}
+                    {userInfo.email ? "Email: " + userInfo.email : null}
                   </Typography>
                   <Typography
                     level="body-sm"
                     fontWeight="lg"
                     textColor={"#000"}
                   >
-                    {localUserInfo.affiliation
-                      ? "Affiliation: " + localUserInfo.affiliation
+                    {userInfo.affiliation
+                      ? "Affiliation: " + userInfo.affiliation
                       : null}
                   </Typography>
                   <Typography
@@ -147,52 +146,54 @@ export default function UserProfileHeader(props) {
                     fontWeight="md"
                     textColor={"#000"}
                   >
-                    {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
+                    {userInfo.bio ? "Bio: " + userInfo.bio : null}
                   </Typography>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="flex-start"
-                    sx={{ py: 2 }}
-                  >
-                    <Button
-                      component="a"
-                      href="/user-profile-update"
-                      variant="outlined"
-                      size="sm"
-                      color="success"
-                      endDecorator={<EditIcon />}
+                  {allowProfileOps && (
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="flex-start"
+                      sx={{ py: 2 }}
                     >
-                      Edit Profile
-                    </Button>
-                    <Dropdown>
-                      <MenuButton
+                      <Button
+                        component="a"
+                        href="/user-profile-update"
                         variant="outlined"
                         size="sm"
-                        color="warning"
-                        endDecorator={<LibraryAddIcon />}
+                        color="success"
+                        endDecorator={<EditIcon />}
                       >
-                        New Contribution
-                      </MenuButton>
-                      <Menu placement="bottom-end" color="primary">
-                        <MenuItem component="a" href="/contribution/dataset">
-                          New Dataset
-                        </MenuItem>
-                        <MenuItem component="a" href="/contribution/notebook">
-                          New Notebook
-                        </MenuItem>
-                        <MenuItem
-                          component="a"
-                          href="/contribution/publication"
+                        Edit Profile
+                      </Button>
+                      <Dropdown>
+                        <MenuButton
+                          variant="outlined"
+                          size="sm"
+                          color="warning"
+                          endDecorator={<LibraryAddIcon />}
                         >
-                          New Publication
-                        </MenuItem>
-                        <MenuItem component="a" href="/contribution/oer">
-                          New Educational Resource
-                        </MenuItem>
-                      </Menu>
-                    </Dropdown>
-                  </Stack>
+                          New Contribution
+                        </MenuButton>
+                        <Menu placement="bottom-end" color="primary">
+                          <MenuItem component="a" href="/contribution/dataset">
+                            New Dataset
+                          </MenuItem>
+                          <MenuItem component="a" href="/contribution/notebook">
+                            New Notebook
+                          </MenuItem>
+                          <MenuItem
+                            component="a"
+                            href="/contribution/publication"
+                          >
+                            New Publication
+                          </MenuItem>
+                          <MenuItem component="a" href="/contribution/oer">
+                            New Educational Resource
+                          </MenuItem>
+                        </Menu>
+                      </Dropdown>
+                    </Stack>
+                  )}
                 </Stack>
               </Grid>
               <Grid xs={12} md={3}>

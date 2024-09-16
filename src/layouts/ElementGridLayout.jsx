@@ -40,8 +40,6 @@ export default function ElementGridLayout(props) {
             container
             rowSpacing={2}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            justifyContent="center"
-            alignItems="center"
             direction="column"
             sx={{
               backgroundColor: "inherit",

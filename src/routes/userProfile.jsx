@@ -44,19 +44,16 @@ export default function UserProfile() {
   const [localUserInfoMissing, setLocalUserInfoMissing] = useState("unknown");
   const [error, setError] = useState(null);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-  const [isTesting, setIsTesting] = useState(false);
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
   useEffect(() => {
+    async function getTally(userInfo) {
+      const tally = await getNumberOfContributions(userInfo.sub);
+      setNumberOfTotalItems(tally);
+    }
     if (userInfo) {
-      if (userInfo.sub === "http://cilogon.org/serverE/users/do-not-use") {
-        setNumberOfTotalItems(0);
-        setIsTesting(true);
-      } else {
-        setNumberOfTotalItems(getNumberOfContributions(userInfo.sub));
-        setIsTesting(false);
-      }
+      getTally(userInfo);
     }
   }, [userInfo]);
 
@@ -194,8 +191,9 @@ export default function UserProfile() {
         <CssBaseline enableColorScheme />
         {userInfo && (
           <UserProfileHeader
-            localUserInfo={localUserInfo}
+            userInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
+            allowProfileOps
           />
         )}
         <Container maxWidth="xl">
@@ -211,8 +209,6 @@ export default function UserProfile() {
             <Grid
               container
               display="flex"
-              justifyContent="center"
-              alignItems="center"
               direction="column"
               sx={{
                 minHeight: USER_PROFILE_BODY_HEIGHT,
@@ -227,9 +223,10 @@ export default function UserProfile() {
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}
-                width="100%"
               >
-                {isTesting ? (
+                {/* For testing purposes */}
+                {userInfo.sub ===
+                "http://cilogon.org/serverE/users/do-not-use" ? (
                   <ElementGrid
                     headline="Demo contributions"
                     elementType="dataset"
