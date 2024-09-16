@@ -32,7 +32,7 @@ export const OER_EXTERNAL_LINK_TYPES = {
 export const IMAGE_SIZE_LIMIT = 5000000;
 
 export const NAVBAR_HEIGHT = 70;
-export const HEADER_HEIGHT = 150;
+export const HEADER_HEIGHT = 200;
 export const FOOTER_HEIGHT = 130;
 export const USER_PROFILE_HEADER_HEIGHT = 300;
 export const SEARCH_RESULTS_HEADER_HEIGHT = 170;

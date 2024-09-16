@@ -8,7 +8,6 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 
 import ElementGrid from "../components/ElementGrid";
-import PageNav from "../components/PageNav";
 import Header from "../components/Layout/Header";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
@@ -25,7 +24,12 @@ export default function ElementGridLayout(props) {
   return (
     <JoyCssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title={title} icon={icon} displayNewContributionButton={true} />
+      <Header
+        title={title}
+        icon={icon}
+        displayNewContributionButton={true}
+        currentPage={pageNavName}
+      />
       <Container maxWidth="xl">
         <Box
           component="main"
@@ -48,7 +52,6 @@ export default function ElementGridLayout(props) {
               pb: 8,
             }}
           >
-            <PageNav currentPage={pageNavName} sx={{ px: 0 }} />
             <ElementGrid
               elementType={elementType}
               fieldName={fieldName}

@@ -16,11 +16,14 @@ import CardContent from "@mui/joy/CardContent";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 import { HEADER_HEIGHT } from "../../configs/VarConfigs";
+import PageNav from "../PageNav";
 
 export default function Header(props) {
   const title = props.title ? props.title : "";
   const subtitle = props.subtitle ? props.subtitle : "";
   const icon = props.icon;
+  const currentPage = props.currentPage;
+  const parentPages = props.parentPages;
   const displayNewContributionButton = props.displayNewContributionButton;
 
   const [
@@ -43,7 +46,7 @@ export default function Header(props) {
       <Card
         variant="plain"
         component="li"
-        sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
+        sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1, p: 1 }}
       >
         <CardCover>
           <img
@@ -55,6 +58,12 @@ export default function Header(props) {
         <CardContent>
           <Container maxWidth="xl">
             <Stack spacing={0.5} sx={{ px: 4, py: 2 }}>
+              <PageNav
+                parentPages={parentPages}
+                currentPage={currentPage}
+                fontLevel="body-xs"
+                sx={{ px: 0, pb: 3 }}
+              />
               {title.length > 30 ? (
                 <Typography level="h3" textColor="#000" startDecorator={icon}>
                   {title}
