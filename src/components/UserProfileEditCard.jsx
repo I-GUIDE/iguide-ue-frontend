@@ -52,14 +52,8 @@ export default function UserProfileEditCard(props) {
 
   const userProfileEditType = props.userProfileEditType;
 
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
+  const [isAuthenticated, setIsAuthenticated, localUserInfo, setLocalUserInfo] =
+    useOutletContext();
 
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
     useState("no submission");
