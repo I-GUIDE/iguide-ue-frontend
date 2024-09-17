@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 import { StyledEngineProvider } from "@mui/material/styles";
 
@@ -20,8 +21,9 @@ const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
+  const [cookies, setCookie] = useCookies(["user"]);
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(cookies.IGPAU);
   const [userInfo, setUserInfo] = useState(null);
   const [localUserInfo, setLocalUserInfo] = useState(null);
 
@@ -44,42 +46,6 @@ export default function Root(props) {
     last_name: "Person",
     openid: "http://cilogon.org/serverE/users/do-not-use",
   };
-
-  // Check if the user existed in the auth backend, if yes, setUser
-  useEffect(() => {
-    const checkIfLoggedIn = () => {
-      fetch(AUTH_BACKEND_URL + "/auth-validation", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) return response.json();
-          throw new Error("User not logged in via CILogon!");
-        })
-        .then((resObject) => {
-          console.log(
-            "User is authenticated via CILogon",
-            resObject.isAuthenticated
-          );
-          setIsAuthenticated(resObject.isAuthenticated);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    if (USE_DEMO_USER) {
-      console.log("Using demo user!");
-      setIsAuthenticated(true);
-    } else {
-      checkIfLoggedIn();
-    }
-  }, []);
 
   useEffect(() => {
     const getUserInfo = () => {
