@@ -233,7 +233,7 @@ export default function UserProfile() {
                   <ElementGrid
                     headline="Your contributions"
                     fieldName="contributor"
-                    matchValue={userId}
+                    matchValue={encodeURIComponent(userId)}
                     noElementMsg="You currently don't have any contribution..."
                   />
                 )}
