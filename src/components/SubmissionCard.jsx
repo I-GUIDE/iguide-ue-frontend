@@ -95,14 +95,8 @@ export default function SubmissionCard(props) {
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
 
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
+  const [isAuthenticated, setIsAuthenticated, localUserInfo, setLocalUserInfo] =
+    useOutletContext();
 
   const [elementURI, setElementURI] = useState();
 
@@ -437,7 +431,7 @@ export default function SubmissionCard(props) {
 
     data["resource-type"] = resourceTypeSelected;
 
-    data.metadata = { created_by: userInfo.sub };
+    data.metadata = { created_by: localUserInfo.openid };
     data["related-resources"] = relatedResources;
 
     if (resourceTypeSelected === "oer") {

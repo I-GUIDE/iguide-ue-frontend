@@ -27,6 +27,8 @@ export default function Root(props) {
   const [userInfo, setUserInfo] = useState(null);
   const [localUserInfo, setLocalUserInfo] = useState(null);
 
+  const [userId, setUserId] = useState();
+
   const demoCILogonUser = {
     email: "user@example.com",
     family_name: "Person",
@@ -65,6 +67,7 @@ export default function Root(props) {
         .then((resObject) => {
           console.log("Getting user info from CILogon...", resObject.userInfo);
           setUserInfo(resObject.userInfo);
+          setUserId(resObject.userInfo.sub);
         })
         .catch((err) => {
           console.log(err);
@@ -73,53 +76,52 @@ export default function Root(props) {
 
     // If the demo user mode is on, set the demo user as user
     if (USE_DEMO_USER) {
+      setIsAuthenticated(true);
       setUserInfo(demoCILogonUser);
     } else {
       if (isAuthenticated) {
         getUserInfo();
       } else {
-        setUserInfo({ userInfo: null });
+        setLocalUserInfo({ userInfo: null });
       }
     }
   }, [isAuthenticated]);
 
-  // Check if the user exists on the local DB, if not, add the user
-  // Save the user information from CILogon to the local DB
-  const saveUserToLocalDB = async () => {
-    const ret_msg = await addUser(
-      userInfo.sub,
-      userInfo.given_name,
-      userInfo.family_name,
-      userInfo.email,
-      userInfo.idp_name,
-      ""
-    );
-    console.log("saving user to the local db...", ret_msg);
-  };
-
   useEffect(() => {
-    const handleCheckUser = async () => {
-      if (userInfo.sub) {
-        const localUserExists = await checkUser(userInfo.sub);
+    // Check if the user exists on the local DB, if not, add the user
+    // Save the user information from CILogon to the local DB
+    async function saveUserToLocalDB() {
+      const ret_msg = await addUser(
+        userInfo.sub,
+        userInfo.given_name,
+        userInfo.family_name,
+        userInfo.email,
+        userInfo.idp_name,
+        ""
+      );
+      console.log("saving user to the local db...", ret_msg);
+    }
+
+    async function handleCheckUser(uid) {
+      if (uid) {
+        const localUserExists = await checkUser(uid);
         if (localUserExists) {
           console.log("Found the user from our database");
         } else {
           console.log("Couldn't find the user from our database...");
           await saveUserToLocalDB();
         }
-        const returnedLocalUser = await fetchUser(userInfo.sub);
+        const returnedLocalUser = await fetchUser(uid);
         setLocalUserInfo(returnedLocalUser);
       }
-    };
+    }
 
     if (USE_DEMO_USER) {
       setLocalUserInfo(demoLocalUser);
     } else {
-      if (userInfo) {
-        handleCheckUser();
-      }
+      handleCheckUser(userId);
     }
-  }, [userInfo]);
+  }, [userId]);
 
   function ScrollTop(props) {
     const { children, window } = props;
@@ -178,8 +180,6 @@ export default function Root(props) {
           context={[
             isAuthenticated,
             setIsAuthenticated,
-            userInfo,
-            setUserInfo,
             localUserInfo,
             setLocalUserInfo,
           ]}

@@ -163,7 +163,7 @@ export default function UserProfileEditCard(props) {
     }
 
     const result = await updateUser(
-      userInfo.sub,
+      localUserInfo.openid,
       firstName,
       lastName,
       email,
