@@ -152,7 +152,7 @@ export default function SubmissionCard(props) {
 
       setPublicationDOI(thisElement["external-link-publication"]);
 
-      setContributor(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
 
       let relatedResourcesArray = [];
       thisElement["related-datasets"].map((re) =>
@@ -501,7 +501,7 @@ export default function SubmissionCard(props) {
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update" && localUserInfo && localUserInfo.openid) {
-    if (!contributor || localUserInfo.openid !== contributor) {
+    if (!contributor || localUserInfo.openid !== contributor.id) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
