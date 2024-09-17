@@ -18,8 +18,7 @@ import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 export default function UserProfileUpdate() {
   usePageTitle("Update User Profile");
 
-  const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
-    useOutletContext();
+  const { isAuthenticated } = useOutletContext();
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {

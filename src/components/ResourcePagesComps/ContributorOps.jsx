@@ -31,14 +31,7 @@ export default function ContributorOps(props) {
   const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
 
   // OutletContext retrieving the user object to display user info
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
+  const { isAuthenticated, localUserInfo } = useOutletContext();
 
   if (!isAuthenticated) {
     return null;

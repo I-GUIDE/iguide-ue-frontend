@@ -18,8 +18,7 @@ import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 export default function ResourceSubmission() {
   usePageTitle("Contribution");
 
-  const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
-    useOutletContext();
+  const { isAuthenticated } = useOutletContext();
 
   const elementType = useParams().elementType;
 

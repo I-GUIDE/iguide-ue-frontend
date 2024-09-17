@@ -95,14 +95,7 @@ export default function SubmissionCard(props) {
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
 
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
+  const { localUserInfo } = useOutletContext();
 
   const [elementURI, setElementURI] = useState();
 
@@ -152,7 +145,7 @@ export default function SubmissionCard(props) {
 
       setPublicationDOI(thisElement["external-link-publication"]);
 
-      setContributor(thisElement["contributor-id"]);
+      setContributor(thisElement["contributor"]);
 
       let relatedResourcesArray = [];
       thisElement["related-datasets"].map((re) =>
@@ -437,7 +430,7 @@ export default function SubmissionCard(props) {
 
     data["resource-type"] = resourceTypeSelected;
 
-    data.metadata = { created_by: userInfo.sub };
+    data.metadata = { created_by: localUserInfo.openid };
     data["related-resources"] = relatedResources;
 
     if (resourceTypeSelected === "oer") {
@@ -501,7 +494,7 @@ export default function SubmissionCard(props) {
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update" && localUserInfo && localUserInfo.openid) {
-    if (!contributor || localUserInfo.openid !== contributor) {
+    if (!contributor || localUserInfo.openid !== contributor.id) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
