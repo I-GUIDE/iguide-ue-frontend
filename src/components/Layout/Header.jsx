@@ -23,7 +23,7 @@ export default function Header(props) {
   const icon = props.icon;
   const displayNewContributionButton = props.displayNewContributionButton;
 
-  const [isAuthenticated] = useOutletContext();
+  const { isAuthenticated } = useOutletContext();
 
   return (
     <Box

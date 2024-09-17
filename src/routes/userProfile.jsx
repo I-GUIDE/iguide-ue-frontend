@@ -28,14 +28,14 @@ import {
 } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 
+const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+
 export default function UserProfile() {
   usePageTitle("User Profile");
 
   // OutletContext retrieving the user object to display user info
-  const [isAuthenticated, setIsAuthenticated, localUserInfo, setLocalUserInfo] =
-    useOutletContext();
+  const { isAuthenticated, localUserInfo } = useOutletContext();
 
-  console.log(isAuthenticated, localUserInfo);
   const [userId, setUserId] = useState();
 
   const [localUserInfoMissing, setLocalUserInfoMissing] = useState("unknown");
@@ -223,7 +223,7 @@ export default function UserProfile() {
                 spacing={2}
               >
                 {/* For testing purposes */}
-                {userId === "http://cilogon.org/serverE/users/do-not-use" ? (
+                {USE_DEMO_USER ? (
                   <ElementGrid
                     headline="Demo contributions"
                     elementType="dataset"

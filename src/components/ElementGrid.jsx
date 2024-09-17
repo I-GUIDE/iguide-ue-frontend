@@ -52,6 +52,15 @@ export default function ElementGrid(props) {
   //   retrieve the data
   useEffect(() => {
     async function retrieveData(startingIdx) {
+      console.log(
+        fieldName,
+        matchValue,
+        elementType,
+        ranking.sortBy,
+        ranking.order,
+        startingIdx,
+        itemsPerPage
+      );
       try {
         const data = await elementRetriever(
           fieldName,
@@ -73,6 +82,7 @@ export default function ElementGrid(props) {
         setLoading(false);
       }
     }
+
     retrieveData(currentStartingIdx);
   }, [currentStartingIdx, elementType, ranking, fieldName, matchValue]);
 

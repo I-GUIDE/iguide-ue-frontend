@@ -177,12 +177,12 @@ export default function Root(props) {
         customOutlet
       ) : (
         <Outlet
-          context={[
+          context={{
             isAuthenticated,
             setIsAuthenticated,
             localUserInfo,
             setLocalUserInfo,
-          ]}
+          }}
         />
       )}
       <ScrollTop>

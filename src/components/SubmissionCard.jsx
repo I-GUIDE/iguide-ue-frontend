@@ -95,8 +95,7 @@ export default function SubmissionCard(props) {
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
 
-  const [isAuthenticated, setIsAuthenticated, localUserInfo, setLocalUserInfo] =
-    useOutletContext();
+  const { localUserInfo } = useOutletContext();
 
   const [elementURI, setElementURI] = useState();
 
