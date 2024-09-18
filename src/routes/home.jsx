@@ -144,26 +144,22 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
+              py: 4,
             }}
           >
             <Container maxWidth="lg">
               <Stack
                 direction="column"
+                alignItems={{ xs: "center", md: "flex-start" }}
                 spacing={2}
                 sx={{
                   backgroundColor: "inherit",
-                  py: 3,
                 }}
               >
                 <Typography level="h3" textColor="#000">
                   What to do next?
                 </Typography>
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  spacing={4}
-                  alignItems="center"
-                  justifyContent="center"
-                >
+                <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
                   <TutorialCard
                     thumbnailImage="/images/charco-education.png"
                     title="Join"
