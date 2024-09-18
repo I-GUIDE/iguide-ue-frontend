@@ -32,7 +32,7 @@ export default function ElementGrid(props) {
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
 
-  const [metadataList, setMetadataList] = useState([]);
+  const [elementList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resultLength, setResultLength] = useState(null);
@@ -62,7 +62,7 @@ export default function ElementGrid(props) {
           startingIdx,
           itemsPerPage
         );
-
+        console.log(data);
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
@@ -191,16 +191,17 @@ export default function ElementGrid(props) {
               sx={{ flexGrow: 1 }}
               justifyContent="flex-start"
             >
-              {metadataList?.map((metadata) => (
-                <Grid key={metadata.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              {elementList?.map((element) => (
+                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                   <InfoCard
-                    cardtype={metadata["resource-type"] + "s"}
-                    pageid={metadata.id}
-                    title={metadata.title}
-                    authors={metadata.authors}
-                    tags={metadata.tags}
-                    contents={metadata.contents}
-                    thumbnailImage={metadata["thumbnail-image"]}
+                    cardtype={element["resource-type"] + "s"}
+                    pageid={element.id}
+                    title={element.title}
+                    authors={element.authors}
+                    tags={element.tags}
+                    contents={element.contents}
+                    thumbnailImage={element["thumbnail-image"]}
+                    contributor={element["contributor"]}
                     showElementType={showElementType}
                   />
                 </Grid>
