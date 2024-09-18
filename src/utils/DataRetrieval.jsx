@@ -208,7 +208,7 @@ export async function fetchSingleElementDetails(elementId) {
 export async function getNumberOfContributions(uid) {
   const numberOfContributions = await elementRetriever(
     "contributor",
-    uid,
+    encodeURIComponent(uid),
     null,
     null,
     null,

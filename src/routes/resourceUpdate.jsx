@@ -20,8 +20,7 @@ export default function ResourceUpdate() {
   usePageTitle("Update Contribution");
 
   const id = useParams().id;
-  const [isAuthenticated, setIsAuthenticated, userInfo, setUserInfo] =
-    useOutletContext();
+  const { isAuthenticated } = useOutletContext();
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {

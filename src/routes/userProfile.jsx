@@ -28,18 +28,15 @@ import {
 } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 
+const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+
 export default function UserProfile() {
   usePageTitle("User Profile");
 
   // OutletContext retrieving the user object to display user info
-  const [
-    isAuthenticated,
-    setIsAuthenticated,
-    userInfo,
-    setUserInfo,
-    localUserInfo,
-    setLocalUserInfo,
-  ] = useOutletContext();
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
+  const [userId, setUserId] = useState();
 
   const [localUserInfoMissing, setLocalUserInfoMissing] = useState("unknown");
   const [error, setError] = useState(null);
@@ -48,14 +45,15 @@ export default function UserProfile() {
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
   useEffect(() => {
-    async function getTally(userInfo) {
-      const tally = await getNumberOfContributions(userInfo.sub);
+    async function getTally(uid) {
+      const tally = await getNumberOfContributions(uid);
       setNumberOfTotalItems(tally);
     }
-    if (userInfo) {
-      getTally(userInfo);
+    if (localUserInfo) {
+      getTally(localUserInfo.openid);
+      setUserId(localUserInfo.openid);
     }
-  }, [userInfo]);
+  }, [localUserInfo]);
 
   // Check if the user exists on the local DB, if not, add the user
   useEffect(() => {
@@ -189,7 +187,7 @@ export default function UserProfile() {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        {userInfo && (
+        {localUserInfo && (
           <UserProfileHeader
             userInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
@@ -225,8 +223,7 @@ export default function UserProfile() {
                 spacing={2}
               >
                 {/* For testing purposes */}
-                {userInfo.sub ===
-                "http://cilogon.org/serverE/users/do-not-use" ? (
+                {USE_DEMO_USER ? (
                   <ElementGrid
                     headline="Demo contributions"
                     elementType="dataset"
@@ -236,7 +233,7 @@ export default function UserProfile() {
                   <ElementGrid
                     headline="Your contributions"
                     fieldName="contributor"
-                    matchValue={userInfo.sub}
+                    matchValue={encodeURIComponent(userId)}
                     noElementMsg="You currently don't have any contribution..."
                   />
                 )}

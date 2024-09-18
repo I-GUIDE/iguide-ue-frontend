@@ -131,6 +131,7 @@ router.get('/cilogon-callback', async (req, res, next) => {
       // Set the tokens in cookies
       res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
       res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
+      res.cookie('IGPAU', true, { path: "/" });
 
       console.log("Setting cookies to: ", target_domain);
 
@@ -142,6 +143,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
 router.get('/logout', function (req, res) {
   res.clearCookie('jwt', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
   res.clearCookie('refreshToken', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
+  res.clearCookie('IGPAU', true, { path: "/" });
+
   req.session.destroy(function (err) {
     res.redirect(FRONTEND_URL);
   });

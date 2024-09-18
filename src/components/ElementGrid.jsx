@@ -73,8 +73,9 @@ export default function ElementGrid(props) {
         setLoading(false);
       }
     }
+
     retrieveData(currentStartingIdx);
-  }, [currentStartingIdx, elementType, ranking]);
+  }, [currentStartingIdx, elementType, ranking, fieldName, matchValue]);
 
   function handlePageClick(event, newValue) {
     const newStartingIdx = (newValue - 1) * itemsPerPage;
