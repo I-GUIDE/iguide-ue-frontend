@@ -8,11 +8,14 @@ import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
-
-import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import Typography from "@mui/joy/Typography";
 
+import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import usePageTitle from "../../hooks/usePageTitle";
+
 export default function TermsOfUse() {
+  usePageTitle("Legal - Terms of Use");
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
