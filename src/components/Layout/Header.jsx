@@ -32,11 +32,7 @@ export default function Header(props) {
         sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1, p: 1 }}
       >
         <CardCover>
-          <img
-            src="/images/network-bg.png"
-            loading="lazy"
-            alt="Network with nodes and connections"
-          />
+          <img src="/images/header-bg.png" loading="lazy" alt="Gray scale" />
         </CardCover>
         <CardContent>
           <Container maxWidth="xl">
