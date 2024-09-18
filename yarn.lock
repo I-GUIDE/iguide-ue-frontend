@@ -3544,7 +3544,7 @@ react-is@^18.3.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-jdenticon@^1.2.0:
+react-jdenticon@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-jdenticon/-/react-jdenticon-1.3.0.tgz#22963f2c5066d40ce31f2fa35c89160bb4dfc160"
   integrity sha512-8MLM2egK3I8ySoNJ+nsuVFwCMsNmz4RNgdeIebuNdizfxV639ReZSdC0KmJm2QLdhthwRZDOaj6i8FKToZuFLg==

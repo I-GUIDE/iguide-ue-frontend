@@ -23,7 +23,7 @@
     "react-code-blocks": "^0.1.6",
     "react-cookie": "^7.2.0",
     "react-dom": "^18.2.0",
-    "react-jdenticon": "^1.2.0",
+    "react-jdenticon": "^1.3.0",
     "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.24.0"
   },
