@@ -70,13 +70,13 @@ export default function TermsOfUse() {
                 . The I-GUIDE Platform, services, and{" "}
                 <Link href="https://i-guide.io">i-guide.io</Link> website,
                 including any information, products, or applications available
-                through the Project services, platform and website, are referred
-                to in these Terms of Use as the “Site”. The Project aims to
-                enable open access and sharing of geospatial data-intensive
-                knowledge, under Apache 2.0 license agreement. The University of
-                Illinois Urbana-Champaign represented by The Board of Trustees
-                of the Illinois of Illinois (“Illinois”, “we”, “our”, “us”) is
-                the lead institution of the Project.
+                through the Project services, platform, and website, are
+                referred to in these Terms of Use as the “Site”. The Project
+                aims to enable open access and sharing of geospatial
+                data-intensive knowledge, under Apache 2.0 license agreement.
+                The University of Illinois Urbana-Champaign represented by the
+                Board of Trustees of the Illinois of Illinois (“Illinois”, “we”,
+                “our”, “us”) is the lead institution of the Project.
               </Typography>
               <Typography level="body-md" sx={{ p: 2 }}>
                 By using the Site, you agree that you have read and accepted the
@@ -85,7 +85,7 @@ export default function TermsOfUse() {
                 or installing software of the Project, or otherwise accessing
                 the Site. Please read these Terms carefully. The Terms govern
                 your use of the Site and any incorporated content (such as
-                Illinois, Participating Institutions or third party software,
+                Illinois, Participating Institutions or third-party software,
                 text, data, information, or graphics) made available through the
                 Site. By continuing to use the Site, You accept these Terms. If
                 You are not willing to be bound by these Terms, please stop
@@ -96,7 +96,7 @@ export default function TermsOfUse() {
               <Stack spacing={1} sx={{ p: 2 }}>
                 <Typography level="title-lg">1. Governing Terms</Typography>
                 <Typography level="body-md">
-                  The Terms are governed by Illinois's web privacy notices and
+                  The Terms are governed by Illinois' web privacy notices and
                   policy links presented here:
                   https://www.vpaa.uillinois.edu/resources/web_privacy and
                   https://www.vpaa.uillinois.edu/resources/terms_of_use/.
@@ -127,7 +127,7 @@ export default function TermsOfUse() {
                 </Typography>
                 <Typography level="body-md">
                   You agree to credit and attribute the authors and creators of
-                  Project that You use with the copyright notice or statement of
+                  Project with the copyright notice or statement of
                   credit/attribution as customarily acceptable in industry.
                 </Typography>
               </Stack>
@@ -136,11 +136,11 @@ export default function TermsOfUse() {
               <Stack spacing={1} sx={{ p: 2 }}>
                 <Typography level="title-lg">4. Limitations</Typography>
                 <Typography level="body-md">
-                  In no event shall Illinois, Participating Institutions' or
+                  In no event shall Illinois, Participating Institutions or
                   their employees be liable for any damages (including, without
                   limitation, damages for loss of data or profit, or due to
                   business interruption) arising out of the use or inability to
-                  use the content on Site, even if Illinois or an Illinois
+                  use the content on Site, even if Project or a Project
                   authorized representative has been notified orally or in
                   writing of the possibility of such damage. Because some
                   jurisdictions do not allow limitations on implied warranties,
@@ -155,10 +155,10 @@ export default function TermsOfUse() {
                   5. Modification of Site and Terms
                 </Typography>
                 <Typography level="body-md">
-                  Illinois reserves the right to modify the Site and may
+                  Project reserves the right to modify the Site and may
                   discontinue, temporarily or permanently, the Site for any
                   reason, at its sole discretion, with or without notice to You.
-                  Illinois may likewise change the Terms from time to time with
+                  Project may likewise change the Terms from time to time with
                   or without notice to you. You agree to review the Terms
                   periodically to ensure that you are aware of any
                   modifications. Your continued access to the Site after the
@@ -172,8 +172,8 @@ export default function TermsOfUse() {
                 <Typography level="title-lg">6. Termination</Typography>
                 <Typography level="body-md">
                   If you violate or fail to comply with any of these Terms or in
-                  Illinois' sole discretion restrict or inhibit any other user
-                  from using or enjoying the Site, Illinois may terminate your
+                  Project's sole discretion restrict or inhibit any other user
+                  from using or enjoying the Site, Project may terminate your
                   access to the Site account without notice to You.
                 </Typography>
               </Stack>
