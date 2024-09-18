@@ -20,6 +20,7 @@ export default function ElementGridLayout(props) {
   const subtitle = props.subtitle;
   const pageNavName = props.pageNavName ? props.pageNavName : "All " + title;
   const icon = props.icon;
+  const contribution = props.contribution;
   const showElementType = props.showElementType;
 
   return (
@@ -30,6 +31,7 @@ export default function ElementGridLayout(props) {
         subtitle={subtitle}
         icon={icon}
         currentPage={pageNavName}
+        contribution={contribution}
       />
       <Container maxWidth="xl">
         <Box

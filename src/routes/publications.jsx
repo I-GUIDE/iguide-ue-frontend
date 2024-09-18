@@ -14,6 +14,10 @@ export default function Publications() {
       title="Publications"
       subtitle="Browse peer-reviewed publications that showcase cutting-edge research and insights in geospatial science and related fields."
       icon={<ArticleIcon />}
+      contribution={{
+        text: "Contribute a new publication",
+        link: "/contribution/publication",
+      }}
     />
   );
 }
