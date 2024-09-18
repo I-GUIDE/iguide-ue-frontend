@@ -92,7 +92,6 @@ export default function InfoCard(props) {
           >
             <Typography
               level="title-md"
-              textColor="#4D4F5C"
               sx={{
                 overflow: "hidden",
                 textOverflow: "ellipsis",
