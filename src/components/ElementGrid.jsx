@@ -186,7 +186,7 @@ export default function ElementGrid(props) {
           >
             <Grid
               container
-              spacing={2}
+              spacing={3}
               columns={12}
               sx={{ flexGrow: 1 }}
               justifyContent="flex-start"

@@ -394,7 +394,7 @@ export default function SearchResults() {
                   >
                     <Grid
                       container
-                      spacing={2}
+                      spacing={3}
                       columns={12}
                       sx={{ flexGrow: 1 }}
                     >
