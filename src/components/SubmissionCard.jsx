@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
 
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -630,19 +631,36 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTags(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>
-              Abstract <RequiredFieldIndicator />
-            </FormLabel>
-            <Textarea
-              name="contents"
-              minRows={4}
-              maxRows={10}
-              required
-              value={contents}
-              onChange={(event) => setContents(event.target.value)}
-            />
-          </FormControl>
+          {resourceTypeSelected === "oer" ? (
+            <FormControl sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                Content <RequiredFieldIndicator />
+              </FormLabel>
+              <div data-color-mode="light">
+                <MDEditor
+                  height={400}
+                  value={contents}
+                  onChange={(value) => {
+                    setContents(value);
+                  }}
+                />
+              </div>
+            </FormControl>
+          ) : (
+            <FormControl sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                Abstract <RequiredFieldIndicator />
+              </FormLabel>
+              <Textarea
+                name="contents"
+                minRows={4}
+                maxRows={10}
+                required
+                value={contents}
+                onChange={(event) => setContents(event.target.value)}
+              />
+            </FormControl>
+          )}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
               Thumbnail image {"(< 5MB)"} <RequiredFieldIndicator />
