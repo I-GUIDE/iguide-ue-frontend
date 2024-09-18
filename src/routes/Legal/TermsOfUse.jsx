@@ -41,16 +41,20 @@ export default function TermsOfUse() {
             }}
           >
             <Grid xs={12}>
-              <Stack spacing={3} alignItems="center" sx={{ p: 2 }}>
-                <Typography level="h1">
+              <Stack
+                spacing={3}
+                alignItems={{ xs: "flex-start", md: "center" }}
+                sx={{ p: 2 }}
+              >
+                <Typography level="h2">
                   I-GUIDE Platform Terms of Use
                 </Typography>
-                <Typography level="title-lg">
+                <Typography level="body-lg">
                   Legal Information & Notices
                 </Typography>
               </Stack>
 
-              <Divider sx={{ my: 4 }} />
+              <Divider sx={{ mx: 2, my: 4 }} />
 
               <Typography level="body-md" sx={{ p: 2 }}>
                 The Institute for Geospatial Understanding through an
@@ -71,10 +75,16 @@ export default function TermsOfUse() {
                   platform.i-guide.io
                 </Link>
                 . The I-GUIDE Platform, services, and{" "}
-                <Link href="https://i-guide.io">i-guide.io</Link> website,
-                including any information, products, or applications available
-                through the Project services, platform, and website, are
-                referred to in these Terms of Use as the “Site”. The Project
+                <Link
+                  href="https://i-guide.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  i-guide.io
+                </Link>{" "}
+                website, including any information, products, or applications
+                available through the Project services, platform, and website,
+                are referred to in these Terms of Use as the “Site”. The Project
                 aims to enable open access and sharing of geospatial
                 data-intensive knowledge, under Apache 2.0 license agreement.
                 The University of Illinois Urbana-Champaign represented by the
@@ -100,13 +110,13 @@ export default function TermsOfUse() {
                 <Typography level="title-lg">1. Governing Terms</Typography>
                 <Typography level="body-md">
                   The Terms are governed by Illinois' web privacy notices and
-                  policy links presented here:
+                  policy links presented here:{" "}
                   <Link
                     href="https://www.vpaa.uillinois.edu/resources/web_privacy"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    https://www.vpaa.uillinois.edu/resources/web_privacy
+                    University of Illinois System Privacy Statement
                   </Link>{" "}
                   and{" "}
                   <Link
@@ -114,7 +124,7 @@ export default function TermsOfUse() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    https://www.vpaa.uillinois.edu/resources/terms_of_use/
+                    Legal Notice and Terms of Use
                   </Link>
                   .
                 </Typography>
@@ -193,6 +203,11 @@ export default function TermsOfUse() {
                   from using or enjoying the Site, Project may terminate your
                   access to the Site account without notice to You.
                 </Typography>
+              </Stack>
+
+              {/* Update timing info */}
+              <Stack spacing={1} sx={{ p: 2 }}>
+                <Typography level="body-sm">Updated on Sep 18, 2024</Typography>
               </Stack>
             </Grid>
           </Grid>
