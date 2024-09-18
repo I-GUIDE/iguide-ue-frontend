@@ -10,6 +10,7 @@ import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { inputExists } from "../../helpers/helper";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
@@ -125,9 +126,11 @@ export default function DatasetPage() {
               />
             </Grid>
 
-            <Grid xs={12} md={6}>
-              <CodeSnippet directDownloadLink={directDownloadLink} />
-            </Grid>
+            {inputExists(directDownloadLink) && (
+              <Grid xs={12} md={6}>
+                <CodeSnippet directDownloadLink={directDownloadLink} />
+              </Grid>
+            )}
             <Grid xs={12} md={6}>
               <CapsuleList title="Tags" items={tags} />
               <ActionList
