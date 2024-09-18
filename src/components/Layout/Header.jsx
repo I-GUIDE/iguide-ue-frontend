@@ -17,9 +17,6 @@ export default function Header(props) {
   const icon = props.icon;
   const currentPage = props.currentPage;
   const parentPages = props.parentPages;
-  const displayNewContributionButton = props.displayNewContributionButton;
-
-  const { isAuthenticated } = useOutletContext();
 
   return (
     <Box
