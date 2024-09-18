@@ -16,7 +16,7 @@ import Input from "@mui/joy/Input";
 import Button from "@mui/joy/Button";
 import IconButton from "@mui/joy/IconButton";
 import Box from "@mui/joy/Box";
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 import Card from "@mui/joy/Card";
@@ -389,9 +389,6 @@ export default function SearchResults() {
                   )}
                   <Stack
                     spacing={2}
-                    sx={{
-                      px: { xs: 2, md: 4, width: "100%" },
-                    }}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -402,9 +399,11 @@ export default function SearchResults() {
                       sx={{ flexGrow: 1 }}
                     >
                       {searchResults?.map((result) => (
-                        <Grid key={result.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                        <Grid
+                          key={result._id}
+                          size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                        >
                           <InfoCard
-                            key={result._id}
                             cardtype={result["resource-type"] + "s"}
                             pageid={result._id}
                             title={result.title}
@@ -412,6 +411,7 @@ export default function SearchResults() {
                             tags={result.tags}
                             contents={result.contents}
                             thumbnailImage={result["thumbnail-image"]}
+                            showElementType
                           />
                         </Grid>
                       ))}
