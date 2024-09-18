@@ -44,13 +44,10 @@ export default function ElementGridLayout(props) {
           <Grid
             container
             rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             direction="column"
             sx={{
               backgroundColor: "inherit",
-              px: { xs: 2, md: 6 },
-              pt: 4,
-              pb: 8,
+              p: 4,
             }}
           >
             <ElementGrid
