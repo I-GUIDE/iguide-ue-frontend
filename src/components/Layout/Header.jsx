@@ -41,7 +41,7 @@ export default function Header(props) {
                 parentPages={parentPages}
                 currentPage={currentPage}
                 fontLevel="body-xs"
-                sx={{ px: 0, pb: 2 }}
+                sx={{ px: 0, pb: 4 }}
               />
               {title.length > 30 ? (
                 <Typography level="h3" textColor="#000" startDecorator={icon}>

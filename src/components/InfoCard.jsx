@@ -10,7 +10,6 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Divider from "@mui/joy/Divider";
 
 import { printListWithDelimiter, stringTruncator } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
@@ -27,7 +26,7 @@ export default function InfoCard(props) {
   const pageid = props.pageid;
   const tags = props.tags;
   const contents = props.contents;
-  const contributor = props.contributor;
+  const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
