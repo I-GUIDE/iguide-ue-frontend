@@ -98,8 +98,22 @@ export default function TermsOfUse() {
                 <Typography level="body-md">
                   The Terms are governed by Illinois' web privacy notices and
                   policy links presented here:
-                  https://www.vpaa.uillinois.edu/resources/web_privacy and
-                  https://www.vpaa.uillinois.edu/resources/terms_of_use/.
+                  <Link
+                    href="https://www.vpaa.uillinois.edu/resources/web_privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://www.vpaa.uillinois.edu/resources/web_privacy
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="https://www.vpaa.uillinois.edu/resources/terms_of_use/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://www.vpaa.uillinois.edu/resources/terms_of_use/
+                  </Link>
+                  .
                 </Typography>
               </Stack>
 
