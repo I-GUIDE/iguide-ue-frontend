@@ -389,6 +389,32 @@ export default function SubmissionCard(props) {
       return;
     }
 
+    const formData = new FormData(event.target);
+
+    formData.forEach((value, key) => {
+      if (key === "authors" || key === "tags") {
+        data[key] = value.split(",").map((item) => item.trim());
+      } else if (key === "notebook-url") {
+        // Array[0]: the notebook repo url
+        // Array[1]: the notebook filename
+        const notebookUrlArray = value.split("/blob/main/");
+        data["notebook-repo"] = notebookUrlArray[0];
+        data["notebook-file"] = notebookUrlArray[1];
+      } else {
+        data[key] = value;
+      }
+    });
+
+    data["resource-type"] = resourceTypeSelected;
+
+    data.metadata = { created_by: localUserInfo.openid };
+    data["related-resources"] = relatedResources;
+    data["contents"] = contents;
+
+    if (resourceTypeSelected === "oer") {
+      data["oer-external-links"] = oerExternalLinks;
+    }
+
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
       const formData = new FormData();
@@ -411,31 +437,6 @@ export default function SubmissionCard(props) {
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
       alert("You have to upload a thumbnail image for your contribution!");
       return;
-    }
-
-    const formData = new FormData(event.target);
-
-    formData.forEach((value, key) => {
-      if (key === "authors" || key === "tags") {
-        data[key] = value.split(",").map((item) => item.trim());
-      } else if (key === "notebook-url") {
-        // Array[0]: the notebook repo url
-        // Array[1]: the notebook filename
-        const notebookUrlArray = value.split("/blob/main/");
-        data["notebook-repo"] = notebookUrlArray[0];
-        data["notebook-file"] = notebookUrlArray[1];
-      } else {
-        data[key] = value;
-      }
-    });
-
-    data["resource-type"] = resourceTypeSelected;
-
-    data.metadata = { created_by: localUserInfo.openid };
-    data["related-resources"] = relatedResources;
-
-    if (resourceTypeSelected === "oer") {
-      data["oer-external-links"] = oerExternalLinks;
     }
 
     console.log("data to be submitted", data);
