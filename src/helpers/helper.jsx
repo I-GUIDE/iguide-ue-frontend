@@ -77,3 +77,23 @@ export function stringTruncator(input, start, len, endDecorator = "...") {
 
   return input.slice(start, len) + endDecorator;
 }
+
+/**
+ * Indicate whether the input exists or not
+ * @param {string} input the input object
+ * @param {boolean} [checkEmptyString=true] check if the string is empty or not
+ * @return {boolean} return true only if the input exists or not empty
+ */
+export function inputExists(input, checkEmptyString = true) {
+  if (input == null) {
+    return false;
+  }
+
+  if (checkEmptyString && typeof input === "string") {
+    if (input === "") {
+      return false;
+    }
+  }
+
+  return true;
+}

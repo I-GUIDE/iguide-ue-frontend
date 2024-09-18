@@ -228,6 +228,7 @@ export default function UserProfile() {
                     headline="Demo contributions"
                     elementType="dataset"
                     noElementMsg="You currently don't have any contribution..."
+                    showElementType
                   />
                 ) : (
                   <ElementGrid
@@ -235,6 +236,7 @@ export default function UserProfile() {
                     fieldName="contributor"
                     matchValue={encodeURIComponent(userId)}
                     noElementMsg="You currently don't have any contribution..."
+                    showElementType
                   />
                 )}
               </Stack>

@@ -12,7 +12,12 @@ export default function Notebooks() {
     <ElementGridLayout
       elementType="notebook"
       title="Notebooks"
+      subtitle="Explore interactive Jupyter notebooks designed to streamline data processing, analysis, and visualization for geospatial research."
       icon={<CodeIcon />}
+      contribution={{
+        text: "Contribute a new notebook",
+        link: "/contribution/notebook",
+      }}
     />
   );
 }

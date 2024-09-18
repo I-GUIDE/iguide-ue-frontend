@@ -11,7 +11,12 @@ import { stringTruncator } from "../helpers/helper";
 export default function PageNav(props) {
   const parentPages = props.parentPages ? props.parentPages : [];
   const currentPage = stringTruncator(props.currentPage, 0, 30);
+  const fontLevel = props.fontLevel ? props.fontLevel : "body-xs";
   const sx = props.sx;
+
+  if (!currentPage) {
+    return null;
+  }
 
   return (
     <Stack
@@ -21,15 +26,16 @@ export default function PageNav(props) {
     >
       <Breadcrumbs separator="›" aria-label="breadcrumbs" sx={sx}>
         <Link color="neutral" href="/">
-          <HomeIcon sx={{ mr: 0.5 }} />
-          Home
+          <Typography level={fontLevel} startDecorator={<HomeIcon />}>
+            Home
+          </Typography>
         </Link>
         {parentPages.map((parentPage) => (
           <Link key={parentPage[0]} color="neureal" href={parentPage[1]}>
-            {parentPage[0]}
+            <Typography level={fontLevel}>{parentPage[0]}</Typography>
           </Link>
         ))}
-        <Typography>{currentPage}</Typography>
+        <Typography level={fontLevel}>{currentPage}</Typography>
       </Breadcrumbs>
     </Stack>
   );

@@ -38,42 +38,47 @@ export default function MainContent(props) {
         sx={{ py: 2 }}
       >
         <Grid xs={12} md={8}>
-          <Link
-            href={"/contributor/" + encodedUserId}
-            style={{ textDecoration: "none" }}
-          >
-            <Card
-              variant="plain"
-              orientation="horizontal"
-              sx={{
-                maxHeight: "150px",
-                bgcolor: "#fff",
-                p: 0,
-                "&:hover": {
-                  borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-                  transform: "translateY(-2px)",
-                },
-              }}
+          {contributorName && (
+            <Link
+              href={"/contributor/" + encodedUserId}
+              style={{ textDecoration: "none" }}
             >
-              <CardContent>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{ pb: 2 }}
-                >
-                  <UserAvatar
-                    link={contributorAvatar}
-                    userId={contributorUserId}
-                  />
-                  <Stack direction="column">
-                    <Typography level="title-lg">{contributorName}</Typography>
-                    <Typography level="body-sm">Contributor</Typography>
+              <Card
+                variant="plain"
+                orientation="horizontal"
+                sx={{
+                  maxHeight: "150px",
+                  bgcolor: "#fff",
+                  p: 0,
+                  "&:hover": {
+                    borderColor:
+                      "theme.vars.palette.primary.outlinedHoverBorder",
+                    transform: "translateY(-2px)",
+                  },
+                }}
+              >
+                <CardContent>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{ pb: 2 }}
+                  >
+                    <UserAvatar
+                      link={contributorAvatar}
+                      userId={contributorUserId}
+                    />
+                    <Stack direction="column">
+                      <Typography level="title-lg">
+                        {contributorName}
+                      </Typography>
+                      <Typography level="body-sm">Contributor</Typography>
+                    </Stack>
                   </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Link>
+                </CardContent>
+              </Card>
+            </Link>
+          )}
           <Typography level="h2" sx={{ py: 1 }}>
             {title}
           </Typography>

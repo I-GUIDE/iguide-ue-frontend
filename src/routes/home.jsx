@@ -144,45 +144,41 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
-              px: 4,
-              py: 2,
+              py: 4,
             }}
           >
             <Container maxWidth="lg">
-              <Typography
-                level="h3"
-                textColor="#000"
+              <Stack
+                direction="column"
+                alignItems={{ xs: "center", md: "flex-start" }}
+                spacing={2}
                 sx={{
-                  px: 2,
-                  py: 0.5,
+                  backgroundColor: "inherit",
                 }}
               >
-                What to do next?
-              </Typography>
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                spacing={4}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <TutorialCard
-                  thumbnailImage="/images/charco-education.png"
-                  title="Join"
-                  content="Become a member of the I-GUIDE community"
-                  link="/user-profile"
-                />
-                <TutorialCard
-                  thumbnailImage="/images/charco-launch.png"
-                  title="Learn"
-                  content="Explore the power of I-GUIDE Platform"
-                  link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
-                />
-                <TutorialCard
-                  thumbnailImage="/images/charco-photos.png"
-                  title="Contribute"
-                  content="Share knowledge with the community"
-                  link="/user-profile"
-                />
+                <Typography level="h3" textColor="#000">
+                  What to do next?
+                </Typography>
+                <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
+                  <TutorialCard
+                    thumbnailImage="/images/charco-education.png"
+                    title="Join"
+                    content="Become a member of the I-GUIDE community"
+                    link="/user-profile"
+                  />
+                  <TutorialCard
+                    thumbnailImage="/images/charco-launch.png"
+                    title="Learn"
+                    content="Explore the power of I-GUIDE Platform"
+                    link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
+                  />
+                  <TutorialCard
+                    thumbnailImage="/images/charco-photos.png"
+                    title="Contribute"
+                    content="Share knowledge with the community"
+                    link="/user-profile"
+                  />
+                </Stack>
               </Stack>
             </Container>
           </Box>
@@ -192,38 +188,41 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
+              pt: 4,
               pb: 8,
             }}
           >
             <Container maxWidth="lg">
-              <FeaturedElementsList
-                icon={<DatasetIcon />}
-                title="Datasets"
-                pageLink="/datasets"
-                type="dataset"
-                limit={4}
-              />
-              <FeaturedElementsList
-                icon={<CodeIcon />}
-                title="Notebooks"
-                pageLink="/notebooks"
-                type="notebook"
-                limit={4}
-              />
-              <FeaturedElementsList
-                icon={<ArticleIcon />}
-                title="Publications"
-                pageLink="/publications"
-                type="publication"
-                limit={4}
-              />
-              <FeaturedElementsList
-                icon={<SchoolIcon />}
-                title="Educational Resources"
-                pageLink="/oers"
-                type="oer"
-                limit={4}
-              />
+              <Stack direction="column" spacing={2}>
+                <FeaturedElementsList
+                  icon={<DatasetIcon />}
+                  title="Datasets"
+                  pageLink="/datasets"
+                  type="dataset"
+                  limit={4}
+                />
+                <FeaturedElementsList
+                  icon={<CodeIcon />}
+                  title="Notebooks"
+                  pageLink="/notebooks"
+                  type="notebook"
+                  limit={4}
+                />
+                <FeaturedElementsList
+                  icon={<ArticleIcon />}
+                  title="Publications"
+                  pageLink="/publications"
+                  type="publication"
+                  limit={4}
+                />
+                <FeaturedElementsList
+                  icon={<SchoolIcon />}
+                  title="Educational Resources"
+                  pageLink="/oers"
+                  type="oer"
+                  limit={4}
+                />
+              </Stack>
             </Container>
           </Box>
         </Box>

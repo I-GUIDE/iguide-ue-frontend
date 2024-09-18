@@ -8,7 +8,6 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 
 import ElementGrid from "../components/ElementGrid";
-import PageNav from "../components/PageNav";
 import Header from "../components/Layout/Header";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
@@ -18,14 +17,22 @@ export default function ElementGridLayout(props) {
   const fieldName = props.fieldName;
   const matchValue = props.matchValue;
   const title = props.title;
+  const subtitle = props.subtitle;
   const pageNavName = props.pageNavName ? props.pageNavName : "All " + title;
   const icon = props.icon;
+  const contribution = props.contribution;
   const showElementType = props.showElementType;
 
   return (
     <JoyCssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title={title} icon={icon} displayNewContributionButton={true} />
+      <Header
+        title={title}
+        subtitle={subtitle}
+        icon={icon}
+        currentPage={pageNavName}
+        contribution={contribution}
+      />
       <Container maxWidth="xl">
         <Box
           component="main"
@@ -39,16 +46,12 @@ export default function ElementGridLayout(props) {
           <Grid
             container
             rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             direction="column"
             sx={{
               backgroundColor: "inherit",
-              px: { xs: 2, md: 6 },
-              pt: 4,
-              pb: 8,
+              p: 4,
             }}
           >
-            <PageNav currentPage={pageNavName} sx={{ px: 0 }} />
             <ElementGrid
               elementType={elementType}
               fieldName={fieldName}
