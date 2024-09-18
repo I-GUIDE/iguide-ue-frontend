@@ -62,7 +62,7 @@ export default function ElementGrid(props) {
           startingIdx,
           itemsPerPage
         );
-        console.log(data);
+
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
@@ -106,6 +106,16 @@ export default function ElementGrid(props) {
       default:
         console.log(`Unknown sorting mechanism: ${newValue}`);
     }
+  }
+
+  if (loading) {
+    return (
+      <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+        <JoyCssVarsProvider>
+          <CssBaseline enableColorScheme />
+        </JoyCssVarsProvider>
+      </MaterialCssVarsProvider>
+    );
   }
 
   if (numberOfTotalItems === 0) {
