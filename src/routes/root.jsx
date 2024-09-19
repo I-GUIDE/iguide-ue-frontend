@@ -108,7 +108,7 @@ export default function Root(props) {
         if (localUserExists) {
           console.log("Found the user from our database");
         } else {
-          console.log("Couldn't find the user from our database...");
+          console.log("Couldn't find the user from our database...", uid);
           await saveUserToLocalDB();
         }
         const returnedLocalUser = await fetchUser(uid);
