@@ -50,7 +50,7 @@ export default function Root(props) {
   };
 
   useEffect(() => {
-    const getUserInfo = () => {
+    const getUserInfoFromCILogon = () => {
       fetch(AUTH_BACKEND_URL + "/userinfo", {
         method: "GET",
         credentials: "include",
@@ -62,6 +62,8 @@ export default function Root(props) {
       })
         .then((response) => {
           if (response.status === 200) return response.json();
+          setIsAuthenticated(false);
+          setCookie("IGPAU", false, { path: "/" });
           throw new Error("CILogon has failed!");
         })
         .then((resObject) => {
@@ -70,6 +72,8 @@ export default function Root(props) {
           setUserId(resObject.userInfo.sub);
         })
         .catch((err) => {
+          setIsAuthenticated(false);
+          setCookie("IGPAU", false, { path: "/" });
           console.log(err);
         });
     };
@@ -80,12 +84,13 @@ export default function Root(props) {
       setUserInfo(demoCILogonUser);
     } else {
       if (isAuthenticated) {
-        getUserInfo();
+        getUserInfoFromCILogon();
       } else {
         setLocalUserInfo({ userInfo: null });
+        setCookie("IGPAU", false, { path: "/" });
       }
     }
-  }, [isAuthenticated]);
+  }, []);
 
   useEffect(() => {
     // Check if the user exists on the local DB, if not, add the user
