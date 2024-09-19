@@ -13,7 +13,7 @@ import LoginCard from "../components/LoginCard";
 import UserProfileEditCard from "../components/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function UserProfileUpdate() {
   usePageTitle("Update User Profile");
@@ -25,15 +25,11 @@ export default function UserProfileUpdate() {
     return (
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
-        <Header
-          title="Knowledge Contribution"
-          subtitle="Thanks for your contributions!"
-        />
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
@@ -46,7 +42,7 @@ export default function UserProfileUpdate() {
               alignItems="center"
               direction="column"
               sx={{
-                minHeight: DEFAULT_BODY_HEIGHT,
+                minHeight: NO_HEADER_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
                 pt: 4,
@@ -64,12 +60,11 @@ export default function UserProfileUpdate() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header title="User profile update" subtitle="" />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{
-            minHeight: DEFAULT_BODY_HEIGHT,
+            minHeight: NO_HEADER_BODY_HEIGHT,
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -82,7 +77,7 @@ export default function UserProfileUpdate() {
             alignItems="center"
             direction="column"
             sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
+              minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
               pt: 4,

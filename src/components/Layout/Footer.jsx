@@ -28,7 +28,7 @@ export default function Footer() {
         sx={{ borderRadius: 0, flexGrow: 1 }}
       >
         <CardContent sx={{ justifyContent: "center" }}>
-          <Container maxWidth="xl" sx={{ flexGrow: 1 }}>
+          <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
             <Grid
               container
               spacing={1}

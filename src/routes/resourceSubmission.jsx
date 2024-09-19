@@ -26,7 +26,7 @@ export default function ResourceSubmission() {
     return (
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{
@@ -61,7 +61,7 @@ export default function ResourceSubmission() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{

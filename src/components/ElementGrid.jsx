@@ -204,7 +204,7 @@ export default function ElementGrid(props) {
               justifyContent="flex-start"
             >
               {elementList?.map((element) => (
-                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
                   <InfoCard
                     cardtype={element["resource-type"] + "s"}
                     pageid={element.id}

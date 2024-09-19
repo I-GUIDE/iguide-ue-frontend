@@ -273,7 +273,7 @@ export default function SearchResults() {
             </CardContent>
           </Card>
         </Box>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{

@@ -70,7 +70,7 @@ export default function OERPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{
@@ -116,6 +116,7 @@ export default function OERPage() {
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="oer"
+                useMarkdown
               />
             </Grid>
 

@@ -33,7 +33,7 @@ export default function ElementGridLayout(props) {
         currentPage={pageNavName}
         contribution={contribution}
       />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{

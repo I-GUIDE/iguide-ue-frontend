@@ -80,7 +80,7 @@ export default function UserProfile() {
       <JoyCssVarsProvider disableTransitionOnChange>
         <CssBaseline />
         <Header title="Please login to continue" subtitle="" />
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{
@@ -125,7 +125,7 @@ export default function UserProfile() {
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
           <Header title={"Error: " + error.message} />
-          <Container maxWidth="xl">
+          <Container maxWidth="lg">
             <Box
               component="main"
               sx={{
@@ -150,7 +150,7 @@ export default function UserProfile() {
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
           <Header title="Please complete your profile" />
-          <Container maxWidth="xl">
+          <Container maxWidth="lg">
             <Box
               component="main"
               sx={{
@@ -194,7 +194,7 @@ export default function UserProfile() {
             allowProfileOps
           />
         )}
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{

@@ -21,10 +21,11 @@ export default function MainContent(props) {
   const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
   const doi = props.doi;
-  const contentsTitle = props.contentsTitle ? props.contentsTitle : "About";
+  const contentsTitle = props.contentsTitle;
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
   const elementType = props.elementType;
+  const useMarkdown = props.useMarkdown;
 
   const contributorAvatar = contributor["avatar-url"];
   const contributorName = contributor.name;
@@ -128,11 +129,17 @@ export default function MainContent(props) {
       <Typography level="h4" sx={{ pt: 2 }}>
         {contentsTitle}
       </Typography>
-      <Box sx={{ py: 2 }}>
-        <div className="container" data-color-mode="light">
-          <MDEditor.Markdown source={contents} />
-        </div>
-      </Box>
+      {useMarkdown ? (
+        <Box sx={{ py: 2 }}>
+          <div className="container" data-color-mode="light">
+            <MDEditor.Markdown source={contents} />
+          </div>
+        </Box>
+      ) : (
+        <Typography level="body-lg" sx={{ pt: 2 }}>
+          {contents}
+        </Typography>
+      )}
     </Stack>
   );
 }

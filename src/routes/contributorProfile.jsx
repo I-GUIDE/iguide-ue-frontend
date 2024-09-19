@@ -63,7 +63,7 @@ export default function ContributorProfile() {
             contributionCount={numberOfTotalItems}
           />
         )}
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             sx={{
               minHeight: USER_PROFILE_BODY_HEIGHT,
