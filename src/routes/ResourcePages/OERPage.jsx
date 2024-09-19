@@ -117,6 +117,7 @@ export default function OERPage() {
                 thumbnailImage={thumbnailImage}
                 elementType="oer"
                 useMarkdown
+                useOERLayout
               />
             </Grid>
 
