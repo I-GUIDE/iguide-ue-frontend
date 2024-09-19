@@ -73,7 +73,7 @@ export default function TermsOfUse() {
                 (UCGIS), University of Minnesota, and Utah State University,
                 referred to in these Terms of Use as the “Participating
                 Institutions”. The I-GUIDE Platform is hosted at{" "}
-                <Link component={RouterLink} to="/">
+                <Link href="https://platform.i-guide.io">
                   platform.i-guide.io
                 </Link>
                 . The I-GUIDE Platform, services, and{" "}
