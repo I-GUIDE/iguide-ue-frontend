@@ -9,7 +9,6 @@ import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
-import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import SubmissionCard from "../components/SubmissionCard";
 import usePageTitle from "../hooks/usePageTitle";
@@ -27,10 +26,6 @@ export default function ResourceUpdate() {
     return (
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
-        <Header
-          title="Update Your Contribution"
-          subtitle="Thanks for your contributions!"
-        />
         <Container maxWidth="xl">
           <Box
             component="main"
@@ -66,10 +61,6 @@ export default function ResourceUpdate() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Header
-        title="Update Your Contribution"
-        subtitle="Thanks for your contributions!"
-      />
       <Container maxWidth="xl">
         <Box
           component="main"
