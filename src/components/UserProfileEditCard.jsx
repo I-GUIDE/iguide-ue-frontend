@@ -142,7 +142,7 @@ export default function UserProfileEditCard(props) {
       formData.append("file", confirmedProfilePictureFile);
 
       const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/upload-avatar`,
+        `${USER_BACKEND_URL}/api/users/${localUserInfo.id}/avatar`,
         {
           method: "POST",
           body: formData,
