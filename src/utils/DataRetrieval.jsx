@@ -77,7 +77,7 @@ export async function DataSearcher(
  */
 export async function fetchAllTitlesByElementType(elementType) {
   const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements/titles?element_type=${elementType}`
+    `${BACKEND_URL_PORT}/api/elements/titles?element-type=${elementType}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch titles");
