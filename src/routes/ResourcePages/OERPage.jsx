@@ -127,16 +127,14 @@ export default function OERPage() {
             <Grid xs={12}>
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
-            <Grid xs={12}>
-              <RelatedElements
-                relatedDatasets={relatedDatasets}
-                relatedNotebooks={relatedNotebooks}
-                relatedPublications={relatedPublications}
-                relatedOERs={relatedOERs}
-                xs={12}
-                md={6}
-              />
-            </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>
