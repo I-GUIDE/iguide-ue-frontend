@@ -39,7 +39,7 @@ const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 // Function to retrieve the role from the "user_dev" index
 const getUserRole = async (user_id) => {
-  const openid = decodeURIComponent(user_id);
+  const openid = encodeURIComponent(user_id);
 
   const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
