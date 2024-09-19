@@ -26,6 +26,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import FeaturedElementsList from "../components/FeaturedElementsList";
 import TutorialCard from "../components/TutorialCard";
 import SearchBar from "../components/SearchBar";
+import usePageTitle from "../hooks/usePageTitle";
 
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
@@ -35,6 +36,8 @@ import {
 } from "../configs/VarConfigs";
 
 export default function Home() {
+  usePageTitle("", true);
+
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
