@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
@@ -73,7 +75,8 @@ export default function SimpleInfoCard(props) {
           <Link
             overlay
             underline="none"
-            href={"/" + cardType + "/" + pageId}
+            component={RouterLink}
+            to={"/" + cardType + "/" + pageId}
             sx={{ color: "text.tertiary" }}
           >
             <Stack spacing={1}>

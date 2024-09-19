@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
@@ -36,7 +38,8 @@ export default function CapsuleList(props) {
         {filteredItems.map((item) => (
           <Link
             key={item}
-            href={"/tag/" + item}
+            component={RouterLink}
+            to={"/tag/" + item}
             underline="none"
             sx={{
               "--Link-gap": "0.5rem",

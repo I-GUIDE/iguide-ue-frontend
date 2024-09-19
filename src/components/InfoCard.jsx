@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Tooltip from "@mui/joy/Tooltip";
 import Link from "@mui/joy/Link";
@@ -86,7 +88,8 @@ export default function InfoCard(props) {
           <Link
             overlay
             underline="none"
-            href={"/" + cardType + "/" + pageid}
+            component={RouterLink}
+            to={"/" + cardType + "/" + pageid}
             sx={{ color: "text.tertiary" }}
           >
             <Typography
@@ -135,7 +138,8 @@ export default function InfoCard(props) {
         {contributorName && (
           <CardActions>
             <Link
-              href={"/contributor/" + encodeURIComponent(contributorUserId)}
+              component={RouterLink}
+              to={"/contributor/" + encodeURIComponent(contributorUserId)}
             >
               <Stack direction="row" alignItems="center" spacing={1.5}>
                 <UserAvatar

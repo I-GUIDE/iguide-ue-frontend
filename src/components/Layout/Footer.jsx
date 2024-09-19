@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
@@ -140,7 +142,7 @@ export default function Footer() {
                   spacing={1}
                   sx={{ display: "flex" }}
                 >
-                  <Link href="/terms-of-use">
+                  <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
                   </Link>
                 </Stack>

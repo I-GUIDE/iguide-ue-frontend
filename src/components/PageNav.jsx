@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Stack from "@mui/joy/Stack";
 import Breadcrumbs from "@mui/joy/Breadcrumbs";
 import Link from "@mui/joy/Link";
@@ -25,13 +27,18 @@ export default function PageNav(props) {
       sx={{ width: "100%" }}
     >
       <Breadcrumbs separator="›" aria-label="breadcrumbs" sx={sx}>
-        <Link color="neutral" href="/">
+        <Link color="neutral" component={RouterLink} to="/">
           <Typography level={fontLevel} startDecorator={<HomeIcon />}>
             Home
           </Typography>
         </Link>
         {parentPages.map((parentPage) => (
-          <Link key={parentPage[0]} color="neureal" href={parentPage[1]}>
+          <Link
+            key={parentPage[0]}
+            color="neureal"
+            component={RouterLink}
+            to={parentPage[1]}
+          >
             <Typography level={fontLevel}>{parentPage[0]}</Typography>
           </Link>
         ))}

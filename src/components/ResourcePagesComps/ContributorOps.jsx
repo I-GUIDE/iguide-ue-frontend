@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
@@ -74,7 +74,8 @@ export default function ContributorOps(props) {
       <Button size="sm" variant="outlined" color="primary">
         <Link
           underline="none"
-          href={"/element-update/" + elementId}
+          component={RouterLink}
+          to={"/element-update/" + elementId}
           sx={{ color: "inherit" }}
         >
           Edit

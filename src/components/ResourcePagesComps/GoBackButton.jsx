@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Link from "@mui/joy/Link";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
@@ -20,7 +22,12 @@ export default function GoBackButton(props) {
         spacing={1}
       >
         <Button size="sm" color="primary">
-          <Link underline="none" href={parentPage} sx={{ color: "inherit" }}>
+          <Link
+            underline="none"
+            component={RouterLink}
+            to={parentPage}
+            sx={{ color: "inherit" }}
+          >
             Go Back to All {parentPageName}
           </Link>
         </Button>

@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -40,7 +42,8 @@ export default function MainContent(props) {
         <Grid xs={12} md={8}>
           {contributorName && (
             <Link
-              href={"/contributor/" + encodedUserId}
+              component={RouterLink}
+              to={"/contributor/" + encodedUserId}
               style={{ textDecoration: "none" }}
             >
               <Card

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -71,7 +73,7 @@ export default function TermsOfUse() {
                 (UCGIS), University of Minnesota, and Utah State University,
                 referred to in these Terms of Use as the “Participating
                 Institutions”. The I-GUIDE Platform is hosted at{" "}
-                <Link href="https://platform.i-guide.io">
+                <Link component={RouterLink} to="/">
                   platform.i-guide.io
                 </Link>
                 . The I-GUIDE Platform, services, and{" "}
