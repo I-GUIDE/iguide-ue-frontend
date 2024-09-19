@@ -50,8 +50,8 @@ export default function UserProfile() {
       setNumberOfTotalItems(tally);
     }
     if (localUserInfo) {
-      getTally(localUserInfo.openid);
-      setUserId(localUserInfo.openid);
+      getTally(localUserInfo.id);
+      setUserId(localUserInfo.id);
     }
   }, [localUserInfo]);
 

@@ -37,7 +37,7 @@ export default function ContributorOps(props) {
     return null;
   }
 
-  if (!localUserInfo || localUserInfo.openid !== contributorId) {
+  if (!localUserInfo || localUserInfo.id !== contributorId) {
     return null;
   }
 

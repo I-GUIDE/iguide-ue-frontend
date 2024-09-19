@@ -101,7 +101,7 @@ export default function UserProfileHeader(props) {
                 >
                   <UserAvatar
                     link={userInfo["avatar_url"]}
-                    userId={userInfo.openid}
+                    userId={userInfo.id}
                     size={150}
                   />
                 </Stack>

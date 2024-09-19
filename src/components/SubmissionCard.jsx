@@ -66,6 +66,8 @@ export default function SubmissionCard(props) {
     checkTokens();
   }, []);
 
+  const { localUserInfo } = useOutletContext();
+
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
@@ -95,8 +97,6 @@ export default function SubmissionCard(props) {
     useState("");
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
-
-  const { localUserInfo } = useOutletContext();
 
   const [elementURI, setElementURI] = useState();
 
@@ -495,8 +495,8 @@ export default function SubmissionCard(props) {
   }
 
   // If the user is not the contributor, deny access to the update form.
-  if (submissionType === "update" && localUserInfo && localUserInfo.openid) {
-    if (!contributor || localUserInfo.openid !== contributor.id) {
+  if (submissionType === "update" && localUserInfo && localUserInfo.id) {
+    if (!contributor || localUserInfo.id !== contributor.id) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }

@@ -47,6 +47,7 @@ export default function ContributorProfile() {
         bio: user["bio"],
         avatar_url: user["avatar_url"],
         openid: user["openid"],
+        id: user["id"],
       });
     }
     getContributorInfo(userId);
