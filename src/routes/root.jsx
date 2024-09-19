@@ -18,6 +18,7 @@ import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
@@ -67,7 +68,11 @@ export default function Root(props) {
           throw new Error("CILogon has failed!");
         })
         .then((resObject) => {
-          console.log("Getting user info from CILogon...", resObject.userInfo);
+          TEST_MODE &&
+            console.log(
+              "Getting user info from CILogon...",
+              resObject.userInfo
+            );
           setUserInfo(resObject.userInfo);
           setUserId(resObject.userInfo.sub);
         })
@@ -80,6 +85,7 @@ export default function Root(props) {
 
     // If the demo user mode is on, set the demo user as user
     if (USE_DEMO_USER) {
+      TEST_MODE && console.log("Using demo user...");
       setIsAuthenticated(true);
       setUserInfo(demoCILogonUser);
     } else {
@@ -104,16 +110,17 @@ export default function Root(props) {
         userInfo.idp_name,
         ""
       );
-      console.log("saving user to the local db...", ret_msg);
+      TEST_MODE && console.log("saving user to the local db...", ret_msg);
     }
 
     async function handleCheckUser(uid) {
       if (uid) {
         const localUserExists = await checkUser(uid);
         if (localUserExists) {
-          console.log("Found the user from our database");
+          TEST_MODE && console.log("Found the user from our database");
         } else {
-          console.log("Couldn't find the user from our database...", uid);
+          TEST_MODE &&
+            console.log("Couldn't find the user from our database...", uid);
           await saveUserToLocalDB();
         }
         const returnedLocalUser = await fetchUser(uid);

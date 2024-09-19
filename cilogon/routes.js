@@ -97,7 +97,7 @@ router.get('/cilogon-callback', async (req, res, next) => {
 
       // Retrieve user role from OpenSearch
       const role = await getUserRole(user.sub);
-      console.log('user role: ', role);
+      console.log('user: ', user.sub, ' role: ', role);
 
       // Generate JWT token with role
       const userPayload = { id: user.sub, role };
@@ -113,8 +113,6 @@ router.get('/cilogon-callback', async (req, res, next) => {
       res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
       res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
       res.cookie('IGPAU', true, { path: "/" });
-
-      console.log("Setting cookies to: ", target_domain);
 
       res.redirect(`${FRONTEND_URL}/user-profile`);
     });

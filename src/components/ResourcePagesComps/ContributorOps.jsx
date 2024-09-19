@@ -18,6 +18,7 @@ import Link from "@mui/joy/Link";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ContributorOps(props) {
   const elementId = props.elementId;
@@ -42,7 +43,7 @@ export default function ContributorOps(props) {
   }
 
   async function handleElementDelete(elementId) {
-    console.log("Deleting...", elementId);
+    TEST_MODE && console.log("Deleting...", elementId);
     try {
       const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/elements/${elementId}`,
@@ -88,7 +89,7 @@ export default function ContributorOps(props) {
         onClick={() => {
           setDeleteMetadataTitle(title);
           setDeleteMetadataId(elementId);
-          console.log("Attempting to delete:", title, elementId);
+          TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
         Delete

@@ -51,18 +51,18 @@ app.use(passport.session());
 app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
-  console.log('-----------------------------');
+  console.log('-----------------');
   console.log('serialize user');
   console.log(user);
-  console.log('-----------------------------');
+  console.log('-----------------');
   done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-  console.log('-----------------------------');
+  console.log('-----------------');
   console.log('deserialize user');
   console.log(user);
-  console.log('-----------------------------');
+  console.log('-----------------');
   done(null, user);
 });
 

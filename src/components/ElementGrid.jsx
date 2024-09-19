@@ -24,6 +24,8 @@ import InfoCard from "./InfoCard";
 import { elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function ElementGrid(props) {
   const headline = props.headline;
   const fieldName = props.fieldName;
@@ -104,7 +106,7 @@ export default function ElementGrid(props) {
         });
         break;
       default:
-        console.log(`Unknown sorting mechanism: ${newValue}`);
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
     }
   }
 

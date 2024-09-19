@@ -48,6 +48,7 @@ import {
 import { printListWithDelimiter } from "../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -224,7 +225,7 @@ export default function SubmissionCard(props) {
     let newArray = [...relatedResources];
     newArray.splice(idx, 1);
     setRelatedResources(newArray);
-    console.log("Removing one, now: ", relatedResources, idx);
+    TEST_MODE && console.log("Removing one, now: ", relatedResources, idx);
   };
 
   const handleRelatedResourceTypeChange = (value) => {
@@ -271,14 +272,14 @@ export default function SubmissionCard(props) {
     setCurrentOerExternalLinkType("");
     setCurrentOerExternalLinkURL("");
     setCurrentOerExternalLinkTitle("");
-    console.log("Added one, now: ", oerExternalLinks);
+    TEST_MODE && console.log("Added one, now: ", oerExternalLinks);
   };
 
   const handleRemovingOneOerExternalLink = (idx) => {
     let newArray = [...oerExternalLinks];
     newArray.splice(idx, 1);
     setOerExternalLinks(newArray);
-    console.log("Removing one, now: ", oerExternalLinks);
+    TEST_MODE && console.log("Removing one, now: ", oerExternalLinks);
   };
 
   const handleOerExternalLinkTypeChange = (value) => {
@@ -299,7 +300,7 @@ export default function SubmissionCard(props) {
         return;
       }
       const data = await response.json();
-      console.log("search return", data.title);
+      TEST_MODE && console.log("search return", data.title);
       setCurrentOerExternalLinkTitle(data.title);
     }
   };
@@ -311,7 +312,7 @@ export default function SubmissionCard(props) {
     }
 
     const metadataDOI = await getMetadataByDOI(publicationDOI);
-    console.log("pub metadata", metadataDOI);
+    TEST_MODE && console.log("pub metadata", metadataDOI);
 
     if (!metadataDOI) {
       return;
@@ -439,7 +440,7 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    console.log("data to be submitted", data);
+    TEST_MODE && console.log("data to be submitted", data);
 
     if (submissionType === "update") {
       const response = await fetchWithAuth(
@@ -454,7 +455,7 @@ export default function SubmissionCard(props) {
       );
 
       const result = await response.json();
-      console.log("Element update msg returned", result.message);
+      TEST_MODE && console.log("Element update msg returned", result.message);
 
       if (result && result.message === "Element updated successfully") {
         setSubmissionStatus("update-succeeded");
@@ -471,7 +472,7 @@ export default function SubmissionCard(props) {
       });
 
       const result = await response.json();
-      console.log("initial submission, msg", result);
+      TEST_MODE && ("initial submission, msg", result);
       if (result && result.message === "Resource registered successfully") {
         setSubmissionStatus("initial-succeeded");
         if (result.elementId) {
