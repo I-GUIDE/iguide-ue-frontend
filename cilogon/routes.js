@@ -18,13 +18,6 @@ const target_domain = process.env.JWT_TARGET_DOMAIN;
 const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
 const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 
-console.log('OpenSearch Node:', os_node);
-console.log('OpenSearch Username:', os_usr);
-console.log('OpenSearch Password:', os_pswd);
-console.log('OpenSearch Index:', os_index);
-console.log('User Index: ', user_index);
-console.log('Target JWT backend domain: ', target_domain);
-
 if (!os_node) {
   throw new Error('Missing OpenSearch node configuration');
 }
@@ -41,33 +34,20 @@ const client = new Client({
 });
 
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
+const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 // Function to retrieve the role from the "user_dev" index
 const getUserRole = async (user_id) => {
   const openid = decodeURIComponent(user_id);
 
-  try {
-    const response = await client.search({
-      index: user_index,
-      body: {
-        query: {
-          term: {
-            openid: openid
-          }
-        }
-      }
-    });
+  const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
-    if (response.body.hits.total.value === 0) {
-      console.error('User not found');
-      return null;
-    } else {
-      return response.body.hits.hits[0]._source.role;
-    }
-  } catch (error) {
-    console.error('Error retrieving user role:', error);
-    return null;
+  if (!response.ok) {
+    throw new Error(`Error: ${response.statusText}`);
   }
+
+  const result = await response.json();
+  return result.role;
 };
 
 
