@@ -3,8 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Client } = require('@opensearch-project/opensearch');
 const dotenv = require('dotenv');
-
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
 dotenv.config();
 
