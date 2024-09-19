@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Client } = require('@opensearch-project/opensearch');
 const dotenv = require('dotenv');
+const fetch = require('node-fetch');
 
 dotenv.config();
 
@@ -43,7 +44,7 @@ const getUserRole = async (user_id) => {
   const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.statusText}`);
+    return 10;
   }
 
   const result = await response.json();
