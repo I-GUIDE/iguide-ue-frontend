@@ -1,6 +1,6 @@
-import * as React from "react";
+import React, { useRef, useEffect } from "react";
 
-import Jdenticon from "react-jdenticon";
+import { update } from "jdenticon";
 
 import Avatar from "@mui/joy/Avatar";
 
@@ -9,6 +9,11 @@ export default function UserAvatar(props) {
   const userId = props.userId ? props.userId : "";
   const size = props.size;
 
+  const icon = useRef(null);
+  useEffect(() => {
+    update(icon.current, userId);
+  }, [userId]);
+
   if (!link) {
     return (
       <Avatar
@@ -16,7 +21,12 @@ export default function UserAvatar(props) {
         alt="Generated avatar"
         sx={{ width: size, height: size }}
       >
-        <Jdenticon value={userId} />
+        <svg
+          data-jdenticon-value={userId}
+          height={size}
+          ref={icon}
+          width={size}
+        />
       </Avatar>
     );
   }

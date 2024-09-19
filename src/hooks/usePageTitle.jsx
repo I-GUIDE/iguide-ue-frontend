@@ -17,7 +17,12 @@ export default function usePageTitle(
 
   useEffect(() => {
     if (usePostfix) {
-      document.title = title + " - " + postfix;
+      // When the requested title is empty, don't use dash
+      if (title === "") {
+        document.title = postfix;
+      } else {
+        document.title = title + " - " + postfix;
+      }
     } else {
       document.title = title;
     }

@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
@@ -18,6 +18,7 @@ import Link from "@mui/joy/Link";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ContributorOps(props) {
   const elementId = props.elementId;
@@ -37,12 +38,12 @@ export default function ContributorOps(props) {
     return null;
   }
 
-  if (!localUserInfo || localUserInfo.openid !== contributorId) {
+  if (!localUserInfo || localUserInfo.id !== contributorId) {
     return null;
   }
 
   async function handleElementDelete(elementId) {
-    console.log("Deleting...", elementId);
+    TEST_MODE && console.log("Deleting...", elementId);
     try {
       const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/elements/${elementId}`,
@@ -74,7 +75,8 @@ export default function ContributorOps(props) {
       <Button size="sm" variant="outlined" color="primary">
         <Link
           underline="none"
-          href={"/element-update/" + elementId}
+          component={RouterLink}
+          to={"/element-update/" + elementId}
           sx={{ color: "inherit" }}
         >
           Edit
@@ -87,7 +89,7 @@ export default function ContributorOps(props) {
         onClick={() => {
           setDeleteMetadataTitle(title);
           setDeleteMetadataId(elementId);
-          console.log("Attempting to delete:", title, elementId);
+          TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
         Delete

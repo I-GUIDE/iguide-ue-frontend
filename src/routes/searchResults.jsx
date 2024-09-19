@@ -40,6 +40,8 @@ import {
 } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function SearchResults() {
   // define search data
   const [data, setData] = useState({
@@ -131,9 +133,10 @@ export default function SearchResults() {
   // When users click the pagination, update current starting index
   function handlePageClick(event, value) {
     const newStartingIdx = (value - 1) * itemsPerPage;
-    console.log(
-      `User requested page number ${value}, which is offset ${newStartingIdx}`
-    );
+    TEST_MODE &&
+      console.log(
+        `User requested page number ${value}, which is offset ${newStartingIdx}`
+      );
     setCurrentStartingIdx(newStartingIdx);
     setCurrentPage(value);
   }
@@ -270,7 +273,7 @@ export default function SearchResults() {
             </CardContent>
           </Card>
         </Box>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             component="main"
             sx={{

@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const { Client } = require('@opensearch-project/opensearch');
 const dotenv = require('dotenv');
+const fetch = require('node-fetch');
 
 dotenv.config();
 
@@ -17,13 +18,6 @@ const target_domain = process.env.JWT_TARGET_DOMAIN;
 
 const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
 const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
-
-console.log('OpenSearch Node:', os_node);
-console.log('OpenSearch Username:', os_usr);
-console.log('OpenSearch Password:', os_pswd);
-console.log('OpenSearch Index:', os_index);
-console.log('User Index: ', user_index);
-console.log('Target JWT backend domain: ', target_domain);
 
 if (!os_node) {
   throw new Error('Missing OpenSearch node configuration');
@@ -41,33 +35,20 @@ const client = new Client({
 });
 
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
+const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 // Function to retrieve the role from the "user_dev" index
 const getUserRole = async (user_id) => {
-  const openid = decodeURIComponent(user_id);
+  const openid = encodeURIComponent(user_id);
 
-  try {
-    const response = await client.search({
-      index: user_index,
-      body: {
-        query: {
-          term: {
-            openid: openid
-          }
-        }
-      }
-    });
+  const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
-    if (response.body.hits.total.value === 0) {
-      console.error('User not found');
-      return null;
-    } else {
-      return response.body.hits.hits[0]._source.role;
-    }
-  } catch (error) {
-    console.error('Error retrieving user role:', error);
-    return null;
+  if (!response.ok) {
+    return 10;
   }
+
+  const result = await response.json();
+  return result.role;
 };
 
 
@@ -115,8 +96,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
       }
 
       // Retrieve user role from OpenSearch
-      const role = await getUserRole(user.sub) || 10; // Default to 'user' if role not found
-      console.log('user role: ', role);
+      const role = await getUserRole(user.sub);
+      console.log('user: ', user.sub, ' role: ', role);
 
       // Generate JWT token with role
       const userPayload = { id: user.sub, role };
@@ -132,8 +113,6 @@ router.get('/cilogon-callback', async (req, res, next) => {
       res.cookie('jwt', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
       res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
       res.cookie('IGPAU', true, { path: "/" });
-
-      console.log("Setting cookies to: ", target_domain);
 
       res.redirect(`${FRONTEND_URL}/user-profile`);
     });

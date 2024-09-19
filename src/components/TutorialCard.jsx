@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -32,7 +34,8 @@ export default function TutorialCard(props) {
         <Stack direction="column" sx={{ p: 0 }}>
           <Link
             overlay
-            href={link}
+            component={RouterLink}
+            to={link}
             underline="none"
             sx={{ color: "text.tertiary" }}
           >

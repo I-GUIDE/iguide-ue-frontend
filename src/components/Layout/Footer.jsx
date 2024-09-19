@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
@@ -26,7 +28,7 @@ export default function Footer() {
         sx={{ borderRadius: 0, flexGrow: 1 }}
       >
         <CardContent sx={{ justifyContent: "center" }}>
-          <Container maxWidth="xl" sx={{ flexGrow: 1 }}>
+          <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
             <Grid
               container
               spacing={1}
@@ -140,7 +142,7 @@ export default function Footer() {
                   spacing={1}
                   sx={{ display: "flex" }}
                 >
-                  <Link href="/terms-of-use">
+                  <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
                   </Link>
                 </Stack>

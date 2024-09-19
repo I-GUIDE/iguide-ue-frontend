@@ -52,7 +52,7 @@ export default function UserProfileHeader(props) {
             />
           </CardCover>
           <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
               <Grid
                 container
                 sx={{ justifyContent: "center", alignItems: "center" }}
@@ -90,7 +90,7 @@ export default function UserProfileHeader(props) {
           />
         </CardCover>
         <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
-          <Container maxWidth="xl">
+          <Container maxWidth="lg">
             <Grid
               container
               sx={{ justifyContent: "center", alignItems: "center" }}
@@ -101,7 +101,7 @@ export default function UserProfileHeader(props) {
                 >
                   <UserAvatar
                     link={userInfo["avatar_url"]}
-                    userId={userInfo.openid}
+                    userId={userInfo.id}
                     size={150}
                   />
                 </Stack>

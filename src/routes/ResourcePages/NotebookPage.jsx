@@ -74,7 +74,7 @@ export default function NotebookPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{
@@ -117,6 +117,7 @@ export default function NotebookPage() {
                 title={title}
                 authors={authors}
                 contributor={contributor}
+                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="notebook"

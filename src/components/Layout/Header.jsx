@@ -46,13 +46,13 @@ export default function Header(props) {
           <img src="/images/header-bg.png" loading="lazy" alt="Gray scale" />
         </CardCover>
         <CardContent>
-          <Container maxWidth="xl">
+          <Container maxWidth="lg">
             <Stack spacing={2} sx={{ px: 4, py: 2 }}>
               <PageNav
                 parentPages={parentPages}
                 currentPage={currentPage}
                 fontLevel="body-xs"
-                sx={{ px: 0, pb: 4 }}
+                sx={{ px: 0, pb: { xs: 1, sm: 3 } }}
               />
               <Stack
                 direction="row"

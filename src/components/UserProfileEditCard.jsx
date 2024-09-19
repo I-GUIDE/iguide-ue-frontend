@@ -26,7 +26,7 @@ import { styled } from "@mui/joy";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
-import { fetchUser, updateUser, checkTokens } from "../utils/UserManager";
+import { updateUser, checkTokens } from "../utils/UserManager";
 import { dataURLtoFile } from "../helpers/helper";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
@@ -90,7 +90,7 @@ export default function UserProfileEditCard(props) {
       setBio(localUserInfo["bio"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
-    if (localUserInfo && localUserInfo.openid) {
+    if (localUserInfo && localUserInfo.id) {
       getLocalUserInfo();
     }
   }, [localUserInfo]);
@@ -140,9 +140,10 @@ export default function UserProfileEditCard(props) {
         "user-upload.png"
       );
       formData.append("file", confirmedProfilePictureFile);
+      formData.append("id", localUserInfo.id);
 
       const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/upload-avatar`,
+        `${USER_BACKEND_URL}/api/users/avatar`,
         {
           method: "POST",
           body: formData,

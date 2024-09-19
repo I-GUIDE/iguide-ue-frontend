@@ -24,6 +24,8 @@ import InfoCard from "./InfoCard";
 import { elementRetriever } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function ElementGrid(props) {
   const headline = props.headline;
   const fieldName = props.fieldName;
@@ -104,7 +106,7 @@ export default function ElementGrid(props) {
         });
         break;
       default:
-        console.log(`Unknown sorting mechanism: ${newValue}`);
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
     }
   }
 
@@ -202,7 +204,7 @@ export default function ElementGrid(props) {
               justifyContent="flex-start"
             >
               {elementList?.map((element) => (
-                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
                   <InfoCard
                     cardtype={element["resource-type"] + "s"}
                     pageid={element.id}

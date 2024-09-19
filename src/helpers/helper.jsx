@@ -1,3 +1,5 @@
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 /**
  * Extract the value of fieldOut of which entry matches the valueIn of fieldIn.
  * The return value is the extracted value.
@@ -8,7 +10,7 @@
  * @return {string} the value of fieldOut
  */
 export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
-  console.log(jsonData);
+  TEST_MODE && console.log(jsonData);
   const index = jsonData.findIndex((entry) => entry[fieldIn] == valueIn);
   return jsonData[index][fieldOut];
 }

@@ -77,7 +77,7 @@ export default function DatasetPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{
@@ -120,6 +120,7 @@ export default function DatasetPage() {
                 title={title}
                 authors={authors}
                 contributor={contributor}
+                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="dataset"

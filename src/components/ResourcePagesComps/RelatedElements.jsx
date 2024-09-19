@@ -32,12 +32,8 @@ export default function RelatedElements(props) {
     }
 
     const responsive = {
-      desktop: {
-        breakpoint: { max: 5000, min: 1200 },
-        items: 3,
-      },
       desktopNarrow: {
-        breakpoint: { max: 1200, min: 900 },
+        breakpoint: { max: 5000, min: 900 },
         items: 2,
       },
       tablet: {

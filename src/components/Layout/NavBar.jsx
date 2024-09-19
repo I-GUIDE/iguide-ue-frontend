@@ -83,7 +83,7 @@ export default function NavBar(props) {
           <MenuButton color="primary">
             <UserAvatar
               link={localUserInfo["avatar_url"]}
-              userId={localUserInfo.openid}
+              userId={localUserInfo.id}
             />
           </MenuButton>
           <Menu

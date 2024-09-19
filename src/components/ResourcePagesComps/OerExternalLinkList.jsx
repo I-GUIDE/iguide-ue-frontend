@@ -7,6 +7,8 @@ import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import Link from "@mui/joy/Link";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function OerExternalLinkList(props) {
   const oerExternalLinks = props.oerExternalLinks;
 
@@ -43,7 +45,7 @@ export default function OerExternalLinkList(props) {
         break;
       default:
         others.push(item);
-        console.log(`OER external link type unknown: ${item}`);
+        TEST_MODE && console.log(`OER external link type unknown: ${item}`);
     }
   }
 

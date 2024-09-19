@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
 
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -47,6 +48,7 @@ import {
 import { printListWithDelimiter } from "../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -64,6 +66,8 @@ export default function SubmissionCard(props) {
   useEffect(() => {
     checkTokens();
   }, []);
+
+  const { localUserInfo } = useOutletContext();
 
   const submissionType = props.submissionType;
   const elementId = props.elementId;
@@ -94,8 +98,6 @@ export default function SubmissionCard(props) {
     useState("");
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
-
-  const { localUserInfo } = useOutletContext();
 
   const [elementURI, setElementURI] = useState();
 
@@ -223,7 +225,7 @@ export default function SubmissionCard(props) {
     let newArray = [...relatedResources];
     newArray.splice(idx, 1);
     setRelatedResources(newArray);
-    console.log("Removing one, now: ", relatedResources, idx);
+    TEST_MODE && console.log("Removing one, now: ", relatedResources, idx);
   };
 
   const handleRelatedResourceTypeChange = (value) => {
@@ -270,14 +272,14 @@ export default function SubmissionCard(props) {
     setCurrentOerExternalLinkType("");
     setCurrentOerExternalLinkURL("");
     setCurrentOerExternalLinkTitle("");
-    console.log("Added one, now: ", oerExternalLinks);
+    TEST_MODE && console.log("Added one, now: ", oerExternalLinks);
   };
 
   const handleRemovingOneOerExternalLink = (idx) => {
     let newArray = [...oerExternalLinks];
     newArray.splice(idx, 1);
     setOerExternalLinks(newArray);
-    console.log("Removing one, now: ", oerExternalLinks);
+    TEST_MODE && console.log("Removing one, now: ", oerExternalLinks);
   };
 
   const handleOerExternalLinkTypeChange = (value) => {
@@ -298,7 +300,7 @@ export default function SubmissionCard(props) {
         return;
       }
       const data = await response.json();
-      console.log("search return", data.title);
+      TEST_MODE && console.log("search return", data.title);
       setCurrentOerExternalLinkTitle(data.title);
     }
   };
@@ -310,7 +312,7 @@ export default function SubmissionCard(props) {
     }
 
     const metadataDOI = await getMetadataByDOI(publicationDOI);
-    console.log("pub metadata", metadataDOI);
+    TEST_MODE && console.log("pub metadata", metadataDOI);
 
     if (!metadataDOI) {
       return;
@@ -388,6 +390,32 @@ export default function SubmissionCard(props) {
       return;
     }
 
+    const formData = new FormData(event.target);
+
+    formData.forEach((value, key) => {
+      if (key === "authors" || key === "tags") {
+        data[key] = value.split(",").map((item) => item.trim());
+      } else if (key === "notebook-url") {
+        // Array[0]: the notebook repo url
+        // Array[1]: the notebook filename
+        const notebookUrlArray = value.split("/blob/main/");
+        data["notebook-repo"] = notebookUrlArray[0];
+        data["notebook-file"] = notebookUrlArray[1];
+      } else {
+        data[key] = value;
+      }
+    });
+
+    data["resource-type"] = resourceTypeSelected;
+
+    data.metadata = { created_by: localUserInfo.id };
+    data["related-resources"] = relatedResources;
+    data["contents"] = contents;
+
+    if (resourceTypeSelected === "oer") {
+      data["oer-external-links"] = oerExternalLinks;
+    }
+
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
       const formData = new FormData();
@@ -412,32 +440,7 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    const formData = new FormData(event.target);
-
-    formData.forEach((value, key) => {
-      if (key === "authors" || key === "tags") {
-        data[key] = value.split(",").map((item) => item.trim());
-      } else if (key === "notebook-url") {
-        // Array[0]: the notebook repo url
-        // Array[1]: the notebook filename
-        const notebookUrlArray = value.split("/blob/main/");
-        data["notebook-repo"] = notebookUrlArray[0];
-        data["notebook-file"] = notebookUrlArray[1];
-      } else {
-        data[key] = value;
-      }
-    });
-
-    data["resource-type"] = resourceTypeSelected;
-
-    data.metadata = { created_by: localUserInfo.openid };
-    data["related-resources"] = relatedResources;
-
-    if (resourceTypeSelected === "oer") {
-      data["oer-external-links"] = oerExternalLinks;
-    }
-
-    console.log("data to be submitted", data);
+    TEST_MODE && console.log("data to be submitted", data);
 
     if (submissionType === "update") {
       const response = await fetchWithAuth(
@@ -452,7 +455,7 @@ export default function SubmissionCard(props) {
       );
 
       const result = await response.json();
-      console.log("Element update msg returned", result.message);
+      TEST_MODE && console.log("Element update msg returned", result.message);
 
       if (result && result.message === "Element updated successfully") {
         setSubmissionStatus("update-succeeded");
@@ -469,7 +472,7 @@ export default function SubmissionCard(props) {
       });
 
       const result = await response.json();
-      console.log("initial submission, msg", result);
+      TEST_MODE && ("initial submission, msg", result);
       if (result && result.message === "Resource registered successfully") {
         setSubmissionStatus("initial-succeeded");
         if (result.elementId) {
@@ -493,8 +496,8 @@ export default function SubmissionCard(props) {
   }
 
   // If the user is not the contributor, deny access to the update form.
-  if (submissionType === "update" && localUserInfo && localUserInfo.openid) {
-    if (!contributor || localUserInfo.openid !== contributor.id) {
+  if (submissionType === "update" && localUserInfo && localUserInfo.id) {
+    if (!contributor || localUserInfo.id !== contributor.id) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
@@ -630,19 +633,36 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTags(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>
-              Abstract <RequiredFieldIndicator />
-            </FormLabel>
-            <Textarea
-              name="contents"
-              minRows={4}
-              maxRows={10}
-              required
-              value={contents}
-              onChange={(event) => setContents(event.target.value)}
-            />
-          </FormControl>
+          {resourceTypeSelected === "oer" ? (
+            <FormControl sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                Content <RequiredFieldIndicator />
+              </FormLabel>
+              <div data-color-mode="light">
+                <MDEditor
+                  height={400}
+                  value={contents}
+                  onChange={(value) => {
+                    setContents(value);
+                  }}
+                />
+              </div>
+            </FormControl>
+          ) : (
+            <FormControl sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                Abstract <RequiredFieldIndicator />
+              </FormLabel>
+              <Textarea
+                name="contents"
+                minRows={4}
+                maxRows={10}
+                required
+                value={contents}
+                onChange={(event) => setContents(event.target.value)}
+              />
+            </FormControl>
+          )}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
               Thumbnail image {"(< 5MB)"} <RequiredFieldIndicator />

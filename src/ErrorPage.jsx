@@ -33,7 +33,7 @@ export default function ErrorPage(props) {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{

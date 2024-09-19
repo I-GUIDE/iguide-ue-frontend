@@ -22,7 +22,7 @@ export async function fetchUser(uid) {
 
 /**
  * Add a user
- * @param {string} uid the OpenID of the user
+ * @param {string} openid the OpenID of the user
  * @param {string} first_name the first name of the user
  * @param {string} last_name the last name of the user
  * @param {string} email the work email of the user
@@ -32,7 +32,7 @@ export async function fetchUser(uid) {
  * @throws {Error} Throws an error if adding a user failed
  */
 export async function addUser(
-  uid,
+  openid,
   first_name,
   last_name,
   email,
@@ -40,7 +40,7 @@ export async function addUser(
   bio
 ) {
   const user = {
-    openid: uid,
+    openid: openid,
     first_name: first_name,
     last_name: last_name,
     email: email,
@@ -66,7 +66,7 @@ export async function addUser(
 
 /**
  * Update a user
- * @param {string} uid the OpenID of the user
+ * @param {string} openid the OpenID of the user
  * @param {string} first_name the first name of the user
  * @param {string} last_name the last name of the user
  * @param {string} email the work email of the user
@@ -77,7 +77,7 @@ export async function addUser(
  * @throws {Error} Throws an error if updating a user failed
  */
 export async function updateUser(
-  uid,
+  openid,
   first_name,
   last_name,
   email,
@@ -85,9 +85,9 @@ export async function updateUser(
   bio,
   avatar_url
 ) {
-  const openId = encodeURIComponent(uid);
+  const openId = encodeURIComponent(openid);
   const user = {
-    openid: uid,
+    openid: openid,
     first_name: first_name,
     last_name: last_name,
     email: email,
