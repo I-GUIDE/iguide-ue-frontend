@@ -408,7 +408,7 @@ export default function SubmissionCard(props) {
 
     data["resource-type"] = resourceTypeSelected;
 
-    data.metadata = { created_by: localUserInfo.openid };
+    data.metadata = { created_by: localUserInfo.id };
     data["related-resources"] = relatedResources;
     data["contents"] = contents;
 
