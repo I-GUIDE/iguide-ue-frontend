@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
@@ -8,7 +9,7 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
-import CardCover from "@mui/joy/CardCover";
+import Box from "@mui/joy/Box";
 import CardContent from "@mui/joy/CardContent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
@@ -127,7 +128,11 @@ export default function MainContent(props) {
       <Typography level="h4" sx={{ pt: 2 }}>
         {contentsTitle}
       </Typography>
-      <Typography sx={{ py: 2 }}>{contents}</Typography>
+      <Box sx={{ py: 2 }}>
+        <div className="container" data-color-mode="light">
+          <MDEditor.Markdown source={contents} />
+        </div>
+      </Box>
     </Stack>
   );
 }
