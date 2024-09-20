@@ -3,19 +3,19 @@ import { React, useState, useEffect } from "react";
 import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
 import Stack from "@mui/joy/Stack";
-import IconButton from "@mui/joy/IconButton";
 import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
-import DeleteForever from "@mui/icons-material/DeleteForever";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+import { getUserRole } from "../../utils/UserManager";
+import { PERMISSIONS } from "../../configs/Permissions";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -39,7 +39,9 @@ export default function ContributorOps(props) {
   }
 
   if (!localUserInfo || localUserInfo.id !== contributorId) {
-    return null;
+    if (getUserRole(localUserInfo.id) >= PERMISSIONS["edit_all"]) {
+      return null;
+    }
   }
 
   async function handleElementDelete(elementId) {
