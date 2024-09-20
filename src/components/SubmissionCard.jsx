@@ -70,6 +70,10 @@ export default function SubmissionCard(props) {
 
   const { localUserInfo } = useOutletContext();
 
+  if (!localUserInfo) {
+    return null;
+  }
+
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;

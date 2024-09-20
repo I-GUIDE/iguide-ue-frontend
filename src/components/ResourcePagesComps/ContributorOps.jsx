@@ -33,11 +33,11 @@ export default function ContributorOps(props) {
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated, localUserInfo } = useOutletContext();
 
-  if (!isAuthenticated) {
+  if (!localUserInfo || !isAuthenticated) {
     return null;
   }
 
-  if (!localUserInfo || localUserInfo.id !== contributorId) {
+  if (localUserInfo.id !== contributorId) {
     if (localUserInfo.role >= PERMISSIONS["edit_all"]) {
       return null;
     }
