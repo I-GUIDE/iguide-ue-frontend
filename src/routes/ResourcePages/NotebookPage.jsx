@@ -35,6 +35,9 @@ export default function NotebookPage() {
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [creationTime, setCreationTime] = useState();
+  const [updateTime, setUpdateTime] = useState();
+
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -59,6 +62,8 @@ export default function NotebookPage() {
       setNotebookFile(thisElement["notebook-file"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setHtmlNotebook(thisElement["html-notebook"]);
+      setCreationTime(thisElement["created-at"]);
+      setUpdateTime(thisElement["updated-at"]);
     }
     fetchData();
   }, [id]);
@@ -121,6 +126,8 @@ export default function NotebookPage() {
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="notebook"
+                creationTime={creationTime}
+                updateTime={updateTime}
               />
             </Grid>
 

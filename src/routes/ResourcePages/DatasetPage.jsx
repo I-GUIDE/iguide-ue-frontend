@@ -37,6 +37,8 @@ export default function DatasetPage() {
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [creationTime, setCreationTime] = useState();
+  const [updateTime, setUpdateTime] = useState();
 
   const [error, setError] = useState(false);
 
@@ -62,6 +64,8 @@ export default function DatasetPage() {
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setCreationTime(thisElement["created-at"]);
+      setUpdateTime(thisElement["updated-at"]);
     }
     fetchData();
   }, [id]);
@@ -124,6 +128,8 @@ export default function DatasetPage() {
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="dataset"
+                creationTime={creationTime}
+                updateTime={updateTime}
               />
             </Grid>
 

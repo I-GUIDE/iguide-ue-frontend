@@ -33,6 +33,9 @@ export default function OERPage() {
   const [relatedOERs, setRelatedOERs] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
+  const [creationTime, setCreationTime] = useState();
+  const [updateTime, setUpdateTime] = useState();
+
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -55,6 +58,8 @@ export default function OERPage() {
       setTags(thisElement.tags);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
+      setCreationTime(thisElement["created-at"]);
+      setUpdateTime(thisElement["updated-at"]);
     }
     fetchData();
   }, [id]);
@@ -116,6 +121,8 @@ export default function OERPage() {
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 elementType="oer"
+                creationTime={creationTime}
+                updateTime={updateTime}
                 useMarkdown
                 useOERLayout
               />
