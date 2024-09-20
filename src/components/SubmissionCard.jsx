@@ -33,6 +33,7 @@ import SubmissionStatusCard from "./SubmissionStatusCard";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
+import { PERMISSIONS } from "../configs/Permissions";
 
 import {
   RESOURCE_TYPE_NAMES,
@@ -498,7 +499,9 @@ export default function SubmissionCard(props) {
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update" && localUserInfo && localUserInfo.id) {
     if (!contributor || localUserInfo.id !== contributor.id) {
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      if (localUserInfo.role >= PERMISSIONS["edit_all"]) {
+        return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      }
     }
   }
 
