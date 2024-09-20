@@ -53,6 +53,7 @@ export default function Root(props) {
     first_name: "Happy",
     last_name: "Person",
     openid: "http://cilogon.org/serverE/users/do-not-use",
+    role: 0,
   };
 
   useEffect(() => {
