@@ -12,6 +12,9 @@ import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
+import IconButton from "@mui/joy/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { PERMISSIONS } from "../../configs/Permissions";
@@ -37,10 +40,11 @@ export default function ContributorOps(props) {
     return null;
   }
 
-  if (localUserInfo.id !== contributorId) {
-    if (localUserInfo.role >= PERMISSIONS["edit_all"]) {
-      return null;
-    }
+  // Check if the current user is admin, if yes, allow edit
+  const isAdmin =
+    localUserInfo.role || PERMISSIONS["default_user"] < PERMISSIONS["edit_all"];
+  if (localUserInfo.id !== contributorId && !isAdmin) {
+    return null;
   }
 
   async function handleElementDelete(elementId) {
@@ -72,20 +76,20 @@ export default function ContributorOps(props) {
   }
 
   return (
-    <Stack direction="row" spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <Button size="sm" variant="outlined" color="primary">
+    <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
+      <IconButton size="sm" variant="soft" color="primary">
         <Link
           underline="none"
           component={RouterLink}
           to={"/element-update/" + elementId}
           sx={{ color: "inherit" }}
         >
-          Edit
+          <EditIcon />
         </Link>
-      </Button>
-      <Button
+      </IconButton>
+      <IconButton
         color="danger"
-        variant="outlined"
+        variant="soft"
         size="sm"
         onClick={() => {
           setDeleteMetadataTitle(title);
@@ -93,8 +97,8 @@ export default function ContributorOps(props) {
           TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
-        Delete
-      </Button>
+        <DeleteForeverIcon />
+      </IconButton>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}
         onClose={() => {
