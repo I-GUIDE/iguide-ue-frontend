@@ -27,14 +27,14 @@ export default function SubmissionStatusCard(props) {
       submissionStatusText = "Submission failed. Please try again!";
       break;
     case "update-succeeded":
-      submissionStatusText = "Thank you for your update! You are all set!";
+      submissionStatusText = "Thank you for the update! You are all set!";
       break;
     case "update-failed":
-      submissionStatusText = "Your update failed. Please try again!";
+      submissionStatusText =
+        "Submission of your edit failed. Please try again!";
       break;
     case "unauthorized":
-      submissionStatusText =
-        "You have to login as the contributor to update this element!";
+      submissionStatusText = "You don't have permission to edit this element";
       break;
     default:
       submissionStatusText = "Submission status unknown...";
