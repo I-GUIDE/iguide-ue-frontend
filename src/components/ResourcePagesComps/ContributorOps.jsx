@@ -14,7 +14,6 @@ import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
-import { getUserRole } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
@@ -39,7 +38,7 @@ export default function ContributorOps(props) {
   }
 
   if (!localUserInfo || localUserInfo.id !== contributorId) {
-    if (getUserRole(localUserInfo.id) >= PERMISSIONS["edit_all"]) {
+    if (localUserInfo.role >= PERMISSIONS["edit_all"]) {
       return null;
     }
   }

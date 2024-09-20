@@ -14,7 +14,12 @@ import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Fade from "@mui/material/Fade";
 
-import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
+import {
+  checkUser,
+  fetchUser,
+  addUser,
+  getUserRole,
+} from "../utils/UserManager.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
@@ -124,6 +129,11 @@ export default function Root(props) {
           await saveUserToLocalDB();
         }
         const returnedLocalUser = await fetchUser(uid);
+        const userRole = (await getUserRole(uid)) || 10;
+        returnedLocalUser.push({ role: userRole });
+
+        TEST_MODE && console.log("set local user: ", returnedLocalUser);
+
         setLocalUserInfo(returnedLocalUser);
       }
     }

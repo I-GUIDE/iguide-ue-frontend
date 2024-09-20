@@ -165,12 +165,9 @@ export async function checkTokens() {
  * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
  */
 export async function getUserRole(uid) {
-  const response = await fetchWithAuth(
-    `${USER_BACKEND_URL}/api/users/${uid}/role`,
-    {
-      method: "GET",
-    }
-  );
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${uid}/role`, {
+    method: "GET",
+  });
 
   if (!response.ok) {
     console.warn("Failed to retrieve user role...");
@@ -180,7 +177,8 @@ export async function getUserRole(uid) {
 
   const result = await response.json();
 
-  TEST_MODE && console.log(`GET user role. UserId: ${uid}, return: ${result}`);
+  TEST_MODE &&
+    console.log(`GET user role. UserId: ${uid}, return: ${result.role}`);
 
   return result.role;
 }
