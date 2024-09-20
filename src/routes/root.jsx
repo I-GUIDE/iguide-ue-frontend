@@ -129,8 +129,9 @@ export default function Root(props) {
           await saveUserToLocalDB();
         }
         const returnedLocalUser = await fetchUser(uid);
-        const userRole = (await getUserRole(uid)) || 10;
-        returnedLocalUser.role = userRole;
+        const userRole = await getUserRole(uid);
+        // Make sure the function returns a number, otherwise assign 10
+        returnedLocalUser.role = typeof userRole === "number" ? userRole : 10;
 
         TEST_MODE && console.log("set local user: ", returnedLocalUser);
 
