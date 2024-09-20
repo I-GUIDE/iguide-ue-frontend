@@ -54,13 +54,8 @@ export default function NavBar(props) {
   const buttonRef = React.useRef(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  const userRole =
-    typeof localUserInfo.role === "number"
-      ? localUserInfo.role
-      : PERMISSIONS["default_user"];
-
   // Check if the current user is admin, if yes, allow edit
-  const canEditOER = userRole < PERMISSIONS["edit_oer"];
+  const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
