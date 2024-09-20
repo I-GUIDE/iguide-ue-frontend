@@ -130,7 +130,7 @@ export default function Root(props) {
         }
         const returnedLocalUser = await fetchUser(uid);
         const userRole = (await getUserRole(uid)) || 10;
-        returnedLocalUser.push({ role: userRole });
+        returnedLocalUser.role = userRole;
 
         TEST_MODE && console.log("set local user: ", returnedLocalUser);
 
