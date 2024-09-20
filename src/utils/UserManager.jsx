@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "./FetcherWithJWT";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 
 /**
@@ -156,4 +157,31 @@ export async function checkTokens() {
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
+}
+
+/**
+ * Get user role number
+ * @param {string} uid the UserId of the user
+ * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
+ */
+export async function getUserRole(uid) {
+  const response = await fetch(
+    `${USER_BACKEND_URL}/api/users/${encodeURIComponent(uid)}/role`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (!response.ok) {
+    console.warn("Failed to retrieve user role...");
+    TEST_MODE && console.log(`Error: ${response.status} ${error.message}`);
+    return 10;
+  }
+
+  const result = await response.json();
+
+  TEST_MODE &&
+    console.log(`GET user role. UserId: ${uid}, return: ${result.role}`);
+
+  return result.role;
 }

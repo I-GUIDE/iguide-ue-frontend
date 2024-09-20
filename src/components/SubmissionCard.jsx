@@ -33,6 +33,7 @@ import SubmissionStatusCard from "./SubmissionStatusCard";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
+import { PERMISSIONS } from "../configs/Permissions";
 
 import {
   RESOURCE_TYPE_NAMES,
@@ -68,6 +69,10 @@ export default function SubmissionCard(props) {
   }, []);
 
   const { localUserInfo } = useOutletContext();
+
+  if (!localUserInfo) {
+    return null;
+  }
 
   const submissionType = props.submissionType;
   const elementId = props.elementId;
@@ -495,11 +500,29 @@ export default function SubmissionCard(props) {
     );
   }
 
+  // Check if the current user is admin, if yes, allow edit
+  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
+  const isContributor = contributor && localUserInfo.id === contributor.id;
+
   // If the user is not the contributor, deny access to the update form.
-  if (submissionType === "update" && localUserInfo && localUserInfo.id) {
-    if (!contributor || localUserInfo.id !== contributor.id) {
+  if (submissionType === "update") {
+    if (!isContributor && !isAdmin) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
+  }
+
+  let cardTitle = "";
+  if (submissionType === "initial") {
+    cardTitle =
+      "Submit a new " + RESOURCE_TYPE_NAMES[elementType].toLowerCase();
+  } else if (submissionType === "update") {
+    if (isContributor) {
+      cardTitle = "Edit your contribution";
+    } else if (isAdmin) {
+      cardTitle = "Edit this element as an admin";
+    }
+  } else {
+    cardTitle = "You are not authorized to update this element";
   }
 
   function RequiredFieldIndicator() {
@@ -518,11 +541,12 @@ export default function SubmissionCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="title-lg">
-        {submissionType === "update"
-          ? "Update your contribution"
-          : "Submit a new " + RESOURCE_TYPE_NAMES[elementType].toLowerCase()}
-      </Typography>
+      <Typography level="title-lg">{cardTitle}</Typography>
+      {isAdmin && !isContributor && (
+        <Typography color="danger" level="title-md">
+          WARNING: You are not the contributor
+        </Typography>
+      )}
       <Typography level="body-sm">
         Fields marked <RequiredFieldIndicator /> are required.
       </Typography>

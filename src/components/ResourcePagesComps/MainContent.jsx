@@ -16,6 +16,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../UserAvatar";
+import { PeriodAgoText } from "../../utils/PeriodAgoText";
 
 export default function MainContent(props) {
   const title = props.title;
@@ -28,7 +29,13 @@ export default function MainContent(props) {
   const elementType = props.elementType;
   const useMarkdown = props.useMarkdown;
   const useOERLayout = props.useOERLayout;
+  const creationTime = props.creationTime;
+  const updateTime = props.updateTime;
 
+  const hasTimestamp = creationTime || updateTime;
+  const timePassedText = updateTime
+    ? PeriodAgoText("Updated ", updateTime)
+    : PeriodAgoText("Contributed ", creationTime);
   const contributorAvatar = contributor["avatar-url"];
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
@@ -111,7 +118,9 @@ export default function MainContent(props) {
                         <Typography level="title-lg">
                           {contributorName}
                         </Typography>
-                        <Typography level="body-sm">Contributor</Typography>
+                        <Typography level="body-sm">
+                          {hasTimestamp ? timePassedText : "Contributor"}
+                        </Typography>
                       </Stack>
                     </Stack>
                   </CardContent>
@@ -183,7 +192,9 @@ export default function MainContent(props) {
                       <Typography level="title-lg">
                         {contributorName}
                       </Typography>
-                      <Typography level="body-sm">Contributor</Typography>
+                      <Typography level="body-sm">
+                        {hasTimestamp ? timePassedText : "Contributor"}
+                      </Typography>
                     </Stack>
                   </Stack>
                 </CardContent>

@@ -14,7 +14,14 @@ import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Fade from "@mui/material/Fade";
 
-import { checkUser, fetchUser, addUser } from "../utils/UserManager.jsx";
+import {
+  checkUser,
+  fetchUser,
+  addUser,
+  getUserRole,
+} from "../utils/UserManager.jsx";
+
+import { PERMISSIONS } from "../configs/Permissions.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
@@ -48,6 +55,7 @@ export default function Root(props) {
     first_name: "Happy",
     last_name: "Person",
     openid: "http://cilogon.org/serverE/users/do-not-use",
+    role: 0,
   };
 
   useEffect(() => {
@@ -124,6 +132,13 @@ export default function Root(props) {
           await saveUserToLocalDB();
         }
         const returnedLocalUser = await fetchUser(uid);
+        const userRole = await getUserRole(uid);
+        // Make sure the function returns a number, otherwise assign 10
+        returnedLocalUser.role =
+          typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
+
+        TEST_MODE && console.log("set local user: ", returnedLocalUser);
+
         setLocalUserInfo(returnedLocalUser);
       }
     }

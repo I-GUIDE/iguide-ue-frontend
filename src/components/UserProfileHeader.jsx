@@ -19,16 +19,17 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 import UserAvatar from "./UserAvatar";
 import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
+import { PERMISSIONS } from "../configs/Permissions";
 
 export default function UserProfileHeader(props) {
-  const userInfo = props.userInfo;
+  const localUserInfo = props.localUserInfo;
   const allowProfileOps = props.allowProfileOps;
   const contributionCount = props.contributionCount
     ? props.contributionCount
     : 0;
 
   // If the user info from the local DB is still not available, wait...
-  if (!userInfo) {
+  if (!localUserInfo) {
     return (
       <Box
         sx={{
@@ -71,6 +72,8 @@ export default function UserProfileHeader(props) {
     );
   }
 
+  const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
+
   return (
     <Box
       sx={{
@@ -100,8 +103,8 @@ export default function UserProfileHeader(props) {
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
                   <UserAvatar
-                    link={userInfo["avatar_url"]}
-                    userId={userInfo.id}
+                    link={localUserInfo["avatar_url"]}
+                    userId={localUserInfo.id}
                     size={150}
                   />
                 </Stack>
@@ -117,12 +120,12 @@ export default function UserProfileHeader(props) {
                   }}
                 >
                   <Typography level="h1" fontWeight="lg" textColor={"#000"}>
-                    {userInfo.first_name
-                      ? userInfo.first_name
+                    {localUserInfo.first_name
+                      ? localUserInfo.first_name
                       : "First name unknown"}
                     &nbsp;
-                    {userInfo.last_name
-                      ? userInfo.last_name
+                    {localUserInfo.last_name
+                      ? localUserInfo.last_name
                       : "Last name unknown"}
                   </Typography>
                   <Typography
@@ -130,15 +133,17 @@ export default function UserProfileHeader(props) {
                     fontWeight="lg"
                     textColor={"#000"}
                   >
-                    {userInfo.email ? "Email: " + userInfo.email : null}
+                    {localUserInfo.email
+                      ? "Email: " + localUserInfo.email
+                      : null}
                   </Typography>
                   <Typography
                     level="body-sm"
                     fontWeight="lg"
                     textColor={"#000"}
                   >
-                    {userInfo.affiliation
-                      ? "Affiliation: " + userInfo.affiliation
+                    {localUserInfo.affiliation
+                      ? "Affiliation: " + localUserInfo.affiliation
                       : null}
                   </Typography>
                   <Typography
@@ -146,7 +151,7 @@ export default function UserProfileHeader(props) {
                     fontWeight="md"
                     textColor={"#000"}
                   >
-                    {userInfo.bio ? "Bio: " + userInfo.bio : null}
+                    {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
                   </Typography>
                   {allowProfileOps && (
                     <Stack
@@ -187,9 +192,11 @@ export default function UserProfileHeader(props) {
                           >
                             New Publication
                           </MenuItem>
-                          <MenuItem component="a" href="/contribution/oer">
-                            New Educational Resource
-                          </MenuItem>
+                          {canEditOER && (
+                            <MenuItem component="a" href="/contribution/oer">
+                              New Educational Resource
+                            </MenuItem>
+                          )}
                         </Menu>
                       </Dropdown>
                     </Stack>

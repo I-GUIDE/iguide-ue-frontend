@@ -189,7 +189,7 @@ export default function UserProfile() {
         <CssBaseline enableColorScheme />
         {localUserInfo && (
           <UserProfileHeader
-            userInfo={localUserInfo}
+            localUserInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
             allowProfileOps
           />

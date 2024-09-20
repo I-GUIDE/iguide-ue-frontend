@@ -36,6 +36,7 @@ import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
+import { PERMISSIONS } from "../../configs/Permissions";
 
 const pages = [
   ["Home", "/"],
@@ -52,6 +53,9 @@ export default function NavBar(props) {
 
   const buttonRef = React.useRef(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  // Check if the current user is admin, if yes, allow edit
+  const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -125,9 +129,11 @@ export default function NavBar(props) {
             <MenuItem component="a" href="/contribution/publication">
               New Publication
             </MenuItem>
-            <MenuItem component="a" href="/contribution/oer">
-              New Educational Resource
-            </MenuItem>
+            {canEditOER && (
+              <MenuItem component="a" href="/contribution/oer">
+                New Educational Resource
+              </MenuItem>
+            )}
             <ListDivider />
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
@@ -173,9 +179,11 @@ export default function NavBar(props) {
           >
             <ListItem>New Publication</ListItem>
           </Link>
-          <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
-            <ListItem>New Educational Resource</ListItem>
-          </Link>
+          {canEditOER && (
+            <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
+              <ListItem>New Educational Resource</ListItem>
+            </Link>
+          )}
           <Divider sx={{ my: 1 }} />
           <ListItem onClick={logout}>Logout</ListItem>
         </List>

@@ -59,7 +59,7 @@ export default function ContributorProfile() {
         <CssBaseline enableColorScheme />
         {contributorInfo && (
           <UserProfileHeader
-            userInfo={contributorInfo}
+            localUserInfo={contributorInfo}
             contributionCount={numberOfTotalItems}
           />
         )}
