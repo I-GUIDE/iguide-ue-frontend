@@ -21,6 +21,8 @@ import {
   getUserRole,
 } from "../utils/UserManager.jsx";
 
+import { PERMISSIONS } from "../configs/Permissions.jsx";
+
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -132,7 +134,8 @@ export default function Root(props) {
         const returnedLocalUser = await fetchUser(uid);
         const userRole = await getUserRole(uid);
         // Make sure the function returns a number, otherwise assign 10
-        returnedLocalUser.role = typeof userRole === "number" ? userRole : 10;
+        returnedLocalUser.role =
+          typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
 
         TEST_MODE && console.log("set local user: ", returnedLocalUser);
 

@@ -41,9 +41,7 @@ export default function ContributorOps(props) {
   }
 
   // Check if the current user is admin, if yes, allow edit
-  const isAdmin =
-    typeof localUserInfo.role === "number" ||
-    PERMISSIONS["default_user"] < PERMISSIONS["edit_all"];
+  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
   if (localUserInfo.id !== contributorId && !isAdmin) {
     return null;
   }
