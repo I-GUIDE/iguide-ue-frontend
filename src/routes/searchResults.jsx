@@ -130,6 +130,31 @@ export default function SearchResults() {
     }
   }, [currentStartingIdx, searchTerm, searchCategory]);
 
+  // Determine the search result page URL based on different variables
+  function searchUriBuilder(keyword, type) {
+    const encodedKeyword = encodeURIComponent(keyword);
+    let keywordExist = false;
+    let typeExist = false;
+    let uriPrefix = `/search-results`;
+
+    if (keyword && keyword !== "") {
+      keywordExist = true;
+    }
+    if (type && type !== "") {
+      typeExist = true;
+    }
+
+    if (keywordExist && typeExist) {
+      return uriPrefix + `?keyword=${encodedKeyword}&type=${type}`;
+    } else if (keywordExist && !typeExist) {
+      return uriPrefix + `?keyword=${encodedKeyword}`;
+    } else if (!keywordExist && typeExist) {
+      return uriPrefix + `?type=${type}`;
+    } else {
+      return uriPrefix;
+    }
+  }
+
   // When users click the pagination, update current starting index
   function handlePageClick(event, value) {
     const newStartingIdx = (value - 1) * itemsPerPage;
@@ -146,6 +171,9 @@ export default function SearchResults() {
     setSearchCategory(value);
     setCurrentPage(1);
     setCurrentStartingIdx(0);
+    if (nextSearchTerm) {
+      navigate(searchUriBuilder(nextSearchTerm, value), { replace: true });
+    }
   }
 
   // Handle reset search
@@ -173,11 +201,7 @@ export default function SearchResults() {
     }
     setSearchTerm(nextSearchTerm);
     setSearchParams({ keyword: nextSearchTerm, type: searchCategory });
-    navigate(
-      `/search-results?keyword=${encodeURIComponent(
-        nextSearchTerm
-      )}&type=${searchCategory}`
-    );
+    navigate(searchUriBuilder(nextSearchTerm, searchCategory));
   }
 
   return (
@@ -303,52 +327,54 @@ export default function SearchResults() {
                 }}
               >
                 {/* Tabs for filtering element types */}
-                <Tabs
-                  aria-label="Search-filter-by-types"
-                  defaultValue="any"
-                  value={searchCategory}
-                  onChange={handleSelectChange}
-                  sx={{ width: "100%" }}
-                >
-                  <TabList
-                    sx={{
-                      overflow: "auto",
-                      scrollSnapType: "x mandatory",
-                      "&::-webkit-scrollbar": { display: "none" },
-                    }}
+                {searchTerm && (
+                  <Tabs
+                    aria-label="Search-filter-by-types"
+                    defaultValue="any"
+                    value={searchCategory}
+                    onChange={handleSelectChange}
+                    sx={{ width: "100%" }}
                   >
-                    <Tab
-                      value="any"
-                      sx={{ flex: "none", scrollSnapAlign: "start" }}
+                    <TabList
+                      sx={{
+                        overflow: "auto",
+                        scrollSnapType: "x mandatory",
+                        "&::-webkit-scrollbar": { display: "none" },
+                      }}
                     >
-                      All
-                    </Tab>
-                    <Tab
-                      value="dataset"
-                      sx={{ flex: "none", scrollSnapAlign: "start" }}
-                    >
-                      Datasets
-                    </Tab>
-                    <Tab
-                      value="notebook"
-                      sx={{ flex: "none", scrollSnapAlign: "start" }}
-                    >
-                      Notebooks
-                    </Tab>
-                    <Tab
-                      value="publication"
-                      sx={{ flex: "none", scrollSnapAlign: "start" }}
-                    >
-                      Publications
-                    </Tab>
-                    <Tab
-                      value="oer"
-                      sx={{ flex: "none", scrollSnapAlign: "start" }}
-                    >
-                      Educational Resources
-                    </Tab>
-                  </TabList>
-                </Tabs>
+                      <Tab
+                        value="any"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        All
+                      </Tab>
+                      <Tab
+                        value="dataset"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        Datasets
+                      </Tab>
+                      <Tab
+                        value="notebook"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        Notebooks
+                      </Tab>
+                      <Tab
+                        value="publication"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        Publications
+                      </Tab>
+                      <Tab
+                        value="oer"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        Educational Resources
+                      </Tab>
+                    </TabList>
+                  </Tabs>
+                )}
 
                 {/* Search result summary and "clear search button" */}
                 {hasSearchParam && (
