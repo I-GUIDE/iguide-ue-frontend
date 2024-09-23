@@ -71,7 +71,7 @@ export default function SearchResults() {
   // Number of total elements matching the search
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
   // Number of elements displayed per page
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
@@ -100,7 +100,7 @@ export default function SearchResults() {
         const returnResults = await DataSearcher(
           searchTerm,
           searchCategory,
-          "prioritize_title_author",
+          "_score",
           "desc",
           currentStartingIdx,
           itemsPerPage
@@ -294,154 +294,140 @@ export default function SearchResults() {
                 pb: 8,
               }}
             >
-              <Grid xs={12}>
-                <Stack
-                  spacing={2}
-                  sx={{
-                    px: { xs: 2, md: 4, width: "100%" },
-                    pt: 2,
-                    minHeight: 0,
-                  }}
+              <Stack
+                spacing={2}
+                sx={{
+                  px: { xs: 2, md: 4, width: "100%" },
+                  pt: 2,
+                  minHeight: 0,
+                }}
+              >
+                {/* Tabs for filtering element types */}
+                <Tabs
+                  aria-label="Search-filter-by-types"
+                  defaultValue="any"
+                  value={searchCategory}
+                  onChange={handleSelectChange}
+                  sx={{ width: "100%" }}
                 >
-                  {/* Tabs for filtering element types */}
-                  <Tabs
-                    aria-label="Search-filter-by-types"
-                    defaultValue="any"
-                    value={searchCategory}
-                    onChange={handleSelectChange}
-                    sx={{ width: "100%" }}
+                  <TabList
+                    sx={{
+                      overflow: "auto",
+                      scrollSnapType: "x mandatory",
+                      "&::-webkit-scrollbar": { display: "none" },
+                    }}
                   >
-                    <TabList
-                      sx={{
-                        overflow: "auto",
-                        scrollSnapType: "x mandatory",
-                        "&::-webkit-scrollbar": { display: "none" },
-                      }}
+                    <Tab
+                      value="any"
+                      sx={{ flex: "none", scrollSnapAlign: "start" }}
                     >
-                      <Tab
-                        value="any"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        All
-                      </Tab>
-                      <Tab
-                        value="dataset"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Datasets
-                      </Tab>
-                      <Tab
-                        value="notebook"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Notebooks
-                      </Tab>
-                      <Tab
-                        value="publication"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Publications
-                      </Tab>
-                      <Tab
-                        value="oer"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Educational Resources
-                      </Tab>
-                    </TabList>
-                  </Tabs>
+                      All
+                    </Tab>
+                    <Tab
+                      value="dataset"
+                      sx={{ flex: "none", scrollSnapAlign: "start" }}
+                    >
+                      Datasets
+                    </Tab>
+                    <Tab
+                      value="notebook"
+                      sx={{ flex: "none", scrollSnapAlign: "start" }}
+                    >
+                      Notebooks
+                    </Tab>
+                    <Tab
+                      value="publication"
+                      sx={{ flex: "none", scrollSnapAlign: "start" }}
+                    >
+                      Publications
+                    </Tab>
+                    <Tab
+                      value="oer"
+                      sx={{ flex: "none", scrollSnapAlign: "start" }}
+                    >
+                      Educational Resources
+                    </Tab>
+                  </TabList>
+                </Tabs>
 
-                  {/* Search result summary and "clear search button" */}
-                  {hasSearchParam && (
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      spacing={2}
-                    >
-                      {numberOfTotalItems > 0 ? (
-                        <Typography>
-                          Searched "{searchTerm}"
-                          {searchCategory !== "any" &&
-                            ' under "' +
-                              RESOURCE_TYPE_NAMES[searchCategory] +
-                              '"'}
-                          , returned {currentStartingIdx + 1}-
-                          {currentStartingIdx + arrayLength(searchResults)} of{" "}
-                          {numberOfTotalItems}
-                        </Typography>
-                      ) : (
-                        <Typography>
-                          Searched "{searchTerm}"
-                          {searchCategory !== "any" &&
-                            ' under "' +
-                              RESOURCE_TYPE_NAMES[searchCategory] +
-                              '"'}
-                          , no items matched your criteria.
-                        </Typography>
-                      )}
-                      <Button
-                        key="clear-search"
-                        size="sm"
-                        variant="outlined"
-                        onClick={handleReset}
-                      >
-                        Reset
-                      </Button>
-                    </Stack>
-                  )}
+                {/* Search result summary and "clear search button" */}
+                {hasSearchParam && (
                   <Stack
-                    spacing={2}
-                    justifyContent="center"
+                    direction="row"
+                    justifyContent="space-between"
                     alignItems="center"
+                    spacing={2}
                   >
-                    <Grid
-                      container
-                      spacing={3}
-                      columns={12}
-                      sx={{ flexGrow: 1 }}
+                    {numberOfTotalItems > 0 ? (
+                      <Typography>
+                        Searched "{searchTerm}"
+                        {searchCategory !== "any" &&
+                          ' under "' +
+                            RESOURCE_TYPE_NAMES[searchCategory] +
+                            '"'}
+                        , returned {currentStartingIdx + 1}-
+                        {currentStartingIdx + arrayLength(searchResults)} of{" "}
+                        {numberOfTotalItems}
+                      </Typography>
+                    ) : (
+                      <Typography>
+                        Searched "{searchTerm}"
+                        {searchCategory !== "any" &&
+                          ' under "' +
+                            RESOURCE_TYPE_NAMES[searchCategory] +
+                            '"'}
+                        , no items matched your criteria.
+                      </Typography>
+                    )}
+                    <Button
+                      key="clear-search"
+                      size="sm"
+                      variant="outlined"
+                      onClick={handleReset}
                     >
-                      {searchResults?.map((result) => (
-                        <Grid
-                          key={result._id}
-                          size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
-                        >
-                          <InfoCard
-                            cardtype={result["resource-type"] + "s"}
-                            pageid={result._id}
-                            title={result.title}
-                            authors={result.authors}
-                            tags={result.tags}
-                            contents={result.contents}
-                            thumbnailImage={result["thumbnail-image"]}
-                            showElementType
-                          />
-                        </Grid>
-                      ))}
-                    </Grid>
+                      Reset
+                    </Button>
                   </Stack>
+                )}
+                <Stack spacing={2} justifyContent="center" alignItems="center">
+                  <Grid container spacing={3} columns={12} sx={{ flexGrow: 1 }}>
+                    {searchResults?.map((result) => (
+                      <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
+                        <InfoCard
+                          cardtype={result["resource-type"] + "s"}
+                          pageid={result._id}
+                          title={result.title}
+                          authors={result.authors}
+                          tags={result.tags}
+                          contents={result.contents}
+                          thumbnailImage={result["thumbnail-image"]}
+                          showElementType
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
                 </Stack>
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{
-                    px: { xs: 2, md: 4, width: "100%" },
-                    pt: 2,
-                    minHeight: 0,
-                  }}
-                >
-                  {numberOfPages > 0 && (
-                    <Pagination
-                      count={numberOfPages}
-                      color="primary"
-                      page={currentPage}
-                      onChange={handlePageClick}
-                    />
-                  )}
-                </Stack>
-              </Grid>
+              </Stack>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+                sx={{
+                  px: { xs: 2, md: 4, width: "100%" },
+                  pt: 2,
+                  minHeight: 0,
+                }}
+              >
+                {numberOfPages > 0 && (
+                  <Pagination
+                    count={numberOfPages}
+                    color="primary"
+                    page={currentPage}
+                    onChange={handlePageClick}
+                  />
+                )}
+              </Stack>
             </Grid>
           </Box>
         </Container>
