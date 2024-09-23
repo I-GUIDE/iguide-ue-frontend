@@ -24,7 +24,7 @@ export async function getHomepageElements(elementType, limit = 4) {
  * @async
  * @function searchResources
  * @param {string} keyword - The keyword to search for in resources.
- * @param {string} [resourceType=null] - The type of resources to filter by. Defaults to any, which means no filtering by type.
+ * @param {string} [elementType="any"] - The type of resources to filter by. Defaults to any, which means no filtering by type.
  * @param {string} [sortBy='_score'] - The field to sort the search results by. Defaults to 'prioritize_title_author'.
  * @param {string} [order='desc'] - The order of sorting, either 'asc' or 'desc'. Defaults to 'desc'.
  * @param {number} [from=0] - The starting index for pagination. Defaults to 0.
@@ -34,36 +34,36 @@ export async function getHomepageElements(elementType, limit = 4) {
  */
 export async function DataSearcher(
   keyword,
-  resourceType = "any",
-  sortBy = "prioritize_title_author",
+  elementType = "any",
+  sortBy = "_score",
   order = "desc",
   from = 0,
   size = 10
 ) {
-  const body = {
-    keyword,
-    sort_by: sortBy,
-    order,
-    from,
-    size,
-  };
-
-  if (resourceType) {
-    body.resource_type = resourceType;
+  if (!keyword || keyword === "") {
+    return {
+      elements: [],
+      total_count: 0,
+    };
   }
 
-  const response = await fetch(`${BACKEND_URL_PORT}/api/search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/search?keyword=${keyword}&element-type=${elementType}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to search resources");
+    if (!response.ok) {
+      throw new Error("Failed to retrieve elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching search results: ", error.message);
+    return "ERROR";
   }
-  return response.json();
 }
 
 /**
