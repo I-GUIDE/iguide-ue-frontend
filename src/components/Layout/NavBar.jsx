@@ -39,7 +39,7 @@ import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
 const pages = [
-  ["Home", "/"],
+  ["About", "/about"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
@@ -309,10 +309,7 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link
-                  to={"https://i-guide.io"}
-                  style={{ textDecoration: "none" }}
-                >
+                <Link to={"/"} style={{ textDecoration: "none" }}>
                   <Box
                     component="img"
                     sx={{ height: 40, mt: 1, px: 2 }}
