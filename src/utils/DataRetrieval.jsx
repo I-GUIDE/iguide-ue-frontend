@@ -49,7 +49,7 @@ export async function DataSearcher(
 
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/beta/search?keyword=${keyword}&element-type=${elementType}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      `${BACKEND_URL_PORT}/api/search?keyword=${keyword}&element-type=${elementType}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
       {
         method: "GET",
       }
