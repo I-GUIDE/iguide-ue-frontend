@@ -21,7 +21,7 @@ import UserProfileUpdate from "./routes/userProfileUpdate";
 import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
-import About from "./routes/about";
+import About from "./routes/About";
 
 import ErrorPage from "./ErrorPage";
 import ContributorProfile from "./routes/contributorProfile";
