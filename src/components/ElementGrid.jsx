@@ -189,38 +189,29 @@ export default function ElementGrid(props) {
               <Option value="a-z">A-Z</Option>
             </Select>
           </Stack>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-            sx={{ width: "100%" }}
+          <Grid
+            container
+            spacing={3}
+            columns={12}
+            sx={{ flexGrow: 1 }}
+            justifyContent="flex-start"
           >
-            <Grid
-              container
-              spacing={3}
-              columns={12}
-              sx={{ flexGrow: 1 }}
-              justifyContent="flex-start"
-            >
-              {elementList?.map((element) => (
-                <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                  <InfoCard
-                    cardtype={element["resource-type"] + "s"}
-                    pageid={element.id}
-                    title={element.title}
-                    authors={element.authors}
-                    tags={element.tags}
-                    contents={element.contents}
-                    thumbnailImage={element["thumbnail-image"]}
-                    contributor={element["contributor"]}
-                    showElementType={showElementType}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
-
+            {elementList?.map((element) => (
+              <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <InfoCard
+                  cardtype={element["resource-type"] + "s"}
+                  pageid={element.id}
+                  title={element.title}
+                  authors={element.authors}
+                  tags={element.tags}
+                  contents={element.contents}
+                  thumbnailImage={element["thumbnail-image"]}
+                  contributor={element["contributor"]}
+                  showElementType={showElementType}
+                />
+              </Grid>
+            ))}
+          </Grid>
           <Stack
             direction="row"
             justifyContent="center"

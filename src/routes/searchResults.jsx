@@ -415,24 +415,28 @@ export default function SearchResults() {
                     </Button>
                   </Stack>
                 )}
-                <Stack spacing={2} justifyContent="center" alignItems="center">
-                  <Grid container spacing={3} columns={12} sx={{ flexGrow: 1 }}>
-                    {searchResults?.map((result) => (
-                      <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
-                        <InfoCard
-                          cardtype={result["resource-type"] + "s"}
-                          pageid={result._id}
-                          title={result.title}
-                          authors={result.authors}
-                          tags={result.tags}
-                          contents={result.contents}
-                          thumbnailImage={result["thumbnail-image"]}
-                          showElementType
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Stack>
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
+                >
+                  {searchResults?.map((result) => (
+                    <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
+                      <InfoCard
+                        cardtype={result["resource-type"] + "s"}
+                        pageid={result._id}
+                        title={result.title}
+                        authors={result.authors}
+                        tags={result.tags}
+                        contents={result.contents}
+                        thumbnailImage={result["thumbnail-image"]}
+                        showElementType
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </Stack>
               <Stack
                 direction="row"
