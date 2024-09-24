@@ -216,30 +216,23 @@ export default function UserProfile() {
                 pb: 8,
               }}
             >
-              <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-              >
-                {/* For testing purposes */}
-                {USE_DEMO_USER ? (
-                  <ElementGrid
-                    headline="Demo contributions"
-                    elementType="dataset"
-                    noElementMsg="You currently don't have any contribution..."
-                    showElementType
-                  />
-                ) : (
-                  <ElementGrid
-                    headline="Your contributions"
-                    fieldName="contributor"
-                    matchValue={encodeURIComponent(userId)}
-                    noElementMsg="You currently don't have any contribution..."
-                    showElementType
-                  />
-                )}
-              </Stack>
+              {/* For testing purposes */}
+              {USE_DEMO_USER ? (
+                <ElementGrid
+                  headline="Demo contributions"
+                  elementType="dataset"
+                  noElementMsg="You currently don't have any contribution..."
+                  showElementType
+                />
+              ) : (
+                <ElementGrid
+                  headline="Your contributions"
+                  fieldName="contributor"
+                  matchValue={encodeURIComponent(userId)}
+                  noElementMsg="You currently don't have any contribution..."
+                  showElementType
+                />
+              )}
             </Grid>
           </Box>
         </Container>
