@@ -218,3 +218,34 @@ export async function getNumberOfContributions(uid) {
   );
   return Number(numberOfContributions);
 }
+
+/**
+ * Fetches a single documentation
+ *
+ * @async
+ * @function fetchSingleElementDetails
+ * @param {string} docName - Documentation name
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the documentation.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchADocumentation(docName) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/documentations/${docName}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch documentation");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single documentation: ", error.message);
+    return "ERROR";
+  }
+}
