@@ -50,11 +50,52 @@ export default function About() {
               >
                 <Typography level="h2">About I-GUIDE Platform</Typography>
               </Stack>
-
               <Divider sx={{ mx: 2, my: 4 }} />
-
               <Typography level="body-md" sx={{ p: 2 }}>
-                Future "About" contents
+                <Typography fontWeight="lg">What:</Typography> The I-GUIDE
+                Platform provides an open science and collaborative environment
+                for geospatial data-intensive convergence research and education
+                focused on sustainability and resilience challenges and enabled
+                by advanced cyberGIS and cyberinfrastructure.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                <Typography fontWeight="lg">Who:</Typography> Geospatial and
+                sustainability research and education communities.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                <Typography fontWeight="lg">Why:</Typography> Support convergent
+                knowledge sharing and discovery through connecting diverse
+                digital knowledge elements at scale.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                <Typography fontWeight="lg">How:</Typography> Democratize access
+                to advanced cyberGIS & cyberinfrastructure and cutting-edge
+                geospatial AI & data science capabilities.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                <Typography fontWeight="lg">Uniqueness:</Typography> Advanced
+                cyberGIS and cyberinfrastructure, cutting-edge geospatial AI and
+                data science capabilities, FAIR data principles, convergent
+                approaches to sustainability challenges.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                To learn more about using the I-GUIDE Platform, check out the
+                Getting Started guide{" "}
+                <Typography level="body-sm">(Link coming soon)</Typography>.
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                To learn more about the NSF Institute for Geospatial
+                Understanding through an Integrative Discovery Environment
+                (I-GUIDE), explore our work, and find out out about upcoming
+                events, check our website at:{" "}
+                <Link
+                  href="https://i-guide.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  i-guide.io
+                </Link>
+                .
               </Typography>
             </Grid>
           </Grid>
