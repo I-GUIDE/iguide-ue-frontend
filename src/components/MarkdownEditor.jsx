@@ -5,6 +5,7 @@ import MDEditor from "@uiw/react-md-editor";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
 import { styled } from "@mui/joy";
+import Stack from "@mui/joy/Stack";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
@@ -27,7 +28,7 @@ const VisuallyHiddenInput = styled("input")`
 export default function MarkdownEditor(props) {
   const contents = props.contents;
   const setContents = props.setContents;
-  const [imgLink, setImgLink] = useState();
+  const [imgMarkdown, setImgMarkdown] = useState();
 
   async function handleImageUpload(event) {
     const toBeUploaded = event.target.files[0];
@@ -60,43 +61,63 @@ export default function MarkdownEditor(props) {
           }
         );
         TEST_MODE && console.log("Response", formData, response);
+
         const result = await response.json();
-        setImgLink(result.url);
+
+        setImgMarkdown(
+          <Typography>
+            Markdown script:{" "}
+            <Typography
+              textColor="#000"
+              sx={{ fontFamily: "monospace", opacity: "50%" }}
+            >
+              {"![image](" + result.url + ")"}
+            </Typography>
+          </Typography>
+        );
         TEST_MODE && console.log("Img link", result.url);
       } catch (error) {
         console.error("Error fetching a single element: ", error.message);
-        setImgLink("Upload failed...");
+        setImgMarkdown(
+          <Typography color="danger">WARNING: Upload failed...</Typography>
+        );
       }
     } else {
-      setImgLink("No file...");
+      setImgMarkdown(
+        <Typography color="danger">
+          WARNING: No file to be uploaded...
+        </Typography>
+      );
     }
   }
 
   return (
     <div data-color-mode="light">
-      <Button
-        component="label"
-        role={undefined}
-        tabIndex={-1}
-        variant="outlined"
-        color="primary"
-        name="thumbnail-image"
-      >
-        Upload an image
-        <VisuallyHiddenInput type="file" onChange={handleImageUpload} />
-      </Button>
-      {imgLink && (
-        <div>
-          <Typography>Image link: {imgLink}</Typography>
-        </div>
-      )}
-      <MDEditor
-        height={400}
-        value={contents}
-        onChange={(value) => {
-          setContents(value);
-        }}
-      />
+      <Stack spacing={1}>
+        <Button
+          component="label"
+          role={undefined}
+          tabIndex={-1}
+          variant="outlined"
+          color="primary"
+          name="thumbnail-image"
+        >
+          Upload an image for Markdown
+          <VisuallyHiddenInput type="file" onChange={handleImageUpload} />
+        </Button>
+        {imgMarkdown && (
+          <div>
+            <Typography level="body-md">{imgMarkdown}</Typography>
+          </div>
+        )}
+        <MDEditor
+          height={400}
+          value={contents}
+          onChange={(value) => {
+            setContents(value);
+          }}
+        />
+      </Stack>
     </div>
   );
 }

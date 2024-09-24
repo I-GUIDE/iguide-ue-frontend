@@ -691,7 +691,7 @@ export default function SubmissionCard(props) {
               color="primary"
               name="thumbnail-image"
             >
-              Upload an image
+              Upload a thumbnail image
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleThumbnailImageUpload}
