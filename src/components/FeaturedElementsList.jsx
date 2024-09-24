@@ -71,33 +71,25 @@ export default function FeaturedElementsList(props) {
               </Typography>
             </Link>
           </Stack>
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
+          <Grid
+            container
             spacing={2}
-            sx={{ width: "100%" }}
+            columns={12}
+            sx={{ flexGrow: 1 }}
+            justifyContent="flex-start"
           >
-            <Grid
-              container
-              spacing={2}
-              columns={12}
-              sx={{ flexGrow: 1 }}
-              justifyContent="flex-start"
-            >
-              {featuredElements?.map((featuredElement) => (
-                <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
-                  <InfoCard
-                    cardtype={featuredElement["resource-type"] + "s"}
-                    pageid={featuredElement.id}
-                    title={featuredElement.title}
-                    contents={featuredElement.contents}
-                    thumbnailImage={featuredElement["thumbnail-image"]}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
+            {featuredElements?.map((featuredElement) => (
+              <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
+                <InfoCard
+                  cardtype={featuredElement["resource-type"] + "s"}
+                  pageid={featuredElement.id}
+                  title={featuredElement.title}
+                  contents={featuredElement.contents}
+                  thumbnailImage={featuredElement["thumbnail-image"]}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Stack>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>

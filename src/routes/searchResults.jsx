@@ -415,36 +415,28 @@ export default function SearchResults() {
                     </Button>
                   </Stack>
                 )}
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{ width: "100%" }}
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
                 >
-                  <Grid
-                    container
-                    spacing={3}
-                    columns={12}
-                    sx={{ flexGrow: 1 }}
-                    justifyContent="flex-start"
-                  >
-                    {searchResults?.map((result) => (
-                      <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
-                        <InfoCard
-                          cardtype={result["resource-type"] + "s"}
-                          pageid={result._id}
-                          title={result.title}
-                          authors={result.authors}
-                          tags={result.tags}
-                          contents={result.contents}
-                          thumbnailImage={result["thumbnail-image"]}
-                          showElementType
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Stack>
+                  {searchResults?.map((result) => (
+                    <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
+                      <InfoCard
+                        cardtype={result["resource-type"] + "s"}
+                        pageid={result._id}
+                        title={result.title}
+                        authors={result.authors}
+                        tags={result.tags}
+                        contents={result.contents}
+                        thumbnailImage={result["thumbnail-image"]}
+                        showElementType
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               </Stack>
               <Stack
                 direction="row"
