@@ -415,8 +415,20 @@ export default function SearchResults() {
                     </Button>
                   </Stack>
                 )}
-                <Stack spacing={2} justifyContent="center" alignItems="center">
-                  <Grid container spacing={3} columns={12} sx={{ flexGrow: 1 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ width: "100%" }}
+                >
+                  <Grid
+                    container
+                    spacing={3}
+                    columns={12}
+                    sx={{ flexGrow: 1 }}
+                    justifyContent="flex-start"
+                  >
                     {searchResults?.map((result) => (
                       <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
                         <InfoCard
