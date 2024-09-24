@@ -83,19 +83,12 @@ export default function ContributorProfile() {
                 pb: 8,
               }}
             >
-              <Stack
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-              >
-                <ElementGrid
-                  fieldName="contributor"
-                  matchValue={userId}
-                  noElementMsg="This user doesn't have any contribution"
-                  showElementType
-                />
-              </Stack>
+              <ElementGrid
+                fieldName="contributor"
+                matchValue={userId}
+                noElementMsg="This user doesn't have any contribution"
+                showElementType
+              />
             </Grid>
           </Box>
         </Container>
