@@ -107,7 +107,7 @@ export default function MarkdownEditor(props) {
         </Button>
         {imgMarkdown && (
           <div>
-            <Typography level="body-md">{imgMarkdown}</Typography>
+            <Typography level="body-sm">{imgMarkdown}</Typography>
           </div>
         )}
         <MDEditor
