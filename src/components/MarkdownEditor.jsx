@@ -27,49 +27,49 @@ const VisuallyHiddenInput = styled("input")`
 export default function MarkdownEditor(props) {
   const contents = props.contents;
   const setContents = props.setContents;
-
-  const [imgFile, setImgFile] = useState();
-  const [imgURL, setImgURL] = useState();
   const [imgLink, setImgLink] = useState();
 
   async function handleImageUpload(event) {
     const toBeUploaded = event.target.files[0];
+    TEST_MODE && console.log("image to be uploaded", toBeUploaded);
+
     if (!toBeUploaded.type.startsWith("image/")) {
       alert("Please upload an image!");
-      setImgFile(null);
-      setImgURL(null);
       return null;
     }
     if (toBeUploaded.size > IMAGE_SIZE_LIMIT) {
       alert("Please upload an image smaller than 5MB!");
-      setImgFile(null);
-      setImgURL(null);
       return null;
     }
-    setImgFile(toBeUploaded);
-    setImgURL(URL.createObjectURL(toBeUploaded));
+    const imgFile = toBeUploaded;
+    const imgURL = URL.createObjectURL(toBeUploaded);
+
+    TEST_MODE && console.log("Image info", imgFile, imgURL);
 
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (imgFile) {
       const formData = new FormData();
       formData.append("file", imgFile);
 
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/elements/thumbnail`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const result = await response.json();
-      setImgLink(result.url);
-      TEST_MODE && console.log("img link", result.url);
+      try {
+        const response = await fetchWithAuth(
+          `${USER_BACKEND_URL}/api/elements/thumbnail`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        TEST_MODE && console.log("Response", formData, response);
+        const result = await response.json();
+        setImgLink(result.url);
+        TEST_MODE && console.log("Img link", result.url);
+      } catch (error) {
+        console.error("Error fetching a single element: ", error.message);
+        setImgLink("Upload failed...");
+      }
     } else {
-      setImgLink("Upload failed...");
+      setImgLink("No file...");
     }
-    setImgFile(null);
-    setImgURL(null);
   }
 
   return (
