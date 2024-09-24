@@ -541,7 +541,7 @@ export default function SubmissionCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="title-lg">{cardTitle}</Typography>
+      <Typography level="h3">{cardTitle}</Typography>
       {isAdmin && !isContributor && submissionType === "update" && (
         <Typography color="danger" level="title-md">
           WARNING: You are not the contributor
