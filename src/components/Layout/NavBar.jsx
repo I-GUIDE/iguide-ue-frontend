@@ -30,6 +30,7 @@ import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import ModalClose from "@mui/joy/ModalClose";
 import MenuIcon from "@mui/icons-material/Menu";
+import WebIcon from "@mui/icons-material/Web";
 import Tooltip from "@mui/joy/Tooltip";
 
 import SearchBar from "../SearchBar";
@@ -39,7 +40,7 @@ import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
 const pages = [
-  ["Home", "/"],
+  ["About", "/about"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
@@ -309,16 +310,15 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link
-                  to={"https://i-guide.io"}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Box
-                    component="img"
-                    sx={{ height: 40, mt: 1, px: 2 }}
-                    alt="Logo"
-                    src="/images/Logo.png"
-                  />
+                <Link to={"/"} style={{ textDecoration: "none" }}>
+                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                    <Box
+                      component="img"
+                      sx={{ height: 40, mt: 1, px: 2 }}
+                      alt="Logo"
+                      src="/images/Logo.png"
+                    />
+                  </Tooltip>
                 </Link>
                 {pages?.map((page) => (
                   <Link
@@ -352,7 +352,7 @@ export default function NavBar(props) {
                   variant="plain"
                   spacing="0.1rem"
                 >
-                  <Tooltip title="Go to I-GUIDE JupyterHub" variant="solid">
+                  <Tooltip title="I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"
                       component="a"
