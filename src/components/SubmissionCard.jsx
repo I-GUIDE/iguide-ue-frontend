@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
 
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -30,6 +29,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
+import MarkdownEditor from "./MarkdownEditor";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -662,15 +662,7 @@ export default function SubmissionCard(props) {
               <FormLabel>
                 Content <RequiredFieldIndicator />
               </FormLabel>
-              <div data-color-mode="light">
-                <MDEditor
-                  height={400}
-                  value={contents}
-                  onChange={(value) => {
-                    setContents(value);
-                  }}
-                />
-              </div>
+              <MarkdownEditor contents={contents} setContents={setContents} />
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
