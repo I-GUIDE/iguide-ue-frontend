@@ -16,6 +16,7 @@ import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 import usePageTitle from "../hooks/usePageTitle";
 import PageNav from "../components/PageNav";
+import DocAdminOps from "../components/DocAdminOps";
 import ErrorPage from "../ErrorPage";
 
 export default function DocPage() {
@@ -82,6 +83,11 @@ export default function DocPage() {
                 <PageNav
                   parentPages={[["About", "/about"]]}
                   currentPage={title}
+                />
+                <DocAdminOps
+                  title={title}
+                  docId={id}
+                  afterDeleteRedirection="/about"
                 />
               </Stack>
             </Grid>
