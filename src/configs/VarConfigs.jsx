@@ -7,8 +7,8 @@ export const RESOURCE_TYPE_COLORS = {
   publications: "warning",
   oer: "danger",
   oers: "danger",
-  map: "secondary",
-  maps: "secondary",
+  map: "neutral",
+  maps: "neutral",
   any: "neutral",
 };
 
