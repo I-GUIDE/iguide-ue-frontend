@@ -15,10 +15,9 @@ import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
-export default function DocUpdate() {
-  usePageTitle("Update Documentation");
+export default function DocSubmission() {
+  usePageTitle("Create Documentation");
 
-  const id = useParams().id;
   const { isAuthenticated } = useOutletContext();
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
@@ -85,7 +84,7 @@ export default function DocUpdate() {
               pb: 8,
             }}
           >
-            <DocEditCard docId={id} submissionType="update" />
+            <DocEditCard submissionType="initial" />
           </Grid>
         </Box>
       </Container>

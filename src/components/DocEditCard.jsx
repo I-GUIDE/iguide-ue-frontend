@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
 
 import Card from "@mui/joy/Card";
 import CardActions from "@mui/joy/CardActions";
@@ -11,8 +10,10 @@ import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
+import Input from "@mui/joy/Input";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
+import MarkdownEditor from "./MarkdownEditor";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -24,7 +25,8 @@ const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function DocEditCard(props) {
-  const docName = props.docName;
+  const docId = props.docId;
+  const submissionType = props.submissionType;
 
   useEffect(() => {
     checkTokens();
@@ -32,46 +34,76 @@ export default function DocEditCard(props) {
 
   const { localUserInfo } = useOutletContext();
 
-  const [docContents, setDocContents] = useState();
+  const [docName, setDocName] = useState("");
+  const [docContent, setDocContent] = useState("");
+
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
-  const [elementURI, setElementURI] = useState();
+  const [docURI, setDocURI] = useState();
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchDocData = async () => {
-      const thisElement = await fetchADocumentation(docName);
+      const thisElement = await fetchADocumentation(docId);
+      TEST_MODE && console.log("Doc data", thisElement);
 
-      setDocContents(thisElement);
+      setDocName(thisElement.name);
+      setDocContent(thisElement.content);
     };
     fetchDocData();
-  }, [docName]);
+  }, [docId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {};
 
-    data["contents"] = docContents;
+    data["name"] = docName;
+    data["content"] = docContent;
 
     TEST_MODE && console.log("data to be submitted", data);
 
-    const response = await fetchWithAuth(
-      `${USER_BACKEND_URL}/api/documentations/${docName}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    if (submissionType === "initial") {
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/documentation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const result = await response.json();
+      TEST_MODE && console.log("Response - new doc", result.message);
+
+      if (result && result.message === "Documentation added successfully") {
+        setSubmissionStatus("initial-succeeded");
+        if (result.id) {
+          setDocURI("/docs/" + result.id);
+        }
+      } else {
+        setSubmissionStatus("initial-failed");
       }
-    );
+    } else if (submissionType === "update") {
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/documentation/${docId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
-    const result = await response.json();
-    TEST_MODE && console.log("Documentation returned", result.message);
+      const result = await response.json();
+      TEST_MODE && console.log("Response - update doc", result.message);
 
-    if (result && result.message === "Element updated successfully") {
-      setSubmissionStatus("update-succeeded");
-    } else {
-      setSubmissionStatus("update-failed");
+      if (result && result.message === "Documentation updated successfully") {
+        setSubmissionStatus("update-succeeded");
+      } else {
+        setSubmissionStatus("update-failed");
+      }
     }
   };
 
@@ -81,7 +113,7 @@ export default function DocEditCard(props) {
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
         submissionType={submissionType}
-        elementURI={elementURI}
+        docURI={docURI}
       />
     );
   }
@@ -97,10 +129,10 @@ export default function DocEditCard(props) {
   }
 
   let cardTitle = "";
-  if (isAdmin) {
-    cardTitle = "Edit this element as an admin";
+  if (submissionType === "initial") {
+    cardTitle = "Create a new documentation";
   } else {
-    cardTitle = "You are not authroized to edit this page";
+    cardTitle = `Update the documentation - ${docName}`;
   }
 
   function RequiredFieldIndicator() {
@@ -119,9 +151,7 @@ export default function DocEditCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="title-lg">
-        Update the documentation - "{docName}"
-      </Typography>
+      <Typography level="title-lg">{cardTitle}</Typography>
       <Typography level="body-sm">
         Fields marked <RequiredFieldIndicator /> are required.
       </Typography>
@@ -136,21 +166,29 @@ export default function DocEditCard(props) {
         >
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Documentation name
+              </Typography>
+            </FormLabel>
+            <Input
+              name="name"
+              required
+              value={docName}
+              onChange={(event) => setDocName(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
               Content <RequiredFieldIndicator />
             </FormLabel>
-            <div data-color-mode="light">
-              <MDEditor
-                height={400}
-                value={docContents}
-                onChange={(value) => {
-                  setDocContents(value);
-                }}
-              />
-            </div>
+            <MarkdownEditor contents={docContent} setContents={setDocContent} />
           </FormControl>
           <CardActions sx={{ gridColumn: "1/-1" }}>
             <Button type="submit" variant="solid" color="primary">
-              Update
+              {submissionType === "initial" ? "Submit" : "Update"}
             </Button>
           </CardActions>
         </CardContent>

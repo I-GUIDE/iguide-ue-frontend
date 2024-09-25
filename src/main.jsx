@@ -22,6 +22,8 @@ import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 import About from "./routes/About";
+
+import DocSubmission from "./routes/DocSubmission";
 import DocUpdate from "./routes/DocUpdate";
 
 import ErrorPage from "./ErrorPage";
@@ -106,7 +108,11 @@ const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "doc-update",
+        path: "/new-doc",
+        element: <DocSubmission />,
+      },
+      {
+        path: "/doc-update/:id",
         element: <DocUpdate />,
       },
     ],

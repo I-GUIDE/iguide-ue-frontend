@@ -231,7 +231,7 @@ export async function getNumberOfContributions(uid) {
 export async function fetchADocumentation(docName) {
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/api/documentations/${docName}`,
+      `${BACKEND_URL_PORT}/api/documentation/${docName}`,
       {
         method: "GET",
         headers: {

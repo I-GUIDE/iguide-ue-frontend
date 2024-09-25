@@ -98,7 +98,7 @@ export default function MarkdownEditor(props) {
           color="primary"
           name="thumbnail-image"
         >
-          Upload an image for Markdown
+          Upload an image for Markdown (Optional)
           <VisuallyHiddenInput type="file" onChange={handleImageUpload} />
         </Button>
         {uploadSucceeded ? (
