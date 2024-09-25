@@ -46,10 +46,13 @@ export default function DocEditCard(props) {
       const thisElement = await fetchADocumentation(docId);
       TEST_MODE && console.log("Doc data", thisElement);
 
+      setDocURI("/docs/" + docId);
       setDocName(thisElement.name);
       setDocContent(thisElement.content);
     };
-    fetchDocData();
+    if (submissionType === "update") {
+      fetchDocData();
+    }
   }, [docId]);
 
   const handleSubmit = async (event) => {
@@ -62,19 +65,16 @@ export default function DocEditCard(props) {
     TEST_MODE && console.log("data to be submitted", data);
 
     if (submissionType === "initial") {
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/documentation`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${USER_BACKEND_URL}/api/documentation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       const result = await response.json();
-      TEST_MODE && console.log("Response - new doc", result.message);
+      TEST_MODE && console.log("Response - new doc", result);
 
       if (result && result.message === "Documentation added successfully") {
         setSubmissionStatus("initial-succeeded");
@@ -85,7 +85,7 @@ export default function DocEditCard(props) {
         setSubmissionStatus("initial-failed");
       }
     } else if (submissionType === "update") {
-      const response = await fetchWithAuth(
+      const response = await fetch(
         `${USER_BACKEND_URL}/api/documentation/${docId}`,
         {
           method: "PUT",
@@ -97,7 +97,7 @@ export default function DocEditCard(props) {
       );
 
       const result = await response.json();
-      TEST_MODE && console.log("Response - update doc", result.message);
+      TEST_MODE && console.log("Response - update doc", result);
 
       if (result && result.message === "Documentation updated successfully") {
         setSubmissionStatus("update-succeeded");
@@ -113,7 +113,7 @@ export default function DocEditCard(props) {
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
         submissionType={submissionType}
-        docURI={docURI}
+        elementURI={docURI}
       />
     );
   }
