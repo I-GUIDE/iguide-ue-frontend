@@ -24,8 +24,6 @@ import { getNumberOfContributions } from "../utils/DataRetrieval";
 import { fetchUser } from "../utils/UserManager";
 
 export default function ContributorProfile() {
-  usePageTitle("User Profile");
-
   const userId = decodeURIComponent(useParams().id);
 
   const [contributorInfo, setContributorInfo] = useState({});
@@ -52,6 +50,12 @@ export default function ContributorProfile() {
     }
     getContributorInfo(userId);
   }, [userId]);
+
+  const pageTitle = contributorInfo.first_name
+    ? contributorInfo.first_name + " " + contributorInfo.last_name
+    : "Contributor Profile";
+
+  usePageTitle(pageTitle);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
