@@ -45,6 +45,7 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
+  ["Maps", "/maps"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
