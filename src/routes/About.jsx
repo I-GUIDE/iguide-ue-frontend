@@ -11,12 +11,39 @@ import Container from "@mui/joy/Container";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
+import { DocRetriever } from "../utils/DataRetrieval";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function About() {
   usePageTitle("About");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [docList, setDocList] = useState();
+
+  const itemsPerPage = 20;
+
+  useEffect(() => {
+    async function retrieveDocs() {
+      try {
+        const data = await DocRetriever(0, itemsPerPage);
+        TEST_MODE && console.log("docs returned", data);
+
+        setDocList(data.documentation);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+    retrieveDocs();
+  }, []);
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -98,6 +125,31 @@ export default function About() {
                 .
               </Typography>
             </Grid>
+
+            {/* Section for tutorial articles */}
+            {Array.isArray(docList) && docList.length > 0 && (
+              <Grid xs={12}>
+                <Stack spacing={1} alignItems={"flex-start"} sx={{ p: 2 }}>
+                  <Typography level="h4">More articles</Typography>
+                  <List marker="disc">
+                    {docList?.map((doc) => (
+                      <Link
+                        key={doc.id}
+                        component={RouterLink}
+                        to={"/docs/" + doc.id}
+                        color="inherit"
+                      >
+                        <ListItem>
+                          <Typography color="primary" level="body-lg">
+                            {doc.name}
+                          </Typography>
+                        </ListItem>
+                      </Link>
+                    ))}
+                  </List>
+                </Stack>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Container>
