@@ -64,7 +64,7 @@ export default function InfoCard(props) {
         sx={{
           width: "100%",
           height: "100%",
-          "--Card-radius": "25px",
+          "--Card-radius": "15px",
           "&:hover": {
             borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
             transform: "translateY(-2px)",

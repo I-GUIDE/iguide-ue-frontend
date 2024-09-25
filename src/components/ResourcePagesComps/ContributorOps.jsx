@@ -42,7 +42,8 @@ export default function ContributorOps(props) {
 
   // Check if the current user is admin, if yes, allow edit
   const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
-  if (localUserInfo.id !== contributorId && !isAdmin) {
+  const isContributor = localUserInfo.id === contributorId;
+  if (!isContributor && !isAdmin) {
     return null;
   }
 
@@ -105,7 +106,7 @@ export default function ContributorOps(props) {
           setDeleteMetadataTitle(undefined);
         }}
       >
-        <ModalDialog variant="outlined" role="alertdialog">
+        <ModalDialog variant="outlined" role="alertdialog" color="danger">
           <DialogTitle>
             <WarningRoundedIcon />
             Confirmation
@@ -122,6 +123,7 @@ export default function ContributorOps(props) {
               onClick={() => handleElementDelete(deleteMetadataId)}
             >
               Delete
+              {!isContributor && isAdmin && " (YOU ARE NOT THE CONTRIBUTOR)"}
             </Button>
             <Button
               variant="plain"

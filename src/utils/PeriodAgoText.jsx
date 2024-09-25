@@ -29,6 +29,6 @@ export function PeriodAgoText(pretext, pastTimestamp) {
     const roundedDay = Math.floor(diffInDay);
     return pretext + " " + roundedDay + ` day${roundedDay > 1 ? "s" : ""} ago`;
   } else {
-    return pretext + " with 24 hrs";
+    return pretext + " within 24 hrs";
   }
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
 
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -30,6 +29,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
+import MarkdownEditor from "./MarkdownEditor";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -541,7 +541,7 @@ export default function SubmissionCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="title-lg">{cardTitle}</Typography>
+      <Typography level="h3">{cardTitle}</Typography>
       {isAdmin && !isContributor && submissionType === "update" && (
         <Typography color="danger" level="title-md">
           WARNING: You are not the contributor
@@ -598,8 +598,12 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  Publication URL (DOI link preferred){" "}
-                  <RequiredFieldIndicator />
+                  <Typography
+                    level="title-md"
+                    endDecorator={<RequiredFieldIndicator />}
+                  >
+                    Publication URL (DOI link preferred)
+                  </Typography>
                 </Typography>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -624,7 +628,12 @@ export default function SubmissionCard(props) {
           )}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
-              Title <RequiredFieldIndicator />
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Title
+              </Typography>
             </FormLabel>
             <Input
               name="title"
@@ -635,7 +644,12 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
-              Authors (comma-separated) <RequiredFieldIndicator />
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Authors (comma-separated)
+              </Typography>
             </FormLabel>
             <Input
               name="authors"
@@ -647,7 +661,12 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
-              Tags (comma-separated) <RequiredFieldIndicator />
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Tags (comma-separated)
+              </Typography>
             </FormLabel>
             <Input
               name="tags"
@@ -660,22 +679,24 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "oer" ? (
             <FormControl sx={{ gridColumn: "1/-1" }}>
               <FormLabel>
-                Content <RequiredFieldIndicator />
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Content
+                </Typography>
               </FormLabel>
-              <div data-color-mode="light">
-                <MDEditor
-                  height={400}
-                  value={contents}
-                  onChange={(value) => {
-                    setContents(value);
-                  }}
-                />
-              </div>
+              <MarkdownEditor contents={contents} setContents={setContents} />
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
               <FormLabel>
-                Abstract <RequiredFieldIndicator />
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Abstract
+                </Typography>
               </FormLabel>
               <Textarea
                 name="contents"
@@ -689,7 +710,12 @@ export default function SubmissionCard(props) {
           )}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
-              Thumbnail image {"(< 5MB)"} <RequiredFieldIndicator />
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Thumbnail image {"(< 5MB)"}
+              </Typography>
             </FormLabel>
             <Button
               component="label"
@@ -699,7 +725,7 @@ export default function SubmissionCard(props) {
               color="primary"
               name="thumbnail-image"
             >
-              Upload an image
+              Upload a thumbnail image
               <VisuallyHiddenInput
                 type="file"
                 onChange={handleThumbnailImageUpload}
@@ -721,7 +747,12 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
               <FormLabel>
-                Dataset host link <RequiredFieldIndicator />
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Dataset host link
+                </Typography>
               </FormLabel>
               <Input
                 required
@@ -733,7 +764,11 @@ export default function SubmissionCard(props) {
           )}
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Dataset direct download link</FormLabel>
+              <FormLabel>
+                <Typography level="title-md">
+                  Dataset direct download link
+                </Typography>
+              </FormLabel>
               <Input
                 name="direct-download-link"
                 value={directDownloadLink}
@@ -743,7 +778,9 @@ export default function SubmissionCard(props) {
           )}
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Dataset size</FormLabel>
+              <FormLabel>
+                <Typography level="title-md">Dataset size</Typography>
+              </FormLabel>
               <Input
                 name="size"
                 value={dataSize}
@@ -791,7 +828,12 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  Jupyter Notebook GitHub URL <RequiredFieldIndicator />
+                  <Typography
+                    level="title-md"
+                    endDecorator={<RequiredFieldIndicator />}
+                  >
+                    Jupyter Notebook GitHub URL
+                  </Typography>
                 </Typography>
               </FormLabel>
               <Input
@@ -813,7 +855,9 @@ export default function SubmissionCard(props) {
 
           {/* Related elements */}
           <Grid sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Related elements</FormLabel>
+            <FormLabel>
+              <Typography level="title-md">Related elements</Typography>
+            </FormLabel>
             <Table>
               <thead>
                 <tr>
@@ -894,7 +938,11 @@ export default function SubmissionCard(props) {
           {/* External links */}
           {resourceTypeSelected === "oer" && (
             <Grid sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Educational resource external links</FormLabel>
+              <FormLabel>
+                <Typography level="title-md">
+                  Educational resource external links
+                </Typography>
+              </FormLabel>
               <Table>
                 <thead>
                   <tr>
