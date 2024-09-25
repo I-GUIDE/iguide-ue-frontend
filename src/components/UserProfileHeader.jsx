@@ -13,9 +13,13 @@ import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import Dropdown from "@mui/joy/Dropdown";
 import MenuItem from "@mui/joy/MenuItem";
+import Link from "@mui/joy/Link";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PublicIcon from "@mui/icons-material/Public";
+import MoodIcon from "@mui/icons-material/Mood";
 
 import UserAvatar from "./UserAvatar";
 import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
@@ -113,13 +117,13 @@ export default function UserProfileHeader(props) {
                 <Stack
                   direction="column"
                   sx={{ m: 3 }}
-                  spacing={0.5}
+                  spacing={1.5}
                   alignItems={{
                     xs: "center",
                     md: "flex-start",
                   }}
                 >
-                  <Typography level="h1" fontWeight="lg" textColor={"#000"}>
+                  <Typography level="h1" fontWeight="lg" textColor="#000">
                     {localUserInfo.first_name
                       ? localUserInfo.first_name
                       : "First name unknown"}
@@ -128,31 +132,51 @@ export default function UserProfileHeader(props) {
                       ? localUserInfo.last_name
                       : "Last name unknown"}
                   </Typography>
-                  <Typography
-                    level="body-sm"
-                    fontWeight="lg"
-                    textColor={"#000"}
+                  <Stack
+                    direction="column"
+                    sx={{ m: 3 }}
+                    spacing={1}
+                    alignItems={{
+                      xs: "center",
+                      md: "flex-start",
+                    }}
                   >
-                    {localUserInfo.email
-                      ? "Email: " + localUserInfo.email
-                      : null}
-                  </Typography>
-                  <Typography
-                    level="body-sm"
-                    fontWeight="lg"
-                    textColor={"#000"}
-                  >
-                    {localUserInfo.affiliation
-                      ? "Affiliation: " + localUserInfo.affiliation
-                      : null}
-                  </Typography>
-                  <Typography
-                    level="body-sm"
-                    fontWeight="md"
-                    textColor={"#000"}
-                  >
-                    {localUserInfo.bio ? "Bio: " + localUserInfo.bio : null}
-                  </Typography>
+                    {localUserInfo.affiliation && (
+                      <Typography
+                        level="body-md"
+                        fontWeight="md"
+                        startDecorator={<PublicIcon />}
+                      >
+                        {localUserInfo.affiliation}
+                      </Typography>
+                    )}
+                    {localUserInfo.email && (
+                      <Link
+                        href={"mailto:" + localUserInfo.email}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "underline" }}
+                      >
+                        <Typography
+                          level="body-md"
+                          fontWeight="md"
+                          startDecorator={<AlternateEmailIcon />}
+                        >
+                          {localUserInfo.email}
+                        </Typography>
+                      </Link>
+                    )}
+                    {localUserInfo.bio && (
+                      <Typography
+                        level="body-sm"
+                        fontWeight="md"
+                        startDecorator={<MoodIcon />}
+                      >
+                        {localUserInfo.bio}
+                      </Typography>
+                    )}
+                  </Stack>
+
                   {allowProfileOps && (
                     <Stack
                       direction="row"
