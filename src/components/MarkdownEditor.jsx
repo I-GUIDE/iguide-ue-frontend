@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import MDEditor from "@uiw/react-md-editor";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
@@ -28,7 +29,14 @@ const VisuallyHiddenInput = styled("input")`
 export default function MarkdownEditor(props) {
   const contents = props.contents;
   const setContents = props.setContents;
+
+  const [copied, setCopied] = useState(false);
   const [imgMarkdown, setImgMarkdown] = useState();
+  const [uploadSucceeded, setUploadSucceeded] = useState(false);
+
+  function handleCopy() {
+    setCopied(true);
+  }
 
   async function handleImageUpload(event) {
     const toBeUploaded = event.target.files[0];
@@ -46,6 +54,7 @@ export default function MarkdownEditor(props) {
     const imgURL = URL.createObjectURL(toBeUploaded);
 
     TEST_MODE && console.log("Image info", imgFile, imgURL);
+    setCopied(false);
 
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (imgFile) {
@@ -64,30 +73,17 @@ export default function MarkdownEditor(props) {
 
         const result = await response.json();
 
-        setImgMarkdown(
-          <Typography>
-            Markdown script:{" "}
-            <Typography
-              textColor="#000"
-              sx={{ fontFamily: "monospace", opacity: "50%" }}
-            >
-              {"![image](" + result.url + ")"}
-            </Typography>
-          </Typography>
-        );
+        setImgMarkdown("![image](" + result.url + ")");
+        setUploadSucceeded(true);
         TEST_MODE && console.log("Img link", result.url);
       } catch (error) {
         console.error("Error fetching a single element: ", error.message);
-        setImgMarkdown(
-          <Typography color="danger">WARNING: Upload failed...</Typography>
-        );
+        setImgMarkdown("WARNING: Upload failed...");
+        setUploadSucceeded(false);
       }
     } else {
-      setImgMarkdown(
-        <Typography color="danger">
-          WARNING: No file to be uploaded...
-        </Typography>
-      );
+      setImgMarkdown("WARNING: No file to be uploaded...");
+      setUploadSucceeded(false);
     }
   }
 
@@ -105,11 +101,29 @@ export default function MarkdownEditor(props) {
           Upload an image for Markdown
           <VisuallyHiddenInput type="file" onChange={handleImageUpload} />
         </Button>
-        {imgMarkdown && (
+        {uploadSucceeded ? (
           <div>
-            <Typography level="body-sm">{imgMarkdown}</Typography>
+            <Typography level="body-sm">
+              Markdown script:{" "}
+              <Typography
+                textColor="#000"
+                sx={{ fontFamily: "monospace", opacity: "50%" }}
+              >
+                {imgMarkdown}
+              </Typography>
+            </Typography>
+            <CopyToClipboard onCopy={handleCopy} text={imgMarkdown}>
+              <Button>Copy markdown image script</Button>
+            </CopyToClipboard>
+          </div>
+        ) : (
+          <div>
+            <Typography level="body-sm" color="danger">
+              {imgMarkdown}
+            </Typography>
           </div>
         )}
+        {copied && "Markdown image script copied!"}
         <MDEditor
           height={400}
           value={contents}
