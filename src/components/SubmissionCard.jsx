@@ -127,11 +127,21 @@ export default function SubmissionCard(props) {
     const fetchData = async () => {
       const thisElement = await fetchSingleElementDetails(elementId);
 
+      TEST_MODE && console.log("returned element", thisElement);
+
       setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
-      setTags(thisElement.tags.join(", "));
-      setAuthors(thisElement.authors.join(", "));
+      setTags(
+        Array.isArray(thisElement.tags)
+          ? thisElement.tags.join(", ")
+          : thisElement.tags
+      );
+      setAuthors(
+        Array.isArray(thisElement.authors)
+          ? thisElement.authors.join(", ")
+          : thisElement.authors
+      );
       setContents(thisElement.contents);
       setThumbnailImageFileURL(thisElement["thumbnail-image"]);
 
