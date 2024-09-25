@@ -160,7 +160,7 @@ export default function SubmissionCard(props) {
 
       setPublicationDOI(thisElement["external-link-publication"]);
 
-      setMapIframeLink(thisElement["external_iframe_link"]);
+      setMapIframeLink(thisElement["external-iframe-link"]);
 
       setContributor(thisElement["contributor"]);
 

@@ -56,7 +56,7 @@ export default function MapPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setMapIFrameLink(thisElement["external_iframe_link"]);
+      setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
