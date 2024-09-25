@@ -598,8 +598,12 @@ export default function SubmissionCard(props) {
                     </Tooltip>
                   }
                 >
-                  Publication URL (DOI link preferred){" "}
-                  <RequiredFieldIndicator />
+                  <Typography
+                    level="title-md"
+                    endDecorator={<RequiredFieldIndicator />}
+                  >
+                    Publication URL (DOI link preferred)
+                  </Typography>
                 </Typography>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
