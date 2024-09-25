@@ -11,6 +11,8 @@ import Container from "@mui/joy/Container";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
@@ -123,21 +125,31 @@ export default function About() {
                 .
               </Typography>
             </Grid>
-            <Grid xs={12}>
-              <Stack spacing={1} alignItems={"flex-start"} sx={{ p: 2 }}>
-                <Typography level="h4">More articles</Typography>
-                {docList?.map((doc) => (
-                  <Link
-                    key={doc.id}
-                    component={RouterLink}
-                    to={"/docs/" + doc.id}
-                    color="inherit"
-                  >
-                    <Typography level="body-lg">{doc.name}</Typography>
-                  </Link>
-                ))}
-              </Stack>
-            </Grid>
+
+            {/* Section for tutorial articles */}
+            {Array.isArray(docList) && docList.length > 0 && (
+              <Grid xs={12}>
+                <Stack spacing={1} alignItems={"flex-start"} sx={{ p: 2 }}>
+                  <Typography level="h4">More articles</Typography>
+                  <List marker="disc">
+                    {docList?.map((doc) => (
+                      <Link
+                        key={doc.id}
+                        component={RouterLink}
+                        to={"/docs/" + doc.id}
+                        color="inherit"
+                      >
+                        <ListItem>
+                          <Typography color="primary" level="body-lg">
+                            {doc.name}
+                          </Typography>
+                        </ListItem>
+                      </Link>
+                    ))}
+                  </List>
+                </Stack>
+              </Grid>
+            )}
           </Grid>
         </Box>
       </Container>
