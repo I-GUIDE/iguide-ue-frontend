@@ -103,7 +103,10 @@ export default function MarkdownEditor(props) {
         </Button>
         {uploadSucceeded ? (
           <div>
-            <Typography level="body-sm">
+            <Typography level="body-xs" color="success">
+              Upload succeeded!
+            </Typography>
+            <Typography>
               Markdown script:{" "}
               <Typography
                 textColor="#000"
@@ -113,7 +116,7 @@ export default function MarkdownEditor(props) {
               </Typography>
             </Typography>
             <CopyToClipboard onCopy={handleCopy} text={imgMarkdown}>
-              <Button>Copy markdown image script</Button>
+              <Button size="sm">Copy markdown image script</Button>
             </CopyToClipboard>
           </div>
         ) : (
@@ -123,7 +126,11 @@ export default function MarkdownEditor(props) {
             </Typography>
           </div>
         )}
-        {copied && "Markdown image script copied!"}
+        {copied && (
+          <Typography level="body-sm" color="success">
+            Markdown image script copied!
+          </Typography>
+        )}
         <MDEditor
           height={400}
           value={contents}
