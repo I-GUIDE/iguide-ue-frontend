@@ -48,7 +48,7 @@ export default function DocAdminOps(props) {
   async function handleDocDelete(docId) {
     TEST_MODE && console.log("Deleting...", docId);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/documentation/${docId}`,
         {
           method: "DELETE",

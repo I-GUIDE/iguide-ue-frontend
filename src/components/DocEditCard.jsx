@@ -43,12 +43,12 @@ export default function DocEditCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchDocData = async () => {
-      const thisElement = await fetchADocumentation(docId);
-      TEST_MODE && console.log("Doc data", thisElement);
+      const thisDoc = await fetchADocumentation(docId);
+      TEST_MODE && console.log("Doc data", thisDoc);
 
       setDocURI("/docs/" + docId);
-      setDocName(thisElement.name);
-      setDocContent(thisElement.content);
+      setDocName(thisDoc.name);
+      setDocContent(thisDoc.content);
     };
     if (submissionType === "update") {
       fetchDocData();
@@ -65,13 +65,16 @@ export default function DocEditCard(props) {
     TEST_MODE && console.log("data to be submitted", data);
 
     if (submissionType === "initial") {
-      const response = await fetch(`${USER_BACKEND_URL}/api/documentation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetchWithAuth(
+        `${USER_BACKEND_URL}/api/documentation`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
       TEST_MODE && console.log("Response - new doc", result);
@@ -85,7 +88,7 @@ export default function DocEditCard(props) {
         setSubmissionStatus("initial-failed");
       }
     } else if (submissionType === "update") {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${USER_BACKEND_URL}/api/documentation/${docId}`,
         {
           method: "PUT",
