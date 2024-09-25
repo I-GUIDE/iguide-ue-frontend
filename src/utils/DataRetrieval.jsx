@@ -220,6 +220,34 @@ export async function getNumberOfContributions(uid) {
 }
 
 /**
+ * Retrieve documentation from the database based on the provided parameters.
+ *
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='20'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved elements.
+ * @throws {Error} If the request fails.
+ */
+export async function DocRetriever(from = "0", size = "20", countOnly = false) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/documentation?from=${from}&size=${size}&count-only=${countOnly}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve docs");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of docs: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
  * Fetches a single documentation
  *
  * @async

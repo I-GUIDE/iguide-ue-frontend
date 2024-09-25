@@ -14,9 +14,34 @@ import Typography from "@mui/joy/Typography";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
+import { DocRetriever } from "../utils/DataRetrieval";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function About() {
   usePageTitle("About");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [docList, setDocList] = useState();
+
+  const itemsPerPage = 20;
+
+  useEffect(() => {
+    async function retrieveDocs() {
+      try {
+        const data = await DocRetriever(0, itemsPerPage);
+        TEST_MODE && console.log("docs returned", data);
+
+        setDocList(data.documentation);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+    retrieveDocs();
+  }, []);
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -97,6 +122,21 @@ export default function About() {
                 </Link>
                 .
               </Typography>
+            </Grid>
+            <Grid xs={12}>
+              <Stack spacing={1} alignItems={"flex-start"} sx={{ p: 2 }}>
+                <Typography level="h4">More articles</Typography>
+                {docList?.map((doc) => (
+                  <Link
+                    key={doc.id}
+                    component={RouterLink}
+                    to={"/docs/" + doc.id}
+                    color="inherit"
+                  >
+                    <Typography level="body-lg">{doc.name}</Typography>
+                  </Link>
+                ))}
+              </Stack>
             </Grid>
           </Grid>
         </Box>
