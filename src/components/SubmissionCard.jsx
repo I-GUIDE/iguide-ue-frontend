@@ -102,21 +102,23 @@ export default function SubmissionCard(props) {
 
   const [elementURI, setElementURI] = useState();
 
-  const [title, setTitle] = useState();
-  const [tags, setTags] = useState();
-  const [authors, setAuthors] = useState();
-  const [contents, setContents] = useState();
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
+  const [authors, setAuthors] = useState("");
+  const [contents, setContents] = useState("");
 
-  const [datasetExternalLink, setDatasetExternalLink] = useState();
-  const [directDownloadLink, setDirectDownloadLink] = useState();
-  const [dataSize, setDataSize] = useState();
+  const [datasetExternalLink, setDatasetExternalLink] = useState("");
+  const [directDownloadLink, setDirectDownloadLink] = useState("");
+  const [dataSize, setDataSize] = useState("");
 
-  const [notebookFile, setNotebookFile] = useState();
-  const [notebookRepo, setNotebookRepo] = useState();
-  const [notebookGitHubUrl, setNotebookGitHubUrl] = useState();
+  const [notebookFile, setNotebookFile] = useState("");
+  const [notebookRepo, setNotebookRepo] = useState("");
+  const [notebookGitHubUrl, setNotebookGitHubUrl] = useState("");
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
-  const [publicationDOI, setPublicationDOI] = useState();
+  const [publicationDOI, setPublicationDOI] = useState("");
+
+  const [mapIframeLink, setMapIframeLink] = useState("");
 
   const [contributor, setContributor] = useState();
 
@@ -147,6 +149,8 @@ export default function SubmissionCard(props) {
       setNotebookRepo(thisElement["notebook-repo"]);
 
       setPublicationDOI(thisElement["external-link-publication"]);
+
+      setMapIframeLink(thisElement["external_iframe_link"]);
 
       setContributor(thisElement["contributor"]);
 
@@ -315,7 +319,7 @@ export default function SubmissionCard(props) {
     const metadataDOI = await getMetadataByDOI(publicationDOI);
     TEST_MODE && console.log("pub metadata", metadataDOI);
 
-    if (!metadataDOI) {
+    if (!metadataDOI || metadataDOI === "") {
       return;
     }
 
@@ -416,6 +420,8 @@ export default function SubmissionCard(props) {
     if (resourceTypeSelected === "oer") {
       data["oer-external-links"] = oerExternalLinks;
     }
+
+    TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
@@ -695,7 +701,9 @@ export default function SubmissionCard(props) {
                   level="title-md"
                   endDecorator={<RequiredFieldIndicator />}
                 >
-                  Abstract
+                  {resourceTypeSelected === "publication"
+                    ? "Abstract"
+                    : "About"}
                 </Typography>
               </FormLabel>
               <Textarea
@@ -744,6 +752,24 @@ export default function SubmissionCard(props) {
               </div>
             )}
           </FormControl>
+          {resourceTypeSelected === "map" && (
+            <FormControl sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Map iframe link
+                </Typography>
+              </FormLabel>
+              <Input
+                required
+                name="map-external-iframe-link"
+                value={mapIframeLink}
+                onChange={(event) => setMapIframeLink(event.target.value)}
+              />
+            </FormControl>
+          )}
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1" }}>
               <FormLabel>

@@ -7,6 +7,8 @@ export const RESOURCE_TYPE_COLORS = {
   publications: "warning",
   oer: "danger",
   oers: "danger",
+  map: "secondary",
+  maps: "secondary",
   any: "neutral",
 };
 
@@ -19,6 +21,8 @@ export const RESOURCE_TYPE_NAMES = {
   publications: "Publication",
   oer: "Educational Resource",
   oers: "Educational Resource",
+  map: "Map",
+  maps: "Map",
 };
 
 export const OER_EXTERNAL_LINK_TYPES = {
