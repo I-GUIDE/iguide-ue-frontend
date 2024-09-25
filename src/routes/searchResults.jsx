@@ -216,16 +216,12 @@ export default function SearchResults() {
           }}
         >
           <Card
+            variant="plain"
             component="li"
             sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
           >
             <CardCover>
-              <img
-                src="/images/yellow-blue.png"
-                srcSet="/images/yellow-blue.png 2x"
-                loading="lazy"
-                alt=""
-              />
+              <img src="/images/network-bg.png" loading="lazy" alt="" />
             </CardCover>
             <CardContent
               sx={{ justifyContent: "center", alignItems: "center" }}
@@ -233,7 +229,7 @@ export default function SearchResults() {
               <Container maxWidth="md">
                 <Typography
                   level="h1"
-                  textColor={"#fff"}
+                  textColor={"#000"}
                   sx={{
                     display: "flex",
                     flexDirection: "row",
@@ -241,18 +237,36 @@ export default function SearchResults() {
                     py: 1.5,
                   }}
                   endDecorator={
-                    <Chip component="span" size="sm">
+                    <Chip component="span" color="primary" size="sm">
                       BETA
                     </Chip>
                   }
                   justifyContent="center"
                 >
-                  I-GUIDE Platform
+                  <Stack
+                    direction={{ sx: "column", sm: "row" }}
+                    spacing={0}
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src="/images/iguide-word-color.png"
+                      loading="lazy"
+                      alt="I-GUIDE"
+                    />
+                    <img
+                      src="/images/platform-word-gray.png"
+                      loading="lazy"
+                      alt="Platform"
+                    />
+                  </Stack>
                 </Typography>
                 <form onSubmit={handleSubmit} id="demo">
                   <Input
                     key="search"
-                    variant="plain"
+                    variant="outlined"
                     sx={{ "--Input-decoratorChildHeight": "45px" }}
                     placeholder="Search..."
                     type="text"
