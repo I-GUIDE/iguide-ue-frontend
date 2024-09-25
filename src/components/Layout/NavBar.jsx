@@ -58,6 +58,7 @@ export default function NavBar(props) {
 
   // Check if the current user is admin, if yes, allow edit
   const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
+  const canEditMap = localUserInfo.role < PERMISSIONS["edit_map"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -136,6 +137,11 @@ export default function NavBar(props) {
                 New Educational Resource
               </MenuItem>
             )}
+            {canEditMap && (
+              <MenuItem component="a" href="/contribution/map">
+                New Map
+              </MenuItem>
+            )}
             <ListDivider />
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
@@ -184,6 +190,11 @@ export default function NavBar(props) {
           {canEditOER && (
             <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
               <ListItem>New Educational Resource</ListItem>
+            </Link>
+          )}
+          {canEditMap && (
+            <Link to="/contribution/map" style={{ textDecoration: "none" }}>
+              <ListItem>New Map</ListItem>
             </Link>
           )}
           <Divider sx={{ my: 1 }} />

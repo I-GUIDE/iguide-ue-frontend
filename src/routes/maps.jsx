@@ -9,6 +9,7 @@ export default function Maps() {
   usePageTitle("Maps");
 
   return (
+    // We don't include the new map link, because we won't make this type of contribution publically available
     <ElementGridLayout
       elementType="map"
       title="Maps"

@@ -73,6 +73,7 @@ export default function UserProfileHeader(props) {
   }
 
   const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
+  const canEditMap = localUserInfo.role < PERMISSIONS["edit_map"];
 
   return (
     <Box
@@ -195,6 +196,11 @@ export default function UserProfileHeader(props) {
                           {canEditOER && (
                             <MenuItem component="a" href="/contribution/oer">
                               New Educational Resource
+                            </MenuItem>
+                          )}
+                          {canEditMap && (
+                            <MenuItem component="a" href="/contribution/map">
+                              New Map
                             </MenuItem>
                           )}
                         </Menu>
