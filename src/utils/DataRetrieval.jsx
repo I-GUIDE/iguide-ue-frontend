@@ -218,3 +218,62 @@ export async function getNumberOfContributions(uid) {
   );
   return Number(numberOfContributions);
 }
+
+/**
+ * Retrieve documentation from the database based on the provided parameters.
+ *
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='20'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved elements.
+ * @throws {Error} If the request fails.
+ */
+export async function DocRetriever(from = "0", size = "20", countOnly = false) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/documentation?from=${from}&size=${size}&count-only=${countOnly}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve docs");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of docs: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Fetches a single documentation
+ *
+ * @async
+ * @function fetchSingleElementDetails
+ * @param {string} docName - Documentation name
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the documentation.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchADocumentation(docName) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/documentation/${docName}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch documentation");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single documentation: ", error.message);
+    return "ERROR";
+  }
+}

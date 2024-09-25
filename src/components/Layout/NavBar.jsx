@@ -59,6 +59,7 @@ export default function NavBar(props) {
   // Check if the current user is admin, if yes, allow edit
   const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role < PERMISSIONS["edit_map"];
+  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -114,6 +115,22 @@ export default function NavBar(props) {
             >
               <MenuItem>Update Profile</MenuItem>
             </Link>
+            {isAdmin && (
+              <>
+                <ListDivider />
+                <Typography
+                  level="body-xs"
+                  textTransform="uppercase"
+                  fontWeight="lg"
+                  sx={{ px: 1.5, py: 1 }}
+                >
+                  Admin
+                </Typography>
+                <MenuItem component="a" href="/new-doc">
+                  New Documentation
+                </MenuItem>
+              </>
+            )}
             <ListDivider />
             <Typography
               level="body-xs"
@@ -166,6 +183,22 @@ export default function NavBar(props) {
           <Link to={"/user-profile-update"} style={{ textDecoration: "none" }}>
             <ListItem>Update Profile</ListItem>
           </Link>
+          {isAdmin && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              <Typography
+                level="body-xs"
+                textTransform="uppercase"
+                fontWeight="lg"
+                sx={{ px: 1.5, py: 1 }}
+              >
+                Admin
+              </Typography>
+              <Link to="/new-doc" style={{ textDecoration: "none" }}>
+                <ListItem>New Documentation</ListItem>
+              </Link>
+            </>
+          )}
           <Divider sx={{ my: 1 }} />
           <Typography
             level="body-xs"
