@@ -173,7 +173,7 @@ export default function DocEditCard(props) {
                 level="title-md"
                 endDecorator={<RequiredFieldIndicator />}
               >
-                Documentation name
+                Title
               </Typography>
             </FormLabel>
             <Input
