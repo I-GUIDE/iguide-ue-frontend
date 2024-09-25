@@ -106,7 +106,7 @@ export default function MarkdownEditor(props) {
             <Typography level="body-xs" color="success">
               Upload succeeded!
             </Typography>
-            <Typography>
+            <Typography level="body-xs">
               Markdown script:{" "}
               <Typography
                 textColor="#000"
