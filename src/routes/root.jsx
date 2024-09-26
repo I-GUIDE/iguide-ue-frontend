@@ -55,7 +55,11 @@ export default function Root(props) {
     first_name: "Happy",
     last_name: "Person",
     openid: "http://cilogon.org/serverE/users/do-not-use",
-    role: 0,
+    role: 1,
+    gitHubLink: "https://github.com",
+    linkedInLink: "https://linkedin.com",
+    googleScholarLink: "https://scholar.google.com",
+    personalWebsiteLink: "https://i-guide.io",
   };
 
   useEffect(() => {
