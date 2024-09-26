@@ -6,21 +6,23 @@ import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Avatar from "@mui/joy/Avatar";
-import Grid from "@mui/joy/Grid";
 import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function SearchBar(props) {
-  const onSearch = props.onSearch;
+  const onSearch = props.onSearch ? props.onSearch : () => {};
   const showSmartSearch = props.showSmartSearch;
+
+  const navigate = useNavigate();
+
   // define search data
   const [data, setData] = useState({
     content: "",
     status: "initial",
   });
-
-  const navigate = useNavigate();
-
+  // Traditional search or LLM search
+  const [searchType, setSearchType] = useState();
   // the term that will be immediately passed to the database for search
   const [searchTerm, setSearchTerm] = useState("");
   const searchCategory = "any";
@@ -31,12 +33,16 @@ export default function SearchBar(props) {
     // Use preventDefault here to prevent the submit event from happening
     //   because we need to set some states below.
     event.preventDefault();
-    setSearchTerm("");
-    navigate(
-      `/search-results?keyword=${encodeURIComponent(
-        searchTerm
-      )}&type=${searchCategory}`
-    );
+    if (searchType === "traditional") {
+      navigate(
+        `/search-results?keyword=${encodeURIComponent(
+          searchTerm
+        )}&type=${searchCategory}`
+      );
+      setSearchTerm("");
+    } else if (searchType === "llm") {
+      console.log("You are searching", searchTerm, "using our LLM search");
+    }
   }
 
   return (
@@ -69,23 +75,42 @@ export default function SearchBar(props) {
           }}
           error={data.status === "failure"}
           endDecorator={
+            <Tooltip title="Search" variant="solid">
+              <IconButton
+                size="lg"
+                variant="plain"
+                loading={data.status === "loading"}
+                type="submit"
+                sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                onClick={() => {
+                  onSearch();
+                  setSearchType("traditional");
+                }}
+              >
+                <SearchIcon />
+              </IconButton>
+            </Tooltip>
+          }
+        />
+        {showSmartSearch && (
+          <Tooltip title="Conversational search (Beta)" variant="solid">
             <IconButton
               size="lg"
               variant="plain"
               loading={data.status === "loading"}
               type="submit"
               sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-              onClick={onSearch}
+              onClick={() => {
+                onSearch();
+                setSearchType("llm");
+              }}
             >
-              <SearchIcon />
+              <Avatar
+                alt="Smart search button"
+                src="/images/smart-search-button.png"
+              />
             </IconButton>
-          }
-        />
-        {showSmartSearch && (
-          <Avatar
-            alt="Smart search button"
-            src="/images/smart-search-button.png"
-          />
+          </Tooltip>
         )}
       </Stack>
 
