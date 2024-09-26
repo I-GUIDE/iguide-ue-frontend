@@ -56,8 +56,9 @@ export default function NavBar(props) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   // Check if the current user is admin, if yes, allow edit
-  const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
-  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
+  const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
+  const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
+  const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -113,7 +114,7 @@ export default function NavBar(props) {
             >
               <MenuItem>Update Profile</MenuItem>
             </Link>
-            {isAdmin && (
+            {canEditAllElements && (
               <>
                 <ListDivider />
                 <Typography
@@ -176,7 +177,7 @@ export default function NavBar(props) {
           <Link to={"/user-profile-update"} style={{ textDecoration: "none" }}>
             <ListItem>Update Profile</ListItem>
           </Link>
-          {isAdmin && (
+          {canEditAllElements && (
             <>
               <Divider sx={{ my: 1 }} />
               <Typography

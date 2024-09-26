@@ -41,9 +41,9 @@ export default function ContributorOps(props) {
   }
 
   // Check if the current user is admin, if yes, allow edit
-  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
+  const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const isContributor = localUserInfo.id === contributorId;
-  if (!isContributor && !isAdmin) {
+  if (!isContributor && !canEditAllElements) {
     return null;
   }
 
@@ -123,7 +123,9 @@ export default function ContributorOps(props) {
               onClick={() => handleElementDelete(deleteMetadataId)}
             >
               Delete
-              {!isContributor && isAdmin && " (YOU ARE NOT THE CONTRIBUTOR)"}
+              {!isContributor &&
+                canEditAllElements &&
+                " (YOU ARE NOT THE CONTRIBUTOR)"}
             </Button>
             <Button
               variant="plain"

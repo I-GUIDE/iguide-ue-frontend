@@ -501,12 +501,12 @@ export default function SubmissionCard(props) {
   }
 
   // Check if the current user is admin, if yes, allow edit
-  const isAdmin = localUserInfo.role < PERMISSIONS["edit_all"];
+  const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const isContributor = contributor && localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
-    if (!isContributor && !isAdmin) {
+    if (!isContributor && !canEditAllElements) {
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
@@ -518,8 +518,8 @@ export default function SubmissionCard(props) {
   } else if (submissionType === "update") {
     if (isContributor) {
       cardTitle = "Edit your contribution";
-    } else if (isAdmin) {
-      cardTitle = "Edit this element as an admin";
+    } else if (canEditAllElements) {
+      cardTitle = "Edit this element as a moderator";
     }
   } else {
     cardTitle = "You are not authorized to update this element";
@@ -542,7 +542,7 @@ export default function SubmissionCard(props) {
       }}
     >
       <Typography level="h3">{cardTitle}</Typography>
-      {isAdmin && !isContributor && submissionType === "update" && (
+      {canEditAllElements && !isContributor && submissionType === "update" && (
         <Typography color="danger" level="title-md">
           WARNING: You are not the contributor
         </Typography>
