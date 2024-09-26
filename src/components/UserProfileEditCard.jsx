@@ -32,6 +32,7 @@ import { dataURLtoFile } from "../helpers/helper";
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -180,6 +181,10 @@ export default function UserProfileEditCard(props) {
       email,
       affiliation,
       bio,
+      gitHubLink,
+      linkedInLink,
+      googleScholarLink,
+      personalWebsiteLink,
       avatar_url
     );
 
