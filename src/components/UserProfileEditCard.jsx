@@ -102,10 +102,10 @@ export default function UserProfileEditCard(props) {
       setAffiliationFromDB(localUserInfo["affiliation"]);
       setAffiliation(localUserInfo["affiliation"]);
       setBio(localUserInfo["bio"]);
-      setGitHubLink(localUserInfo["github"]);
-      setLinkedInLink(localUserInfo["linkedin"]);
-      setGoogleScholarLink(localUserInfo["google-scholar"]);
-      setPersonalWebsiteLink(localUserInfo["personal-website"]);
+      setGitHubLink(localUserInfo["gitHubLink"]);
+      setLinkedInLink(localUserInfo["linkedInLink"]);
+      setGoogleScholarLink(localUserInfo["googleScholarLink"]);
+      setPersonalWebsiteLink(localUserInfo["personalWebsiteLink"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
     if (localUserInfo && localUserInfo.id) {
