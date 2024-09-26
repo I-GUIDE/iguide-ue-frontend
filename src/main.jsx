@@ -27,6 +27,8 @@ import DocSubmission from "./routes/DocSubmission";
 import DocUpdate from "./routes/DocUpdate";
 import DocPage from "./routes/DocPage";
 
+import LlmSearch from "./routes/LlmSearch";
+
 import ErrorPage from "./ErrorPage";
 import ContributorProfile from "./routes/contributorProfile";
 
@@ -119,6 +121,10 @@ const router = createBrowserRouter([
       {
         path: "/docs/:id",
         element: <DocPage />,
+      },
+      {
+        path: "/smart-search",
+        element: <LlmSearch />,
       },
     ],
   },
