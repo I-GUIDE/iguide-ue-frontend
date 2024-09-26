@@ -11,6 +11,8 @@ import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 export default function LlmSearchPane(props) {
   const chat = props.chat;
+  const memoryId = props.memoryId;
+
   const [chatMessages, setChatMessages] = useState(chat.messages);
   const [searchInputValue, setSearchInputValue] = useState("");
 

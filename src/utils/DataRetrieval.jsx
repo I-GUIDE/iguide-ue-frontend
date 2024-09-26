@@ -277,3 +277,30 @@ export async function fetchADocumentation(docName) {
     return "ERROR";
   }
 }
+
+/**
+ * Fetches a memoryId for the llm search
+ *
+ * @async
+ * @function fetchLlmSearchMemoryId
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the memory-id.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchLlmSearchMemoryId() {
+  try {
+    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/memory-id`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch a memory-id");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a memory-id: ", error.message);
+    return "ERROR";
+  }
+}
