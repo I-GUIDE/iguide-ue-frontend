@@ -34,7 +34,7 @@ export default function Header(props) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        height: HEADER_HEIGHT,
+        minHeight: HEADER_HEIGHT,
       }}
     >
       <Card
