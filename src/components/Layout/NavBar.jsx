@@ -87,12 +87,15 @@ export default function NavBar(props) {
     if (isAuthenticated) {
       return (
         <Dropdown>
-          <MenuButton color="primary">
-            <UserAvatar
-              link={localUserInfo["avatar_url"]}
-              userId={localUserInfo.id}
-            />
-          </MenuButton>
+          <Tooltip title="Open User Menu" variant="solid">
+            <MenuButton color="primary">
+              <UserAvatar
+                link={localUserInfo["avatar_url"]}
+                userId={localUserInfo.id}
+              />
+            </MenuButton>
+          </Tooltip>
+
           <Menu
             placement="bottom-end"
             color="primary"
@@ -386,7 +389,7 @@ export default function NavBar(props) {
                   variant="plain"
                   spacing="0.1rem"
                 >
-                  <Tooltip title="I-GUIDE JupyterHub" variant="solid">
+                  <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"
                       component="a"
