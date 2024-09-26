@@ -304,3 +304,37 @@ export async function fetchLlmSearchMemoryId() {
     return "ERROR";
   }
 }
+
+/**
+ * Fetches llm search results.
+ *
+ * @async
+ * @function fetchLlmSearchResult
+ * @param {string} searchInput - The input of the llm search request from end users.
+ * @param {string} memoryId - The memoryId from /api/llm/memory-id endpoint.
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the llm search results.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchLlmSearchResult(searchInput, memoryId) {
+  const llmSearchRequestBody = {
+    userQuery: searchInput,
+    memoryId: memoryId,
+  };
+  try {
+    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(llmSearchRequestBody),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch the llm search result");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching the llm search result: ", error.message);
+    return "ERROR";
+  }
+}

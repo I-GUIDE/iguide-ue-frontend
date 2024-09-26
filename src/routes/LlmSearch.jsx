@@ -21,8 +21,8 @@ export default function LlmSearch() {
 
   useEffect(() => {
     async function fetchMemoryId() {
-      const LlmMemory = await fetchLlmSearchMemoryId();
-      // const LlmMemory = {};
+      // const LlmMemory = await fetchLlmSearchMemoryId();
+      const LlmMemory = {};
       TEST_MODE && console.log("memory returned", LlmMemory);
 
       if (LlmMemory === "ERROR") {
