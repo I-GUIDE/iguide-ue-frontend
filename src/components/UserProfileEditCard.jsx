@@ -63,6 +63,11 @@ export default function UserProfileEditCard(props) {
   const [affiliationFromDB, setAffiliationFromDB] = useState();
   const [bio, setBio] = useState();
 
+  const [gitHubLink, setGitHubLink] = useState("");
+  const [linkedInLink, setLinkedInLink] = useState("");
+  const [googleScholarLink, setGoogleScholarLink] = useState("");
+  const [personalWebsiteLink, setPersonalWebsiteLink] = useState("");
+
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
@@ -88,6 +93,10 @@ export default function UserProfileEditCard(props) {
       setAffiliationFromDB(localUserInfo["affiliation"]);
       setAffiliation(localUserInfo["affiliation"]);
       setBio(localUserInfo["bio"]);
+      setGitHubLink(localUserInfo["github"]);
+      setLinkedInLink(localUserInfo["linkedin"]);
+      setGoogleScholarLink(localUserInfo["google-scholar"]);
+      setPersonalWebsiteLink(localUserInfo["personal-website"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
     if (localUserInfo && localUserInfo.id) {
@@ -364,6 +373,38 @@ export default function UserProfileEditCard(props) {
                 </AspectRatio>
               </Stack>
             )}
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>GitHub profile</FormLabel>
+            <Input
+              name="github"
+              value={gitHubLink}
+              onChange={(event) => setGitHubLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>LinkedIn profile</FormLabel>
+            <Input
+              name="linkedin"
+              value={linkedInLink}
+              onChange={(event) => setLinkedInLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Google Scholar profile</FormLabel>
+            <Input
+              name="google-scholar"
+              value={googleScholarLink}
+              onChange={(event) => setGoogleScholarLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Personal website</FormLabel>
+            <Input
+              name="personal-website"
+              value={personalWebsiteLink}
+              onChange={(event) => setPersonalWebsiteLink(event.target.value)}
+            />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Bio</FormLabel>
