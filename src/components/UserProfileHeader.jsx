@@ -76,8 +76,8 @@ export default function UserProfileHeader(props) {
     );
   }
 
-  const canEditOER = localUserInfo.role < PERMISSIONS["edit_oer"];
-  const canEditMap = localUserInfo.role < PERMISSIONS["edit_map"];
+  const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
+  const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
 
   return (
     <Box
