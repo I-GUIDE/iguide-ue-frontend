@@ -175,6 +175,10 @@ export default function DocEditCard(props) {
               >
                 Title
               </Typography>
+              <Typography color="danger">
+                (Please make sure this title is not taken! We are still fixing
+                an issue caused by duplicate titles)
+              </Typography>
             </FormLabel>
             <Input
               name="name"

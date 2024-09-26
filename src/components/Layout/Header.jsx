@@ -34,7 +34,7 @@ export default function Header(props) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        height: HEADER_HEIGHT,
+        minHeight: HEADER_HEIGHT,
       }}
     >
       <Card
@@ -52,7 +52,7 @@ export default function Header(props) {
                 parentPages={parentPages}
                 currentPage={currentPage}
                 fontLevel="body-xs"
-                sx={{ px: 0, pb: { xs: 1, sm: 3 } }}
+                sx={{ px: 0, pb: { xs: 1, sm: 2.5 } }}
               />
               <Stack
                 direction="row"
