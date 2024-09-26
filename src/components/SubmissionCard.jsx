@@ -943,6 +943,7 @@ export default function SubmissionCard(props) {
                       <Option value="notebook">Notebook</Option>
                       <Option value="publication">Publication</Option>
                       <Option value="oer">Educational Resource</Option>
+                      <Option value="map">Map</Option>
                     </Select>
                   </td>
                   <td align="left">
