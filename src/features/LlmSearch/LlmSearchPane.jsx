@@ -3,14 +3,12 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
-import Grid from "@mui/material/Grid2";
 
 import MessageBubble from "./MessageBubble";
 import LlmSearchInput from "./LlmSearchInput";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import { fetchLlmSearchResult } from "../../utils/DataRetrieval";
-import SimpleInfoCard from "../../components/SimpleInfoCard";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -25,9 +23,9 @@ async function getLlmSearchResult(
   const newIdString = newId.toString();
 
   const currentChatMessage = chatMessages.concat({
-    id: newIdString,
+    message_id: newIdString,
     sender: "You",
-    content: input,
+    answer: input,
     timestamp: "Just now",
   });
 
@@ -48,9 +46,9 @@ async function getLlmSearchResult(
   const count = result.count;
 
   const currentChatMessageWithResponse = currentChatMessage.concat({
-    id: messageId,
+    message_id: messageId,
     sender: "I-GUIDE AI",
-    content: answer,
+    answer: answer,
     elements: elementList,
     timestamp: "Just now",
   });
@@ -105,28 +103,8 @@ export default function LlmSearchPane(props) {
                 <Stack direction="column">
                   <MessageBubble
                     variant={isYou ? "sent" : "received"}
-                    {...message}
+                    messageBody={message}
                   />
-                  <Grid
-                    container
-                    spacing={3}
-                    columns={12}
-                    sx={{ flexGrow: 1 }}
-                    justifyContent="flex-start"
-                  >
-                    {message.elements?.map((element) => (
-                      <Grid key={element.id} size={{ xs: 3 }}>
-                        <SimpleInfoCard
-                          cardtype={element["resource-type"] + "s"}
-                          pageId={element.id}
-                          title={element.title}
-                          thumbnailImage={element["thumbnail-image"]}
-                          minHeight="100%"
-                          width="100%"
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
                 </Stack>
               </Stack>
             );
