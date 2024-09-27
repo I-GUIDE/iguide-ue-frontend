@@ -28,6 +28,7 @@ export default function SimpleInfoCard(props) {
   const minHeight = props.minHeight;
   const width = props.width;
   const showElementType = props.showElementType;
+  const defaultOpenNew = props.defaultOpenNew;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -76,6 +77,8 @@ export default function SimpleInfoCard(props) {
             overlay
             underline="none"
             component={RouterLink}
+            target={defaultOpenNew && "_blank"}
+            rel={defaultOpenNew && "noopener noreferrer"}
             to={"/" + cardType + "/" + pageId}
             sx={{ color: "text.tertiary" }}
           >

@@ -447,6 +447,7 @@ export default function SearchResults() {
                         contents={result.contents}
                         thumbnailImage={result["thumbnail-image"]}
                         showElementType
+                        defaultOpenNew
                       />
                     </Grid>
                   ))}

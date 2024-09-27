@@ -30,6 +30,7 @@ export default function InfoCard(props) {
   const contents = props.contents;
   const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
+  const defaultOpenNew = props.defaultOpenNew;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -90,6 +91,8 @@ export default function InfoCard(props) {
             underline="none"
             component={RouterLink}
             to={"/" + cardType + "/" + pageid}
+            target={defaultOpenNew && "_blank"}
+            rel={defaultOpenNew && "noopener noreferrer"}
             sx={{ color: "text.tertiary" }}
           >
             <Typography

@@ -95,6 +95,7 @@ export default function MessageBubble(props) {
                       minHeight="100%"
                       width="100%"
                       showElementType
+                      defaultOpenNew
                     />
                   </Grid>
                 ))}
