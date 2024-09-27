@@ -337,12 +337,16 @@ export default function NavBar(props) {
                     <AuthInDrawer />
                   </Box>
                 </Drawer>
-                <Box
-                  component="img"
-                  sx={{ height: 40, mt: 1, px: 2 }}
-                  alt="Logo"
-                  src="/images/Logo.png"
-                />
+                <Link to={"/"} style={{ textDecoration: "none" }}>
+                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                    <Box
+                      component="img"
+                      sx={{ height: 40, mt: 1, px: 2 }}
+                      alt="Logo"
+                      src="/images/Logo.png"
+                    />
+                  </Tooltip>
+                </Link>
               </Stack>
             </Stack>
 
