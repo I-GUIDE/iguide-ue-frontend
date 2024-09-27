@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 import { StyledEngineProvider } from "@mui/material/styles";
 
@@ -48,9 +48,8 @@ export default function Root(props) {
 
   const demoLocalUser = {
     affiliation: "I-GUIDE",
-    avatar_url:
-      "https://media.licdn.com/dms/image/D560BAQFiEtnyQGMPqg/company-logo_200_200/0/1688432335582/nsf_i_guide_logo?e=2147483647&v=beta&t=UtNQYXjEIdSjsDrsVrVuTf_d53Rb26QZqeImQNt19qw",
-    bio: "Hi! This is my bio.",
+    avatar_url: "/images/Logo.png",
+    bio: "NSF I-GUIDE enhances STEM participation for underserved populations through innovative education and community partnerships.",
     email: "user@example.com",
     first_name: "Happy",
     last_name: "Person",

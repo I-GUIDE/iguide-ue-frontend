@@ -125,55 +125,84 @@ export default function UserProfileHeader(props) {
                 <Stack
                   direction="column"
                   sx={{ m: 3 }}
-                  spacing={1.5}
+                  spacing={2}
                   alignItems={{
                     xs: "center",
                     md: "flex-start",
                   }}
                 >
-                  <Typography level="h1" fontWeight="lg" textColor="#000">
-                    {localUserInfo.first_name
-                      ? localUserInfo.first_name
-                      : "First name unknown"}
-                    &nbsp;
-                    {localUserInfo.last_name
-                      ? localUserInfo.last_name
-                      : "Last name unknown"}
-                  </Typography>
                   <Stack
                     direction="column"
                     sx={{ m: 3 }}
-                    spacing={1}
+                    spacing={0.5}
                     alignItems={{
                       xs: "center",
                       md: "flex-start",
                     }}
                   >
+                    <Typography level="h1" fontWeight="lg" textColor="#000">
+                      {localUserInfo.first_name
+                        ? localUserInfo.first_name
+                        : "First name unknown"}
+                      &nbsp;
+                      {localUserInfo.last_name
+                        ? localUserInfo.last_name
+                        : "Last name unknown"}
+                    </Typography>
                     {localUserInfo.affiliation && (
-                      <Typography level="body-lg" fontWeight="md">
+                      <Typography level="body-lg" fontWeight="sm">
                         {localUserInfo.affiliation}
                       </Typography>
                     )}
-                    {localUserInfo.email && (
-                      <Link
-                        href={"mailto:" + localUserInfo.email}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ textDecoration: "underline" }}
-                      >
-                        <Typography level="body-md" fontWeight="md">
-                          {localUserInfo.email}
-                        </Typography>
-                      </Link>
-                    )}
-                    {localUserInfo.bio && (
-                      <Tooltip
-                        title={"Bio: " + localUserInfo.bio}
-                        variant="outlined"
-                      >
+                  </Stack>
+                  <Stack
+                    direction="column"
+                    sx={{ m: 3 }}
+                    spacing={0.5}
+                    alignItems={{
+                      xs: "center",
+                      md: "flex-start",
+                    }}
+                  >
+                    {localUserInfo.bio &&
+                      (localUserInfo["bio"].length > 100 ? (
+                        <Tooltip
+                          title={
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                maxWidth: 450,
+                                justifyContent: "center",
+                                p: 1,
+                              }}
+                            >
+                              <Typography level="title-sm">Bio</Typography>
+                              <Typography level="body-sm">
+                                {localUserInfo.bio}
+                              </Typography>
+                            </Box>
+                          }
+                          variant="outlined"
+                        >
+                          <Typography
+                            level="body-sm"
+                            fontWeight="lg"
+                            sx={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: { xs: "3", md: "2" },
+                              WebkitBoxOrient: "vertical",
+                            }}
+                          >
+                            {localUserInfo.bio}
+                          </Typography>
+                        </Tooltip>
+                      ) : (
                         <Typography
                           level="body-sm"
-                          fontWeight="md"
+                          fontWeight="lg"
                           sx={{
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -182,11 +211,25 @@ export default function UserProfileHeader(props) {
                             WebkitBoxOrient: "vertical",
                           }}
                         >
-                          Bio: {localUserInfo.bio}
+                          {localUserInfo.bio}
                         </Typography>
-                      </Tooltip>
+                      ))}
+                    {localUserInfo.email && (
+                      <Link
+                        href={"mailto:" + localUserInfo.email}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Typography
+                          level="body-sm"
+                          fontWeight="lg"
+                          color="primary"
+                        >
+                          {localUserInfo.email}
+                        </Typography>
+                      </Link>
                     )}
-                    <Stack direction="row" spacing={1.5}>
+                    <Stack direction="row" spacing={1.5} sx={{ py: 0.5 }}>
                       {localUserInfo.gitHubLink && (
                         <Tooltip title="User GitHub profile" variant="solid">
                           <Link
@@ -256,7 +299,7 @@ export default function UserProfileHeader(props) {
                         color="success"
                         endDecorator={<EditIcon />}
                       >
-                        Edit Profile
+                        Edit
                       </Button>
                       <Dropdown>
                         <MenuButton
@@ -265,7 +308,7 @@ export default function UserProfileHeader(props) {
                           color="warning"
                           endDecorator={<LibraryAddIcon />}
                         >
-                          New Contribution
+                          New Element
                         </MenuButton>
                         <Menu placement="bottom-end" color="primary">
                           <MenuItem component="a" href="/contribution/dataset">
