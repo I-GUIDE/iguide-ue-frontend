@@ -10,11 +10,14 @@ import { sampleChats } from "../features/LlmSearch/sampleChats";
 import { fetchLlmSearchMemoryId } from "../utils/DataRetrieval";
 
 import LlmSearchPane from "../features/LlmSearch/LlmSearchPane";
+import usePageTitle from "../hooks/usePageTitle";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
 export default function LlmSearch() {
+  usePageTitle("Smart search");
+
   const [memoryId, setMemoryId] = useState();
   const [error, setError] = useState(false);
 
