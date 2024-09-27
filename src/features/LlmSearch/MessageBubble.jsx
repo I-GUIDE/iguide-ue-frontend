@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import MDEditor from "@uiw/react-md-editor";
+
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Sheet from "@mui/joy/Sheet";
@@ -7,6 +9,7 @@ import Typography from "@mui/joy/Typography";
 
 export default function MessageBubble(props) {
   const content = props.content;
+  const elementList = props.elementList;
   const variant = props.variant;
   const sender = props.sender;
   const isSent = variant === "sent";
@@ -55,20 +58,9 @@ export default function MessageBubble(props) {
                 },
           ]}
         >
-          <Typography
-            level="body-sm"
-            sx={[
-              isSent
-                ? {
-                    color: "var(--joy-palette-common-white)",
-                  }
-                : {
-                    color: "var(--joy-palette-text-primary)",
-                  },
-            ]}
-          >
-            {content}
-          </Typography>
+          <div className="container" data-color-mode="light">
+            <MDEditor.Markdown source={content} />
+          </div>
         </Sheet>
       </Box>
     </Box>
