@@ -12,6 +12,7 @@ import { fetchLlmSearchMemoryId } from "../utils/DataRetrieval";
 import LlmSearchPane from "../features/LlmSearch/LlmSearchPane";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const DO_NOT_GET_MEMORY_ID = import.meta.env.VITE_DO_NOT_GET_LLM_MEMORY_ID;
 
 export default function LlmSearch() {
   const [selectedChat, setSelectedChat] = useState(sampleChats[0]);
@@ -21,8 +22,9 @@ export default function LlmSearch() {
 
   useEffect(() => {
     async function fetchMemoryId() {
-      // const LlmMemory = await fetchLlmSearchMemoryId();
-      const LlmMemory = {};
+      const LlmMemory = DO_NOT_GET_MEMORY_ID
+        ? {}
+        : await fetchLlmSearchMemoryId();
       TEST_MODE && console.log("memory returned", LlmMemory);
 
       if (LlmMemory === "ERROR") {
