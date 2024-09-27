@@ -1,13 +1,3 @@
-export const starterChat = [
-  [
-    {
-      message_id: "0",
-      answer: "Hi! What can I help you today :)",
-      sender: "I-GUIDE AI",
-    },
-  ],
-];
-
 export const sampleChats = [
   [
     {
