@@ -8,6 +8,9 @@ import MessageBubble from "./MessageBubble";
 import LlmSearchInput from "./LlmSearchInput";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { fetchLlmSearchResult } from "../../utils/DataRetrieval";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function LlmSearchPane(props) {
   const chat = props.chat;
@@ -19,6 +22,40 @@ export default function LlmSearchPane(props) {
   useEffect(() => {
     setChatMessages(chat.messages);
   }, [chat.messages]);
+
+  async function getLlmSearchResult(input, mid) {
+    const result = await fetchLlmSearchResult(input, mid);
+    TEST_MODE && console.log("Llm response", input, mid, result);
+
+    let answer = "";
+    let messageId = "";
+    let elementList = [];
+
+    if (!result) {
+      alert("Error getting response from I-GUIDE AI.");
+      return;
+    }
+
+    if (result.ext) {
+      answer = result.ext.retrieval_augmented_generation.answer;
+      messageId = result.ext.retrieval_augmented_generation.message_id;
+    }
+
+    if (result.hits) {
+      elementList = result.hits.hits;
+    }
+
+    setChatMessages([
+      ...chatMessages,
+      {
+        id: messageId,
+        sender: "I-GUIDE AI",
+        content: answer,
+        elements: elementList,
+        timestamp: "Just now",
+      },
+    ]);
+  }
 
   return (
     <Sheet
@@ -82,6 +119,7 @@ export default function LlmSearchPane(props) {
               timestamp: "Just now",
             },
           ]);
+          getLlmSearchResult(searchInputValue, memoryId);
         }}
       />
     </Sheet>

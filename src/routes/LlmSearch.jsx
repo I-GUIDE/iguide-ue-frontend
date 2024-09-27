@@ -22,17 +22,16 @@ export default function LlmSearch() {
 
   useEffect(() => {
     async function fetchMemoryId() {
-      const LlmMemory = DO_NOT_GET_MEMORY_ID
-        ? {}
-        : await fetchLlmSearchMemoryId();
-      TEST_MODE && console.log("memory returned", LlmMemory);
+      const llmMemory =
+        DO_NOT_GET_MEMORY_ID === "true" ? {} : await fetchLlmSearchMemoryId();
+      TEST_MODE && console.log("llm memory returned", llmMemory);
 
-      if (LlmMemory === "ERROR") {
+      if (llmMemory === "ERROR") {
         setError(true);
         return;
       }
 
-      setMemoryId(LlmMemory.memoryId);
+      setMemoryId(llmMemory.memoryId);
     }
     fetchMemoryId();
   }, []);
