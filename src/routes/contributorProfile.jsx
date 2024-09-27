@@ -46,6 +46,10 @@ export default function ContributorProfile() {
         avatar_url: user["avatar_url"],
         openid: user["openid"],
         id: user["id"],
+        gitHubLink: user.gitHubLink,
+        linkedInLink: user.linkedInLink,
+        googleScholarLink: user.googleScholarLink,
+        personalWebsiteLink: user.personalWebsiteLink,
       });
     }
     getContributorInfo(userId);

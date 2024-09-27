@@ -32,6 +32,7 @@ import { dataURLtoFile } from "../helpers/helper";
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -44,6 +45,14 @@ const VisuallyHiddenInput = styled("input")`
   white-space: nowrap;
   width: 1px;
 `;
+
+function RequiredFieldIndicator() {
+  return (
+    <Typography color="danger" level="title-lg">
+      *
+    </Typography>
+  );
+}
 
 export default function UserProfileEditCard(props) {
   useEffect(() => {
@@ -62,6 +71,11 @@ export default function UserProfileEditCard(props) {
   const [emailFromDB, setEmailFromDB] = useState();
   const [affiliationFromDB, setAffiliationFromDB] = useState();
   const [bio, setBio] = useState();
+
+  const [gitHubLink, setGitHubLink] = useState("");
+  const [linkedInLink, setLinkedInLink] = useState("");
+  const [googleScholarLink, setGoogleScholarLink] = useState("");
+  const [personalWebsiteLink, setPersonalWebsiteLink] = useState("");
 
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
@@ -88,6 +102,10 @@ export default function UserProfileEditCard(props) {
       setAffiliationFromDB(localUserInfo["affiliation"]);
       setAffiliation(localUserInfo["affiliation"]);
       setBio(localUserInfo["bio"]);
+      setGitHubLink(localUserInfo["gitHubLink"]);
+      setLinkedInLink(localUserInfo["linkedInLink"]);
+      setGoogleScholarLink(localUserInfo["googleScholarLink"]);
+      setPersonalWebsiteLink(localUserInfo["personalWebsiteLink"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
     };
     if (localUserInfo && localUserInfo.id) {
@@ -163,6 +181,10 @@ export default function UserProfileEditCard(props) {
       email,
       affiliation,
       bio,
+      gitHubLink,
+      linkedInLink,
+      googleScholarLink,
+      personalWebsiteLink,
       avatar_url
     );
 
@@ -196,6 +218,9 @@ export default function UserProfileEditCard(props) {
           ? "Please fill out the required fields"
           : "Update your user profile"}
       </Typography>
+      <Typography level="body-sm">
+        Fields marked <RequiredFieldIndicator /> are required.
+      </Typography>
       <Divider inset="none" />
       <form onSubmit={handleSubmit} name="resourceForm">
         <CardContent
@@ -211,7 +236,14 @@ export default function UserProfileEditCard(props) {
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>First name (required)</FormLabel>
+              <FormLabel>
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  First name
+                </Typography>
+              </FormLabel>
               <Input
                 name="first_name"
                 required
@@ -227,7 +259,14 @@ export default function UserProfileEditCard(props) {
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Last name (required)</FormLabel>
+              <FormLabel>
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Last name
+                </Typography>
+              </FormLabel>
               <Input
                 name="last_name"
                 required
@@ -243,7 +282,14 @@ export default function UserProfileEditCard(props) {
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Email (required)</FormLabel>
+              <FormLabel>
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Email
+                </Typography>
+              </FormLabel>
               <Input
                 name="email"
                 required
@@ -259,7 +305,14 @@ export default function UserProfileEditCard(props) {
             </FormControl>
           ) : (
             <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Affiliation (required)</FormLabel>
+              <FormLabel>
+                <Typography
+                  level="title-md"
+                  endDecorator={<RequiredFieldIndicator />}
+                >
+                  Affiliation
+                </Typography>
+              </FormLabel>
               <Input
                 name="affiliation"
                 required
@@ -364,6 +417,42 @@ export default function UserProfileEditCard(props) {
                 </AspectRatio>
               </Stack>
             )}
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>GitHub profile</FormLabel>
+            <Input
+              name="github"
+              placeholder="https://github.com/{username}"
+              value={gitHubLink}
+              onChange={(event) => setGitHubLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>LinkedIn profile</FormLabel>
+            <Input
+              name="linkedin"
+              placeholder="https://linkedin.com/in/{username}"
+              value={linkedInLink}
+              onChange={(event) => setLinkedInLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Google Scholar profile</FormLabel>
+            <Input
+              name="google-scholar"
+              placeholder="https://scholar.google.com/"
+              value={googleScholarLink}
+              onChange={(event) => setGoogleScholarLink(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Personal website</FormLabel>
+            <Input
+              name="personal-website"
+              placeholder="https://example.com"
+              value={personalWebsiteLink}
+              onChange={(event) => setPersonalWebsiteLink(event.target.value)}
+            />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Bio</FormLabel>
