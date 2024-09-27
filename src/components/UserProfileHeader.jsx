@@ -14,12 +14,19 @@ import MenuButton from "@mui/joy/MenuButton";
 import Dropdown from "@mui/joy/Dropdown";
 import MenuItem from "@mui/joy/MenuItem";
 import Link from "@mui/joy/Link";
+import Tooltip from "@mui/joy/Tooltip";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PublicIcon from "@mui/icons-material/Public";
 import MoodIcon from "@mui/icons-material/Mood";
+
+import { grey } from "@mui/material/colors";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GoogleIcon from "@mui/icons-material/Google";
+import WebIcon from "@mui/icons-material/Web";
 
 import UserAvatar from "./UserAvatar";
 import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
@@ -143,11 +150,7 @@ export default function UserProfileHeader(props) {
                     }}
                   >
                     {localUserInfo.affiliation && (
-                      <Typography
-                        level="body-md"
-                        fontWeight="md"
-                        startDecorator={<PublicIcon />}
-                      >
+                      <Typography level="body-lg" fontWeight="md">
                         {localUserInfo.affiliation}
                       </Typography>
                     )}
@@ -158,24 +161,84 @@ export default function UserProfileHeader(props) {
                         rel="noopener noreferrer"
                         style={{ textDecoration: "underline" }}
                       >
-                        <Typography
-                          level="body-md"
-                          fontWeight="md"
-                          startDecorator={<AlternateEmailIcon />}
-                        >
+                        <Typography level="body-md" fontWeight="md">
                           {localUserInfo.email}
                         </Typography>
                       </Link>
                     )}
                     {localUserInfo.bio && (
-                      <Typography
-                        level="body-sm"
-                        fontWeight="md"
-                        startDecorator={<MoodIcon />}
+                      <Tooltip
+                        title={"Bio: " + localUserInfo.bio}
+                        variant="outlined"
                       >
-                        {localUserInfo.bio}
-                      </Typography>
+                        <Typography
+                          level="body-sm"
+                          fontWeight="md"
+                          sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: "2",
+                            WebkitBoxOrient: "vertical",
+                          }}
+                        >
+                          Bio: {localUserInfo.bio}
+                        </Typography>
+                      </Tooltip>
                     )}
+                    <Stack direction="row" spacing={1.5}>
+                      {localUserInfo.gitHubLink && (
+                        <Tooltip title="User GitHub profile" variant="solid">
+                          <Link
+                            href={localUserInfo.gitHubLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none" }}
+                          >
+                            <GitHubIcon sx={{ color: grey[800] }} />
+                          </Link>
+                        </Tooltip>
+                      )}
+                      {localUserInfo.linkedInLink && (
+                        <Tooltip title="User LinkedIn profile" variant="solid">
+                          <Link
+                            href={localUserInfo.linkedInLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none" }}
+                          >
+                            <LinkedInIcon sx={{ color: grey[800] }} />
+                          </Link>
+                        </Tooltip>
+                      )}
+                      {localUserInfo.googleScholarLink && (
+                        <Tooltip
+                          title="User Google Scholar profile"
+                          variant="solid"
+                        >
+                          <Link
+                            href={localUserInfo.googleScholarLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none" }}
+                          >
+                            <GoogleIcon sx={{ color: grey[800] }} />
+                          </Link>
+                        </Tooltip>
+                      )}
+                      {localUserInfo.personalWebsiteLink && (
+                        <Tooltip title="User personal website" variant="solid">
+                          <Link
+                            href={localUserInfo.personalWebsiteLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none" }}
+                          >
+                            <WebIcon sx={{ color: grey[800] }} />
+                          </Link>
+                        </Tooltip>
+                      )}
+                    </Stack>
                   </Stack>
 
                   {allowProfileOps && (
