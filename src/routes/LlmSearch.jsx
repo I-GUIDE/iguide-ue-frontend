@@ -15,9 +15,8 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
 export default function LlmSearch() {
-  const [selectedChat, setSelectedChat] = useState(
-    DO_NOT_USE_LLM_ENDPOINT === "true" ? sampleChats[0] : starterChat[0]
-  );
+  const startingChat =
+    DO_NOT_USE_LLM_ENDPOINT === "true" ? sampleChats[0] : starterChat[0];
   const [memoryId, setMemoryId] = useState();
 
   const [error, setError] = useState(false);
@@ -53,7 +52,7 @@ export default function LlmSearch() {
             gridTemplateRows: "auto 1fr auto",
           }}
         >
-          <LlmSearchPane chat={selectedChat} memoryId={memoryId} />
+          <LlmSearchPane startingChat={startingChat} memoryId={memoryId} />
         </Box>
       </Container>
     </CssVarsProvider>

@@ -26,14 +26,12 @@ async function getLlmSearchResult(
     message_id: newIdString,
     sender: "You",
     answer: input,
-    timestamp: "Just now",
   });
 
   setChatMessages(currentChatMessage);
 
   const result = await fetchLlmSearchResult(input, memoryId);
-  TEST_MODE && console.log("Question", input, memoryId, result);
-  TEST_MODE && console.log("Response", result);
+  TEST_MODE && console.log("Question", input, memoryId, "Response", result);
 
   if (!result) {
     alert("Error getting response from I-GUIDE AI.");
@@ -50,16 +48,15 @@ async function getLlmSearchResult(
     sender: "I-GUIDE AI",
     answer: answer,
     elements: elementList,
-    timestamp: "Just now",
   });
   setChatMessages(currentChatMessageWithResponse);
 }
 
 export default function LlmSearchPane(props) {
-  const chat = props.chat;
+  const startingChat = props.startingChat;
   const memoryId = props.memoryId;
 
-  const [chatMessages, setChatMessages] = useState(chat.messages);
+  const [chatMessages, setChatMessages] = useState(startingChat);
   const [searchInputValue, setSearchInputValue] = useState("");
 
   return (
@@ -100,12 +97,10 @@ export default function LlmSearchPane(props) {
                     src="/images/Logo-favicon.png"
                   />
                 )}
-                <Stack direction="column">
-                  <MessageBubble
-                    variant={isYou ? "sent" : "received"}
-                    messageBody={message}
-                  />
-                </Stack>
+                <MessageBubble
+                  variant={isYou ? "sent" : "received"}
+                  messageBody={message}
+                />
               </Stack>
             );
           })}

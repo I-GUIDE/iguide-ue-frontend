@@ -14,22 +14,24 @@ import SimpleInfoCard from "../../components/SimpleInfoCard";
 export default function MessageBubble(props) {
   const variant = props.variant;
   const messageBody = props.messageBody;
-  const sender = props.sender;
   const isSent = variant === "sent";
 
   const answer = messageBody.answer;
   const elements = messageBody.elements;
+  const sender = messageBody.sender;
 
   return (
     <Box sx={{ maxWidth: "75%", minWidth: "auto" }}>
+      {/* MessageBubble title */}
       <Stack
         direction="row"
         spacing={2}
-        sx={{ justifyContent: "space-between", mb: 0.25 }}
+        sx={{ justifyContent: isSent ? "flex-end" : "flex-start", mb: 0.25 }}
       >
         <Typography level="body-xs">{sender}</Typography>
       </Stack>
 
+      {/* Message body */}
       <Box sx={{ position: "relative" }}>
         <Sheet
           color={isSent ? "primary" : "neutral"}
@@ -70,11 +72,9 @@ export default function MessageBubble(props) {
               {answer}
             </Typography>
           ) : (
-            <>
-              <div className="container" data-color-mode="light">
-                <MDEditor.Markdown source={answer} />
-              </div>
-            </>
+            <div className="container" data-color-mode="light">
+              <MDEditor.Markdown source={answer} />
+            </div>
           )}
           {elements && elements.length > 0 && (
             <>
