@@ -64,9 +64,11 @@ export default function MessageBubble(props) {
               {content}
             </Typography>
           ) : (
-            <div className="container" data-color-mode="light">
-              <MDEditor.Markdown source={content} />
-            </div>
+            <>
+              <div className="container" data-color-mode="light">
+                <MDEditor.Markdown source={content} />
+              </div>
+            </>
           )}
         </Sheet>
       </Box>

@@ -3,12 +3,14 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
+import Grid from "@mui/material/Grid2";
 
 import MessageBubble from "./MessageBubble";
 import LlmSearchInput from "./LlmSearchInput";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import { fetchLlmSearchResult } from "../../utils/DataRetrieval";
+import SimpleInfoCard from "../../components/SimpleInfoCard";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -100,10 +102,32 @@ export default function LlmSearchPane(props) {
                     src="/images/Logo-favicon.png"
                   />
                 )}
-                <MessageBubble
-                  variant={isYou ? "sent" : "received"}
-                  {...message}
-                />
+                <Stack direction="column">
+                  <MessageBubble
+                    variant={isYou ? "sent" : "received"}
+                    {...message}
+                  />
+                  <Grid
+                    container
+                    spacing={3}
+                    columns={12}
+                    sx={{ flexGrow: 1 }}
+                    justifyContent="flex-start"
+                  >
+                    {message.elements?.map((element) => (
+                      <Grid key={element.id} size={{ xs: 3 }}>
+                        <SimpleInfoCard
+                          cardtype={element["resource-type"] + "s"}
+                          pageId={element.id}
+                          title={element.title}
+                          thumbnailImage={element["thumbnail-image"]}
+                          minHeight="100%"
+                          width="100%"
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Stack>
               </Stack>
             );
           })}
