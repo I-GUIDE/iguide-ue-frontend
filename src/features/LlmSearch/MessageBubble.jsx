@@ -21,9 +21,7 @@ export default function MessageBubble(props) {
         spacing={2}
         sx={{ justifyContent: "space-between", mb: 0.25 }}
       >
-        <Typography level="body-xs">
-          {sender === "You" ? sender : sender.name}
-        </Typography>
+        <Typography level="body-xs">{sender}</Typography>
       </Stack>
 
       <Box sx={{ position: "relative" }}>
@@ -58,9 +56,18 @@ export default function MessageBubble(props) {
                 },
           ]}
         >
-          <div className="container" data-color-mode="light">
-            <MDEditor.Markdown source={content} />
-          </div>
+          {isSent ? (
+            <Typography
+              level="body-sm"
+              sx={{ color: "var(--joy-palette-common-white)" }}
+            >
+              {content}
+            </Typography>
+          ) : (
+            <div className="container" data-color-mode="light">
+              <MDEditor.Markdown source={content} />
+            </div>
+          )}
         </Sheet>
       </Box>
     </Box>

@@ -12,50 +12,55 @@ import { fetchLlmSearchResult } from "../../utils/DataRetrieval";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
+// Get llm search result and update chatMessages array
+async function getLlmSearchResult(
+  input,
+  memoryId,
+  chatMessages,
+  setChatMessages
+) {
+  const newId = chatMessages.length + 1;
+  const newIdString = newId.toString();
+
+  const currentChatMessage = chatMessages.concat({
+    id: newIdString,
+    sender: "You",
+    content: input,
+    timestamp: "Just now",
+  });
+
+  setChatMessages(currentChatMessage);
+
+  const result = await fetchLlmSearchResult(input, memoryId);
+  TEST_MODE && console.log("Question", input, memoryId, result);
+  TEST_MODE && console.log("Response", result);
+
+  if (!result) {
+    alert("Error getting response from I-GUIDE AI.");
+    return;
+  }
+
+  const answer = result.answer;
+  const messageId = result.message_id;
+  const elementList = result.elements;
+  const count = result.count;
+
+  const currentChatMessageWithResponse = currentChatMessage.concat({
+    id: messageId,
+    sender: "I-GUIDE AI",
+    content: answer,
+    elements: elementList,
+    timestamp: "Just now",
+  });
+  setChatMessages(currentChatMessageWithResponse);
+}
+
 export default function LlmSearchPane(props) {
   const chat = props.chat;
   const memoryId = props.memoryId;
 
   const [chatMessages, setChatMessages] = useState(chat.messages);
   const [searchInputValue, setSearchInputValue] = useState("");
-
-  useEffect(() => {
-    setChatMessages(chat.messages);
-  }, [chat.messages]);
-
-  async function getLlmSearchResult(input, mid) {
-    const result = await fetchLlmSearchResult(input, mid);
-    TEST_MODE && console.log("Llm response", input, mid, result);
-
-    let answer = "";
-    let messageId = "";
-    let elementList = [];
-
-    if (!result) {
-      alert("Error getting response from I-GUIDE AI.");
-      return;
-    }
-
-    if (result.ext) {
-      answer = result.ext.retrieval_augmented_generation.answer;
-      messageId = result.ext.retrieval_augmented_generation.message_id;
-    }
-
-    if (result.hits) {
-      elementList = result.hits.hits;
-    }
-
-    setChatMessages([
-      ...chatMessages,
-      {
-        id: messageId,
-        sender: "I-GUIDE AI",
-        content: answer,
-        elements: elementList,
-        timestamp: "Just now",
-      },
-    ]);
-  }
 
   return (
     <Sheet
@@ -74,7 +79,7 @@ export default function LlmSearchPane(props) {
           px: 2,
           py: 3,
           overflowY: "auto",
-          flexDirection: "column",
+          flexDirection: "column-reverse",
         }}
       >
         <Stack spacing={2} sx={{ justifyContent: "flex-end" }}>
@@ -108,18 +113,12 @@ export default function LlmSearchPane(props) {
         searchInputValue={searchInputValue}
         setSearchInputValue={setSearchInputValue}
         onSubmit={() => {
-          const newId = chatMessages.length + 1;
-          const newIdString = newId.toString();
-          setChatMessages([
-            ...chatMessages,
-            {
-              id: newIdString,
-              sender: "You",
-              content: searchInputValue,
-              timestamp: "Just now",
-            },
-          ]);
-          getLlmSearchResult(searchInputValue, memoryId);
+          getLlmSearchResult(
+            searchInputValue,
+            memoryId,
+            chatMessages,
+            setChatMessages
+          );
         }}
       />
     </Sheet>
