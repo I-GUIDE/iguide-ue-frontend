@@ -10,6 +10,8 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 export default function LlmSearchInput(props) {
   const searchInputValue = props.searchInputValue;
   const setSearchInputValue = props.setSearchInputValue;
+  // When the server is processing answers, temporarily disable input
+  const waitingForResponse = props.waitingForResponse;
   const onSubmit = props.onSubmit;
 
   const textAreaRef = useRef(null);
@@ -25,8 +27,13 @@ export default function LlmSearchInput(props) {
     <Box sx={{ px: 2, pb: 3 }}>
       <FormControl>
         <Input
-          placeholder="Ask me anything..."
+          placeholder={
+            waitingForResponse
+              ? "We are processing your inquery"
+              : "Ask me anything..."
+          }
           aria-label="llm-search-input"
+          disabled={waitingForResponse ? true : false}
           ref={textAreaRef}
           onChange={(e) => {
             setSearchInputValue(e.target.value);

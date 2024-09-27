@@ -38,7 +38,7 @@ export default function MessageBubble(props) {
           variant={isSent ? "solid" : "outlined"}
           sx={[
             {
-              p: 1.25,
+              p: 2,
               borderRadius: "lg",
             },
             isSent
@@ -81,10 +81,9 @@ export default function MessageBubble(props) {
               <Divider sx={{ my: 2 }} />
               <Grid
                 container
-                spacing={1}
+                spacing={2}
                 columns={12}
-                sx={{ flexGrow: 1 }}
-                justifyContent="flex-start"
+                sx={{ flexGrow: 1, width: "100%" }}
               >
                 {elements?.map((element) => (
                   <Grid key={element._id} size={{ xs: 12, sm: 6, md: 4 }}>

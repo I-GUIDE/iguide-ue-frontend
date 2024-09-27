@@ -9,6 +9,7 @@ import LlmSearchInput from "./LlmSearchInput";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import { fetchLlmSearchResult } from "../../utils/DataRetrieval";
+import { Typography } from "@mui/material";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -17,7 +18,8 @@ async function getLlmSearchResult(
   input,
   memoryId,
   chatMessages,
-  setChatMessages
+  setChatMessages,
+  setWaitingForResponse
 ) {
   const newId = chatMessages.length + 1;
   const newIdString = newId.toString();
@@ -28,6 +30,7 @@ async function getLlmSearchResult(
     answer: input,
   });
 
+  setWaitingForResponse(true);
   setChatMessages(currentChatMessage);
 
   const result = await fetchLlmSearchResult(input, memoryId);
@@ -50,6 +53,7 @@ async function getLlmSearchResult(
     elements: elementList,
   });
   setChatMessages(currentChatMessageWithResponse);
+  setWaitingForResponse(false);
 }
 
 export default function LlmSearchPane(props) {
@@ -58,6 +62,7 @@ export default function LlmSearchPane(props) {
 
   const [chatMessages, setChatMessages] = useState(startingChat);
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   return (
     <Sheet
@@ -104,17 +109,22 @@ export default function LlmSearchPane(props) {
               </Stack>
             );
           })}
+          {waitingForResponse && (
+            <Typography level="body-sm">Thinking...</Typography>
+          )}
         </Stack>
       </Box>
       <LlmSearchInput
         searchInputValue={searchInputValue}
         setSearchInputValue={setSearchInputValue}
+        waitingForResponse={waitingForResponse}
         onSubmit={() => {
           getLlmSearchResult(
             searchInputValue,
             memoryId,
             chatMessages,
-            setChatMessages
+            setChatMessages,
+            setWaitingForResponse
           );
         }}
       />

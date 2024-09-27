@@ -2,7 +2,7 @@ export const starterChat = [
   [
     {
       message_id: "0",
-      answer: "Hi stranger! What are you looking for today :)",
+      answer: "Hi! What can I help you today :)",
       sender: "I-GUIDE AI",
     },
   ],
