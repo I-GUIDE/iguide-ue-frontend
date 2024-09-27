@@ -66,7 +66,7 @@ export default function MessageBubble(props) {
         >
           {isSent ? (
             <Typography
-              level="body-sm"
+              level="body-md"
               sx={{ color: "var(--joy-palette-common-white)" }}
             >
               {answer}
@@ -94,6 +94,7 @@ export default function MessageBubble(props) {
                       thumbnailImage={element["thumbnail-image"]}
                       minHeight="100%"
                       width="100%"
+                      showElementType
                     />
                   </Grid>
                 ))}

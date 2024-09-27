@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
 import FormControl from "@mui/joy/FormControl";
 import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
+import Tooltip from "@mui/joy/Tooltip";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 export default function LlmSearchInput(props) {
@@ -40,28 +40,17 @@ export default function LlmSearchInput(props) {
           }}
           value={searchInputValue}
           endDecorator={
-            <Stack
-              direction="row"
-              sx={{
-                justifyContent: "flex-end",
-                alignItems: "center",
-                flexGrow: 1,
-                py: 0.5,
-                pr: 0.5,
-                borderTop: "1px solid",
-                borderColor: "divider",
-              }}
-            >
-              <Button
-                size="sm"
+            <Tooltip title="Send" variant="solid">
+              <IconButton
+                size="lg"
+                variant="solid"
                 color="primary"
-                sx={{ alignSelf: "center", borderRadius: "sm" }}
-                endDecorator={<ArrowUpwardIcon />}
+                sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
                 onClick={handleClick}
               >
-                Send
-              </Button>
-            </Stack>
+                <ArrowUpwardIcon />
+              </IconButton>
+            </Tooltip>
           }
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -72,6 +61,9 @@ export default function LlmSearchInput(props) {
             "& textarea:first-of-type": {
               minHeight: 72,
             },
+            "--Input-decoratorChildHeight": "50px",
+            "--Input-radius": "40px",
+            "--Input-paddingInline": "20px",
           }}
         />
       </FormControl>
