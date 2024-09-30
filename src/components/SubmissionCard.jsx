@@ -189,6 +189,12 @@ export default function SubmissionCard(props) {
           title: re.title,
         })
       );
+      thisElement["related-maps"].map((re) =>
+        relatedResourcesArray.push({
+          type: re["resource-type"],
+          title: re.title,
+        })
+      );
       setRelatedResources(relatedResourcesArray);
 
       setOerExternalLinks(thisElement["oer-external-links"]);
