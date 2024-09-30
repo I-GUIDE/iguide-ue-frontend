@@ -10,10 +10,12 @@ import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
 import Publications from "./routes/publications";
 import OERS from "./routes/oers";
+import Maps from "./routes/maps";
 import NotebookPage from "./routes/ResourcePages/NotebookPage";
 import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from "./routes/ResourcePages/OERPage";
+import MapPage from "./routes/ResourcePages/MapPage";
 import Tag from "./routes/tag";
 
 import UserProfile from "./routes/userProfile";
@@ -75,6 +77,14 @@ const router = createBrowserRouter([
       {
         path: "/oers/:id",
         element: <OERPage />,
+      },
+      {
+        path: "/maps",
+        element: <Maps />,
+      },
+      {
+        path: "/maps/:id",
+        element: <MapPage />,
       },
       {
         path: "/tag/:id",

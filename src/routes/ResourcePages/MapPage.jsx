@@ -10,6 +10,7 @@ import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import MapViewer from "../../components/ResourcePagesComps/MapViewer";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
@@ -19,7 +20,7 @@ import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
 import ErrorPage from "../../ErrorPage";
 
-export default function PublicationPage() {
+export default function MapPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
@@ -31,9 +32,7 @@ export default function PublicationPage() {
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
   const [relatedMaps, setRelatedMaps] = useState([]);
-  const [externalLink, setExternalLink] = useState("");
-  const [directDownloadLink, setDirectDownloadLink] = useState("");
-  const [size, setSize] = useState("");
+  const [mapIFrameLink, setMapIFrameLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -59,9 +58,7 @@ export default function PublicationPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setExternalLink(thisElement["external-link-publication"]);
-      setDirectDownloadLink(thisElement["direct-download-link"]);
-      setSize(thisElement.size);
+      setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -108,33 +105,34 @@ export default function PublicationPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Publications", "/publications"]]}
-                  currentPage="Publication"
+                  parentPages={[["All Maps", "/maps"]]}
+                  currentPage="Map"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/publications"
+                  afterDeleteRedirection="/maps"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                doi={externalLink}
                 contributor={contributor}
-                contentsTitle="Abstract"
+                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
-                elementType="publication"
+                elementType="map"
                 creationTime={creationTime}
                 updateTime={updateTime}
               />
             </Grid>
 
+            {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
+              <MapViewer iframeSrc={mapIFrameLink} />
             </Grid>
             <RelatedElements
               relatedDatasets={relatedDatasets}

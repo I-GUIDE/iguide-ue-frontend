@@ -22,6 +22,11 @@ export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
  * @return {string} the string with all the items separated by the given delimiter.
  */
 export function printListWithDelimiter(listOfItems, delimiter) {
+  // If the listOfItems is not an array, return the object directly
+  if (!Array.isArray(listOfItems)) {
+    return listOfItems;
+  }
+
   let returnStr = "";
   for (var idx in listOfItems) {
     returnStr += listOfItems[idx] + delimiter + " ";

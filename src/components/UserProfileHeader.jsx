@@ -328,6 +328,11 @@ export default function UserProfileHeader(props) {
                               New Educational Resource
                             </MenuItem>
                           )}
+                          {canEditMap && (
+                            <MenuItem component="a" href="/contribution/map">
+                              New Map
+                            </MenuItem>
+                          )}
                         </Menu>
                       </Dropdown>
                     </Stack>
