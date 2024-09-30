@@ -167,31 +167,31 @@ export default function SubmissionCard(props) {
       let relatedResourcesArray = [];
       thisElement["related-datasets"].map((re) =>
         relatedResourcesArray.push({
-          type: re["resource-type"],
+          type: "dataset",
           title: re.title,
         })
       );
       thisElement["related-notebooks"].map((re) =>
         relatedResourcesArray.push({
-          type: re["resource-type"],
+          type: "notebook",
           title: re.title,
         })
       );
       thisElement["related-publications"].map((re) =>
         relatedResourcesArray.push({
-          type: re["resource-type"],
+          type: "publication",
           title: re.title,
         })
       );
       thisElement["related-oers"].map((re) =>
         relatedResourcesArray.push({
-          type: re["resource-type"],
+          type: "oer",
           title: re.title,
         })
       );
       thisElement["related-maps"].map((re) =>
         relatedResourcesArray.push({
-          type: re["resource-type"],
+          type: "map",
           title: re.title,
         })
       );
