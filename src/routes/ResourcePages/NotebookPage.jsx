@@ -141,16 +141,16 @@ export default function NotebookPage() {
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
-              <RelatedElements
-                relatedDatasets={relatedDatasets}
-                relatedNotebooks={relatedNotebooks}
-                relatedPublications={relatedPublications}
-                relatedOERs={relatedOERs}
-                relatedMaps={relatedMaps}
-                xs={12}
-                md={6}
-              />
             </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              relatedMaps={relatedMaps}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>

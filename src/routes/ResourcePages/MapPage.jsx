@@ -133,16 +133,16 @@ export default function MapPage() {
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
               <MapViewer iframeSrc={mapIFrameLink} />
-              <RelatedElements
-                relatedDatasets={relatedDatasets}
-                relatedNotebooks={relatedNotebooks}
-                relatedPublications={relatedPublications}
-                relatedOERs={relatedOERs}
-                relatedMaps={relatedMaps}
-                xs={12}
-                md={6}
-              />
             </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              relatedMaps={relatedMaps}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>
