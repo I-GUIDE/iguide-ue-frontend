@@ -84,6 +84,10 @@ export async function updateUser(
   email,
   affiliation,
   bio,
+  gitHubLink,
+  linkedInLink,
+  googleScholarLink,
+  personalWebsiteLink,
   avatar_url
 ) {
   const openId = encodeURIComponent(openid);
@@ -94,8 +98,14 @@ export async function updateUser(
     email: email,
     affiliation: affiliation,
     bio: bio,
+    gitHubLink: gitHubLink,
+    linkedInLink,
+    googleScholarLink: googleScholarLink,
+    personalWebsiteLink: personalWebsiteLink,
     avatar_url: avatar_url,
   };
+
+  TEST_MODE && console.log("User update", user);
 
   const response = await fetchWithAuth(
     `${USER_BACKEND_URL}/api/users/${openId}`,

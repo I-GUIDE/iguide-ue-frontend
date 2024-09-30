@@ -31,6 +31,7 @@ export default function OERPage() {
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
+  const [relatedMaps, setRelatedMaps] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
   const [creationTime, setCreationTime] = useState();
@@ -51,6 +52,7 @@ export default function OERPage() {
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
+      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -139,6 +141,7 @@ export default function OERPage() {
               relatedNotebooks={relatedNotebooks}
               relatedPublications={relatedPublications}
               relatedOERs={relatedOERs}
+              relatedMaps={relatedMaps}
               xs={12}
               md={6}
             />

@@ -33,6 +33,7 @@ export default function DatasetPage() {
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
+  const [relatedMaps, setRelatedMaps] = useState([]);
   const [externalLink, setExternalLink] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
@@ -55,6 +56,7 @@ export default function DatasetPage() {
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
+      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -154,6 +156,7 @@ export default function DatasetPage() {
               relatedNotebooks={relatedNotebooks}
               relatedPublications={relatedPublications}
               relatedOERs={relatedOERs}
+              relatedMaps={relatedMaps}
               xs={12}
               md={6}
             />

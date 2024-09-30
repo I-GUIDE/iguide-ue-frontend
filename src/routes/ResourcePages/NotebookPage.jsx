@@ -31,6 +31,7 @@ export default function NotebookPage() {
   const [relatedNotebooks, setRelatedNotebooks] = useState([]);
   const [relatedPublications, setRelatedPublicatons] = useState([]);
   const [relatedOERs, setRelatedOERs] = useState([]);
+  const [relatedMaps, setRelatedMaps] = useState([]);
   const [htmlNotebook, setHtmlNotebook] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
@@ -53,6 +54,7 @@ export default function NotebookPage() {
       setRelatedNotebooks(thisElement["related-notebooks"]);
       setRelatedPublicatons(thisElement["related-publications"]);
       setRelatedOERs(thisElement["related-oers"]);
+      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -139,15 +141,16 @@ export default function NotebookPage() {
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
               />
-              <RelatedElements
-                relatedDatasets={relatedDatasets}
-                relatedNotebooks={relatedNotebooks}
-                relatedPublications={relatedPublications}
-                relatedOERs={relatedOERs}
-                xs={12}
-                md={6}
-              />
             </Grid>
+            <RelatedElements
+              relatedDatasets={relatedDatasets}
+              relatedNotebooks={relatedNotebooks}
+              relatedPublications={relatedPublications}
+              relatedOERs={relatedOERs}
+              relatedMaps={relatedMaps}
+              xs={12}
+              md={6}
+            />
           </Grid>
         </Box>
       </Container>

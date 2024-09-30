@@ -16,12 +16,14 @@ export default function RelatedElements(props) {
   const relatedNotebooks = props.relatedNotebooks;
   const relatedPublications = props.relatedPublications;
   const relatedOERs = props.relatedOERs;
+  const relatedMaps = props.relatedMaps;
   const xs = props.xs;
   const md = props.md;
 
   function RelatedElementsByTypes(props) {
     const title = props.title;
     const relatedElements = props.relatedElements;
+    const type = props.type;
 
     // If DataRetriever has returned result, but the result is not an Array, don't render anything.
     if (
@@ -66,7 +68,7 @@ export default function RelatedElements(props) {
                 alignItems="center"
               >
                 <SimpleInfoCard
-                  cardtype={relatedElement["resource-type"] + "s"}
+                  cardtype={type}
                   pageId={relatedElement.id}
                   title={relatedElement.title}
                   thumbnailImage={relatedElement["thumbnail-image"]}
@@ -86,18 +88,27 @@ export default function RelatedElements(props) {
       <RelatedElementsByTypes
         title="Related Datasets"
         relatedElements={relatedDatasets}
+        type="datasets"
       />
       <RelatedElementsByTypes
         title="Related Notebooks"
         relatedElements={relatedNotebooks}
+        type="notebooks"
       />
       <RelatedElementsByTypes
         title="Related Publications"
         relatedElements={relatedPublications}
+        type="publications"
       />
       <RelatedElementsByTypes
         title="Related Educational Resources"
         relatedElements={relatedOERs}
+        type="oers"
+      />
+      <RelatedElementsByTypes
+        title="Related Maps"
+        relatedElements={relatedMaps}
+        type="maps"
       />
     </>
   );

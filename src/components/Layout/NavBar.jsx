@@ -45,6 +45,7 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
+  ["Maps", "/maps"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
@@ -156,6 +157,11 @@ export default function NavBar(props) {
                 New Educational Resource
               </MenuItem>
             )}
+            {canEditMap && (
+              <MenuItem component="a" href="/contribution/map">
+                New Map
+              </MenuItem>
+            )}
             <ListDivider />
             <MenuItem onClick={logout}>Logout</MenuItem>
           </Menu>
@@ -220,6 +226,11 @@ export default function NavBar(props) {
           {canEditOER && (
             <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
               <ListItem>New Educational Resource</ListItem>
+            </Link>
+          )}
+          {canEditMap && (
+            <Link to="/contribution/map" style={{ textDecoration: "none" }}>
+              <ListItem>New Map</ListItem>
             </Link>
           )}
           <Divider sx={{ my: 1 }} />
@@ -326,12 +337,16 @@ export default function NavBar(props) {
                     <AuthInDrawer />
                   </Box>
                 </Drawer>
-                <Box
-                  component="img"
-                  sx={{ height: 40, mt: 1, px: 2 }}
-                  alt="Logo"
-                  src="/images/Logo.png"
-                />
+                <Link to={"/"} style={{ textDecoration: "none" }}>
+                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                    <Box
+                      component="img"
+                      sx={{ height: 40, mt: 1, px: 2 }}
+                      alt="Logo"
+                      src="/images/Logo.png"
+                    />
+                  </Tooltip>
+                </Link>
               </Stack>
             </Stack>
 

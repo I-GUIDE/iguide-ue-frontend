@@ -22,6 +22,7 @@ import DatasetIcon from "@mui/icons-material/Dataset";
 import CodeIcon from "@mui/icons-material/Code";
 import ArticleIcon from "@mui/icons-material/Article";
 import SchoolIcon from "@mui/icons-material/School";
+import MapIcon from "@mui/icons-material/Map";
 
 import FeaturedElementsList from "../components/FeaturedElementsList";
 import TutorialCard from "../components/TutorialCard";
@@ -223,6 +224,13 @@ export default function Home() {
                   title="Educational Resources"
                   pageLink="/oers"
                   type="oer"
+                  limit={4}
+                />
+                <FeaturedElementsList
+                  icon={<MapIcon />}
+                  title="Maps"
+                  pageLink="/maps"
+                  type="map"
                   limit={4}
                 />
               </Stack>
