@@ -76,7 +76,12 @@ export default function SearchResults() {
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
 
-  usePageTitle(keywordParam);
+  // When the search keyword is not empty, use the keyword as page title
+  if (keywordParam) {
+    usePageTitle(keywordParam);
+  } else {
+    usePageTitle("Search");
+  }
 
   // When there is a new search param, update the search term and element type
   useEffect(() => {
