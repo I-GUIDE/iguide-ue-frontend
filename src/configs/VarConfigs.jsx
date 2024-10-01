@@ -33,6 +33,13 @@ export const OER_EXTERNAL_LINK_TYPES = {
   webpage: "Webpage",
 };
 
+export const UNTRUSTED_AFFILIATIONS = [
+  "google",
+  "github",
+  "microsoft",
+  "orcid",
+];
+
 export const IMAGE_SIZE_LIMIT = 5000000;
 
 export const NAVBAR_HEIGHT = 70;

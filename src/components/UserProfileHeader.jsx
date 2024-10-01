@@ -18,9 +18,6 @@ import Tooltip from "@mui/joy/Tooltip";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import PublicIcon from "@mui/icons-material/Public";
-import MoodIcon from "@mui/icons-material/Mood";
 
 import { grey } from "@mui/material/colors";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -29,7 +26,10 @@ import GoogleIcon from "@mui/icons-material/Google";
 import WebIcon from "@mui/icons-material/Web";
 
 import UserAvatar from "./UserAvatar";
-import { USER_PROFILE_HEADER_HEIGHT } from "../configs/VarConfigs";
+import {
+  USER_PROFILE_HEADER_HEIGHT,
+  UNTRUSTED_AFFILIATIONS,
+} from "../configs/VarConfigs";
 import { PERMISSIONS } from "../configs/Permissions";
 
 export default function UserProfileHeader(props) {
@@ -149,11 +149,15 @@ export default function UserProfileHeader(props) {
                         ? localUserInfo.last_name
                         : "Last name unknown"}
                     </Typography>
-                    {localUserInfo.affiliation && (
-                      <Typography level="body-lg" fontWeight="sm">
-                        {localUserInfo.affiliation}
-                      </Typography>
-                    )}
+                    {/* Don't show user affiliation if it's in the untrusted affiliation list */}
+                    {localUserInfo.affiliation &&
+                      !UNTRUSTED_AFFILIATIONS.includes(
+                        localUserInfo.affiliation.toLowerCase()
+                      ) && (
+                        <Typography level="body-lg" fontWeight="sm">
+                          {localUserInfo.affiliation}
+                        </Typography>
+                      )}
                   </Stack>
                   <Stack
                     direction="column"
