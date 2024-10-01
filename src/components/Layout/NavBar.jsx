@@ -65,6 +65,7 @@ export default function NavBar(props) {
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -173,33 +174,37 @@ export default function NavBar(props) {
                 </MenuItem>
               </>
             )}
-            <ListDivider />
-            <Typography
-              level="body-xs"
-              textTransform="uppercase"
-              fontWeight="lg"
-              sx={{ px: 1.5, py: 1 }}
-            >
-              New Contribution
-            </Typography>
-            <MenuItem component="a" href="/contribution/dataset">
-              New Dataset
-            </MenuItem>
-            <MenuItem component="a" href="/contribution/notebook">
-              New Notebook
-            </MenuItem>
-            <MenuItem component="a" href="/contribution/publication">
-              New Publication
-            </MenuItem>
-            {canEditOER && (
-              <MenuItem component="a" href="/contribution/oer">
-                New Educational Resource
-              </MenuItem>
-            )}
-            {canEditMap && (
-              <MenuItem component="a" href="/contribution/map">
-                New Map
-              </MenuItem>
+            {canContributeElements && (
+              <>
+                <ListDivider />
+                <Typography
+                  level="body-xs"
+                  textTransform="uppercase"
+                  fontWeight="lg"
+                  sx={{ px: 1.5, py: 1 }}
+                >
+                  New Contribution
+                </Typography>
+                <MenuItem component="a" href="/contribution/dataset">
+                  New Dataset
+                </MenuItem>
+                <MenuItem component="a" href="/contribution/notebook">
+                  New Notebook
+                </MenuItem>
+                <MenuItem component="a" href="/contribution/publication">
+                  New Publication
+                </MenuItem>
+                {canEditOER && (
+                  <MenuItem component="a" href="/contribution/oer">
+                    New Educational Resource
+                  </MenuItem>
+                )}
+                {canEditMap && (
+                  <MenuItem component="a" href="/contribution/map">
+                    New Map
+                  </MenuItem>
+                )}
+              </>
             )}
             <ListDivider />
             <MenuItem onClick={logout}>Logout</MenuItem>
@@ -249,36 +254,47 @@ export default function NavBar(props) {
               </Link>
             </>
           )}
-          <Divider sx={{ my: 1 }} />
-          <Typography
-            level="body-xs"
-            textTransform="uppercase"
-            fontWeight="lg"
-            sx={{ px: 1.5, py: 1 }}
-          >
-            New Contribution
-          </Typography>
-          <Link to="/contribution/dataset" style={{ textDecoration: "none" }}>
-            <ListItem>New Dataset</ListItem>
-          </Link>
-          <Link to="/contribution/notebook" style={{ textDecoration: "none" }}>
-            <ListItem>New Notebook</ListItem>
-          </Link>
-          <Link
-            to="/contribution/publication"
-            style={{ textDecoration: "none" }}
-          >
-            <ListItem>New Publication</ListItem>
-          </Link>
-          {canEditOER && (
-            <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
-              <ListItem>New Educational Resource</ListItem>
-            </Link>
-          )}
-          {canEditMap && (
-            <Link to="/contribution/map" style={{ textDecoration: "none" }}>
-              <ListItem>New Map</ListItem>
-            </Link>
+          {canContributeElements && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              <Typography
+                level="body-xs"
+                textTransform="uppercase"
+                fontWeight="lg"
+                sx={{ px: 1.5, py: 1 }}
+              >
+                New Contribution
+              </Typography>
+              <Link
+                to="/contribution/dataset"
+                style={{ textDecoration: "none" }}
+              >
+                <ListItem>New Dataset</ListItem>
+              </Link>
+              <Link
+                to="/contribution/notebook"
+                style={{ textDecoration: "none" }}
+              >
+                <ListItem>New Notebook</ListItem>
+              </Link>
+              <Link
+                to="/contribution/publication"
+                style={{ textDecoration: "none" }}
+              >
+                <ListItem>New Publication</ListItem>
+              </Link>
+
+              {canEditOER && (
+                <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
+                  <ListItem>New Educational Resource</ListItem>
+                </Link>
+              )}
+              {canEditMap && (
+                <Link to="/contribution/map" style={{ textDecoration: "none" }}>
+                  <ListItem>New Map</ListItem>
+                </Link>
+              )}
+            </>
           )}
           <Divider sx={{ my: 1 }} />
           <ListItem onClick={logout}>Logout</ListItem>

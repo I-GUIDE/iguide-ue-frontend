@@ -8,7 +8,6 @@ import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
-import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import UserProfileEditCard from "../components/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";

@@ -85,6 +85,7 @@ export default function UserProfileHeader(props) {
 
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
+  const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
 
   return (
     <Box
@@ -305,40 +306,48 @@ export default function UserProfileHeader(props) {
                       >
                         Edit
                       </Button>
-                      <Dropdown>
-                        <MenuButton
-                          variant="outlined"
-                          size="sm"
-                          color="warning"
-                          endDecorator={<LibraryAddIcon />}
-                        >
-                          New Element
-                        </MenuButton>
-                        <Menu placement="bottom-end" color="primary">
-                          <MenuItem component="a" href="/contribution/dataset">
-                            New Dataset
-                          </MenuItem>
-                          <MenuItem component="a" href="/contribution/notebook">
-                            New Notebook
-                          </MenuItem>
-                          <MenuItem
-                            component="a"
-                            href="/contribution/publication"
+                      {canContributeElements && (
+                        <Dropdown>
+                          <MenuButton
+                            variant="outlined"
+                            size="sm"
+                            color="warning"
+                            endDecorator={<LibraryAddIcon />}
                           >
-                            New Publication
-                          </MenuItem>
-                          {canEditOER && (
-                            <MenuItem component="a" href="/contribution/oer">
-                              New Educational Resource
+                            New Element
+                          </MenuButton>
+                          <Menu placement="bottom-end" color="primary">
+                            <MenuItem
+                              component="a"
+                              href="/contribution/dataset"
+                            >
+                              New Dataset
                             </MenuItem>
-                          )}
-                          {canEditMap && (
-                            <MenuItem component="a" href="/contribution/map">
-                              New Map
+                            <MenuItem
+                              component="a"
+                              href="/contribution/notebook"
+                            >
+                              New Notebook
                             </MenuItem>
-                          )}
-                        </Menu>
-                      </Dropdown>
+                            <MenuItem
+                              component="a"
+                              href="/contribution/publication"
+                            >
+                              New Publication
+                            </MenuItem>
+                            {canEditOER && (
+                              <MenuItem component="a" href="/contribution/oer">
+                                New Educational Resource
+                              </MenuItem>
+                            )}
+                            {canEditMap && (
+                              <MenuItem component="a" href="/contribution/map">
+                                New Map
+                              </MenuItem>
+                            )}
+                          </Menu>
+                        </Dropdown>
+                      )}
                     </Stack>
                   )}
                 </Stack>

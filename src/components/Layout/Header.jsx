@@ -14,6 +14,7 @@ import CardContent from "@mui/joy/CardContent";
 import Add from "@mui/icons-material/Add";
 
 import { HEADER_HEIGHT } from "../../configs/VarConfigs";
+import { PERMISSIONS } from "../../configs/Permissions";
 import PageNav from "../PageNav";
 
 export default function Header(props) {
@@ -27,7 +28,10 @@ export default function Header(props) {
   const contributionText = contribution.text;
   const contributionLink = contribution.link;
 
-  const { isAuthenticated } = useOutletContext();
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
+  const canContributeElements =
+    localUserInfo?.role <= PERMISSIONS["contribute"];
 
   return (
     <Box
@@ -83,7 +87,7 @@ export default function Header(props) {
                     {subtitle}
                   </Typography>
                 </Stack>
-                {isAuthenticated && contributionText && (
+                {canContributeElements && contributionText && (
                   <Tooltip title={contributionText} variant="solid">
                     <Button
                       variant="outlined"
