@@ -70,7 +70,7 @@ function ArrayInput(props) {
   const setArray = props.setArray;
   const placeholder = props.placeholder;
 
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState("");
 
   // Add one item
   const handleAddingOneItem = () => {
@@ -102,13 +102,13 @@ function ArrayInput(props) {
           </tr>
         </thead>
         <tbody>
-          {array.map((x, i) => (
+          {array?.map((x, i) => (
             <tr key={i}>
               <td align="left">
                 <p>{x}</p>
               </td>
               <td align="left">
-                {array.length !== 0 && (
+                {array?.length !== 0 && (
                   <IconButton
                     color="danger"
                     variant="plain"
@@ -160,8 +160,8 @@ export default function SubmissionCard(props) {
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
-  const [thumbnailImageFile, setThumbnailImageFile] = useState();
-  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState();
+  const [thumbnailImageFile, setThumbnailImageFile] = useState("");
+  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
   const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
@@ -170,7 +170,7 @@ export default function SubmissionCard(props) {
     returnedRelatedResourceTitle.length === 0;
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [currentRelatedResourceTitle, setCurrentRelatedResourceTitle] =
-    useState();
+    useState("");
   const [currentRelatedResourceType, setCurrentRelatedResourceType] =
     useState("");
 
@@ -184,7 +184,7 @@ export default function SubmissionCard(props) {
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
 
-  const [elementURI, setElementURI] = useState();
+  const [elementURI, setElementURI] = useState("");
 
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
@@ -204,7 +204,7 @@ export default function SubmissionCard(props) {
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
-  const [contributor, setContributor] = useState();
+  const [contributor, setContributor] = useState([]);
 
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
@@ -265,31 +265,31 @@ export default function SubmissionCard(props) {
       setIndexYears(thisElement["spatial-index-year"]);
 
       let relatedResourcesArray = [];
-      thisElement["related-datasets"].map((re) =>
+      thisElement["related-datasets"]?.map((re) =>
         relatedResourcesArray.push({
           type: "dataset",
           title: re.title,
         })
       );
-      thisElement["related-notebooks"].map((re) =>
+      thisElement["related-notebooks"]?.map((re) =>
         relatedResourcesArray.push({
           type: "notebook",
           title: re.title,
         })
       );
-      thisElement["related-publications"].map((re) =>
+      thisElement["related-publications"]?.map((re) =>
         relatedResourcesArray.push({
           type: "publication",
           title: re.title,
         })
       );
-      thisElement["related-oers"].map((re) =>
+      thisElement["related-oers"]?.map((re) =>
         relatedResourcesArray.push({
           type: "oer",
           title: re.title,
         })
       );
-      thisElement["related-maps"].map((re) =>
+      thisElement["related-maps"]?.map((re) =>
         relatedResourcesArray.push({
           type: "map",
           title: re.title,
@@ -515,7 +515,7 @@ export default function SubmissionCard(props) {
 
     formData.forEach((value, key) => {
       if (key === "authors" || key === "tags") {
-        data[key] = value.split(",").map((item) => item.trim());
+        data[key] = value.split(",")?.map((item) => item.trim());
       } else if (key === "notebook-url") {
         // Array[0]: the notebook repo url
         // Array[1]: the notebook filename
@@ -1030,7 +1030,7 @@ export default function SubmissionCard(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {oerExternalLinks.map((x, i) => (
+                  {oerExternalLinks?.map((x, i) => (
                     <tr key={i}>
                       <td align="left">
                         <p>{OER_EXTERNAL_LINK_TYPES[x.type]}</p>
@@ -1134,7 +1134,7 @@ export default function SubmissionCard(props) {
                 </tr>
               </thead>
               <tbody>
-                {relatedResources.map((x, i) => (
+                {relatedResources?.map((x, i) => (
                   <tr key={i}>
                     <td align="left">
                       <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
