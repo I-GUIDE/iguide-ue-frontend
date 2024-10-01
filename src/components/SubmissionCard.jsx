@@ -671,7 +671,7 @@ export default function SubmissionCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="h3">{cardTitle}</Typography>
+      <Typography level="h2">{cardTitle}</Typography>
       {canEditAllElements && !isContributor && submissionType === "update" && (
         <Typography color="danger" level="title-md">
           WARNING: You are not the contributor
@@ -689,8 +689,11 @@ export default function SubmissionCard(props) {
             gap: 2,
           }}
         >
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Element information
+          </Typography>
           {resourceTypeSelected === "publication" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-sm"
@@ -756,7 +759,7 @@ export default function SubmissionCard(props) {
               </Grid>
             </FormControl>
           )}
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography
                 level="title-md"
@@ -772,7 +775,7 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTitle(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography
                 level="title-md"
@@ -789,7 +792,7 @@ export default function SubmissionCard(props) {
               onChange={(event) => setAuthors(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography
                 level="title-md"
@@ -807,7 +810,7 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           {resourceTypeSelected === "oer" ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-md"
@@ -819,7 +822,7 @@ export default function SubmissionCard(props) {
               <MarkdownEditor contents={contents} setContents={setContents} />
             </FormControl>
           ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-md"
@@ -840,7 +843,7 @@ export default function SubmissionCard(props) {
               />
             </FormControl>
           )}
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography
                 level="title-md"
@@ -877,7 +880,7 @@ export default function SubmissionCard(props) {
             )}
           </FormControl>
           {resourceTypeSelected === "map" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-md"
@@ -895,7 +898,7 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-md"
@@ -913,7 +916,7 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography level="title-md">
                   Dataset direct download link
@@ -927,7 +930,7 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography level="title-md">Dataset size</Typography>
               </FormLabel>
@@ -939,7 +942,7 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "notebook" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <Typography
                   level="title-sm"
@@ -1002,90 +1005,6 @@ export default function SubmissionCard(props) {
               )}
             </FormControl>
           )}
-
-          {/* Related elements */}
-          <Grid sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>
-              <Typography level="title-md">Related elements</Typography>
-            </FormLabel>
-            <Table>
-              <thead>
-                <tr>
-                  <th style={{ width: "25%" }} align="left">
-                    Type
-                  </th>
-                  <th style={{ width: "70%" }} align="left">
-                    Title
-                  </th>
-                  <th style={{ width: "5%" }} align="left"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {relatedResources.map((x, i) => (
-                  <tr key={i}>
-                    <td align="left">
-                      <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
-                    </td>
-                    <td align="left">
-                      <p>{x.title}</p>
-                    </td>
-                    <td align="left">
-                      {relatedResources.length !== 0 && (
-                        <DeleteForeverRoundedIcon
-                          color="danger"
-                          onClick={() => handleRemovingOneRelatedResource(i)}
-                          style={{
-                            marginRight: "10px",
-                            marginTop: "4px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td align="left">
-                    <Select
-                      placeholder="Type"
-                      value={currentRelatedResourceType}
-                      onChange={(e, newValue) =>
-                        handleRelatedResourceTypeChange(newValue)
-                      }
-                    >
-                      <Option value="dataset">Dataset</Option>
-                      <Option value="notebook">Notebook</Option>
-                      <Option value="publication">Publication</Option>
-                      <Option value="oer">Educational Resource</Option>
-                      <Option value="map">Map</Option>
-                    </Select>
-                  </td>
-                  <td align="left">
-                    <FormControl id="asynchronous-demo">
-                      <Autocomplete
-                        placeholder="Type and select from the dropdown"
-                        disabled={
-                          !currentRelatedResourceType ||
-                          currentRelatedResourceType === ""
-                        }
-                        loading={relatedResourceDropdownLoading}
-                        options={returnedRelatedResourceTitle}
-                        value={currentRelatedResourceTitle || null}
-                        onChange={(e, newValue) =>
-                          handleRelatedResourceTitleChange(newValue)
-                        }
-                        inputValue={currentSearchTerm}
-                        onInputChange={(e, newInputValue) => {
-                          handleRelatedResourceTitleInputChange(newInputValue);
-                        }}
-                      />
-                    </FormControl>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Grid>
-
           {/* External links */}
           {resourceTypeSelected === "oer" && (
             <Grid sx={{ gridColumn: "1/-1" }}>
@@ -1197,7 +1116,93 @@ export default function SubmissionCard(props) {
             </Grid>
           )}
 
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Related elements
+          </Typography>
+          {/* Related elements */}
+          <Grid sx={{ gridColumn: "1/-1" }}>
+            <Table>
+              <thead>
+                <tr>
+                  <th style={{ width: "25%" }} align="left">
+                    Type
+                  </th>
+                  <th style={{ width: "70%" }} align="left">
+                    Title
+                  </th>
+                  <th style={{ width: "5%" }} align="left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {relatedResources.map((x, i) => (
+                  <tr key={i}>
+                    <td align="left">
+                      <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
+                    </td>
+                    <td align="left">
+                      <p>{x.title}</p>
+                    </td>
+                    <td align="left">
+                      {relatedResources.length !== 0 && (
+                        <DeleteForeverRoundedIcon
+                          color="danger"
+                          onClick={() => handleRemovingOneRelatedResource(i)}
+                          style={{
+                            marginRight: "10px",
+                            marginTop: "4px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td align="left">
+                    <Select
+                      placeholder="Type"
+                      value={currentRelatedResourceType}
+                      onChange={(e, newValue) =>
+                        handleRelatedResourceTypeChange(newValue)
+                      }
+                    >
+                      <Option value="dataset">Dataset</Option>
+                      <Option value="notebook">Notebook</Option>
+                      <Option value="publication">Publication</Option>
+                      <Option value="oer">Educational Resource</Option>
+                      <Option value="map">Map</Option>
+                    </Select>
+                  </td>
+                  <td align="left">
+                    <FormControl id="asynchronous-demo">
+                      <Autocomplete
+                        placeholder="Type and select from the dropdown"
+                        disabled={
+                          !currentRelatedResourceType ||
+                          currentRelatedResourceType === ""
+                        }
+                        loading={relatedResourceDropdownLoading}
+                        options={returnedRelatedResourceTitle}
+                        value={currentRelatedResourceTitle || null}
+                        onChange={(e, newValue) =>
+                          handleRelatedResourceTitleChange(newValue)
+                        }
+                        inputValue={currentSearchTerm}
+                        onInputChange={(e, newInputValue) => {
+                          handleRelatedResourceTitleInputChange(newInputValue);
+                        }}
+                      />
+                    </FormControl>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
+          </Grid>
+
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Spatial metadata
+          </Typography>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Spatial coverage</Typography>
             </FormLabel>
@@ -1207,7 +1212,7 @@ export default function SubmissionCard(props) {
               placeholder="Philadelphia, Pennsylvania, United States"
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Geometry</Typography>
             </FormLabel>
@@ -1217,7 +1222,7 @@ export default function SubmissionCard(props) {
               onChange={(event) => setGeometry(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Bounding Box</Typography>
             </FormLabel>
@@ -1227,7 +1232,7 @@ export default function SubmissionCard(props) {
               onChange={(event) => setBoundingBox(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Centroid</Typography>
             </FormLabel>
@@ -1237,7 +1242,7 @@ export default function SubmissionCard(props) {
               onChange={(event) => setCentroid(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Georeferenced</Typography>
             </FormLabel>
@@ -1253,7 +1258,7 @@ export default function SubmissionCard(props) {
               <Option value="false">False</Option>
             </Select>
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Temporal coverage</Typography>
             </FormLabel>
@@ -1263,7 +1268,7 @@ export default function SubmissionCard(props) {
               placeholder="Late 20th century"
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <Typography level="title-md">Index years</Typography>
             </FormLabel>
