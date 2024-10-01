@@ -27,6 +27,8 @@ import FormHelperText from "@mui/joy/FormHelperText";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
@@ -62,6 +64,88 @@ const VisuallyHiddenInput = styled("input")`
   white-space: nowrap;
   width: 1px;
 `;
+
+function ArrayInput(props) {
+  const array = props.array;
+  const setArray = props.setArray;
+  const placeholder = props.placeholder;
+
+  const [inputValue, setInputValue] = useState();
+
+  // Add one item
+  const handleAddingOneItem = () => {
+    if (!inputValue || inputValue === "") {
+      alert("Please enter a value!");
+      return;
+    }
+    setArray([...array, inputValue]);
+    setInputValue("");
+    TEST_MODE && console.log("Added one item, now: ", array);
+  };
+
+  const handleRemovingOneItem = (idx) => {
+    let newArray = [...array];
+    newArray.splice(idx, 1);
+    setArray(newArray);
+    TEST_MODE && console.log("Removing one item, now: ", array);
+  };
+
+  return (
+    <Grid sx={{ gridColumn: "1/-1" }}>
+      <Table>
+        <thead>
+          <tr>
+            <th style={{ width: "60%" }} align="left">
+              Input (Click the check button to save)
+            </th>
+            <th style={{ width: "10%" }} align="left"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {array.map((x, i) => (
+            <tr key={i}>
+              <td align="left">
+                <p>{x}</p>
+              </td>
+              <td align="left">
+                {array.length !== 0 && (
+                  <IconButton
+                    color="danger"
+                    variant="plain"
+                    size="sm"
+                    onClick={() => handleRemovingOneItem(i)}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                )}
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td align="left">
+              <Input
+                placeholder={placeholder}
+                value={inputValue}
+                onChange={(event) => setInputValue(event.target.value)}
+              />
+            </td>
+            <td align="left">
+              <IconButton
+                size="sm"
+                variant="soft"
+                onClick={handleAddingOneItem}
+                style={{ marginTop: "4px", cursor: "pointer" }}
+                color="primary"
+              >
+                <CheckIcon />
+              </IconButton>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+    </Grid>
+  );
+}
 
 export default function SubmissionCard(props) {
   useEffect(() => {
@@ -122,6 +206,14 @@ export default function SubmissionCard(props) {
 
   const [contributor, setContributor] = useState();
 
+  const [spatialCoverage, setSpatialCoverage] = useState([]);
+  const [geometry, setGeometry] = useState("");
+  const [boundingBox, setBoundingBox] = useState("");
+  const [centroid, setCentroid] = useState("");
+  const [isGeoreferenced, setIsGeoreferenced] = useState("");
+  const [temporalCoverage, setTemporalCoverage] = useState([]);
+  const [indexYears, setIndexYears] = useState([]);
+
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
@@ -163,6 +255,14 @@ export default function SubmissionCard(props) {
       setMapIframeLink(thisElement["external-iframe-link"]);
 
       setContributor(thisElement["contributor"]);
+
+      setSpatialCoverage(thisElement["spatial-coverage"]);
+      setGeometry(thisElement["spatial-geometry"]);
+      setBoundingBox(thisElement["spatial-bounding-box"]);
+      setCentroid(thisElement["spatial-centroid"]);
+      setIsGeoreferenced(thisElement["spatial-georeferenced"]);
+      setTemporalCoverage(thisElement["spatial-temporal-coverage"]);
+      setIndexYears(thisElement["spatial-index-year"]);
 
       let relatedResourcesArray = [];
       thisElement["related-datasets"].map((re) =>
@@ -436,6 +536,14 @@ export default function SubmissionCard(props) {
     if (resourceTypeSelected === "oer") {
       data["oer-external-links"] = oerExternalLinks;
     }
+
+    data["spatial-coverage"] = spatialCoverage;
+    data["spatial-geometry"] = geometry;
+    data["spatial-bounding-box"] = boundingBox;
+    data["spatial-centroid"] = centroid;
+    data["spatial-georeferenced"] = isGeoreferenced;
+    data["spatial-temporal-coverage"] = temporalCoverage;
+    data["spatial-index-year"] = indexYears;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -1088,6 +1196,83 @@ export default function SubmissionCard(props) {
               </Table>
             </Grid>
           )}
+
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Spatial coverage</Typography>
+            </FormLabel>
+            <ArrayInput
+              array={spatialCoverage}
+              setArray={setSpatialCoverage}
+              placeholder="Philadelphia, Pennsylvania, United States"
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Geometry</Typography>
+            </FormLabel>
+            <Input
+              placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+              value={geometry}
+              onChange={(event) => setGeometry(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Bounding Box</Typography>
+            </FormLabel>
+            <Input
+              placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
+              value={boundingBox}
+              onChange={(event) => setBoundingBox(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Centroid</Typography>
+            </FormLabel>
+            <Input
+              placeholder="46.4218,-94.087"
+              value={centroid}
+              onChange={(event) => setCentroid(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Georeferenced</Typography>
+            </FormLabel>
+            <Select
+              placeholder="Select true or false"
+              value={isGeoreferenced}
+              onChange={(e, newValue) => setIsGeoreferenced(newValue)}
+            >
+              <Option value="">
+                <em>Select true or false</em>
+              </Option>
+              <Option value="true">True</Option>
+              <Option value="false">False</Option>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Temporal coverage</Typography>
+            </FormLabel>
+            <ArrayInput
+              array={temporalCoverage}
+              setArray={setTemporalCoverage}
+              placeholder="Late 20th century"
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography level="title-md">Index years</Typography>
+            </FormLabel>
+            <ArrayInput
+              array={indexYears}
+              setArray={setIndexYears}
+              placeholder="1980"
+            />
+          </FormControl>
 
           <CardActions sx={{ gridColumn: "1/-1" }}>
             <Button type="submit" variant="solid" color="primary">
