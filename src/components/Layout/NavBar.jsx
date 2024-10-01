@@ -107,7 +107,7 @@ export default function NavBar(props) {
             {
               name: "offset",
               options: {
-                offset: [50, 20],
+                offset: [80, 25],
               },
             },
           ]}
