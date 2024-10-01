@@ -125,31 +125,6 @@ export default function About() {
                 .
               </Typography>
             </Grid>
-
-            {/* Section for tutorial articles */}
-            {Array.isArray(docList) && docList.length > 0 && (
-              <Grid xs={12}>
-                <Stack spacing={1} alignItems={"flex-start"} sx={{ p: 2 }}>
-                  <Typography level="h4">More articles</Typography>
-                  <List marker="disc">
-                    {docList?.map((doc) => (
-                      <Link
-                        key={doc.id}
-                        component={RouterLink}
-                        to={"/docs/" + doc.id}
-                        color="inherit"
-                      >
-                        <ListItem>
-                          <Typography color="primary" level="body-lg">
-                            {doc.name}
-                          </Typography>
-                        </ListItem>
-                      </Link>
-                    ))}
-                  </List>
-                </Stack>
-              </Grid>
-            )}
           </Grid>
         </Box>
       </Container>

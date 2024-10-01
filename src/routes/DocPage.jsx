@@ -81,7 +81,7 @@ export default function DocPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["About", "/about"]]}
+                  parentPages={[["Tutorials", "/tutorials"]]}
                   currentPage={title}
                 />
                 <DocAdminOps

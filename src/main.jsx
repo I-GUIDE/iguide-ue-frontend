@@ -24,6 +24,7 @@ import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 import About from "./routes/About";
+import Tutorials from "./routes/Tutorials";
 
 import DocSubmission from "./routes/DocSubmission";
 import DocUpdate from "./routes/DocUpdate";
@@ -115,8 +116,12 @@ const router = createBrowserRouter([
         element: <TermsOfUse />,
       },
       {
-        path: "about",
+        path: "/about",
         element: <About />,
+      },
+      {
+        path: "/tutorials",
+        element: <Tutorials />,
       },
       {
         path: "/new-doc",

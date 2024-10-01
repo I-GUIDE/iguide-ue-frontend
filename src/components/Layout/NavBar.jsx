@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React, useState, useRef } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -30,7 +30,6 @@ import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import ModalClose from "@mui/joy/ModalClose";
 import MenuIcon from "@mui/icons-material/Menu";
-import WebIcon from "@mui/icons-material/Web";
 import Tooltip from "@mui/joy/Tooltip";
 
 import SearchBar from "../SearchBar";
@@ -39,8 +38,14 @@ import UserAvatar from "../UserAvatar";
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
+const aboutDropdown = [
+  ["About Us", "/about"],
+  ["Getting Started", "/docs/getting-started"],
+  ["FAQ", "/docs/frequently-asked-questions"],
+  ["Tutorials", "/tutorials"],
+];
+
 const pages = [
-  ["About", "/about"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
@@ -53,8 +58,8 @@ export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
 
-  const buttonRef = React.useRef(null);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const buttonRef = useRef(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Check if the current user is admin, if yes, allow edit
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
@@ -81,6 +86,40 @@ export default function NavBar(props) {
   // Redirect users to auth backend for logout
   function logout() {
     window.open(AUTH_BACKEND_URL + "/logout", "_self");
+  }
+
+  // About button
+  function AboutButton() {
+    return (
+      <Dropdown>
+        <MenuButton
+          variant="plain"
+          color="neutral"
+          size="sm"
+          sx={{ alignSelf: "center" }}
+        >
+          About
+        </MenuButton>
+        <Menu
+          placement="bottom-end"
+          color="primary"
+          modifiers={[
+            {
+              name: "offset",
+              options: {
+                offset: [50, 20],
+              },
+            },
+          ]}
+        >
+          {aboutDropdown.map((item) => (
+            <Link key={item[0]} to={item[1]} style={{ textDecoration: "none" }}>
+              <MenuItem>{item[0]}</MenuItem>
+            </Link>
+          ))}
+        </Menu>
+      </Dropdown>
+    );
   }
 
   // If the user is logged in, display the logout button, otherwise login
@@ -180,6 +219,14 @@ export default function NavBar(props) {
     if (isAuthenticated) {
       return (
         <List>
+          <Typography
+            level="body-xs"
+            textTransform="uppercase"
+            fontWeight="lg"
+            sx={{ px: 1.5, py: 1 }}
+          >
+            User profile
+          </Typography>
           <Link to={"/user-profile"} style={{ textDecoration: "none" }}>
             <ListItem>My Profile</ListItem>
           </Link>
@@ -319,6 +366,38 @@ export default function NavBar(props) {
                     sx={{ px: 2, py: 1 }}
                   >
                     <List>
+                      <Typography
+                        level="body-xs"
+                        textTransform="uppercase"
+                        fontWeight="lg"
+                        sx={{ px: 1.5, py: 1 }}
+                      >
+                        About
+                      </Typography>
+                      {aboutDropdown?.map((page) => (
+                        <Link
+                          key={page[1]}
+                          to={page[1]}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <ListItem key={page[0]}>
+                            <Typography textAlign="center">
+                              {page[0]}
+                            </Typography>
+                          </ListItem>
+                        </Link>
+                      ))}
+                    </List>
+                    <Divider sx={{ my: 1 }} />
+                    <List>
+                      <Typography
+                        level="body-xs"
+                        textTransform="uppercase"
+                        fontWeight="lg"
+                        sx={{ px: 1.5, py: 1 }}
+                      >
+                        Elements
+                      </Typography>
                       {pages?.map((page) => (
                         <Link
                           key={page[1]}
@@ -372,6 +451,7 @@ export default function NavBar(props) {
                     />
                   </Tooltip>
                 </Link>
+                <AboutButton />
                 {pages?.map((page) => (
                   <Link
                     key={page[1]}
