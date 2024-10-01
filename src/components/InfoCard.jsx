@@ -13,7 +13,11 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-import { printListWithDelimiter, stringTruncator } from "../helpers/helper";
+import {
+  printListWithDelimiter,
+  stringTruncator,
+  removeMarkdown,
+} from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
 import {
   RESOURCE_TYPE_COLORS,
@@ -34,7 +38,12 @@ export default function InfoCard(props) {
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
-  const contentsTruncated = stringTruncator(contents, 0, 200, "");
+  const contentsTruncated = stringTruncator(
+    removeMarkdown(contents),
+    0,
+    200,
+    ""
+  );
   const contributorUserId = contributor.id;
   const contributorName = contributor.name;
   const contributorAvatar = contributor["avatar-url"];

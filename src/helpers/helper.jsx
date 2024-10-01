@@ -104,3 +104,39 @@ export function inputExists(input, checkEmptyString = true) {
 
   return true;
 }
+
+/**
+ * Remove Markdown and HTML format (Beta)
+ *  https://stackoverflow.com/questions/74977041/how-to-remove-markdown-syntax-and-output-only-plain-text-in-flutter
+ * @param {string} markdown the input Markdown text
+ * @return {string} return plain text
+ */
+export function removeMarkdown(markdown) {
+  // Remove headers
+  markdown = markdown.replace(/#+\s/g, "");
+
+  // Remove bold and italic
+  markdown = markdown.replace(/\*\*([^*]+)\*\*/g, "$1");
+  markdown = markdown.replace(/\*([^*]+)\*/g, "$1");
+
+  // Remove strikethrough
+  markdown = markdown.replace(/~~([^~]+)~~/g, "$1");
+
+  // Remove links
+  markdown = markdown.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, "$1");
+
+  // Remove code blocks
+  markdown = markdown.replace(/`([^`]+)`/g, "$1");
+  markdown = markdown.replace(/```[\s\S]*?```/g, "");
+
+  // Remove blockquotes
+  markdown = markdown.replace(/^>\s/gm, "");
+
+  // Remove horizontal rules
+  markdown = markdown.replace(/---/g, "");
+
+  // Catch HTML format
+  markdown = markdown.replace(/(<([^>]+)>)/gi, "");
+
+  return markdown;
+}
