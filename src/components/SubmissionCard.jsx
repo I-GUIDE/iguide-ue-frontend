@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
 
-import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -16,16 +15,13 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import Textarea from "@mui/joy/Textarea";
 import { styled } from "@mui/joy";
 import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
 import IconButton from "@mui/joy/IconButton";
-import Tooltip from "@mui/joy/Tooltip";
 import FormHelperText from "@mui/joy/FormHelperText";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
@@ -33,6 +29,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
+import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -96,7 +93,7 @@ function ArrayInput(props) {
       <Table>
         <thead>
           <tr>
-            <th align="left">Input (Click the &#10004; button to save)</th>
+            <th align="left">Click &#10004; button to save</th>
             <th style={{ width: "50px" }} align="left"></th>
           </tr>
         </thead>
@@ -694,49 +691,13 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "publication" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-sm"
-                  endDecorator={
-                    <Tooltip
-                      placement="top-start"
-                      variant="outlined"
-                      arrow
-                      title={
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            maxWidth: 320,
-                            justifyContent: "center",
-                            p: 1,
-                          }}
-                        >
-                          <Typography level="title-sm" sx={{ pb: 1 }}>
-                            You may provide the DOI of the publication and click
-                            "Autofill metadata" to automatically retrieve the
-                            information of the publication.
-                          </Typography>
-                          <Typography level="body-sm">
-                            Feature powered by Crossref. Please note that not
-                            all the fields are available. Some sources are not
-                            supported by Crossref. The abstract might need to be
-                            manually reformatted.
-                          </Typography>
-                        </Box>
-                      }
-                      size="lg"
-                    >
-                      <InfoOutlined size="lg" />
-                    </Tooltip>
-                  }
+                <SubmissionCardFieldTitle
+                  tooltipTitle={`You may provide the DOI of the publication and click \"Autofill metadata\" to automatically retrieve the information of the publication.`}
+                  tooltipContent={`Feature powered by Crossref. Please note that not all the fields are available. Some sources are not supported by Crossref. The abstract might need to be manually reformatted.`}
+                  fieldRequired
                 >
-                  <Typography
-                    level="title-md"
-                    endDecorator={<RequiredFieldIndicator />}
-                  >
-                    Publication URL (DOI link preferred)
-                  </Typography>
-                </Typography>
+                  Publication URL (DOI link preferred)
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                 <Grid md>
@@ -760,12 +721,13 @@ export default function SubmissionCard(props) {
           )}
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add a title that will appear on the I-GUIDE platform"
+                tooltipContent="This title will be key information displayed on the platform so aim for consise but descriptive."
+                fieldRequired
               >
                 Title
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="title"
@@ -776,12 +738,15 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add the authors of the resource"
+                tooltipContent={
+                  "If you can't find specific authors, use something like '<resource> contributors', where you replace <resource> with a short description of the item you are submitting. You can contribute a resource to the I-GUIDE platform that you did not author yourself."
+                }
+                fieldRequired
               >
                 Authors (comma-separated)
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="authors"
@@ -793,12 +758,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
-              >
+              <SubmissionCardFieldTitle fieldRequired>
                 Tags (comma-separated)
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="tags"
@@ -808,48 +770,29 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTags(event.target.value)}
             />
           </FormControl>
-          {resourceTypeSelected === "oer" ? (
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  Content
-                </Typography>
-              </FormLabel>
-              <MarkdownEditor contents={contents} setContents={setContents} />
-            </FormControl>
-          ) : (
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  {resourceTypeSelected === "publication"
-                    ? "Abstract"
-                    : "About"}
-                </Typography>
-              </FormLabel>
-              <Textarea
-                name="contents"
-                minRows={4}
-                maxRows={10}
-                required
-                value={contents}
-                onChange={(event) => setContents(event.target.value)}
-              />
-            </FormControl>
-          )}
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add a brief summary of the resource"
+                tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
+                fieldRequired
+              >
+                {resourceTypeSelected === "publication"
+                  ? "Abstract"
+                  : "Content/About"}
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <MarkdownEditor contents={contents} setContents={setContents} />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add a thumbnail image for the resource"
+                tooltipContent="You can take a screenshot of a key figure or image from the resource, or submit an image that will help distinguish the resource from other similar ones."
+                fieldRequired
               >
                 Thumbnail image {"(< 5MB)"}
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Button
               component="label"
@@ -881,12 +824,12 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "map" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="A link to view the map."
+                  fieldRequired
                 >
                   Map iframe link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -899,12 +842,12 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a link to the primary page for this dataset"
+                  fieldRequired
                 >
                   Dataset host link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -917,9 +860,12 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography level="title-md">
+                <SubmissionCardFieldTitle
+                  tooltipTitle="If there is a direct download link available for the dataset, indicate it here"
+                  tooltipContent="By direct download link, we mean a link where when you click it it starts the download process for the dataset"
+                >
                   Dataset direct download link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 name="direct-download-link"
@@ -931,7 +877,12 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "dataset" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography level="title-md">Dataset size</Typography>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add size information for the dataset here"
+                  tooltipContent="If you know the exact size, add that, otherwise estimate if you can. I.e. is it on the order of megabytes, gigabytes, or terrabytes?"
+                >
+                  Dataset size
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 name="size"
@@ -943,50 +894,18 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "notebook" && (
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-sm"
-                  endDecorator={
-                    <Tooltip
-                      placement="top-start"
-                      variant="outlined"
-                      arrow
-                      title={
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            maxWidth: 320,
-                            justifyContent: "center",
-                            p: 1,
-                          }}
-                        >
-                          <Typography level="title-sm" sx={{ pb: 1 }}>
-                            This is a link to the notebook on GitHub you would
-                            like featured for this Knowledge Element
-                          </Typography>
-                          <Typography level="body-sm">
-                            {`You must link to one specific notebook for 
-                            our notebook preview to function correctly, but when the notebook is 
-                            opened on the I-GUIDE Platform the entire repo will be copied to the 
-                            user's environment. An example link may look like "https://github.com/
-                            <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
-                            `}
-                          </Typography>
-                        </Box>
-                      }
-                      size="lg"
-                    >
-                      <InfoOutlined size="lg" />
-                    </Tooltip>
-                  }
+                <SubmissionCardFieldTitle
+                  tooltipTitle="This is a link to the notebook on GitHub you would like featured for this Knowledge Element"
+                  tooltipContent={`You must link to one specific notebook for 
+                    our notebook preview to function correctly, but when the notebook is 
+                    opened on the I-GUIDE Platform the entire repo will be copied to the 
+                    user's environment. An example link may look like "https://github.com/
+                    <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                    `}
+                  fieldRequired
                 >
-                  <Typography
-                    level="title-md"
-                    endDecorator={<RequiredFieldIndicator />}
-                  >
-                    Jupyter Notebook GitHub URL
-                  </Typography>
-                </Typography>
+                  Jupyter Notebook GitHub URL
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -1008,10 +927,10 @@ export default function SubmissionCard(props) {
           {resourceTypeSelected === "oer" && (
             <Grid sx={{ gridColumn: "1/-1" }}>
               <FormLabel>
-                <Typography level="title-md">
-                  Educational resource external links (Click the &#10004; button
-                  to save)
-                </Typography>
+                <SubmissionCardFieldTitle>
+                  Educational resource external links (Click &#10004; button to
+                  save)
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Table>
                 <thead>
@@ -1123,6 +1042,14 @@ export default function SubmissionCard(props) {
           </Typography>
           {/* Related elements */}
           <Grid sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle
+                tooltipTitle="Indicate other existing resources from the I-GUIDE platform that are similar, related, or relavent to the resource you are submitting"
+                tooltipContent="These resources may be resources used to create the resource you are submitting, use similar methods, or address similar themes. If you wish to connect a resource that hasn't been contributed to the I-GUIDE platform yet, create the resource and connect it to the current resource upon creation."
+              >
+                Related elements
+              </SubmissionCardFieldTitle>
+            </FormLabel>
             <Table>
               <thead>
                 <tr>
@@ -1206,7 +1133,9 @@ export default function SubmissionCard(props) {
           </Typography>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Spatial coverage</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
+                Spatial coverage
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <ArrayInput
               array={spatialCoverage}
@@ -1216,7 +1145,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Geometry</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="The Well-Known Text (WKT) description of the geometry for the spatial coverage.">
+                Geometry
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
@@ -1226,7 +1157,12 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Bounding Box</Typography>
+              <SubmissionCardFieldTitle
+                tooltipTitle="The bounding box in the format:"
+                tooltipContent="ENVELOPE(West, East, North, South)"
+              >
+                Bounding Box
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
@@ -1236,7 +1172,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Centroid</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
+                Centroid
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               placeholder="46.4218,-94.087"
@@ -1246,7 +1184,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Georeferenced</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="True or false, indicating if the knowledge element has a georeferenced version.">
+                Georeferenced
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Select
               placeholder="Select true or false"
@@ -1262,7 +1202,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Temporal coverage</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="A list of text descriptions of the time period for the knowledge element.">
+                Temporal coverage
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <ArrayInput
               array={temporalCoverage}
@@ -1272,7 +1214,9 @@ export default function SubmissionCard(props) {
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography level="title-md">Index years</Typography>
+              <SubmissionCardFieldTitle tooltipTitle="The years this knowledge elements relates to.">
+                Index years
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <ArrayInput
               array={indexYears}
