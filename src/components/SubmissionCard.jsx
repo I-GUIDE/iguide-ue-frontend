@@ -29,6 +29,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
@@ -95,10 +96,8 @@ function ArrayInput(props) {
       <Table>
         <thead>
           <tr>
-            <th style={{ width: "60%" }} align="left">
-              Input (Click the check button to save)
-            </th>
-            <th style={{ width: "10%" }} align="left"></th>
+            <th align="left">Input (Click the &#10004; button to save)</th>
+            <th style={{ width: "50px" }} align="left"></th>
           </tr>
         </thead>
         <tbody>
@@ -1010,7 +1009,8 @@ export default function SubmissionCard(props) {
             <Grid sx={{ gridColumn: "1/-1" }}>
               <FormLabel>
                 <Typography level="title-md">
-                  Educational resource external links
+                  Educational resource external links (Click the &#10004; button
+                  to save)
                 </Typography>
               </FormLabel>
               <Table>
@@ -1023,10 +1023,10 @@ export default function SubmissionCard(props) {
                       URL
                     </th>
                     <th style={{ width: "5%" }} align="left"></th>
-                    <th style={{ width: "37%" }} align="left">
+                    <th style={{ width: "40%" }} align="left">
                       Title
                     </th>
-                    <th style={{ width: "8%" }} align="left"></th>
+                    <th style={{ width: "50px" }} align="left"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1085,10 +1085,12 @@ export default function SubmissionCard(props) {
                     </td>
                     <td align="left">
                       <IconButton
+                        size="sm"
                         variant="outlined"
                         onClick={handleOerExternalLinkSearchTitle}
+                        style={{ marginTop: "4px", cursor: "pointer" }}
                       >
-                        <SearchIcon />
+                        <ArrowForwardIcon />
                       </IconButton>
                     </td>
                     <td align="left">
@@ -1100,15 +1102,15 @@ export default function SubmissionCard(props) {
                       />
                     </td>
                     <td align="left">
-                      <Button
+                      <IconButton
                         size="sm"
                         variant="soft"
                         onClick={handleAddingOneOerExternalLink}
                         style={{ marginTop: "4px", cursor: "pointer" }}
                         color="primary"
                       >
-                        Save
-                      </Button>
+                        <CheckIcon />
+                      </IconButton>
                     </td>
                   </tr>
                 </tbody>
