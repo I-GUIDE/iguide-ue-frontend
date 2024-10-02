@@ -253,13 +253,13 @@ export default function SubmissionCard(props) {
 
       setContributor(thisElement["contributor"]);
 
-      setSpatialCoverage(thisElement["spatial-coverage"]);
+      setSpatialCoverage(thisElement["spatial-coverage"] || []);
       setGeometry(thisElement["spatial-geometry"]);
       setBoundingBox(thisElement["spatial-bounding-box"]);
       setCentroid(thisElement["spatial-centroid"]);
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
-      setTemporalCoverage(thisElement["spatial-temporal-coverage"]);
-      setIndexYears(thisElement["spatial-index-year"]);
+      setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
+      setIndexYears(thisElement["spatial-index-year"] || []);
 
       let relatedResourcesArray = [];
       thisElement["related-datasets"]?.map((re) =>
