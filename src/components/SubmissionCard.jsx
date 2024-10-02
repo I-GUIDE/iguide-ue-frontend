@@ -31,6 +31,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
 import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
+import CapsuleInput from "./CapsuleInput";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -63,86 +64,6 @@ const VisuallyHiddenInput = styled("input")`
   white-space: nowrap;
   width: 1px;
 `;
-
-function ArrayInput(props) {
-  const array = props.array;
-  const setArray = props.setArray;
-  const placeholder = props.placeholder;
-
-  const [inputValue, setInputValue] = useState("");
-
-  // Add one item
-  const handleAddingOneItem = () => {
-    if (!inputValue || inputValue === "") {
-      alert("Please enter a value!");
-      return;
-    }
-    setArray([...array, inputValue]);
-    setInputValue("");
-    TEST_MODE && console.log("Added one item, now: ", array);
-  };
-
-  const handleRemovingOneItem = (idx) => {
-    let newArray = [...array];
-    newArray.splice(idx, 1);
-    setArray(newArray);
-    TEST_MODE && console.log("Removing one item, now: ", array);
-  };
-
-  return (
-    <Grid sx={{ gridColumn: "1/-1" }}>
-      <Table>
-        <thead>
-          <tr>
-            <th align="left">Click &#10004; button to save</th>
-            <th style={{ width: "50px" }} align="left"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {array?.map((x, i) => (
-            <tr key={i}>
-              <td align="left">
-                <p>{x}</p>
-              </td>
-              <td align="left">
-                {array?.length !== 0 && (
-                  <IconButton
-                    color="danger"
-                    variant="plain"
-                    size="sm"
-                    onClick={() => handleRemovingOneItem(i)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                )}
-              </td>
-            </tr>
-          ))}
-          <tr>
-            <td align="left">
-              <Input
-                placeholder={placeholder}
-                value={inputValue}
-                onChange={(event) => setInputValue(event.target.value)}
-              />
-            </td>
-            <td align="left">
-              <IconButton
-                size="sm"
-                variant="soft"
-                onClick={handleAddingOneItem}
-                style={{ marginTop: "4px", cursor: "pointer" }}
-                color="primary"
-              >
-                <CheckIcon />
-              </IconButton>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-    </Grid>
-  );
-}
 
 export default function SubmissionCard(props) {
   useEffect(() => {
@@ -259,7 +180,11 @@ export default function SubmissionCard(props) {
       setCentroid(thisElement["spatial-centroid"]);
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
-      setIndexYears(thisElement["spatial-index-year"] || []);
+      setIndexYears(
+        Array.isArray(thisElement["spatial-index-year"])
+          ? thisElement["spatial-index-year"].join(", ")
+          : thisElement["spatial-index-year"]
+      );
 
       let relatedResourcesArray = [];
       thisElement["related-datasets"]?.map((re) =>
@@ -511,7 +436,7 @@ export default function SubmissionCard(props) {
     const formData = new FormData(event.target);
 
     formData.forEach((value, key) => {
-      if (key === "authors" || key === "tags") {
+      if (key === "authors" || key === "tags" || key === "spatial-index-year") {
         data[key] = value.split(",")?.map((item) => item.trim());
       } else if (key === "notebook-url") {
         // Array[0]: the notebook repo url
@@ -540,7 +465,6 @@ export default function SubmissionCard(props) {
     data["spatial-centroid"] = centroid;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
-    data["spatial-index-year"] = indexYears;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -1157,10 +1081,10 @@ export default function SubmissionCard(props) {
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
-                Spatial coverage
+                Spatial coverage (Click &#10004; button to save)
               </SubmissionCardFieldTitle>
             </FormLabel>
-            <ArrayInput
+            <CapsuleInput
               array={spatialCoverage}
               setArray={setSpatialCoverage}
               placeholder="Philadelphia, Pennsylvania, United States"
@@ -1226,10 +1150,10 @@ export default function SubmissionCard(props) {
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <SubmissionCardFieldTitle tooltipTitle="A list of text descriptions of the time period for the knowledge element.">
-                Temporal coverage
+                Temporal coverage (Click &#10004; button to save)
               </SubmissionCardFieldTitle>
             </FormLabel>
-            <ArrayInput
+            <CapsuleInput
               array={temporalCoverage}
               setArray={setTemporalCoverage}
               placeholder="Late 20th century"
@@ -1238,13 +1162,14 @@ export default function SubmissionCard(props) {
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <SubmissionCardFieldTitle tooltipTitle="The years this knowledge elements relates to.">
-                Index years
+                Index years (comma-separated)
               </SubmissionCardFieldTitle>
             </FormLabel>
-            <ArrayInput
-              array={indexYears}
-              setArray={setIndexYears}
-              placeholder="1980"
+            <Input
+              name="spatial-index-year"
+              placeholder="1990, 2000, ..."
+              value={indexYears}
+              onChange={(event) => setIndexYears(event.target.value)}
             />
           </FormControl>
 
