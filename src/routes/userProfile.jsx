@@ -221,7 +221,7 @@ export default function UserProfile() {
                 <ElementGrid
                   headline="Demo contributions"
                   elementType="dataset"
-                  noElementMsg="You currently don't have any contribution..."
+                  noElementMsg="You currently don't have any contributions..."
                   showElementType
                 />
               ) : (
@@ -229,7 +229,7 @@ export default function UserProfile() {
                   headline="Your contributions"
                   fieldName="contributor"
                   matchValue={encodeURIComponent(userId)}
-                  noElementMsg="You currently don't have any contribution..."
+                  noElementMsg="You currently don't have any contributions..."
                   showElementType
                 />
               )}
