@@ -20,6 +20,7 @@ import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
 import IconButton from "@mui/joy/IconButton";
 import FormHelperText from "@mui/joy/FormHelperText";
+import Textarea from "@mui/joy/Textarea";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
