@@ -770,20 +770,42 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTags(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
-            <FormLabel>
-              <SubmissionCardFieldTitle
-                tooltipTitle="Add a brief summary of the resource"
-                tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
-                fieldRequired
-              >
-                {resourceTypeSelected === "publication"
-                  ? "Abstract"
-                  : "Content/About"}
-              </SubmissionCardFieldTitle>
-            </FormLabel>
-            <MarkdownEditor contents={contents} setContents={setContents} />
-          </FormControl>
+          {resourceTypeSelected === "oer" ? (
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a brief summary of the resource"
+                  tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
+                  fieldRequired
+                >
+                  Content
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <MarkdownEditor contents={contents} setContents={setContents} />
+            </FormControl>
+          ) : (
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a brief summary of the resource"
+                  tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
+                  fieldRequired
+                >
+                  {resourceTypeSelected === "publication"
+                    ? "Abstract"
+                    : "About"}
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Textarea
+                name="contents"
+                minRows={4}
+                maxRows={10}
+                required
+                value={contents}
+                onChange={(event) => setContents(event.target.value)}
+              />
+            </FormControl>
+          )}
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
               <SubmissionCardFieldTitle
