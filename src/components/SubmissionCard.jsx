@@ -625,7 +625,7 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                <Grid md>
+                <Grid xs>
                   <Input
                     required
                     name="external-link-publication"
@@ -633,7 +633,7 @@ export default function SubmissionCard(props) {
                     onChange={(event) => setPublicationDOI(event.target.value)}
                   />
                 </Grid>
-                <Grid md="auto">
+                <Grid xs="auto">
                   <Button
                     variant="outlined"
                     onClick={handleAutofillPublicationInfo}

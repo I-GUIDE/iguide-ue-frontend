@@ -57,14 +57,14 @@ export default function CapsuleInput(props) {
       )}
 
       <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid md>
+        <Grid xs>
           <Input
             placeholder={placeholder}
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
           />
         </Grid>
-        <Grid md="auto">
+        <Grid xs="auto">
           <IconButton
             size="sm"
             variant="solid"
