@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import {
   experimental_extendTheme as materialExtendTheme,
@@ -13,6 +13,7 @@ const materialTheme = materialExtendTheme();
 import AppBar from "@mui/material/AppBar";
 
 import Box from "@mui/joy/Box";
+import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
@@ -34,6 +35,7 @@ import Tooltip from "@mui/joy/Tooltip";
 
 import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
+import HoverOverMenuTab from "../HoverOverMenuTab";
 
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
@@ -89,127 +91,165 @@ export default function NavBar(props) {
     window.open(AUTH_BACKEND_URL + "/logout", "_self");
   }
 
-  // About button
-  function AboutButton() {
-    return (
-      <Dropdown>
-        <MenuButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          sx={{ alignSelf: "center" }}
-        >
-          About
-        </MenuButton>
-        <Menu
-          placement="bottom-end"
-          color="primary"
-          modifiers={[
-            {
-              name: "offset",
-              options: {
-                offset: [80, 25],
-              },
-            },
-          ]}
-        >
-          {aboutDropdown.map((item) => (
-            <Link key={item[0]} to={item[1]} style={{ textDecoration: "none" }}>
-              <MenuItem>{item[0]}</MenuItem>
-            </Link>
-          ))}
-        </Menu>
-      </Dropdown>
-    );
-  }
-
   // If the user is logged in, display the logout button, otherwise login
   function AuthButton() {
     if (isAuthenticated) {
-      return (
-        <Dropdown>
-          <Tooltip title="Open User Menu" variant="solid">
-            <MenuButton color="primary">
-              <UserAvatar
-                link={localUserInfo["avatar_url"]}
-                userId={localUserInfo.id}
-              />
-            </MenuButton>
-          </Tooltip>
+      const [open, setOpen] = useState(false);
 
-          <Menu
-            placement="bottom-end"
-            color="primary"
-            modifiers={[
-              {
-                name: "offset",
-                options: {
-                  offset: [0, 15],
-                },
-              },
-            ]}
+      return (
+        <Tooltip
+          placement="bottom-start"
+          variant="outlined"
+          open={open}
+          onOpen={() => setOpen(true)}
+          onClose={() => setOpen(false)}
+          title={
+            <List>
+              <Link
+                to="/user-profile"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton onClick={() => setOpen(false)}>
+                    My Profile
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+              <Link
+                to="/user-profile-update"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton onClick={() => setOpen(false)}>
+                    Update Profile
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+              {canEditAllElements && (
+                <>
+                  <ListDivider />
+                  <Typography
+                    level="body-xs"
+                    textTransform="uppercase"
+                    fontWeight="lg"
+                    sx={{ px: 1.5, py: 1 }}
+                  >
+                    Admin
+                  </Typography>
+                  <Link
+                    to="/new-doc"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Documentation
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                </>
+              )}
+              {canContributeElements && (
+                <>
+                  <ListDivider />
+                  <Typography
+                    level="body-xs"
+                    textTransform="uppercase"
+                    fontWeight="lg"
+                    sx={{ px: 1.5, py: 1 }}
+                  >
+                    New Contribution
+                  </Typography>
+                  <Link
+                    to="/contribution/dataset"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Dataset
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                  <Link
+                    to="/contribution/notebook"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Notebook
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                  <Link
+                    to="/contribution/publication"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Publication
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                  {canEditOER && (
+                    <Link
+                      to="/contribution/oer"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          New Educational Resource
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
+                  {canEditMap && (
+                    <Link
+                      to="/contribution/map"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          New Map
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
+                </>
+              )}
+              <ListDivider />
+              <ListItem sx={{ width: "100%" }}>
+                <ListItemButton onClick={logout}>Logout</ListItemButton>
+              </ListItem>
+            </List>
+          }
+        >
+          <Button
+            variant="plain"
+            color="neutral"
+            size="sm"
+            sx={{ alignSelf: "center" }}
           >
-            <Link to={"/user-profile"} style={{ textDecoration: "none" }}>
-              <MenuItem>My Profile</MenuItem>
-            </Link>
-            <Link
-              to={"/user-profile-update"}
-              style={{ textDecoration: "none" }}
-            >
-              <MenuItem>Update Profile</MenuItem>
-            </Link>
-            {canEditAllElements && (
-              <>
-                <ListDivider />
-                <Typography
-                  level="body-xs"
-                  textTransform="uppercase"
-                  fontWeight="lg"
-                  sx={{ px: 1.5, py: 1 }}
-                >
-                  Admin
-                </Typography>
-                <MenuItem component="a" href="/new-doc">
-                  New Documentation
-                </MenuItem>
-              </>
-            )}
-            {canContributeElements && (
-              <>
-                <ListDivider />
-                <Typography
-                  level="body-xs"
-                  textTransform="uppercase"
-                  fontWeight="lg"
-                  sx={{ px: 1.5, py: 1 }}
-                >
-                  New Contribution
-                </Typography>
-                <MenuItem component="a" href="/contribution/dataset">
-                  New Dataset
-                </MenuItem>
-                <MenuItem component="a" href="/contribution/notebook">
-                  New Notebook
-                </MenuItem>
-                <MenuItem component="a" href="/contribution/publication">
-                  New Publication
-                </MenuItem>
-                {canEditOER && (
-                  <MenuItem component="a" href="/contribution/oer">
-                    New Educational Resource
-                  </MenuItem>
-                )}
-                {canEditMap && (
-                  <MenuItem component="a" href="/contribution/map">
-                    New Map
-                  </MenuItem>
-                )}
-              </>
-            )}
-            <ListDivider />
-            <MenuItem onClick={logout}>Logout</MenuItem>
-          </Menu>
-        </Dropdown>
+            <UserAvatar
+              link={localUserInfo["avatar_url"]}
+              userId={localUserInfo.id}
+            />
+          </Button>
+        </Tooltip>
       );
     } else {
       return (
@@ -232,11 +272,25 @@ export default function NavBar(props) {
           >
             User profile
           </Typography>
-          <Link to={"/user-profile"} style={{ textDecoration: "none" }}>
-            <ListItem>My Profile</ListItem>
+          <Link
+            to="/user-profile"
+            underline="none"
+            component={RouterLink}
+            sx={{ color: "text.tertiary" }}
+          >
+            <ListItem sx={{ width: "100%" }}>
+              <ListItemButton>My Profile</ListItemButton>
+            </ListItem>
           </Link>
-          <Link to={"/user-profile-update"} style={{ textDecoration: "none" }}>
-            <ListItem>Update Profile</ListItem>
+          <Link
+            to="/user-profile-update"
+            underline="none"
+            component={RouterLink}
+            sx={{ color: "text.tertiary" }}
+          >
+            <ListItem sx={{ width: "100%" }}>
+              <ListItemButton>Update Profile</ListItemButton>
+            </ListItem>
           </Link>
           {canEditAllElements && (
             <>
@@ -249,8 +303,15 @@ export default function NavBar(props) {
               >
                 Admin
               </Typography>
-              <Link to="/new-doc" style={{ textDecoration: "none" }}>
-                <ListItem>New Documentation</ListItem>
+              <Link
+                to="/new-doc"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Documentation</ListItemButton>
+                </ListItem>
               </Link>
             </>
           )}
@@ -267,31 +328,57 @@ export default function NavBar(props) {
               </Typography>
               <Link
                 to="/contribution/dataset"
-                style={{ textDecoration: "none" }}
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
               >
-                <ListItem>New Dataset</ListItem>
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Dataset</ListItemButton>
+                </ListItem>
               </Link>
               <Link
                 to="/contribution/notebook"
-                style={{ textDecoration: "none" }}
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
               >
-                <ListItem>New Notebook</ListItem>
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Notebook</ListItemButton>
+                </ListItem>
               </Link>
               <Link
                 to="/contribution/publication"
-                style={{ textDecoration: "none" }}
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
               >
-                <ListItem>New Publication</ListItem>
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Publication</ListItemButton>
+                </ListItem>
               </Link>
 
               {canEditOER && (
-                <Link to="/contribution/oer" style={{ textDecoration: "none" }}>
-                  <ListItem>New Educational Resource</ListItem>
+                <Link
+                  to="/contribution/oer"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>New Educational Resource</ListItemButton>
+                  </ListItem>
                 </Link>
               )}
               {canEditMap && (
-                <Link to="/contribution/map" style={{ textDecoration: "none" }}>
-                  <ListItem>New Map</ListItem>
+                <Link
+                  to="/contribution/map"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>New Map</ListItemButton>
+                  </ListItem>
                 </Link>
               )}
             </>
@@ -394,12 +481,12 @@ export default function NavBar(props) {
                         <Link
                           key={page[1]}
                           to={page[1]}
-                          style={{ textDecoration: "none" }}
+                          underline="none"
+                          component={RouterLink}
+                          sx={{ color: "text.tertiary" }}
                         >
-                          <ListItem key={page[0]}>
-                            <Typography textAlign="center">
-                              {page[0]}
-                            </Typography>
+                          <ListItem sx={{ width: "100%" }}>
+                            <ListItemButton>{page[0]}</ListItemButton>
                           </ListItem>
                         </Link>
                       ))}
@@ -418,12 +505,12 @@ export default function NavBar(props) {
                         <Link
                           key={page[1]}
                           to={page[1]}
-                          style={{ textDecoration: "none" }}
+                          underline="none"
+                          component={RouterLink}
+                          sx={{ color: "text.tertiary" }}
                         >
-                          <ListItem key={page[0]}>
-                            <Typography textAlign="center">
-                              {page[0]}
-                            </Typography>
+                          <ListItem sx={{ width: "100%" }}>
+                            <ListItemButton>{page[0]}</ListItemButton>
                           </ListItem>
                         </Link>
                       ))}
@@ -432,7 +519,12 @@ export default function NavBar(props) {
                     <AuthInDrawer />
                   </Box>
                 </Drawer>
-                <Link to={"/"} style={{ textDecoration: "none" }}>
+                <Link
+                  to={"/"}
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
                       component="img"
@@ -457,7 +549,12 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link to={"/"} style={{ textDecoration: "none" }}>
+                <Link
+                  to={"/"}
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
                       component="img"
@@ -467,12 +564,14 @@ export default function NavBar(props) {
                     />
                   </Tooltip>
                 </Link>
-                <AboutButton />
+                <HoverOverMenuTab menu={aboutDropdown}>About</HoverOverMenuTab>
                 {pages?.map((page) => (
                   <Link
                     key={page[1]}
                     to={page[1]}
-                    style={{ textDecoration: "none" }}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
                   >
                     <Button
                       key={page[0]}
