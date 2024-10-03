@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router-dom";
 
-import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -16,20 +15,23 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import Textarea from "@mui/joy/Textarea";
 import { styled } from "@mui/joy";
 import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
 import IconButton from "@mui/joy/IconButton";
-import Tooltip from "@mui/joy/Tooltip";
 import FormHelperText from "@mui/joy/FormHelperText";
+import Textarea from "@mui/joy/Textarea";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
+import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
+import CapsuleInput from "./CapsuleInput";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { checkTokens } from "../utils/UserManager";
@@ -76,8 +78,8 @@ export default function SubmissionCard(props) {
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
-  const [thumbnailImageFile, setThumbnailImageFile] = useState();
-  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState();
+  const [thumbnailImageFile, setThumbnailImageFile] = useState("");
+  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
   const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
@@ -86,7 +88,7 @@ export default function SubmissionCard(props) {
     returnedRelatedResourceTitle.length === 0;
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [currentRelatedResourceTitle, setCurrentRelatedResourceTitle] =
-    useState();
+    useState("");
   const [currentRelatedResourceType, setCurrentRelatedResourceType] =
     useState("");
 
@@ -100,7 +102,7 @@ export default function SubmissionCard(props) {
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
 
-  const [elementURI, setElementURI] = useState();
+  const [elementURI, setElementURI] = useState("");
 
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
@@ -120,7 +122,15 @@ export default function SubmissionCard(props) {
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
-  const [contributor, setContributor] = useState();
+  const [contributor, setContributor] = useState([]);
+
+  const [spatialCoverage, setSpatialCoverage] = useState([]);
+  const [geometry, setGeometry] = useState("");
+  const [boundingBox, setBoundingBox] = useState("");
+  const [centroid, setCentroid] = useState("");
+  const [isGeoreferenced, setIsGeoreferenced] = useState("");
+  const [temporalCoverage, setTemporalCoverage] = useState([]);
+  const [indexYears, setIndexYears] = useState([]);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
@@ -164,32 +174,44 @@ export default function SubmissionCard(props) {
 
       setContributor(thisElement["contributor"]);
 
+      setSpatialCoverage(thisElement["spatial-coverage"] || []);
+      setGeometry(thisElement["spatial-geometry"]);
+      setBoundingBox(thisElement["spatial-bounding-box"]);
+      setCentroid(thisElement["spatial-centroid"]);
+      setIsGeoreferenced(thisElement["spatial-georeferenced"]);
+      setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
+      setIndexYears(
+        Array.isArray(thisElement["spatial-index-year"])
+          ? thisElement["spatial-index-year"].join(", ")
+          : thisElement["spatial-index-year"]
+      );
+
       let relatedResourcesArray = [];
-      thisElement["related-datasets"].map((re) =>
+      thisElement["related-datasets"]?.map((re) =>
         relatedResourcesArray.push({
           type: "dataset",
           title: re.title,
         })
       );
-      thisElement["related-notebooks"].map((re) =>
+      thisElement["related-notebooks"]?.map((re) =>
         relatedResourcesArray.push({
           type: "notebook",
           title: re.title,
         })
       );
-      thisElement["related-publications"].map((re) =>
+      thisElement["related-publications"]?.map((re) =>
         relatedResourcesArray.push({
           type: "publication",
           title: re.title,
         })
       );
-      thisElement["related-oers"].map((re) =>
+      thisElement["related-oers"]?.map((re) =>
         relatedResourcesArray.push({
           type: "oer",
           title: re.title,
         })
       );
-      thisElement["related-maps"].map((re) =>
+      thisElement["related-maps"]?.map((re) =>
         relatedResourcesArray.push({
           type: "map",
           title: re.title,
@@ -414,8 +436,8 @@ export default function SubmissionCard(props) {
     const formData = new FormData(event.target);
 
     formData.forEach((value, key) => {
-      if (key === "authors" || key === "tags") {
-        data[key] = value.split(",").map((item) => item.trim());
+      if (key === "authors" || key === "tags" || key === "spatial-index-year") {
+        data[key] = value.split(",")?.map((item) => item.trim());
       } else if (key === "notebook-url") {
         // Array[0]: the notebook repo url
         // Array[1]: the notebook filename
@@ -436,6 +458,13 @@ export default function SubmissionCard(props) {
     if (resourceTypeSelected === "oer") {
       data["oer-external-links"] = oerExternalLinks;
     }
+
+    data["spatial-coverage"] = spatialCoverage;
+    data["spatial-geometry"] = geometry;
+    data["spatial-bounding-box"] = boundingBox;
+    data["spatial-centroid"] = centroid;
+    data["spatial-georeferenced"] = isGeoreferenced;
+    data["spatial-temporal-coverage"] = temporalCoverage;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -563,7 +592,7 @@ export default function SubmissionCard(props) {
         width: "100%",
       }}
     >
-      <Typography level="h3">{cardTitle}</Typography>
+      <Typography level="h2">{cardTitle}</Typography>
       {canEditAllElements && !isContributor && submissionType === "update" && (
         <Typography color="danger" level="title-md">
           WARNING: You are not the contributor
@@ -581,55 +610,22 @@ export default function SubmissionCard(props) {
             gap: 2,
           }}
         >
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Element information
+          </Typography>
           {resourceTypeSelected === "publication" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-sm"
-                  endDecorator={
-                    <Tooltip
-                      placement="top-start"
-                      variant="outlined"
-                      arrow
-                      title={
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            maxWidth: 320,
-                            justifyContent: "center",
-                            p: 1,
-                          }}
-                        >
-                          <Typography level="title-sm" sx={{ pb: 1 }}>
-                            You may provide the DOI of the publication and click
-                            "Autofill metadata" to automatically retrieve the
-                            information of the publication.
-                          </Typography>
-                          <Typography level="body-sm">
-                            Feature powered by Crossref. Please note that not
-                            all the fields are available. Some sources are not
-                            supported by Crossref. The abstract might need to be
-                            manually reformatted.
-                          </Typography>
-                        </Box>
-                      }
-                      size="lg"
-                    >
-                      <InfoOutlined size="lg" />
-                    </Tooltip>
-                  }
+                <SubmissionCardFieldTitle
+                  tooltipTitle={`You may provide the DOI of the publication and click \"Autofill metadata\" to automatically retrieve the information of the publication.`}
+                  tooltipContent={`Feature powered by Crossref. Please note that not all the fields are available. Some sources are not supported by Crossref. The abstract might need to be manually reformatted.`}
+                  fieldRequired
                 >
-                  <Typography
-                    level="title-md"
-                    endDecorator={<RequiredFieldIndicator />}
-                  >
-                    Publication URL (DOI link preferred)
-                  </Typography>
-                </Typography>
+                  Publication URL (DOI link preferred)
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                <Grid md>
+                <Grid xs>
                   <Input
                     required
                     name="external-link-publication"
@@ -637,7 +633,7 @@ export default function SubmissionCard(props) {
                     onChange={(event) => setPublicationDOI(event.target.value)}
                   />
                 </Grid>
-                <Grid md="auto">
+                <Grid xs="auto">
                   <Button
                     variant="outlined"
                     onClick={handleAutofillPublicationInfo}
@@ -648,14 +644,15 @@ export default function SubmissionCard(props) {
               </Grid>
             </FormControl>
           )}
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add a title that will appear on the I-GUIDE platform"
+                tooltipContent="This title will be key information displayed on the platform so aim for consise but descriptive."
+                fieldRequired
               >
                 Title
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="title"
@@ -664,14 +661,17 @@ export default function SubmissionCard(props) {
               onChange={(event) => setTitle(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add the authors of the resource"
+                tooltipContent={
+                  "If you can't find specific authors, use something like '<resource> contributors', where you replace <resource> with a short description of the item you are submitting. You can contribute a resource to the I-GUIDE platform that you did not author yourself."
+                }
+                fieldRequired
               >
                 Authors (comma-separated)
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="authors"
@@ -681,14 +681,11 @@ export default function SubmissionCard(props) {
               onChange={(event) => setAuthors(event.target.value)}
             />
           </FormControl>
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
-              >
+              <SubmissionCardFieldTitle fieldRequired>
                 Tags (comma-separated)
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Input
               name="tags"
@@ -699,28 +696,30 @@ export default function SubmissionCard(props) {
             />
           </FormControl>
           {resourceTypeSelected === "oer" ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a brief summary of the resource"
+                  tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
+                  fieldRequired
                 >
                   Content
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <MarkdownEditor contents={contents} setContents={setContents} />
             </FormControl>
           ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a brief summary of the resource"
+                  tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
+                  fieldRequired
                 >
                   {resourceTypeSelected === "publication"
                     ? "Abstract"
                     : "About"}
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Textarea
                 name="contents"
@@ -732,14 +731,15 @@ export default function SubmissionCard(props) {
               />
             </FormControl>
           )}
-          <FormControl sx={{ gridColumn: "1/-1" }}>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
             <FormLabel>
-              <Typography
-                level="title-md"
-                endDecorator={<RequiredFieldIndicator />}
+              <SubmissionCardFieldTitle
+                tooltipTitle="Add a thumbnail image for the resource"
+                tooltipContent="You can take a screenshot of a key figure or image from the resource, or submit an image that will help distinguish the resource from other similar ones."
+                fieldRequired
               >
                 Thumbnail image {"(< 5MB)"}
-              </Typography>
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Button
               component="label"
@@ -769,14 +769,14 @@ export default function SubmissionCard(props) {
             )}
           </FormControl>
           {resourceTypeSelected === "map" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="A link to view the map."
+                  fieldRequired
                 >
                   Map iframe link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -787,14 +787,14 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add a link to the primary page for this dataset"
+                  fieldRequired
                 >
                   Dataset host link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -805,11 +805,14 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography level="title-md">
+                <SubmissionCardFieldTitle
+                  tooltipTitle="If there is a direct download link available for the dataset, indicate it here"
+                  tooltipContent="By direct download link, we mean a link where when you click it it starts the download process for the dataset"
+                >
                   Dataset direct download link
-                </Typography>
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 name="direct-download-link"
@@ -819,9 +822,14 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "dataset" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography level="title-md">Dataset size</Typography>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Add size information for the dataset here"
+                  tooltipContent="If you know the exact size, add that, otherwise estimate if you can. I.e. is it on the order of megabytes, gigabytes, or terrabytes?"
+                >
+                  Dataset size
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 name="size"
@@ -831,52 +839,20 @@ export default function SubmissionCard(props) {
             </FormControl>
           )}
           {resourceTypeSelected === "notebook" && (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <Typography
-                  level="title-sm"
-                  endDecorator={
-                    <Tooltip
-                      placement="top-start"
-                      variant="outlined"
-                      arrow
-                      title={
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            maxWidth: 320,
-                            justifyContent: "center",
-                            p: 1,
-                          }}
-                        >
-                          <Typography level="title-sm" sx={{ pb: 1 }}>
-                            This is a link to the notebook on GitHub you would
-                            like featured for this Knowledge Element
-                          </Typography>
-                          <Typography level="body-sm">
-                            {`You must link to one specific notebook for 
-                            our notebook preview to function correctly, but when the notebook is 
-                            opened on the I-GUIDE Platform the entire repo will be copied to the 
-                            user's environment. An example link may look like "https://github.com/
-                            <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
-                            `}
-                          </Typography>
-                        </Box>
-                      }
-                      size="lg"
-                    >
-                      <InfoOutlined size="lg" />
-                    </Tooltip>
-                  }
+                <SubmissionCardFieldTitle
+                  tooltipTitle="This is a link to the notebook on GitHub you would like featured for this Knowledge Element"
+                  tooltipContent={`You must link to one specific notebook for 
+                    our notebook preview to function correctly, but when the notebook is 
+                    opened on the I-GUIDE Platform the entire repo will be copied to the 
+                    user's environment. An example link may look like "https://github.com/
+                    <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                    `}
+                  fieldRequired
                 >
-                  <Typography
-                    level="title-md"
-                    endDecorator={<RequiredFieldIndicator />}
-                  >
-                    Jupyter Notebook GitHub URL
-                  </Typography>
-                </Typography>
+                  Jupyter Notebook GitHub URL
+                </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
                 required
@@ -894,11 +870,132 @@ export default function SubmissionCard(props) {
               )}
             </FormControl>
           )}
+          {/* External links */}
+          {resourceTypeSelected === "oer" && (
+            <Grid sx={{ gridColumn: "1/-1" }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>
+                  Educational resource external links (Click &#10004; button to
+                  save)
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Table>
+                <thead>
+                  <tr>
+                    <th style={{ width: "20%" }} align="left">
+                      Type
+                    </th>
+                    <th style={{ width: "30%" }} align="left">
+                      URL
+                    </th>
+                    <th style={{ width: "5%" }} align="left"></th>
+                    <th style={{ width: "40%" }} align="left">
+                      Title
+                    </th>
+                    <th style={{ width: "50px" }} align="left"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {oerExternalLinks?.map((x, i) => (
+                    <tr key={i}>
+                      <td align="left">
+                        <p>{OER_EXTERNAL_LINK_TYPES[x.type]}</p>
+                      </td>
+                      <td align="left">
+                        <p>{x.url}</p>
+                      </td>
+                      <td align="left">
+                        <p></p>
+                      </td>
+                      <td align="left">
+                        <p>{x.title}</p>
+                      </td>
+                      <td align="left">
+                        {oerExternalLinks.length !== 0 && (
+                          <DeleteForeverRoundedIcon
+                            color="danger"
+                            onClick={() => handleRemovingOneOerExternalLink(i)}
+                            style={{
+                              marginRight: "10px",
+                              marginTop: "4px",
+                              cursor: "pointer",
+                            }}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td align="left">
+                      <Select
+                        placeholder="Type"
+                        value={currentOerExternalLinkType}
+                        onChange={(e, newValue) =>
+                          handleOerExternalLinkTypeChange(newValue)
+                        }
+                      >
+                        <Option value="slides">Slides</Option>
+                        <Option value="bok">Body of Knowledge</Option>
+                        <Option value="oer">Open Educational Resources</Option>
+                        <Option value="course">Course</Option>
+                        <Option value="webpage">Webpage</Option>
+                      </Select>
+                    </td>
+                    <td align="left">
+                      <Input
+                        value={currentOerExternalLinkURL}
+                        onChange={(event) =>
+                          setCurrentOerExternalLinkURL(event.target.value)
+                        }
+                      />
+                    </td>
+                    <td align="left">
+                      <IconButton
+                        size="sm"
+                        variant="outlined"
+                        onClick={handleOerExternalLinkSearchTitle}
+                        style={{ marginTop: "4px", cursor: "pointer" }}
+                      >
+                        <ArrowForwardIcon />
+                      </IconButton>
+                    </td>
+                    <td align="left">
+                      <Input
+                        value={currentOerExternalLinkTitle}
+                        onChange={(event) =>
+                          setCurrentOerExternalLinkTitle(event.target.value)
+                        }
+                      />
+                    </td>
+                    <td align="left">
+                      <IconButton
+                        size="sm"
+                        variant="soft"
+                        onClick={handleAddingOneOerExternalLink}
+                        style={{ marginTop: "4px", cursor: "pointer" }}
+                        color="primary"
+                      >
+                        <CheckIcon />
+                      </IconButton>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Grid>
+          )}
 
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Related elements
+          </Typography>
           {/* Related elements */}
           <Grid sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
-              <Typography level="title-md">Related elements</Typography>
+              <SubmissionCardFieldTitle
+                tooltipTitle="Indicate other existing resources from the I-GUIDE platform that are similar, related, or relavent to the resource you are submitting"
+                tooltipContent="These resources may be resources used to create the resource you are submitting, use similar methods, or address similar themes. If you wish to connect a resource that hasn't been contributed to the I-GUIDE platform yet, create the resource and connect it to the current resource upon creation."
+              >
+                Related elements
+              </SubmissionCardFieldTitle>
             </FormLabel>
             <Table>
               <thead>
@@ -913,7 +1010,7 @@ export default function SubmissionCard(props) {
                 </tr>
               </thead>
               <tbody>
-                {relatedResources.map((x, i) => (
+                {relatedResources?.map((x, i) => (
                   <tr key={i}>
                     <td align="left">
                       <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
@@ -978,116 +1075,103 @@ export default function SubmissionCard(props) {
             </Table>
           </Grid>
 
-          {/* External links */}
-          {resourceTypeSelected === "oer" && (
-            <Grid sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>
-                <Typography level="title-md">
-                  Educational resource external links
-                </Typography>
-              </FormLabel>
-              <Table>
-                <thead>
-                  <tr>
-                    <th style={{ width: "20%" }} align="left">
-                      Type
-                    </th>
-                    <th style={{ width: "30%" }} align="left">
-                      URL
-                    </th>
-                    <th style={{ width: "5%" }} align="left"></th>
-                    <th style={{ width: "37%" }} align="left">
-                      Title
-                    </th>
-                    <th style={{ width: "8%" }} align="left"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {oerExternalLinks.map((x, i) => (
-                    <tr key={i}>
-                      <td align="left">
-                        <p>{OER_EXTERNAL_LINK_TYPES[x.type]}</p>
-                      </td>
-                      <td align="left">
-                        <p>{x.url}</p>
-                      </td>
-                      <td align="left">
-                        <p></p>
-                      </td>
-                      <td align="left">
-                        <p>{x.title}</p>
-                      </td>
-                      <td align="left">
-                        {oerExternalLinks.length !== 0 && (
-                          <DeleteForeverRoundedIcon
-                            color="danger"
-                            onClick={() => handleRemovingOneOerExternalLink(i)}
-                            style={{
-                              marginRight: "10px",
-                              marginTop: "4px",
-                              cursor: "pointer",
-                            }}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                  <tr>
-                    <td align="left">
-                      <Select
-                        placeholder="Type"
-                        value={currentOerExternalLinkType}
-                        onChange={(e, newValue) =>
-                          handleOerExternalLinkTypeChange(newValue)
-                        }
-                      >
-                        <Option value="slides">Slides</Option>
-                        <Option value="bok">Body of Knowledge</Option>
-                        <Option value="oer">Open Educational Resources</Option>
-                        <Option value="course">Course</Option>
-                        <Option value="webpage">Webpage</Option>
-                      </Select>
-                    </td>
-                    <td align="left">
-                      <Input
-                        value={currentOerExternalLinkURL}
-                        onChange={(event) =>
-                          setCurrentOerExternalLinkURL(event.target.value)
-                        }
-                      />
-                    </td>
-                    <td align="left">
-                      <IconButton
-                        variant="outlined"
-                        onClick={handleOerExternalLinkSearchTitle}
-                      >
-                        <SearchIcon />
-                      </IconButton>
-                    </td>
-                    <td align="left">
-                      <Input
-                        value={currentOerExternalLinkTitle}
-                        onChange={(event) =>
-                          setCurrentOerExternalLinkTitle(event.target.value)
-                        }
-                      />
-                    </td>
-                    <td align="left">
-                      <Button
-                        size="sm"
-                        variant="soft"
-                        onClick={handleAddingOneOerExternalLink}
-                        style={{ marginTop: "4px", cursor: "pointer" }}
-                        color="primary"
-                      >
-                        Save
-                      </Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            </Grid>
-          )}
+          <Typography level="h3" sx={{ pt: 1 }}>
+            Spatial metadata
+          </Typography>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
+                Spatial coverage (Click &#10004; button to save)
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <CapsuleInput
+              array={spatialCoverage}
+              setArray={setSpatialCoverage}
+              placeholder="Chicago, IL"
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="The Well-Known Text (WKT) description of the geometry for the spatial coverage.">
+                Geometry
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <Input
+              placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+              value={geometry}
+              onChange={(event) => setGeometry(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle
+                tooltipTitle="The bounding box in the format:"
+                tooltipContent="ENVELOPE(West, East, North, South)"
+              >
+                Bounding Box
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <Input
+              placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
+              value={boundingBox}
+              onChange={(event) => setBoundingBox(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
+                Centroid
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <Input
+              placeholder="46.4218,-94.087"
+              value={centroid}
+              onChange={(event) => setCentroid(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="True or false, indicating if the knowledge element has a georeferenced version.">
+                Georeferenced
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <Select
+              placeholder="Select true or false"
+              value={isGeoreferenced}
+              onChange={(e, newValue) => setIsGeoreferenced(newValue)}
+            >
+              <Option value="">
+                <em>Select true or false</em>
+              </Option>
+              <Option value="true">True</Option>
+              <Option value="false">False</Option>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="A list of text descriptions of the time period for the knowledge element.">
+                Temporal coverage (Click &#10004; button to save)
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <CapsuleInput
+              array={temporalCoverage}
+              setArray={setTemporalCoverage}
+              placeholder="Late 20th century"
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormLabel>
+              <SubmissionCardFieldTitle tooltipTitle="The years this knowledge elements relates to.">
+                Index years (comma-separated)
+              </SubmissionCardFieldTitle>
+            </FormLabel>
+            <Input
+              name="spatial-index-year"
+              placeholder="1990, 2000, ..."
+              value={indexYears}
+              onChange={(event) => setIndexYears(event.target.value)}
+            />
+          </FormControl>
 
           <CardActions sx={{ gridColumn: "1/-1" }}>
             <Button type="submit" variant="solid" color="primary">
