@@ -1087,7 +1087,7 @@ export default function SubmissionCard(props) {
             <CapsuleInput
               array={spatialCoverage}
               setArray={setSpatialCoverage}
-              placeholder="Philadelphia, Pennsylvania, United States"
+              placeholder="Chicago, IL"
             />
           </FormControl>
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
