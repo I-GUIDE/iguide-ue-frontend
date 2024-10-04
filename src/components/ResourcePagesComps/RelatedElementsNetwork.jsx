@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { GraphCanvas, recommendLayout } from "reagraph";
-import { useTheme } from "@mui/joy/styles";
+import { GraphCanvas } from "reagraph";
 
+import { useTheme } from "@mui/joy/styles";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
-import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
-import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 
 import SimpleInfoCard from "../SimpleInfoCard";
@@ -18,12 +16,14 @@ import { RESOURCE_TYPE_COLORS } from "../../configs/VarConfigs";
 
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;
+
+  const graphRef = useRef(null);
   const [nodes, setNodes] = useState();
   const [edges, setEdges] = useState();
+  const [noRelatedElements, setNoRelatedElements] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const graphRef = useRef(null);
 
   const theme = useTheme();
   const htmlColors = {
@@ -47,6 +47,12 @@ export default function RelatedElementsNetwork(props) {
           type: node["resource-type"],
           fill: htmlColors[node["resource-type"]],
         }));
+
+        if (!returnedNodes || returnedNodes.length === 0) {
+          setNoRelatedElements(true);
+        } else {
+          setNoRelatedElements(false);
+        }
 
         returnedNodes.push({
           id: elementId,
@@ -78,8 +84,16 @@ export default function RelatedElementsNetwork(props) {
     return null;
   }
 
+  //  When there are no related elements, return null
+  if (noRelatedElements) {
+    return null;
+  }
+
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Typography level="h5" fontWeight="lg" mb={1}>
+        Related elements network
+      </Typography>
       <Box
         sx={{
           display: "flex",
