@@ -31,7 +31,7 @@ export default function UserProfileEditStatusCard(props) {
   return (
     <Box
       sx={{
-        maxWidth: 500,
+        maxWidth: 800,
         position: "relative",
         overflow: { xs: "auto", sm: "initial" },
       }}
