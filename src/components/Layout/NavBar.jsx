@@ -48,11 +48,11 @@ const aboutDropdown = [
 ];
 
 const pages = [
+  ["Maps", "/maps"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
-  ["Maps", "/maps"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
@@ -165,6 +165,20 @@ export default function NavBar(props) {
                   >
                     New Contribution
                   </Typography>
+                  {canEditMap && (
+                    <Link
+                      to="/contribution/map"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          New Map
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
                   <Link
                     to="/contribution/dataset"
                     underline="none"
@@ -211,20 +225,6 @@ export default function NavBar(props) {
                       <ListItem sx={{ width: "100%" }}>
                         <ListItemButton onClick={() => setOpen(false)}>
                           New Educational Resource
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
-                  {canEditMap && (
-                    <Link
-                      to="/contribution/map"
-                      underline="none"
-                      component={RouterLink}
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton onClick={() => setOpen(false)}>
-                          New Map
                         </ListItemButton>
                       </ListItem>
                     </Link>
@@ -326,6 +326,18 @@ export default function NavBar(props) {
               >
                 New Contribution
               </Typography>
+              {canEditMap && (
+                <Link
+                  to="/contribution/map"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>New Map</ListItemButton>
+                  </ListItem>
+                </Link>
+              )}
               <Link
                 to="/contribution/dataset"
                 underline="none"
@@ -356,7 +368,6 @@ export default function NavBar(props) {
                   <ListItemButton>New Publication</ListItemButton>
                 </ListItem>
               </Link>
-
               {canEditOER && (
                 <Link
                   to="/contribution/oer"
@@ -366,18 +377,6 @@ export default function NavBar(props) {
                 >
                   <ListItem sx={{ width: "100%" }}>
                     <ListItemButton>New Educational Resource</ListItemButton>
-                  </ListItem>
-                </Link>
-              )}
-              {canEditMap && (
-                <Link
-                  to="/contribution/map"
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton>New Map</ListItemButton>
                   </ListItem>
                 </Link>
               )}
