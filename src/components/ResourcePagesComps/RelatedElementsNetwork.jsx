@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { GraphCanvas } from "reagraph";
+import { GraphCanvas, useSelection } from "reagraph";
 
 import { useTheme } from "@mui/joy/styles";
 import Button from "@mui/joy/Button";
@@ -8,6 +8,7 @@ import Link from "@mui/joy/Link";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import Divider from "@mui/joy/Divider";
 
 import SimpleInfoCard from "../SimpleInfoCard";
 
@@ -79,6 +80,13 @@ export default function RelatedElementsNetwork(props) {
     }
   }, [elementId]);
 
+  const { selections, actives, onNodeClick, onCanvasClick } = useSelection({
+    ref: graphRef,
+    nodes: nodes,
+    edges: edges,
+    pathSelectionType: "all",
+  });
+
   // If there are no nodes, return null
   if (!nodes || !edges) {
     return null;
@@ -92,13 +100,17 @@ export default function RelatedElementsNetwork(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Related elements network
+        Related elements network (Beta)
+      </Typography>
+      <Divider inset="none" />
+      <Typography color="neutral" level="body-sm" variant="plain">
+        Right click or long press the node to view the element
       </Typography>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          border: "solid 1px",
+          border: "solid 1px gold",
           height: 700,
           width: "100%",
           position: "relative",
@@ -111,6 +123,10 @@ export default function RelatedElementsNetwork(props) {
           animated={false}
           edgeArrowPosition="none"
           labelType="nodes"
+          selections={selections}
+          actives={actives}
+          onCanvasClick={onCanvasClick}
+          onNodeClick={onNodeClick}
           contextMenu={function ({ data, onClose }) {
             if (data.id !== elementId) {
               return (
