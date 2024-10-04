@@ -28,12 +28,12 @@ export default function RelatedElementsNetwork(props) {
 
   const theme = useTheme();
   const htmlColors = {
-    dataset: `${theme.palette.primary[500]}`,
-    notebook: `${theme.palette.success[500]}`,
-    publication: `${theme.palette.warning[500]}`,
-    oer: `${theme.palette.danger[500]}`,
-    map: `${theme.palette.neutral[500]}`,
-    any: `${theme.palette.neutral[500]}`,
+    dataset: `${theme.palette.primary[300]}`,
+    notebook: `${theme.palette.success[300]}`,
+    publication: `${theme.palette.warning[300]}`,
+    oer: `${theme.palette.danger[300]}`,
+    map: `${theme.palette.neutral[300]}`,
+    any: `${theme.palette.neutral[300]}`,
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function RelatedElementsNetwork(props) {
         returnedNodes.push({
           id: elementId,
           label: "This element",
-          fill: "#000",
+          fill: "#ff0000",
         });
 
         const returnedEdges = data.neighbors?.map((edge) => ({
