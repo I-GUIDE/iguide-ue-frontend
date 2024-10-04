@@ -368,6 +368,12 @@ export default function SearchResults() {
                         All
                       </Tab>
                       <Tab
+                        value="map"
+                        sx={{ flex: "none", scrollSnapAlign: "start" }}
+                      >
+                        Maps
+                      </Tab>
+                      <Tab
                         value="dataset"
                         sx={{ flex: "none", scrollSnapAlign: "start" }}
                       >
