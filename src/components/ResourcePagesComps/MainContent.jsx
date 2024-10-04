@@ -10,6 +10,7 @@ import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
+import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -205,9 +206,42 @@ export default function MainContent(props) {
             {title}
           </Typography>
           {authors && authors.length > 0 && (
-            <Typography level="body-lg" sx={{ py: 1 }}>
-              {printListWithDelimiter(authors, ",")}
-            </Typography>
+            <Tooltip
+              title={
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    maxWidth: 450,
+                    maxHeight: 400,
+                    overflow: "hidden",
+                    overflowY: "scroll",
+                    p: 1,
+                  }}
+                >
+                  <Typography level="title-sm">
+                    Author{authors.length > 1 && "s"}
+                  </Typography>
+                  <Typography level="body-sm">
+                    {printListWithDelimiter(authors, ",")}
+                  </Typography>
+                </Box>
+              }
+              variant="outlined"
+            >
+              <Typography
+                level="body-lg"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "2",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {printListWithDelimiter(authors, ",")}
+              </Typography>
+            </Tooltip>
           )}
           {doi && (
             <Link

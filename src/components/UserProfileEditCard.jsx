@@ -91,6 +91,8 @@ export default function UserProfileEditCard(props) {
   const [profilePictureScale, setProfilePictureScale] = useState(1);
   const [newProfilePicture, setNewProfilePicture] = useState(false);
 
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
   useEffect(() => {
     const getLocalUserInfo = async () => {
       setFirstNameFromDB(localUserInfo["first_name"]);
@@ -149,6 +151,7 @@ export default function UserProfileEditCard(props) {
   async function handleSubmit(event) {
     event.preventDefault();
     let avatar_url = "";
+    setButtonDisabled(true);
 
     // If the user uploads and confirms the new picture, use it.
     if (newProfilePicture) {
@@ -160,16 +163,21 @@ export default function UserProfileEditCard(props) {
       formData.append("file", confirmedProfilePictureFile);
       formData.append("id", localUserInfo.id);
 
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/users/avatar`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      try {
+        const response = await fetchWithAuth(
+          `${USER_BACKEND_URL}/api/users/avatar`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      const profilePictureResult = await response.json();
-      avatar_url = profilePictureResult.url;
+        const profilePictureResult = await response.json();
+        avatar_url = profilePictureResult.url;
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error updating user profile!");
+      }
     } else {
       avatar_url = confirmedProfilePictureURL;
     }
@@ -187,6 +195,8 @@ export default function UserProfileEditCard(props) {
       personalWebsiteLink,
       avatar_url
     );
+
+    setButtonDisabled(false);
 
     if (result && result.message === "User updated successfully") {
       setUserProfileSubmissionStatus("update-succeeded");
@@ -466,8 +476,13 @@ export default function UserProfileEditCard(props) {
           </FormControl>
 
           <CardActions sx={{ gridColumn: "1/-1" }}>
-            <Button type="submit" variant="solid" color="primary">
-              Update your profile
+            <Button
+              type="submit"
+              variant="solid"
+              color="primary"
+              disabled={buttonDisabled}
+            >
+              {buttonDisabled ? "Sending..." : "Update your profile"}
             </Button>
           </CardActions>
         </CardContent>
