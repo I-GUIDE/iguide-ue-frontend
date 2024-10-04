@@ -28,6 +28,7 @@ export default function SimpleInfoCard(props) {
   const minHeight = props.minHeight;
   const width = props.width;
   const showElementType = props.showElementType;
+  const disableReactRouter = props.disableReactRouter;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -75,7 +76,7 @@ export default function SimpleInfoCard(props) {
           <Link
             overlay
             underline="none"
-            component={RouterLink}
+            component={disableReactRouter ? "a" : RouterLink}
             to={"/" + cardType + "/" + pageId}
             sx={{ color: "text.tertiary" }}
           >
