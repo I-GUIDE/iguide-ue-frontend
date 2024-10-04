@@ -12,7 +12,7 @@ export default function Datasets() {
     <ElementGridLayout
       elementType="dataset"
       title="Datasets"
-      subtitle="Access a wide variety of geospatial datasets curated for research, analysis, and educational purposes across different domains."
+      subtitle="Access a wide variety of geospatial-related datasets curated for research, analysis, and educational purposes across different domains."
       icon={<DatasetIcon />}
       contribution={{
         text: "Contribute a new dataset",

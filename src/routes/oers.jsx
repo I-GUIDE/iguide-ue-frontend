@@ -13,7 +13,7 @@ export default function OERs() {
     <ElementGridLayout
       elementType="oer"
       title="Educational Resources"
-      subtitle="Discover educational resources tailored for teaching and learning in geospatial data science, designed for students and professionals alike."
+      subtitle="Harness data-intensive teaching and learning materials with a focus on geospatial data science."
       icon={<SchoolIcon />}
     />
   );

@@ -13,7 +13,7 @@ export default function Maps() {
     <ElementGridLayout
       elementType="map"
       title="Maps"
-      subtitle="Unlock new insights with map research—where data meets geography to reveal hidden connections."
+      subtitle="Interact with diverse cartographic maps to understand the transformation of spatial data to knowledge and insights."
       icon={<MapIcon />}
     />
   );
