@@ -213,7 +213,9 @@ export default function MainContent(props) {
                     display: "flex",
                     flexDirection: "column",
                     maxWidth: 450,
-                    justifyContent: "center",
+                    maxHeight: 400,
+                    overflow: "hidden",
+                    overflowY: "scroll",
                     p: 1,
                   }}
                 >
