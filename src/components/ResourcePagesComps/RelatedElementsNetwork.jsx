@@ -14,6 +14,7 @@ import SimpleInfoCard from "../SimpleInfoCard";
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { RESOURCE_TYPE_COLORS } from "../../configs/VarConfigs";
+import { stringTruncator } from "../../helpers/helper";
 
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;
@@ -43,7 +44,8 @@ export default function RelatedElementsNetwork(props) {
 
         let returnedNodes = data.nodes?.map((node) => ({
           id: node.id,
-          label: node.title,
+          label: stringTruncator(node.title, 0, 25, "..."),
+          title: node.title,
           thumbnail: node["thumbnail-image"],
           type: node["resource-type"],
           fill: htmlColors[node["resource-type"]],
@@ -65,6 +67,7 @@ export default function RelatedElementsNetwork(props) {
           id: edge.src + "-" + edge.dst,
           source: edge.src,
           target: edge.dst,
+          size: 2,
         }));
 
         setNodes(returnedNodes);
@@ -142,7 +145,7 @@ export default function RelatedElementsNetwork(props) {
                   <SimpleInfoCard
                     cardtype={data.type}
                     pageId={data.id}
-                    title={data.label}
+                    title={data.title}
                     thumbnailImage={data.thumbnail}
                     minHeight="100%"
                     width="100%"
