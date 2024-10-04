@@ -17,6 +17,7 @@ import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
 import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
 import ActionList from "../../components/ResourcePagesComps/ActionsList";
+import RelatedElementsReagraph from "../../components/ResourcePagesComps/RelatedElementsReagraph";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
@@ -160,6 +161,9 @@ export default function DatasetPage() {
               xs={12}
               md={6}
             />
+            <Grid xs={12}>
+              <RelatedElementsReagraph />
+            </Grid>
           </Grid>
         </Box>
       </Container>

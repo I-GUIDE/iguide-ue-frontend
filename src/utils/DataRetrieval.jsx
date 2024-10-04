@@ -277,3 +277,34 @@ export async function fetchADocumentation(docName) {
     return "ERROR";
   }
 }
+
+/**
+ * Fetches the neighbors of an element
+ *
+ * @async
+ * @function fetchNeighbors
+ * @param {string} elementId - element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the neighbors.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchNeighbors(elementId) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch neighbors");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching neighbors: ", error.message);
+    return "ERROR";
+  }
+}
