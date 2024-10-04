@@ -24,7 +24,6 @@ import Textarea from "@mui/joy/Textarea";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -131,6 +130,8 @@ export default function SubmissionCard(props) {
   const [isGeoreferenced, setIsGeoreferenced] = useState("");
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
+
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
@@ -468,72 +469,97 @@ export default function SubmissionCard(props) {
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
+    setButtonDisabled(true);
+
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
       const formData = new FormData();
       formData.append("file", thumbnailImageFile);
 
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/elements/thumbnail`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      try {
+        const response = await fetchWithAuth(
+          `${USER_BACKEND_URL}/api/elements/thumbnail`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      const result = await response.json();
-      data["thumbnail-image"] = result.url;
+        const result = await response.json();
+        data["thumbnail-image"] = result.url;
+      } catch (error) {
+        console.error("Error:", error);
+        setButtonDisabled(false);
+        alert("Error uploading thumbnail...");
+      }
     } else {
       data["thumbnail-image"] = thumbnailImageFileURL;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
       alert("You have to upload a thumbnail image for your contribution!");
+      setButtonDisabled(false);
       return;
     }
 
     TEST_MODE && console.log("data to be submitted", data);
 
     if (submissionType === "update") {
-      const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/elements/${elementId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      try {
+        const response = await fetchWithAuth(
+          `${USER_BACKEND_URL}/api/elements/${elementId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        const result = await response.json();
+        TEST_MODE && console.log("Element update msg returned", result.message);
+
+        if (result && result.message === "Element updated successfully") {
+          setSubmissionStatus("update-succeeded");
+        } else {
+          setSubmissionStatus("update-failed");
         }
-      );
-
-      const result = await response.json();
-      TEST_MODE && console.log("Element update msg returned", result.message);
-
-      if (result && result.message === "Element updated successfully") {
-        setSubmissionStatus("update-succeeded");
-      } else {
-        setSubmissionStatus("update-failed");
+      } catch (error) {
+        console.error("Error:", error);
+        setButtonDisabled(false);
+        alert("Error updating this element...");
       }
     } else if (submissionType === "initial") {
-      const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/elements`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      try {
+        const response = await fetchWithAuth(
+          `${USER_BACKEND_URL}/api/elements`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
 
-      const result = await response.json();
-      TEST_MODE && ("initial submission, msg", result);
-      if (result && result.message === "Resource registered successfully") {
-        setSubmissionStatus("initial-succeeded");
-        if (result.elementId) {
-          setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+        const result = await response.json();
+        TEST_MODE && ("initial submission, msg", result);
+        if (result && result.message === "Resource registered successfully") {
+          setSubmissionStatus("initial-succeeded");
+          if (result.elementId) {
+            setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+          }
+        } else {
+          setSubmissionStatus("initial-failed");
         }
-      } else {
-        setSubmissionStatus("initial-failed");
+      } catch (error) {
+        console.error("Error:", error);
+        setButtonDisabled(false);
+        alert("Error submitting this new element..");
       }
     }
+    setButtonDisabled(false);
   };
 
   // After submission, show users the submission status.
@@ -1174,8 +1200,15 @@ export default function SubmissionCard(props) {
           </FormControl>
 
           <CardActions sx={{ gridColumn: "1/-1" }}>
-            <Button type="submit" variant="solid" color="primary">
-              {submissionType === "update"
+            <Button
+              type="submit"
+              variant="solid"
+              color="primary"
+              disabled={buttonDisabled}
+            >
+              {buttonDisabled
+                ? "Sending..."
+                : submissionType === "update"
                 ? "Update this contribution"
                 : "Submit this contribution"}
             </Button>
