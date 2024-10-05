@@ -161,9 +161,12 @@ export default function Footer() {
                   direction="row"
                   justifyContent="center"
                   alignItems="center"
-                  spacing={1}
+                  spacing={2}
                   sx={{ display: "flex" }}
                 >
+                  <Link component={RouterLink} to="/support">
+                    <Typography level="body-xs">Support</Typography>
+                  </Link>
                   <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
                   </Link>

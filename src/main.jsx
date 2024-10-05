@@ -32,6 +32,7 @@ import DocPage from "./routes/DocPage";
 
 import ErrorPage from "./ErrorPage";
 import ContributorProfile from "./routes/contributorProfile";
+import Support from "./routes/Support";
 
 const router = createBrowserRouter([
   {
@@ -134,6 +135,10 @@ const router = createBrowserRouter([
       {
         path: "/docs/:id",
         element: <DocPage />,
+      },
+      {
+        path: "/support",
+        element: <Support />,
       },
     ],
   },
