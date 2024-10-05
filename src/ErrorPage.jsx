@@ -13,6 +13,7 @@ import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 
 import usePageTitle from "./hooks/usePageTitle";
+import SearchBar from "./components/SearchBar";
 
 import { NO_HEADER_BODY_HEIGHT } from "./configs/VarConfigs";
 
@@ -94,6 +95,14 @@ export default function ErrorPage(props) {
                     color="neutral"
                   >
                     Homepage
+                  </Button>
+                  <Button
+                    component="a"
+                    href="/support"
+                    variant="outlined"
+                    color="neutral"
+                  >
+                    Support
                   </Button>
                   <Button
                     variant="outlined"
