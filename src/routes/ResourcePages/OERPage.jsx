@@ -15,6 +15,7 @@ import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
 import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
 import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
+import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
@@ -145,6 +146,9 @@ export default function OERPage() {
               xs={12}
               md={6}
             />
+            <Grid xs={12}>
+              <RelatedElementsNetwork elementId={id} />
+            </Grid>
           </Grid>
         </Box>
       </Container>

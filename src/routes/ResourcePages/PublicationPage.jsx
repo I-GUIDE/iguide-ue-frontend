@@ -14,6 +14,7 @@ import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
 import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
+import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
@@ -145,6 +146,9 @@ export default function PublicationPage() {
               xs={12}
               md={6}
             />
+            <Grid xs={12}>
+              <RelatedElementsNetwork elementId={id} />
+            </Grid>
           </Grid>
         </Box>
       </Container>
