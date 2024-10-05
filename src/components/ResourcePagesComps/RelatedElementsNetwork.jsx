@@ -14,6 +14,7 @@ import SimpleInfoCard from "../SimpleInfoCard";
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { RESOURCE_TYPE_COLORS } from "../../configs/VarConfigs";
 import { stringTruncator } from "../../helpers/helper";
+import { BorderColor } from "@mui/icons-material";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -123,7 +124,7 @@ export default function RelatedElementsNetwork(props) {
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          border: "solid 1px gold",
+          border: "solid 1px #e1e1e1",
           height: 700,
           width: "100%",
           position: "relative",
