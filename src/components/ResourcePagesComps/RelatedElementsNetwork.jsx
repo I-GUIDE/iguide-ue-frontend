@@ -8,13 +8,14 @@ import Link from "@mui/joy/Link";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Divider from "@mui/joy/Divider";
 
 import SimpleInfoCard from "../SimpleInfoCard";
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { RESOURCE_TYPE_COLORS } from "../../configs/VarConfigs";
 import { stringTruncator } from "../../helpers/helper";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;
@@ -23,6 +24,7 @@ export default function RelatedElementsNetwork(props) {
   const [nodes, setNodes] = useState();
   const [edges, setEdges] = useState();
   const [noRelatedElements, setNoRelatedElements] = useState(false);
+  const [selectedElement, setSelectedElement] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -90,6 +92,18 @@ export default function RelatedElementsNetwork(props) {
     pathSelectionType: "all",
   });
 
+  function handleNodeClick(node) {
+    setSelectedElement(node);
+    onNodeClick(node);
+    TEST_MODE && console.log("clicked", node);
+  }
+
+  function handleCanvasClick(canvas) {
+    setSelectedElement(null);
+    onCanvasClick(canvas);
+    TEST_MODE && console.log("clicked canvas");
+  }
+
   // If there are no nodes, return null
   if (!nodes || !edges) {
     return null;
@@ -105,10 +119,6 @@ export default function RelatedElementsNetwork(props) {
       <Typography level="h5" fontWeight="lg" mb={1}>
         Related elements network (Beta)
       </Typography>
-      <Divider inset="none" />
-      <Typography color="neutral" level="body-sm" variant="plain">
-        Right click or long press the node to view the element
-      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -119,6 +129,55 @@ export default function RelatedElementsNetwork(props) {
           position: "relative",
         }}
       >
+        {selectedElement && selectedElement.id !== elementId && (
+          <Box
+            style={{
+              zIndex: 9,
+              position: "absolute",
+              top: 5,
+              right: 5,
+              background: "rgba(0, 0, 0, .5)",
+              color: "white",
+            }}
+          >
+            <Box
+              sx={{
+                background: "#fff",
+                width: "100%",
+                minWidth: 250,
+                textAlign: "center",
+              }}
+            >
+              <Typography level="title-md">Selected element</Typography>
+              <SimpleInfoCard
+                cardtype={selectedElement.type}
+                pageId={selectedElement.id}
+                title={selectedElement.title}
+                thumbnailImage={selectedElement.thumbnail}
+                minHeight="100%"
+                width="100%"
+                disableReactRouter
+                showElementType
+              />
+              <Button
+                color={RESOURCE_TYPE_COLORS[selectedElement.type]}
+                size="sm"
+                variant="solid"
+                sx={{ my: 1, mx: 0.5 }}
+              >
+                <Link
+                  underline="none"
+                  href={"/" + selectedElement.type + "s/" + selectedElement.id}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "inherit" }}
+                >
+                  View Element
+                </Link>
+              </Button>
+            </Box>
+          </Box>
+        )}
         <GraphCanvas
           ref={graphRef}
           nodes={nodes}
@@ -128,57 +187,8 @@ export default function RelatedElementsNetwork(props) {
           labelType="nodes"
           selections={selections}
           actives={actives}
-          onCanvasClick={onCanvasClick}
-          onNodeClick={onNodeClick}
-          contextMenu={function ({ data, onClose }) {
-            if (data.id !== elementId) {
-              return (
-                <Box
-                  sx={{
-                    background: "white",
-                    width: "100%",
-                    border: "solid 1px black",
-                    minWidth: 250,
-                    textAlign: "center",
-                  }}
-                >
-                  <SimpleInfoCard
-                    cardtype={data.type}
-                    pageId={data.id}
-                    title={data.title}
-                    thumbnailImage={data.thumbnail}
-                    minHeight="100%"
-                    width="100%"
-                    disableReactRouter
-                    showElementType
-                  />
-                  <Button
-                    color={RESOURCE_TYPE_COLORS[data.type]}
-                    size="sm"
-                    sx={{ my: 1, mx: 0.5 }}
-                  >
-                    <Link
-                      underline="none"
-                      href={"/" + data.type + "s/" + data.id}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ color: "inherit" }}
-                    >
-                      Open
-                    </Link>
-                  </Button>
-                  <Button
-                    color={RESOURCE_TYPE_COLORS[data.type]}
-                    size="sm"
-                    variant="outlined"
-                    onClick={onClose}
-                  >
-                    Close
-                  </Button>
-                </Box>
-              );
-            }
-          }}
+          onCanvasClick={(canvas) => handleCanvasClick(canvas)}
+          onNodeClick={(node) => handleNodeClick(node)}
         />
       </Box>
     </Stack>
