@@ -150,31 +150,15 @@ export default function RelatedElementsNetwork(props) {
             >
               <Typography level="title-md">Selected element</Typography>
               <SimpleInfoCard
-                cardtype={selectedElement.type}
+                cardtype={selectedElement.type + "s"}
                 pageId={selectedElement.id}
                 title={selectedElement.title}
                 thumbnailImage={selectedElement.thumbnail}
                 minHeight="100%"
                 width="100%"
-                disableReactRouter
+                openInNewTab
                 showElementType
               />
-              <Button
-                color={RESOURCE_TYPE_COLORS[selectedElement.type]}
-                size="sm"
-                variant="solid"
-                sx={{ my: 1, mx: 0.5 }}
-              >
-                <Link
-                  underline="none"
-                  href={"/" + selectedElement.type + "s/" + selectedElement.id}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ color: "inherit" }}
-                >
-                  View Element
-                </Link>
-              </Button>
             </Box>
           </Box>
         )}
