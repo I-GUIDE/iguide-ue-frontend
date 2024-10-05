@@ -58,13 +58,29 @@ export default function Footer() {
                 </Stack>
               </Grid>
               <Grid xs={12} sm={10} lg={4}>
-                <Typography level="h5" textColor="#606060" sx={{ py: 0.2 }}>
+                <Typography
+                  level="h5"
+                  textColor="#606060"
+                  sx={{
+                    py: 0.2,
+                    textAlign: {
+                      xs: "center",
+                      sm: "left",
+                    },
+                  }}
+                >
                   © {new Date().getFullYear()} I-GUIDE All Rights Reserved.
                 </Typography>
                 <Typography
                   level="body-xs"
                   textColor="#606060"
-                  sx={{ py: 0.2 }}
+                  sx={{
+                    py: 0.2,
+                    textAlign: {
+                      xs: "center",
+                      sm: "left",
+                    },
+                  }}
                 >
                   Institute for Geospatial Understanding through an Integrative
                   Discovery Environment (I-GUIDE) is supported by the National
@@ -75,7 +91,13 @@ export default function Footer() {
                 <Typography
                   level="body-xs"
                   textColor="#606060"
-                  sx={{ py: 0.2 }}
+                  sx={{
+                    py: 0.2,
+                    textAlign: {
+                      xs: "center",
+                      sm: "left",
+                    },
+                  }}
                 >
                   This material is based upon work supported by the National
                   Science Foundation under award No. 2118329. Any opinions,

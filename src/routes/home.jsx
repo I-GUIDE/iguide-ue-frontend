@@ -133,6 +133,7 @@ export default function Home() {
                       pb: 4,
                     }}
                     justifyContent="center"
+                    align="center"
                   >
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
