@@ -10,53 +10,58 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 
-export default function TutorialCard(props) {
-  const thumbnailImage = props.thumbnailImage;
+function Img(props) {
+  const children = props.children;
+  return (
+    <CardOverflow sx={{ alignItems: "center" }}>
+      <AspectRatio
+        variant="plain"
+        objectFit="contain"
+        ratio="1"
+        sx={{ width: "100px" }}
+      >
+        {children}
+      </AspectRatio>
+    </CardOverflow>
+  );
+}
+
+function Body(props) {
+  const link = props.link;
   const title = props.title;
   const content = props.content;
-  const link = props.link;
+  const align = props.align;
 
   return (
-    <Card
-      variant="plain"
-      orientation="horizontal"
-      sx={{
-        maxHeight: "150px",
-        bgcolor: "#fff",
-        "&:hover": {
-          borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-          transform: "translateY(-2px)",
-        },
-        p: 0,
-      }}
-    >
-      <CardContent>
+    <CardContent>
+      <Link
+        overlay
+        component={RouterLink}
+        to={link}
+        underline="none"
+        sx={{ color: "text.tertiary" }}
+      >
         <Stack direction="column" sx={{ p: 0 }}>
-          <Link
-            overlay
-            component={RouterLink}
-            to={link}
-            underline="none"
-            sx={{ color: "text.tertiary" }}
+          <Typography
+            level="h4"
+            textColor="#000"
+            align={align}
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+              py: 0.5,
+            }}
           >
-            <Typography
-              level="h4"
-              textColor="#000"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "2",
-                WebkitBoxOrient: "vertical",
-                py: 0.5,
-              }}
-            >
-              {title}
-            </Typography>
-          </Link>
+            {title}
+          </Typography>
+
           <Typography
             level="body-sm"
             textColor="#000"
+            align={align}
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -69,17 +74,50 @@ export default function TutorialCard(props) {
             {content}
           </Typography>
         </Stack>
-      </CardContent>
-      <CardOverflow>
-        <AspectRatio
-          variant="plain"
-          objectFit="contain"
-          ratio="1"
-          sx={{ width: "100px" }}
-        >
+      </Link>
+    </CardContent>
+  );
+}
+
+export default function TutorialCard(props) {
+  const thumbnailImage = props.thumbnailImage;
+  const title = props.title;
+  const content = props.content;
+  const link = props.link;
+  const bgColor = props.bgColor;
+  const inColumn = props.inColumn;
+
+  return (
+    <Card
+      variant="plain"
+      orientation={inColumn ? "vertical" : "horizontal"}
+      sx={{
+        maxHeight: "300px",
+        width: "100%",
+        bgcolor: bgColor,
+        "&:hover": {
+          borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+          transform: "translateY(-2px)",
+        },
+        p: 0,
+      }}
+    >
+      {inColumn && (
+        <Img>
           <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
-        </AspectRatio>
-      </CardOverflow>
+        </Img>
+      )}
+      <Body
+        link={link}
+        title={title}
+        content={content}
+        align={inColumn ? "center" : "left"}
+      />
+      {!inColumn && (
+        <Img>
+          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+        </Img>
+      )}
     </Card>
   );
 }

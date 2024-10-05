@@ -155,33 +155,33 @@ export default function Home() {
             <Container maxWidth="lg">
               <Stack
                 direction="column"
-                alignItems={{ xs: "center", md: "flex-start" }}
+                alignItems="center"
                 spacing={2}
                 sx={{
                   backgroundColor: "inherit",
                 }}
               >
-                <Typography level="h3" textColor="#000">
-                  What to do next?
-                </Typography>
                 <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
                   <TutorialCard
-                    thumbnailImage="/images/charco-education.png"
-                    title="Join"
+                    thumbnailImage="/images/homepage/map.png"
+                    title="Map"
                     content="Become a member of the I-GUIDE community"
-                    link="/user-profile"
+                    bgColor="#fff"
+                    inColumn
                   />
                   <TutorialCard
-                    thumbnailImage="/images/charco-launch.png"
-                    title="Learn"
+                    thumbnailImage="/images/homepage/network.png"
+                    title="Connect"
                     content="Explore the power of I-GUIDE Platform"
-                    link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
+                    bgColor="#fff"
+                    inColumn
                   />
                   <TutorialCard
-                    thumbnailImage="/images/charco-photos.png"
-                    title="Contribute"
+                    thumbnailImage="/images/homepage/search.png"
+                    title="Discover"
                     content="Share knowledge with the community"
-                    link="/user-profile"
+                    bgColor="#fff"
+                    inColumn
                   />
                 </Stack>
               </Stack>
@@ -198,6 +198,45 @@ export default function Home() {
             }}
           >
             <Container maxWidth="lg">
+              <Stack
+                direction="column"
+                alignItems="center"
+                spacing={4}
+                sx={{
+                  backgroundColor: "inherit",
+                  py: 4,
+                }}
+              >
+                <Typography level="h3" textColor="#000">
+                  What to do next?
+                </Typography>
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={{ xs: 4, md: 10 }}
+                >
+                  <TutorialCard
+                    thumbnailImage="/images/homepage/verify.png"
+                    title="Register"
+                    content="Become a member of the I-GUIDE community"
+                    link="/user-profile"
+                    bgColor="#fafafa"
+                  />
+                  <TutorialCard
+                    thumbnailImage="/images/homepage/reading-book.png"
+                    title="Learn"
+                    content="Explore the power of I-GUIDE Platform"
+                    link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
+                    bgColor="#fafafa"
+                  />
+                  <TutorialCard
+                    thumbnailImage="/images/homepage/jigsaw.png"
+                    title="Contribute"
+                    content="Share your knowledge with our community"
+                    link="/user-profile"
+                    bgColor="#fafafa"
+                  />
+                </Stack>
+              </Stack>
               <Stack direction="column" spacing={2}>
                 <FeaturedElementsList
                   icon={<DatasetIcon />}
