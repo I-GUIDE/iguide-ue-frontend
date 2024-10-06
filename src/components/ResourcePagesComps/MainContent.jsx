@@ -19,6 +19,65 @@ import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
 
+function AuthorsDisplay(props) {
+  const authorsList = props.authorsList;
+  if (!authorsList) {
+    return null;
+  }
+
+  const numberOfAuthors = authorsList.length;
+
+  if (numberOfAuthors === 0) return null;
+
+  // When there are too many authors, use tooltip to display the full list
+  if (numberOfAuthors > 10) {
+    return (
+      <Tooltip
+        title={
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              maxWidth: 450,
+              maxHeight: 400,
+              overflow: "hidden",
+              overflowY: "scroll",
+              p: 1,
+            }}
+          >
+            <Typography level="title-sm">
+              Author{authorsList.length > 1 && "s"}
+            </Typography>
+            <Typography level="body-sm">
+              {printListWithDelimiter(authorsList, ",")}
+            </Typography>
+          </Box>
+        }
+        variant="outlined"
+      >
+        <Typography
+          level="body-lg"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {printListWithDelimiter(authorsList, ",")}
+        </Typography>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <Typography level="body-lg">
+      {printListWithDelimiter(authorsList, ",")}
+    </Typography>
+  );
+}
+
 export default function MainContent(props) {
   const title = props.title;
   const contributor = props.contributor ? props.contributor : {};
@@ -205,44 +264,7 @@ export default function MainContent(props) {
           <Typography level="h2" sx={{ py: 1 }}>
             {title}
           </Typography>
-          {authors && authors.length > 0 && (
-            <Tooltip
-              title={
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    maxWidth: 450,
-                    maxHeight: 400,
-                    overflow: "hidden",
-                    overflowY: "scroll",
-                    p: 1,
-                  }}
-                >
-                  <Typography level="title-sm">
-                    Author{authors.length > 1 && "s"}
-                  </Typography>
-                  <Typography level="body-sm">
-                    {printListWithDelimiter(authors, ",")}
-                  </Typography>
-                </Box>
-              }
-              variant="outlined"
-            >
-              <Typography
-                level="body-lg"
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: "2",
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
-                {printListWithDelimiter(authors, ",")}
-              </Typography>
-            </Tooltip>
-          )}
+          <AuthorsDisplay authorsList={authors} />
           {doi && (
             <Link
               href={doi}

@@ -3,6 +3,7 @@ import { React, useState, useEffect } from "react";
 import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
 import Stack from "@mui/joy/Stack";
+import Tooltip from "@mui/joy/Tooltip";
 import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
@@ -84,7 +85,9 @@ export default function ContributorOps(props) {
           to={"/element-update/" + elementId}
           sx={{ color: "inherit" }}
         >
-          <EditIcon />
+          <Tooltip title="Edit this element" placement="top" arrow>
+            <EditIcon />
+          </Tooltip>
         </Link>
       </IconButton>
       <IconButton
@@ -97,7 +100,9 @@ export default function ContributorOps(props) {
           TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
-        <DeleteForeverIcon />
+        <Tooltip title="Delete this element" placement="top" arrow>
+          <DeleteForeverIcon />
+        </Tooltip>
       </IconButton>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}

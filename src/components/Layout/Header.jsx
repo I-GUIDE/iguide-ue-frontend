@@ -88,7 +88,11 @@ export default function Header(props) {
                   </Typography>
                 </Stack>
                 {canContributeElements && contributionText && (
-                  <Tooltip title={contributionText} variant="solid">
+                  <Tooltip
+                    title={contributionText}
+                    placement="top"
+                    variant="solid"
+                  >
                     <Button
                       variant="outlined"
                       color="neutral"

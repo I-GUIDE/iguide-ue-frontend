@@ -122,7 +122,11 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <Tooltip title="I-GUIDE support email" arrow>
+                      <Tooltip
+                        title="I-GUIDE support email"
+                        placement="top"
+                        arrow
+                      >
                         <EmailIcon sx={{ color: grey[700] }} />
                       </Tooltip>
                     </Link>
@@ -134,7 +138,11 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <Tooltip title="I-GUIDE YouTube channel" arrow>
+                      <Tooltip
+                        title="I-GUIDE YouTube channel"
+                        placement="top"
+                        arrow
+                      >
                         <YouTubeIcon sx={{ color: grey[700] }} />
                       </Tooltip>
                     </Link>
@@ -146,7 +154,7 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <Tooltip title="I-GUIDE X account" arrow>
+                      <Tooltip title="I-GUIDE X account" placement="top" arrow>
                         <XIcon sx={{ color: grey[700] }} />
                       </Tooltip>
                     </Link>
@@ -158,7 +166,11 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <Tooltip title="I-GUIDE LinkedIn profile" arrow>
+                      <Tooltip
+                        title="I-GUIDE LinkedIn profile"
+                        placement="top"
+                        arrow
+                      >
                         <LinkedInIcon sx={{ color: grey[700] }} />
                       </Tooltip>
                     </Link>
