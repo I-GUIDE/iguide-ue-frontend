@@ -239,6 +239,13 @@ export default function Home() {
               </Stack>
               <Stack direction="column" spacing={2}>
                 <FeaturedElementsList
+                  icon={<MapIcon />}
+                  title="Maps"
+                  pageLink="/maps"
+                  type="map"
+                  limit={4}
+                />
+                <FeaturedElementsList
                   icon={<DatasetIcon />}
                   title="Datasets"
                   pageLink="/datasets"
@@ -264,13 +271,6 @@ export default function Home() {
                   title="Educational Resources"
                   pageLink="/oers"
                   type="oer"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<MapIcon />}
-                  title="Maps"
-                  pageLink="/maps"
-                  type="map"
                   limit={4}
                 />
               </Stack>

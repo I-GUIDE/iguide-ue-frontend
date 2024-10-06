@@ -5,6 +5,8 @@ import ArticleIcon from "@mui/icons-material/Article";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGridLayout from "../layouts/ElementGridLayout";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function Publications() {
   usePageTitle("Publications");
 
@@ -12,7 +14,7 @@ export default function Publications() {
     <ElementGridLayout
       elementType="publication"
       title="Publications"
-      subtitle="Discover connected knowledge from peer-reviewed papers that showcase cutting-edge research and insights in geospatial and related fields."
+      subtitle={TAGLINES.publication}
       icon={<ArticleIcon />}
       contribution={{
         text: "Contribute a new publication",

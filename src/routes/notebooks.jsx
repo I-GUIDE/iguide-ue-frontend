@@ -5,6 +5,8 @@ import CodeIcon from "@mui/icons-material/Code";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGridLayout from "../layouts/ElementGridLayout";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function Notebooks() {
   usePageTitle("Notebooks");
 
@@ -12,7 +14,7 @@ export default function Notebooks() {
     <ElementGridLayout
       elementType="notebook"
       title="Notebooks"
-      subtitle="Explore interactive scientific workflows designed to streamline data processing, analysis, and visualization for convergence research and education."
+      subtitle={TAGLINES.notebook}
       icon={<CodeIcon />}
       contribution={{
         text: "Contribute a new notebook",

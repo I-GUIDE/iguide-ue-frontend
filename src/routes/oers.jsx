@@ -5,6 +5,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGridLayout from "../layouts/ElementGridLayout";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function OERs() {
   usePageTitle("Educational Resources");
 
@@ -13,7 +15,7 @@ export default function OERs() {
     <ElementGridLayout
       elementType="oer"
       title="Educational Resources"
-      subtitle="Harness data-intensive teaching and learning materials with a focus on geospatial data science."
+      subtitle={TAGLINES.publication}
       icon={<SchoolIcon />}
     />
   );

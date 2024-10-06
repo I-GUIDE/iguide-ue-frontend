@@ -5,6 +5,8 @@ import MapIcon from "@mui/icons-material/Map";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGridLayout from "../layouts/ElementGridLayout";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function Maps() {
   usePageTitle("Maps");
 
@@ -13,7 +15,7 @@ export default function Maps() {
     <ElementGridLayout
       elementType="map"
       title="Maps"
-      subtitle="Interact with diverse cartographic maps to understand the transformation of spatial data to knowledge and insights."
+      subtitle={TAGLINES.map}
       icon={<MapIcon />}
     />
   );

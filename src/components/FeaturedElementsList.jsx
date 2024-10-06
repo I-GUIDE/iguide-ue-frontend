@@ -20,6 +20,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import InfoCard from "./InfoCard";
 import { getHomepageElements } from "../utils/DataRetrieval";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function FeaturedElementsList(props) {
   const icon = props.icon;
   const title = props.title;
@@ -71,6 +73,9 @@ export default function FeaturedElementsList(props) {
               </Typography>
             </Link>
           </Stack>
+          <Typography level="body-sm" textColor="#696969">
+            {TAGLINES[type]}
+          </Typography>
           <Grid
             container
             spacing={2}

@@ -5,6 +5,8 @@ import DatasetIcon from "@mui/icons-material/Dataset";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGridLayout from "../layouts/ElementGridLayout";
 
+import { TAGLINES } from "../configs/Texts";
+
 export default function Datasets() {
   usePageTitle("Datasets");
 
@@ -12,7 +14,7 @@ export default function Datasets() {
     <ElementGridLayout
       elementType="dataset"
       title="Datasets"
-      subtitle="Access a wide variety of geospatial-related datasets curated for research, analysis, and educational purposes across different domains."
+      subtitle={TAGLINES.dataset}
       icon={<DatasetIcon />}
       contribution={{
         text: "Contribute a new dataset",
