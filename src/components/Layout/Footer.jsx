@@ -10,6 +10,7 @@ import Grid from "@mui/joy/Grid";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 import CardContent from "@mui/joy/CardContent";
+import Tooltip from "@mui/joy/Tooltip";
 
 import { grey } from "@mui/material/colors";
 import XIcon from "@mui/icons-material/X";
@@ -164,6 +165,16 @@ export default function Footer() {
                   spacing={2}
                   sx={{ display: "flex" }}
                 >
+                  <Link
+                    component={RouterLink}
+                    to="https://i-guide.io"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Tooltip title="Open I-GUIDE website">
+                      <Typography level="body-xs">I-GUIDE</Typography>
+                    </Tooltip>
+                  </Link>
                   <Link component={RouterLink} to="/support">
                     <Typography level="body-xs">Support</Typography>
                   </Link>
