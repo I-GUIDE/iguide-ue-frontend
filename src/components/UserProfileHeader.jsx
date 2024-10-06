@@ -236,7 +236,11 @@ export default function UserProfileHeader(props) {
                     )}
                     <Stack direction="row" spacing={1.5} sx={{ py: 0.5 }}>
                       {localUserInfo.gitHubLink && (
-                        <Tooltip title="User GitHub profile" variant="solid">
+                        <Tooltip
+                          title="User GitHub profile"
+                          variant="solid"
+                          arrow
+                        >
                           <Link
                             href={localUserInfo.gitHubLink}
                             target="_blank"
@@ -248,7 +252,11 @@ export default function UserProfileHeader(props) {
                         </Tooltip>
                       )}
                       {localUserInfo.linkedInLink && (
-                        <Tooltip title="User LinkedIn profile" variant="solid">
+                        <Tooltip
+                          title="User LinkedIn profile"
+                          variant="solid"
+                          arrow
+                        >
                           <Link
                             href={localUserInfo.linkedInLink}
                             target="_blank"
@@ -263,6 +271,7 @@ export default function UserProfileHeader(props) {
                         <Tooltip
                           title="User Google Scholar profile"
                           variant="solid"
+                          arrow
                         >
                           <Link
                             href={localUserInfo.googleScholarLink}
@@ -275,7 +284,11 @@ export default function UserProfileHeader(props) {
                         </Tooltip>
                       )}
                       {localUserInfo.personalWebsiteLink && (
-                        <Tooltip title="User personal website" variant="solid">
+                        <Tooltip
+                          title="User personal website"
+                          variant="solid"
+                          arrow
+                        >
                           <Link
                             href={localUserInfo.personalWebsiteLink}
                             target="_blank"

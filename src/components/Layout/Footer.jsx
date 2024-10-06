@@ -122,7 +122,9 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <EmailIcon sx={{ color: grey[700] }} />
+                      <Tooltip title="I-GUIDE support email" arrow>
+                        <EmailIcon sx={{ color: grey[700] }} />
+                      </Tooltip>
                     </Link>
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
@@ -132,7 +134,9 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <YouTubeIcon sx={{ color: grey[700] }} />
+                      <Tooltip title="I-GUIDE YouTube channel" arrow>
+                        <YouTubeIcon sx={{ color: grey[700] }} />
+                      </Tooltip>
                     </Link>
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
@@ -142,7 +146,9 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <XIcon sx={{ color: grey[700] }} />
+                      <Tooltip title="I-GUIDE X account" arrow>
+                        <XIcon sx={{ color: grey[700] }} />
+                      </Tooltip>
                     </Link>
                   </Box>
                   <Box sx={{ width: "flex", px: 0.5 }}>
@@ -152,7 +158,9 @@ export default function Footer() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: "none" }}
                     >
-                      <LinkedInIcon sx={{ color: grey[700] }} />
+                      <Tooltip title="I-GUIDE LinkedIn profile" arrow>
+                        <LinkedInIcon sx={{ color: grey[700] }} />
+                      </Tooltip>
                     </Link>
                   </Box>
                 </Stack>
@@ -171,9 +179,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Tooltip title="Open I-GUIDE website">
-                      <Typography level="body-xs">I-GUIDE</Typography>
-                    </Tooltip>
+                    <Typography level="body-xs">I-GUIDE</Typography>
                   </Link>
                   <Link component={RouterLink} to="/support">
                     <Typography level="body-xs">Support</Typography>

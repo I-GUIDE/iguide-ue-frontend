@@ -1,12 +1,13 @@
 import { React, useState, useEffect } from "react";
+
 import { Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
-
-import { StyledEngineProvider } from "@mui/material/styles";
 
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
 
+import Tooltip from "@mui/joy/Tooltip";
+import { StyledEngineProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
@@ -20,7 +21,6 @@ import {
   addUser,
   getUserRole,
 } from "../utils/UserManager.jsx";
-
 import { PERMISSIONS } from "../configs/Permissions.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
@@ -222,7 +222,9 @@ export default function Root(props) {
           color="neutral"
           aria-label="scroll back to top"
         >
-          <KeyboardArrowUpIcon />
+          <Tooltip title="Back to top" placement="top-start">
+            <KeyboardArrowUpIcon />
+          </Tooltip>
         </Fab>
       </ScrollTop>
       <Footer />
