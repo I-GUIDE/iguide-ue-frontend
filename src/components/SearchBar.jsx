@@ -6,7 +6,7 @@ import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Avatar from "@mui/joy/Avatar";
-import Grid from "@mui/joy/Grid";
+import Tooltip from "@mui/joy/Tooltip";
 import IconButton from "@mui/joy/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -82,10 +82,16 @@ export default function SearchBar(props) {
           }
         />
         {showSmartSearch && (
-          <Avatar
-            alt="Smart search button"
-            src="/images/smart-search-button.png"
-          />
+          <Tooltip
+            title="Conversational search coming early next year"
+            variant="outlined"
+            placement="bottom"
+          >
+            <Avatar
+              alt="Smart search button"
+              src="/images/smart-search-button.png"
+            />
+          </Tooltip>
         )}
       </Stack>
 
