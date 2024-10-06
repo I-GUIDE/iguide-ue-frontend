@@ -13,6 +13,8 @@ import SearchIcon from "@mui/icons-material/Search";
 export default function SearchBar(props) {
   const onSearch = props.onSearch;
   const showSmartSearch = props.showSmartSearch;
+  const placeholder = props.placeholder;
+
   // define search data
   const [data, setData] = useState({
     content: "",
@@ -60,7 +62,7 @@ export default function SearchBar(props) {
             "--Input-radius": "40px",
             "--Input-paddingInline": "20px",
           }}
-          placeholder="Start your exploration..."
+          placeholder={placeholder}
           type="text"
           value={searchTerm}
           onChange={(event) => {

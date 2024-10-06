@@ -22,9 +22,7 @@ export default function ErrorPage(props) {
   const navigate = useNavigate();
 
   const error = useRouteError();
-  {
-    error & console.error("Err msg", error);
-  }
+  error && console.error("Err msg", error);
 
   const errorStatus = props.customStatus ? props.customStatus : error.status;
   const errorStatusText = props.customStatusText
@@ -70,47 +68,51 @@ export default function ErrorPage(props) {
             >
               <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
                 <Stack
-                  spacing={1}
+                  spacing={2}
                   sx={{
                     p: 1,
                     display: "flex",
                   }}
                 >
-                  <Typography level="h2">{`${errorStatus}`}</Typography>
+                  <Typography level="h1">{`${errorStatus}`}</Typography>
                   <Typography level="title-lg">{`${errorStatusText} :(`}</Typography>
-                </Stack>
-                <Stack
-                  direction="row"
-                  flexWrap="wrap"
-                  alignItems="center"
-                  justifyContent="center"
-                  spacing={1}
-                  useFlexGap
-                  sx={{ p: 0.5 }}
-                >
-                  <Button
-                    component="a"
-                    href="/"
-                    variant="outlined"
-                    color="neutral"
+                  <SearchBar placeholder="Search elements..." />
+                  <Stack
+                    direction="row"
+                    flexWrap="wrap"
+                    alignItems="center"
+                    justifyContent="center"
+                    spacing={1}
+                    useFlexGap
+                    sx={{ p: 0.5 }}
                   >
-                    Homepage
-                  </Button>
-                  <Button
-                    component="a"
-                    href="/support"
-                    variant="outlined"
-                    color="neutral"
-                  >
-                    Support
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => navigate(-1)}
-                  >
-                    Go Back
-                  </Button>
+                    <Button
+                      component="a"
+                      href="/"
+                      variant="outlined"
+                      color="neutral"
+                      size="sm"
+                    >
+                      Homepage
+                    </Button>
+                    <Button
+                      component="a"
+                      href="/support"
+                      variant="outlined"
+                      color="neutral"
+                      size="sm"
+                    >
+                      Support
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => navigate(-1)}
+                      size="sm"
+                    >
+                      Go Back
+                    </Button>
+                  </Stack>
                 </Stack>
               </CardContent>
             </Card>

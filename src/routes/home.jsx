@@ -138,7 +138,10 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
-                  <SearchBar showSmartSearch />
+                  <SearchBar
+                    placeholder="Start your exploration..."
+                    showSmartSearch
+                  />
                 </Box>
               </Container>
             </CardContent>

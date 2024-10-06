@@ -460,7 +460,10 @@ export default function NavBar(props) {
                     <ModalClose id="close-icon" sx={{ position: "initial" }} />
                   </Box>
                   <Box sx={{ px: 2, py: 1 }}>
-                    <SearchBar onSearch={() => setDrawerOpen(false)} />
+                    <SearchBar
+                      onSearch={() => setDrawerOpen(false)}
+                      placeholder="Search..."
+                    />
                   </Box>
                   <Box
                     onClick={toggleDrawer(false)}
@@ -590,7 +593,7 @@ export default function NavBar(props) {
                 alignItems="center"
                 spacing={0.1}
               >
-                <SearchBar />
+                <SearchBar placeholder="Search..." />
                 <ButtonGroup
                   color="primary"
                   orientation="horizontal"
