@@ -19,6 +19,7 @@
     "@uiw/react-md-editor": "^4.0.4",
     "axios": "^1.7.2",
     "jdenticon": "^3.3.0",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-avatar-editor": "^13.0.2",
     "react-code-blocks": "^0.1.6",
@@ -31,7 +32,6 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.37.1",
