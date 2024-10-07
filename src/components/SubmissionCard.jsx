@@ -189,39 +189,7 @@ export default function SubmissionCard(props) {
           : thisElement["spatial-index-year"]
       );
 
-      let relatedResourcesArray = [];
-      thisElement["related-datasets"]?.map((re) =>
-        relatedResourcesArray.push({
-          type: "dataset",
-          title: re.title,
-        })
-      );
-      thisElement["related-notebooks"]?.map((re) =>
-        relatedResourcesArray.push({
-          type: "notebook",
-          title: re.title,
-        })
-      );
-      thisElement["related-publications"]?.map((re) =>
-        relatedResourcesArray.push({
-          type: "publication",
-          title: re.title,
-        })
-      );
-      thisElement["related-oers"]?.map((re) =>
-        relatedResourcesArray.push({
-          type: "oer",
-          title: re.title,
-        })
-      );
-      thisElement["related-maps"]?.map((re) =>
-        relatedResourcesArray.push({
-          type: "map",
-          title: re.title,
-        })
-      );
-      setRelatedResources(relatedResourcesArray);
-
+      setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
     };
     if (submissionType === "update") {
@@ -1041,7 +1009,7 @@ export default function SubmissionCard(props) {
                 {relatedResources?.map((x, i) => (
                   <tr key={i}>
                     <td align="left">
-                      <p>{RESOURCE_TYPE_NAMES[x.type]}</p>
+                      <p>{RESOURCE_TYPE_NAMES[x["resource-type"]]}</p>
                     </td>
                     <td align="left">
                       <p>{x.title}</p>
