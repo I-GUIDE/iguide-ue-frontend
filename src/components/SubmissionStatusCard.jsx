@@ -22,28 +22,27 @@ export default function SubmissionStatusCard(props) {
   switch (submissionStatus) {
     case "initial-succeeded":
       submissionStatusText =
-        "Thank you for your contribution! You are all set!";
+        "Thank you for your contribution. You are all set.";
       submissionSucceeded = true;
       break;
     case "initial-failed":
-      submissionStatusText = "Submission failed. Please try again!";
+      submissionStatusText = "Submission failed. Please try again.";
       submissionSucceeded = false;
       break;
     case "initial-failed-duplicate":
-      submissionStatusText = "Submission failed. Duplicate DOI/URL";
+      submissionStatusText = "Submission failed due to duplicate DOI/URL.";
       submissionSucceeded = false;
       break;
     case "update-succeeded":
-      submissionStatusText = "Thank you for the update! You are all set!";
+      submissionStatusText = "Thank you for the update. You are all set.";
       submissionSucceeded = true;
       break;
     case "update-failed":
-      submissionStatusText =
-        "Submission of your edit failed. Please try again!";
+      submissionStatusText = "Update failed. Please try again.";
       submissionSucceeded = false;
       break;
     case "unauthorized":
-      submissionStatusText = "You don't have permission to edit this element";
+      submissionStatusText = "You don't have permission to edit this element.";
       submissionSucceeded = false;
       break;
     default:
