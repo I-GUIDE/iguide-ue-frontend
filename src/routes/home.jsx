@@ -168,21 +168,21 @@ export default function Home() {
                   <TutorialCard
                     thumbnailImage="/images/homepage/map.png"
                     title="Map"
-                    content="Become a member of the I-GUIDE community"
+                    content="Transform geospatial data to knowledge and insights"
                     bgColor="#fff"
                     inColumn
                   />
                   <TutorialCard
                     thumbnailImage="/images/homepage/network.png"
                     title="Connect"
-                    content="Explore the power of I-GUIDE Platform"
+                    content="Gain holistic understanding of linked knowledge elements"
                     bgColor="#fff"
                     inColumn
                   />
                   <TutorialCard
                     thumbnailImage="/images/homepage/search.png"
                     title="Discover"
-                    content="Share knowledge with the community"
+                    content="Seek new convergence knowledge through intelligent search"
                     bgColor="#fff"
                     inColumn
                   />
