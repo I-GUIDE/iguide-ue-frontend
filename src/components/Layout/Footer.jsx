@@ -179,10 +179,10 @@ export default function Footer() {
               </Grid>
               <Grid xs={12}>
                 <Stack
-                  direction="row"
+                  direction={{ xs: "column", sm: "row" }}
                   justifyContent="center"
                   alignItems="center"
-                  spacing={2}
+                  spacing={{ xs: 1, sm: 2 }}
                   sx={{ display: "flex" }}
                 >
                   <Link
@@ -198,6 +198,14 @@ export default function Footer() {
                   </Link>
                   <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
+                  </Link>
+                  <Link
+                    component={RouterLink}
+                    to="/contributor-license-agreement"
+                  >
+                    <Typography level="body-xs">
+                      Contributor License Agreement
+                    </Typography>
                   </Link>
                 </Stack>
               </Grid>

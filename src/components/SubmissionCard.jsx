@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
@@ -16,11 +16,13 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import { styled } from "@mui/joy";
+import Link from "@mui/joy/Link";
 import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
 import IconButton from "@mui/joy/IconButton";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Textarea from "@mui/joy/Textarea";
+import Stack from "@mui/joy/Stack";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
@@ -1200,18 +1202,33 @@ export default function SubmissionCard(props) {
           </FormControl>
 
           <CardActions sx={{ gridColumn: "1/-1" }}>
-            <Button
-              type="submit"
-              variant="solid"
-              color="primary"
-              disabled={buttonDisabled}
-            >
-              {buttonDisabled
-                ? "Sending..."
-                : submissionType === "update"
-                ? "Update this contribution"
-                : "Submit this contribution"}
-            </Button>
+            <Stack spacing={1} sx={{ width: "100%" }}>
+              <Button
+                type="submit"
+                variant="solid"
+                color="primary"
+                disabled={buttonDisabled}
+              >
+                {buttonDisabled
+                  ? "Sending..."
+                  : submissionType === "update"
+                  ? "Update"
+                  : "Submit"}
+              </Button>
+              <Typography level="body-sm">
+                By clicking {submissionType === "update" ? "Update" : "Submit"},
+                you agree to our{" "}
+                <Link
+                  component={RouterLink}
+                  to="/contributor-license-agreement"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Contributor License Agreement
+                </Link>
+                .
+              </Typography>
+            </Stack>
           </CardActions>
         </CardContent>
       </form>

@@ -23,6 +23,7 @@ import UserProfileUpdate from "./routes/userProfileUpdate";
 import ResourceSubmission from "./routes/resourceSubmission";
 import ResourceUpdate from "./routes/resourceUpdate";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
+import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
 
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
       {
         path: "/terms-of-use",
         element: <TermsOfUse />,
+      },
+      {
+        path: "/contributor-license-agreement",
+        element: <LicenseAgreement />,
       },
       {
         path: "/about",
