@@ -71,7 +71,7 @@ export default function Home() {
             </CardCover>
             <CardContent
               sx={{
-                justifyContent: "center",
+                justifyContent: "flex-end",
                 alignItems: "center",
                 minHeight: HOME_SEARCH_SEC_HEIGHT,
               }}
@@ -164,7 +164,14 @@ export default function Home() {
                   backgroundColor: "inherit",
                 }}
               >
-                <Stack direction={{ xs: "column", md: "row" }} spacing={4}>
+                <Stack
+                  direction={{ xs: "column", md: "row" }}
+                  spacing={{ xs: "50px", md: "100px" }}
+                  sx={{
+                    backgroundColor: "inherit",
+                    py: "50px",
+                  }}
+                >
                   <TutorialCard
                     thumbnailImage="/images/homepage/map.png"
                     title="Map"
@@ -207,7 +214,7 @@ export default function Home() {
                 spacing={4}
                 sx={{
                   backgroundColor: "inherit",
-                  py: 4,
+                  py: "50px",
                 }}
               >
                 <Typography level="h3" textColor="#000">

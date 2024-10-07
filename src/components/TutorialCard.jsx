@@ -18,7 +18,7 @@ function Img(props) {
         variant="plain"
         objectFit="contain"
         ratio="1"
-        sx={{ width: "100px" }}
+        sx={{ width: "60px" }}
       >
         {children}
       </AspectRatio>
@@ -41,7 +41,7 @@ function Body(props) {
         underline="none"
         sx={{ color: "text.tertiary" }}
       >
-        <Stack direction="column" sx={{ p: 0 }}>
+        <Stack direction="column" sx={{ p: 0, width: "100%" }}>
           <Typography
             level="h4"
             textColor="#000"
@@ -60,7 +60,6 @@ function Body(props) {
 
           <Typography
             level="body-sm"
-            textColor="#000"
             align={align}
             sx={{
               overflow: "hidden",
