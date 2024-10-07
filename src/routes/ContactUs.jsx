@@ -15,8 +15,8 @@ import Typography from "@mui/joy/Typography";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
-export default function Support() {
-  usePageTitle("Support");
+export default function ContactUs() {
+  usePageTitle("Contact Us");
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -48,13 +48,20 @@ export default function Support() {
                 alignItems={{ xs: "flex-start", md: "center" }}
                 sx={{ p: 2 }}
               >
-                <Typography level="h2">Have a question?</Typography>
+                <Typography level="h2">Any questions or comments?</Typography>
               </Stack>
 
               <Divider sx={{ mx: 2, my: 4 }} />
 
               <Typography level="body-md" sx={{ p: 2 }}>
-                Please email{" "}
+                You may find the answers to your questions{" "}
+                <Link component={RouterLink} to="/tutorials">
+                  here
+                </Link>
+                .
+              </Typography>
+              <Typography level="body-md" sx={{ p: 2 }}>
+                If not, please feel free to email{" "}
                 <Link
                   href="mailto:help@i-guide.io"
                   target="_blank"
@@ -63,7 +70,7 @@ export default function Support() {
                 >
                   help@i-guide.io
                 </Link>{" "}
-                for help or reporting bugs.
+                for assistance or to report any issues.
               </Typography>
             </Grid>
           </Grid>

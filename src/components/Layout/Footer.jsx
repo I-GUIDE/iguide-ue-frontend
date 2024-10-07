@@ -193,8 +193,8 @@ export default function Footer() {
                   >
                     <Typography level="body-xs">I-GUIDE</Typography>
                   </Link>
-                  <Link component={RouterLink} to="/support">
-                    <Typography level="body-xs">Support</Typography>
+                  <Link component={RouterLink} to="/contact-us">
+                    <Typography level="body-xs">Contact Us</Typography>
                   </Link>
                   <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>

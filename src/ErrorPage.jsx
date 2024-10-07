@@ -97,12 +97,12 @@ export default function ErrorPage(props) {
                     </Button>
                     <Button
                       component="a"
-                      href="/support"
+                      href="/contact-us"
                       variant="outlined"
                       color="neutral"
                       size="sm"
                     >
-                      Support
+                      Contact Us
                     </Button>
                     <Button
                       variant="outlined"
