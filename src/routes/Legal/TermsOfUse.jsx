@@ -63,16 +63,17 @@ export default function TermsOfUse() {
                 Integrative Discovery Environment (I-GUIDE) is funded as a
                 project by the National Science Foundation (NSF), which is
                 referred to as “Project” in these Terms of Use. The
-                collaborating institutions in the Project include the University
-                of Illinois Urbana-Champaign (Illinois), Columbia University,
-                Consortium of Universities for the Advancement of Hydrologic
-                Science, Inc. (CUAHSI), Florida International University (FIU),
-                Michigan State University, Open Geospatial Consortium (OGC),
-                Purdue University, University Consortium of Atmospheric Research
-                (UCAR), University Consortium of Geographic Information Science
-                (UCGIS), University of Minnesota, and Utah State University,
-                referred to in these Terms of Use as the “Participating
-                Institutions”. The I-GUIDE Platform is hosted at{" "}
+                collaborating institutions in the Project currently include the
+                University of Illinois Urbana-Champaign (Illinois), Columbia
+                University, Consortium of Universities for the Advancement of
+                Hydrologic Science, Inc. (CUAHSI), Florida International
+                University (FIU), Michigan State University, Open Geospatial
+                Consortium (OGC), Purdue University, University Consortium of
+                Atmospheric Research (UCAR), University Consortium for
+                Geographic Information Science (UCGIS), University of Minnesota,
+                and Utah State University, referred to in these Terms of Use as
+                the Collaborating Institutions”. The I-GUIDE Platform is hosted
+                at{" "}
                 <Link href="https://platform.i-guide.io">
                   platform.i-guide.io
                 </Link>
@@ -100,11 +101,11 @@ export default function TermsOfUse() {
                 or installing software of the Project, or otherwise accessing
                 the Site. Please read these Terms carefully. The Terms govern
                 your use of the Site and any incorporated content (such as
-                Illinois, Participating Institutions or third-party software,
+                Illinois, Collaborating Institutions or third-party software,
                 text, data, information, or graphics) made available through the
                 Site. By continuing to use the Site, You accept these Terms. If
                 You are not willing to be bound by these Terms, please stop
-                using this Site.
+                using the Site.
               </Typography>
 
               {/* Item 1 */}
@@ -141,10 +142,10 @@ export default function TermsOfUse() {
                   You hereby accept that all intellectual property, including
                   copyrights, and other proprietary rights in or related to
                   Project and Site are, and will remain, the exclusive property
-                  of the Project, Participating Institutions or Illinois whether
+                  of the Project, Collaborating Institutions or Illinois whether
                   or not specifically recognized or perfected under applicable
                   law. As End User, You will not take any action that
-                  jeopardizes Project's, Participating Institutions' or
+                  jeopardizes Project's, Collaborating Institutions' or
                   Illinois' proprietary rights.
                 </Typography>
               </Stack>
@@ -165,7 +166,7 @@ export default function TermsOfUse() {
               <Stack spacing={1} sx={{ p: 2 }}>
                 <Typography level="title-lg">4. Limitations</Typography>
                 <Typography level="body-md">
-                  In no event shall Illinois, Participating Institutions or
+                  In no event shall Illinois, Collaborating Institutions or
                   their employees be liable for any damages (including, without
                   limitation, damages for loss of data or profit, or due to
                   business interruption) arising out of the use or inability to
@@ -174,7 +175,7 @@ export default function TermsOfUse() {
                   writing of the possibility of such damage. Because some
                   jurisdictions do not allow limitations on implied warranties,
                   or limitations of liability for consequential or incidental
-                  damages, these limitations may not apply to you.
+                  damages, these limitations may not apply to You.
                 </Typography>
               </Stack>
 
@@ -188,8 +189,8 @@ export default function TermsOfUse() {
                   discontinue, temporarily or permanently, the Site for any
                   reason, at its sole discretion, with or without notice to You.
                   Project may likewise change the Terms from time to time with
-                  or without notice to you. You agree to review the Terms
-                  periodically to ensure that you are aware of any
+                  or without notice to You. You agree to review the Terms
+                  periodically to ensure that You are aware of any
                   modifications. Your continued access to the Site after the
                   modifications have become effective shall be deemed your
                   conclusive acceptance of the modified Terms.
@@ -209,7 +210,7 @@ export default function TermsOfUse() {
 
               {/* Update timing info */}
               <Stack spacing={1} sx={{ p: 2 }}>
-                <Typography level="body-sm">Updated on Sep 18, 2024</Typography>
+                <Typography level="body-sm">Updated on Oct 7, 2024</Typography>
               </Stack>
             </Grid>
           </Grid>
