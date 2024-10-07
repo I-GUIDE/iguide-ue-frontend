@@ -6,14 +6,7 @@ import { useCookies } from "react-cookie";
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
 
-import Tooltip from "@mui/joy/Tooltip";
 import { StyledEngineProvider } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
-import Fab from "@mui/material/Fab";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Fade from "@mui/material/Fade";
 
 import {
   checkUser,
@@ -22,7 +15,7 @@ import {
   getUserRole,
 } from "../utils/UserManager.jsx";
 import { PERMISSIONS } from "../configs/Permissions.jsx";
-import ScrollToTop from "../helpers/ScrollToTop.jsx";
+import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
@@ -154,52 +147,6 @@ export default function Root(props) {
     }
   }, [userId]);
 
-  function ScrollTop(props) {
-    const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
-    const trigger = useScrollTrigger({
-      target: window ? window() : undefined,
-      disableHysteresis: true,
-      threshold: 100,
-    });
-
-    function handleClick(event) {
-      const anchor = (event.target.ownerDocument || document).querySelector(
-        "#back-to-top-anchor"
-      );
-
-      if (anchor) {
-        anchor.scrollIntoView({
-          block: "center",
-          behavior: "smooth",
-        });
-      }
-    }
-
-    return (
-      <Fade in={trigger}>
-        <Box
-          onClick={handleClick}
-          role="presentation"
-          sx={{ position: "fixed", bottom: 170, right: 20 }}
-        >
-          {children}
-        </Box>
-      </Fade>
-    );
-  }
-
-  ScrollTop.propTypes = {
-    children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-  };
-
   return (
     <StyledEngineProvider injectFirst>
       <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
@@ -217,18 +164,7 @@ export default function Root(props) {
         />
       )}
       <ScrollToTop />
-      <ScrollTop>
-        <Fab
-          sx={{ display: { xs: "none", md: "flex" } }}
-          size="small"
-          color="neutral"
-          aria-label="scroll back to top"
-        >
-          <Tooltip title="Back to top" placement="top-start">
-            <KeyboardArrowUpIcon />
-          </Tooltip>
-        </Fab>
-      </ScrollTop>
+      <ClickToTop />
       <Footer />
     </StyledEngineProvider>
   );
