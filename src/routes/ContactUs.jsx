@@ -11,6 +11,7 @@ import Container from "@mui/joy/Container";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import Tooltip from "@mui/joy/Tooltip";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
@@ -55,9 +56,11 @@ export default function ContactUs() {
 
               <Typography level="body-md" sx={{ p: 2 }}>
                 You may find the answers to your questions{" "}
-                <Link component={RouterLink} to="/tutorials">
-                  here
-                </Link>
+                <Tooltip title="Tutorials" placement="top">
+                  <Link component={RouterLink} to="/tutorials">
+                    here
+                  </Link>
+                </Tooltip>
                 .
               </Typography>
               <Typography level="body-md" sx={{ p: 2 }}>
@@ -66,7 +69,6 @@ export default function ContactUs() {
                   href="mailto:help@i-guide.io"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none" }}
                 >
                   help@i-guide.io
                 </Link>{" "}
