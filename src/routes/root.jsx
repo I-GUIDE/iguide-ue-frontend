@@ -22,6 +22,7 @@ import {
   getUserRole,
 } from "../utils/UserManager.jsx";
 import { PERMISSIONS } from "../configs/Permissions.jsx";
+import ScrollToTop from "../helpers/ScrollToTop.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
@@ -215,6 +216,7 @@ export default function Root(props) {
           }}
         />
       )}
+      <ScrollToTop />
       <ScrollTop>
         <Fab
           sx={{ display: { xs: "none", md: "flex" } }}
