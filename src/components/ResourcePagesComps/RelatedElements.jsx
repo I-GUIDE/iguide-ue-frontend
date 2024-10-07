@@ -45,9 +45,9 @@ export default function RelatedElements(props) {
         {relatedElements?.map((relatedElement) => (
           <Box
             key={relatedElement.id}
-            sx={{ p: 0.5 }}
             justifyContent="center"
             alignItems="center"
+            sx={{ p: 0.5, height: "100%" }}
           >
             <SimpleInfoCard
               cardtype={relatedElement["resource-type"]}
