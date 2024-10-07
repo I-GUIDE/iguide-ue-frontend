@@ -555,7 +555,7 @@ export default function SubmissionCard(props) {
                 component={RouterLink}
                 to={`/publications/${result.elementId}`}
               >
-                <Typography level="body-xs">here</Typography>
+                here
               </Link>
             </Typography>
           );
@@ -602,7 +602,7 @@ export default function SubmissionCard(props) {
   let cardTitle = "";
   if (submissionType === "initial") {
     cardTitle =
-      "Submit a new " + RESOURCE_TYPE_NAMES[elementType].toLowerCase();
+      "Submit a new " + RESOURCE_TYPE_NAMES[elementType]?.toLowerCase();
   } else if (submissionType === "update") {
     if (isContributor) {
       cardTitle = "Edit your contribution";
@@ -1275,7 +1275,13 @@ export default function SubmissionCard(props) {
           </CardContent>
         </form>
       </Card>
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+      <Modal
+        open={openModal}
+        onClose={() => {
+          setSubmissionStatus("no submission");
+          setOpenModal(false);
+        }}
+      >
         <ModalDialog size="lg">
           <ModalClose />
           <SubmissionStatusCard
