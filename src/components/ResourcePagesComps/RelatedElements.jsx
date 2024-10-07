@@ -24,10 +24,12 @@ export default function RelatedElements(props) {
     md: {
       breakpoint: { max: 5000, min: 900 },
       items: 3,
+      slidesToSlide: 3,
     },
     sm: {
       breakpoint: { max: 900, min: 600 },
       items: 2,
+      slidesToSlide: 2,
     },
     xs: {
       breakpoint: { max: 600, min: 0 },
