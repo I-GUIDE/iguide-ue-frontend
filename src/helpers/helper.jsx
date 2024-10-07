@@ -112,6 +112,8 @@ export function inputExists(input, checkEmptyString = true) {
  * @return {string} return plain text
  */
 export function removeMarkdown(markdown) {
+  if (!markdown) return null;
+
   // Remove headers
   markdown = markdown.replace(/#+\s/g, "");
 
