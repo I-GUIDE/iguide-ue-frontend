@@ -50,7 +50,7 @@ export default function RelatedElements(props) {
             sx={{ p: 0.5, height: "100%" }}
           >
             <SimpleInfoCard
-              cardtype={relatedElement["resource-type"]}
+              cardtype={relatedElement["resource-type"] + "s"}
               pageId={relatedElement.id}
               title={relatedElement.title}
               thumbnailImage={relatedElement["thumbnail-image"]}
