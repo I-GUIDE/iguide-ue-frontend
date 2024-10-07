@@ -118,7 +118,7 @@ export default function RelatedElementsNetwork(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Related elements network (Beta)
+        Related elements network
       </Typography>
       <Box
         sx={{
