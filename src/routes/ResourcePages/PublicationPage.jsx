@@ -27,15 +27,11 @@ export default function PublicationPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
-  const [relatedPublications, setRelatedPublicatons] = useState([]);
-  const [relatedOERs, setRelatedOERs] = useState([]);
-  const [relatedMaps, setRelatedMaps] = useState([]);
   const [externalLink, setExternalLink] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
@@ -50,11 +46,6 @@ export default function PublicationPage() {
         return;
       }
 
-      setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedNotebooks(thisElement["related-notebooks"]);
-      setRelatedPublicatons(thisElement["related-publications"]);
-      setRelatedOERs(thisElement["related-oers"]);
-      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -64,6 +55,7 @@ export default function PublicationPage() {
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
     }
@@ -137,15 +129,9 @@ export default function PublicationPage() {
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
             </Grid>
-            <RelatedElements
-              relatedDatasets={relatedDatasets}
-              relatedNotebooks={relatedNotebooks}
-              relatedPublications={relatedPublications}
-              relatedOERs={relatedOERs}
-              relatedMaps={relatedMaps}
-              xs={12}
-              md={6}
-            />
+            <Grid xs={12}>
+              <RelatedElements relatedElements={relatedElements} />
+            </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>

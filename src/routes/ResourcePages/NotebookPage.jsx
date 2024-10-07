@@ -28,15 +28,11 @@ export default function NotebookPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
-  const [relatedPublications, setRelatedPublicatons] = useState([]);
-  const [relatedOERs, setRelatedOERs] = useState([]);
-  const [relatedMaps, setRelatedMaps] = useState([]);
   const [htmlNotebook, setHtmlNotebook] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
@@ -51,11 +47,6 @@ export default function NotebookPage() {
         return;
       }
 
-      setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedNotebooks(thisElement["related-notebooks"]);
-      setRelatedPublicatons(thisElement["related-publications"]);
-      setRelatedOERs(thisElement["related-oers"]);
-      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -65,6 +56,7 @@ export default function NotebookPage() {
       setNotebookFile(thisElement["notebook-file"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setHtmlNotebook(thisElement["html-notebook"]);
+      setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
     }
@@ -143,15 +135,9 @@ export default function NotebookPage() {
                 htmlNotebook={htmlNotebook}
               />
             </Grid>
-            <RelatedElements
-              relatedDatasets={relatedDatasets}
-              relatedNotebooks={relatedNotebooks}
-              relatedPublications={relatedPublications}
-              relatedOERs={relatedOERs}
-              relatedMaps={relatedMaps}
-              xs={12}
-              md={6}
-            />
+            <Grid xs={12}>
+              <RelatedElements relatedElements={relatedElements} />
+            </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>

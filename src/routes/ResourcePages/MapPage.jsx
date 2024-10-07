@@ -28,13 +28,9 @@ export default function MapPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
-  const [relatedPublications, setRelatedPublicatons] = useState([]);
-  const [relatedOERs, setRelatedOERs] = useState([]);
-  const [relatedMaps, setRelatedMaps] = useState([]);
   const [mapIFrameLink, setMapIFrameLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
@@ -49,11 +45,6 @@ export default function MapPage() {
         return;
       }
 
-      setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedNotebooks(thisElement["related-notebooks"]);
-      setRelatedPublicatons(thisElement["related-publications"]);
-      setRelatedOERs(thisElement["related-oers"]);
-      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
@@ -61,6 +52,7 @@ export default function MapPage() {
       setTags(thisElement.tags);
       setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
     }
@@ -135,15 +127,9 @@ export default function MapPage() {
               <CapsuleList title="Tags" items={tags} />
               <MapViewer iframeSrc={mapIFrameLink} />
             </Grid>
-            <RelatedElements
-              relatedDatasets={relatedDatasets}
-              relatedNotebooks={relatedNotebooks}
-              relatedPublications={relatedPublications}
-              relatedOERs={relatedOERs}
-              relatedMaps={relatedMaps}
-              xs={12}
-              md={6}
-            />
+            <Grid xs={12}>
+              <RelatedElements relatedElements={relatedElements} />
+            </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>

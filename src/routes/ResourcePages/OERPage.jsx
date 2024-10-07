@@ -28,12 +28,8 @@ export default function OERPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [relatedDatasets, setRelatedDatasets] = useState([]);
-  const [relatedNotebooks, setRelatedNotebooks] = useState([]);
-  const [relatedPublications, setRelatedPublicatons] = useState([]);
-  const [relatedOERs, setRelatedOERs] = useState([]);
-  const [relatedMaps, setRelatedMaps] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [relatedElements, setRelatedElements] = useState([]);
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -49,17 +45,13 @@ export default function OERPage() {
         return;
       }
 
-      setRelatedDatasets(thisElement["related-datasets"]);
-      setRelatedNotebooks(thisElement["related-notebooks"]);
-      setRelatedPublicatons(thisElement["related-publications"]);
-      setRelatedOERs(thisElement["related-oers"]);
-      setRelatedMaps(thisElement["related-maps"]);
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setRelatedElements(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -137,15 +129,9 @@ export default function OERPage() {
             <Grid xs={12}>
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
-            <RelatedElements
-              relatedDatasets={relatedDatasets}
-              relatedNotebooks={relatedNotebooks}
-              relatedPublications={relatedPublications}
-              relatedOERs={relatedOERs}
-              relatedMaps={relatedMaps}
-              xs={12}
-              md={6}
-            />
+            <Grid xs={12}>
+              <RelatedElements relatedElements={relatedElements} />
+            </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>
