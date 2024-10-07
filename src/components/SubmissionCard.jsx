@@ -28,6 +28,7 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
@@ -48,6 +49,7 @@ import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
+  duplicateDOIExists,
 } from "../utils/DataRetrieval";
 import { printListWithDelimiter } from "../helpers/helper";
 
@@ -120,6 +122,7 @@ export default function SubmissionCard(props) {
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState("");
+  const [hasDuplicateDOI, setHasDuplicateDOI] = useState(false);
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
@@ -316,6 +319,17 @@ export default function SubmissionCard(props) {
       const data = await response.json();
       TEST_MODE && console.log("search return", data.title);
       setCurrentOerExternalLinkTitle(data.title);
+    }
+  };
+
+  const handleDOIInputChange = async (e) => {
+    setPublicationDOI(e.target.value);
+
+    const check = await duplicateDOIExists(e.target.value);
+    if (check === "true") {
+      setHasDuplicateDOI(true);
+    } else {
+      setHasDuplicateDOI(false);
     }
   };
 
@@ -610,7 +624,10 @@ export default function SubmissionCard(props) {
             Element information
           </Typography>
           {resourceTypeSelected === "publication" && (
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={hasDuplicateDOI}
+            >
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle={`You may provide the DOI of the publication and click \"Autofill metadata\" to automatically retrieve the information of the publication.`}
@@ -622,12 +639,16 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                 <Grid xs>
-                  <Input
-                    required
-                    name="external-link-publication"
-                    value={publicationDOI}
-                    onChange={(event) => setPublicationDOI(event.target.value)}
-                  />
+                  {submissionType === "initial" ? (
+                    <Input
+                      required
+                      name="external-link-publication"
+                      value={publicationDOI}
+                      onChange={(event) => handleDOIInputChange(event)}
+                    />
+                  ) : (
+                    <Typography>{publicationDOI}</Typography>
+                  )}
                 </Grid>
                 <Grid xs="auto">
                   <Button
@@ -638,6 +659,18 @@ export default function SubmissionCard(props) {
                   </Button>
                 </Grid>
               </Grid>
+              {hasDuplicateDOI && (
+                <FormHelperText>
+                  <Typography
+                    level="title-sm"
+                    color="danger"
+                    startDecorator={<WarningAmberIcon />}
+                  >
+                    The DOI/URL you entered matches one already on the I-GUIDE
+                    Platform and cannot be submitted again.
+                  </Typography>
+                </FormHelperText>
+              )}
             </FormControl>
           )}
           <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>

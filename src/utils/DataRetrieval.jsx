@@ -308,3 +308,22 @@ export async function fetchNeighbors(elementId) {
     return "ERROR";
   }
 }
+
+/**
+ * Verify if there is a duplicate DOI or URL for publication
+ *
+ * @async
+ * @function duplicateDOIExists
+ * @param {string} url - DOI or URL
+ * @returns {Promise<Object>} A promise that resolves to the JSON response related to DOI duplication.
+ * @throws {Error} Throws an error if the verification fails.
+ */
+export async function duplicateDOIExists(url) {
+  try {
+    // TODO: add dup check endpoint
+    return "false";
+  } catch (error) {
+    console.error("Error fetching neighbors: ", error.message);
+    return "ERROR";
+  }
+}
