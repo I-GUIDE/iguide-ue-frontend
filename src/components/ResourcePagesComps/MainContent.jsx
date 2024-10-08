@@ -96,7 +96,7 @@ export default function MainContent(props) {
   const timePassedText = updateTime
     ? PeriodAgoText("Updated ", updateTime)
     : PeriodAgoText("Contributed ", creationTime);
-  const contributorAvatar = contributor["avatar-url"];
+  const contributorAvatar = contributor["avatar_url"];
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
   const encodedUserId = encodeURIComponent(contributor.id);
