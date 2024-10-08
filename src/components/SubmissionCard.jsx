@@ -126,7 +126,7 @@ export default function SubmissionCard(props) {
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState("");
-  const [hasDuplicateDOI, setHasDuplicateDOI] = useState(false);
+  const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] = useState();
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
@@ -331,11 +331,11 @@ export default function SubmissionCard(props) {
   const handleDOIInputChange = async (e) => {
     setPublicationDOI(e.target.value);
 
-    const check = await duplicateDOIExists(e.target.value);
-    if (check === "true") {
-      setHasDuplicateDOI(true);
+    const doiVerification = await duplicateDOIExists(e.target.value);
+    if (doiVerification && doiVerification.duplicate) {
+      setElementIdWithDuplicateDOI(doiVerification.elementId);
     } else {
-      setHasDuplicateDOI(false);
+      setElementIdWithDuplicateDOI(null);
     }
   };
 
@@ -659,7 +659,7 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "publication" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={hasDuplicateDOI}
+                error={!!elementIdWithDuplicateDOI}
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -692,15 +692,19 @@ export default function SubmissionCard(props) {
                     </Button>
                   </Grid>
                 </Grid>
-                {hasDuplicateDOI && (
+                {!!elementIdWithDuplicateDOI && (
                   <FormHelperText>
-                    <Typography
-                      level="title-sm"
-                      color="danger"
-                      startDecorator={<WarningAmberIcon />}
-                    >
-                      The DOI/URL you entered matches one already on the I-GUIDE
-                      Platform and cannot be submitted again.
+                    <Typography level="title-sm" color="danger">
+                      WARNING: The DOI/URL you entered matches one already on
+                      the I-GUIDE Platform and cannot be submitted again.&nbsp;
+                      <Link
+                        component={RouterLink}
+                        to={`/publications/${elementIdWithDuplicateDOI}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View the element
+                      </Link>
                     </Typography>
                   </FormHelperText>
                 )}

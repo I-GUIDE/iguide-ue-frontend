@@ -319,9 +319,20 @@ export async function fetchNeighbors(elementId) {
  * @throws {Error} Throws an error if the verification fails.
  */
 export async function duplicateDOIExists(url) {
+  const encodedUrl = encodeURIComponent(url);
+
   try {
-    // TODO: add dup check endpoint
-    return "false";
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/duplicate?field-name=doi&&value=${encodedUrl}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to verify duplication");
+    }
+
+    return response.json();
   } catch (error) {
     console.error("Error fetching neighbors: ", error.message);
     return "ERROR";
