@@ -259,7 +259,7 @@ export default function SubmissionCard(props) {
     setCurrentRelatedResourceTitle(value);
     setRelatedResources([
       ...relatedResources,
-      { type: currentRelatedResourceType, title: value },
+      { "resource-type": currentRelatedResourceType, title: value },
     ]);
     setCurrentRelatedResourceType("");
     setCurrentRelatedResourceTitle("");
