@@ -41,7 +41,6 @@ import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
 const aboutDropdown = [
-  ["About Us", "/about"],
   ["Getting Started", "/docs/getting-started"],
   ["FAQ", "/docs/frequently-asked-questions"],
   ["Tutorials", "/tutorials"],
@@ -480,6 +479,17 @@ export default function NavBar(props) {
                       >
                         About
                       </Typography>
+                      <Link
+                        key={"about"}
+                        to={"/about"}
+                        underline="none"
+                        component={RouterLink}
+                        sx={{ color: "text.tertiary" }}
+                      >
+                        <ListItem sx={{ width: "100%" }}>
+                          <ListItemButton>About Us</ListItemButton>
+                        </ListItem>
+                      </Link>
                       {aboutDropdown?.map((page) => (
                         <Link
                           key={page[1]}
@@ -567,7 +577,9 @@ export default function NavBar(props) {
                     />
                   </Tooltip>
                 </Link>
-                <HoverOverMenuTab menu={aboutDropdown}>About</HoverOverMenuTab>
+                <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
+                  About
+                </HoverOverMenuTab>
                 {pages?.map((page) => (
                   <Link
                     key={page[1]}

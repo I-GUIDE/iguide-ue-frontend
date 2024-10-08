@@ -13,6 +13,7 @@ export default function HoverOverMenuTab(props) {
   const menu = props.menu;
   const menuBody = props.menuBody;
   const tabName = props.children;
+  const tabLink = props.tabLink;
 
   const [open, setOpen] = useState(false);
 
@@ -48,14 +49,20 @@ export default function HoverOverMenuTab(props) {
         )
       }
     >
-      <Button
-        variant="plain"
-        color="neutral"
-        size="sm"
-        sx={{ alignSelf: "center" }}
+      <Link
+        to={tabLink}
+        component={RouterLink}
+        style={{ textDecoration: "none" }}
       >
-        {tabName}
-      </Button>
+        <Button
+          variant="plain"
+          color="neutral"
+          size="sm"
+          sx={{ alignSelf: "center" }}
+        >
+          {tabName}
+        </Button>
+      </Link>
     </Tooltip>
   );
 }
