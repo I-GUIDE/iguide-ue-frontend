@@ -175,6 +175,7 @@ export default function Home() {
                   <TutorialCard
                     thumbnailImage="/images/homepage/map.png"
                     title="Map"
+                    link="/maps"
                     content="Transform geospatial data to knowledge and insights"
                     bgColor="#fff"
                     inColumn
@@ -189,6 +190,7 @@ export default function Home() {
                   <TutorialCard
                     thumbnailImage="/images/homepage/search.png"
                     title="Discover"
+                    link="/search"
                     content="Seek new convergence knowledge through intelligent search"
                     bgColor="#fff"
                     inColumn
