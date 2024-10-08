@@ -84,6 +84,7 @@ export default function Home() {
                     display: "grid",
                     gridTemplateColumns: { xs: "auto", md: "100%" },
                     gridTemplateRows: "auto 1fr auto",
+                    pb: 1,
                   }}
                 >
                   <Typography
