@@ -291,7 +291,8 @@ export async function fetchADocumentation(docName) {
 export async function fetchNeighbors(elementId, depth = 2) {
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors?depth=${depth}`,
+      // `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors?depth=${depth}`,
+      `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors`,
       {
         method: "GET",
         headers: {
