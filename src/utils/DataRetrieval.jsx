@@ -284,13 +284,14 @@ export async function fetchADocumentation(docName) {
  * @async
  * @function fetchNeighbors
  * @param {string} elementId - element ID
+ * @param {Int} [depth=2] number of level for neighbor search
  * @returns {Promise<Object>} A promise that resolves to the JSON response containing the neighbors.
  * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function fetchNeighbors(elementId) {
+export async function fetchNeighbors(elementId, depth = 2) {
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors`,
+      `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors?depth=${depth}`,
       {
         method: "GET",
         headers: {

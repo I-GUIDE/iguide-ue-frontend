@@ -17,6 +17,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;
   const tabTitle = props.tabTitle || "Related elements network";
+  const depth = props.depth || 2;
 
   const graphRef = useRef(null);
   const [nodes, setNodes] = useState();
@@ -38,9 +39,9 @@ export default function RelatedElementsNetwork(props) {
   };
 
   useEffect(() => {
-    async function retrieveNeighbors(elementId) {
+    async function retrieveNeighbors(elementId, depth) {
       try {
-        const data = await fetchNeighbors(elementId);
+        const data = await fetchNeighbors(elementId, depth);
 
         let returnedNodes = data.nodes?.map((node) => ({
           id: node.id,
@@ -79,7 +80,7 @@ export default function RelatedElementsNetwork(props) {
     }
 
     if (elementId) {
-      retrieveNeighbors(elementId);
+      retrieveNeighbors(elementId, depth);
     }
   }, [elementId]);
 

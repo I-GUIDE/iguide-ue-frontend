@@ -117,7 +117,11 @@ export default function NetworkVisualizer() {
                   {thisElement.title}
                 </Typography>
               </Stack>
-              <RelatedElementsNetwork elementId={thisElement.id} tabTitle=" " />
+              <RelatedElementsNetwork
+                elementId={thisElement.id}
+                tabTitle=" "
+                depth={3}
+              />
             </Grid>
           </Grid>
         </Box>
