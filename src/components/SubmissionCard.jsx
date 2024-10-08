@@ -445,6 +445,7 @@ export default function SubmissionCard(props) {
     data.metadata = { created_by: localUserInfo.id };
     data["related-resources"] = relatedResources;
     data["contents"] = contents;
+    data["external-link-publication"] = publicationDOI;
 
     if (resourceTypeSelected === "oer") {
       data["oer-external-links"] = oerExternalLinks;
