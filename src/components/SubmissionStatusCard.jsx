@@ -12,31 +12,41 @@ import "../utils/UserManager";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
-  const submissionType = props.submissionType;
+  const subMessage = props.subMessage;
   const elementURI = props.elementURI;
 
   let submissionStatusText = "";
+  let submissionSucceeded;
 
   // Display the submission status
   switch (submissionStatus) {
     case "initial-succeeded":
       submissionStatusText =
-        "Thank you for your contribution! You are all set!";
+        "Thank you for your contribution. You are all set.";
+      submissionSucceeded = true;
       break;
     case "initial-failed":
-      submissionStatusText = "Submission failed. Please try again!";
+      submissionStatusText = "Submission failed. Please try again.";
+      submissionSucceeded = false;
+      break;
+    case "initial-failed-duplicate":
+      submissionStatusText = "Submission failed due to duplicate DOI/URL.";
+      submissionSucceeded = false;
       break;
     case "update-succeeded":
-      submissionStatusText = "Thank you for the update! You are all set!";
+      submissionStatusText = "Thank you for the update. You are all set.";
+      submissionSucceeded = true;
       break;
     case "update-failed":
-      submissionStatusText =
-        "Submission of your edit failed. Please try again!";
+      submissionStatusText = "Update failed. Please try again.";
+      submissionSucceeded = false;
       break;
     case "unauthorized":
-      submissionStatusText = "You don't have permission to edit this element";
+      submissionStatusText = "You don't have permission to edit this element.";
+      submissionSucceeded = false;
       break;
     default:
+      submissionSucceeded = false;
       submissionStatusText = "Submission status unknown...";
   }
 
@@ -49,7 +59,7 @@ export default function SubmissionStatusCard(props) {
       }}
     >
       <Card
-        variant="outlined"
+        variant="plain"
         orientation="horizontal"
         sx={{
           width: "100%",
@@ -68,7 +78,10 @@ export default function SubmissionStatusCard(props) {
               "& > button": { flex: 1 },
             }}
           >
-            <Typography level="h4">{submissionStatusText}</Typography>
+            <Stack spacing={2}>
+              <Typography level="h4">{submissionStatusText}</Typography>
+              {subMessage}
+            </Stack>
           </Box>
           <Stack
             direction="row"
@@ -79,18 +92,27 @@ export default function SubmissionStatusCard(props) {
             useFlexGap
             sx={{ p: 0.5 }}
           >
-            <Button component="a" href="/" variant="outlined" color="neutral">
-              Homepage
-            </Button>
-            <Button
-              component="a"
-              href="/user-profile"
-              variant="outlined"
-              color="primary"
-            >
-              User profile
-            </Button>
-            {submissionStatus !== "unauthorized" && elementURI && (
+            {submissionSucceeded && (
+              <>
+                <Button
+                  component="a"
+                  href="/"
+                  variant="outlined"
+                  color="neutral"
+                >
+                  Homepage
+                </Button>
+                <Button
+                  component="a"
+                  href="/user-profile"
+                  variant="outlined"
+                  color="primary"
+                >
+                  User profile
+                </Button>
+              </>
+            )}
+            {submissionSucceeded && elementURI && (
               <Button
                 component="a"
                 href={elementURI}

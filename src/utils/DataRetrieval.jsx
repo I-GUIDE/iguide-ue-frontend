@@ -308,3 +308,33 @@ export async function fetchNeighbors(elementId) {
     return "ERROR";
   }
 }
+
+/**
+ * Verify if there is a duplicate DOI or URL for publication
+ *
+ * @async
+ * @function duplicateDOIExists
+ * @param {string} url - DOI or URL
+ * @returns {Promise<Object>} A promise that resolves to the JSON response related to DOI duplication.
+ * @throws {Error} Throws an error if the verification fails.
+ */
+export async function duplicateDOIExists(url) {
+  const encodedUrl = encodeURIComponent(url);
+
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/duplicate?field-name=doi&&value=${encodedUrl}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to verify duplication");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching neighbors: ", error.message);
+    return "ERROR";
+  }
+}
