@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Home from "./routes/home";
+import SearchHome from "./routes/SearchHome";
 import SearchResults from "./routes/searchResults";
 
 import Datasets from "./routes/datasets";
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/search-home",
+        element: <SearchHome />,
       },
       {
         path: "/search",

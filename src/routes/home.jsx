@@ -191,7 +191,7 @@ export default function Home() {
                   <TutorialCard
                     thumbnailImage="/images/homepage/search.png"
                     title="Discover"
-                    link="/search"
+                    link="/search-home"
                     content="Seek new convergence knowledge through intelligent search"
                     bgColor="#fff"
                     inColumn
