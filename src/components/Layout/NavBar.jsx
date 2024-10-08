@@ -103,6 +103,7 @@ export default function NavBar(props) {
           open={open}
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
+          leaveDelay={100}
           title={
             <List>
               <Link

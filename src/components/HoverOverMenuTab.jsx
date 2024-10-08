@@ -23,6 +23,7 @@ export default function HoverOverMenuTab(props) {
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
+      leaveDelay={100}
       title={
         menuBody ? (
           menuBody
