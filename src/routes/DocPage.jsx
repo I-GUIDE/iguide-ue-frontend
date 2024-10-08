@@ -19,6 +19,8 @@ import PageNav from "../components/PageNav";
 import DocAdminOps from "../components/DocAdminOps";
 import ErrorPage from "../ErrorPage";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function DocPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
@@ -29,7 +31,7 @@ export default function DocPage() {
   useEffect(() => {
     async function fetchData() {
       const thisDoc = await fetchADocumentation(id);
-      console.log(thisDoc);
+      TEST_MODE && console.log("Doc", thisDoc);
 
       if (thisDoc === "ERROR") {
         setError(true);
