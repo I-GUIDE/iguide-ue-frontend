@@ -184,6 +184,7 @@ export default function Home() {
                   <TutorialCard
                     thumbnailImage="/images/homepage/network.png"
                     title="Connect"
+                    link="/element-network"
                     content="Gain holistic understanding of linked knowledge elements"
                     bgColor="#fff"
                     inColumn
