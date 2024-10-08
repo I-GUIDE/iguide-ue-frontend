@@ -140,7 +140,7 @@ export default function SearchResults() {
     const encodedKeyword = encodeURIComponent(keyword);
     let keywordExist = false;
     let typeExist = false;
-    let uriPrefix = `/search-results`;
+    let uriPrefix = `/search`;
 
     if (keyword && keyword !== "") {
       keywordExist = true;
@@ -192,7 +192,7 @@ export default function SearchResults() {
     setSearchResults([]);
 
     setSearchParams({ keyword: "", type: "any" });
-    navigate(`/search-results`);
+    navigate(`/search`);
   }
 
   // Function that handles submit events. This function will update the search term.

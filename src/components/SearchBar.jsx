@@ -35,9 +35,7 @@ export default function SearchBar(props) {
     event.preventDefault();
     setSearchTerm("");
     navigate(
-      `/search-results?keyword=${encodeURIComponent(
-        searchTerm
-      )}&type=${searchCategory}`
+      `/search?keyword=${encodeURIComponent(searchTerm)}&type=${searchCategory}`
     );
   }
 
