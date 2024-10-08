@@ -27,6 +27,7 @@ import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
+import NetworkVisualizer from "./routes/NetworkVisualizer";
 
 import DocSubmission from "./routes/DocSubmission";
 import DocUpdate from "./routes/DocUpdate";
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
       {
         path: "/maps/:id",
         element: <MapPage />,
+      },
+      {
+        path: "/element-network",
+        element: <NetworkVisualizer />,
       },
       {
         path: "/tag/:id",
