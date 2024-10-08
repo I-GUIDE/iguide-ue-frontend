@@ -26,8 +26,8 @@ export default function NetworkVisualizer() {
   usePageTitle("Explore Knowledge Network");
 
   const [thisElement, setThisElement] = useState();
-  const [generate, setGenerate] = useState(0);
   const [error, setError] = useState(false);
+  const [seed, setSeed] = useState(1);
 
   const elementTypes = ["dataset", "notebook"];
   const elementType =
@@ -43,7 +43,7 @@ export default function NetworkVisualizer() {
       }
     }
     retrievethisElements();
-  }, [generate]);
+  }, [seed]);
 
   if (!thisElement) {
     return null;
@@ -89,7 +89,7 @@ export default function NetworkVisualizer() {
                       <IconButton
                         variant="outlined"
                         size="md"
-                        onClick={() => setGenerate(generate + 1)}
+                        onClick={() => setSeed(Math.random())}
                       >
                         <ShuffleIcon />
                       </IconButton>
@@ -118,6 +118,7 @@ export default function NetworkVisualizer() {
                 </Typography>
               </Stack>
               <RelatedElementsNetwork
+                key={seed}
                 elementId={thisElement.id}
                 tabTitle=" "
                 depth={3}
