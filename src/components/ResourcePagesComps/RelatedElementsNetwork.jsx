@@ -3,8 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { GraphCanvas, useSelection } from "reagraph";
 
 import { useTheme } from "@mui/joy/styles";
-import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
@@ -12,14 +10,13 @@ import Typography from "@mui/joy/Typography";
 import SimpleInfoCard from "../SimpleInfoCard";
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
-import { RESOURCE_TYPE_COLORS } from "../../configs/VarConfigs";
 import { stringTruncator } from "../../helpers/helper";
-import { BorderColor } from "@mui/icons-material";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;
+  const tabTitle = props.tabTitle || "Related elements network";
 
   const graphRef = useRef(null);
   const [nodes, setNodes] = useState();
@@ -118,7 +115,7 @@ export default function RelatedElementsNetwork(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Related elements network
+        {tabTitle}
       </Typography>
       <Box
         sx={{

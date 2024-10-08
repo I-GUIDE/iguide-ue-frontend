@@ -11,25 +11,32 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 import Button from "@mui/joy/Button";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import IconButton from "@mui/joy/IconButton";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { getHomepageElements } from "../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import RelatedElementsNetwork from "../components/ResourcePagesComps/RelatedElementsNetwork";
 import usePageTitle from "../hooks/usePageTitle";
 import ErrorPage from "../ErrorPage";
+import { Tooltip } from "@mui/joy";
 
 export default function NetworkVisualizer() {
-  usePageTitle("Element Network");
+  usePageTitle("Explore Knowledge Network");
 
   const [thisElement, setThisElement] = useState();
   const [generate, setGenerate] = useState(0);
   const [error, setError] = useState(false);
 
+  const elementTypes = ["dataset", "notebook"];
+  const elementType =
+    elementTypes[Math.floor(Math.random() * elementTypes.length)];
+
   useEffect(() => {
     async function retrievethisElements() {
       try {
-        const data = await getHomepageElements("dataset", 1);
-        console.log("data", data);
+        const data = await getHomepageElements(elementType, 1);
         setThisElement(data[0]);
       } catch (error) {
         setError(error);
@@ -74,30 +81,43 @@ export default function NetworkVisualizer() {
           >
             <Grid xs={12}>
               <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-                <Typography level="title-lg" mb={1}>
-                  {`Element name: ${thisElement.title}`}
+                <Typography
+                  level="h2"
+                  mb={1}
+                  endDecorator={
+                    <Tooltip title="Show another network graph" placement="top">
+                      <IconButton
+                        variant="outlined"
+                        size="md"
+                        onClick={() => setGenerate(generate + 1)}
+                      >
+                        <ShuffleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                >
+                  Explore knowledge network
                 </Typography>
-                <Typography level="body-sm" mb={1}>
-                  (This page is still under development)
+                <Typography
+                  level="title-lg"
+                  mb={1}
+                  endDecorator={
+                    <Tooltip title="View this element" placement="top">
+                      <IconButton
+                        component={RouterLink}
+                        to={`/${elementType}s/${thisElement.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <OpenInNewIcon />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                >
+                  {thisElement.title}
                 </Typography>
-                <Stack direction="row" spacing={2}>
-                  <Link
-                    component={RouterLink}
-                    to={`/datasets/${thisElement.id}`}
-                  >
-                    View this element
-                  </Link>
-                  <Button
-                    variant="outlined"
-                    size="sm"
-                    color="success"
-                    onClick={() => setGenerate(generate + 1)}
-                  >
-                    See another network
-                  </Button>
-                </Stack>
               </Stack>
-              <RelatedElementsNetwork elementId={thisElement.id} />
+              <RelatedElementsNetwork elementId={thisElement.id} tabTitle=" " />
             </Grid>
           </Grid>
         </Box>
