@@ -544,6 +544,7 @@ export default function SubmissionCard(props) {
           if (result.elementId) {
             setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
           }
+          // Case where there is a duplication on publication DOI
         } else if (
           result.message === "Duplicate found while registering resource"
         ) {
@@ -555,6 +556,8 @@ export default function SubmissionCard(props) {
               <Link
                 component={RouterLink}
                 to={`/publications/${result.elementId}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 here
               </Link>
@@ -578,7 +581,6 @@ export default function SubmissionCard(props) {
     return (
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
-        submissionType={submissionType}
         elementURI={elementURI}
       />
     );
