@@ -49,12 +49,14 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
                   >
-                    <Box
-                      component="img"
-                      sx={{ height: 55, mx: 1 }}
-                      alt="Logo"
-                      src="/images/nsf.png"
-                    />
+                    <Tooltip title="NSF website" placement="top">
+                      <Box
+                        component="img"
+                        sx={{ height: 55, mx: 1 }}
+                        alt="Logo"
+                        src="/images/nsf.png"
+                      />
+                    </Tooltip>
                   </Link>
                 </Stack>
               </Grid>
