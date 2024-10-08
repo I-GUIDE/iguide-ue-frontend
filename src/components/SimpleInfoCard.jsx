@@ -10,7 +10,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-import { stringTruncator } from "../helpers/helper";
+import { removeMarkdown } from "../helpers/helper";
 
 import {
   RESOURCE_TYPE_COLORS,
@@ -31,7 +31,7 @@ export default function SimpleInfoCard(props) {
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
-  const contentsTruncated = stringTruncator(contents, 0, 200, "");
+  const contentsWithoutMarkdown = removeMarkdown(contents);
 
   return (
     <Card
@@ -72,6 +72,7 @@ export default function SimpleInfoCard(props) {
                 display: "-webkit-box",
                 WebkitLineClamp: "3",
                 WebkitBoxOrient: "vertical",
+                wordBreak: "break-word",
               }}
             >
               {title}
@@ -84,9 +85,10 @@ export default function SimpleInfoCard(props) {
                 textOverflow: "ellipsis",
                 WebkitLineClamp: "2",
                 WebkitBoxOrient: "vertical",
+                wordBreak: "break-word",
               }}
             >
-              {contentsTruncated}
+              {contentsWithoutMarkdown}
             </Typography>
           </Stack>
         </Link>

@@ -11,11 +11,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-import {
-  printListWithDelimiter,
-  stringTruncator,
-  removeMarkdown,
-} from "../helpers/helper";
+import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
 import {
   RESOURCE_TYPE_COLORS,
@@ -35,12 +31,8 @@ export default function InfoCard(props) {
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
 
-  const contentsTruncated = stringTruncator(
-    removeMarkdown(contents),
-    0,
-    200,
-    ""
-  );
+  const contentsWithoutMarkdown = removeMarkdown(contents);
+
   const contributorUserId = contributor.id;
   const contributorName = contributor.name;
   const contributorAvatar = contributor["avatar-url"];
@@ -88,6 +80,7 @@ export default function InfoCard(props) {
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
               mb: 0.5,
             }}
           >
@@ -103,6 +96,7 @@ export default function InfoCard(props) {
             display: "-webkit-box",
             WebkitLineClamp: "1",
             WebkitBoxOrient: "vertical",
+            wordBreak: "break-word",
             mb: 0.5,
           }}
         >
@@ -117,9 +111,10 @@ export default function InfoCard(props) {
             textOverflow: "ellipsis",
             WebkitLineClamp: "2",
             WebkitBoxOrient: "vertical",
+            wordBreak: "break-word",
           }}
         >
-          {contentsTruncated}
+          {contentsWithoutMarkdown}
         </Typography>
       </CardContent>
 
