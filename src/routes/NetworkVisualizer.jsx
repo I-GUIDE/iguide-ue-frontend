@@ -83,7 +83,7 @@ export default function NetworkVisualizer() {
                 <Stack direction="row" spacing={2}>
                   <Link
                     component={RouterLink}
-                    to={`/datsets/${thisElement.id}`}
+                    to={`/datasets/${thisElement.id}`}
                   >
                     View this element
                   </Link>
