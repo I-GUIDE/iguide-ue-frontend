@@ -29,7 +29,7 @@ export default function FeaturedElementsList(props) {
   const type = props.type;
   const limit = props.limit;
 
-  const [featuredElements, fsetFeaturedElements] = useState([]);
+  const [featuredElements, setFeaturedElements] = useState([]);
 
   const [error, setError] = useState(null);
 
@@ -39,13 +39,15 @@ export default function FeaturedElementsList(props) {
     async function retrieveFeaturedElements() {
       try {
         const data = await getHomepageElements(type, limit);
-        fsetFeaturedElements(data);
+        setFeaturedElements(data);
       } catch (error) {
         setError(error);
       }
     }
     retrieveFeaturedElements();
   }, []);
+
+  if (!featuredElements || featuredElements.length === 0) return null;
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
