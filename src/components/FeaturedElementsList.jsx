@@ -64,14 +64,9 @@ export default function FeaturedElementsList(props) {
             <Typography level="h3" startDecorator={icon}>
               {title}
             </Typography>
-            <Link
-              component={RouterLink}
-              to={pageLink}
-              color="inherit"
-              style={{ textDecoration: "none" }}
-            >
+            <Link component={RouterLink} to={pageLink} color="inherit">
               <Typography startDecorator={<ArrowForwardIcon />}>
-                View All
+                View More
               </Typography>
             </Link>
           </Stack>
