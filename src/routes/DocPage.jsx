@@ -55,7 +55,7 @@ export default function DocPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{

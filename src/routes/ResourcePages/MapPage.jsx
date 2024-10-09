@@ -70,7 +70,7 @@ export default function MapPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{

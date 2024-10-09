@@ -73,7 +73,7 @@ export default function PublicationPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{

@@ -45,10 +45,10 @@ function AuthorsDisplay(props) {
               p: 1,
             }}
           >
-            <Typography level="title-sm">
+            <Typography level="title-md">
               Author{authorsList.length > 1 && "s"}
             </Typography>
-            <Typography level="body-sm">
+            <Typography level="body-md">
               {printListWithDelimiter(authorsList, ",")}
             </Typography>
           </Box>
@@ -56,7 +56,7 @@ function AuthorsDisplay(props) {
         variant="outlined"
       >
         <Typography
-          level="body-lg"
+          level="title-md"
           sx={{
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -72,7 +72,16 @@ function AuthorsDisplay(props) {
   }
 
   return (
-    <Typography level="body-lg">
+    <Typography
+      level="title-md"
+      sx={{
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        WebkitLineClamp: "2",
+        WebkitBoxOrient: "vertical",
+      }}
+    >
       {printListWithDelimiter(authorsList, ",")}
     </Typography>
   );
@@ -216,7 +225,7 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12}>
           {contributorName && (
             <Link
               component={RouterLink}
@@ -261,7 +270,7 @@ export default function MainContent(props) {
               </Card>
             </Link>
           )}
-          <Typography level="h2" sx={{ py: 1 }}>
+          <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
           <AuthorsDisplay authorsList={authors} />
@@ -275,14 +284,14 @@ export default function MainContent(props) {
               <Typography
                 level="body-sm"
                 startDecorator={<OpenInNewIcon />}
-                sx={{ py: 1 }}
+                sx={{ py: 1, wordBreak: "break-word" }}
               >
                 {doi}
               </Typography>
             </Link>
           )}
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12}>
           <AspectRatio
             variant="outlined"
             sx={{ py: 1, borderRadius: "lg", height: "100%" }}
@@ -311,7 +320,10 @@ export default function MainContent(props) {
           </div>
         </Box>
       ) : (
-        <Typography level="body-lg" sx={{ pt: 2 }}>
+        <Typography
+          level="body-lg"
+          sx={{ pt: 2, wordBreak: "break-word", lineHeight: "150%" }}
+        >
           {contents}
         </Typography>
       )}

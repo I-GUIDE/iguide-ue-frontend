@@ -74,7 +74,7 @@ export default function NotebookPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{

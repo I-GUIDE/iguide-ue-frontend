@@ -76,7 +76,7 @@ export default function DatasetPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{
@@ -128,13 +128,11 @@ export default function DatasetPage() {
               />
             </Grid>
 
-            {inputExists(directDownloadLink) && (
-              <Grid xs={12} md={6}>
-                <CodeSnippet directDownloadLink={directDownloadLink} />
-              </Grid>
-            )}
-            <Grid xs={12} md={6}>
+            <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
+              {inputExists(directDownloadLink) && (
+                <CodeSnippet directDownloadLink={directDownloadLink} />
+              )}
               <ActionList
                 title="Data Exploration"
                 externalLink={externalLink}
