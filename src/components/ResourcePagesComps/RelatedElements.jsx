@@ -21,13 +21,8 @@ export default function RelatedElements(props) {
   }
 
   const responsive = {
-    md: {
-      breakpoint: { max: 5000, min: 900 },
-      items: 3,
-      slidesToSlide: 3,
-    },
     sm: {
-      breakpoint: { max: 900, min: 600 },
+      breakpoint: { max: 5000, min: 600 },
       items: 2,
       slidesToSlide: 2,
     },
