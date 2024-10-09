@@ -106,9 +106,11 @@ export default function About() {
                 approaches to sustainability challenges.
               </Typography>
               <Typography level="body-md" sx={{ p: 2 }}>
-                To learn more about using the I-GUIDE Platform, check out the
-                Getting Started guide{" "}
-                <Typography level="body-sm">(Link coming soon)</Typography>.
+                To learn more about using the I-GUIDE Platform, check out{" "}
+                <Link component={RouterLink} to="/docs/getting-started">
+                  Getting Started
+                </Link>
+                .
               </Typography>
               <Typography level="body-md" sx={{ p: 2 }}>
                 To learn more about the NSF Institute for Geospatial
