@@ -837,15 +837,11 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "map" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
-                  <SubmissionCardFieldTitle
-                    tooltipTitle="A link to view the map."
-                    fieldRequired
-                  >
+                  <SubmissionCardFieldTitle tooltipTitle="A link to view the map.">
                     Map iframe link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Input
-                  required
                   name="map-external-iframe-link"
                   value={mapIframeLink}
                   onChange={(event) => setMapIframeLink(event.target.value)}
