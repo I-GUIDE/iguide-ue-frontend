@@ -11,6 +11,7 @@ import Stack from "@mui/joy/Stack";
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import MapViewer from "../../components/ResourcePagesComps/MapViewer";
+import StaticMap from "../../components/ResourcePagesComps/StaticMap";
 
 import MainContent from "../../components/ResourcePagesComps/MainContent";
 import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
@@ -126,6 +127,7 @@ export default function MapPage() {
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
               <MapViewer iframeSrc={mapIFrameLink} />
+              <StaticMap mapImg={thumbnailImage} />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />

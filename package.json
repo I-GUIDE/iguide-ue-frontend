@@ -28,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.24.0",
+    "react-zoom-pan-pinch": "^3.6.1",
     "reagraph": "^4.19.3"
   },
   "devDependencies": {
