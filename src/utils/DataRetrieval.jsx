@@ -312,6 +312,33 @@ export async function fetchNeighbors(elementId, depth = 2) {
 }
 
 /**
+ * Fetches the whole connected elements
+ *
+ * @async
+ * @function fetchConnectedGraph
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the connected graph.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchConnectedGraph() {
+  try {
+    const response = await fetch(`${BACKEND_URL_PORT}/api/connected-graph`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch the connected graph");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching connected graph: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
  * Verify if there is a duplicate DOI or URL for publication
  *
  * @async
