@@ -82,10 +82,7 @@ export default function SearchBar(props) {
           }
         />
         {showSmartSearch && (
-          <Tooltip
-            title="Conversational search coming early next year"
-            placement="top"
-          >
+          <Tooltip title="Conversational search coming soon" placement="top">
             <Avatar
               alt="Smart search button"
               src="/images/smart-search-button.png"
