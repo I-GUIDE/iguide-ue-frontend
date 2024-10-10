@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { GraphCanvas, useSelection } from "reagraph";
-
 import { useTheme } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-import SimpleInfoCard from "../SimpleInfoCard";
+import ConnectedGraph from "../ConnectedGraph";
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { stringTruncator } from "../../helpers/helper";
@@ -19,11 +17,9 @@ export default function RelatedElementsNetwork(props) {
   const tabTitle = props.tabTitle || "Related elements network";
   const depth = props.depth || 2;
 
-  const graphRef = useRef(null);
   const [nodes, setNodes] = useState();
   const [edges, setEdges] = useState();
   const [noRelatedElements, setNoRelatedElements] = useState(false);
-  const [selectedElement, setSelectedElement] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -84,25 +80,6 @@ export default function RelatedElementsNetwork(props) {
     }
   }, [elementId]);
 
-  const { selections, actives, onNodeClick, onCanvasClick } = useSelection({
-    ref: graphRef,
-    nodes: nodes,
-    edges: edges,
-    pathSelectionType: "all",
-  });
-
-  function handleNodeClick(node) {
-    setSelectedElement(node);
-    onNodeClick(node);
-    TEST_MODE && console.log("clicked", node);
-  }
-
-  function handleCanvasClick(canvas) {
-    setSelectedElement(null);
-    onCanvasClick(canvas);
-    TEST_MODE && console.log("clicked canvas");
-  }
-
   // If there are no nodes, return null
   if (!nodes || !edges) {
     return null;
@@ -128,51 +105,7 @@ export default function RelatedElementsNetwork(props) {
           position: "relative",
         }}
       >
-        {selectedElement && selectedElement.id !== elementId && (
-          <Box
-            style={{
-              zIndex: 9,
-              position: "absolute",
-              top: 5,
-              right: 5,
-              background: "rgba(0, 0, 0, .5)",
-              color: "white",
-            }}
-          >
-            <Box
-              sx={{
-                background: "#fff",
-                width: "100%",
-                minWidth: 250,
-                textAlign: "center",
-              }}
-            >
-              <Typography level="title-md">Selected element</Typography>
-              <SimpleInfoCard
-                cardtype={selectedElement.type + "s"}
-                pageId={selectedElement.id}
-                title={selectedElement.title}
-                thumbnailImage={selectedElement.thumbnail}
-                minHeight="100%"
-                width="100%"
-                openInNewTab
-                showElementType
-              />
-            </Box>
-          </Box>
-        )}
-        <GraphCanvas
-          ref={graphRef}
-          nodes={nodes}
-          edges={edges}
-          animated={false}
-          edgeArrowPosition="none"
-          labelType="nodes"
-          selections={selections}
-          actives={actives}
-          onCanvasClick={(canvas) => handleCanvasClick(canvas)}
-          onNodeClick={(node) => handleNodeClick(node)}
-        />
+        <ConnectedGraph nodes={nodes} edges={edges} elementId={elementId} />
       </Box>
     </Stack>
   );
