@@ -8,6 +8,7 @@ export async function fetchWithAuth(url, options = {}) {
     credentials: "include", // Ensure cookies are sent with the request
   });
 
+  // Case: access token expired, try using the refresh token
   if (res.status === 401) {
     TEST_MODE && console.log("Token expired, try to refresh");
     // Access token has expired, refresh it
@@ -18,6 +19,10 @@ export async function fetchWithAuth(url, options = {}) {
       ...options,
       credentials: "include",
     });
+    // Case: access token missing
+  } else if (res.status === 403) {
+    alert("Invalid credential. Please login again!");
+    window.open(AUTH_BACKEND_URL + "/logout", "_self");
   }
 
   return res;
@@ -29,6 +34,7 @@ export async function refreshAccessToken() {
     credentials: "include",
   });
 
+  // Refresh token expired or missing
   if (!res.ok) {
     alert("Session expired. Please login again!");
     window.open(AUTH_BACKEND_URL + "/logout", "_self");
