@@ -73,12 +73,12 @@ export default function ConnectedGraph(props) {
         ref={graphRef}
         nodes={nodes}
         edges={edges}
-        animated={false}
         edgeArrowPosition="none"
         labelType="nodes"
         selections={selections}
         actives={actives}
         draggable={draggable}
+        layoutType="forceDirected2d"
         onCanvasClick={(canvas) => handleCanvasClick(canvas)}
         onNodeClick={(node) => handleNodeClick(node)}
       />
