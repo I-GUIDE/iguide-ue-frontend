@@ -9,6 +9,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
+import Typography from "@mui/joy/Typography";
 
 import ConnectedGraph from "../components/ConnectedGraph";
 import { NO_HEADER_BODY_HEIGHT, NAVBAR_HEIGHT } from "../configs/VarConfigs";
@@ -111,6 +112,28 @@ export default function NetworkVisualizer() {
               pb: 8,
             }}
           >
+            <Box
+              style={{
+                zIndex: 9,
+                position: "absolute",
+                top: NAVBAR_HEIGHT + 20,
+                left: 20,
+                background: "rgba(0, 0, 0, .5)",
+                color: "white",
+              }}
+            >
+              <Box
+                sx={{
+                  background: "#fff",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                <Typography level="body-xs">
+                  * Only the elements with connections are displayed.
+                </Typography>
+              </Box>
+            </Box>
             <ConnectedGraph
               nodes={nodes}
               edges={edges}
