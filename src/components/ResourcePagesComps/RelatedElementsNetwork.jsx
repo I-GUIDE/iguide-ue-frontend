@@ -105,7 +105,19 @@ export default function RelatedElementsNetwork(props) {
           position: "relative",
         }}
       >
-        <ConnectedGraph nodes={nodes} edges={edges} elementId={elementId} />
+        <ConnectedGraph
+          nodes={nodes}
+          edges={edges}
+          elementId={elementId}
+          elementBoxStyle={{
+            zIndex: 9,
+            position: "absolute",
+            top: 20,
+            right: 20,
+            background: "rgba(0, 0, 0, .5)",
+            color: "white",
+          }}
+        />
       </Box>
     </Stack>
   );

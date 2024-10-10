@@ -2,63 +2,92 @@ import React, { useState, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
+import { useTheme } from "@mui/joy/styles";
+
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
-import Typography from "@mui/joy/Typography";
-import Stack from "@mui/joy/Stack";
-import Link from "@mui/joy/Link";
-import Button from "@mui/joy/Button";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
-import IconButton from "@mui/joy/IconButton";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { getHomepageElements } from "../utils/DataRetrieval";
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
-import RelatedElementsNetwork from "../components/ResourcePagesComps/RelatedElementsNetwork";
+import ConnectedGraph from "../components/ConnectedGraph";
+import { NO_HEADER_BODY_HEIGHT, NAVBAR_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
-import ErrorPage from "../ErrorPage";
-import { Tooltip } from "@mui/joy";
+import { fetchConnectedGraph } from "../utils/DataRetrieval";
+import { stringTruncator } from "../helpers/helper";
 
 export default function NetworkVisualizer() {
   usePageTitle("Explore Knowledge Network");
 
-  const [thisElement, setThisElement] = useState();
-  const [error, setError] = useState(false);
-  const [seed, setSeed] = useState(1);
+  const [nodes, setNodes] = useState();
+  const [edges, setEdges] = useState();
+  const [noRelatedElements, setNoRelatedElements] = useState(false);
 
-  const elementTypes = ["dataset", "notebook"];
-  const elementType =
-    elementTypes[Math.floor(Math.random() * elementTypes.length)];
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const theme = useTheme();
+  const htmlColors = {
+    dataset: `${theme.palette.primary[300]}`,
+    notebook: `${theme.palette.success[300]}`,
+    publication: `${theme.palette.warning[300]}`,
+    oer: `${theme.palette.danger[300]}`,
+    map: `${theme.palette.neutral[300]}`,
+    any: `${theme.palette.neutral[300]}`,
+  };
 
   useEffect(() => {
-    async function retrievethisElements() {
+    async function retrieveNeighbors() {
       try {
-        const data = await getHomepageElements(elementType, 1);
-        setThisElement(data[0]);
+        const data = await fetchConnectedGraph();
+
+        let returnedNodes = data.nodes.map((node) => ({
+          id: node.id,
+          label: stringTruncator(node.title, 0, 25, "..."),
+          title: node.title,
+          thumbnail: node["thumbnail-image"],
+          type: node["resource-type"],
+          fill: htmlColors[node["resource-type"]],
+        }));
+
+        if (!returnedNodes || returnedNodes.length === 0) {
+          setNoRelatedElements(true);
+        } else {
+          setNoRelatedElements(false);
+        }
+
+        const returnedEdges = data.neighbors?.map((edge) => ({
+          id: edge.src + "-" + edge.dst,
+          source: edge.src,
+          target: edge.dst,
+          size: 2,
+        }));
+
+        setNodes(returnedNodes);
+        setEdges(returnedEdges);
       } catch (error) {
         setError(error);
+        setLoading(false);
       }
     }
-    retrievethisElements();
-  }, [seed]);
 
-  if (!thisElement) {
+    retrieveNeighbors();
+  }, []);
+
+  // If there are no nodes, return null
+  if (!nodes || !edges) {
     return null;
   }
 
-  if (error) {
-    return (
-      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
-    );
+  //  When there are no related elements, return null
+  if (noRelatedElements) {
+    return null;
   }
 
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Box
           component="main"
           sx={{
@@ -70,60 +99,31 @@ export default function NetworkVisualizer() {
         >
           <Grid
             container
-            rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            direction="column"
             sx={{
+              minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
               pt: 4,
               pb: 8,
             }}
           >
-            <Grid xs={12}>
-              <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-                <Typography
-                  level="h2"
-                  mb={1}
-                  endDecorator={
-                    <Tooltip title="Show another network graph" placement="top">
-                      <IconButton
-                        variant="outlined"
-                        size="md"
-                        onClick={() => setSeed(Math.random())}
-                      >
-                        <ShuffleIcon />
-                      </IconButton>
-                    </Tooltip>
-                  }
-                >
-                  Explore knowledge network
-                </Typography>
-                <Typography
-                  level="title-lg"
-                  mb={1}
-                  endDecorator={
-                    <Tooltip title="View this element" placement="top">
-                      <IconButton
-                        component={RouterLink}
-                        to={`/${elementType}s/${thisElement.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <OpenInNewIcon />
-                      </IconButton>
-                    </Tooltip>
-                  }
-                >
-                  {thisElement.title}
-                </Typography>
-              </Stack>
-              <RelatedElementsNetwork
-                key={seed}
-                elementId={thisElement.id}
-                tabTitle=" "
-                depth={3}
-              />
-            </Grid>
+            <ConnectedGraph
+              nodes={nodes}
+              edges={edges}
+              draggable
+              elementBoxStyle={{
+                zIndex: 9,
+                position: "absolute",
+                top: NAVBAR_HEIGHT + 20,
+                right: 20,
+                background: "rgba(0, 0, 0, .5)",
+                color: "white",
+              }}
+            />
           </Grid>
         </Box>
       </Container>

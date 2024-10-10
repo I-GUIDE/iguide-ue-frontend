@@ -13,6 +13,8 @@ export default function ConnectedGraph(props) {
   const nodes = props.nodes;
   const edges = props.edges;
   const elementId = props.elementId;
+  const elementBoxStyle = props.elementBoxStyle;
+  const draggable = props.draggable;
 
   const graphRef = useRef(null);
   const [selectedElement, setSelectedElement] = useState(null);
@@ -44,16 +46,7 @@ export default function ConnectedGraph(props) {
   return (
     <div>
       {selectedElement && selectedElement.id !== elementId && (
-        <Box
-          style={{
-            zIndex: 9,
-            position: "absolute",
-            top: 5,
-            right: 5,
-            background: "rgba(0, 0, 0, .5)",
-            color: "white",
-          }}
-        >
+        <Box style={elementBoxStyle}>
           <Box
             sx={{
               background: "#fff",
@@ -85,6 +78,7 @@ export default function ConnectedGraph(props) {
         labelType="nodes"
         selections={selections}
         actives={actives}
+        draggable={draggable}
         onCanvasClick={(canvas) => handleCanvasClick(canvas)}
         onNodeClick={(node) => handleNodeClick(node)}
       />
