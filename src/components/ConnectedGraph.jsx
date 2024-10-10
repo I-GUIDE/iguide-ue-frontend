@@ -4,6 +4,7 @@ import { GraphCanvas, useSelection } from "reagraph";
 
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
+import Tooltip from "@mui/joy/Tooltip";
 
 import SimpleInfoCard from "./SimpleInfoCard";
 
@@ -47,26 +48,28 @@ export default function ConnectedGraph(props) {
     <div>
       {selectedElement && selectedElement.id !== elementId && (
         <Box style={elementBoxStyle}>
-          <Box
-            sx={{
-              background: "#fff",
-              width: "100%",
-              minWidth: 250,
-              textAlign: "center",
-            }}
-          >
-            <Typography level="title-md">Selected element</Typography>
-            <SimpleInfoCard
-              cardtype={selectedElement.type + "s"}
-              pageId={selectedElement.id}
-              title={selectedElement.title}
-              thumbnailImage={selectedElement.thumbnail}
-              minHeight="100%"
-              width="100%"
-              openInNewTab
-              showElementType
-            />
-          </Box>
+          <Tooltip title="Open in new window">
+            <Box
+              sx={{
+                background: "#fff",
+                width: "100%",
+                minWidth: 250,
+                textAlign: "center",
+              }}
+            >
+              <Typography level="title-md">Selected element</Typography>
+              <SimpleInfoCard
+                cardtype={selectedElement.type + "s"}
+                pageId={selectedElement.id}
+                title={selectedElement.title}
+                thumbnailImage={selectedElement.thumbnail}
+                minHeight="100%"
+                width="100%"
+                openInNewTab
+                showElementType
+              />
+            </Box>
+          </Tooltip>
         </Box>
       )}
       <GraphCanvas
