@@ -3,8 +3,8 @@ import { React, useState, useRef } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
-  experimental_extendTheme as materialExtendTheme,
-  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  extendTheme as materialExtendTheme,
+  ThemeProvider as MaterialCssVarsProvider,
   THEME_ID as MATERIAL_THEME_ID,
 } from "@mui/material/styles";
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
