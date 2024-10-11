@@ -1,6 +1,10 @@
 import * as React from "react";
 
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  MiniMap,
+  TransformWrapper,
+  TransformComponent,
+} from "react-zoom-pan-pinch";
 
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
@@ -17,14 +21,14 @@ export default function StaticMap(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Map (Panable)
+        Pannable Map
       </Typography>
       <Typography color="neutral" level="body-xs" variant="plain">
         Click{" "}
         <Link href={mapImg} target="_blank" rel="noopener noreferrer">
           here
         </Link>{" "}
-        to view the static map in new window.
+        to view the map in new window.
       </Typography>
       <Box
         sx={{
@@ -36,9 +40,29 @@ export default function StaticMap(props) {
         }}
       >
         <TransformWrapper>
-          <TransformComponent>
-            <img width="100%" src={mapImg} loading="lazy" alt="static map" />
-          </TransformComponent>
+          <div>
+            <div
+              style={{
+                position: "absolute",
+                zIndex: 5,
+                bottom: "20px",
+                left: "20px",
+                border: "solid 3px black",
+              }}
+            >
+              <MiniMap width={300}>
+                <img
+                  width="100%"
+                  src={mapImg}
+                  loading="lazy"
+                  alt="static map"
+                />
+              </MiniMap>
+            </div>
+            <TransformComponent>
+              <img width="100%" src={mapImg} loading="lazy" alt="static map" />
+            </TransformComponent>
+          </div>
         </TransformWrapper>
       </Box>
     </Stack>
