@@ -434,7 +434,7 @@ export default function SubmissionCard(props) {
         const notebookUrlArrayWithMainBranch = value.split("/blob/main/");
         const notebookUrlArrayWithMasterBranch = value.split("/blob/master/");
 
-        if (!notebookUrlArray[1]) {
+        if (!notebookUrlArrayWithMainBranch[1]) {
           data["notebook-repo"] = notebookUrlArrayWithMasterBranch[0];
           data["notebook-file"] = decodeURIComponent(
             notebookUrlArrayWithMasterBranch[1]
