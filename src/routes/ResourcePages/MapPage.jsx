@@ -126,7 +126,9 @@ export default function MapPage() {
             {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-              <MapViewer iframeSrc={mapIFrameLink} />
+              {mapIFrameLink !== thumbnailImage && (
+                <MapViewer iframeSrc={mapIFrameLink} />
+              )}
               <StaticMap mapImg={thumbnailImage} />
             </Grid>
             <Grid xs={12}>
