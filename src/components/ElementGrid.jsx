@@ -98,6 +98,7 @@ export default function ElementGrid(props) {
       console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
     navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
     setCurrentPage(newPageNumber);
+    window.scrollTo(0, 0);
   }
 
   function handleSortingChange(event, newValue) {
