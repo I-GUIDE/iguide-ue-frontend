@@ -2,6 +2,8 @@ const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from "axios";
 import { fetchWithAuth } from "./FetcherWithJWT.jsx";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 /**
  * Retrieve elements for the homepage from the database.
  * @return {Promise<Array<Dict>>} an array of all elements for homepage.
@@ -22,7 +24,7 @@ export async function getHomepageElements(elementType, limit = 4) {
 /**
  * Searches for resources based on a keyword, with optional resource type, sorting, and pagination.
  * @async
- * @function searchResources
+ * @function DataSearcher
  * @param {string} keyword - The keyword to search for in resources.
  * @param {string} [elementType="any"] - The type of resources to filter by. Defaults to any, which means no filtering by type.
  * @param {string} [sortBy='_score'] - The field to sort the search results by. Defaults to 'prioritize_title_author'.
@@ -56,12 +58,62 @@ export async function DataSearcher(
     );
 
     if (!response.ok) {
-      throw new Error("Failed to retrieve elements");
+      throw new Error("Failed to search element");
     }
 
     return response.json();
   } catch (error) {
     console.error("Error fetching search results: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Get the return count of all available element types based on a search term
+ * @async
+ * @function DataSearcherCount
+ * @param {string} keyword - The keyword to search for in resources.
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search result count.
+ * @throws {Error} Throws an error if the search operation fails.
+ */
+export async function DataSearcherCount(keyword) {
+  if (!keyword || keyword === "") {
+    return {
+      elements: [],
+      total_count: 0,
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/search/count?keyword=${keyword}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve element search count");
+    }
+
+    const resJson = await response.json();
+
+    let countJson = [];
+    countJson.push(["any", resJson.total_count]);
+    const elementTypeCount = resJson.resource_type_counts;
+
+    for (let idx in elementTypeCount) {
+      countJson.push([
+        elementTypeCount[idx]["element-type"],
+        elementTypeCount[idx]["count"],
+      ]);
+    }
+
+    TEST_MODE && console.log("search count by element types", countJson);
+
+    return countJson;
+  } catch (error) {
+    console.error("Error fetching search result count: ", error.message);
     return "ERROR";
   }
 }
