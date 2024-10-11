@@ -70,7 +70,7 @@ export default function OERPage() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{

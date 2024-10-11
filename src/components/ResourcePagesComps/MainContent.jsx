@@ -225,7 +225,7 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
-        <Grid xs={12}>
+        <Grid xs={12} md={8}>
           {contributorName && (
             <Link
               component={RouterLink}
@@ -291,7 +291,7 @@ export default function MainContent(props) {
             </Link>
           )}
         </Grid>
-        <Grid xs={12}>
+        <Grid xs={12} md={4}>
           <AspectRatio
             variant="outlined"
             sx={{ py: 1, borderRadius: "lg", height: "100%" }}
