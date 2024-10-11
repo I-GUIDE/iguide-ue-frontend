@@ -434,7 +434,7 @@ export default function SubmissionCard(props) {
         // Array[1]: the notebook filename
         const notebookUrlArray = value.split("/blob/main/");
         data["notebook-repo"] = notebookUrlArray[0];
-        data["notebook-file"] = notebookUrlArray[1];
+        data["notebook-file"] = decodeURIComponent(notebookUrlArray[1]);
       } else {
         data[key] = value;
       }
