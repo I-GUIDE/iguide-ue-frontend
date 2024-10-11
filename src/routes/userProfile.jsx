@@ -219,6 +219,7 @@ export default function UserProfile() {
               {/* For testing purposes */}
               {USE_DEMO_USER ? (
                 <ElementGrid
+                  uriPrefix="/user-profile"
                   headline="Demo contributions"
                   elementType="dataset"
                   noElementMsg="You currently don't have any contributions..."
@@ -226,6 +227,7 @@ export default function UserProfile() {
                 />
               ) : (
                 <ElementGrid
+                  uriPrefix="/user-profile"
                   headline="Your contributions"
                   fieldName="contributor"
                   matchValue={encodeURIComponent(userId)}
