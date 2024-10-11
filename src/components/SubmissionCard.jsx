@@ -31,7 +31,6 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
 import MarkdownEditor from "./MarkdownEditor";
@@ -392,7 +391,7 @@ export default function SubmissionCard(props) {
 
     // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+/blob/.+/.+.ipynb"
+      "https://(www.)?github.com/.+/blob/(master|main)/.+.ipynb"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
@@ -432,9 +431,20 @@ export default function SubmissionCard(props) {
       } else if (key === "notebook-url") {
         // Array[0]: the notebook repo url
         // Array[1]: the notebook filename
-        const notebookUrlArray = value.split("/blob/main/");
-        data["notebook-repo"] = notebookUrlArray[0];
-        data["notebook-file"] = decodeURIComponent(notebookUrlArray[1]);
+        const notebookUrlArrayWithMainBranch = value.split("/blob/main/");
+        const notebookUrlArrayWithMasterBranch = value.split("/blob/master/");
+
+        if (!notebookUrlArray[1]) {
+          data["notebook-repo"] = notebookUrlArrayWithMasterBranch[0];
+          data["notebook-file"] = decodeURIComponent(
+            notebookUrlArrayWithMasterBranch[1]
+          );
+        } else {
+          data["notebook-repo"] = notebookUrlArrayWithMainBranch[0];
+          data["notebook-file"] = decodeURIComponent(
+            notebookUrlArrayWithMainBranch[1]
+          );
+        }
       } else {
         data[key] = value;
       }
@@ -913,7 +923,7 @@ export default function SubmissionCard(props) {
                 our notebook preview to function correctly, but when the notebook is 
                 opened on the I-GUIDE Platform the entire repo will be copied to the 
                 user's environment. An example link may look like "https://github.com/
-                <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                <username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                 `}
                     fieldRequired
                   >
@@ -923,7 +933,7 @@ export default function SubmissionCard(props) {
                 <Input
                   required
                   name="notebook-url"
-                  placeholder="https://github.com/<username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                  placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                   value={notebookGitHubUrl}
                   error={notebookGitHubUrlError}
                   onChange={handleNotebookGitHubUrlChange}
