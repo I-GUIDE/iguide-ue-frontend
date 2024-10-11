@@ -53,6 +53,7 @@ export default function ElementGridLayout(props) {
             }}
           >
             <ElementGrid
+              uriPrefix={"/" + elementType + "s"}
               elementType={elementType}
               fieldName={fieldName}
               matchValue={matchValue}

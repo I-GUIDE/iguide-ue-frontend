@@ -173,6 +173,7 @@ export default function SearchResults() {
       );
     setCurrentStartingIdx(newStartingIdx);
     setCurrentPage(value);
+    window.scrollTo(0, 0);
   }
 
   // When user select a different category in the search bar

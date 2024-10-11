@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import {
   extendTheme as materialExtendTheme,
   ThemeProvider as MaterialCssVarsProvider,
@@ -27,6 +29,16 @@ import { arrayLength } from "../helpers/helper";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ElementGrid(props) {
+  const navigate = useNavigate();
+  const [pageParam, setPageParam] = useSearchParams();
+  const itemsPerPage = 12;
+
+  const fromPageParam =
+    pageParam.get("page") >= 1 ? parseInt(pageParam.get("page")) : 1;
+
+  const initialStartingIdx = (fromPageParam - 1) * itemsPerPage;
+
+  const uriPrefix = props.uriPrefix;
   const headline = props.headline;
   const fieldName = props.fieldName;
   const matchValue = props.matchValue;
@@ -43,12 +55,11 @@ export default function ElementGrid(props) {
     sortBy: "creation_time",
     order: "desc",
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [currentStartingIdx, setCurrentStartingIdx] = useState(0);
+  const [currentPage, setCurrentPage] = useState(fromPageParam);
+  const [currentStartingIdx, setCurrentStartingIdx] =
+    useState(initialStartingIdx);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
-
-  const itemsPerPage = 12;
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -79,10 +90,15 @@ export default function ElementGrid(props) {
     retrieveData(currentStartingIdx);
   }, [currentStartingIdx, elementType, ranking, fieldName, matchValue]);
 
-  function handlePageClick(event, newValue) {
-    const newStartingIdx = (newValue - 1) * itemsPerPage;
+  function handlePageClick(event, newPageNumber) {
+    const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
-    setCurrentPage(newValue);
+    setPageParam({ page: newPageNumber });
+    TEST_MODE &&
+      console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
+    navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
+    setCurrentPage(newPageNumber);
+    window.scrollTo(0, 0);
   }
 
   function handleSortingChange(event, newValue) {

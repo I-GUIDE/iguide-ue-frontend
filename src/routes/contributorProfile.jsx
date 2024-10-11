@@ -92,6 +92,7 @@ export default function ContributorProfile() {
               }}
             >
               <ElementGrid
+                uriPrefix={"/contributor/" + userId}
                 fieldName="contributor"
                 matchValue={userId}
                 noElementMsg="This user doesn't have any contribution"
