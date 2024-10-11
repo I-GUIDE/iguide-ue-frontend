@@ -45,8 +45,9 @@ export default function StaticMap(props) {
               style={{
                 position: "absolute",
                 zIndex: 5,
-                top: "20px",
-                right: "20px",
+                bottom: "20px",
+                left: "20px",
+                border: "solid 3px black",
               }}
             >
               <MiniMap width={300}>
