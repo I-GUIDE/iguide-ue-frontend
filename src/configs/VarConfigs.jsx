@@ -23,6 +23,7 @@ export const RESOURCE_TYPE_NAMES = {
   oers: "Educational Resource",
   map: "Map",
   maps: "Map",
+  any: "All Types",
 };
 
 export const OER_EXTERNAL_LINK_TYPES = {

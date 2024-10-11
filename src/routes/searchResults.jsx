@@ -31,7 +31,7 @@ import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 
 import InfoCard from "../components/InfoCard";
-import { DataSearcher } from "../utils/DataRetrieval";
+import { DataSearcher, DataSearcherCount } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 import {
   SEARCH_RESULTS_HEADER_HEIGHT,
@@ -58,6 +58,7 @@ export default function SearchResults() {
   const [nextSearchTerm, setNextSearchTerm] = useState("");
   // the search will only return results from given category if it's not 'any'
   const [searchCategory, setSearchCategory] = useState("any");
+  const [searchCategoryCount, setSearchCategoryCount] = useState([]);
   // A list of elements returned for the current page
   const [searchResults, setSearchResults] = useState([]);
   // Has a valid searchParam
@@ -110,6 +111,9 @@ export default function SearchResults() {
           currentStartingIdx,
           itemsPerPage
         );
+
+        const returnResultsCount = await DataSearcherCount(searchTerm);
+        setSearchCategoryCount(returnResultsCount);
 
         const returnElements = returnResults.elements
           ? returnResults.elements
@@ -361,42 +365,15 @@ export default function SearchResults() {
                         "&::-webkit-scrollbar": { display: "none" },
                       }}
                     >
-                      <Tab
-                        value="any"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        All
-                      </Tab>
-                      <Tab
-                        value="map"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Maps
-                      </Tab>
-                      <Tab
-                        value="dataset"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Datasets
-                      </Tab>
-                      <Tab
-                        value="notebook"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Notebooks
-                      </Tab>
-                      <Tab
-                        value="publication"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Publications
-                      </Tab>
-                      <Tab
-                        value="oer"
-                        sx={{ flex: "none", scrollSnapAlign: "start" }}
-                      >
-                        Educational Resources
-                      </Tab>
+                      {searchCategoryCount?.map((item) => (
+                        <Tab
+                          key={item[0]}
+                          value={item[0]}
+                          sx={{ flex: "none", scrollSnapAlign: "start" }}
+                        >
+                          {`${RESOURCE_TYPE_NAMES[item[0]]} (${item[1]})`}
+                        </Tab>
+                      ))}
                     </TabList>
                   </Tabs>
                 )}
