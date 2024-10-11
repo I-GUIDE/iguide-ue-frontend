@@ -21,7 +21,7 @@ export default function StaticMap(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Map (Panable)
+        Map (Pannable)
       </Typography>
       <Typography color="neutral" level="body-xs" variant="plain">
         Click{" "}
