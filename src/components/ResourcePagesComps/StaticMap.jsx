@@ -21,14 +21,14 @@ export default function StaticMap(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Map (Pannable)
+        Pannable Map
       </Typography>
       <Typography color="neutral" level="body-xs" variant="plain">
         Click{" "}
         <Link href={mapImg} target="_blank" rel="noopener noreferrer">
           here
         </Link>{" "}
-        to view the static map in new window.
+        to view the map in new window.
       </Typography>
       <Box
         sx={{
