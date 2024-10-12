@@ -7,7 +7,7 @@ import Home from "./routes/home";
 import SearchHome from "./routes/SearchHome";
 const SearchResults = lazy(() => import("./routes/searchResults"));
 
-const Datasets = lazy(() => import("./routes/dataset"));
+const Datasets = lazy(() => import("./routes/datasets"));
 const Notebooks = lazy(() => import("./routes/notebooks"));
 const Publications = lazy(() => import("/routes/publications"));
 const OERS = lazy(() => import("./routes/oers"));
