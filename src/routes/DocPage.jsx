@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useParams } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -104,7 +104,9 @@ export default function DocPage() {
               <Divider sx={{ mx: 2, my: 4 }} />
               <Stack spacing={1} sx={{ p: 2 }}>
                 <div className="container" data-color-mode="light">
-                  <MDEditor.Markdown source={content} />
+                  <Suspense fallback={<p>Loading content...</p>}>
+                    <MarkdownPreview source={content} />
+                  </Suspense>
                 </div>
               </Stack>
             </Grid>

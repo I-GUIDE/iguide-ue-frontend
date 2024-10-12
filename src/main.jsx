@@ -4,40 +4,40 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Home from "./routes/home";
-const SearchHome = lazy(() => import("./routes/SearchHome"));
-const SearchResults = lazy(() => import("./routes/searchResults"));
 
-const Datasets = lazy(() => import("./routes/datasets"));
-const Notebooks = lazy(() => import("./routes/notebooks"));
-const Publications = lazy(() => import("./routes/publications"));
-const OERS = lazy(() => import("./routes/oers"));
-const Maps = lazy(() => import("./routes/maps"));
-const NotebookPage = lazy(() => import("./routes/ResourcePages/NotebookPage"));
-const DatasetPage = lazy(() => import("./routes/ResourcePages/DatasetPage"));
-const PublicationPage = lazy(() =>
-  import("./routes/ResourcePages/PublicationPage")
-);
-const OERPage = lazy(() => import("./routes/ResourcePages/OERPage"));
-const MapPage = lazy(() => import("./routes/ResourcePages/MapPage"));
-const Tag = lazy(() => import("./routes/tag"));
+import SearchHome from "./routes/SearchHome";
+import SearchResults from "./routes/searchResults";
 
-const UserProfile = lazy(() => import("./routes/userProfile"));
-const UserProfileUpdate = lazy(() => import("./routes/userProfileUpdate"));
+import Datasets from "./routes/datasets";
+import Notebooks from "./routes/notebooks";
+import Publications from "./routes/publications";
+import OERs from "./routes/oers";
+import Maps from "./routes/maps";
+import Tag from "./routes/tag";
+
+import DatasetPage from "./routes/ResourcePages/DatasetPage";
+import NotebookPage from "./routes/ResourcePages/NotebookPage";
+import PublicationPage from "./routes/ResourcePages/PublicationPage";
+import OERPage from "./routes/ResourcePages/OERPage";
+import MapPage from "./routes/ResourcePages/MapPage";
+
+import UserProfile from "./routes/userProfile";
+import UserProfileUpdate from "./routes/userProfileUpdate";
 const ResourceSubmission = lazy(() => import("./routes/resourceSubmission"));
 const ResourceUpdate = lazy(() => import("./routes/resourceUpdate"));
-const TermsOfUse = lazy(() => import("./routes/Legal/TermsOfUse"));
-const LicenseAgreement = lazy(() => import("./routes/Legal/LicenseAgreement"));
-const About = lazy(() => import("./routes/About"));
-const Tutorials = lazy(() => import("./routes/Tutorials"));
+import About from "./routes/About";
+import Tutorials from "./routes/Tutorials";
+import TermsOfUse from "./routes/Legal/TermsOfUse";
+import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 
-const NetworkVisualizer = lazy(() => import("./routes/NetworkVisualizer"));
+import NetworkVisualizer from "./routes/NetworkVisualizer";
 const DocSubmission = lazy(() => import("./routes/DocSubmission"));
 const DocUpdate = lazy(() => import("./routes/DocUpdate"));
-const DocPage = lazy(() => import("./routes/DocPage"));
+import DocPage from "./routes/DocPage";
 
 import ErrorPage from "./ErrorPage";
-const ContributorProfile = lazy(() => import("./routes/contributorProfile"));
-const ContactUs = lazy(() => import("./routes/ContactUs"));
+import ContributorProfile from "./routes/contributorProfile";
+import ContactUs from "./routes/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -83,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/oers",
-        element: <OERS />,
+        element: <OERs />,
       },
       {
         path: "/oers/:id",
