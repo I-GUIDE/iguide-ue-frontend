@@ -1,7 +1,6 @@
 import React from "react";
 
 import Box from "@mui/joy/Box";
-import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";

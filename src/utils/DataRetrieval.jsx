@@ -1,6 +1,5 @@
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from "axios";
-import { fetchWithAuth } from "./FetcherWithJWT.jsx";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 

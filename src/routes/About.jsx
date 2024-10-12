@@ -11,8 +11,6 @@ import Container from "@mui/joy/Container";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
-import List from "@mui/joy/List";
-import ListItem from "@mui/joy/ListItem";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
