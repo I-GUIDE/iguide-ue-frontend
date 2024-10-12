@@ -9,7 +9,7 @@ const SearchResults = lazy(() => import("./routes/searchResults"));
 
 const Datasets = lazy(() => import("./routes/datasets"));
 const Notebooks = lazy(() => import("./routes/notebooks"));
-const Publications = lazy(() => import("/routes/publications"));
+const Publications = lazy(() => import("./routes/publications"));
 const OERS = lazy(() => import("./routes/oers"));
 const Maps = lazy(() => import("./routes/maps"));
 const NotebookPage = lazy(() => import("./routes/ResourcePages/NotebookPage"));
