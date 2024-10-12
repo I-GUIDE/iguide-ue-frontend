@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -19,10 +19,10 @@ import OERPage from "./routes/ResourcePages/OERPage";
 import MapPage from "./routes/ResourcePages/MapPage";
 import Tag from "./routes/tag";
 
-import UserProfile from "./routes/userProfile";
-import UserProfileUpdate from "./routes/userProfileUpdate";
-import ResourceSubmission from "./routes/resourceSubmission";
-import ResourceUpdate from "./routes/resourceUpdate";
+const UserProfile = lazy(() => import("./routes/userProfile"));
+const UserProfileUpdate = lazy(() => import("./routes/userProfileUpdate"));
+const ResourceSubmission = lazy(() => import("./routes/resourceSubmission"));
+const ResourceUpdate = lazy(() => import("./routes/resourceUpdate"));
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 import About from "./routes/About";
@@ -161,6 +161,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
   </React.StrictMode>
 );
