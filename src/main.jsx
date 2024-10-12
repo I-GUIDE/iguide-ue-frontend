@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Home from "./routes/home";
-import SearchHome from "./routes/SearchHome";
+const SearchHome = lazy(() => import("./routes/SearchHome"));
 const SearchResults = lazy(() => import("./routes/searchResults"));
 
 const Datasets = lazy(() => import("./routes/datasets"));

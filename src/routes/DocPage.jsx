@@ -9,7 +9,8 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
-import { Typography, Divider } from "@mui/joy";
+import Typography from "@mui/joy/Typography";
+import Divider from "@mui/joy/Divider";
 
 import { fetchADocumentation } from "../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
