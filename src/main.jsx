@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root";
 import Home from "./routes/home";
 import SearchHome from "./routes/SearchHome";
-import SearchResults from "./routes/searchResults";
+const SearchResults = lazy(() => import("./routes/searchResults"));
 
 import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
@@ -17,25 +17,25 @@ import DatasetPage from "./routes/ResourcePages/DatasetPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from "./routes/ResourcePages/OERPage";
 import MapPage from "./routes/ResourcePages/MapPage";
-import Tag from "./routes/tag";
+const Tag = lazy(() => import("./routes/tag"));
 
 const UserProfile = lazy(() => import("./routes/userProfile"));
 const UserProfileUpdate = lazy(() => import("./routes/userProfileUpdate"));
 const ResourceSubmission = lazy(() => import("./routes/resourceSubmission"));
 const ResourceUpdate = lazy(() => import("./routes/resourceUpdate"));
-import TermsOfUse from "./routes/Legal/TermsOfUse";
-import LicenseAgreement from "./routes/Legal/LicenseAgreement";
-import About from "./routes/About";
-import Tutorials from "./routes/Tutorials";
-import NetworkVisualizer from "./routes/NetworkVisualizer";
+const TermsOfUse = lazy(() => import("./routes/Legal/TermsOfUse"));
+const LicenseAgreement = lazy(() => import("./routes/Legal/LicenseAgreement"));
+const About = lazy(() => import("./routes/About"));
+const Tutorials = lazy(() => import("./routes/Tutorials"));
 
-import DocSubmission from "./routes/DocSubmission";
-import DocUpdate from "./routes/DocUpdate";
-import DocPage from "./routes/DocPage";
+const NetworkVisualizer = lazy(() => import("./routes/NetworkVisualizer"));
+const DocSubmission = lazy(() => import("./routes/DocSubmission"));
+const DocUpdate = lazy(() => import("./routes/DocUpdate"));
+const DocPage = lazy(() => import("./routes/DocPage"));
 
 import ErrorPage from "./ErrorPage";
-import ContributorProfile from "./routes/contributorProfile";
-import ContactUs from "./routes/ContactUs";
+const ContributorProfile = lazy(() => import("./routes/contributorProfile"));
+const ContactUs = lazy(() => import("./routes/ContactUs"));
 
 const router = createBrowserRouter([
   {
