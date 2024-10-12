@@ -1,36 +1,38 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Root from "./routes/root";
 import Home from "./routes/home";
+
 import SearchHome from "./routes/SearchHome";
 import SearchResults from "./routes/searchResults";
 
 import Datasets from "./routes/datasets";
 import Notebooks from "./routes/notebooks";
 import Publications from "./routes/publications";
-import OERS from "./routes/oers";
+import OERs from "./routes/oers";
 import Maps from "./routes/maps";
-import NotebookPage from "./routes/ResourcePages/NotebookPage";
+import Tag from "./routes/tag";
+
 import DatasetPage from "./routes/ResourcePages/DatasetPage";
+import NotebookPage from "./routes/ResourcePages/NotebookPage";
 import PublicationPage from "./routes/ResourcePages/PublicationPage";
 import OERPage from "./routes/ResourcePages/OERPage";
 import MapPage from "./routes/ResourcePages/MapPage";
-import Tag from "./routes/tag";
 
 import UserProfile from "./routes/userProfile";
 import UserProfileUpdate from "./routes/userProfileUpdate";
-import ResourceSubmission from "./routes/resourceSubmission";
-import ResourceUpdate from "./routes/resourceUpdate";
-import TermsOfUse from "./routes/Legal/TermsOfUse";
-import LicenseAgreement from "./routes/Legal/LicenseAgreement";
+const ResourceSubmission = lazy(() => import("./routes/resourceSubmission"));
+const ResourceUpdate = lazy(() => import("./routes/resourceUpdate"));
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
-import NetworkVisualizer from "./routes/NetworkVisualizer";
+import TermsOfUse from "./routes/Legal/TermsOfUse";
+import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 
-import DocSubmission from "./routes/DocSubmission";
-import DocUpdate from "./routes/DocUpdate";
+import NetworkVisualizer from "./routes/NetworkVisualizer";
+const DocSubmission = lazy(() => import("./routes/DocSubmission"));
+const DocUpdate = lazy(() => import("./routes/DocUpdate"));
 import DocPage from "./routes/DocPage";
 
 import ErrorPage from "./ErrorPage";
@@ -81,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/oers",
-        element: <OERS />,
+        element: <OERs />,
       },
       {
         path: "/oers/:id",
@@ -161,6 +163,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
   </React.StrictMode>
 );

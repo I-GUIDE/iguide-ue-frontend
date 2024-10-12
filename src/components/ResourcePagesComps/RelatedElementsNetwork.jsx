@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useTheme } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-import ConnectedGraph from "../ConnectedGraph";
+const ConnectedGraph = lazy(() => import("../ConnectedGraph"));
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { stringTruncator } from "../../helpers/helper";
@@ -91,34 +91,36 @@ export default function RelatedElementsNetwork(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Typography level="h5" fontWeight="lg" mb={1}>
-        {tabTitle}
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          border: "solid 1px #e1e1e1",
-          height: 700,
-          width: "100%",
-          position: "relative",
-        }}
-      >
-        <ConnectedGraph
-          nodes={nodes}
-          edges={edges}
-          elementId={elementId}
-          elementBoxStyle={{
-            zIndex: 9,
-            position: "absolute",
-            top: 20,
-            right: 20,
-            background: "rgba(0, 0, 0, .5)",
-            color: "white",
+    <Suspense fallback={<div>Loading related element graph...</div>}>
+      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+        <Typography level="h5" fontWeight="lg" mb={1}>
+          {tabTitle}
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            border: "solid 1px #e1e1e1",
+            height: 700,
+            width: "100%",
+            position: "relative",
           }}
-        />
-      </Box>
-    </Stack>
+        >
+          <ConnectedGraph
+            nodes={nodes}
+            edges={edges}
+            elementId={elementId}
+            elementBoxStyle={{
+              zIndex: 9,
+              position: "absolute",
+              top: 20,
+              right: 20,
+              background: "rgba(0, 0, 0, .5)",
+              color: "white",
+            }}
+          />
+        </Box>
+      </Stack>
+    </Suspense>
   );
 }

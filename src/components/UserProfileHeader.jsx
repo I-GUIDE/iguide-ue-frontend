@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
@@ -57,10 +57,9 @@ export default function UserProfileHeader(props) {
         >
           <CardCover>
             <img
-              src="/images/green-blue.png"
-              srcSet="/images/green-blue.png 2x"
+              src="/images/network-bg.png"
               loading="lazy"
-              alt=""
+              alt="Network with nodes and connections"
             />
           </CardCover>
           <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>

@@ -1,7 +1,7 @@
-import * as React from "react";
+import React, { lazy, Suspense } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
@@ -206,7 +206,9 @@ export default function MainContent(props) {
         {useMarkdown ? (
           <Box sx={{ py: 2 }}>
             <div className="container" data-color-mode="light">
-              <MDEditor.Markdown source={contents} />
+              <Suspense fallback={<p>Loading content...</p>}>
+                <MarkdownPreview source={contents} />
+              </Suspense>
             </div>
           </Box>
         ) : (
@@ -316,7 +318,9 @@ export default function MainContent(props) {
       {useMarkdown ? (
         <Box sx={{ py: 2 }}>
           <div className="container" data-color-mode="light">
-            <MDEditor.Markdown source={contents} />
+            <Suspense fallback={<p>Loading content...</p>}>
+              <MarkdownPreview source={contents} />
+            </Suspense>
           </div>
         </Box>
       ) : (

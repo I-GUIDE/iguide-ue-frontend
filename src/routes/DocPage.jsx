@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useParams } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -9,7 +9,8 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
-import { Typography, Divider } from "@mui/joy";
+import Typography from "@mui/joy/Typography";
+import Divider from "@mui/joy/Divider";
 
 import { fetchADocumentation } from "../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
@@ -103,7 +104,9 @@ export default function DocPage() {
               <Divider sx={{ mx: 2, my: 4 }} />
               <Stack spacing={1} sx={{ p: 2 }}>
                 <div className="container" data-color-mode="light">
-                  <MDEditor.Markdown source={content} />
+                  <Suspense fallback={<p>Loading content...</p>}>
+                    <MarkdownPreview source={content} />
+                  </Suspense>
                 </div>
               </Stack>
             </Grid>

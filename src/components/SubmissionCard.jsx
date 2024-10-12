@@ -15,7 +15,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/joy/styles";
 import Link from "@mui/joy/Link";
 import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";

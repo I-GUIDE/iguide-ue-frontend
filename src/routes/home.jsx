@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -65,7 +65,6 @@ export default function Home() {
             <CardCover>
               <img
                 src="/images/network-bg.png"
-                loading="lazy"
                 alt="Network with nodes and connections"
               />
             </CardCover>
@@ -112,14 +111,9 @@ export default function Home() {
                         alignItems: "center",
                       }}
                     >
-                      <img
-                        src="/images/iguide-word-color.png"
-                        loading="lazy"
-                        alt="I-GUIDE"
-                      />
+                      <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
                         src="/images/platform-word-gray.png"
-                        loading="lazy"
                         alt="Platform"
                       />
                     </Stack>

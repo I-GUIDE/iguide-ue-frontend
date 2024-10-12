@@ -829,6 +829,15 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.20.0.tgz#03554155b45d8b529adf635b2f6ad1165d70d8b4"
   integrity sha512-mUnk8rPJBI9loFDZ+YzPGdeniYK+FTmRD1TMCz7ev2SNIozyKKpnGgsxO34u6Z4z/t0ITuu7voi/AshfsGsgFg==
 
+"@rollup/pluginutils@^5.1.0":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.1.2.tgz#d3bc9f0fea4fd4086aaac6aa102f3fa587ce8bd9"
+  integrity sha512-/FIdS3PyZ39bjZlwqFnWqCOVnW7o963LtKMwQOD0NhQqw22gSr2YY1afu3FxRip4ZCZNsD5jq6Aaz6QV3D/Njw==
+  dependencies:
+    "@types/estree" "^1.0.0"
+    estree-walker "^2.0.2"
+    picomatch "^2.3.1"
+
 "@rollup/rollup-android-arm-eabi@4.24.0":
   version "4.24.0"
   resolved "https://registry.yarnpkg.com/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.24.0.tgz#1661ff5ea9beb362795304cb916049aba7ac9c54"
@@ -1112,7 +1121,7 @@
   resolved "https://registry.yarnpkg.com/@uiw/copy-to-clipboard/-/copy-to-clipboard-1.0.17.tgz#86f501ddc8a6db0b45e6899bcd9d48e0b78f233e"
   integrity sha512-O2GUHV90Iw2VrSLVLK0OmNIMdZ5fgEg4NhvtwINsX+eZ/Wf6DWD0TdsK9xwV7dNRnK/UI2mQtl0a2/kRgm1m1A==
 
-"@uiw/react-markdown-preview@^5.0.6":
+"@uiw/react-markdown-preview@^5.0.6", "@uiw/react-markdown-preview@^5.1.3":
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/@uiw/react-markdown-preview/-/react-markdown-preview-5.1.3.tgz#edbffb9e3dde910e6bc862e8d17019c838b265f0"
   integrity sha512-jV02wO4XHWFk54kz7sLqOkdPgJLttSfKLyen47XgjcyGgQXU2I4WJBygmdpV2AT9m/MiQ8qrN1Y+E5Syv9ZDpw==
@@ -2145,6 +2154,11 @@ estree-util-is-identifier-name@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-3.0.0.tgz#0b5ef4c4ff13508b34dcd01ecfa945f61fce5dbd"
   integrity sha512-hFtqIDZTIUZ9BXLb8y4pYGyk6+wekIivNVTcmvk8NoOh+VeRn5y6cEHzbURrWbfp1fIqdVipilzj+lfaadNZmg==
+
+estree-walker@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
+  integrity sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
 
 esutils@^2.0.2:
   version "2.0.3"
@@ -3818,6 +3832,11 @@ picocolors@^1.0.0, picocolors@^1.1.0:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.1.0.tgz#5358b76a78cde483ba5cef6a9dc9671440b27d59"
   integrity sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==
 
+picomatch@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
+  integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
+
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.0.0.tgz#89bb63c6fada2c3e90adc4a647beeeb39cc7bf8f"
@@ -4576,6 +4595,11 @@ suspend-react@^0.1.3:
   resolved "https://registry.yarnpkg.com/suspend-react/-/suspend-react-0.1.3.tgz#a52f49d21cfae9a2fb70bd0c68413d3f9d90768e"
   integrity sha512-aqldKgX9aZqpoDp3e8/BZ8Dm7x1pJl+qI3ZKxDN0i/IQTWUwBx/ManmlVJ3wowqbno6c2bmiIfs+Um6LbsjJyQ==
 
+tar-mini@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/tar-mini/-/tar-mini-0.2.0.tgz#2b2cdc215f5b83b0ab8ce363dc9ded22de51849b"
+  integrity sha512-+qfUHz700DWnRutdUsxRRVZ38G1Qr27OetwaMYTdg8hcPxf46U0S1Zf76dQMWRBmusOt2ZCK5kbIaiLkoGO7WQ==
+
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
@@ -4852,6 +4876,14 @@ vfile@^6.0.0:
   dependencies:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
+
+vite-plugin-compression2@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-compression2/-/vite-plugin-compression2-1.3.0.tgz#2d7a5afc4182d16498554a9cec9b366431eb3964"
+  integrity sha512-/cYzISoYOo/SwPUBReS1E02a8eNTpQm8+lQUBj5NNGxuq4iZ3JOfWExUlobhVhPMJuejD7dipT+cMLbaWsMbdw==
+  dependencies:
+    "@rollup/pluginutils" "^5.1.0"
+    tar-mini "^0.2.0"
 
 vite@^5.4.8:
   version "5.4.8"

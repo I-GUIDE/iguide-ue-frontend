@@ -21,7 +21,7 @@ import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/joy/styles";
 
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
