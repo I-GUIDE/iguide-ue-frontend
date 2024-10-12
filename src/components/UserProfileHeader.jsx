@@ -57,10 +57,9 @@ export default function UserProfileHeader(props) {
         >
           <CardCover>
             <img
-              src="/images/green-blue.png"
-              srcSet="/images/green-blue.png 2x"
+              src="/images/network-bg.png"
               loading="lazy"
-              alt=""
+              alt="Network with nodes and connections"
             />
           </CardCover>
           <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
