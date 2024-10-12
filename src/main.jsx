@@ -7,16 +7,18 @@ import Home from "./routes/home";
 import SearchHome from "./routes/SearchHome";
 const SearchResults = lazy(() => import("./routes/searchResults"));
 
-import Datasets from "./routes/datasets";
-import Notebooks from "./routes/notebooks";
-import Publications from "./routes/publications";
-import OERS from "./routes/oers";
-import Maps from "./routes/maps";
-import NotebookPage from "./routes/ResourcePages/NotebookPage";
-import DatasetPage from "./routes/ResourcePages/DatasetPage";
-import PublicationPage from "./routes/ResourcePages/PublicationPage";
-import OERPage from "./routes/ResourcePages/OERPage";
-import MapPage from "./routes/ResourcePages/MapPage";
+const Datasets = lazy(() => import("./routes/dataset"));
+const Notebooks = lazy(() => import("./routes/notebooks"));
+const Publications = lazy(() => import("/routes/publications"));
+const OERS = lazy(() => import("./routes/oers"));
+const Maps = lazy(() => import("./routes/maps"));
+const NotebookPage = lazy(() => import("./routes/ResourcePages/NotebookPage"));
+const DatasetPage = lazy(() => import("./routes/ResourcePages/DatasetPage"));
+const PublicationPage = lazy(() =>
+  import("./routes/ResourcePages/PublicationPage")
+);
+const OERPage = lazy(() => import("./routes/ResourcePages/OERPage"));
+const MapPage = lazy(() => import("./routes/ResourcePages/MapPage"));
 const Tag = lazy(() => import("./routes/tag"));
 
 const UserProfile = lazy(() => import("./routes/userProfile"));
