@@ -70,6 +70,7 @@ export default function SearchBar(props) {
           error={data.status === "failure"}
           endDecorator={
             <IconButton
+              aria-label="Search"
               size="lg"
               variant="plain"
               loading={data.status === "loading"}

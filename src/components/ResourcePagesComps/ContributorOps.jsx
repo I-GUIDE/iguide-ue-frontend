@@ -80,6 +80,7 @@ export default function ContributorOps(props) {
     <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
       <IconButton size="sm" variant="soft" color="primary">
         <Link
+          aria-label="Edit this element"
           underline="none"
           component={RouterLink}
           to={"/element-update/" + elementId}
@@ -91,6 +92,7 @@ export default function ContributorOps(props) {
         </Link>
       </IconButton>
       <IconButton
+        aria-label="Delete this element"
         color="danger"
         variant="soft"
         size="sm"

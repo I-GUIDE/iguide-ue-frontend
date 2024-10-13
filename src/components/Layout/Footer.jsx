@@ -129,7 +129,10 @@ export default function Footer() {
                         placement="top"
                         arrow
                       >
-                        <EmailIcon sx={{ color: grey[700] }} />
+                        <EmailIcon
+                          aria-label="I-GUIDE support email"
+                          sx={{ color: grey[700] }}
+                        />
                       </Tooltip>
                     </Link>
                   </Box>
@@ -145,7 +148,10 @@ export default function Footer() {
                         placement="top"
                         arrow
                       >
-                        <YouTubeIcon sx={{ color: grey[700] }} />
+                        <YouTubeIcon
+                          aria-label="I-GUIDE YouTube"
+                          sx={{ color: grey[700] }}
+                        />
                       </Tooltip>
                     </Link>
                   </Box>
@@ -157,7 +163,10 @@ export default function Footer() {
                       style={{ textDecoration: "none" }}
                     >
                       <Tooltip title="I-GUIDE X account" placement="top" arrow>
-                        <XIcon sx={{ color: grey[700] }} />
+                        <XIcon
+                          aria-label="I-GUIDE X"
+                          sx={{ color: grey[700] }}
+                        />
                       </Tooltip>
                     </Link>
                   </Box>
@@ -173,7 +182,10 @@ export default function Footer() {
                         placement="top"
                         arrow
                       >
-                        <LinkedInIcon sx={{ color: grey[700] }} />
+                        <LinkedInIcon
+                          aria-label="I-GUIDE LinkedIn"
+                          sx={{ color: grey[700] }}
+                        />
                       </Tooltip>
                     </Link>
                   </Box>

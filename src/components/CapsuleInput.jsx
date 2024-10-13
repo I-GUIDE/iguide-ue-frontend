@@ -71,6 +71,7 @@ export default function CapsuleInput(props) {
         </Grid>
         <Grid xs="auto">
           <IconButton
+            aria-label="Save input"
             size="sm"
             variant="solid"
             onClick={handleAddingOneItem}

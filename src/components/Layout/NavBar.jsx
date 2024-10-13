@@ -424,6 +424,7 @@ export default function NavBar(props) {
                   size="lg"
                   ref={buttonRef}
                   id="composition-button"
+                  aria-label="View menu"
                   aria-controls={"composition-menu"}
                   aria-haspopup="true"
                   aria-expanded={drawerOpen ? "true" : undefined}

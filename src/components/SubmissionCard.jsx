@@ -1031,6 +1031,7 @@ export default function SubmissionCard(props) {
                       </td>
                       <td align="left">
                         <IconButton
+                          aria-label="Search website title"
                           size="sm"
                           variant="outlined"
                           onClick={handleOerExternalLinkSearchTitle}
@@ -1049,6 +1050,7 @@ export default function SubmissionCard(props) {
                       </td>
                       <td align="left">
                         <IconButton
+                          aria-label="Save this external link"
                           size="sm"
                           variant="soft"
                           onClick={handleAddingOneOerExternalLink}
