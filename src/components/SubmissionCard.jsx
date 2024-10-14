@@ -71,10 +71,6 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
-  useEffect(() => {
-    checkTokens();
-  }, []);
-
   const { localUserInfo } = useOutletContext();
 
   const submissionType = props.submissionType;
@@ -142,6 +138,10 @@ export default function SubmissionCard(props) {
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    checkTokens();
+  }, []);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
@@ -1041,7 +1041,7 @@ export default function SubmissionCard(props) {
                           aria-label="Search website title"
                           size="sm"
                           variant="outlined"
-                          onClick={handleOerExternalLinkSearchTitle}
+                          onClick={() => handleOerExternalLinkSearchTitle()}
                           style={{ marginTop: "4px", cursor: "pointer" }}
                         >
                           <ArrowForwardIcon />
