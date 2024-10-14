@@ -216,7 +216,9 @@ export default function SubmissionCard(props) {
     const getAllTitlesByElementType = async (resourceType) => {
       if (resourceType && resourceType !== "") {
         const returnedTitles = await fetchAllTitlesByElementType(resourceType);
-        setReturnedRelatedResourceTitle(returnedTitles);
+        // Check duplicate titles, otherwise AutoComplete might fail...
+        const returnedTitlesUnique = [...new Set(returnedTitles)];
+        setReturnedRelatedResourceTitle(returnedTitlesUnique);
       } else {
         setReturnedRelatedResourceTitle([]);
       }
