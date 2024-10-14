@@ -602,9 +602,13 @@ export default function SubmissionCard(props) {
     return null;
   }
 
+  if (!contributor) {
+    return null;
+  }
+
   // Check if the current user is admin, if yes, allow edit
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
-  const isContributor = contributor && localUserInfo.id === contributor.id;
+  const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
