@@ -609,7 +609,6 @@ export default function SubmissionCard(props) {
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
     if (!isContributor && !canEditAllElements) {
-      setOpenModal(false);
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
