@@ -107,7 +107,7 @@ export default function NotebookViewer(props) {
             <ExitToAppIcon />
           </Link>
         </Button>
-        &nbsp;(Login Required)
+        &nbsp;(Separate Login)
         {isUsingNbconvert && (
           <Typography color="neutral" level="body-sm" variant="plain">
             Disclaimer: This read-only notebook below was automatically
