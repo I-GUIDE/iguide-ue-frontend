@@ -23,8 +23,8 @@ import MapPage from "./routes/ResourcePages/MapPage";
 
 import UserProfile from "./routes/userProfile";
 import UserProfileUpdate from "./routes/userProfileUpdate";
-const ResourceSubmission = lazy(() => import("./routes/resourceSubmission"));
-const ResourceUpdate = lazy(() => import("./routes/resourceUpdate"));
+import ResourceSubmission from "./routes/resourceSubmission";
+import ResourceUpdate from "./routes/resourceUpdate";
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
 import TermsOfUse from "./routes/Legal/TermsOfUse";

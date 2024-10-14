@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
@@ -33,7 +33,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
-import MarkdownEditor from "./MarkdownEditor";
+const MarkdownEditor = lazy(() => import("./MarkdownEditor"));
 import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
 import CapsuleInput from "./CapsuleInput";
 
@@ -784,7 +784,12 @@ export default function SubmissionCard(props) {
                     Content
                   </SubmissionCardFieldTitle>
                 </FormLabel>
-                <MarkdownEditor contents={contents} setContents={setContents} />
+                <Suspense fallback={<div>Loading markdown editor...</div>}>
+                  <MarkdownEditor
+                    contents={contents}
+                    setContents={setContents}
+                  />
+                </Suspense>
               </FormControl>
             ) : (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
