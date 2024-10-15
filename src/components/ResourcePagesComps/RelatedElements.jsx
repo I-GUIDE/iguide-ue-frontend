@@ -15,7 +15,7 @@ export default function RelatedElements(props) {
 
   if (
     !Array.isArray(relatedElements) ||
-    (Array.isArray(relatedElements) && relatedElements.length == 0)
+    (Array.isArray(relatedElements) && relatedElements.length === 0)
   ) {
     return null;
   }

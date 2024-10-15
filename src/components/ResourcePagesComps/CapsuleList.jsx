@@ -14,13 +14,13 @@ export default function CapsuleList(props) {
   const items = props.items;
 
   // If items object doesn't exist, or it only has one empty item, return null
-  if (!items || (items.length == 1 && items[0] == "")) {
+  if (!items || (items.length === 1 && items[0] === "")) {
     return null;
   }
 
   // Filter out empty strings
   const filteredItems = items.filter(function (elem) {
-    return elem != null && elem !== "";
+    return elem !== null && elem !== "";
   });
 
   return (

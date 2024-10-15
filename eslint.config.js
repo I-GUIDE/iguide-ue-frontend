@@ -15,6 +15,7 @@ export default [
       "no-duplicate-imports": "error",
       "no-unneeded-ternary": "error",
       "prefer-object-spread": "error",
+      "eqeqeq": "error",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
     },

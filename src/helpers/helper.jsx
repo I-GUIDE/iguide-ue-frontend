@@ -11,7 +11,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
  */
 export function extractValueFromJSON(fieldIn, valueIn, fieldOut, jsonData) {
   TEST_MODE && console.log(jsonData);
-  const index = jsonData.findIndex((entry) => entry[fieldIn] == valueIn);
+  const index = jsonData.findIndex((entry) => entry[fieldIn] === valueIn);
   return jsonData[index][fieldOut];
 }
 
@@ -92,7 +92,7 @@ export function stringTruncator(input, start, len, endDecorator = "...") {
  * @return {boolean} return true only if the input exists or not empty
  */
 export function inputExists(input, checkEmptyString = true) {
-  if (input == null) {
+  if (input === null) {
     return false;
   }
 
