@@ -203,13 +203,13 @@ export default function SubmissionCard(props) {
     if (submissionType === "update") {
       fetchData();
     }
-  }, [elementId]);
+  }, [elementId, submissionType]);
 
   useEffect(() => {
     if (submissionType === "initial") {
       setResourceTypeSelected(elementType);
     }
-  }, [elementType]);
+  }, [elementType, submissionType]);
 
   // When the current related element type changes, fetch a list of titles under that type.
   useEffect(() => {
@@ -246,7 +246,7 @@ export default function SubmissionCard(props) {
 
   // Related elements...
   const handleRemovingOneRelatedResource = (idx) => {
-    let newArray = [...relatedResources];
+    const newArray = [...relatedResources];
     newArray.splice(idx, 1);
     setRelatedResources(newArray);
     TEST_MODE && console.log("Removing one, now: ", relatedResources, idx);
@@ -300,7 +300,7 @@ export default function SubmissionCard(props) {
   };
 
   const handleRemovingOneOerExternalLink = (idx) => {
-    let newArray = [...oerExternalLinks];
+    const newArray = [...oerExternalLinks];
     newArray.splice(idx, 1);
     setOerExternalLinks(newArray);
     TEST_MODE && console.log("Removing one, now: ", oerExternalLinks);
@@ -362,9 +362,9 @@ export default function SubmissionCard(props) {
     }
 
     const authorList = metadataDOI["author"];
-    let authorNameList = [];
+    const authorNameList = [];
 
-    for (let idx in authorList) {
+    for (const idx in authorList) {
       let authorName = "";
 
       // Case when it's an organization, aka no first and last name

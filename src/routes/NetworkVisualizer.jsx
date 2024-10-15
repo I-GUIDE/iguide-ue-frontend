@@ -1,8 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useTheme } from "@mui/joy/styles";
-
-import { CssVarsProvider } from "@mui/joy/styles";
+import { useTheme, CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -40,7 +38,7 @@ export default function NetworkVisualizer() {
       try {
         const data = await fetchConnectedGraph();
 
-        let returnedNodes = data.nodes.map((node) => ({
+        const returnedNodes = data.nodes.map((node) => ({
           id: node.id,
           label: stringTruncator(node.title, 0, 25, "..."),
           title: node.title,
@@ -71,7 +69,7 @@ export default function NetworkVisualizer() {
     }
 
     retrieveNeighbors();
-  }, []);
+  }, [htmlColors]);
 
   // If there are no nodes, return null
   if (!nodes || !edges) {

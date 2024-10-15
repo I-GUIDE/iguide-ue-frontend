@@ -45,7 +45,7 @@ export default function FeaturedElementsList(props) {
       }
     }
     retrieveFeaturedElements();
-  }, []);
+  }, [limit, type]);
 
   if (!featuredElements || featuredElements.length === 0) return null;
 

@@ -39,7 +39,7 @@ export default function RelatedElementsNetwork(props) {
       try {
         const data = await fetchNeighbors(elementId, depth);
 
-        let returnedNodes = data.nodes?.map((node) => ({
+        const returnedNodes = data.nodes?.map((node) => ({
           id: node.id,
           label: stringTruncator(node.title, 0, 25, "..."),
           title: node.title,
@@ -78,7 +78,7 @@ export default function RelatedElementsNetwork(props) {
     if (elementId) {
       retrieveNeighbors(elementId, depth);
     }
-  }, [elementId]);
+  }, [elementId, depth, htmlColors]);
 
   // If there are no nodes, return null
   if (!nodes || !edges) {

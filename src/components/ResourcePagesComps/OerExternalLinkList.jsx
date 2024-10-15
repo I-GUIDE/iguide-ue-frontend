@@ -17,12 +17,12 @@ export default function OerExternalLinkList(props) {
   }
 
   // Group different external links based on types
-  let slides = [];
-  let boks = [];
-  let oers = [];
-  let courses = [];
-  let webpages = [];
-  let others = [];
+  const slides = [];
+  const boks = [];
+  const oers = [];
+  const courses = [];
+  const webpages = [];
+  const others = [];
 
   for (const idx in oerExternalLinks) {
     const item = oerExternalLinks[idx];

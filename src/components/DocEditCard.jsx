@@ -53,7 +53,7 @@ export default function DocEditCard(props) {
     if (submissionType === "update") {
       fetchDocData();
     }
-  }, [docId]);
+  }, [docId, submissionType]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

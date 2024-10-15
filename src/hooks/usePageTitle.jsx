@@ -26,7 +26,7 @@ export default function usePageTitle(
     } else {
       document.title = title;
     }
-  }, [title]);
+  }, [title, postfix, usePostfix]);
 
   useEffect(
     () => () => {
@@ -34,6 +34,6 @@ export default function usePageTitle(
         document.title = defaultTitle.current;
       }
     },
-    []
+    [prevailOnUnmount]
   );
 }

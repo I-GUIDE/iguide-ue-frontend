@@ -23,7 +23,7 @@ function get_notebook_html(repo_url, notebook_filename) {
   const match = repo_url.match(
     /^https?:\/\/(www\.)?github.com\/(?<owner>[\w.-]+)\/(?<name>[\w.-]+)/
   );
-  let ret =
+  const ret =
     "https://nbviewer.cgwebhost.cigi.illinois.edu/github/" +
     match.groups.owner +
     "/" +
@@ -35,7 +35,7 @@ function get_notebook_html(repo_url, notebook_filename) {
 
 function get_openwith_url(repo_url, notebook_filename) {
   const repo_name = repo_url.split("/").pop();
-  let ret =
+  const ret =
     "https://jupyter.iguide.illinois.edu/hub/user-redirect/git-pull/?repo=" +
     repo_url +
     "&urlpath=/lab/tree/" +

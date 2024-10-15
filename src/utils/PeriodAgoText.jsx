@@ -9,13 +9,13 @@ export function PeriodAgoText(pretext, pastTimestamp) {
   const DAY_TO_MON = 30.4;
   const MON_TO_YR = 12;
 
-  let now = new Date();
-  let past = new Date(pastTimestamp);
+  const now = new Date();
+  const past = new Date(pastTimestamp);
 
-  let diffInTime = now.getTime() - past.getTime();
-  let diffInDay = diffInTime / TIME_TO_DAY;
-  let diffInMon = diffInDay / DAY_TO_MON;
-  let diffInYr = diffInMon / MON_TO_YR;
+  const diffInTime = now.getTime() - past.getTime();
+  const diffInDay = diffInTime / TIME_TO_DAY;
+  const diffInMon = diffInDay / DAY_TO_MON;
+  const diffInYr = diffInMon / MON_TO_YR;
 
   if (diffInYr >= 1.0) {
     const roundedYr = Math.floor(diffInYr);

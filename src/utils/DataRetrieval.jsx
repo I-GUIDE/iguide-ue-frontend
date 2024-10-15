@@ -97,11 +97,11 @@ export async function DataSearcherCount(keyword) {
 
     const resJson = await response.json();
 
-    let countJson = [];
+    const countJson = [];
     countJson.push(["any", resJson.total_count]);
     const elementTypeCount = resJson.resource_type_counts;
 
-    for (let idx in elementTypeCount) {
+    for (const idx in elementTypeCount) {
       countJson.push([
         elementTypeCount[idx]["element-type"],
         elementTypeCount[idx]["count"],
