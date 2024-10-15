@@ -25,16 +25,17 @@ export default function RelatedElementsNetwork(props) {
   const [error, setError] = useState(null);
 
   const theme = useTheme();
-  const htmlColors = {
-    dataset: `${theme.palette.primary[300]}`,
-    notebook: `${theme.palette.success[300]}`,
-    publication: `${theme.palette.warning[300]}`,
-    oer: `${theme.palette.danger[300]}`,
-    map: `${theme.palette.neutral[300]}`,
-    any: `${theme.palette.neutral[300]}`,
-  };
 
   useEffect(() => {
+    const htmlColors = {
+      dataset: `${theme.palette.primary[300]}`,
+      notebook: `${theme.palette.success[300]}`,
+      publication: `${theme.palette.warning[300]}`,
+      oer: `${theme.palette.danger[300]}`,
+      map: `${theme.palette.neutral[300]}`,
+      any: `${theme.palette.neutral[300]}`,
+    };
+
     async function retrieveNeighbors(elementId, depth) {
       try {
         const data = await fetchNeighbors(elementId, depth);
@@ -78,7 +79,7 @@ export default function RelatedElementsNetwork(props) {
     if (elementId) {
       retrieveNeighbors(elementId, depth);
     }
-  }, [elementId, depth, htmlColors]);
+  });
 
   // If there are no nodes, return null
   if (!nodes || !edges) {

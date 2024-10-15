@@ -24,16 +24,17 @@ export default function NetworkVisualizer() {
   const [error, setError] = useState(null);
 
   const theme = useTheme();
-  const htmlColors = {
-    dataset: `${theme.palette.primary[300]}`,
-    notebook: `${theme.palette.success[300]}`,
-    publication: `${theme.palette.warning[300]}`,
-    oer: `${theme.palette.danger[300]}`,
-    map: `${theme.palette.neutral[300]}`,
-    any: `${theme.palette.neutral[300]}`,
-  };
 
   useEffect(() => {
+    const htmlColors = {
+      dataset: `${theme.palette.primary[300]}`,
+      notebook: `${theme.palette.success[300]}`,
+      publication: `${theme.palette.warning[300]}`,
+      oer: `${theme.palette.danger[300]}`,
+      map: `${theme.palette.neutral[300]}`,
+      any: `${theme.palette.neutral[300]}`,
+    };
+
     async function retrieveNeighbors() {
       try {
         const data = await fetchConnectedGraph();
@@ -69,7 +70,7 @@ export default function NetworkVisualizer() {
     }
 
     retrieveNeighbors();
-  }, [htmlColors]);
+  });
 
   // If there are no nodes, return null
   if (!nodes || !edges) {
