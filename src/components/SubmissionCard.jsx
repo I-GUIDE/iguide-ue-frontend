@@ -678,7 +678,7 @@ export default function SubmissionCard(props) {
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
-                    tooltipTitle={`You may provide the DOI of the publication and click \"Autofill metadata\" to automatically retrieve the information of the publication.`}
+                    tooltipTitle={`You may provide the DOI of the publication and click "Autofill metadata" to automatically retrieve the information of the publication.`}
                     tooltipContent={`Feature powered by Crossref. Please note that not all the fields are available. Some sources are not supported by Crossref. The abstract might need to be manually reformatted.`}
                     fieldRequired
                   >
@@ -707,7 +707,7 @@ export default function SubmissionCard(props) {
                     </Button>
                   </Grid>
                 </Grid>
-                {!!elementIdWithDuplicateDOI && (
+                {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
                       WARNING: The DOI/URL you entered matches one already on

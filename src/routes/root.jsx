@@ -141,7 +141,9 @@ export default function Root(props) {
     if (USE_DEMO_USER) {
       setLocalUserInfo(demoLocalUser);
     } else {
-      handleCheckUser(userInfo);
+      if (userInfo) {
+        handleCheckUser(userInfo);
+      }
     }
   }, [userInfo]);
 

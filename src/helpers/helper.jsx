@@ -125,7 +125,7 @@ export function removeMarkdown(markdown) {
   markdown = markdown.replace(/~~([^~]+)~~/g, "$1");
 
   // Remove links
-  markdown = markdown.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, "$1");
+  markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
 
   // Remove code blocks
   markdown = markdown.replace(/`([^`]+)`/g, "$1");
