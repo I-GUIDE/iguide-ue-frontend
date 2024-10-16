@@ -70,7 +70,7 @@ export default function NetworkVisualizer() {
     }
 
     retrieveNeighbors();
-  });
+  }, [theme]);
 
   // If there are no nodes, return null
   if (!nodes || !edges) {

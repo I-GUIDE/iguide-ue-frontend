@@ -9,6 +9,7 @@ const ConnectedGraph = lazy(() => import("../ConnectedGraph"));
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { stringTruncator } from "../../helpers/helper";
+import { element } from "prop-types";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -79,7 +80,7 @@ export default function RelatedElementsNetwork(props) {
     if (elementId) {
       retrieveNeighbors(elementId, depth);
     }
-  });
+  }, [elementId, depth, theme]);
 
   // If there are no nodes, return null
   if (!nodes || !edges) {
