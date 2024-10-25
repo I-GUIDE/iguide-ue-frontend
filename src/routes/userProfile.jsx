@@ -142,7 +142,7 @@ export default function UserProfile() {
   }
 
   // If local user information is missing, ask them to fill out the info
-  if (localUserInfoMissing === "unknwon") {
+  if (localUserInfoMissing === "unknown") {
     return;
   } else if (localUserInfoMissing === "missing") {
     return (
