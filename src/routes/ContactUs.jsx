@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
-import AspectRatio from "@mui/joy/AspectRatio";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -25,25 +24,11 @@ import ReportIcon from "@mui/icons-material/Report";
 import IconButton from "@mui/joy/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { styled } from "@mui/joy";
 
 import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
 const VITE_SLACK_API_URL = import.meta.env.VITE_SLACK_API_URL;
-const VITE_SLACK_API_TOKEN = import.meta.env.VITE_SLACK_API_TOKEN;
-
-const VisuallyHiddenInput = styled("input")`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  white-space: nowrap;
-  width: 1px;
-`;
 
 export default function ContactUs() {
   usePageTitle("Contact Us");
@@ -54,27 +39,6 @@ export default function ContactUs() {
   const [contactMessage, setContactMessage] = useState("");
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-  const [contactImageFile, setContactImageFile] = useState("");
-  const [contactImageFileURL, setContactImageFileURL] = useState("");
-
-  async function handleImageUploadToSlack() {
-    // 1. Get an image upload URL from Slack
-    const res = await fetch(
-      `https://slack.com/api/files.getUploadURLExternal?filename=${contactImageFile.name}&length=${contactImageFile.size}&pretty=1`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Bearer ${VITE_SLACK_API_TOKEN}`,
-        },
-      }
-    );
-
-    const data = await res.json();
-
-    // 2. Upload file to that URL
-    // 3. Finalize upload and share on the channel with files.completeUploadExternal
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -118,31 +82,7 @@ export default function ContactUs() {
     } else {
       setError("There was an error, please try again later.");
     }
-
-    if (contactImageFile) {
-      await handleImageUploadToSlack();
-    }
   }
-
-  const handleImageUpload = (event) => {
-    const thumbnailFile = event.target.files[0];
-    if (!thumbnailFile.type.startsWith("image/")) {
-      alert("Please upload an image!");
-      setContactImageFile(null);
-      setContactImageFileURL(null);
-      return null;
-    }
-    if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
-      alert("Please upload an image smaller than 5MB!");
-      setContactImageFile(null);
-      setContactImageFileURL(null);
-      return null;
-    }
-    setContactImageFile(thumbnailFile);
-    setContactImageFileURL(URL.createObjectURL(thumbnailFile));
-
-    console.log(contactImageFileURL);
-  };
 
   function RequiredFieldIndicator() {
     return (
@@ -354,36 +294,6 @@ export default function ContactUs() {
                         }}
                         onChange={(e) => setContactMessage(e.target.value)}
                       />
-                    </FormControl>
-
-                    <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
-                      <FormLabel>Thumbnail image {"(< 5MB)"}</FormLabel>
-                      <Button
-                        component="label"
-                        role={undefined}
-                        tabIndex={-1}
-                        variant="outlined"
-                        color="primary"
-                        name="contact-page-image"
-                      >
-                        Upload a thumbnail image
-                        <VisuallyHiddenInput
-                          type="file"
-                          onChange={handleImageUpload}
-                        />
-                      </Button>
-                      {contactImageFileURL && (
-                        <div style={{ margin: "10px 0" }}>
-                          <Typography>Thumbnail preview</Typography>
-                          <AspectRatio ratio="1" sx={{ width: 190 }}>
-                            <img
-                              src={contactImageFileURL}
-                              loading="lazy"
-                              alt="thumbnail-preview"
-                            />
-                          </AspectRatio>
-                        </div>
-                      )}
                     </FormControl>
 
                     <Button type="submit">Submit</Button>
