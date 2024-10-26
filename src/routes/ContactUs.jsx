@@ -248,6 +248,7 @@ export default function ContactUs() {
                         </FormLabel>
                         <Input
                           required
+                          type="email"
                           placeholder="Email"
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
@@ -283,7 +284,6 @@ export default function ContactUs() {
                       </FormLabel>
                       <Textarea
                         required
-                        type="email"
                         size="md"
                         name="message"
                         placeholder="Your message"
