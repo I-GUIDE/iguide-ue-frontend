@@ -122,7 +122,7 @@ export default function ContactUs() {
                 alignItems={{ xs: "flex-start", md: "center" }}
                 sx={{ p: 2 }}
               >
-                <Typography level="h2">Any questions or comments?</Typography>
+                <Typography level="h2">Contact Us</Typography>
               </Stack>
 
               <Divider sx={{ mx: 2, my: 4 }} />
@@ -156,7 +156,7 @@ export default function ContactUs() {
                   borderRadius: "5px",
                 }}
               >
-                <Typography level="h2" sx={{ py: 1 }}>
+                <Typography level="h3" sx={{ py: 1 }}>
                   Contact Form
                 </Typography>
                 <Typography level="body-sm">
