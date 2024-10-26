@@ -73,7 +73,12 @@ export default function ContactUs() {
     );
 
     if (res.ok) {
-      setSuccessMsg("Your inquiry has been noted");
+      setSuccessMsg(
+        "Your inquiry has been noted. We will get back to you soon."
+      );
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
     } else {
       setError("There was an error, please try again later.");
     }
