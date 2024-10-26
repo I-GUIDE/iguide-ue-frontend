@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { stringTruncator } from "../helpers/helper";
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGridLayout from "../features/ElementList/ElementGridLayout";
+import ElementGridLayout from "../features/ElementGrid/ElementGridLayout";
 
 export default function Tag() {
   const tagName = useParams().id;
