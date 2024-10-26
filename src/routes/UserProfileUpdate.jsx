@@ -9,13 +9,13 @@ import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
 import LoginCard from "../components/LoginCard";
-import DocEditCard from "../features/DocSubmission/DocEditCard";
+import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
-export default function DocSubmission() {
-  usePageTitle("Create Documentation");
+export default function UserProfileUpdate() {
+  usePageTitle("Update User Profile");
 
   const { isAuthenticated } = useOutletContext();
 
@@ -83,7 +83,7 @@ export default function DocSubmission() {
               pb: 8,
             }}
           >
-            <DocEditCard submissionType="initial" />
+            <UserProfileEditCard userProfileEditType="update" />
           </Grid>
         </Box>
       </Container>

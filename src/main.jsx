@@ -2,41 +2,41 @@ import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Root from "./routes/root";
-import Home from "./routes/home";
+import Root from "./routes/Root";
+import Home from "./routes/Home";
 
 import SearchHome from "./routes/SearchHome";
-import SearchResults from "./routes/searchResults";
+import SearchResults from "./routes/SearchResults";
 
-import Datasets from "./routes/datasets";
-import Notebooks from "./routes/notebooks";
-import Publications from "./routes/publications";
-import OERs from "./routes/oers";
-import Maps from "./routes/maps";
-import Tag from "./routes/tag";
+import Datasets from "./routes/Datasets";
+import Notebooks from "./routes/Notebooks";
+import Publications from "./routes/Publications";
+import OERs from "./routes/Oers";
+import Maps from "./routes/Maps";
+import Tag from "./routes/Tag";
 
-import DatasetPage from "./routes/ResourcePages/DatasetPage";
-import NotebookPage from "./routes/ResourcePages/NotebookPage";
-import PublicationPage from "./routes/ResourcePages/PublicationPage";
-import OERPage from "./routes/ResourcePages/OERPage";
-import MapPage from "./routes/ResourcePages/MapPage";
+import DatasetPage from "./routes/ElementPage/DatasetPage";
+import NotebookPage from "./routes/ElementPage/NotebookPage";
+import PublicationPage from "./routes/ElementPage/PublicationPage";
+import OERPage from "./routes/ElementPage/OERPage";
+import MapPage from "./routes/ElementPage/MapPage";
 
-import UserProfile from "./routes/userProfile";
-import UserProfileUpdate from "./routes/userProfileUpdate";
-import ResourceSubmission from "./routes/resourceSubmission";
-import ResourceUpdate from "./routes/resourceUpdate";
+import UserProfile from "./routes/UserProfile";
+import UserProfileUpdate from "./routes/UserProfileUpdate";
+import ElementSubmission from "./routes/ElementSubmission";
+import ElementUpdate from "./routes/ElementUpdate";
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 
 import NetworkVisualizer from "./routes/NetworkVisualizer";
-const DocSubmission = lazy(() => import("./routes/DocSubmission"));
-const DocUpdate = lazy(() => import("./routes/DocUpdate"));
+import DocSubmission from "./routes/DocSubmission";
+import DocUpdate from "./routes/DocUpdate";
 import DocPage from "./routes/DocPage";
 
-import ErrorPage from "./ErrorPage";
-import ContributorProfile from "./routes/contributorProfile";
+import ErrorPage from "./routes/ErrorPage";
+import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
 
 const router = createBrowserRouter([
@@ -119,11 +119,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/contribution/:elementType",
-        element: <ResourceSubmission />,
+        element: <ElementSubmission />,
       },
       {
         path: "/element-update/:id",
-        element: <ResourceUpdate />,
+        element: <ElementUpdate />,
       },
       {
         path: "/terms-of-use",
