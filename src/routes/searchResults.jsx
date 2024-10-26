@@ -78,11 +78,8 @@ export default function SearchResults() {
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
 
   // When the search keyword is not empty, use the keyword as page title
-  if (keywordParam) {
-    usePageTitle(keywordParam);
-  } else {
-    usePageTitle("Search");
-  }
+  const searchPageTitle = keywordParam ? keywordParam : "Search";
+  usePageTitle(searchPageTitle);
 
   // When there is a new search param, update the search term and element type
   useEffect(() => {
@@ -144,7 +141,7 @@ export default function SearchResults() {
     const encodedKeyword = encodeURIComponent(keyword);
     let keywordExist = false;
     let typeExist = false;
-    let uriPrefix = `/search`;
+    const uriPrefix = `/search`;
 
     if (keyword && keyword !== "") {
       keywordExist = true;

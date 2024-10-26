@@ -1,10 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { compression } from 'vite-plugin-compression2'
+import eslintPlugin from 'vite-plugin-eslint'
 
 export default defineConfig({
     base: "/",
-    plugins: [react(), compression()],
+    plugins: [react(), compression(), eslintPlugin({
+        cache: false,
+        include: ['./src//*.js', './src//*.jsx'],
+        exclude: [],
+    }),],
     preview: {
         port: 80,
         strictPort: true,

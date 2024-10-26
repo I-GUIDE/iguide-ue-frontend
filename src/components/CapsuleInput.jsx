@@ -30,7 +30,7 @@ export default function CapsuleInput(props) {
   };
 
   const handleRemovingOneItem = (idx) => {
-    let newArray = [...array];
+    const newArray = [...array];
     newArray.splice(idx, 1);
     setArray(newArray);
     TEST_MODE && console.log("Removing one item, updated array", newArray);

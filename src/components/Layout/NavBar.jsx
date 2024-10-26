@@ -88,9 +88,8 @@ export default function NavBar(props) {
 
   // If the user is logged in, display the logout button, otherwise login
   function AuthButton() {
+    const [open, setOpen] = useState(false);
     if (isAuthenticated) {
-      const [open, setOpen] = useState(false);
-
       return (
         <Tooltip
           placement="bottom-start"
