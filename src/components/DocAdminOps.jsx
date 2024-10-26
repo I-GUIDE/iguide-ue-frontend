@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 
 import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
@@ -75,7 +75,12 @@ export default function DocAdminOps(props) {
 
   return (
     <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <IconButton size="sm" variant="soft" color="primary">
+      <IconButton
+        aria-label="Edit this doc"
+        size="sm"
+        variant="soft"
+        color="primary"
+      >
         <Link
           underline="none"
           component={RouterLink}
@@ -86,6 +91,7 @@ export default function DocAdminOps(props) {
         </Link>
       </IconButton>
       <IconButton
+        aria-label="Delete this doc"
         color="danger"
         variant="soft"
         size="sm"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
@@ -70,6 +70,7 @@ export default function SearchBar(props) {
           error={data.status === "failure"}
           endDecorator={
             <IconButton
+              aria-label="Search"
               size="lg"
               variant="plain"
               loading={data.status === "loading"}

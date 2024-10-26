@@ -39,7 +39,12 @@ export default function CapsuleInput(props) {
   return (
     <Grid sx={{ gridColumn: "1/-1" }}>
       {array && array.length > 0 && (
-        <Stack direction="row" spacing={1} sx={{ py: 1 }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ py: 1, flexWrap: "wrap" }}
+        >
           {array?.map((x, i) => (
             <Chip
               key={i}
@@ -66,6 +71,7 @@ export default function CapsuleInput(props) {
         </Grid>
         <Grid xs="auto">
           <IconButton
+            aria-label="Save input"
             size="sm"
             variant="solid"
             onClick={handleAddingOneItem}

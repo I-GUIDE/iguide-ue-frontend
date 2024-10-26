@@ -15,7 +15,7 @@ export default function OERs() {
     <ElementGridLayout
       elementType="oer"
       title="Educational Resources"
-      subtitle={TAGLINES.publication}
+      subtitle={TAGLINES.oer}
       icon={<SchoolIcon />}
     />
   );

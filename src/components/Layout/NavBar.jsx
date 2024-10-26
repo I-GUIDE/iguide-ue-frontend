@@ -18,11 +18,7 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
 import ButtonGroup from "@mui/joy/ButtonGroup";
-import MenuItem from "@mui/joy/MenuItem";
-import Menu from "@mui/joy/Menu";
 import ListDivider from "@mui/joy/ListDivider";
-import MenuButton from "@mui/joy/MenuButton";
-import Dropdown from "@mui/joy/Dropdown";
 import Avatar from "@mui/joy/Avatar";
 import Drawer from "@mui/joy/Drawer";
 import List from "@mui/joy/List";
@@ -428,6 +424,7 @@ export default function NavBar(props) {
                   size="lg"
                   ref={buttonRef}
                   id="composition-button"
+                  aria-label="View menu"
                   aria-controls={"composition-menu"}
                   aria-haspopup="true"
                   aria-expanded={drawerOpen ? "true" : undefined}

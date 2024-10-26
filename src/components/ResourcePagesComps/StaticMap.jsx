@@ -1,6 +1,19 @@
-import * as React from "react";
+import React, { lazy, Suspense } from "react";
 
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+// Lazy load react-zoom-pan-pinch
+const MiniMap = lazy(() =>
+  import("react-zoom-pan-pinch").then((module) => ({ default: module.MiniMap }))
+);
+const TransformWrapper = lazy(() =>
+  import("react-zoom-pan-pinch").then((module) => ({
+    default: module.TransformWrapper,
+  }))
+);
+const TransformComponent = lazy(() =>
+  import("react-zoom-pan-pinch").then((module) => ({
+    default: module.TransformComponent,
+  }))
+);
 
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
@@ -17,14 +30,14 @@ export default function StaticMap(props) {
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
-        Map (Panable)
+        Pannable Map
       </Typography>
       <Typography color="neutral" level="body-xs" variant="plain">
         Click{" "}
         <Link href={mapImg} target="_blank" rel="noopener noreferrer">
           here
         </Link>{" "}
-        to view the static map in new window.
+        to view the map in new window.
       </Typography>
       <Box
         sx={{
@@ -35,11 +48,38 @@ export default function StaticMap(props) {
           position: "relative",
         }}
       >
-        <TransformWrapper>
-          <TransformComponent>
-            <img width="100%" src={mapImg} loading="lazy" alt="static map" />
-          </TransformComponent>
-        </TransformWrapper>
+        <Suspense fallback={<p>Loading map...</p>}>
+          <TransformWrapper>
+            <div>
+              <div
+                style={{
+                  position: "absolute",
+                  zIndex: 5,
+                  bottom: "20px",
+                  left: "20px",
+                  border: "solid 2px black",
+                }}
+              >
+                <MiniMap width={300}>
+                  <img
+                    width="100%"
+                    src={mapImg}
+                    loading="lazy"
+                    alt="static map"
+                  />
+                </MiniMap>
+              </div>
+              <TransformComponent>
+                <img
+                  width="100%"
+                  src={mapImg}
+                  loading="lazy"
+                  alt="static map"
+                />
+              </TransformComponent>
+            </div>
+          </TransformWrapper>
+        </Suspense>
       </Box>
     </Stack>
   );

@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useTheme } from "@mui/joy/styles";
 
@@ -11,7 +9,7 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
 
-import ConnectedGraph from "../components/ConnectedGraph";
+const ConnectedGraph = lazy(() => import("../components/ConnectedGraph"));
 import { NO_HEADER_BODY_HEIGHT, NAVBAR_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { fetchConnectedGraph } from "../utils/DataRetrieval";
@@ -134,19 +132,21 @@ export default function NetworkVisualizer() {
                 </Typography>
               </Box>
             </Box>
-            <ConnectedGraph
-              nodes={nodes}
-              edges={edges}
-              draggable
-              elementBoxStyle={{
-                zIndex: 9,
-                position: "absolute",
-                top: NAVBAR_HEIGHT + 20,
-                right: 20,
-                background: "rgba(0, 0, 0, .5)",
-                color: "white",
-              }}
-            />
+            <Suspense fallback={<p>Loading element network...</p>}>
+              <ConnectedGraph
+                nodes={nodes}
+                edges={edges}
+                draggable
+                elementBoxStyle={{
+                  zIndex: 9,
+                  position: "absolute",
+                  top: NAVBAR_HEIGHT + 20,
+                  right: 20,
+                  background: "rgba(0, 0, 0, .5)",
+                  color: "white",
+                }}
+              />
+            </Suspense>
           </Grid>
         </Box>
       </Container>

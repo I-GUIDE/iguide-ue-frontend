@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useOutletContext, Link as RouterLink } from "react-router-dom";
 
@@ -15,7 +15,7 @@ import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/joy/styles";
 import Link from "@mui/joy/Link";
 import Table from "@mui/joy/Table";
 import Autocomplete from "@mui/joy/Autocomplete";
@@ -31,10 +31,9 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import SubmissionStatusCard from "./SubmissionStatusCard";
-import MarkdownEditor from "./MarkdownEditor";
+const MarkdownEditor = lazy(() => import("./MarkdownEditor"));
 import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
 import CapsuleInput from "./CapsuleInput";
 
@@ -72,10 +71,6 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
-  useEffect(() => {
-    checkTokens();
-  }, []);
-
   const { localUserInfo } = useOutletContext();
 
   const submissionType = props.submissionType;
@@ -143,6 +138,10 @@ export default function SubmissionCard(props) {
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    checkTokens();
+  }, []);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
@@ -217,7 +216,9 @@ export default function SubmissionCard(props) {
     const getAllTitlesByElementType = async (resourceType) => {
       if (resourceType && resourceType !== "") {
         const returnedTitles = await fetchAllTitlesByElementType(resourceType);
-        setReturnedRelatedResourceTitle(returnedTitles);
+        // Check duplicate titles, otherwise AutoComplete might fail...
+        const returnedTitlesUnique = [...new Set(returnedTitles)];
+        setReturnedRelatedResourceTitle(returnedTitlesUnique);
       } else {
         setReturnedRelatedResourceTitle([]);
       }
@@ -392,7 +393,7 @@ export default function SubmissionCard(props) {
 
     // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+/blob/.+/.+.ipynb"
+      "https://(www.)?github.com/.+/blob/(master|main)/.+.ipynb"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
@@ -432,9 +433,20 @@ export default function SubmissionCard(props) {
       } else if (key === "notebook-url") {
         // Array[0]: the notebook repo url
         // Array[1]: the notebook filename
-        const notebookUrlArray = value.split("/blob/main/");
-        data["notebook-repo"] = notebookUrlArray[0];
-        data["notebook-file"] = notebookUrlArray[1];
+        const notebookUrlArrayWithMainBranch = value.split("/blob/main/");
+        const notebookUrlArrayWithMasterBranch = value.split("/blob/master/");
+
+        if (!notebookUrlArrayWithMainBranch[1]) {
+          data["notebook-repo"] = notebookUrlArrayWithMasterBranch[0];
+          data["notebook-file"] = decodeURIComponent(
+            notebookUrlArrayWithMasterBranch[1]
+          );
+        } else {
+          data["notebook-repo"] = notebookUrlArrayWithMainBranch[0];
+          data["notebook-file"] = decodeURIComponent(
+            notebookUrlArrayWithMainBranch[1]
+          );
+        }
       } else {
         data[key] = value;
       }
@@ -590,14 +602,17 @@ export default function SubmissionCard(props) {
     return null;
   }
 
+  if (!contributor) {
+    return null;
+  }
+
   // Check if the current user is admin, if yes, allow edit
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
-  const isContributor = contributor && localUserInfo.id === contributor.id;
+  const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
     if (!isContributor && !canEditAllElements) {
-      setOpenModal(false);
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
@@ -772,7 +787,12 @@ export default function SubmissionCard(props) {
                     Content
                   </SubmissionCardFieldTitle>
                 </FormLabel>
-                <MarkdownEditor contents={contents} setContents={setContents} />
+                <Suspense fallback={<div>Loading markdown editor...</div>}>
+                  <MarkdownEditor
+                    contents={contents}
+                    setContents={setContents}
+                  />
+                </Suspense>
               </FormControl>
             ) : (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -913,7 +933,7 @@ export default function SubmissionCard(props) {
                 our notebook preview to function correctly, but when the notebook is 
                 opened on the I-GUIDE Platform the entire repo will be copied to the 
                 user's environment. An example link may look like "https://github.com/
-                <username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                <username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                 `}
                     fieldRequired
                   >
@@ -923,7 +943,7 @@ export default function SubmissionCard(props) {
                 <Input
                   required
                   name="notebook-url"
-                  placeholder="https://github.com/<username>/<repo_name>/blob/<branch_name>/<notebook_name>.ipynb"
+                  placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                   value={notebookGitHubUrl}
                   error={notebookGitHubUrlError}
                   onChange={handleNotebookGitHubUrlChange}
@@ -1021,9 +1041,10 @@ export default function SubmissionCard(props) {
                       </td>
                       <td align="left">
                         <IconButton
+                          aria-label="Search website title"
                           size="sm"
                           variant="outlined"
-                          onClick={handleOerExternalLinkSearchTitle}
+                          onClick={() => handleOerExternalLinkSearchTitle()}
                           style={{ marginTop: "4px", cursor: "pointer" }}
                         >
                           <ArrowForwardIcon />
@@ -1039,6 +1060,7 @@ export default function SubmissionCard(props) {
                       </td>
                       <td align="left">
                         <IconButton
+                          aria-label="Save this external link"
                           size="sm"
                           variant="soft"
                           onClick={handleAddingOneOerExternalLink}

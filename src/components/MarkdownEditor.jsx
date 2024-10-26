@@ -5,7 +5,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/joy/styles";
 import Stack from "@mui/joy/Stack";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";

@@ -12,7 +12,6 @@ const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
-import Stack from "@mui/joy/Stack";
 import Grid from "@mui/material/Grid2";
 
 import UserProfileHeader from "../components/UserProfileHeader";

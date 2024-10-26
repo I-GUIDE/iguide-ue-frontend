@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useOutletContext } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
