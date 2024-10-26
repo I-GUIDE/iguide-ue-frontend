@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -9,15 +9,14 @@ import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
 import LoginCard from "../components/LoginCard";
-import SubmissionCard from "../features/ElementSubmission/SubmissionCard";
+import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
-export default function ResourceUpdate() {
-  usePageTitle("Update Contribution");
+export default function UserProfileUpdate() {
+  usePageTitle("Update User Profile");
 
-  const id = useParams().id;
   const { isAuthenticated } = useOutletContext();
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
@@ -84,7 +83,7 @@ export default function ResourceUpdate() {
               pb: 8,
             }}
           >
-            <SubmissionCard submissionType="update" elementId={id} />
+            <UserProfileEditCard userProfileEditType="update" />
           </Grid>
         </Box>
       </Container>

@@ -14,12 +14,11 @@ import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
-export default function ResourceSubmission() {
-  usePageTitle("Contribution");
+export default function ElementUpdate() {
+  usePageTitle("Update Contribution");
 
+  const id = useParams().id;
   const { isAuthenticated } = useOutletContext();
-
-  const elementType = useParams().elementType;
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
@@ -85,10 +84,7 @@ export default function ResourceSubmission() {
               pb: 8,
             }}
           >
-            <SubmissionCard
-              submissionType="initial"
-              elementType={elementType}
-            />
+            <SubmissionCard submissionType="update" elementId={id} />
           </Grid>
         </Box>
       </Container>
