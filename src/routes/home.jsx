@@ -24,8 +24,8 @@ import ArticleIcon from "@mui/icons-material/Article";
 import SchoolIcon from "@mui/icons-material/School";
 import MapIcon from "@mui/icons-material/Map";
 
-import FeaturedElementsList from "../components/FeaturedElementsList";
-import TutorialCard from "../components/TutorialCard";
+import FeaturedElementsList from "../features/Home/FeaturedElementsList";
+import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 

@@ -6,7 +6,7 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 
-import SimpleInfoCard from "../SimpleInfoCard";
+import SimpleInfoCard from "../../components/SimpleInfoCard";
 
 import "react-multi-carousel/lib/styles.css";
 

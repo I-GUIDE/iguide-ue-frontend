@@ -32,28 +32,28 @@ import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import SubmissionStatusCard from "./SubmissionStatusCard";
-const MarkdownEditor = lazy(() => import("./MarkdownEditor"));
-import SubmissionCardFieldTitle from "./SubmissionCardFieldTitle";
-import CapsuleInput from "./CapsuleInput";
+import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
+const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
+import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
+import CapsuleInput from "../../components/CapsuleInput";
 
-import { fetchWithAuth } from "../utils/FetcherWithJWT";
-import { checkTokens } from "../utils/UserManager";
-import { PERMISSIONS } from "../configs/Permissions";
+import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+import { checkTokens } from "../../utils/UserManager";
+import { PERMISSIONS } from "../../configs/Permissions";
 
 import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
-} from "../configs/VarConfigs";
+} from "../../configs/VarConfigs";
 
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
   duplicateDOIExists,
-} from "../utils/DataRetrieval";
-import { printListWithDelimiter } from "../helpers/helper";
+} from "../../utils/DataRetrieval";
+import { printListWithDelimiter } from "../../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;

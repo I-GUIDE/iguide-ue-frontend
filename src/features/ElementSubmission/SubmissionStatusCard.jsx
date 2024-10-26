@@ -7,8 +7,6 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-import "../utils/UserManager";
-
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
   const subMessage = props.subMessage;

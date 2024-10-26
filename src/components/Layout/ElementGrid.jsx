@@ -21,10 +21,10 @@ import Pagination from "@mui/material/Pagination";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
-import InfoCard from "./InfoCard";
+import InfoCard from "../InfoCard";
 
-import { elementRetriever } from "../utils/DataRetrieval";
-import { arrayLength } from "../helpers/helper";
+import { elementRetriever } from "../../utils/DataRetrieval";
+import { arrayLength } from "../../helpers/helper";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 

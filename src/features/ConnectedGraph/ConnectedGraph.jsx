@@ -6,7 +6,7 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Tooltip from "@mui/joy/Tooltip";
 
-import SimpleInfoCard from "./SimpleInfoCard";
+import SimpleInfoCard from "../../components/SimpleInfoCard";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 

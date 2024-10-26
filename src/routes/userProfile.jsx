@@ -17,10 +17,10 @@ import Grid from "@mui/joy/Grid";
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
-import UserProfileHeader from "../components/UserProfileHeader";
-import UserProfileEditCard from "../components/UserProfileEditCard";
+import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
+import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGrid from "../components/ElementGrid";
+import ElementGrid from "../components/Layout/ElementGrid";
 
 import {
   DEFAULT_BODY_HEIGHT,

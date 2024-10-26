@@ -14,9 +14,9 @@ import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Grid from "@mui/material/Grid2";
 
-import UserProfileHeader from "../components/UserProfileHeader";
+import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGrid from "../components/ElementGrid";
+import ElementGrid from "../components/Layout/ElementGrid";
 
 import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";

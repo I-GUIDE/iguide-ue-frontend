@@ -7,7 +7,9 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
 
-const ConnectedGraph = lazy(() => import("../components/ConnectedGraph"));
+const ConnectedGraph = lazy(() =>
+  import("../features/ConnectedGraph/ConnectedGraph")
+);
 import { NO_HEADER_BODY_HEIGHT, NAVBAR_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { fetchConnectedGraph } from "../utils/DataRetrieval";

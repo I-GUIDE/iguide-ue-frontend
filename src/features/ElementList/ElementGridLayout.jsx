@@ -7,10 +7,10 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 
-import ElementGrid from "../components/ElementGrid";
-import Header from "../components/Layout/Header";
+import ElementGrid from "../../components/Layout/ElementGrid";
+import Header from "../../components/Layout/Header";
 
-import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
+import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 export default function ElementGridLayout(props) {
   const elementType = props.elementType;

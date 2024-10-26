@@ -12,14 +12,14 @@ import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 
-import SubmissionStatusCard from "./SubmissionStatusCard";
-import MarkdownEditor from "./MarkdownEditor";
+import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
+import MarkdownEditor from "../../components/MarkdownEditor";
 
-import { fetchWithAuth } from "../utils/FetcherWithJWT";
-import { checkTokens } from "../utils/UserManager";
-import { PERMISSIONS } from "../configs/Permissions";
+import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+import { checkTokens } from "../../utils/UserManager";
+import { PERMISSIONS } from "../../configs/Permissions";
 
-import { fetchADocumentation } from "../utils/DataRetrieval";
+import { fetchADocumentation } from "../../utils/DataRetrieval";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;

@@ -11,25 +11,27 @@ import Stack from "@mui/joy/Stack";
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
-import MainContent from "../../components/ResourcePagesComps/MainContent";
-import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
-import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
+import MainContent from "../../features/Element/MainContent";
+import CapsuleList from "../../features/Element/CapsuleList";
+import RelatedElements from "../../features/Element/RelatedElements";
+import NotebookViewer from "../../features/Element/NotebookViewer";
+import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
-import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
-import ErrorPage from "../../ErrorPage";
+import ContributorOps from "../../features/Element/ContributorOps";
 
-export default function PublicationPage() {
+import ErrorPage from "../ErrorPage";
+
+export default function NotebookPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [externalLink, setExternalLink] = useState("");
-  const [directDownloadLink, setDirectDownloadLink] = useState("");
-  const [size, setSize] = useState("");
+  const [htmlNotebook, setHtmlNotebook] = useState("");
+  const [repoUrl, setRepoUrl] = useState("");
+  const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
@@ -51,10 +53,10 @@ export default function PublicationPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setExternalLink(thisElement["external-link-publication"]);
-      setDirectDownloadLink(thisElement["direct-download-link"]);
-      setSize(thisElement.size);
+      setRepoUrl(thisElement["notebook-repo"]);
+      setNotebookFile(thisElement["notebook-file"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setHtmlNotebook(thisElement["html-notebook"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -101,33 +103,38 @@ export default function PublicationPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Publications", "/publications"]]}
-                  currentPage="Publication"
+                  parentPages={[["All Notebooks", "/notebooks"]]}
+                  currentPage="Notebook"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/publications"
+                  afterDeleteRedirection="/notebooks"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
-                doi={externalLink}
                 contributor={contributor}
-                contentsTitle="Abstract"
+                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
-                elementType="publication"
+                elementType="notebook"
                 creationTime={creationTime}
                 updateTime={updateTime}
               />
             </Grid>
 
+            {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
+              <NotebookViewer
+                repoUrl={repoUrl}
+                notebookFile={notebookFile}
+                htmlNotebook={htmlNotebook}
+              />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />

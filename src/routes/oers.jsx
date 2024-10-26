@@ -3,7 +3,7 @@ import React from "react";
 import SchoolIcon from "@mui/icons-material/School";
 
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGridLayout from "../layouts/ElementGridLayout";
+import ElementGridLayout from "../features/ElementList/ElementGridLayout";
 
 import { TAGLINES } from "../configs/Texts";
 

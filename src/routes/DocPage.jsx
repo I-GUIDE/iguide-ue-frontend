@@ -17,8 +17,9 @@ import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 import usePageTitle from "../hooks/usePageTitle";
 import PageNav from "../components/PageNav";
-import DocAdminOps from "../components/DocAdminOps";
-import ErrorPage from "../ErrorPage";
+import DocAdminOps from "../features/DocSubmission/DocAdminOps";
+
+import ErrorPage from "./ErrorPage";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 

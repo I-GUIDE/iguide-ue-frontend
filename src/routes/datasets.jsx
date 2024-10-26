@@ -3,7 +3,7 @@ import React from "react";
 import DatasetIcon from "@mui/icons-material/Dataset";
 
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGridLayout from "../layouts/ElementGridLayout";
+import ElementGridLayout from "../features/ElementList/ElementGridLayout";
 
 import { TAGLINES } from "../configs/Texts";
 

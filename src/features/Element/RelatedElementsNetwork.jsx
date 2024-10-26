@@ -5,11 +5,10 @@ import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-const ConnectedGraph = lazy(() => import("../ConnectedGraph"));
+const ConnectedGraph = lazy(() => import("../ConnectedGraph/ConnectedGraph"));
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { stringTruncator } from "../../helpers/helper";
-import { element } from "prop-types";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 

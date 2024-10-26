@@ -11,26 +11,28 @@ import Stack from "@mui/joy/Stack";
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
-import MainContent from "../../components/ResourcePagesComps/MainContent";
-import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
-import OerExternalLinkList from "../../components/ResourcePagesComps/OerExternalLinkList";
-import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
+import MainContent from "../../features/Element/MainContent";
+import CapsuleList from "../../features/Element/CapsuleList";
+import RelatedElements from "../../features/Element/RelatedElements";
+import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
-import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
-import ErrorPage from "../../ErrorPage";
+import ContributorOps from "../../features/Element/ContributorOps";
+import MapViewer from "../../features/Element/MapViewer";
+import StaticMap from "../../features/Element/StaticMap";
 
-export default function OERPage() {
+import ErrorPage from "../ErrorPage";
+
+export default function MapPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
+  const [mapIFrameLink, setMapIFrameLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
-  const [oerExternalLinks, setOerExternalLinks] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
@@ -50,9 +52,9 @@ export default function OERPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
+      setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setRelatedElements(thisElement["related-elements"]);
-      setOerExternalLinks(thisElement["oer-external-links"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
     }
@@ -98,36 +100,37 @@ export default function OERPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Educational Resources", "/oers"]]}
-                  currentPage="Educational Resource"
+                  parentPages={[["All Maps", "/maps"]]}
+                  currentPage="Map"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/oers"
+                  afterDeleteRedirection="/maps"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
                 contributor={contributor}
+                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
-                elementType="oer"
+                elementType="map"
                 creationTime={creationTime}
                 updateTime={updateTime}
-                useMarkdown
-                useOERLayout
               />
             </Grid>
 
+            {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-            </Grid>
-            <Grid xs={12}>
-              <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
+              {mapIFrameLink !== thumbnailImage && (
+                <MapViewer iframeSrc={mapIFrameLink} />
+              )}
+              <StaticMap mapImg={thumbnailImage} />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />

@@ -10,26 +10,30 @@ import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
-import MapViewer from "../../components/ResourcePagesComps/MapViewer";
-import StaticMap from "../../components/ResourcePagesComps/StaticMap";
+import { inputExists } from "../../helpers/helper";
 
-import MainContent from "../../components/ResourcePagesComps/MainContent";
-import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
-import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
+import MainContent from "../../features/Element/MainContent";
+import CapsuleList from "../../features/Element/CapsuleList";
+import RelatedElements from "../../features/Element/RelatedElements";
+import CodeSnippet from "../../features/Element/CodeSnippet";
+import ActionList from "../../features/Element/ActionsList";
+import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
-import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
-import ErrorPage from "../../ErrorPage";
+import ContributorOps from "../../features/Element/ContributorOps";
 
-export default function MapPage() {
+import ErrorPage from "../ErrorPage";
+
+export default function DatasetPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
-  const [mapIFrameLink, setMapIFrameLink] = useState();
+  const [externalLink, setExternalLink] = useState("");
+  const [directDownloadLink, setDirectDownloadLink] = useState("");
+  const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
@@ -51,7 +55,9 @@ export default function MapPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setMapIFrameLink(thisElement["external-iframe-link"]);
+      setExternalLink(thisElement["external-link"]);
+      setDirectDownloadLink(thisElement["direct-download-link"]);
+      setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
@@ -99,15 +105,15 @@ export default function MapPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Maps", "/maps"]]}
-                  currentPage="Map"
+                  parentPages={[["All Datasets", "/datasets"]]}
+                  currentPage="Dataset"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/maps"
+                  afterDeleteRedirection="/datasets"
                 />
               </Stack>
               <MainContent
@@ -117,19 +123,25 @@ export default function MapPage() {
                 contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
-                elementType="map"
+                elementType="dataset"
                 creationTime={creationTime}
                 updateTime={updateTime}
               />
             </Grid>
 
-            {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-              {mapIFrameLink !== thumbnailImage && (
-                <MapViewer iframeSrc={mapIFrameLink} />
+              {inputExists(directDownloadLink) && (
+                <CodeSnippet directDownloadLink={directDownloadLink} />
               )}
-              <StaticMap mapImg={thumbnailImage} />
+              <ActionList
+                title="Data Exploration"
+                externalLink={externalLink}
+                externalLinkText="Access Data Source"
+                directDownloadLink={directDownloadLink}
+                directDownloadLinkText="Download Data"
+                size={size}
+              />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />

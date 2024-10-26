@@ -16,8 +16,8 @@ import IconButton from "@mui/joy/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-import { fetchWithAuth } from "../utils/FetcherWithJWT";
-import { PERMISSIONS } from "../configs/Permissions";
+import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+import { PERMISSIONS } from "../../configs/Permissions";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;

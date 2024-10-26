@@ -9,7 +9,7 @@ import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
 import LoginCard from "../components/LoginCard";
-import DocEditCard from "../components/DocEditCard";
+import DocEditCard from "../features/DocSubmission/DocEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";

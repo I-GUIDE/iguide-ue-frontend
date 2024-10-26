@@ -10,20 +10,18 @@ import Stack from "@mui/joy/Stack";
 
 import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
-import { inputExists } from "../../helpers/helper";
 
-import MainContent from "../../components/ResourcePagesComps/MainContent";
-import CapsuleList from "../../components/ResourcePagesComps/CapsuleList";
-import RelatedElements from "../../components/ResourcePagesComps/RelatedElements";
-import CodeSnippet from "../../components/ResourcePagesComps/CodeSnippet";
-import ActionList from "../../components/ResourcePagesComps/ActionsList";
-import RelatedElementsNetwork from "../../components/ResourcePagesComps/RelatedElementsNetwork";
+import MainContent from "../../features/Element/MainContent";
+import CapsuleList from "../../features/Element/CapsuleList";
+import RelatedElements from "../../features/Element/RelatedElements";
+import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwork";
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
-import ContributorOps from "../../components/ResourcePagesComps/ContributorOps";
-import ErrorPage from "../../ErrorPage";
+import ContributorOps from "../../features/Element/ContributorOps";
 
-export default function DatasetPage() {
+import ErrorPage from "../ErrorPage";
+
+export default function PublicationPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState([]);
@@ -54,7 +52,7 @@ export default function DatasetPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
-      setExternalLink(thisElement["external-link"]);
+      setExternalLink(thisElement["external-link-publication"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
@@ -104,25 +102,26 @@ export default function DatasetPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Datasets", "/datasets"]]}
-                  currentPage="Dataset"
+                  parentPages={[["All Publications", "/publications"]]}
+                  currentPage="Publication"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/datasets"
+                  afterDeleteRedirection="/publications"
                 />
               </Stack>
               <MainContent
                 title={title}
                 authors={authors}
+                doi={externalLink}
                 contributor={contributor}
-                contentsTitle="About"
+                contentsTitle="Abstract"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
-                elementType="dataset"
+                elementType="publication"
                 creationTime={creationTime}
                 updateTime={updateTime}
               />
@@ -130,17 +129,6 @@ export default function DatasetPage() {
 
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-              {inputExists(directDownloadLink) && (
-                <CodeSnippet directDownloadLink={directDownloadLink} />
-              )}
-              <ActionList
-                title="Data Exploration"
-                externalLink={externalLink}
-                externalLinkText="Access Data Source"
-                directDownloadLink={directDownloadLink}
-                directDownloadLinkText="Download Data"
-                size={size}
-              />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />

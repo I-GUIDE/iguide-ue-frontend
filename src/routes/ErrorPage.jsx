@@ -12,10 +12,10 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 
-import usePageTitle from "./hooks/usePageTitle";
-import SearchBar from "./components/SearchBar";
+import usePageTitle from "../hooks/usePageTitle";
+import SearchBar from "../components/SearchBar";
 
-import { NO_HEADER_BODY_HEIGHT } from "./configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function ErrorPage(props) {
   usePageTitle("Error");

@@ -8,8 +8,6 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-import "../utils/UserManager";
-
 export default function UserProfileEditStatusCard(props) {
   const userProfileSubmissionStatus = props.userProfileSubmissionStatus;
   let submissionStatusText = "";

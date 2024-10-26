@@ -15,11 +15,11 @@ import OERs from "./routes/oers";
 import Maps from "./routes/maps";
 import Tag from "./routes/tag";
 
-import DatasetPage from "./routes/ResourcePages/DatasetPage";
-import NotebookPage from "./routes/ResourcePages/NotebookPage";
-import PublicationPage from "./routes/ResourcePages/PublicationPage";
-import OERPage from "./routes/ResourcePages/OERPage";
-import MapPage from "./routes/ResourcePages/MapPage";
+import DatasetPage from "./routes/ElementPage/DatasetPage";
+import NotebookPage from "./routes/ElementPage/NotebookPage";
+import PublicationPage from "./routes/ElementPage/PublicationPage";
+import OERPage from "./routes/ElementPage/OERPage";
+import MapPage from "./routes/ElementPage/MapPage";
 
 import UserProfile from "./routes/userProfile";
 import UserProfileUpdate from "./routes/userProfileUpdate";
@@ -35,7 +35,7 @@ const DocSubmission = lazy(() => import("./routes/DocSubmission"));
 const DocUpdate = lazy(() => import("./routes/DocUpdate"));
 import DocPage from "./routes/DocPage";
 
-import ErrorPage from "./ErrorPage";
+import ErrorPage from "./routes/ErrorPage";
 import ContributorProfile from "./routes/contributorProfile";
 import ContactUs from "./routes/ContactUs";
 

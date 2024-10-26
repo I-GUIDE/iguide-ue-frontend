@@ -17,10 +17,10 @@ import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import InfoCard from "./InfoCard";
-import { getHomepageElements } from "../utils/DataRetrieval";
+import InfoCard from "../../components/InfoCard";
+import { getHomepageElements } from "../../utils/DataRetrieval";
 
-import { TAGLINES } from "../configs/Texts";
+import { TAGLINES } from "../../configs/Texts";
 
 export default function FeaturedElementsList(props) {
   const icon = props.icon;

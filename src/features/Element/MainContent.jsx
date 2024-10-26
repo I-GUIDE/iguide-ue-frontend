@@ -16,7 +16,7 @@ import CardContent from "@mui/joy/CardContent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { printListWithDelimiter } from "../../helpers/helper";
-import UserAvatar from "../UserAvatar";
+import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
 
 function AuthorsDisplay(props) {

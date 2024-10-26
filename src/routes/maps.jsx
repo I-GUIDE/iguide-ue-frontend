@@ -3,7 +3,7 @@ import React from "react";
 import MapIcon from "@mui/icons-material/Map";
 
 import usePageTitle from "../hooks/usePageTitle";
-import ElementGridLayout from "../layouts/ElementGridLayout";
+import ElementGridLayout from "../features/ElementList/ElementGridLayout";
 
 import { TAGLINES } from "../configs/Texts";
 

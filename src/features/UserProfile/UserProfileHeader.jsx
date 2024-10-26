@@ -25,12 +25,12 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GoogleIcon from "@mui/icons-material/Google";
 import WebIcon from "@mui/icons-material/Web";
 
-import UserAvatar from "./UserAvatar";
+import UserAvatar from "../../components/UserAvatar";
 import {
   USER_PROFILE_HEADER_HEIGHT,
   UNTRUSTED_AFFILIATIONS,
-} from "../configs/VarConfigs";
-import { PERMISSIONS } from "../configs/Permissions";
+} from "../../configs/VarConfigs";
+import { PERMISSIONS } from "../../configs/Permissions";
 
 export default function UserProfileHeader(props) {
   const localUserInfo = props.localUserInfo;

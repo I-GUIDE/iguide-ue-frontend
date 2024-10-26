@@ -23,13 +23,13 @@ import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { styled } from "@mui/joy/styles";
 
-import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
+import { IMAGE_SIZE_LIMIT } from "../../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
-import { updateUser, checkTokens } from "../utils/UserManager";
-import { dataURLtoFile } from "../helpers/helper";
+import { updateUser, checkTokens } from "../../utils/UserManager";
+import { dataURLtoFile } from "../../helpers/helper";
 
-import { fetchWithAuth } from "../utils/FetcherWithJWT";
+import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
