@@ -31,8 +31,8 @@ import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 
 import NetworkVisualizer from "./routes/NetworkVisualizer";
-const DocSubmission = lazy(() => import("./routes/DocSubmission"));
-const DocUpdate = lazy(() => import("./routes/DocUpdate"));
+import DocSubmission from "./routes/DocSubmission";
+import DocUpdate from "./routes/DocUpdate";
 import DocPage from "./routes/DocPage";
 
 import ErrorPage from "./routes/ErrorPage";

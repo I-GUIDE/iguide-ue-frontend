@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import { useOutletContext } from "react-router-dom";
 
@@ -13,7 +13,7 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-import MarkdownEditor from "../../components/MarkdownEditor";
+const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -191,7 +191,12 @@ export default function DocEditCard(props) {
             <FormLabel>
               Content <RequiredFieldIndicator />
             </FormLabel>
-            <MarkdownEditor contents={docContent} setContents={setDocContent} />
+            <Suspense fallback={<div>Loading markdown editor...</div>}>
+              <MarkdownEditor
+                contents={docContent}
+                setContents={setDocContent}
+              />
+            </Suspense>
           </FormControl>
           <CardActions sx={{ gridColumn: "1/-1" }}>
             <Button type="submit" variant="solid" color="primary">
