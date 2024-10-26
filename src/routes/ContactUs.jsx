@@ -25,7 +25,7 @@ import IconButton from "@mui/joy/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
 const VITE_SLACK_API_URL = import.meta.env.VITE_SLACK_API_URL;
@@ -42,11 +42,6 @@ export default function ContactUs() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if (!contactName || !contactEmail || !contactMessage) {
-      setError("Please fill all the fields in the form");
-      return;
-    }
 
     // Send text data to Slack channel
     const res = await fetch(
@@ -137,7 +132,7 @@ export default function ContactUs() {
                 .
               </Typography>
               <Typography level="body-md" sx={{ p: 2 }}>
-                If not, please feel free to email{" "}
+                You can also email{" "}
                 <Link
                   href="mailto:help@i-guide.io"
                   target="_blank"
@@ -145,18 +140,20 @@ export default function ContactUs() {
                 >
                   help@i-guide.io
                 </Link>{" "}
-                for assistance or to report any issues.
+                or submit the form below for assistance or to report any issues.
               </Typography>
 
               <Box
                 sx={{
-                  my: 4,
+                  m: 2,
                   p: 3,
                   border: "1px solid #ddd",
                   borderRadius: "5px",
                 }}
               >
-                <Typography level="h2">Reach out to us</Typography>
+                <Typography level="h2" sx={{ py: 1 }}>
+                  Contact Form
+                </Typography>
                 <Typography level="body-sm">
                   Fields marked <RequiredFieldIndicator /> are required.
                 </Typography>
@@ -235,6 +232,7 @@ export default function ContactUs() {
                           Your name <RequiredFieldIndicator />
                         </FormLabel>
                         <Input
+                          required
                           placeholder="Name"
                           value={contactName}
                           onChange={(e) => setContactName(e.target.value)}
@@ -249,6 +247,7 @@ export default function ContactUs() {
                           Your email <RequiredFieldIndicator />
                         </FormLabel>
                         <Input
+                          required
                           placeholder="Email"
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
@@ -283,6 +282,8 @@ export default function ContactUs() {
                         <RequiredFieldIndicator />
                       </FormLabel>
                       <Textarea
+                        required
+                        type="email"
                         size="md"
                         name="message"
                         placeholder="Your message"
