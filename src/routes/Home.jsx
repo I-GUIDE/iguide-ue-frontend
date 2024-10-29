@@ -135,6 +135,7 @@ export default function Home() {
                   </Typography>
                   <SearchBar
                     placeholder="Start your exploration..."
+                    showTrendingSearchKeywords
                     showSmartSearch
                   />
                 </Box>
