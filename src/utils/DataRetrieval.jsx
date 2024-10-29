@@ -1,6 +1,6 @@
-const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 import axios from "axios";
 
+const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 /**
@@ -415,6 +415,41 @@ export async function duplicateDOIExists(url) {
     return response.json();
   } catch (error) {
     console.error("Error fetching neighbors: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Retrieve top search terms
+ *
+ * @async
+ * @function retrieveTopSearchKeywords
+ * @param {Int} [numberOfTerms=5] - Number of terms returned. Default 5
+ * @param {Int} [timespan=6] - Time window in hours. Default 24
+ * @returns {Promise<Object>} A promise that resolves to the JSON response related to top search terms.
+ * @throws {Error} Throws an error if the retrieval fails.
+ */
+export async function retrieveTopSearchKeywords(
+  numberOfTerms = 5,
+  timespan = 24
+) {
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/top-keywords?k=${numberOfTerms}&t=${timespan}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get top keywords");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error getting top keywords: ", error.message);
     return "ERROR";
   }
 }
