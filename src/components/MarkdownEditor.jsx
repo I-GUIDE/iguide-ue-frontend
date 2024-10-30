@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo } from "react";
 
-import MDEditor from "@uiw/react-md-editor";
+import JoditEditor from "jodit-react";
+import "@mdxeditor/editor/style.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import Button from "@mui/joy/Button";
@@ -26,9 +27,62 @@ const VisuallyHiddenInput = styled("input")`
   width: 1px;
 `;
 
+const buttons = [
+  "undo",
+  "redo",
+  "|",
+  "bold",
+  "underline",
+  "italic",
+  "strikethrough",
+  "|",
+  "superscript",
+  "subscript",
+  "|",
+  "align",
+  "|",
+  "ul",
+  "ol",
+  "outdent",
+  "indent",
+  "|",
+  "font",
+  "fontsize",
+  "brush",
+  "paragraph",
+  "|",
+  "image",
+  "link",
+  "table",
+  "|",
+  "hr",
+  "eraser",
+  "copyformat",
+  "|",
+  "fullsize",
+  "|",
+  "source",
+  "|",
+];
+
 export default function MarkdownEditor(props) {
+  const editor = useRef(null);
+
   const contents = props.contents;
   const setContents = props.setContents;
+
+  const config = useMemo(
+    () => ({
+      readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+      placeholder: "Start typings...",
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
+      buttons: buttons,
+      height: 800,
+    }),
+    []
+  );
 
   const [copied, setCopied] = useState(false);
   const [imgMarkdown, setImgMarkdown] = useState();
@@ -131,12 +185,13 @@ export default function MarkdownEditor(props) {
             Markdown image script copied!
           </Typography>
         )}
-        <MDEditor
-          height={400}
+        <JoditEditor
+          ref={editor}
           value={contents}
-          onChange={(value) => {
-            setContents(value);
-          }}
+          config={config}
+          tabIndex={1} // tabIndex of textarea
+          onBlur={(newContent) => setContents(newContent)} // preferred to use only this option to update the content for performance reasons
+          onChange={(newContent) => {}}
         />
       </Stack>
     </div>
