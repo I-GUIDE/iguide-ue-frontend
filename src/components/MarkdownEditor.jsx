@@ -1,7 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 
 import JoditEditor from "jodit-react";
-import "@mdxeditor/editor/style.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import Button from "@mui/joy/Button";
