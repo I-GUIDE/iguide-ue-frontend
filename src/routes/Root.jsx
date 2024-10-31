@@ -134,7 +134,7 @@ export default function Root(props) {
 
         const user = {
           affiliation: returnedLocalUser.affiliation,
-          avatar_url: returnedLocalUser.avatar_url,
+          avatar_url: returnedLocalUser["avatar-url"],
           bio: returnedLocalUser.bio,
           email: returnedLocalUser.email,
           first_name: returnedLocalUser["first-name"],

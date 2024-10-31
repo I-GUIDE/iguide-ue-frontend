@@ -42,7 +42,7 @@ export default function ContributorProfile() {
         email: user["email"],
         affiliation: user["affiliation"],
         bio: user["bio"],
-        avatar_url: user["avatar_url"],
+        avatar_url: user["avatar-url"],
         openid: user["openid"],
         id: user["id"],
         gitHubLink: user.gitHubLink,
