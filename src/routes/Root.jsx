@@ -132,9 +132,23 @@ export default function Root(props) {
         returnedLocalUser.role =
           typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
 
-        TEST_MODE && console.log("set local user: ", returnedLocalUser);
+        const user = {
+          affiliation: returnedLocalUser.affiliation,
+          avatar_url: returnedLocalUser.avatar_url,
+          bio: returnedLocalUser.bio,
+          email: returnedLocalUser.email,
+          first_name: returnedLocalUser["first-name"],
+          last_name: returnedLocalUser["last-name"],
+          openid: returnedLocalUser.openid,
+          role: returnedLocalUser.role,
+          gitHubLink: returnedLocalUser.gitHubLink,
+          linkedInLink: returnedLocalUser.linkedInLink,
+          googleScholarLink: returnedLocalUser.googleScholarLink,
+          personalWebsiteLink: returnedLocalUser.personalWebsiteLink,
+        };
+        TEST_MODE && console.log("set local user from DB: ", user);
 
-        setLocalUserInfo(returnedLocalUser);
+        setLocalUserInfo(user);
       }
     }
 
