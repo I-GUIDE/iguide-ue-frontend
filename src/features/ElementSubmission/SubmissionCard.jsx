@@ -45,6 +45,7 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
+  VISIBILITY,
 } from "../../configs/VarConfigs";
 
 import {
@@ -78,6 +79,8 @@ export default function SubmissionCard(props) {
   const elementType = props.elementType;
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
+
+  const [visibility, setVisibility] = useState(VISIBILITY.public);
 
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
   const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
@@ -151,6 +154,7 @@ export default function SubmissionCard(props) {
       TEST_MODE && console.log("returned element", thisElement);
 
       setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
       setTags(
@@ -225,6 +229,11 @@ export default function SubmissionCard(props) {
     };
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
+
+  const handleVisibilityChange = async (e, newValue) => {
+    TEST_MODE && console.log("Setting visibility to", newValue);
+    setVisibility(newValue);
+  };
 
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
@@ -452,6 +461,8 @@ export default function SubmissionCard(props) {
       }
     });
 
+    data.visibility = visibility;
+
     data["resource-type"] = resourceTypeSelected;
 
     data.metadata = { created_by: localUserInfo.id };
@@ -668,6 +679,23 @@ export default function SubmissionCard(props) {
               gap: 2,
             }}
           >
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Set the visibility of this element"
+                  fieldRequired
+                >
+                  Visibility
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select
+                defaultValue={VISIBILITY.public}
+                onChange={handleVisibilityChange}
+              >
+                <Option value={VISIBILITY.public}>Public</Option>
+                <Option value={VISIBILITY.private}>Private</Option>
+              </Select>
+            </FormControl>
             <Typography level="h3" sx={{ pt: 1 }}>
               Element information
             </Typography>
