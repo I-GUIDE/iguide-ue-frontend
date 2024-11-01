@@ -115,6 +115,7 @@ export default function MarkdownEditor(props) {
           tooltip: "Insert image",
           iconURL: "/images/insert-image-icon.png",
         },
+        "video",
         "|",
         {
           name: "embedment",
@@ -138,6 +139,7 @@ export default function MarkdownEditor(props) {
             const inputElement = document.createElement("input");
             inputElement.setAttribute("type", "text");
             inputElement.id = "embed-url";
+            inputElement.placeholder = "URL";
             divElement.appendChild(inputElement);
 
             const buttonElement = document.createElement("button");
