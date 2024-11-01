@@ -115,6 +115,40 @@ export default function MarkdownEditor(props) {
           tooltip: "Insert image",
           iconURL: "/images/insert-image-icon.png",
         },
+        "|",
+        {
+          name: "embedment",
+          tooltip: "Embed webpage",
+          iconURL: "/images/iframe-icon.png",
+          popup: (editor, current, self, close) => {
+            function handleClick(e) {
+              const embedURL = document.getElementById("embed-url").value;
+              console.log("URL for iframe", embedURL);
+              if (embedURL) {
+                const iframe =
+                  editor.selection.j.createInside.element("iframe");
+                iframe.setAttribute("src", embedURL);
+                iframe.setAttribute("width", "100%");
+                iframe.setAttribute("height", "100%");
+                editor.selection.insertNode(iframe);
+              }
+            }
+            const divElement = editor.create.div("iframe-embed-popup");
+
+            const inputElement = document.createElement("input");
+            inputElement.setAttribute("type", "text");
+            inputElement.id = "embed-url";
+            divElement.appendChild(inputElement);
+
+            const buttonElement = document.createElement("button");
+            buttonElement.innerHTML = "Embed";
+            buttonElement.onclick = handleClick;
+            divElement.appendChild(buttonElement);
+
+            console.log("div element", divElement);
+            return divElement;
+          },
+        },
         "link",
         "table",
         "|",
