@@ -9,7 +9,7 @@ import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
-export default function MarkdownEditor(props) {
+export default function HTMLEditor(props) {
   const editor = useRef(null);
 
   const contents = props.contents;
@@ -124,7 +124,7 @@ export default function MarkdownEditor(props) {
           popup: (editor, current, self, close) => {
             function handleClick(e) {
               const embedURL = document.getElementById("embed-url").value;
-              console.log("URL for iframe", embedURL);
+              TEST_MODE && console.log("URL for iframe", embedURL);
               if (embedURL) {
                 const iframe =
                   editor.selection.j.createInside.element("iframe");
@@ -147,7 +147,6 @@ export default function MarkdownEditor(props) {
             buttonElement.onclick = handleClick;
             divElement.appendChild(buttonElement);
 
-            console.log("div element", divElement);
             return divElement;
           },
         },
