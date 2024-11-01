@@ -81,7 +81,10 @@ export default function MarkdownEditor(props) {
           setImgMarkdown("![image](" + result.url + ")");
           setUploadSucceeded(true);
           TEST_MODE && console.log("Img link", result.url);
-          this.insertImage(editor, result.url);
+
+          const image = editor.selection.j.createInside.element("img");
+          image.setAttribute("src", result.url);
+          editor.selection.insertNode(image);
         } catch (error) {
           console.error("Error fetching a single element: ", error.message);
           setImgMarkdown("WARNING: Upload failed...");
