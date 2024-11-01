@@ -42,8 +42,8 @@ export const UNTRUSTED_AFFILIATIONS = [
 ];
 
 export const VISIBILITY = Object.freeze({
-  private: 1,
-  public: 10,
+  private: "private",
+  public: "public",
 });
 
 export const IMAGE_SIZE_LIMIT = 5000000;
