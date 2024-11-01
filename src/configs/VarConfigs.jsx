@@ -41,6 +41,11 @@ export const UNTRUSTED_AFFILIATIONS = [
   "orcid",
 ];
 
+export const VISIBILITY = Object.freeze({
+  private: 1,
+  public: 10,
+});
+
 export const IMAGE_SIZE_LIMIT = 5000000;
 
 export const NAVBAR_HEIGHT = 70;
