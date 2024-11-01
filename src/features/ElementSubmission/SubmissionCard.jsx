@@ -33,7 +33,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
+const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 
@@ -788,10 +788,7 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Suspense fallback={<div>Loading markdown editor...</div>}>
-                  <MarkdownEditor
-                    contents={contents}
-                    setContents={setContents}
-                  />
+                  <HTMLEditor contents={contents} setContents={setContents} />
                 </Suspense>
               </FormControl>
             ) : (

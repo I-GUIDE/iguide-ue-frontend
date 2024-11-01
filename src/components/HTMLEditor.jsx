@@ -9,7 +9,7 @@ import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
-export default function MarkdownEditor(props) {
+export default function HTMLEditor(props) {
   const editor = useRef(null);
 
   const contents = props.contents;
@@ -114,6 +114,41 @@ export default function MarkdownEditor(props) {
           name: "image",
           tooltip: "Insert image",
           iconURL: "/images/insert-image-icon.png",
+        },
+        "video",
+        "|",
+        {
+          name: "embedment",
+          tooltip: "Embed webpage",
+          iconURL: "/images/iframe-icon.png",
+          popup: (editor, current, self, close) => {
+            function handleClick(e) {
+              const embedURL = document.getElementById("embed-url").value;
+              TEST_MODE && console.log("URL for iframe", embedURL);
+              if (embedURL) {
+                const iframe =
+                  editor.selection.j.createInside.element("iframe");
+                iframe.setAttribute("src", embedURL);
+                iframe.setAttribute("width", "100%");
+                iframe.setAttribute("height", "100%");
+                editor.selection.insertNode(iframe);
+              }
+            }
+            const divElement = editor.create.div("iframe-embed-popup");
+
+            const inputElement = document.createElement("input");
+            inputElement.setAttribute("type", "text");
+            inputElement.id = "embed-url";
+            inputElement.placeholder = "URL";
+            divElement.appendChild(inputElement);
+
+            const buttonElement = document.createElement("button");
+            buttonElement.innerHTML = "Embed";
+            buttonElement.onclick = handleClick;
+            divElement.appendChild(buttonElement);
+
+            return divElement;
+          },
         },
         "link",
         "table",

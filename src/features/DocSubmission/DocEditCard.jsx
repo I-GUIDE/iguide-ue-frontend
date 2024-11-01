@@ -13,7 +13,7 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
+const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -192,10 +192,7 @@ export default function DocEditCard(props) {
               Content <RequiredFieldIndicator />
             </FormLabel>
             <Suspense fallback={<div>Loading markdown editor...</div>}>
-              <MarkdownEditor
-                contents={docContent}
-                setContents={setDocContent}
-              />
+              <HTMLEditor contents={docContent} setContents={setDocContent} />
             </Suspense>
           </FormControl>
           <CardActions sx={{ gridColumn: "1/-1" }}>
