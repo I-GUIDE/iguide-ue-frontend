@@ -151,7 +151,7 @@ export default function SearchBar(props) {
             </Tooltip>
           )}
         </Stack>
-        {showTrendingSearchKeywords && (
+        {showTrendingSearchKeywords && trendingSearchKeywords.length > 0 && (
           <ClickableKeywordList>{trendingSearchKeywords}</ClickableKeywordList>
         )}
       </Stack>
