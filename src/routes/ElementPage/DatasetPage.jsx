@@ -122,6 +122,7 @@ export default function DatasetPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/datasets"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
               <MainContent

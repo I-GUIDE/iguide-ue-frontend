@@ -120,6 +120,7 @@ export default function NotebookPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/notebooks"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
               <MainContent

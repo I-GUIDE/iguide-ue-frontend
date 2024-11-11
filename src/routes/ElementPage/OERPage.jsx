@@ -116,6 +116,7 @@ export default function OERPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/oers"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
               <MainContent

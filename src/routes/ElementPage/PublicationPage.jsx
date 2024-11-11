@@ -119,6 +119,7 @@ export default function PublicationPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/publications"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
               <MainContent

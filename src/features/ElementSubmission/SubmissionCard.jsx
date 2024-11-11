@@ -53,6 +53,7 @@ import {
   fetchAllTitlesByElementType,
   getMetadataByDOI,
   duplicateDOIExists,
+  fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
 
@@ -77,6 +78,7 @@ export default function SubmissionCard(props) {
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
@@ -149,7 +151,9 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = await fetchSingleElementDetails(elementId);
+      const thisElement = isPrivateElement
+        ? await fetchSinglePrivateElementDetails(elementId)
+        : await fetchSingleElementDetails(elementId);
 
       TEST_MODE && console.log("returned element", thisElement);
 
@@ -207,7 +211,7 @@ export default function SubmissionCard(props) {
     if (submissionType === "update") {
       fetchData();
     }
-  }, [elementId, submissionType]);
+  }, [isPrivateElement, elementId, submissionType]);
 
   useEffect(() => {
     if (submissionType === "initial") {

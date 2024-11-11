@@ -117,6 +117,7 @@ export default function MapPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/maps"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
               <MainContent
