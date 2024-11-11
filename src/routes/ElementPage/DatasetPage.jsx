@@ -45,13 +45,13 @@ export default function DatasetPage() {
   const [error, setError] = useState(false);
 
   const [pageParam, setPageParam] = useSearchParams();
-  const isPrivateElement = pageParam.get("private-mode") === "true";
+  const isPrivateElement = pageParam.get("private-mode");
 
   useEffect(() => {
     async function fetchData() {
       const thisElement = isPrivateElement
-        ? await fetchSingleElementDetails(id)
-        : await fetchSinglePrivateElementDetails(id);
+        ? await fetchSinglePrivateElementDetails(id)
+        : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
