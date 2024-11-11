@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -8,7 +8,10 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
-import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
+import {
+  fetchSingleElementDetails,
+  fetchSinglePrivateElementDetails,
+} from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import { inputExists } from "../../helpers/helper";
 
@@ -41,9 +44,14 @@ export default function DatasetPage() {
 
   const [error, setError] = useState(false);
 
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode") === "true";
+
   useEffect(() => {
     async function fetchData() {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement = isPrivateElement
+        ? await fetchSingleElementDetails(id)
+        : await fetchSinglePrivateElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
@@ -64,7 +72,7 @@ export default function DatasetPage() {
       setUpdateTime(thisElement["updated-at"]);
     }
     fetchData();
-  }, [id]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 

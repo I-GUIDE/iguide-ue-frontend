@@ -27,9 +27,13 @@ export default function InfoCard(props) {
   const contents = props.contents;
   const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
+  const uri = `/${cardType}/${pageid}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
 
   const contentsWithoutMarkdown = removeMarkdown(contents);
 
@@ -69,7 +73,7 @@ export default function InfoCard(props) {
           overlay
           underline="none"
           component={RouterLink}
-          to={"/" + cardType + "/" + pageid}
+          to={uri}
           sx={{ color: "text.tertiary" }}
         >
           <Typography

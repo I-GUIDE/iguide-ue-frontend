@@ -264,6 +264,7 @@ export default function ElementGrid(props) {
                   thumbnailImage={element["thumbnail-image"]}
                   contributor={element["contributor"]}
                   showElementType={showElementType}
+                  isPrivateElement={retrievePrivateElements}
                 />
               </Grid>
             ))}

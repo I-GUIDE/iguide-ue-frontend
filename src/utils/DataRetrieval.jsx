@@ -493,3 +493,34 @@ export async function retrievePrivateElementsByUserId(
     return "ERROR";
   }
 }
+
+/**
+ * Fetches a single private element for element pages
+ *
+ * @async
+ * @function fetchSinglePrivateElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSinglePrivateElementDetails(elementId) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/private-elements/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch a single private element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single private element: ", error.message);
+    return "ERROR";
+  }
+}
