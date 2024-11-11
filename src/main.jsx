@@ -23,6 +23,7 @@ import MapPage from "./routes/ElementPage/MapPage";
 
 import UserProfile from "./routes/UserProfile";
 import UserProfileUpdate from "./routes/UserProfileUpdate";
+import UserPrivateElements from "./routes/UserPrivateElements";
 import ElementSubmission from "./routes/ElementSubmission";
 import ElementUpdate from "./routes/ElementUpdate";
 import About from "./routes/About";
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: "/user-profile",
         element: <UserProfile />,
+      },
+      {
+        path: "/private-elements",
+        element: <UserPrivateElements />,
       },
       {
         path: "/contributor/:id",
