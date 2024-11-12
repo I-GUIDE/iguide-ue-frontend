@@ -74,6 +74,8 @@ export default function UserPrivateElements() {
       <Header
         title="Private Elements"
         subtitle="Only you can see the listed elements here"
+        currentPage="Private Elements"
+        parentPages={[["User Profile", "/user-profile"]]}
         icon={<LockIcon />}
       />
       <Container maxWidth="lg">
