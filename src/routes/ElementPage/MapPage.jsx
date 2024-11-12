@@ -23,6 +23,7 @@ import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
 import MapViewer from "../../features/Element/MapViewer";
 import StaticMap from "../../features/Element/StaticMap";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 
 import ErrorPage from "../ErrorPage";
 
@@ -120,6 +121,7 @@ export default function MapPage() {
                   isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
                 title={title}
                 authors={authors}

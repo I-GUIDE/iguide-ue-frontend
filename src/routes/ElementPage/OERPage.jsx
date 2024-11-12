@@ -22,6 +22,7 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 
 import ErrorPage from "../ErrorPage";
 
@@ -119,6 +120,7 @@ export default function OERPage() {
                   isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
                 title={title}
                 authors={authors}
