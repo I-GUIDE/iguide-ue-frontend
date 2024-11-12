@@ -64,6 +64,10 @@ export default function UserPrivateElements() {
     );
   }
 
+  if (!localUserInfo) {
+    return null;
+  }
+
   return (
     <JoyCssVarsProvider disableTransitionOnChange>
       <CssBaseline />
