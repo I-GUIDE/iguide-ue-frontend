@@ -45,7 +45,7 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
-  VISIBILITY,
+  ELEM_VISIBILITY,
 } from "../../configs/VarConfigs";
 
 import {
@@ -82,7 +82,7 @@ export default function SubmissionCard(props) {
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
-  const [visibility, setVisibility] = useState(VISIBILITY.public);
+  const [visibility, setVisibility] = useState("");
 
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
   const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
@@ -692,12 +692,9 @@ export default function SubmissionCard(props) {
                   Visibility
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Select
-                defaultValue={VISIBILITY.public}
-                onChange={handleVisibilityChange}
-              >
-                <Option value={VISIBILITY.public}>Public</Option>
-                <Option value={VISIBILITY.private}>Private</Option>
+              <Select value={visibility} onChange={handleVisibilityChange}>
+                <Option value={ELEM_VISIBILITY.public}>Public</Option>
+                <Option value={ELEM_VISIBILITY.private}>Private</Option>
               </Select>
             </FormControl>
             <Typography level="h3" sx={{ pt: 1 }}>
