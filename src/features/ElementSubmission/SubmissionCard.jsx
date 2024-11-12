@@ -157,7 +157,14 @@ export default function SubmissionCard(props) {
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      const elementUrlReturned = `/${
+        thisElement["resource-type"]
+      }s/${elementId}${
+        thisElement.visibility === ELEM_VISIBILITY.private
+          ? "?private-mode=true"
+          : ""
+      }`;
+      setElementURI(elementUrlReturned);
       setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
@@ -541,6 +548,10 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
+          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+          }`;
+          setElementURI(futureElementUrl);
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
@@ -569,7 +580,12 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+            const futureElementUrl = `/${resourceTypeSelected}s/${
+              result.elementId
+            }${
+              visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+            }`;
+            setElementURI(futureElementUrl);
           }
           // Case where there is a duplication on publication DOI
         } else if (
@@ -1326,6 +1342,7 @@ export default function SubmissionCard(props) {
           </CardContent>
         </form>
       </Card>
+      {/* Handle submission failure */}
       <Modal
         open={openModal}
         onClose={() => {
