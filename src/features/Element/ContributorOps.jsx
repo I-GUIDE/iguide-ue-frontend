@@ -30,9 +30,13 @@ export default function ContributorOps(props) {
   const afterDeleteRedirection = props.afterDeleteRedirection
     ? props.afterDeleteRedirection
     : "/";
+  const isPrivateElement = props.isPrivateElement;
 
   const [deleteMetadataTitle, setDeleteMetadataTitle] = useState(undefined);
   const [deleteMetadataId, setDeleteMetadataId] = useState(undefined);
+  const updateFormUri = `/element-update/${elementId}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
 
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated, localUserInfo } = useOutletContext();
@@ -83,7 +87,7 @@ export default function ContributorOps(props) {
           aria-label="Edit this element"
           underline="none"
           component={RouterLink}
-          to={"/element-update/" + elementId}
+          to={updateFormUri}
           sx={{ color: "inherit" }}
         >
           <Tooltip title="Edit this element" placement="top" arrow>

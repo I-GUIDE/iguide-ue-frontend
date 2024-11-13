@@ -11,6 +11,9 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
+import IconButton from "@mui/joy/IconButton";
+import LockIcon from "@mui/icons-material/Lock";
+
 import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
 import {
@@ -27,9 +30,13 @@ export default function InfoCard(props) {
   const contents = props.contents;
   const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
+  const uri = `/${cardType}/${pageid}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
 
   const contentsWithoutMarkdown = removeMarkdown(contents);
 
@@ -63,13 +70,32 @@ export default function InfoCard(props) {
             />
           )}
         </AspectRatio>
+        {isPrivateElement && (
+          <IconButton
+            aria-label="lock icon"
+            size="md"
+            variant="solid"
+            color="neutral"
+            disabled
+            sx={{
+              position: "absolute",
+              zIndex: 2,
+              borderRadius: "50%",
+              right: "1rem",
+              bottom: 0,
+              transform: "translateY(50%)",
+            }}
+          >
+            <LockIcon />
+          </IconButton>
+        )}
       </CardOverflow>
       <CardContent>
         <Link
           overlay
           underline="none"
           component={RouterLink}
-          to={"/" + cardType + "/" + pageid}
+          to={uri}
           sx={{ color: "text.tertiary" }}
         >
           <Typography

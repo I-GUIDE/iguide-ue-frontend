@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -8,7 +8,10 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
-import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
+import {
+  fetchSingleElementDetails,
+  fetchSinglePrivateElementDetails,
+} from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../features/Element/MainContent";
@@ -18,6 +21,7 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 
 import ErrorPage from "../ErrorPage";
 
@@ -38,9 +42,14 @@ export default function PublicationPage() {
 
   const [error, setError] = useState(false);
 
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode");
+
   useEffect(() => {
     async function fetchData() {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement = isPrivateElement
+        ? await fetchSinglePrivateElementDetails(id)
+        : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
@@ -61,7 +70,7 @@ export default function PublicationPage() {
       setUpdateTime(thisElement["updated-at"]);
     }
     fetchData();
-  }, [id]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 
@@ -111,8 +120,10 @@ export default function PublicationPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/publications"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
                 title={title}
                 authors={authors}

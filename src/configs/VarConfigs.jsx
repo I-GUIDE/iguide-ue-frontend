@@ -41,7 +41,7 @@ export const UNTRUSTED_AFFILIATIONS = [
   "orcid",
 ];
 
-export const VISIBILITY = Object.freeze({
+export const ELEM_VISIBILITY = Object.freeze({
   private: "private",
   public: "public",
 });

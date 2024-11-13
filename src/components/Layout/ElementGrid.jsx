@@ -23,7 +23,10 @@ import CardContent from "@mui/joy/CardContent";
 
 import InfoCard from "../InfoCard";
 
-import { elementRetriever } from "../../utils/DataRetrieval";
+import {
+  elementRetriever,
+  retrievePrivateElementsByUserId,
+} from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -45,6 +48,7 @@ export default function ElementGrid(props) {
   const elementType = props.elementType;
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
+  const retrievePrivateElements = props.retrievePrivateElements;
 
   const [elementList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +80,8 @@ export default function ElementGrid(props) {
           itemsPerPage
         );
 
+        TEST_MODE && console.log("Retrieve elements", data);
+
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
@@ -87,8 +93,42 @@ export default function ElementGrid(props) {
       }
     }
 
-    retrieveData(currentStartingIdx);
-  }, [currentStartingIdx, elementType, ranking, fieldName, matchValue]);
+    async function retrievePrivateData(startingIdx) {
+      try {
+        const data = await retrievePrivateElementsByUserId(
+          matchValue,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        TEST_MODE && console.log("Retrieve private elements", data);
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
+    if (retrievePrivateElements) {
+      retrievePrivateData(currentStartingIdx);
+    } else {
+      retrieveData(currentStartingIdx);
+    }
+  }, [
+    retrievePrivateElements,
+    currentStartingIdx,
+    elementType,
+    ranking,
+    fieldName,
+    matchValue,
+  ]);
 
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
@@ -224,6 +264,7 @@ export default function ElementGrid(props) {
                   thumbnailImage={element["thumbnail-image"]}
                   contributor={element["contributor"]}
                   showElementType={showElementType}
+                  isPrivateElement={retrievePrivateElements}
                 />
               </Grid>
             ))}

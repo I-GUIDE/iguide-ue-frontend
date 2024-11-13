@@ -11,6 +11,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { stringTruncator } from "../helpers/helper";
 
 export default function PageNav(props) {
+  // Format: [["Page name", "page URI"], ...]
   const parentPages = props.parentPages ? props.parentPages : [];
   const currentPage = stringTruncator(props.currentPage, 0, 30);
   const fontLevel = props.fontLevel ? props.fontLevel : "body-xs";

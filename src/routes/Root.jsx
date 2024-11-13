@@ -19,6 +19,7 @@ import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function Root(props) {
@@ -94,6 +95,7 @@ export default function Root(props) {
       first_name: "Happy",
       last_name: "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
+      id: DEMO_USERID,
       role: 1,
       gitHubLink: "https://github.com",
       linkedInLink: "https://linkedin.com",

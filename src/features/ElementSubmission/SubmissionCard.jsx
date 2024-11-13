@@ -45,7 +45,7 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
-  VISIBILITY,
+  ELEM_VISIBILITY,
 } from "../../configs/VarConfigs";
 
 import {
@@ -53,6 +53,7 @@ import {
   fetchAllTitlesByElementType,
   getMetadataByDOI,
   duplicateDOIExists,
+  fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
 
@@ -77,10 +78,11 @@ export default function SubmissionCard(props) {
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
-  const [visibility, setVisibility] = useState(VISIBILITY.public);
+  const [visibility, setVisibility] = useState("");
 
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
   const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
@@ -149,11 +151,20 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = await fetchSingleElementDetails(elementId);
+      const thisElement = isPrivateElement
+        ? await fetchSinglePrivateElementDetails(elementId)
+        : await fetchSingleElementDetails(elementId);
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      const elementUrlReturned = `/${
+        thisElement["resource-type"]
+      }s/${elementId}${
+        thisElement.visibility === ELEM_VISIBILITY.private
+          ? "?private-mode=true"
+          : ""
+      }`;
+      setElementURI(elementUrlReturned);
       setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
@@ -207,7 +218,7 @@ export default function SubmissionCard(props) {
     if (submissionType === "update") {
       fetchData();
     }
-  }, [elementId, submissionType]);
+  }, [isPrivateElement, elementId, submissionType]);
 
   useEffect(() => {
     if (submissionType === "initial") {
@@ -537,6 +548,10 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
+          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+          }`;
+          setElementURI(futureElementUrl);
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
@@ -565,7 +580,12 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+            const futureElementUrl = `/${resourceTypeSelected}s/${
+              result.elementId
+            }${
+              visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+            }`;
+            setElementURI(futureElementUrl);
           }
           // Case where there is a duplication on publication DOI
         } else if (
@@ -688,12 +708,9 @@ export default function SubmissionCard(props) {
                   Visibility
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Select
-                defaultValue={VISIBILITY.public}
-                onChange={handleVisibilityChange}
-              >
-                <Option value={VISIBILITY.public}>Public</Option>
-                <Option value={VISIBILITY.private}>Private</Option>
+              <Select value={visibility} onChange={handleVisibilityChange}>
+                <Option value={ELEM_VISIBILITY.public}>Public</Option>
+                <Option value={ELEM_VISIBILITY.private}>Private</Option>
               </Select>
             </FormControl>
             <Typography level="h3" sx={{ pt: 1 }}>
@@ -1325,6 +1342,7 @@ export default function SubmissionCard(props) {
           </CardContent>
         </form>
       </Card>
+      {/* Handle submission failure */}
       <Modal
         open={openModal}
         onClose={() => {

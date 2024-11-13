@@ -1,4 +1,5 @@
 import axios from "axios";
+import { fetchWithAuth } from "./FetcherWithJWT";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -174,6 +175,7 @@ export async function getMetadataByDOI(doi) {
  * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
  * @param {string} [from='0'] - The starting point of the results.
  * @param {string} [size='10'] - The number of results to retrieve.
+ * @param {boolean} [countOnly=false] - only return count number.
  * @returns {Promise<Object|number>} The retrieved elements.
  * @throws {Error} If the request fails.
  */
@@ -450,6 +452,75 @@ export async function retrieveTopSearchKeywords(
     return response.json();
   } catch (error) {
     console.error("Error getting top keywords: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Retrieve private elements from the database by user id.
+ *
+ * @param {string} [userId] - User ID.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
+ * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='12'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved private elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrievePrivateElementsByUserId(
+  userId,
+  sortBy = "creation_time",
+  order = "desc",
+  from = "0",
+  size = "12"
+) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/private-elements?` +
+        `user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve private elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of private elements: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Fetches a single private element for element pages
+ *
+ * @async
+ * @function fetchSinglePrivateElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSinglePrivateElementDetails(elementId) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/private-elements/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch a single private element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single private element: ", error.message);
     return "ERROR";
   }
 }

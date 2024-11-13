@@ -217,7 +217,7 @@ export default function UserProfile() {
               }}
             >
               {/* For testing purposes */}
-              {USE_DEMO_USER ? (
+              {USE_DEMO_USER && !userId ? (
                 <ElementGrid
                   uriPrefix="/user-profile"
                   headline="Demo contributions"

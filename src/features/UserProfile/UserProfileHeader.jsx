@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
@@ -18,6 +20,7 @@ import Tooltip from "@mui/joy/Tooltip";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import PolicyIcon from "@mui/icons-material/Policy";
 
 import { grey } from "@mui/material/colors";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -359,6 +362,18 @@ export default function UserProfileHeader(props) {
                             )}
                           </Menu>
                         </Dropdown>
+                      )}
+                      {canContributeElements && (
+                        <Button
+                          component={RouterLink}
+                          to="/private-elements"
+                          variant="outlined"
+                          size="sm"
+                          color="neutral"
+                          endDecorator={<PolicyIcon />}
+                        >
+                          View Private Elements
+                        </Button>
                       )}
                     </Stack>
                   )}
