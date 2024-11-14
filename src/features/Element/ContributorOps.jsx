@@ -5,7 +5,7 @@ import { useOutletContext, Link as RouterLink } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";
 import Link from "@mui/joy/Link";
-import IconButton from "@mui/joy/IconButton";
+import Button from "@mui/joy/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
@@ -41,7 +41,7 @@ export default function ContributorOps(props) {
 
   return (
     <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <IconButton size="sm" variant="soft" color="primary">
+      <Button size="sm" variant="soft" color="primary">
         <Link
           aria-label="Edit this element"
           underline="none"
@@ -53,7 +53,7 @@ export default function ContributorOps(props) {
             <EditIcon />
           </Tooltip>
         </Link>
-      </IconButton>
+      </Button>
       <ElementDeleteButton
         color="danger"
         variant="soft"
