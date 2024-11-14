@@ -51,7 +51,7 @@ export const IMAGE_SIZE_LIMIT = 5000000;
 export const NAVBAR_HEIGHT = 70;
 export const HEADER_HEIGHT = 200;
 export const FOOTER_HEIGHT = 150;
-export const USER_PROFILE_HEADER_HEIGHT = 300;
+export const USER_PROFILE_HEADER_HEIGHT = 365;
 export const SEARCH_RESULTS_HEADER_HEIGHT = 250;
 export const HOME_SEARCH_SEC_HEIGHT = "300px";
 
