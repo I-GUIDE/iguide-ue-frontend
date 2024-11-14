@@ -84,7 +84,7 @@ export default function FeaturedElementsList(props) {
               <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
                 <InfoCard
                   cardtype={featuredElement["resource-type"] + "s"}
-                  pageid={featuredElement.id}
+                  elementId={featuredElement.id}
                   title={featuredElement.title}
                   contents={featuredElement.contents}
                   thumbnailImage={featuredElement["thumbnail-image"]}

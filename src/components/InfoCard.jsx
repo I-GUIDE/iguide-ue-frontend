@@ -26,7 +26,7 @@ export default function InfoCard(props) {
   const title = props.title;
   const authors = props.authors;
   const cardType = props.cardtype;
-  const pageid = props.pageid;
+  const elementId = props.elementId;
   const contents = props.contents;
   const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
@@ -34,7 +34,7 @@ export default function InfoCard(props) {
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
-  const uri = `/${cardType}/${pageid}${
+  const uri = `/${cardType}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
 

@@ -2,7 +2,7 @@
  * Get a text indicating how much time has passed. e.g. "Contributed 10 days ago"
  * @param {string} pretext The text before "xxx {time unit} ago"
  * @param {string} pastTimestamp the timestamp in the past
- * @return {string} text indicating how ,uch time has passed
+ * @return {string} text indicating how much time has passed
  */
 export function PeriodAgoText(pretext, pastTimestamp) {
   const TIME_TO_DAY = 1000 * 60 * 60 * 24;
