@@ -36,6 +36,7 @@ export default function MapPage() {
   const [tags, setTags] = useState([]);
   const [mapIFrameLink, setMapIFrameLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -63,6 +64,7 @@ export default function MapPage() {
       setTags(thisElement.tags);
       setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -129,6 +131,7 @@ export default function MapPage() {
                 contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="map"
                 creationTime={creationTime}
                 updateTime={updateTime}

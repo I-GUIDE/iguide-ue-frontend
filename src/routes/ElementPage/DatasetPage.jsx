@@ -39,6 +39,7 @@ export default function DatasetPage() {
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -68,6 +69,7 @@ export default function DatasetPage() {
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -134,6 +136,7 @@ export default function DatasetPage() {
                 contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="dataset"
                 creationTime={creationTime}
                 updateTime={updateTime}

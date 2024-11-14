@@ -37,6 +37,7 @@ export default function NotebookPage() {
   const [repoUrl, setRepoUrl] = useState("");
   const [notebookFile, setNotebookFile] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -65,6 +66,7 @@ export default function NotebookPage() {
       setRepoUrl(thisElement["notebook-repo"]);
       setNotebookFile(thisElement["notebook-file"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setHtmlNotebook(thisElement["html-notebook"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
@@ -132,6 +134,7 @@ export default function NotebookPage() {
                 contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="notebook"
                 creationTime={creationTime}
                 updateTime={updateTime}

@@ -95,6 +95,7 @@ export default function MainContent(props) {
   const contentsTitle = props.contentsTitle;
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
+  const thumbnailImageCredit = props.thumbnailImageCredit;
   const elementType = props.elementType;
   const useMarkdown = props.useMarkdown;
   const useOERLayout = props.useOERLayout;
@@ -294,20 +295,22 @@ export default function MainContent(props) {
           )}
         </Grid>
         <Grid xs={12} md={4}>
-          <AspectRatio
-            variant="outlined"
-            sx={{ py: 1, borderRadius: "lg", height: "100%" }}
-          >
-            {thumbnailImage ? (
-              <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
-            ) : (
-              <img
-                src={`/default-images/${elementType}.png`}
-                loading="lazy"
-                alt="deafult-thumbnail"
-              />
-            )}
-          </AspectRatio>
+          <Tooltip title={thumbnailImageCredit} placement="top">
+            <AspectRatio
+              variant="outlined"
+              sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+            >
+              {thumbnailImage ? (
+                <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+              ) : (
+                <img
+                  src={`/default-images/${elementType}.png`}
+                  loading="lazy"
+                  alt="deafult-thumbnail"
+                />
+              )}
+            </AspectRatio>
+          </Tooltip>
         </Grid>
       </Grid>
       {contentsTitle && (
