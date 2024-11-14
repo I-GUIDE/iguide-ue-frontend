@@ -86,6 +86,7 @@ export default function SubmissionCard(props) {
 
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
   const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
   const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
@@ -895,6 +896,20 @@ export default function SubmissionCard(props) {
                   </AspectRatio>
                 </div>
               )}
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Add a credit or the source of the thumbnail image if required">
+                  Thumbnail image credit
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="thumbnail-credit"
+                value={thumbnailImageCredit}
+                onChange={(event) =>
+                  setThumbnailImageCredit(event.target.value)
+                }
+              />
             </FormControl>
             {resourceTypeSelected === "map" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
