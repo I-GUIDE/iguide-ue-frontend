@@ -102,7 +102,8 @@ export default function UserPrivateElements() {
               matchValue={localUserInfo.id}
               noElementMsg="No private element returned"
               showElementType
-              retrievePrivateElements
+              showUserElementCard
+              isPrivateElement
             />
           </Grid>
         </Box>

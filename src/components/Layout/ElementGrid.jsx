@@ -22,6 +22,7 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
 import InfoCard from "../InfoCard";
+import UserElementCard from "../UserElementCard";
 
 import {
   elementRetriever,
@@ -48,7 +49,8 @@ export default function ElementGrid(props) {
   const elementType = props.elementType;
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
-  const retrievePrivateElements = props.retrievePrivateElements;
+  const isPrivateElement = props.isPrivateElement;
+  const showUserElementCard = props.showUserElementCard;
 
   const [elementList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -116,13 +118,13 @@ export default function ElementGrid(props) {
       }
     }
 
-    if (retrievePrivateElements) {
+    if (isPrivateElement) {
       retrievePrivateData(currentStartingIdx);
     } else {
       retrieveData(currentStartingIdx);
     }
   }, [
-    retrievePrivateElements,
+    isPrivateElement,
     currentStartingIdx,
     elementType,
     ranking,
@@ -254,18 +256,34 @@ export default function ElementGrid(props) {
           >
             {elementList?.map((element) => (
               <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                <InfoCard
-                  cardtype={element["resource-type"] + "s"}
-                  pageid={element.id}
-                  title={element.title}
-                  authors={element.authors}
-                  tags={element.tags}
-                  contents={element.contents}
-                  thumbnailImage={element["thumbnail-image"]}
-                  contributor={element["contributor"]}
-                  showElementType={showElementType}
-                  isPrivateElement={retrievePrivateElements}
-                />
+                {showUserElementCard ? (
+                  <UserElementCard
+                    cardtype={element["resource-type"] + "s"}
+                    elementId={element.id}
+                    title={element.title}
+                    authors={element.authors}
+                    tags={element.tags}
+                    contents={element.contents}
+                    thumbnailImage={element["thumbnail-image"]}
+                    contributor={element["contributor"]}
+                    numberOfClicks={element["click-count"]}
+                    showElementType={showElementType}
+                    isPrivateElement={isPrivateElement}
+                  />
+                ) : (
+                  <InfoCard
+                    cardtype={element["resource-type"] + "s"}
+                    elementId={element.id}
+                    title={element.title}
+                    authors={element.authors}
+                    tags={element.tags}
+                    contents={element.contents}
+                    thumbnailImage={element["thumbnail-image"]}
+                    contributor={element["contributor"]}
+                    showElementType={showElementType}
+                    isPrivateElement={isPrivateElement}
+                  />
+                )}
               </Grid>
             ))}
           </Grid>

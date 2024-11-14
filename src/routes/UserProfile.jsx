@@ -224,6 +224,7 @@ export default function UserProfile() {
                   elementType="dataset"
                   noElementMsg="You currently don't have any contributions..."
                   showElementType
+                  showUserElementCard
                 />
               ) : (
                 <ElementGrid
@@ -233,6 +234,7 @@ export default function UserProfile() {
                   matchValue={encodeURIComponent(userId)}
                   noElementMsg="You currently don't have any contributions..."
                   showElementType
+                  showUserElementCard
                 />
               )}
             </Grid>

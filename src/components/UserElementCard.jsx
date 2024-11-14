@@ -6,43 +6,45 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
-import CardActions from "@mui/joy/CardActions";
 import CardOverflow from "@mui/joy/CardOverflow";
-import Stack from "@mui/joy/Stack";
+import CardActions from "@mui/joy/CardActions";
 import Typography from "@mui/joy/Typography";
-
+import Button from "@mui/joy/Button";
 import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
+import Divider from "@mui/joy/Divider";
+
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import LockIcon from "@mui/icons-material/Lock";
 
-import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
-import UserAvatar from "./UserAvatar";
+import { NumberText } from "../utils/NumberText";
+import ElementDeleteButton from "./ElementDeleteButton";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
 } from "../configs/VarConfigs";
 
-export default function InfoCard(props) {
+export default function UserElementCard(props) {
   const thumbnailImage = props.thumbnailImage;
   const title = props.title;
-  const authors = props.authors;
   const cardType = props.cardtype;
   const elementId = props.elementId;
-  const contents = props.contents;
-  const contributor = props.contributor ? props.contributor : {};
+  const numberOfClicks = props.numberOfClicks || 0;
   const showElementType = props.showElementType;
+  const contributor = props.contributor ? props.contributor : {};
   const isPrivateElement = props.isPrivateElement;
 
+  const updateFormUri = `/element-update/${elementId}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
   const uri = `/${cardType}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
-
-  const contentsWithoutMarkdown = removeMarkdown(contents);
-
+  const numberOfClicksAsString = NumberText(numberOfClicks);
   const contributorUserId = contributor.id;
-  const contributorName = contributor.name;
-  const contributorAvatar = contributor["avatar-url"];
 
   return (
     <Card
@@ -99,7 +101,7 @@ export default function InfoCard(props) {
           sx={{ color: "text.tertiary" }}
         >
           <Typography
-            level="title-md"
+            level="title-sm"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -113,68 +115,60 @@ export default function InfoCard(props) {
             {title}
           </Typography>
         </Link>
-        <Typography
-          level="body-sm"
-          textColor="#4D4F5C"
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: "1",
-            WebkitBoxOrient: "vertical",
-            wordBreak: "break-word",
-            mb: 0.5,
-          }}
-        >
-          {printListWithDelimiter(authors, ",")}
-        </Typography>
-        <Typography
-          level="body-xs"
-          textColor="#a1a1a1"
-          sx={{
-            display: "-webkit-box",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-            wordBreak: "break-word",
-          }}
-        >
-          {contentsWithoutMarkdown}
-        </Typography>
       </CardContent>
-
-      {contributorName && (
-        <CardActions>
+      <Divider orientation="horizontal" />
+      <CardActions
+        variant="outlined"
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          borderColor: "#fff",
+        }}
+      >
+        <Tooltip title={numberOfClicks}>
+          <Typography level="title-sm">
+            {numberOfClicksAsString} view{numberOfClicks > 1 && "s"}
+          </Typography>
+        </Tooltip>
+        <Divider orientation="vertical" />
+        <Button size="sm" variant="plain" color="primary">
           <Link
+            aria-label="Edit this element"
+            underline="none"
             component={RouterLink}
-            to={"/contributor/" + encodeURIComponent(contributorUserId)}
+            to={updateFormUri}
+            sx={{ color: "inherit" }}
           >
-            <Stack direction="row" alignItems="center" spacing={1.5}>
-              <UserAvatar
-                size={30}
-                link={contributorAvatar}
-                userId={contributorUserId}
-              />
-              <Stack direction="column">
-                <Typography
-                  level="title-sm"
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: "1",
-                    WebkitBoxOrient: "vertical",
-                  }}
-                >
-                  {contributorName}
-                </Typography>
-                <Typography level="body-xs">Contributor</Typography>
-              </Stack>
-            </Stack>
+            <Typography
+              startDecorator={<EditIcon />}
+              level="title-sm"
+              color="primary"
+            >
+              Edit
+            </Typography>
           </Link>
-        </CardActions>
-      )}
+        </Button>
+
+        <Divider orientation="vertical" />
+        <ElementDeleteButton
+          variant="plain"
+          color="danger"
+          size="sm"
+          title={title}
+          elementId={elementId}
+          contributorId={contributorUserId}
+          afterDeleteRedirection="/user-profile"
+        >
+          <Typography
+            startDecorator={<DeleteForeverIcon />}
+            level="title-sm"
+            color="danger"
+          >
+            Delete
+          </Typography>
+        </ElementDeleteButton>
+      </CardActions>
 
       {showElementType && (
         <CardOverflow
@@ -188,7 +182,6 @@ export default function InfoCard(props) {
             fontWeight: "xl",
             letterSpacing: "1px",
             textTransform: "uppercase",
-            borderLeft: "1px solid",
             borderColor: "divider",
           }}
         >

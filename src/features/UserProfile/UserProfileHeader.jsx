@@ -306,9 +306,9 @@ export default function UserProfileHeader(props) {
 
                   {allowProfileOps && (
                     <Stack
-                      direction="row"
+                      direction={{ xs: "column", sm: "row" }}
                       spacing={2}
-                      justifyContent="flex-start"
+                      justifyContent={{ xs: "center", sm: "flex-start" }}
                       sx={{ py: 2 }}
                     >
                       <Button

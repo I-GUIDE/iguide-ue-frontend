@@ -427,7 +427,7 @@ export default function SearchResults() {
                     <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
                       <InfoCard
                         cardtype={result["resource-type"] + "s"}
-                        pageid={result._id}
+                        elementId={result._id}
                         title={result.title}
                         authors={result.authors}
                         tags={result.tags}
