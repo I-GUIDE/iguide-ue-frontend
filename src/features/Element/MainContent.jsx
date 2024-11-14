@@ -125,7 +125,11 @@ export default function MainContent(props) {
             <Card sx={{ minHeight: "400px" }}>
               <CardCover>
                 {thumbnailImage ? (
-                  <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+                  <img
+                    src={thumbnailImage.high}
+                    loading="lazy"
+                    alt="thumbnail"
+                  />
                 ) : (
                   <img
                     src={`/default-images/${elementType}.png`}
@@ -301,7 +305,11 @@ export default function MainContent(props) {
               sx={{ py: 1, borderRadius: "lg", height: "100%" }}
             >
               {thumbnailImage ? (
-                <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+                <img
+                  src={thumbnailImage.medium}
+                  loading="lazy"
+                  alt="thumbnail"
+                />
               ) : (
                 <img
                   src={`/default-images/${elementType}.png`}

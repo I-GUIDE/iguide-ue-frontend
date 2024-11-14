@@ -49,7 +49,7 @@ export default function SimpleInfoCard(props) {
     >
       <CardOverflow>
         <AspectRatio ratio="2">
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          <img src={thumbnailImage.low} loading="lazy" alt="thumbnail" />
         </AspectRatio>
       </CardOverflow>
       <CardContent>

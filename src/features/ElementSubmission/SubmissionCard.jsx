@@ -890,11 +890,7 @@ export default function SubmissionCard(props) {
                   <Typography>Thumbnail preview</Typography>
                   <AspectRatio ratio="1" sx={{ width: 190 }}>
                     <img
-                      src={
-                        typeof thumbnailImageFileURLs === "string"
-                          ? thumbnailImageFileURLs
-                          : thumbnailImageFileURLs.low
-                      }
+                      src={thumbnailImageFileURLs.low}
                       loading="lazy"
                       alt="thumbnail-preview"
                     />
