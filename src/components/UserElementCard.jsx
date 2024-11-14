@@ -19,6 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import LockIcon from "@mui/icons-material/Lock";
 
 import { NumberText } from "../utils/NumberText";
+import ElementDeleteButton from "./ElementDeleteButton";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
@@ -28,20 +29,22 @@ export default function UserElementCard(props) {
   const thumbnailImage = props.thumbnailImage;
   const title = props.title;
   const cardType = props.cardtype;
-  const pageid = props.pageid;
+  const elementId = props.elementId;
   const numberOfClicks = props.numberOfClicks || 0;
   const showElementType = props.showElementType;
+  const contributor = props.contributor ? props.contributor : {};
   const isPrivateElement = props.isPrivateElement;
 
-  const updateFormUri = `/element-update/${pageid}${
+  const updateFormUri = `/element-update/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
-  const uri = `/${cardType}/${pageid}${
+  const uri = `/${cardType}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
   const numberOfClicksAsString = NumberText(numberOfClicks);
+  const contributorUserId = contributor.id;
 
   return (
     <Card
@@ -148,13 +151,23 @@ export default function UserElementCard(props) {
         </Button>
 
         <Divider orientation="vertical" />
-        <Typography
-          startDecorator={<DeleteForeverIcon />}
-          level="title-sm"
+        <ElementDeleteButton
+          variant="plain"
           color="danger"
+          size="sm"
+          title={title}
+          elementId={elementId}
+          contributorId={contributorUserId}
+          afterDeleteRedirection="/user-profile"
         >
-          Delete
-        </Typography>
+          <Typography
+            startDecorator={<DeleteForeverIcon />}
+            level="title-sm"
+            color="danger"
+          >
+            Delete
+          </Typography>
+        </ElementDeleteButton>
       </CardActions>
 
       {showElementType && (

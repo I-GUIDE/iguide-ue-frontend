@@ -259,7 +259,7 @@ export default function ElementGrid(props) {
                 {showUserElementCard ? (
                   <UserElementCard
                     cardtype={element["resource-type"] + "s"}
-                    pageid={element.id}
+                    elementId={element.id}
                     title={element.title}
                     authors={element.authors}
                     tags={element.tags}
