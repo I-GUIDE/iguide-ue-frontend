@@ -7,7 +7,9 @@ import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
+import CardActions from "@mui/joy/CardActions";
 import Typography from "@mui/joy/Typography";
+import Button from "@mui/joy/Button";
 
 import Divider from "@mui/joy/Divider";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -29,6 +31,9 @@ export default function UserElementCard(props) {
   const numberOfClicks = props.numberOfClicks || "0";
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
+  const updateFormUri = `/element-update/${pageid}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -106,29 +111,36 @@ export default function UserElementCard(props) {
           </Typography>
         </Link>
       </CardContent>
-
       <Divider orientation="horizontal" />
-
-      <CardOverflow
+      <CardActions
         variant="outlined"
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-around",
+          justifyContent: "space-evenly",
           borderColor: "#fff",
         }}
       >
-        <Typography startDecorator={<VisibilityIcon />} level="title-sm">
-          {numberOfClicks}
-        </Typography>
+        <Typography level="title-sm">{numberOfClicks} views</Typography>
         <Divider orientation="vertical" />
-        <Typography
-          startDecorator={<EditIcon color="danger" />}
-          level="title-sm"
-          color="primary"
-        >
-          Edit
-        </Typography>
+        <Button size="sm" variant="plain" color="primary">
+          <Link
+            aria-label="Edit this element"
+            underline="none"
+            component={RouterLink}
+            to={updateFormUri}
+            sx={{ color: "inherit" }}
+          >
+            <Typography
+              startDecorator={<EditIcon />}
+              level="title-sm"
+              color="primary"
+            >
+              Edit
+            </Typography>
+          </Link>
+        </Button>
+
         <Divider orientation="vertical" />
         <Typography
           startDecorator={<DeleteForeverIcon />}
@@ -137,7 +149,7 @@ export default function UserElementCard(props) {
         >
           Delete
         </Typography>
-      </CardOverflow>
+      </CardActions>
 
       {showElementType && (
         <CardOverflow
