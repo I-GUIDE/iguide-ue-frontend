@@ -10,14 +10,15 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import CardActions from "@mui/joy/CardActions";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
 import Divider from "@mui/joy/Divider";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-
-import IconButton from "@mui/joy/IconButton";
 import LockIcon from "@mui/icons-material/Lock";
+
+import { NumberText } from "../utils/NumberText";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
@@ -28,18 +29,19 @@ export default function UserElementCard(props) {
   const title = props.title;
   const cardType = props.cardtype;
   const pageid = props.pageid;
-  const numberOfClicks = props.numberOfClicks || "0";
+  const numberOfClicks = props.numberOfClicks || 0;
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
+
   const updateFormUri = `/element-update/${pageid}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
-
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
   const uri = `/${cardType}/${pageid}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
+  const numberOfClicksAsString = NumberText(numberOfClicks);
 
   return (
     <Card
@@ -121,7 +123,11 @@ export default function UserElementCard(props) {
           borderColor: "#fff",
         }}
       >
-        <Typography level="title-sm">{numberOfClicks} views</Typography>
+        <Tooltip title={numberOfClicks}>
+          <Typography level="title-sm">
+            {numberOfClicksAsString} view{numberOfClicks > 1 && "s"}
+          </Typography>
+        </Tooltip>
         <Divider orientation="vertical" />
         <Button size="sm" variant="plain" color="primary">
           <Link
