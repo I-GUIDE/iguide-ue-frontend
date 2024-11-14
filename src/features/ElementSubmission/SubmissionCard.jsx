@@ -513,7 +513,7 @@ export default function SubmissionCard(props) {
 
         const result = await response.json();
         TEST_MODE && console.log("image submission return", result);
-        data["thumbnail-image"] = result.images;
+        data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         setButtonDisabled(false);
