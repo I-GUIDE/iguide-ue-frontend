@@ -85,7 +85,7 @@ export default function SubmissionCard(props) {
   const [visibility, setVisibility] = useState("");
 
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
-  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
+  const [thumbnailImageFileURLs, setThumbnailImageFileURLs] = useState();
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
@@ -180,7 +180,7 @@ export default function SubmissionCard(props) {
           : thisElement.authors
       );
       setContents(thisElement.contents);
-      setThumbnailImageFileURL(thisElement["thumbnail-image"]);
+      setThumbnailImageFileURLs(thisElement["thumbnail-image"]);
 
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
@@ -252,17 +252,17 @@ export default function SubmissionCard(props) {
     if (!thumbnailFile.type.startsWith("image/")) {
       alert("Please upload an image!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
       alert("Please upload an image smaller than 5MB!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     setThumbnailImageFile(thumbnailFile);
-    setThumbnailImageFileURL(URL.createObjectURL(thumbnailFile));
+    setThumbnailImageFileURLs(URL.createObjectURL(thumbnailFile));
   };
 
   // Related elements...
@@ -512,14 +512,15 @@ export default function SubmissionCard(props) {
         );
 
         const result = await response.json();
-        data["thumbnail-image"] = result.url;
+        TEST_MODE && console.log("image submission return", result);
+        data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         setButtonDisabled(false);
         alert("Error uploading thumbnail...");
       }
     } else {
-      data["thumbnail-image"] = thumbnailImageFileURL;
+      data["thumbnail-image"] = thumbnailImageFileURLs;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
@@ -884,12 +885,17 @@ export default function SubmissionCard(props) {
                   onChange={handleThumbnailImageUpload}
                 />
               </Button>
-              {thumbnailImageFileURL && (
+              {thumbnailImageFileURLs && (
                 <div>
                   <Typography>Thumbnail preview</Typography>
                   <AspectRatio ratio="1" sx={{ width: 190 }}>
                     <img
-                      src={thumbnailImageFileURL}
+                      // This is necessary to show both the newly uploaded image as well as the returned thumbnail
+                      src={
+                        typeof thumbnailImageFileURLs === "string"
+                          ? thumbnailImageFileURLs
+                          : thumbnailImageFileURLs.low
+                      }
                       loading="lazy"
                       alt="thumbnail-preview"
                     />

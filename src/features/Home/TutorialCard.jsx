@@ -79,7 +79,7 @@ function Body(props) {
 }
 
 export default function TutorialCard(props) {
-  const thumbnailImage = props.thumbnailImage;
+  const iconImage = props.iconImage;
   const title = props.title;
   const content = props.content;
   const link = props.link;
@@ -103,7 +103,7 @@ export default function TutorialCard(props) {
     >
       {inColumn && (
         <Img>
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          <img src={iconImage} loading="lazy" alt="thumbnail" />
         </Img>
       )}
       <Body
@@ -114,7 +114,7 @@ export default function TutorialCard(props) {
       />
       {!inColumn && (
         <Img>
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          <img src={iconImage} loading="lazy" alt="thumbnail" />
         </Img>
       )}
     </Card>

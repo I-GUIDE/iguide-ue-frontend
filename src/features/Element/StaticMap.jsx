@@ -34,7 +34,7 @@ export default function StaticMap(props) {
       </Typography>
       <Typography color="neutral" level="body-xs" variant="plain">
         Click{" "}
-        <Link href={mapImg} target="_blank" rel="noopener noreferrer">
+        <Link href={mapImg.original} target="_blank" rel="noopener noreferrer">
           here
         </Link>{" "}
         to view the map in new window.
@@ -63,7 +63,7 @@ export default function StaticMap(props) {
                 <MiniMap width={300}>
                   <img
                     width="100%"
-                    src={mapImg}
+                    src={mapImg.low}
                     loading="lazy"
                     alt="static map"
                   />
@@ -72,7 +72,7 @@ export default function StaticMap(props) {
               <TransformComponent>
                 <img
                   width="100%"
-                  src={mapImg}
+                  src={mapImg.original}
                   loading="lazy"
                   alt="static map"
                 />
