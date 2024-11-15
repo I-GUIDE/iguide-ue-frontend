@@ -51,6 +51,7 @@ export default function ElementGrid(props) {
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
   const showUserElementCard = props.showUserElementCard;
+  const disableUriChange = props.disableUriChange;
 
   const [elementList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -135,10 +136,17 @@ export default function ElementGrid(props) {
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
-    setPageParam({ page: newPageNumber });
-    TEST_MODE &&
-      console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
-    navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
+    // When disableUriChange is true, skip adding "page=" query
+    if (!disableUriChange) {
+      setPageParam({ page: newPageNumber });
+      TEST_MODE &&
+        console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
+      navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
+    } else {
+      TEST_MODE &&
+        console.log(`Skipping URI change... to page ${newPageNumber}`);
+    }
+
     setCurrentPage(newPageNumber);
     window.scrollTo(0, 0);
   }

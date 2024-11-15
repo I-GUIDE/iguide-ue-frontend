@@ -249,6 +249,7 @@ export default function UserProfile() {
                     noElementMsg="You currently don't have any contributions..."
                     showElementType
                     showUserElementCard
+                    disableUriChange
                   />
                 ) : (
                   <ElementGrid
@@ -258,6 +259,7 @@ export default function UserProfile() {
                     noElementMsg="You currently don't have any contributions..."
                     showElementType
                     showUserElementCard
+                    disableUriChange
                   />
                 )
               ) : (
@@ -268,6 +270,7 @@ export default function UserProfile() {
                   showElementType
                   showUserElementCard
                   isPrivateElement
+                  disableUriChange
                 />
               )}
             </Grid>
