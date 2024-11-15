@@ -1,4 +1,7 @@
 import { React, useState, useEffect } from "react";
+
+import { useOutletContext } from "react-router-dom";
+
 import {
   extendTheme as materialExtendTheme,
   ThemeProvider as MaterialCssVarsProvider,
@@ -8,12 +11,13 @@ import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 
-import { useOutletContext } from "react-router-dom";
-
 import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
+import Tabs from "@mui/joy/Tabs";
+import TabList from "@mui/joy/TabList";
+import Tab from "@mui/joy/Tab";
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
@@ -41,6 +45,8 @@ export default function UserProfile() {
   const [localUserInfoMissing, setLocalUserInfoMissing] = useState("unknown");
   const [error, setError] = useState(null);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
+  const [viewVisibility, setViewVisibility] = useState("public");
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -74,6 +80,11 @@ export default function UserProfile() {
       checkLocalUserInfo();
     }
   }, [localUserInfo]);
+
+  // When user select a different category in the search bar
+  function handleViewVisibilityChange(event, value) {
+    setViewVisibility(value);
+  }
 
   if (!isAuthenticated) {
     return (
@@ -216,25 +227,47 @@ export default function UserProfile() {
                 pb: 8,
               }}
             >
-              {/* For testing purposes */}
-              {USE_DEMO_USER && !userId ? (
-                <ElementGrid
-                  uriPrefix="/user-profile"
-                  headline="Demo contributions"
-                  elementType="dataset"
-                  noElementMsg="You currently don't have any contributions..."
-                  showElementType
-                  showUserElementCard
-                />
+              <Tabs
+                aria-label="Search-filter-by-types"
+                defaultValue="public"
+                value={viewVisibility}
+                onChange={handleViewVisibilityChange}
+                sx={{ mb: 2 }}
+              >
+                <TabList underlinePlacement="bottom">
+                  <Tab value="public">Public Elements</Tab>
+                  <Tab value="private">Private Elements</Tab>
+                </TabList>
+              </Tabs>
+              {viewVisibility === "public" ? (
+                // For testing purposes
+                USE_DEMO_USER && !userId ? (
+                  <ElementGrid
+                    uriPrefix="/user-profile"
+                    headline="Demo contributions"
+                    elementType="dataset"
+                    noElementMsg="You currently don't have any contributions..."
+                    showElementType
+                    showUserElementCard
+                  />
+                ) : (
+                  <ElementGrid
+                    uriPrefix="/user-profile"
+                    fieldName="contributor"
+                    matchValue={encodeURIComponent(userId)}
+                    noElementMsg="You currently don't have any contributions..."
+                    showElementType
+                    showUserElementCard
+                  />
+                )
               ) : (
                 <ElementGrid
-                  uriPrefix="/user-profile"
-                  headline="Your contributions"
-                  fieldName="contributor"
-                  matchValue={encodeURIComponent(userId)}
-                  noElementMsg="You currently don't have any contributions..."
+                  uriPrefix="/private-elements"
+                  matchValue={localUserInfo.id}
+                  noElementMsg="No private element returned"
                   showElementType
                   showUserElementCard
+                  isPrivateElement
                 />
               )}
             </Grid>

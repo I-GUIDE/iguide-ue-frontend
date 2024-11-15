@@ -363,18 +363,6 @@ export default function UserProfileHeader(props) {
                           </Menu>
                         </Dropdown>
                       )}
-                      {canContributeElements && (
-                        <Button
-                          component={RouterLink}
-                          to="/private-elements"
-                          variant="outlined"
-                          size="sm"
-                          color="neutral"
-                          endDecorator={<PolicyIcon />}
-                        >
-                          View Private Elements
-                        </Button>
-                      )}
                     </Stack>
                   )}
                 </Stack>

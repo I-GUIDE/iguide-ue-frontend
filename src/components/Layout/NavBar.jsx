@@ -124,20 +124,6 @@ export default function NavBar(props) {
                   </ListItemButton>
                 </ListItem>
               </Link>
-              {canContributeElements && (
-                <Link
-                  to="/private-elements"
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton onClick={() => setOpen(false)}>
-                      View Private Elements
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
-              )}
               {canEditAllElements && (
                 <>
                   <ListDivider />
@@ -301,18 +287,6 @@ export default function NavBar(props) {
               <ListItemButton>Update Profile</ListItemButton>
             </ListItem>
           </Link>
-          {canContributeElements && (
-            <Link
-              to="/private-elements"
-              underline="none"
-              component={RouterLink}
-              sx={{ color: "text.tertiary" }}
-            >
-              <ListItem sx={{ width: "100%" }}>
-                <ListItemButton>View Private Elements</ListItemButton>
-              </ListItem>
-            </Link>
-          )}
           {canEditAllElements && (
             <>
               <Divider sx={{ my: 1 }} />
