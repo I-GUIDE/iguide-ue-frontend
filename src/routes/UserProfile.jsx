@@ -17,7 +17,7 @@ import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
+import Tab, { tabClasses } from "@mui/joy/Tab";
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
@@ -232,11 +232,36 @@ export default function UserProfile() {
                 defaultValue="public"
                 value={viewVisibility}
                 onChange={handleViewVisibilityChange}
-                sx={{ mb: 2 }}
+                sx={{ mb: 2, bgcolor: "transparent" }}
               >
-                <TabList underlinePlacement="bottom">
-                  <Tab value="public">Public Elements</Tab>
-                  <Tab value="private">Private Elements</Tab>
+                <TabList
+                  sx={{
+                    pt: 1,
+                    justifyContent: "center",
+                    [`&& .${tabClasses.root}`]: {
+                      flex: "initial",
+                      bgcolor: "transparent",
+                      "&:hover": {
+                        bgcolor: "transparent",
+                      },
+                      [`&.${tabClasses.selected}`]: {
+                        color: "primary.plainColor",
+                        "&::after": {
+                          height: 2,
+                          borderTopLeftRadius: 3,
+                          borderTopRightRadius: 3,
+                          bgcolor: "primary",
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <Tab indicatorInset value="public">
+                    Public Elements
+                  </Tab>
+                  <Tab indicatorInset value="private">
+                    Private Elements
+                  </Tab>
                 </TabList>
               </Tabs>
               {viewVisibility === "public" ? (
@@ -266,7 +291,7 @@ export default function UserProfile() {
                 <ElementGrid
                   uriPrefix="/private-elements"
                   matchValue={localUserInfo.id}
-                  noElementMsg="No private element returned"
+                  noElementMsg="You currently don't have any private elements..."
                   showElementType
                   showUserElementCard
                   isPrivateElement
