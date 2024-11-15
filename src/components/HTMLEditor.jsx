@@ -59,10 +59,10 @@ export default function HTMLEditor(props) {
           const result = await response.json();
 
           setUploadSucceeded(true);
-          TEST_MODE && console.log("Img link", result.url);
+          TEST_MODE && console.log("Img link", result["image-urls"]);
 
           const image = editor.selection.j.createInside.element("img");
-          image.setAttribute("src", result.url);
+          image.setAttribute("src", result["image-urls"].original);
           editor.selection.insertNode(image);
         } catch (error) {
           console.error("Error fetching a single element: ", error.message);
