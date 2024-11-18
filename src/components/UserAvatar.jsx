@@ -5,16 +5,17 @@ import { update } from "jdenticon";
 import Avatar from "@mui/joy/Avatar";
 
 export default function UserAvatar(props) {
-  const link = props.link;
+  const userAvatarUrls = props.userAvatarUrls;
   const userId = props.userId ? props.userId : "";
   const size = props.size;
+  const avatarResolution = props.avatarResolution || "high";
 
   const icon = useRef(null);
   useEffect(() => {
     update(icon.current, userId);
   }, [userId]);
 
-  if (!link) {
+  if (!userAvatarUrls) {
     return (
       <Avatar
         variant="outlined"
@@ -35,7 +36,11 @@ export default function UserAvatar(props) {
     <Avatar
       variant="outlined"
       alt="User avatar"
-      src={link}
+      src={
+        typeof userAvatarUrls === "string"
+          ? userAvatarUrls
+          : userAvatarUrls[avatarResolution]
+      }
       sx={{ width: size, height: size }}
     />
   );

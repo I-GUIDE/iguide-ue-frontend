@@ -118,7 +118,7 @@ export default function UserProfileHeader(props) {
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
                   <UserAvatar
-                    link={localUserInfo["avatar_url"]}
+                    userAvatarUrls={localUserInfo["avatar_url"]}
                     userId={localUserInfo.id}
                     size={150}
                   />

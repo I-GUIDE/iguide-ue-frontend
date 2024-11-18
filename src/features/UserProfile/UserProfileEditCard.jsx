@@ -173,6 +173,8 @@ export default function UserProfileEditCard(props) {
         );
 
         const profilePictureResult = await response.json();
+        TEST_MODE &&
+          console.log("Upload avatar returned", profilePictureResult);
         avatar_url = profilePictureResult.url;
       } catch (error) {
         console.error("Error:", error);

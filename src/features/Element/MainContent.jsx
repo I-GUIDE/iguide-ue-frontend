@@ -185,7 +185,7 @@ export default function MainContent(props) {
                       sx={{ py: 2 }}
                     >
                       <UserAvatar
-                        link={contributorAvatar}
+                        userAvatarUrls={contributorAvatar}
                         userId={contributorUserId}
                       />
                       <Stack direction="column">
@@ -261,7 +261,7 @@ export default function MainContent(props) {
                     sx={{ pb: 2 }}
                   >
                     <UserAvatar
-                      link={contributorAvatar}
+                      userAvatarUrls={contributorAvatar}
                       userId={contributorUserId}
                     />
                     <Stack direction="column">

@@ -153,7 +153,7 @@ export default function InfoCard(props) {
             <Stack direction="row" alignItems="center" spacing={1.5}>
               <UserAvatar
                 size={30}
-                link={contributorAvatar}
+                userAvatarUrls={contributorAvatar}
                 userId={contributorUserId}
               />
               <Stack direction="column">

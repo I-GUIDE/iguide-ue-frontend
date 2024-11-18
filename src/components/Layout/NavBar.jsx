@@ -240,7 +240,7 @@ export default function NavBar(props) {
             sx={{ alignSelf: "center" }}
           >
             <UserAvatar
-              link={localUserInfo["avatar_url"]}
+              userAvatarUrls={localUserInfo["avatar_url"]}
               userId={localUserInfo.id}
             />
           </Button>
