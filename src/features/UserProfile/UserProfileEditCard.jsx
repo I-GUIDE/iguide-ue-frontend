@@ -175,7 +175,7 @@ export default function UserProfileEditCard(props) {
         const profilePictureResult = await response.json();
         TEST_MODE &&
           console.log("Upload avatar returned", profilePictureResult);
-        avatar_url = profilePictureResult.url;
+        avatar_url = profilePictureResult["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         alert("Error updating user profile!");
@@ -424,7 +424,11 @@ export default function UserProfileEditCard(props) {
                 >
                   <img
                     alt="User profile picture"
-                    src={confirmedProfilePictureURL}
+                    src={
+                      typeof confirmedProfilePictureURL === "string"
+                        ? confirmedProfilePictureURL
+                        : confirmedProfilePictureURL.low
+                    }
                   />
                 </AspectRatio>
               </Stack>
