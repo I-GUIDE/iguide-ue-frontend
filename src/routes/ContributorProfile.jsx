@@ -26,6 +26,7 @@ export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
 
   const [contributorInfo, setContributorInfo] = useState({});
+  const [contributorInfoLoading, setContributorInfoLoading] = useState(true);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
 
   // When users select a new page or when there is a change of total items,
@@ -50,6 +51,7 @@ export default function ContributorProfile() {
         googleScholarLink: user.googleScholarLink,
         personalWebsiteLink: user.personalWebsiteLink,
       });
+      setContributorInfoLoading(false);
     }
     getContributorInfo(userId);
   }, [userId]);
@@ -68,6 +70,7 @@ export default function ContributorProfile() {
           <UserProfileHeader
             localUserInfo={contributorInfo}
             contributionCount={numberOfTotalItems}
+            loading={contributorInfoLoading}
           />
         )}
         <Container maxWidth="lg">

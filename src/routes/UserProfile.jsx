@@ -44,6 +44,7 @@ export default function UserProfile() {
 
   const [localUserInfoMissing, setLocalUserInfoMissing] = useState("unknown");
   const [error, setError] = useState(null);
+  const [localUserInfoLoading, setLocalUserInfoLoading] = useState(true);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
 
   const [viewVisibility, setViewVisibility] = useState("public");
@@ -78,6 +79,7 @@ export default function UserProfile() {
 
     if (localUserInfo) {
       checkLocalUserInfo();
+      setLocalUserInfoLoading(false);
     }
   }, [localUserInfo]);
 
@@ -202,6 +204,7 @@ export default function UserProfile() {
           <UserProfileHeader
             localUserInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
+            loading={localUserInfoLoading}
             allowProfileOps
           />
         )}
