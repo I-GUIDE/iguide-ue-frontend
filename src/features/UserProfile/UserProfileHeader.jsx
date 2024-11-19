@@ -70,7 +70,11 @@ export default function UserProfileHeader(props) {
                 sx={{ justifyContent: "center", alignItems: "center" }}
               >
                 <Stack sx={{ m: 3 }} spacing={1}>
-                  <Typography level="h3" fontWeight="lg" textColor={"#fff"}>
+                  <Typography
+                    level="title-lg"
+                    fontWeight="sm"
+                    textColor="#bdbdbd"
+                  >
                     Loading profile...
                   </Typography>
                 </Stack>
@@ -112,7 +116,7 @@ export default function UserProfileHeader(props) {
                 sx={{ justifyContent: "center", alignItems: "center" }}
               >
                 <Stack sx={{ m: 3 }} spacing={1}>
-                  <Typography level="h3" fontWeight="lg" textColor={"#fff"}>
+                  <Typography level="title-lg" fontWeight="md">
                     Error fetching the user information. Please check back
                     later.
                   </Typography>
