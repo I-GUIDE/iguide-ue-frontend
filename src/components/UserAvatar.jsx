@@ -17,13 +17,7 @@ export default function UserAvatar(props) {
   }, [userId]);
 
   if (isLoading) {
-    return (
-      <Avatar
-        variant="outlined"
-        alt="Avatar loading"
-        sx={{ width: size, height: size }}
-      />
-    );
+    return <Avatar variant="outlined" sx={{ width: size, height: size }} />;
   }
 
   if (!userAvatarUrls) {
