@@ -11,7 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import AspectRatio from "@mui/joy/AspectRatio";
 // import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
-import Modal from "@mui/material/Modal";
+import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Sheet from "@mui/joy/Sheet";
 import Select from "@mui/joy/Select";
@@ -37,6 +37,7 @@ export default function ContributorProfileCard(props) {
   const [contributorRole, setContributorRole] = useState(props.role);
   const contributorAvatar = props.avatar;
   const contributorOrg = props.org;
+  const contributorEmail = props.email;
 
   const [roleOpen, setRoleOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -45,7 +46,7 @@ export default function ContributorProfileCard(props) {
     <>
     <Card
       variant="outlined"
-    //   color={categoryColor}
+      justifyContent="center"
       sx={{
         width: "100%",
         height: "100%",
@@ -78,10 +79,14 @@ export default function ContributorProfileCard(props) {
         /> 
       </Stack>
     </Stack>
+    <Stack direction="column">
+      <Typography level="title-sm">{contributorOrg}</Typography>
+      <Typography level="title-sm">{contributorEmail}</Typography>
+    </Stack>
       <Stack
           direction="row"
           alignItems="center"
-          spacing={2}
+          spacing={0}
           sx={{ py: 2 }}
       >
         {/*Additional Info*/}
@@ -91,34 +96,55 @@ export default function ContributorProfileCard(props) {
             spacing={2}
             sx={{ py: 2 }}
         >
-        <Typography level="title-sm">{contributorOrg}</Typography>
+        
         </Stack>
         {/*User Options*/}
         <Stack
-            direction="column"
-            alignItems="center"
+            direction="row"
+            // justifyContent="stretch"
+            // alignItems="center"
             spacing={2}
-            sx={{ py: 2 }}
+            sx={{ margin: "auto"}} 
         >
-        <Button color="success" size="sm" sx={{ width: "100%", my: 1, mx: 0.5 }} onClick={()=>setRoleOpen(true)}>Change Role<Edit/></Button>
-        <Button color="success" size="sm" sx={{ width: "100%", my: 1, mx: 0.5 }}>Edit User<Edit/></Button>
-        <Button color="danger" size="sm" sx={{ width: "100%", my: 1, mx: 0.5 }}>Delete User<Delete/></Button>
+        <Button 
+          color="success" 
+          size="sm" 
+          sx={{ width: "100%" }} 
+          onClick={()=>setRoleOpen(true)}>
+            Change Role
+            <Edit/>
+        </Button>
+        <Button color="success" size="sm" sx={{ width: "100%" }}>Edit User<Edit/></Button>
+        <Button 
+          color="danger" 
+          size="sm" 
+          sx={{ width: "100%"}} 
+          onClick={()=>setDeleteOpen(true)}>
+            Delete User
+            <Delete/>
+          </Button>
         </Stack>
       </Stack>
     </Card>
-    <Modal
-    aria-labelledby="modal-title" // ??
-    aria-describedby="modal-desc" // ?? 
+
+
+
+
+
+  {/* Change Role Modal */}
+  <Modal
     open={roleOpen}
     onClose={() => setRoleOpen(false)}
     sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
   >
     <form
       onSubmit={(event) => {
+        
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const formJson = Object.fromEntries((formData).entries());
         setContributorRole(formJson["role"]);
+        setRoleOpen(false);
         // Do backend request
       }}
     >
@@ -129,7 +155,6 @@ export default function ContributorProfileCard(props) {
           <ModalClose />
           <Typography
             component="h2"
-            id="modal-title"
             level="h4"
             textColor="inherit"
             sx={{ fontWeight: 'lg', mb: 1 }}
@@ -144,11 +169,73 @@ export default function ContributorProfileCard(props) {
           <Button 
             color="danger" 
             size="sm" 
-            sx={{ width: "100%", my: 1, mx: 0.5 }}>
+            sx={{ width: "100%", my: 1, mx: 0.5 }}
+            onClick={()=>setRoleOpen(false)}
+            >
               Cancel
               <Close/>
           </Button>
-          <Button type="submit" color="success" size="sm" sx={{ width: "100%", my: 1, mx: 0.5 }}>Confirm<Done/></Button>
+          <Button 
+            type="submit" 
+            color="success" 
+            size="sm" 
+            sx={{ width: "100%", my: 1, mx: 0.5 }}>
+              Confirm 
+              <Done/>
+          </Button>
+        </Sheet>
+      </form>
+    </Modal>
+
+    {/* Delete User Modal */}
+  <Modal
+    open={deleteOpen}
+    onClose={() => setDeleteOpen(false)}
+    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+  >
+    <form
+      onSubmit={(event) => {
+        
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const formJson = Object.fromEntries((formData).entries());
+        setContributorRole(formJson["role"]);
+        // Need a way to remove user from list
+        // Do backend request
+        setDeleteOpen(false);
+        
+      }}
+    >
+        <Sheet
+          variant="outlined"
+          sx={{ maxWidth: 500, borderRadius: 'md', p: 3, boxShadow: 'lg' }}
+        >
+          <ModalClose />
+          <Typography
+            component="h2"
+            level="h4"
+            textColor="inherit"
+            sx={{ fontWeight: 'lg', mb: 1 }}
+          >
+            Are you sure you would like to delete user? This action cannot be undone
+          </Typography>
+          <Button 
+            color="danger" 
+            size="sm" 
+            sx={{ width: "100%", my: 1, mx: 0.5 }}
+            onClick={()=>setDeleteOpen(false)}
+            >
+              Cancel
+              <Close/>
+          </Button>
+          <Button 
+            type="submit" 
+            color="success" 
+            size="sm" 
+            sx={{ width: "100%", my: 1, mx: 0.5 }}>
+              Confirm 
+              <Done/>
+          </Button>
         </Sheet>
       </form>
     </Modal>
