@@ -41,6 +41,7 @@ export default function MapPage() {
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const [pageParam, setPageParam] = useSearchParams();
@@ -68,6 +69,7 @@ export default function MapPage() {
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setIsLoading(false);
     }
     fetchData();
   }, [isPrivateElement, id]);
@@ -135,6 +137,7 @@ export default function MapPage() {
                 elementType="map"
                 creationTime={creationTime}
                 updateTime={updateTime}
+                isLoading={isLoading}
               />
             </Grid>
 

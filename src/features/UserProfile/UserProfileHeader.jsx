@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
@@ -20,7 +18,6 @@ import Tooltip from "@mui/joy/Tooltip";
 
 import EditIcon from "@mui/icons-material/Edit";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import PolicyIcon from "@mui/icons-material/Policy";
 
 import { grey } from "@mui/material/colors";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -41,6 +38,53 @@ export default function UserProfileHeader(props) {
   const contributionCount = props.contributionCount
     ? props.contributionCount
     : 0;
+  const loading = props.loading;
+
+  // When the localUserInfo is still loading...
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          p: 0,
+          m: 0,
+          height: USER_PROFILE_HEADER_HEIGHT,
+        }}
+      >
+        <Card
+          component="li"
+          sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
+        >
+          <CardCover>
+            <img
+              src="/images/network-bg.png"
+              loading="lazy"
+              alt="Network with nodes and connections"
+            />
+          </CardCover>
+          <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
+            <Container maxWidth="lg">
+              <Grid
+                container
+                sx={{ justifyContent: "center", alignItems: "center" }}
+              >
+                <Stack sx={{ m: 3 }} spacing={1}>
+                  <Typography
+                    level="title-lg"
+                    fontWeight="sm"
+                    textColor="#bdbdbd"
+                  >
+                    Loading profile...
+                  </Typography>
+                </Stack>
+              </Grid>
+            </Container>
+          </CardContent>
+        </Card>
+      </Box>
+    );
+  }
 
   // If the user info from the local DB is still not available, wait...
   if (!localUserInfo) {
@@ -72,7 +116,7 @@ export default function UserProfileHeader(props) {
                 sx={{ justifyContent: "center", alignItems: "center" }}
               >
                 <Stack sx={{ m: 3 }} spacing={1}>
-                  <Typography level="h3" fontWeight="lg" textColor={"#fff"}>
+                  <Typography level="title-lg" fontWeight="md">
                     Error fetching the user information. Please check back
                     later.
                   </Typography>
