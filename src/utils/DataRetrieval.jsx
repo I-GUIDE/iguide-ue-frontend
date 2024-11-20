@@ -61,59 +61,46 @@ export async function DataSearcher(
       throw new Error("Failed to search element");
     }
 
-    return response.json();
+    const responseJson = await response.json();
+
+    TEST_MODE &&
+      console.log("Search return result from endpoint", responseJson);
+
+    // An array of elements
+    const elements = responseJson.elements;
+    // Number of elements should have been returned without pagination
+    const countOfTotal = responseJson["total_count"];
+    // Number of elements should have been returned without pagination regardless element types
+    const countsByTypes = responseJson["total_count_by_types"];
+
+    const countsByTypesInArray = [];
+
+    // Track total number of elements regardless of element types
+    let countOfAny = 0;
+
+    for (const idx in countsByTypes) {
+      countsByTypesInArray.push([
+        countsByTypes[idx]["element-type"],
+        countsByTypes[idx]["count"],
+      ]);
+      countOfAny += countsByTypes[idx]["count"];
+    }
+
+    if (countOfAny > 0) {
+      countsByTypesInArray.splice(0, 0, ["any", countOfAny]);
+    }
+
+    const result = {
+      elements: elements,
+      total_count: countOfTotal,
+      total_count_by_types: countsByTypesInArray,
+    };
+
+    TEST_MODE && console.log("Search result to be returned", result);
+
+    return result;
   } catch (error) {
     console.error("Error fetching search results: ", error.message);
-    return "ERROR";
-  }
-}
-
-/**
- * Get the return count of all available element types based on a search term
- * @async
- * @function DataSearcherCount
- * @param {string} keyword - The keyword to search for in resources.
- * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search result count.
- * @throws {Error} Throws an error if the search operation fails.
- */
-export async function DataSearcherCount(keyword) {
-  if (!keyword || keyword === "") {
-    return {
-      elements: [],
-      total_count: 0,
-    };
-  }
-
-  try {
-    const response = await fetch(
-      `${BACKEND_URL_PORT}/api/search/count?keyword=${keyword}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to retrieve element search count");
-    }
-
-    const resJson = await response.json();
-
-    const countJson = [];
-    countJson.push(["any", resJson.total_count]);
-    const elementTypeCount = resJson.resource_type_counts;
-
-    for (const idx in elementTypeCount) {
-      countJson.push([
-        elementTypeCount[idx]["element-type"],
-        elementTypeCount[idx]["count"],
-      ]);
-    }
-
-    TEST_MODE && console.log("search count by element types", countJson);
-
-    return countJson;
-  } catch (error) {
-    console.error("Error fetching search result count: ", error.message);
     return "ERROR";
   }
 }
