@@ -242,6 +242,8 @@ export default function NavBar(props) {
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
               userId={localUserInfo.id}
+              avatarResolution="low"
+              isLoading={!localUserInfo}
             />
           </Button>
         </Tooltip>

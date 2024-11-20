@@ -9,11 +9,22 @@ export default function UserAvatar(props) {
   const userId = props.userId ? props.userId : "";
   const size = props.size;
   const avatarResolution = props.avatarResolution || "high";
+  const isLoading = props.isLoading;
 
   const icon = useRef(null);
   useEffect(() => {
     update(icon.current, userId);
   }, [userId]);
+
+  if (isLoading) {
+    return (
+      <Avatar
+        variant="outlined"
+        alt="Avatar loading"
+        sx={{ width: size, height: size }}
+      />
+    );
+  }
 
   if (!userAvatarUrls) {
     return (

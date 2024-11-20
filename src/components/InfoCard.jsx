@@ -155,6 +155,7 @@ export default function InfoCard(props) {
                 size={30}
                 userAvatarUrls={contributorAvatar}
                 userId={contributorUserId}
+                avatarResolution="low"
               />
               <Stack direction="column">
                 <Typography

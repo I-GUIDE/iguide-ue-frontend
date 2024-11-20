@@ -190,6 +190,8 @@ export default function MainContent(props) {
                       <UserAvatar
                         userAvatarUrls={contributorAvatar}
                         userId={contributorUserId}
+                        avatarResolution="low"
+                        isLoading={isLoading}
                       />
                       <Stack direction="column">
                         <Typography level="title-lg">
@@ -266,6 +268,8 @@ export default function MainContent(props) {
                     <UserAvatar
                       userAvatarUrls={contributorAvatar}
                       userId={contributorUserId}
+                      avatarResolution="low"
+                      isLoading={isLoading}
                     />
                     <Stack direction="column">
                       <Typography level="title-lg">
