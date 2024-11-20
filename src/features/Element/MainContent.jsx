@@ -101,6 +101,7 @@ export default function MainContent(props) {
   const useOERLayout = props.useOERLayout;
   const creationTime = props.creationTime;
   const updateTime = props.updateTime;
+  const isLoading = props.isLoading;
 
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
@@ -128,12 +129,14 @@ export default function MainContent(props) {
                   <img
                     src={thumbnailImage.high}
                     loading="lazy"
+                    style={isLoading ? { display: "none" } : null}
                     alt="thumbnail"
                   />
                 ) : (
                   <img
                     src={`/default-images/${elementType}.png`}
                     loading="lazy"
+                    style={isLoading ? { display: "none" } : null}
                     alt="deafult-thumbnail"
                   />
                 )}
@@ -308,12 +311,14 @@ export default function MainContent(props) {
                 <img
                   src={thumbnailImage.medium}
                   loading="lazy"
+                  style={isLoading ? { display: "none" } : null}
                   alt="thumbnail"
                 />
               ) : (
                 <img
                   src={`/default-images/${elementType}.png`}
                   loading="lazy"
+                  style={isLoading ? { display: "none" } : null}
                   alt="deafult-thumbnail"
                 />
               )}
