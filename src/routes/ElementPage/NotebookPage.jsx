@@ -130,6 +130,7 @@ export default function NotebookPage() {
               </Stack>
               <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 contributor={contributor}

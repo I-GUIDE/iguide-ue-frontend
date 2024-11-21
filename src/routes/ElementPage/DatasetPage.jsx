@@ -132,6 +132,7 @@ export default function DatasetPage() {
               </Stack>
               <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 contributor={contributor}

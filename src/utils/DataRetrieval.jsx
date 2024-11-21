@@ -511,3 +511,39 @@ export async function fetchSinglePrivateElementDetails(elementId) {
     return "ERROR";
   }
 }
+
+/**
+ * Get whether the element is bookmarked or not by the user
+ *
+ * @async
+ * @function getElementBookmarkStatus
+ * @param {string} elementId - Element ID
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the bookmark status.
+ * @throws {Error} Throws an error if getting the bookmark status fails.
+ */
+export async function getElementBookmarkStatus(elementId, elementType) {
+  let query = "";
+  if (elementType) {
+    query += `?elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/save/${elementId}` + query,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get the save status");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error getting the save status: ", error.message);
+    return "ERROR";
+  }
+}

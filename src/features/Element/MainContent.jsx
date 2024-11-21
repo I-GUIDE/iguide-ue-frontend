@@ -13,8 +13,10 @@ import Box from "@mui/joy/Box";
 import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
+
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
+import UserOperations from "./UserOperations";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
@@ -88,6 +90,7 @@ function AuthorsDisplay(props) {
 }
 
 export default function MainContent(props) {
+  const elementId = props.elementId;
   const title = props.title;
   const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
@@ -206,6 +209,7 @@ export default function MainContent(props) {
                 </Card>
               </Link>
             )}
+            <UserOperations elementId={elementId} elementType={elementType} />
           </Grid>
         </Grid>
         {contentsTitle && (
@@ -304,6 +308,7 @@ export default function MainContent(props) {
               </Typography>
             </Link>
           )}
+          <UserOperations elementId={elementId} elementType={elementType} />
         </Grid>
         <Grid xs={12} md={4}>
           <Tooltip title={thumbnailImageCredit} placement="top">

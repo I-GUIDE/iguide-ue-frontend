@@ -127,6 +127,7 @@ export default function MapPage() {
               </Stack>
               <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 contributor={contributor}
