@@ -547,3 +547,47 @@ export async function getElementBookmarkStatus(elementId, elementType) {
     return "ERROR";
   }
 }
+
+/**
+ * Bookmark or unbookmark an element to the users profile
+ *
+ * @async
+ * @function handleBookmarkingAnElement
+ * @param {string} elementId - Element ID
+ * @param {boolean} bookmarkElement - True - to bookmark this element; False - to unbookmark this element
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the status.
+ * @throws {Error} Throws an error if bookmarking or unbookmarking the element fails.
+ */
+export async function handleBookmarkingAnElement(
+  elementId,
+  bookmarkElement = true,
+  elementType
+) {
+  let query = `?save=${bookmarkElement}`;
+  if (elementType) {
+    query += `&elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/save/${elementId}` + query,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to bookmark or unbookmark an element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error bookmarking or unbookmarking an element: ",
+      error.message
+    );
+    return "ERROR";
+  }
+}
