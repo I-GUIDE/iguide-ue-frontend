@@ -463,7 +463,7 @@ export async function retrievePrivateElementsByUserId(
 ) {
   try {
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/private-elements?` +
+      `${BACKEND_URL_PORT}/api/elements/private?` +
         `user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
       {
         method: "GET",
@@ -493,7 +493,7 @@ export async function retrievePrivateElementsByUserId(
 export async function fetchSinglePrivateElementDetails(elementId) {
   try {
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/private-elements/${elementId}`,
+      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
       {
         method: "GET",
         headers: {
