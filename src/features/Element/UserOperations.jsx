@@ -61,7 +61,7 @@ export default function UserOperations(props) {
           size="sm"
           disabled={isBookmarked === undefined}
           color={isBookmarked ? "success" : "neutral"}
-          onClick={handleBookmarking(isBookmarked)}
+          onClick={() => handleBookmarking(isBookmarked)}
         >
           {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
         </IconButton>
