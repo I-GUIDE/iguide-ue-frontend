@@ -22,6 +22,7 @@ export default function ElementDeleteButton(props) {
   const elementId = props.elementId;
   const contributorId = props.contributorId;
   const title = props.title;
+  const tooltipTitle = props.tooltipTitle;
   const variant = props.variant;
   const color = props.color;
   const size = props.size;
@@ -88,7 +89,7 @@ export default function ElementDeleteButton(props) {
           TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
-        <Tooltip title="Delete this element" placement="top" arrow>
+        <Tooltip title={tooltipTitle} placement="top" arrow>
           {children}
         </Tooltip>
       </Button>

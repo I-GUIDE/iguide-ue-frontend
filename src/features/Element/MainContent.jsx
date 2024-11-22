@@ -16,7 +16,7 @@ import CardContent from "@mui/joy/CardContent";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import UserOperations from "./UserOperations";
+import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
 import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
@@ -224,7 +224,7 @@ export default function MainContent(props) {
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
               <CopyButton textToCopy={shareUrl} />
               {isAuthenticated && (
-                <UserOperations
+                <BookmarkButton
                   elementId={elementId}
                   elementType={elementType}
                 />
@@ -313,7 +313,7 @@ export default function MainContent(props) {
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
               <CopyButton textToCopy={shareUrl} />
               {isAuthenticated && (
-                <UserOperations
+                <BookmarkButton
                   elementId={elementId}
                   elementType={elementType}
                 />

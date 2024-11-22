@@ -34,7 +34,7 @@ export default function CopyButton(props) {
 
   return (
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
-      <Tooltip title="Copy element URL">
+      <Tooltip title="Copy element URL" placement="top" arrow>
         <IconButton
           variant="outlined"
           size="sm"

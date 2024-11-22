@@ -17,7 +17,7 @@ import {
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
-export default function UserOperations(props) {
+export default function BookmarkButton(props) {
   const elementId = props.elementId;
   const elementType = props.elementType;
 
@@ -56,6 +56,8 @@ export default function UserOperations(props) {
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
       <Tooltip
         title={isBookmarked ? "Remove bookmark" : "Bookmark this element"}
+        placement="top"
+        arrow
       >
         <IconButton
           variant="outlined"

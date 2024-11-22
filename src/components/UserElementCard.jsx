@@ -126,7 +126,11 @@ export default function UserElementCard(props) {
           borderColor: "#fff",
         }}
       >
-        <Tooltip title={numberOfClicks}>
+        <Tooltip
+          title={numberOfClicks > 1000 && numberOfClicks}
+          placement="top"
+          arrow
+        >
           <Typography level="title-sm">
             {numberOfClicksAsString} view{numberOfClicks > 1 && "s"}
           </Typography>
