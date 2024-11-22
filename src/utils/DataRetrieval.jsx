@@ -529,7 +529,7 @@ export async function getElementBookmarkStatus(elementId, elementType) {
   }
   try {
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/users/save/${elementId}` + query,
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
       {
         method: "GET",
         headers: {
@@ -570,7 +570,7 @@ export async function handleBookmarkingAnElement(
   }
   try {
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/users/save/${elementId}` + query,
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
       {
         method: "PUT",
         headers: {
