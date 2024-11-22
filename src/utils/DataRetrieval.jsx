@@ -614,8 +614,8 @@ export async function retrieveBookmarkedElements(
 ) {
   try {
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/elements/bookmark/${userId}` +
-        `?sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      `${BACKEND_URL_PORT}/api/elements/bookmark` +
+        `?user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
       {
         method: "GET",
       }
