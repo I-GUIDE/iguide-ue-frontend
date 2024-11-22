@@ -564,7 +564,7 @@ export async function handleBookmarkingAnElement(
   bookmarkElement = true,
   elementType
 ) {
-  let query = `?save=${bookmarkElement}`;
+  let query = `?bookmark=${bookmarkElement}`;
   if (elementType) {
     query += `&elementType=${elementType}`;
   }
