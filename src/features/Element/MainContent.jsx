@@ -17,10 +17,11 @@ import CardContent from "@mui/joy/CardContent";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import UserOperations from "./UserOperations";
+import ShareButton from "./ShareButton";
+import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
-import ShareButton from "./ShareButton";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
@@ -221,6 +222,7 @@ export default function MainContent(props) {
             )}
             <Stack direction="row" spacing={1}>
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+              <CopyButton textToCopy={shareUrl} />
               {isAuthenticated && (
                 <UserOperations
                   elementId={elementId}
@@ -309,6 +311,7 @@ export default function MainContent(props) {
             )}
             <Stack direction="row" spacing={1}>
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+              <CopyButton textToCopy={shareUrl} />
               {isAuthenticated && (
                 <UserOperations
                   elementId={elementId}
