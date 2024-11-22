@@ -20,6 +20,7 @@ import UserOperations from "./UserOperations";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
+import ShareButton from "./ShareButton";
 
 function AuthorsDisplay(props) {
   const authorsList = props.authorsList;
@@ -116,7 +117,7 @@ export default function MainContent(props) {
   const encodedUserId = encodeURIComponent(contributor.id);
 
   // OutletContext retrieving the user object to display user info
-  const { isAuthenticated, localUserInfo } = useOutletContext();
+  const { isAuthenticated } = useOutletContext();
 
   if (useOERLayout) {
     return (
@@ -212,9 +213,19 @@ export default function MainContent(props) {
                 </Card>
               </Link>
             )}
-            {isAuthenticated && (
-              <UserOperations elementId={elementId} elementType={elementType} />
-            )}
+            <Stack direction="row" spacing={1}>
+              <ShareButton
+                elementType={elementType}
+                elementId={elementId}
+                elementTitle={title}
+              />
+              {isAuthenticated && (
+                <UserOperations
+                  elementId={elementId}
+                  elementType={elementType}
+                />
+              )}
+            </Stack>
           </Grid>
         </Grid>
         {contentsTitle && (
@@ -295,6 +306,11 @@ export default function MainContent(props) {
               </Link>
             )}
             <Stack direction="row" spacing={1}>
+              <ShareButton
+                elementType={elementType}
+                elementId={elementId}
+                elementTitle={title}
+              />
               {isAuthenticated && (
                 <UserOperations
                   elementId={elementId}
