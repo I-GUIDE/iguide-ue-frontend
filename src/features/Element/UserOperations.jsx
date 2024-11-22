@@ -37,17 +37,13 @@ export default function UserOperations(props) {
   }, [elementId, elementType, triggerUseEffect]);
 
   async function handleBookmarking(currentStatus) {
-    const response = await handleBookmarkingAnElement(
+    const status = await handleBookmarkingAnElement(
       elementId,
       !currentStatus,
       elementType
     );
-    if (!response.ok) {
-      alert("Bookmark operation failed!");
-      return;
-    }
-    const data = await response.json();
-    TEST_MODE && console.log("handle bookmarking return msg", data);
+
+    TEST_MODE && console.log("handle bookmarking return msg", status);
     setTriggerUseEffect(1);
   }
 
