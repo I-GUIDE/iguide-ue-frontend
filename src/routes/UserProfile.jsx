@@ -309,7 +309,6 @@ export default function UserProfile() {
                   matchValue={localUserInfo.id}
                   noElementMsg="You haven't bookmarked any elements yet..."
                   showElementType
-                  showUserElementCard
                   isBookmarkedElement
                   disableUriChange
                 />
