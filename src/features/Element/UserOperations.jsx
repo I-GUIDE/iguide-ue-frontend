@@ -71,7 +71,7 @@ export default function UserOperations(props) {
         autoHideDuration={8000}
         open={open}
         variant="soft"
-        color="success"
+        color={isBookmarked ? "success" : "neutral"}
         size="md"
         onClose={() => setOpen(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
