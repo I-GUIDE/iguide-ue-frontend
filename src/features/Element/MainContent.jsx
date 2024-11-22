@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router-dom";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
@@ -115,6 +115,9 @@ export default function MainContent(props) {
   const contributorUserId = contributor.id;
   const encodedUserId = encodeURIComponent(contributor.id);
 
+  // OutletContext retrieving the user object to display user info
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
   if (useOERLayout) {
     return (
       <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -209,7 +212,9 @@ export default function MainContent(props) {
                 </Card>
               </Link>
             )}
-            <UserOperations elementId={elementId} elementType={elementType} />
+            {isAuthenticated && (
+              <UserOperations elementId={elementId} elementType={elementType} />
+            )}
           </Grid>
         </Grid>
         {contentsTitle && (
@@ -308,7 +313,9 @@ export default function MainContent(props) {
               </Typography>
             </Link>
           )}
-          <UserOperations elementId={elementId} elementType={elementType} />
+          {isAuthenticated && (
+            <UserOperations elementId={elementId} elementType={elementType} />
+          )}
         </Grid>
         <Grid xs={12} md={4}>
           <Tooltip title={thumbnailImageCredit} placement="top">
