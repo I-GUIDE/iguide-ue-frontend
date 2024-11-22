@@ -27,6 +27,7 @@ import UserElementCard from "../UserElementCard";
 import {
   elementRetriever,
   retrievePrivateElementsByUserId,
+  retrieveBookmarkedElements,
 } from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
 
@@ -50,6 +51,7 @@ export default function ElementGrid(props) {
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
+  const isBookmarkedElement = props.isBookmarkedElement;
   const showUserElementCard = props.showUserElementCard;
   const disableUriChange = props.disableUriChange;
 
@@ -119,13 +121,39 @@ export default function ElementGrid(props) {
       }
     }
 
+    async function retrieveBookmarkedData(startingIdx) {
+      try {
+        const data = await retrieveBookmarkedElements(
+          matchValue,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        TEST_MODE && console.log("Retrieve bookmarked elements", data);
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
     if (isPrivateElement) {
       retrievePrivateData(currentStartingIdx);
+    } else if (isBookmarkedElement) {
+      retrieveBookmarkedData(currentStartingIdx);
     } else {
       retrieveData(currentStartingIdx);
     }
   }, [
     isPrivateElement,
+    isBookmarkedElement,
     currentStartingIdx,
     elementType,
     ranking,
@@ -193,14 +221,11 @@ export default function ElementGrid(props) {
           <CssBaseline enableColorScheme />
           <Stack spacing={2} justifyContent="center" alignItems="center">
             <Card
-              variant="outlined"
+              variant="plain"
               orientation="horizontal"
               sx={{
                 width: "100%",
-                "&:hover": {
-                  boxShadow: "md",
-                  borderColor: "neutral.outlinedHoverBorder",
-                },
+                backgroundColor: "#fff",
               }}
             >
               <CardContent>
@@ -211,7 +236,7 @@ export default function ElementGrid(props) {
                     alignItems="center"
                     display="flex"
                   >
-                    <Typography level="title-lg">{noElementMsg}</Typography>
+                    <Typography level="body-md">{noElementMsg}</Typography>
                   </Grid>
                 </Grid>
               </CardContent>

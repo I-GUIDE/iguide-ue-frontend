@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router-dom";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
@@ -13,8 +13,10 @@ import Box from "@mui/joy/Box";
 import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
+
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
+import UserOperations from "./UserOperations";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
@@ -88,6 +90,7 @@ function AuthorsDisplay(props) {
 }
 
 export default function MainContent(props) {
+  const elementId = props.elementId;
   const title = props.title;
   const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
@@ -111,6 +114,9 @@ export default function MainContent(props) {
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
   const encodedUserId = encodeURIComponent(contributor.id);
+
+  // OutletContext retrieving the user object to display user info
+  const { isAuthenticated, localUserInfo } = useOutletContext();
 
   if (useOERLayout) {
     return (
@@ -205,6 +211,9 @@ export default function MainContent(props) {
                   </CardContent>
                 </Card>
               </Link>
+            )}
+            {isAuthenticated && (
+              <UserOperations elementId={elementId} elementType={elementType} />
             )}
           </Grid>
         </Grid>
@@ -303,6 +312,9 @@ export default function MainContent(props) {
                 {doi}
               </Typography>
             </Link>
+          )}
+          {isAuthenticated && (
+            <UserOperations elementId={elementId} elementType={elementType} />
           )}
         </Grid>
         <Grid xs={12} md={4}>

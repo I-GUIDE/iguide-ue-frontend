@@ -511,3 +511,126 @@ export async function fetchSinglePrivateElementDetails(elementId) {
     return "ERROR";
   }
 }
+
+/**
+ * Get whether the element is bookmarked or not by the user
+ *
+ * @async
+ * @function getElementBookmarkStatus
+ * @param {string} elementId - Element ID
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the bookmark status.
+ * @throws {Error} Throws an error if getting the bookmark status fails.
+ */
+export async function getElementBookmarkStatus(elementId, elementType) {
+  let query = "";
+  if (elementType) {
+    query += `?elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get the save status");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error getting the save status: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Bookmark or unbookmark an element to the users profile
+ *
+ * @async
+ * @function handleBookmarkingAnElement
+ * @param {string} elementId - Element ID
+ * @param {boolean} bookmarkElement - True - to bookmark this element; False - to unbookmark this element
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the status.
+ * @throws {Error} Throws an error if bookmarking or unbookmarking the element fails.
+ */
+export async function handleBookmarkingAnElement(
+  elementId,
+  bookmarkElement = true,
+  elementType
+) {
+  let query = `?bookmark=${bookmarkElement}`;
+  if (elementType) {
+    query += `&elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to bookmark or unbookmark an element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error bookmarking or unbookmarking an element: ",
+      error.message
+    );
+    return "ERROR";
+  }
+}
+
+/**
+ * Retrieve bookmarked elements from the database by user id.
+ *
+ * @async
+ * @function retrieveBookmarkedElements
+ * @param {string} [userId] - User ID.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
+ * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='12'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved bookmarked elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrieveBookmarkedElements(
+  userId,
+  sortBy = "creation_time",
+  order = "desc",
+  from = "0",
+  size = "12"
+) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/bookmark` +
+        `?user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve bookmarked elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error fetching a list of bookmarked elements: ",
+      error.message
+    );
+    return "ERROR";
+  }
+}

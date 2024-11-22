@@ -129,6 +129,7 @@ export default function PublicationPage() {
               </Stack>
               <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 doi={externalLink}
