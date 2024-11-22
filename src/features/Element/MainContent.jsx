@@ -22,6 +22,9 @@ import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
 import ShareButton from "./ShareButton";
 
+const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
+const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
+
 function AuthorsDisplay(props) {
   const authorsList = props.authorsList;
   if (!authorsList) {
@@ -119,6 +122,9 @@ export default function MainContent(props) {
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated } = useOutletContext();
 
+  const shareUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
+  const shareTitle = `${WEBSITE_TITLE}: ${title}`;
+
   if (useOERLayout) {
     return (
       <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -214,11 +220,7 @@ export default function MainContent(props) {
               </Link>
             )}
             <Stack direction="row" spacing={1}>
-              <ShareButton
-                elementType={elementType}
-                elementId={elementId}
-                elementTitle={title}
-              />
+              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
               {isAuthenticated && (
                 <UserOperations
                   elementId={elementId}
@@ -306,11 +308,7 @@ export default function MainContent(props) {
               </Link>
             )}
             <Stack direction="row" spacing={1}>
-              <ShareButton
-                elementType={elementType}
-                elementId={elementId}
-                elementTitle={title}
-              />
+              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
               {isAuthenticated && (
                 <UserOperations
                   elementId={elementId}

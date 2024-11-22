@@ -22,21 +22,16 @@ import {
 } from "react-share";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
-const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
-const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
 
 export default function ShareButton(props) {
-  const elementType = props.elementType;
-  const elementId = props.elementId;
-  const elementTitle = props.elementTitle;
+  const shareUrl = props.shareUrl;
+  const shareTitle = props.shareTitle;
 
-  if (!elementType && !elementId) {
+  if (!shareUrl) {
     return null;
   }
 
-  const elementUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
-  const shareTitle = `${WEBSITE_TITLE}: ${elementTitle}`;
-  TEST_MODE && console.log("Share url", elementUrl, "title", shareTitle);
+  TEST_MODE && console.log("Share url", shareUrl, "title", shareTitle);
 
   return (
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
@@ -54,21 +49,21 @@ export default function ShareButton(props) {
         <Menu>
           <MenuItem>
             <Tooltip title="Email" placement="left" arrow>
-              <EmailShareButton url={elementUrl} className="email-button">
+              <EmailShareButton url={shareUrl} className="email-button">
                 <EmailIcon size={40} round />
               </EmailShareButton>
             </Tooltip>
           </MenuItem>
           <MenuItem>
             <Tooltip title="Facebook" placement="left" arrow>
-              <FacebookShareButton url={elementUrl} className="facebook-button">
+              <FacebookShareButton url={shareUrl} className="facebook-button">
                 <FacebookIcon size={40} round />
               </FacebookShareButton>
             </Tooltip>
           </MenuItem>
           <MenuItem>
             <Tooltip title="LinkedIn" placement="left" arrow>
-              <LinkedinShareButton url={elementUrl} className="linkedin-button">
+              <LinkedinShareButton url={shareUrl} className="linkedin-button">
                 <LinkedinIcon size={40} round />
               </LinkedinShareButton>
             </Tooltip>
@@ -76,7 +71,7 @@ export default function ShareButton(props) {
           <MenuItem>
             <Tooltip title="X" placement="left" arrow>
               <TwitterShareButton
-                url={elementUrl}
+                url={shareUrl}
                 title={shareTitle}
                 className="x-button"
               >
