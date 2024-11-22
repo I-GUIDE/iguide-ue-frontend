@@ -27,6 +27,7 @@ import UserElementCard from "../UserElementCard";
 import {
   elementRetriever,
   retrievePrivateElementsByUserId,
+  retrieveBookmarkedElements,
 } from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
 
@@ -50,6 +51,7 @@ export default function ElementGrid(props) {
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
+  const isBookmarkedElement = props.isBookmarkedElement;
   const showUserElementCard = props.showUserElementCard;
   const disableUriChange = props.disableUriChange;
 
@@ -119,13 +121,39 @@ export default function ElementGrid(props) {
       }
     }
 
+    async function retrieveBookmarkedData(startingIdx) {
+      try {
+        const data = await retrieveBookmarkedElements(
+          matchValue,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        TEST_MODE && console.log("Retrieve bookmarked elements", data);
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
     if (isPrivateElement) {
       retrievePrivateData(currentStartingIdx);
+    } else if (isBookmarkedElement) {
+      retrieveBookmarkedData(currentStartingIdx);
     } else {
       retrieveData(currentStartingIdx);
     }
   }, [
     isPrivateElement,
+    isBookmarkedElement,
     currentStartingIdx,
     elementType,
     ranking,

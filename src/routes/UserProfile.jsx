@@ -33,6 +33,7 @@ import {
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function UserProfile() {
   usePageTitle("User Profile");
@@ -47,7 +48,7 @@ export default function UserProfile() {
   const [localUserInfoLoading, setLocalUserInfoLoading] = useState(true);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
 
-  const [viewVisibility, setViewVisibility] = useState("public");
+  const [elementDisplayOption, setElementDisplayOption] = useState("public");
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -84,8 +85,9 @@ export default function UserProfile() {
   }, [localUserInfo]);
 
   // When user select a different category in the search bar
-  function handleViewVisibilityChange(event, value) {
-    setViewVisibility(value);
+  function handleElementDisplayOptionChange(event, value) {
+    setElementDisplayOption(value);
+    TEST_MODE && console.log("Element display option set to", value);
   }
 
   if (!isAuthenticated) {
@@ -233,8 +235,8 @@ export default function UserProfile() {
               <Tabs
                 aria-label="Search-filter-by-types"
                 defaultValue="public"
-                value={viewVisibility}
-                onChange={handleViewVisibilityChange}
+                value={elementDisplayOption}
+                onChange={handleElementDisplayOptionChange}
                 sx={{ mb: 2, bgcolor: "transparent" }}
               >
                 <TabList
@@ -265,11 +267,14 @@ export default function UserProfile() {
                   <Tab indicatorInset value="private">
                     Private Elements
                   </Tab>
+                  <Tab indicatorInset value="bookmarked">
+                    Bookmarked Elements
+                  </Tab>
                 </TabList>
               </Tabs>
-              {viewVisibility === "public" ? (
+              {elementDisplayOption === "public" &&
                 // For testing purposes
-                USE_DEMO_USER && !userId ? (
+                (USE_DEMO_USER && !userId ? (
                   <ElementGrid
                     uriPrefix="/user-profile"
                     headline="Demo contributions"
@@ -281,23 +286,31 @@ export default function UserProfile() {
                   />
                 ) : (
                   <ElementGrid
-                    uriPrefix="/user-profile"
                     fieldName="contributor"
                     matchValue={encodeURIComponent(userId)}
-                    noElementMsg="You currently don't have any contributions..."
+                    noElementMsg="You don't have any contributions..."
                     showElementType
                     showUserElementCard
                     disableUriChange
                   />
-                )
-              ) : (
+                ))}
+              {elementDisplayOption === "private" && (
                 <ElementGrid
-                  uriPrefix="/private-elements"
                   matchValue={localUserInfo.id}
-                  noElementMsg="You currently don't have any private elements..."
+                  noElementMsg="You don't have any private elements..."
                   showElementType
                   showUserElementCard
                   isPrivateElement
+                  disableUriChange
+                />
+              )}
+              {elementDisplayOption === "bookmarked" && (
+                <ElementGrid
+                  matchValue={localUserInfo.id}
+                  noElementMsg="You haven't bookmarked any elements yet..."
+                  showElementType
+                  showUserElementCard
+                  isBookmarkedElement
                   disableUriChange
                 />
               )}

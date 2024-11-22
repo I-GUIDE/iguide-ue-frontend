@@ -591,3 +591,46 @@ export async function handleBookmarkingAnElement(
     return "ERROR";
   }
 }
+
+/**
+ * Retrieve bookmarked elements from the database by user id.
+ *
+ * @async
+ * @function retrieveBookmarkedElements
+ * @param {string} [userId] - User ID.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
+ * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='12'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved bookmarked elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrieveBookmarkedElements(
+  userId,
+  sortBy = "creation_time",
+  order = "desc",
+  from = "0",
+  size = "12"
+) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/bookmark/${userId}` +
+        `?sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve bookmarked elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error fetching a list of bookmarked elements: ",
+      error.message
+    );
+    return "ERROR";
+  }
+}
