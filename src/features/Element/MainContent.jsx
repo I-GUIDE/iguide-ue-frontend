@@ -16,10 +16,15 @@ import CardContent from "@mui/joy/CardContent";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import UserOperations from "./UserOperations";
+import BookmarkButton from "./BookmarkButton";
+import ShareButton from "./ShareButton";
+import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
+
+const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
+const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
 
 function AuthorsDisplay(props) {
   const authorsList = props.authorsList;
@@ -116,7 +121,10 @@ export default function MainContent(props) {
   const encodedUserId = encodeURIComponent(contributor.id);
 
   // OutletContext retrieving the user object to display user info
-  const { isAuthenticated, localUserInfo } = useOutletContext();
+  const { isAuthenticated } = useOutletContext();
+
+  const shareUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
+  const shareTitle = `${WEBSITE_TITLE}: ${title}`;
 
   if (useOERLayout) {
     return (
@@ -212,9 +220,16 @@ export default function MainContent(props) {
                 </Card>
               </Link>
             )}
-            {isAuthenticated && (
-              <UserOperations elementId={elementId} elementType={elementType} />
-            )}
+            <Stack direction="row" spacing={1}>
+              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+              <CopyButton textToCopy={shareUrl} />
+              {isAuthenticated && (
+                <BookmarkButton
+                  elementId={elementId}
+                  elementType={elementType}
+                />
+              )}
+            </Stack>
           </Grid>
         </Grid>
         {contentsTitle && (
@@ -246,53 +261,67 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
-        <Grid xs={12} md={8}>
-          {contributorName && (
-            <Link
-              component={RouterLink}
-              to={"/contributor/" + encodedUserId}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                variant="plain"
-                orientation="horizontal"
-                sx={{
-                  maxHeight: "150px",
-                  bgcolor: "#fff",
-                  p: 0,
-                  "&:hover": {
-                    borderColor:
-                      "theme.vars.palette.primary.outlinedHoverBorder",
-                    transform: "translateY(-2px)",
-                  },
-                }}
+        <Grid xs={12}>
+          <Stack direction="row" justifyContent="space-between">
+            {contributorName && (
+              <Link
+                component={RouterLink}
+                to={"/contributor/" + encodedUserId}
+                style={{ textDecoration: "none" }}
               >
-                <CardContent>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{ pb: 2 }}
-                  >
-                    <UserAvatar
-                      userAvatarUrls={contributorAvatar}
-                      userId={contributorUserId}
-                      avatarResolution="low"
-                      isLoading={isLoading}
-                    />
-                    <Stack direction="column">
-                      <Typography level="title-lg">
-                        {contributorName}
-                      </Typography>
-                      <Typography level="body-sm">
-                        {hasTimestamp ? timePassedText : "Contributor"}
-                      </Typography>
+                <Card
+                  variant="plain"
+                  orientation="horizontal"
+                  sx={{
+                    maxHeight: "150px",
+                    bgcolor: "#fff",
+                    p: 0,
+                    "&:hover": {
+                      borderColor:
+                        "theme.vars.palette.primary.outlinedHoverBorder",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{ pb: 2 }}
+                    >
+                      <UserAvatar
+                        userAvatarUrls={contributorAvatar}
+                        userId={contributorUserId}
+                        avatarResolution="low"
+                        isLoading={isLoading}
+                      />
+                      <Stack direction="column">
+                        <Typography level="title-lg">
+                          {contributorName}
+                        </Typography>
+                        <Typography level="body-sm">
+                          {hasTimestamp ? timePassedText : "Contributor"}
+                        </Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Link>
-          )}
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+            <Stack direction="row" spacing={1}>
+              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+              <CopyButton textToCopy={shareUrl} />
+              {isAuthenticated && (
+                <BookmarkButton
+                  elementId={elementId}
+                  elementType={elementType}
+                />
+              )}
+            </Stack>
+          </Stack>
+        </Grid>
+        <Grid xs={12} md={8}>
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
@@ -312,9 +341,6 @@ export default function MainContent(props) {
                 {doi}
               </Typography>
             </Link>
-          )}
-          {isAuthenticated && (
-            <UserOperations elementId={elementId} elementType={elementType} />
           )}
         </Grid>
         <Grid xs={12} md={4}>

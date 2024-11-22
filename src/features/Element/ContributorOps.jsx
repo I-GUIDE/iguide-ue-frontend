@@ -59,6 +59,7 @@ export default function ContributorOps(props) {
         variant="soft"
         size="sm"
         title={title}
+        tooltipTitle="Delete this element"
         elementId={elementId}
         contributorId={contributorId}
         afterDeleteRedirection={afterDeleteRedirection}
