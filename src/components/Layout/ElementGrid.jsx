@@ -221,14 +221,11 @@ export default function ElementGrid(props) {
           <CssBaseline enableColorScheme />
           <Stack spacing={2} justifyContent="center" alignItems="center">
             <Card
-              variant="outlined"
+              variant="plain"
               orientation="horizontal"
               sx={{
                 width: "100%",
-                "&:hover": {
-                  boxShadow: "md",
-                  borderColor: "neutral.outlinedHoverBorder",
-                },
+                backgroundColor: "#fff",
               }}
             >
               <CardContent>
@@ -239,7 +236,7 @@ export default function ElementGrid(props) {
                     alignItems="center"
                     display="flex"
                   >
-                    <Typography level="title-lg">{noElementMsg}</Typography>
+                    <Typography level="body-md">{noElementMsg}</Typography>
                   </Grid>
                 </Grid>
               </CardContent>
