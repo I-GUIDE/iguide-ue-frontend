@@ -246,53 +246,65 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
-        <Grid xs={12} md={8}>
-          {contributorName && (
-            <Link
-              component={RouterLink}
-              to={"/contributor/" + encodedUserId}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                variant="plain"
-                orientation="horizontal"
-                sx={{
-                  maxHeight: "150px",
-                  bgcolor: "#fff",
-                  p: 0,
-                  "&:hover": {
-                    borderColor:
-                      "theme.vars.palette.primary.outlinedHoverBorder",
-                    transform: "translateY(-2px)",
-                  },
-                }}
+        <Grid xs={12}>
+          <Stack direction="row" justifyContent="space-between">
+            {contributorName && (
+              <Link
+                component={RouterLink}
+                to={"/contributor/" + encodedUserId}
+                style={{ textDecoration: "none" }}
               >
-                <CardContent>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{ pb: 2 }}
-                  >
-                    <UserAvatar
-                      userAvatarUrls={contributorAvatar}
-                      userId={contributorUserId}
-                      avatarResolution="low"
-                      isLoading={isLoading}
-                    />
-                    <Stack direction="column">
-                      <Typography level="title-lg">
-                        {contributorName}
-                      </Typography>
-                      <Typography level="body-sm">
-                        {hasTimestamp ? timePassedText : "Contributor"}
-                      </Typography>
+                <Card
+                  variant="plain"
+                  orientation="horizontal"
+                  sx={{
+                    maxHeight: "150px",
+                    bgcolor: "#fff",
+                    p: 0,
+                    "&:hover": {
+                      borderColor:
+                        "theme.vars.palette.primary.outlinedHoverBorder",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{ pb: 2 }}
+                    >
+                      <UserAvatar
+                        userAvatarUrls={contributorAvatar}
+                        userId={contributorUserId}
+                        avatarResolution="low"
+                        isLoading={isLoading}
+                      />
+                      <Stack direction="column">
+                        <Typography level="title-lg">
+                          {contributorName}
+                        </Typography>
+                        <Typography level="body-sm">
+                          {hasTimestamp ? timePassedText : "Contributor"}
+                        </Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Link>
-          )}
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+            <Stack direction="row" spacing={1}>
+              {isAuthenticated && (
+                <UserOperations
+                  elementId={elementId}
+                  elementType={elementType}
+                />
+              )}
+            </Stack>
+          </Stack>
+        </Grid>
+        <Grid xs={12} md={8}>
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
@@ -312,9 +324,6 @@ export default function MainContent(props) {
                 {doi}
               </Typography>
             </Link>
-          )}
-          {isAuthenticated && (
-            <UserOperations elementId={elementId} elementType={elementType} />
           )}
         </Grid>
         <Grid xs={12} md={4}>
