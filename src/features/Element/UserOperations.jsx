@@ -44,7 +44,7 @@ export default function UserOperations(props) {
     );
 
     TEST_MODE && console.log("handle bookmarking return msg", status);
-    setTriggerUseEffect(1);
+    setTriggerUseEffect(triggerUseEffect + 1);
   }
 
   return (
