@@ -126,7 +126,7 @@ router.get('/logout', function (req, res) {
   res.clearCookie('IGPAU', true, { path: "/" });
 
   req.session.destroy(function (err) {
-    res.redirect(FRONTEND_URL);
+    res.redirect("back")
   });
 });
 
