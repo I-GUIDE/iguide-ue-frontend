@@ -85,6 +85,9 @@ router.get('/login', function (req, res, next) {
 router.get('/cilogon-callback', async (req, res, next) => {
   passport.authenticate('oidc', async (err, user, info) => {
     if (err) {
+      console.log('-----------------------------');
+      console.log("Error: ", new Date());
+      console.log("User: ", user);
       console.log(err);
       return res.redirect(`/error`);
     }
@@ -93,6 +96,10 @@ router.get('/cilogon-callback', async (req, res, next) => {
     }
     req.logIn(user, async function (err) {
       if (err) {
+        console.log('-----------------------------');
+        console.log("Error login: ", new Date());
+        console.log("User: ", user);
+        console.log(err);
         return res.redirect(`/errorlogin`);
       }
 
@@ -164,7 +171,6 @@ router.get("/userinfo", (req, res) => {
       }
     });
 
-    console.log('req passport', req.session.passport);
     res.end(user_info);
   } else {
     const no_user_info = JSON.stringify({
