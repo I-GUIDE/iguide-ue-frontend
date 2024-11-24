@@ -5,7 +5,9 @@ import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
 import Snackbar from "@mui/joy/Snackbar";
 import Typography from "@mui/joy/Typography";
+import Badge from "@mui/joy/Badge";
 
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LinkIcon from "@mui/icons-material/Link";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -35,23 +37,31 @@ export default function CopyButton(props) {
   return (
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
       <Tooltip title="Copy element URL" placement="top" arrow>
-        <IconButton
-          variant="outlined"
+        <Badge
+          variant="plain"
+          color="success"
           size="sm"
-          onClick={() => copyText(textToCopy)}
+          badgeContent={<CheckCircleIcon />}
+          invisible={!copied}
         >
-          <LinkIcon />
-        </IconButton>
+          <IconButton
+            variant="outlined"
+            size="sm"
+            color={copied ? "success" : "neutral"}
+            onClick={() => copyText(textToCopy)}
+          >
+            <LinkIcon />
+          </IconButton>
+        </Badge>
       </Tooltip>
       <Snackbar
         autoHideDuration={3000}
         open={copied}
         variant="soft"
-        color="primary"
+        color="success"
         size="md"
         onClose={() => setCopied(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        sx={{ maxWidth: 360 }}
       >
         <Typography level="body-md">Element URL copied!</Typography>
       </Snackbar>
