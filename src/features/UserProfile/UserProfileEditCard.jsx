@@ -23,7 +23,10 @@ import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { styled } from "@mui/joy/styles";
 
-import { IMAGE_SIZE_LIMIT } from "../../configs/VarConfigs";
+import {
+  IMAGE_SIZE_LIMIT,
+  ACCEPTED_IMAGE_TYPES,
+} from "../../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
 import { updateUser, checkTokens } from "../../utils/UserManager";
@@ -347,6 +350,7 @@ export default function UserProfileEditCard(props) {
               Upload your profile picture
               <VisuallyHiddenInput
                 type="file"
+                accept={ACCEPTED_IMAGE_TYPES}
                 onChange={handleProfilePictureUpload}
               />
             </Button>

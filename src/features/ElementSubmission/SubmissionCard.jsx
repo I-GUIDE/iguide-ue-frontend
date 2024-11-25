@@ -46,6 +46,7 @@ import {
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
+  ACCEPTED_IMAGE_TYPES,
 } from "../../configs/VarConfigs";
 
 import {
@@ -882,6 +883,7 @@ export default function SubmissionCard(props) {
                 Upload a thumbnail image
                 <VisuallyHiddenInput
                   type="file"
+                  accept={ACCEPTED_IMAGE_TYPES}
                   onChange={handleThumbnailImageUpload}
                 />
               </Button>
