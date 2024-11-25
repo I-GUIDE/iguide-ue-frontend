@@ -20,7 +20,7 @@ export default function PrivateElementBanner(props) {
         startDecorator={<LockIcon />}
         sx={{ fontSize: "sm", "--Typography-gap": "0.5rem", p: 1 }}
       >
-        This element is only visible to you.
+        This element is only visible to you and Platform admins.
       </Typography>
     </Stack>
   );

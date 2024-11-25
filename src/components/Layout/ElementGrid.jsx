@@ -30,6 +30,7 @@ import {
   retrieveBookmarkedElements,
 } from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
+import { ELEM_VISIBILITY } from "../../configs/VarConfigs";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -301,7 +302,9 @@ export default function ElementGrid(props) {
                     contributor={element["contributor"]}
                     numberOfClicks={element["click-count"]}
                     showElementType={showElementType}
-                    isPrivateElement={isPrivateElement}
+                    isPrivateElement={
+                      element.visibility === ELEM_VISIBILITY.private
+                    }
                   />
                 ) : (
                   <InfoCard
@@ -314,7 +317,9 @@ export default function ElementGrid(props) {
                     thumbnailImage={element["thumbnail-image"]}
                     contributor={element["contributor"]}
                     showElementType={showElementType}
-                    isPrivateElement={isPrivateElement}
+                    isPrivateElement={
+                      element.visibility === ELEM_VISIBILITY.private
+                    }
                   />
                 )}
               </Grid>
