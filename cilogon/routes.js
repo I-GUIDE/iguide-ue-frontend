@@ -128,7 +128,8 @@ router.get('/cilogon-callback', async (req, res, next) => {
 });
 
 router.get('/logout', function (req, res) {
-  const redirectURI = decodeURIComponent(req.query["redirect-uri"]);
+  const redirectURI = req.query["redirect-uri"];
+  const decodedRedirectURI = decodeURIComponent(redirectURI);
 
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
   res.clearCookie(process.env.JWT_REFRESH_TOKEN_NAME, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'Strict', domain: target_domain, path: '/' });
@@ -136,7 +137,7 @@ router.get('/logout', function (req, res) {
 
   req.session.destroy(function (err) {
     if (redirectURI) {
-      res.redirect(`${FRONTEND_URL}${redirectURI}`);
+      res.redirect(`${FRONTEND_URL}${decodedRedirectURI}`);
     } else {
       res.redirect(`${FRONTEND_URL}`);
     }
