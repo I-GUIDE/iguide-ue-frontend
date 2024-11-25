@@ -90,7 +90,7 @@ export default function ElementUpdate() {
             <SubmissionCard
               submissionType="update"
               elementId={id}
-              isPrivateElement={isPrivateElement}
+              isPrivateElement={isPrivateElement === "true"}
             />
           </Grid>
         </Box>

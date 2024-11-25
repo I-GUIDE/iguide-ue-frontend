@@ -49,9 +49,10 @@ export default function PublicationPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement = isPrivateElement
-        ? await fetchSinglePrivateElementDetails(id)
-        : await fetchSingleElementDetails(id);
+      const thisElement =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(id)
+          : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
