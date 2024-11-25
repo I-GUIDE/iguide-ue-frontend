@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import {
   extendTheme as materialExtendTheme,
@@ -50,10 +50,12 @@ const pages = [
   ["Educational Resources", "/oers"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
+  const currentLocation = useLocation();
 
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -83,7 +85,15 @@ export default function NavBar(props) {
 
   // Redirect users to auth backend for logout
   function logout() {
-    window.open(AUTH_BACKEND_URL + "/logout", "_self");
+    const redirectURI = currentLocation?.pathname + currentLocation?.search;
+    TEST_MODE && console.log("Redirect URI for logout", redirectURI);
+
+    window.open(
+      AUTH_BACKEND_URL +
+        "/logout?redirect-uri=" +
+        encodeURIComponent(redirectURI),
+      "_self"
+    );
   }
 
   // If the user is logged in, display the logout button, otherwise login
