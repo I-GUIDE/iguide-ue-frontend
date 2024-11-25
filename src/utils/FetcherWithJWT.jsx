@@ -36,8 +36,7 @@ export async function fetchWithAuth(url, options = {}) {
     });
     // Case: access token missing
   } else if (res.status === 403) {
-    alert("Invalid credential. Please login again!");
-    logout();
+    alert("Invalid credential: You don't have permission to access this page!");
   }
 
   return res;
