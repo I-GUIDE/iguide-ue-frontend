@@ -67,3 +67,6 @@ export const USER_PROFILE_BODY_HEIGHT = `calc(100vh - ${
 export const SEARCH_RESULTS_BODY_HEIGHT = `calc(100vh - ${
   NAVBAR_HEIGHT + SEARCH_RESULTS_HEADER_HEIGHT + FOOTER_HEIGHT
 }px)`;
+
+export const ACCEPTED_IMAGE_TYPES =
+  "image/gif, image/jpg, image/jpeg, image/png, image/webp, image/tiff";
