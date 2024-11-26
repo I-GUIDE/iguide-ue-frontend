@@ -173,62 +173,68 @@ export default function MainContent(props) {
               </CardContent>
             </Card>
           </Grid>
-          <Grid xs={12} md={8}>
-            {contributorName && (
-              <Link
-                component={RouterLink}
-                to={"/contributor/" + encodedUserId}
-                style={{ textDecoration: "none" }}
-              >
-                <Card
-                  variant="plain"
-                  orientation="horizontal"
-                  sx={{
-                    maxHeight: "150px",
-                    bgcolor: "#fff",
-                    p: 0,
-                    "&:hover": {
-                      borderColor:
-                        "theme.vars.palette.primary.outlinedHoverBorder",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
+          <Grid xs={12}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              justifyContent={{ xs: "center", sm: "space-between" }}
+              alignItems={{ xs: "flex-start", sm: "center" }}
+            >
+              {contributorName && (
+                <Link
+                  component={RouterLink}
+                  to={"/contributor/" + encodedUserId}
+                  style={{ textDecoration: "none" }}
                 >
-                  <CardContent>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={2}
-                      sx={{ py: 2 }}
-                    >
-                      <UserAvatar
-                        userAvatarUrls={contributorAvatar}
-                        userId={contributorUserId}
-                        avatarResolution="low"
-                        isLoading={isLoading}
-                      />
-                      <Stack direction="column">
-                        <Typography level="title-lg">
-                          {contributorName}
-                        </Typography>
-                        <Typography level="body-sm">
-                          {hasTimestamp ? timePassedText : "Contributor"}
-                        </Typography>
+                  <Card
+                    variant="plain"
+                    orientation="horizontal"
+                    sx={{
+                      maxHeight: "150px",
+                      bgcolor: "#fff",
+                      p: 0,
+                      "&:hover": {
+                        borderColor:
+                          "theme.vars.palette.primary.outlinedHoverBorder",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{ py: 2 }}
+                      >
+                        <UserAvatar
+                          userAvatarUrls={contributorAvatar}
+                          userId={contributorUserId}
+                          avatarResolution="low"
+                          isLoading={isLoading}
+                        />
+                        <Stack direction="column">
+                          <Typography level="title-lg">
+                            {contributorName}
+                          </Typography>
+                          <Typography level="body-sm">
+                            {hasTimestamp ? timePassedText : "Contributor"}
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Link>
-            )}
-            <Stack direction="row" spacing={1}>
-              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-              <CopyButton textToCopy={shareUrl} />
-              {isAuthenticated && (
-                <BookmarkButton
-                  elementId={elementId}
-                  elementType={elementType}
-                />
+                    </CardContent>
+                  </Card>
+                </Link>
               )}
+              <Stack direction="row" spacing={1}>
+                <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+                <CopyButton textToCopy={shareUrl} />
+                {isAuthenticated && (
+                  <BookmarkButton
+                    elementId={elementId}
+                    elementType={elementType}
+                  />
+                )}
+              </Stack>
             </Stack>
           </Grid>
         </Grid>
@@ -262,7 +268,11 @@ export default function MainContent(props) {
         sx={{ py: 2 }}
       >
         <Grid xs={12}>
-          <Stack direction="row" justifyContent="space-between">
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            justifyContent={{ xs: "center", sm: "space-between" }}
+            alignItems={{ xs: "flex-start", sm: "center" }}
+          >
             {contributorName && (
               <Link
                 component={RouterLink}
