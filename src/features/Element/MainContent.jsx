@@ -94,6 +94,52 @@ function AuthorsDisplay(props) {
   );
 }
 
+function ContributorCard(props) {
+  const encodedUserId = props.encodedUserId;
+  const avatar = props.avatar;
+  const userId = props.userId;
+  const name = props.name;
+  const isLoading = props.isLoading;
+  const timePassedText = props.timePassedText;
+
+  return (
+    <Link
+      component={RouterLink}
+      to={"/contributor/" + encodedUserId}
+      style={{ textDecoration: "none" }}
+    >
+      <Card
+        variant="plain"
+        orientation="horizontal"
+        sx={{
+          maxHeight: "150px",
+          bgcolor: "#fff",
+          p: 0,
+          "&:hover": {
+            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+            transform: "translateY(-2px)",
+          },
+        }}
+      >
+        <CardContent>
+          <Stack direction="row" alignItems="center" spacing={2} sx={{ py: 1 }}>
+            <UserAvatar
+              userAvatarUrls={avatar}
+              userId={userId}
+              avatarResolution="low"
+              isLoading={isLoading}
+            />
+            <Stack direction="column">
+              <Typography level="title-lg">{name}</Typography>
+              <Typography level="body-sm">{timePassedText}</Typography>
+            </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
 export default function MainContent(props) {
   const elementId = props.elementId;
   const title = props.title;
@@ -180,50 +226,14 @@ export default function MainContent(props) {
               alignItems={{ xs: "flex-start", sm: "center" }}
             >
               {contributorName && (
-                <Link
-                  component={RouterLink}
-                  to={"/contributor/" + encodedUserId}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Card
-                    variant="plain"
-                    orientation="horizontal"
-                    sx={{
-                      maxHeight: "150px",
-                      bgcolor: "#fff",
-                      p: 0,
-                      "&:hover": {
-                        borderColor:
-                          "theme.vars.palette.primary.outlinedHoverBorder",
-                        transform: "translateY(-2px)",
-                      },
-                    }}
-                  >
-                    <CardContent>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{ py: 2 }}
-                      >
-                        <UserAvatar
-                          userAvatarUrls={contributorAvatar}
-                          userId={contributorUserId}
-                          avatarResolution="low"
-                          isLoading={isLoading}
-                        />
-                        <Stack direction="column">
-                          <Typography level="title-lg">
-                            {contributorName}
-                          </Typography>
-                          <Typography level="body-sm">
-                            {hasTimestamp ? timePassedText : "Contributor"}
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <ContributorCard
+                  encodedUserId={encodedUserId}
+                  userId={contributorUserId}
+                  name={contributorName}
+                  avatar={contributorAvatar}
+                  isLoading={isLoading}
+                  timePassedText={hasTimestamp ? timePassedText : "Contributor"}
+                />
               )}
               <Stack direction="row" spacing={1}>
                 <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
@@ -274,50 +284,14 @@ export default function MainContent(props) {
             alignItems={{ xs: "flex-start", sm: "center" }}
           >
             {contributorName && (
-              <Link
-                component={RouterLink}
-                to={"/contributor/" + encodedUserId}
-                style={{ textDecoration: "none" }}
-              >
-                <Card
-                  variant="plain"
-                  orientation="horizontal"
-                  sx={{
-                    maxHeight: "150px",
-                    bgcolor: "#fff",
-                    p: 0,
-                    "&:hover": {
-                      borderColor:
-                        "theme.vars.palette.primary.outlinedHoverBorder",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                >
-                  <CardContent>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={2}
-                      sx={{ pb: 2 }}
-                    >
-                      <UserAvatar
-                        userAvatarUrls={contributorAvatar}
-                        userId={contributorUserId}
-                        avatarResolution="low"
-                        isLoading={isLoading}
-                      />
-                      <Stack direction="column">
-                        <Typography level="title-lg">
-                          {contributorName}
-                        </Typography>
-                        <Typography level="body-sm">
-                          {hasTimestamp ? timePassedText : "Contributor"}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Link>
+              <ContributorCard
+                encodedUserId={encodedUserId}
+                userId={contributorUserId}
+                name={contributorName}
+                avatar={contributorAvatar}
+                isLoading={isLoading}
+                timePassedText={hasTimestamp ? timePassedText : "Contributor"}
+              />
             )}
             <Stack direction="row" spacing={1}>
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
