@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 
 import Tooltip from "@mui/joy/Tooltip";
 import DialogTitle from "@mui/joy/DialogTitle";

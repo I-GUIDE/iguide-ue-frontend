@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";

@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,

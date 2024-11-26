@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";

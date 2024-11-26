@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 
 import Card from "@mui/joy/Card";
 import CardActions from "@mui/joy/CardActions";
