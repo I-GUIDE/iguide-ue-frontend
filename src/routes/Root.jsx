@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { useCookies } from "react-cookie";
 
 import NavBar from "../components/Layout/NavBar.jsx";

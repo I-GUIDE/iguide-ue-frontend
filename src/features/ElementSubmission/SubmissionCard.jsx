@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";

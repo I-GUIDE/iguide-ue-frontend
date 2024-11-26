@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";

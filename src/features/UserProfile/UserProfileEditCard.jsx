@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 import AvatarEditor from "react-avatar-editor";
 
 import Card from "@mui/joy/Card";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 import Tooltip from "@mui/joy/Tooltip";
 import Link from "@mui/joy/Link";

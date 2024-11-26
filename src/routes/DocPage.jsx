@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import { CssVarsProvider } from "@mui/joy/styles";

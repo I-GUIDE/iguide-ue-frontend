@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -18,6 +18,11 @@ import Grid from "@mui/joy/Grid";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
+import Typography from "@mui/joy/Typography";
+
+import PublicIcon from "@mui/icons-material/Public";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
@@ -232,12 +237,19 @@ export default function UserProfile() {
                 pb: 8,
               }}
             >
+              <Typography level="title-lg" sx={{ textAlign: "center", mb: 1 }}>
+                Element Options
+              </Typography>
               <Tabs
                 aria-label="Search-filter-by-types"
                 defaultValue="public"
                 value={elementDisplayOption}
                 onChange={handleElementDisplayOptionChange}
-                sx={{ mb: 2, bgcolor: "transparent" }}
+                sx={{
+                  mb: 2,
+                  bgcolor: "transparent",
+                  width: "100%",
+                }}
               >
                 <TabList
                   sx={{
@@ -262,13 +274,19 @@ export default function UserProfile() {
                   }}
                 >
                   <Tab indicatorInset value="public">
-                    Public Elements
+                    <Typography startDecorator={<PublicIcon />}>
+                      Public
+                    </Typography>
                   </Tab>
                   <Tab indicatorInset value="private">
-                    Private Elements
+                    <Typography startDecorator={<VisibilityOffIcon />}>
+                      Private
+                    </Typography>
                   </Tab>
                   <Tab indicatorInset value="bookmarked">
-                    Bookmarked Elements
+                    <Typography startDecorator={<BookmarkIcon />}>
+                      Bookmarks
+                    </Typography>
                   </Tab>
                 </TabList>
               </Tabs>
