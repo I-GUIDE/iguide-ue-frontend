@@ -225,6 +225,7 @@ export default function SubmissionCard(props) {
   useEffect(() => {
     if (submissionType === "initial") {
       setResourceTypeSelected(elementType);
+      setVisibility(ELEM_VISIBILITY.public);
     }
   }, [elementType, submissionType]);
 
