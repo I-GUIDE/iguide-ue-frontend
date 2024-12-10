@@ -40,11 +40,16 @@ export default function SearchBar(props) {
       const data = await retrieveTopSearchKeywords();
       TEST_MODE && console.log("Trending search keywords returned", data);
 
-      if (data !== "ERROR") {
-        const keywordList = data["top_keywords"].map((keyword) => {
+      if (data && data !== "ERROR") {
+        // Only display search keywords more than 10 times
+        const keywordCountList = data["top_keywords"].filter(
+          (keywordCount) => keywordCount.count > 10
+        );
+        const keywordList = keywordCountList.map((keyword) => {
           return keyword.keyword;
         });
-        TEST_MODE && console.log("Trending search keywords list", keywordList);
+        TEST_MODE &&
+          console.log("Trending search keywords display list", keywordList);
         setTrendingSearchKeywords(keywordList);
       } else {
         setTrendingSearchKeywords([]);
