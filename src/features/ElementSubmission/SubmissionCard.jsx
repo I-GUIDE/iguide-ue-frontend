@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
@@ -33,7 +33,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
+const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 
@@ -45,6 +45,8 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
+  ELEM_VISIBILITY,
+  ACCEPTED_IMAGE_TYPES,
 } from "../../configs/VarConfigs";
 
 import {
@@ -52,6 +54,7 @@ import {
   fetchAllTitlesByElementType,
   getMetadataByDOI,
   duplicateDOIExists,
+  fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
 
@@ -76,11 +79,15 @@ export default function SubmissionCard(props) {
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
+  const [visibility, setVisibility] = useState("");
+
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
-  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
+  const [thumbnailImageFileURLs, setThumbnailImageFileURLs] = useState();
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
   const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
@@ -146,11 +153,21 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = await fetchSingleElementDetails(elementId);
+      const thisElement = isPrivateElement
+        ? await fetchSinglePrivateElementDetails(elementId)
+        : await fetchSingleElementDetails(elementId);
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      const elementUrlReturned = `/${
+        thisElement["resource-type"]
+      }s/${elementId}${
+        thisElement.visibility === ELEM_VISIBILITY.private
+          ? "?private-mode=true"
+          : ""
+      }`;
+      setElementURI(elementUrlReturned);
+      setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
       setTags(
@@ -164,7 +181,7 @@ export default function SubmissionCard(props) {
           : thisElement.authors
       );
       setContents(thisElement.contents);
-      setThumbnailImageFileURL(thisElement["thumbnail-image"]);
+      setThumbnailImageFileURLs(thisElement["thumbnail-image"]);
 
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
@@ -203,11 +220,12 @@ export default function SubmissionCard(props) {
     if (submissionType === "update") {
       fetchData();
     }
-  }, [elementId, submissionType]);
+  }, [isPrivateElement, elementId, submissionType]);
 
   useEffect(() => {
     if (submissionType === "initial") {
       setResourceTypeSelected(elementType);
+      setVisibility(ELEM_VISIBILITY.public);
     }
   }, [elementType, submissionType]);
 
@@ -226,22 +244,27 @@ export default function SubmissionCard(props) {
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
 
+  const handleVisibilityChange = async (e, newValue) => {
+    TEST_MODE && console.log("Setting visibility to", newValue);
+    setVisibility(newValue);
+  };
+
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
       alert("Please upload an image!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
       alert("Please upload an image smaller than 5MB!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     setThumbnailImageFile(thumbnailFile);
-    setThumbnailImageFileURL(URL.createObjectURL(thumbnailFile));
+    setThumbnailImageFileURLs(URL.createObjectURL(thumbnailFile));
   };
 
   // Related elements...
@@ -452,6 +475,8 @@ export default function SubmissionCard(props) {
       }
     });
 
+    data.visibility = visibility;
+
     data["resource-type"] = resourceTypeSelected;
 
     data.metadata = { created_by: localUserInfo.id };
@@ -489,14 +514,15 @@ export default function SubmissionCard(props) {
         );
 
         const result = await response.json();
-        data["thumbnail-image"] = result.url;
+        TEST_MODE && console.log("image submission return", result);
+        data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         setButtonDisabled(false);
         alert("Error uploading thumbnail...");
       }
     } else {
-      data["thumbnail-image"] = thumbnailImageFileURL;
+      data["thumbnail-image"] = thumbnailImageFileURLs;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
@@ -526,6 +552,10 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
+          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+          }`;
+          setElementURI(futureElementUrl);
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
@@ -554,7 +584,12 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+            const futureElementUrl = `/${resourceTypeSelected}s/${
+              result.elementId
+            }${
+              visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+            }`;
+            setElementURI(futureElementUrl);
           }
           // Case where there is a duplication on publication DOI
         } else if (
@@ -668,6 +703,20 @@ export default function SubmissionCard(props) {
               gap: 2,
             }}
           >
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Set the visibility of this element"
+                  fieldRequired
+                >
+                  Visibility
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select value={visibility} onChange={handleVisibilityChange}>
+                <Option value={ELEM_VISIBILITY.public}>Public</Option>
+                <Option value={ELEM_VISIBILITY.private}>Private</Option>
+              </Select>
+            </FormControl>
             <Typography level="h3" sx={{ pt: 1 }}>
               Element information
             </Typography>
@@ -788,10 +837,7 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Suspense fallback={<div>Loading markdown editor...</div>}>
-                  <MarkdownEditor
-                    contents={contents}
-                    setContents={setContents}
-                  />
+                  <HTMLEditor contents={contents} setContents={setContents} />
                 </Suspense>
               </FormControl>
             ) : (
@@ -838,21 +884,41 @@ export default function SubmissionCard(props) {
                 Upload a thumbnail image
                 <VisuallyHiddenInput
                   type="file"
+                  accept={ACCEPTED_IMAGE_TYPES}
                   onChange={handleThumbnailImageUpload}
                 />
               </Button>
-              {thumbnailImageFileURL && (
+              {thumbnailImageFileURLs && (
                 <div>
                   <Typography>Thumbnail preview</Typography>
                   <AspectRatio ratio="1" sx={{ width: 190 }}>
                     <img
-                      src={thumbnailImageFileURL}
+                      // This is necessary to show both the newly uploaded image as well as the returned thumbnail
+                      src={
+                        typeof thumbnailImageFileURLs === "string"
+                          ? thumbnailImageFileURLs
+                          : thumbnailImageFileURLs.low
+                      }
                       loading="lazy"
                       alt="thumbnail-preview"
                     />
                   </AspectRatio>
                 </div>
               )}
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Add a credit or the source of the thumbnail image if required">
+                  Thumbnail image credit
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="thumbnail-credit"
+                value={thumbnailImageCredit}
+                onChange={(event) =>
+                  setThumbnailImageCredit(event.target.value)
+                }
+              />
             </FormControl>
             {resourceTypeSelected === "map" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -1300,6 +1366,7 @@ export default function SubmissionCard(props) {
           </CardContent>
         </form>
       </Card>
+      {/* Handle submission failure */}
       <Modal
         open={openModal}
         onClose={() => {

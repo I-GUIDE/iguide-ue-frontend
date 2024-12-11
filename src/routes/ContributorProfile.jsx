@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -26,6 +26,7 @@ export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
 
   const [contributorInfo, setContributorInfo] = useState({});
+  const [contributorInfoLoading, setContributorInfoLoading] = useState(true);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
 
   // When users select a new page or when there is a change of total items,
@@ -37,12 +38,12 @@ export default function ContributorProfile() {
       setNumberOfTotalItems(tally);
 
       setContributorInfo({
-        first_name: user["first_name"],
-        last_name: user["last_name"],
+        first_name: user["first-name"],
+        last_name: user["last-name"],
         email: user["email"],
         affiliation: user["affiliation"],
         bio: user["bio"],
-        avatar_url: user["avatar_url"],
+        avatar_url: user["avatar-url"],
         openid: user["openid"],
         id: user["id"],
         gitHubLink: user.gitHubLink,
@@ -50,6 +51,7 @@ export default function ContributorProfile() {
         googleScholarLink: user.googleScholarLink,
         personalWebsiteLink: user.personalWebsiteLink,
       });
+      setContributorInfoLoading(false);
     }
     getContributorInfo(userId);
   }, [userId]);
@@ -68,6 +70,7 @@ export default function ContributorProfile() {
           <UserProfileHeader
             localUserInfo={contributorInfo}
             contributionCount={numberOfTotalItems}
+            loading={contributorInfoLoading}
           />
         )}
         <Container maxWidth="lg">

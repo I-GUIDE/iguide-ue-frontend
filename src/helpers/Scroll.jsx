@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 
 import Tooltip from "@mui/joy/Tooltip";
 import Box from "@mui/material/Box";

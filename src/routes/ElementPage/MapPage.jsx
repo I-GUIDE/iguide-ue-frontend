@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -8,7 +8,10 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
-import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
+import {
+  fetchSingleElementDetails,
+  fetchSinglePrivateElementDetails,
+} from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../features/Element/MainContent";
@@ -20,6 +23,7 @@ import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
 import MapViewer from "../../features/Element/MapViewer";
 import StaticMap from "../../features/Element/StaticMap";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 
 import ErrorPage from "../ErrorPage";
 
@@ -32,15 +36,23 @@ export default function MapPage() {
   const [tags, setTags] = useState([]);
   const [mapIFrameLink, setMapIFrameLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode");
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(id)
+          : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
@@ -54,12 +66,14 @@ export default function MapPage() {
       setTags(thisElement.tags);
       setMapIFrameLink(thisElement["external-iframe-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setIsLoading(false);
     }
     fetchData();
-  }, [id]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 
@@ -109,25 +123,30 @@ export default function MapPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/maps"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 contributor={contributor}
                 contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="map"
                 creationTime={creationTime}
                 updateTime={updateTime}
+                isLoading={isLoading}
               />
             </Grid>
 
             {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
-              {mapIFrameLink !== thumbnailImage && (
+              {mapIFrameLink !== thumbnailImage.original && (
                 <MapViewer iframeSrc={mapIFrameLink} />
               )}
               <StaticMap mapImg={thumbnailImage} />

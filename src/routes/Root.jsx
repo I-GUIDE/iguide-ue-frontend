@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { useCookies } from "react-cookie";
 
 import NavBar from "../components/Layout/NavBar.jsx";
@@ -19,6 +19,7 @@ import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function Root(props) {
@@ -94,6 +95,7 @@ export default function Root(props) {
       first_name: "Happy",
       last_name: "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
+      id: DEMO_USERID,
       role: 1,
       gitHubLink: "https://github.com",
       linkedInLink: "https://linkedin.com",
@@ -132,9 +134,26 @@ export default function Root(props) {
         returnedLocalUser.role =
           typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
 
-        TEST_MODE && console.log("set local user: ", returnedLocalUser);
+        TEST_MODE &&
+          console.log("Local user returned from DB: ", returnedLocalUser);
+        const user = {
+          affiliation: returnedLocalUser.affiliation,
+          avatar_url: returnedLocalUser["avatar-url"],
+          bio: returnedLocalUser.bio,
+          email: returnedLocalUser.email,
+          first_name: returnedLocalUser["first-name"],
+          last_name: returnedLocalUser["last-name"],
+          openid: returnedLocalUser.openid,
+          id: returnedLocalUser.id,
+          role: returnedLocalUser.role,
+          gitHubLink: returnedLocalUser.gitHubLink,
+          linkedInLink: returnedLocalUser.linkedInLink,
+          googleScholarLink: returnedLocalUser.googleScholarLink,
+          personalWebsiteLink: returnedLocalUser.personalWebsiteLink,
+        };
+        TEST_MODE && console.log("Setting localUserInfo: ", user);
 
-        setLocalUserInfo(returnedLocalUser);
+        setLocalUserInfo(user);
       }
     }
 

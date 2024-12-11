@@ -1,8 +1,8 @@
 import { React, useState } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router";
+import { useOutletContext } from "react-router";
 
-import Stack from "@mui/joy/Stack";
+import Tooltip from "@mui/joy/Tooltip";
 import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
@@ -11,20 +11,22 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
-import IconButton from "@mui/joy/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-import { fetchWithAuth } from "../../utils/FetcherWithJWT";
-import { PERMISSIONS } from "../../configs/Permissions";
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
+import { PERMISSIONS } from "../configs/Permissions";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
-export default function DocAdminOps(props) {
-  const docId = props.docId;
+export default function ElementDeleteButton(props) {
+  const elementId = props.elementId;
+  const contributorId = props.contributorId;
   const title = props.title;
+  const tooltipTitle = props.tooltipTitle;
+  const variant = props.variant;
+  const color = props.color;
+  const size = props.size;
+  const children = props.children;
   const afterDeleteRedirection = props.afterDeleteRedirection
     ? props.afterDeleteRedirection
     : "/";
@@ -41,15 +43,16 @@ export default function DocAdminOps(props) {
 
   // Check if the current user is admin, if yes, allow edit
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
-  if (!canEditAllElements) {
+  const isContributor = localUserInfo.id === contributorId;
+  if (!isContributor && !canEditAllElements) {
     return null;
   }
 
-  async function handleDocDelete(docId) {
-    TEST_MODE && console.log("Deleting...", docId);
+  async function handleElementDelete(elementId) {
+    TEST_MODE && console.log("Deleting...", elementId);
     try {
       const response = await fetchWithAuth(
-        `${USER_BACKEND_URL}/api/documentation/${docId}`,
+        `${USER_BACKEND_URL}/api/elements/${elementId}`,
         {
           method: "DELETE",
         }
@@ -64,7 +67,7 @@ export default function DocAdminOps(props) {
 
       const result = await response.json();
       // When the deletion was successful, rerender the list
-      if (result && result.message === "Documentation deleted successfully") {
+      if (result && result.message === "Resource deleted successfully") {
         window.location.href = afterDeleteRedirection;
       }
     } catch (error) {
@@ -74,35 +77,22 @@ export default function DocAdminOps(props) {
   }
 
   return (
-    <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <IconButton
-        aria-label="Edit this doc"
-        size="sm"
-        variant="soft"
-        color="primary"
-      >
-        <Link
-          underline="none"
-          component={RouterLink}
-          to={"/doc-update/" + docId}
-          sx={{ color: "inherit" }}
-        >
-          <EditIcon />
-        </Link>
-      </IconButton>
-      <IconButton
-        aria-label="Delete this doc"
-        color="danger"
-        variant="soft"
-        size="sm"
+    <>
+      <Button
+        aria-label="Delete this element"
+        color={color}
+        variant={variant}
+        size={size}
         onClick={() => {
           setDeleteMetadataTitle(title);
-          setDeleteMetadataId(docId);
-          TEST_MODE && console.log("Attempting to delete:", title, docId);
+          setDeleteMetadataId(elementId);
+          TEST_MODE && console.log("Attempting to delete:", title, elementId);
         }}
       >
-        <DeleteForeverIcon />
-      </IconButton>
+        <Tooltip title={tooltipTitle} placement="top" arrow>
+          {children}
+        </Tooltip>
+      </Button>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}
         onClose={() => {
@@ -124,9 +114,12 @@ export default function DocAdminOps(props) {
             <Button
               variant="solid"
               color="danger"
-              onClick={() => handleDocDelete(deleteMetadataId)}
+              onClick={() => handleElementDelete(deleteMetadataId)}
             >
               Delete
+              {!isContributor &&
+                canEditAllElements &&
+                " (YOU ARE NOT THE CONTRIBUTOR)"}
             </Button>
             <Button
               variant="plain"
@@ -141,6 +134,6 @@ export default function DocAdminOps(props) {
           </DialogActions>
         </ModalDialog>
       </Modal>
-    </Stack>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router";
 import AvatarEditor from "react-avatar-editor";
 
 import Card from "@mui/joy/Card";
@@ -23,7 +23,10 @@ import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { styled } from "@mui/joy/styles";
 
-import { IMAGE_SIZE_LIMIT } from "../../configs/VarConfigs";
+import {
+  IMAGE_SIZE_LIMIT,
+  ACCEPTED_IMAGE_TYPES,
+} from "../../configs/VarConfigs";
 
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
 import { updateUser, checkTokens } from "../../utils/UserManager";
@@ -173,7 +176,9 @@ export default function UserProfileEditCard(props) {
         );
 
         const profilePictureResult = await response.json();
-        avatar_url = profilePictureResult.url;
+        TEST_MODE &&
+          console.log("Upload avatar returned", profilePictureResult);
+        avatar_url = profilePictureResult["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         alert("Error updating user profile!");
@@ -345,6 +350,7 @@ export default function UserProfileEditCard(props) {
               Upload your profile picture
               <VisuallyHiddenInput
                 type="file"
+                accept={ACCEPTED_IMAGE_TYPES}
                 onChange={handleProfilePictureUpload}
               />
             </Button>
@@ -422,7 +428,11 @@ export default function UserProfileEditCard(props) {
                 >
                   <img
                     alt="User profile picture"
-                    src={confirmedProfilePictureURL}
+                    src={
+                      typeof confirmedProfilePictureURL === "string"
+                        ? confirmedProfilePictureURL
+                        : confirmedProfilePictureURL.low
+                    }
                   />
                 </AspectRatio>
               </Stack>

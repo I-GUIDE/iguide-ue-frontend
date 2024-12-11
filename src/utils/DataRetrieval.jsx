@@ -1,4 +1,5 @@
 import axios from "axios";
+import { fetchWithAuth } from "./FetcherWithJWT";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -60,59 +61,46 @@ export async function DataSearcher(
       throw new Error("Failed to search element");
     }
 
-    return response.json();
+    const responseJson = await response.json();
+
+    TEST_MODE &&
+      console.log("Search return result from endpoint", responseJson);
+
+    // An array of elements
+    const elements = responseJson.elements;
+    // Number of elements should have been returned without pagination
+    const countOfTotal = responseJson["total_count"];
+    // Number of elements should have been returned without pagination regardless element types
+    const countsByTypes = responseJson["total_count_by_types"];
+
+    const countsByTypesInArray = [];
+
+    // Track total number of elements regardless of element types
+    let countOfAny = 0;
+
+    for (const idx in countsByTypes) {
+      countsByTypesInArray.push([
+        countsByTypes[idx]["element-type"],
+        countsByTypes[idx]["count"],
+      ]);
+      countOfAny += countsByTypes[idx]["count"];
+    }
+
+    if (countOfAny > 0) {
+      countsByTypesInArray.splice(0, 0, ["any", countOfAny]);
+    }
+
+    const result = {
+      elements: elements,
+      total_count: countOfTotal,
+      total_count_by_types: countsByTypesInArray,
+    };
+
+    TEST_MODE && console.log("Search result to be returned", result);
+
+    return result;
   } catch (error) {
     console.error("Error fetching search results: ", error.message);
-    return "ERROR";
-  }
-}
-
-/**
- * Get the return count of all available element types based on a search term
- * @async
- * @function DataSearcherCount
- * @param {string} keyword - The keyword to search for in resources.
- * @returns {Promise<Object>} A promise that resolves to the JSON response containing the search result count.
- * @throws {Error} Throws an error if the search operation fails.
- */
-export async function DataSearcherCount(keyword) {
-  if (!keyword || keyword === "") {
-    return {
-      elements: [],
-      total_count: 0,
-    };
-  }
-
-  try {
-    const response = await fetch(
-      `${BACKEND_URL_PORT}/api/search/count?keyword=${keyword}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to retrieve element search count");
-    }
-
-    const resJson = await response.json();
-
-    const countJson = [];
-    countJson.push(["any", resJson.total_count]);
-    const elementTypeCount = resJson.resource_type_counts;
-
-    for (const idx in elementTypeCount) {
-      countJson.push([
-        elementTypeCount[idx]["element-type"],
-        elementTypeCount[idx]["count"],
-      ]);
-    }
-
-    TEST_MODE && console.log("search count by element types", countJson);
-
-    return countJson;
-  } catch (error) {
-    console.error("Error fetching search result count: ", error.message);
     return "ERROR";
   }
 }
@@ -174,6 +162,7 @@ export async function getMetadataByDOI(doi) {
  * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
  * @param {string} [from='0'] - The starting point of the results.
  * @param {string} [size='10'] - The number of results to retrieve.
+ * @param {boolean} [countOnly=false] - only return count number.
  * @returns {Promise<Object|number>} The retrieved elements.
  * @throws {Error} If the request fails.
  */
@@ -450,6 +439,198 @@ export async function retrieveTopSearchKeywords(
     return response.json();
   } catch (error) {
     console.error("Error getting top keywords: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Retrieve private elements from the database by user id.
+ *
+ * @param {string} [userId] - User ID.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
+ * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='12'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved private elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrievePrivateElementsByUserId(
+  userId,
+  sortBy = "creation_time",
+  order = "desc",
+  from = "0",
+  size = "12"
+) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/private?` +
+        `user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve private elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a list of private elements: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Fetches a single private element for element pages
+ *
+ * @async
+ * @function fetchSinglePrivateElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSinglePrivateElementDetails(elementId) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch a single private element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching a single private element: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Get whether the element is bookmarked or not by the user
+ *
+ * @async
+ * @function getElementBookmarkStatus
+ * @param {string} elementId - Element ID
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the bookmark status.
+ * @throws {Error} Throws an error if getting the bookmark status fails.
+ */
+export async function getElementBookmarkStatus(elementId, elementType) {
+  let query = "";
+  if (elementType) {
+    query += `?elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get the save status");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error getting the save status: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Bookmark or unbookmark an element to the users profile
+ *
+ * @async
+ * @function handleBookmarkingAnElement
+ * @param {string} elementId - Element ID
+ * @param {boolean} bookmarkElement - True - to bookmark this element; False - to unbookmark this element
+ * @param {string} elementType - the type of the element
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the status.
+ * @throws {Error} Throws an error if bookmarking or unbookmarking the element fails.
+ */
+export async function handleBookmarkingAnElement(
+  elementId,
+  bookmarkElement = true,
+  elementType
+) {
+  let query = `?bookmark=${bookmarkElement}`;
+  if (elementType) {
+    query += `&elementType=${elementType}`;
+  }
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/users/bookmark/${elementId}` + query,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to bookmark or unbookmark an element");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error bookmarking or unbookmarking an element: ",
+      error.message
+    );
+    return "ERROR";
+  }
+}
+
+/**
+ * Retrieve bookmarked elements from the database by user id.
+ *
+ * @async
+ * @function retrieveBookmarkedElements
+ * @param {string} [userId] - User ID.
+ * @param {string} [sortBy='creation_time'] - The field by which to sort the results.
+ * @param {string} [order='desc'] - The order of the sorting (ascending or descending).
+ * @param {string} [from='0'] - The starting point of the results.
+ * @param {string} [size='12'] - The number of results to retrieve.
+ * @returns {Promise<Object|number>} The retrieved bookmarked elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrieveBookmarkedElements(
+  userId,
+  sortBy = "creation_time",
+  order = "desc",
+  from = "0",
+  size = "12"
+) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/bookmark` +
+        `?user-id=${userId}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve bookmarked elements");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(
+      "Error fetching a list of bookmarked elements: ",
+      error.message
+    );
     return "ERROR";
   }
 }

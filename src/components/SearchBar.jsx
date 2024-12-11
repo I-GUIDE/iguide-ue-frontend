@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
@@ -40,11 +40,16 @@ export default function SearchBar(props) {
       const data = await retrieveTopSearchKeywords();
       TEST_MODE && console.log("Trending search keywords returned", data);
 
-      if (data !== "ERROR") {
-        const keywordList = data["top_keywords"].map((keyword) => {
+      if (data && data !== "ERROR") {
+        // Only display search keywords more than 10 times
+        const keywordCountList = data["top_keywords"].filter(
+          (keywordCount) => keywordCount.count > 10
+        );
+        const keywordList = keywordCountList.map((keyword) => {
           return keyword.keyword;
         });
-        TEST_MODE && console.log("Trending search keywords list", keywordList);
+        TEST_MODE &&
+          console.log("Trending search keywords display list", keywordList);
         setTrendingSearchKeywords(keywordList);
       } else {
         setTrendingSearchKeywords([]);
@@ -151,7 +156,7 @@ export default function SearchBar(props) {
             </Tooltip>
           )}
         </Stack>
-        {showTrendingSearchKeywords && (
+        {showTrendingSearchKeywords && trendingSearchKeywords.length > 0 && (
           <ClickableKeywordList>{trendingSearchKeywords}</ClickableKeywordList>
         )}
       </Stack>

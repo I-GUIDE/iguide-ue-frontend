@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -31,7 +31,7 @@ import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 
 import InfoCard from "../components/InfoCard";
-import { DataSearcher, DataSearcherCount } from "../utils/DataRetrieval";
+import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
 import {
   SEARCH_RESULTS_HEADER_HEIGHT,
@@ -109,15 +109,15 @@ export default function SearchResults() {
           itemsPerPage
         );
 
-        const returnResultsCount = await DataSearcherCount(searchTerm);
-        setSearchCategoryCount(returnResultsCount);
-
         const returnElements = returnResults.elements
           ? returnResults.elements
           : [];
         const returnElementsCount = returnResults["total_count"]
           ? returnResults["total_count"]
           : 0;
+
+        const returnResultsCount = returnResults.total_count_by_types;
+        setSearchCategoryCount(returnResultsCount);
 
         setNumberOfTotalItems(returnElementsCount);
         setNumberOfPages(Math.ceil(returnElementsCount / itemsPerPage));
@@ -427,7 +427,7 @@ export default function SearchResults() {
                     <Grid key={result._id} size={{ xs: 12, sm: 6, md: 4 }}>
                       <InfoCard
                         cardtype={result["resource-type"] + "s"}
-                        pageid={result._id}
+                        elementId={result._id}
                         title={result.title}
                         authors={result.authors}
                         tags={result.tags}
