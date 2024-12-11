@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import { CssVarsProvider } from "@mui/joy/styles";
+import { CssVarsProvider, styled } from "@mui/joy/styles";
+import AspectRatio from "@mui/joy/AspectRatio";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -24,11 +25,58 @@ import ReportIcon from "@mui/icons-material/Report";
 import IconButton from "@mui/joy/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
 const VITE_SLACK_API_URL = import.meta.env.VITE_SLACK_API_URL;
+
+const VisuallyHiddenInput = styled("input")`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
+
+const Img = styled("img")`
+  width: 100%;
+  height: 100%;
+  outline: 2px #97c3f0 solid;
+  border-radius: 5px;
+  transition: all 300ms;
+`;
+
+const PreviewImgContainer = styled("div")`
+  width: calc(100% / 5);
+  height: 80px;
+  position: relative;
+  cursor: pointer;
+  transition: all 300ms;
+`;
+
+const ImageContainer = styled("div")`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  transition: all 300ms;
+`;
+
+const DeleteBtn = styled(DeleteIcon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 24px;
+  transition: all 300ms;
+`;
 
 export default function ContactUs() {
   usePageTitle("Contact Us");
@@ -39,9 +87,90 @@ export default function ContactUs() {
   const [contactMessage, setContactMessage] = useState("");
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imageFilesURL, setImageFilesURL] = useState([]);
+
+  const handleImageUpload = (event) => {
+    if (imageFiles.length == 5) {
+      alert("You can upload only up to 5 images");
+      return;
+    }
+
+    let arrImg = [];
+    let arrURL = [];
+
+    for (let idx = 0; idx < event.target.files.length; ++idx) {
+      if (arrImg.length == 5) {
+        alert("You can upload only up to 5 images");
+        return;
+      }
+
+      let file = event.target.files[idx];
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image!");
+        continue;
+      }
+      if (file.size > IMAGE_SIZE_LIMIT) {
+        alert("Please upload an image smaller than 5MB!");
+        continue;
+      }
+
+      arrImg.push(file);
+      arrURL.push(URL.createObjectURL(file));
+    }
+
+    setImageFiles([...imageFiles, ...arrImg]);
+    setImageFilesURL([...imageFilesURL, ...arrURL]);
+  };
+
+  async function uploadImgToSlack() {
+    const formData = new FormData();
+
+    const contactDetails = {
+      contactCategory,
+      contactEmail,
+      contactMessage,
+      contactName,
+    };
+
+    console.log(imageFiles);
+
+    for (let file of imageFiles) {
+      formData.append("files", file);
+    }
+
+    formData.append("contactDetails", JSON.stringify(contactDetails));
+
+    const res = await fetch(`http://localhost:3000/upload-to-slack`, {
+      mode: "no-cors",
+      method: "POST",
+      body: formData,
+    });
+
+    console.log(res);
+    if (res.status === 200) {
+      setSuccessMsg(
+        "Your inquiry has been noted. We will get back to you soon."
+      );
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+      setContactCategory("Question");
+      setImageFiles("");
+      setImageFilesURL("");
+    } else {
+      setError("There was an error, please try again later.");
+    }
+    return;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (imageFilesURL.length > 0) {
+      uploadImgToSlack();
+      return;
+    }
 
     // Send text data to Slack channel
     const res = await fetch(
@@ -79,6 +208,7 @@ export default function ContactUs() {
       setContactName("");
       setContactEmail("");
       setContactMessage("");
+      setContactCategory("Question");
     } else {
       setError("There was an error, please try again later.");
     }
@@ -89,6 +219,47 @@ export default function ContactUs() {
       <Typography color="danger" level="title-lg">
         *
       </Typography>
+    );
+  }
+
+  function removeFile(idx) {
+    let imgArr = [...imageFiles];
+    imgArr.splice(idx, 1);
+    setImageFiles([...imgArr]);
+
+    let urlArr = [...imageFilesURL];
+    urlArr.splice(idx, 1);
+    setImageFilesURL([...urlArr]);
+  }
+
+  function PreviewImg({ fileURL, imgKey }) {
+    const [isShown, setIsShown] = useState(false);
+
+    return (
+      <PreviewImgContainer
+        onMouseEnter={() => {
+          setIsShown(true);
+        }}
+        onMouseLeave={() => {
+          setIsShown(false);
+        }}
+      >
+        <Img src={fileURL} loading="lazy" alt="thumbnail-preview" />
+        {isShown && (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "rgba(0,0,0,0.3)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              borderRadius: "5px",
+            }}
+          ></div>
+        )}
+        {isShown && <DeleteBtn onClick={() => removeFile(imgKey)} />}
+      </PreviewImgContainer>
     );
   }
 
@@ -302,6 +473,38 @@ export default function ContactUs() {
                       />
                     </FormControl>
 
+                    <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                      <FormLabel>
+                        Images {"(Up to 5 images, each < 5MB)"}
+                      </FormLabel>
+                      <Button
+                        component="label"
+                        role={undefined}
+                        tabIndex={-1}
+                        variant="outlined"
+                        color="primary"
+                        name="thumbnail-image"
+                      >
+                        Upload images
+                        <VisuallyHiddenInput
+                          type="file"
+                          onChange={handleImageUpload}
+                          accept="image/png, image/gif, image/jpeg"
+                          multiple
+                        />
+                      </Button>
+                      {imageFilesURL.length > 0 && (
+                        <div style={{ marginTop: "20px" }}>
+                          <Typography>Image preview</Typography>
+                          <ImageContainer>
+                            {imageFilesURL.map((fileURL, key) => (
+                              <PreviewImg fileURL={fileURL} imgKey={key} />
+                            ))}
+                          </ImageContainer>
+                        </div>
+                      )}
+                    </FormControl>
+
                     <Button type="submit">Submit</Button>
                   </Stack>
                 </form>
@@ -313,3 +516,8 @@ export default function ContactUs() {
     </CssVarsProvider>
   );
 }
+
+// const x = styled.div`
+//   display: "flex";
+//   gap: 5px;
+// `;
