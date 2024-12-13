@@ -4,7 +4,7 @@ import ReactGA4 from "react-ga4";
 const VITE_GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
-export default function Analytics(props) {
+export default function GoogleAnalytics(props) {
   ReactGA4.initialize([
     {
       trackingId: VITE_GA_MEASUREMENT_ID,
@@ -14,12 +14,11 @@ export default function Analytics(props) {
   useEffect(() => {
     const observer = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
-        TEST_MODE && console.log(entry);
-        ReactGA4.event({
+        TEST_MODE && console.log("PerformanceObserverNavigation entry", entry);
+        ReactGA4.event("Page Performance", {
           page_performance: entry.duration,
           label: window.location.pathname,
           category: "Page performance",
-          action: "Page Performance",
         });
       });
     });
