@@ -39,6 +39,8 @@ import ErrorPage from "./routes/ErrorPage";
 import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
 
+import GoogleAnalytics from "./utils/GoogleAnalytics";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -164,7 +166,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Suspense fallback={<div>Loading...</div>}>
-      <RouterProvider router={router} />
+      <GoogleAnalytics>
+        <RouterProvider router={router} />
+      </GoogleAnalytics>
     </Suspense>
   </React.StrictMode>
 );
