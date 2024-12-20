@@ -7,7 +7,7 @@ import Delete from "@mui/icons-material/Delete";
 import Done from "@mui/icons-material/Done";
 import Close from "@mui/icons-material/Close";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 // import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
@@ -20,6 +20,7 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Tooltip from '@mui/joy/Tooltip';
 import CardContent from "@mui/joy/CardContent";
+import Link from "@mui/joy/Link";
 
 import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
@@ -30,7 +31,7 @@ import {
 import { EditAttributesOutlined } from "@mui/icons-material";
 
 
-export default function ContributorProfileCard(props) {
+export default function UserProfileCard(props) {
   const contributorId = props.id;
   const contributorName = props.name;
   const [contributorRole, setContributorRole] = useState(props.role);
@@ -45,14 +46,9 @@ export default function ContributorProfileCard(props) {
 
   return (
     <>
-    {/* <Link
-      component={RouterLink}
-      to={"/contributor/" + contributorId}
-      style={{ textDecoration: "none" }}
-    > */}
+    
       <Card
         variant="outlined"
-        justifyContent="center"
         sx={{
           width: "100%",
           height: "100%",
@@ -73,7 +69,14 @@ export default function ContributorProfileCard(props) {
                 spacing={2}
                 sx={{ width: "85%", py: 2 }}
             >
-              <Typography level="title-lg" sx={{lineHeight: 1}}>{contributorName}</Typography>
+              <Link
+                overlay
+                component={RouterLink}
+                to={"/contributor/adb03aee-8f4c-4cbf-9e7d-99450fef13e5"}
+                style={{ textDecoration: "none" }}
+              >
+                <Typography level="title-lg" sx={{lineHeight: 1}}>{contributorName}</Typography>
+              </Link>
               <Typography 
                 level="title-md" 
                 sx={{lineHeight: 0, fontWeight: "bold"}} 
@@ -152,7 +155,6 @@ export default function ContributorProfileCard(props) {
         </CardContent>
         
       </Card>
-    {/* </Link> */}
 
 
 

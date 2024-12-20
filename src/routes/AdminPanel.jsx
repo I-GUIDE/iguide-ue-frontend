@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Grid from "@mui/material/Grid2";
 import Typography from "@mui/joy/Typography";
-import ContributorProfileCard from "../components/ContributorProfileCard";
+import UserProfileCard from "../components/UserProfileCard";
 import Header from "../components/Layout/Header";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
@@ -46,7 +46,7 @@ export default function AdminPanel() {
   ]);
 
   function deleteContributor(contributorId) {
-    const index = userList.findIndex((user) => user["id"] == contributorId);
+    const index = userList.findIndex((user) => user["id"] === contributorId);
     const newArray = [...userList.slice(0, index), ...userList.slice(index + 1)];
     setUserList(newArray);
   }
@@ -81,7 +81,7 @@ export default function AdminPanel() {
             >
               {userList?.map((user) => (
                 <Grid key={user.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                  <ContributorProfileCard 
+                  <UserProfileCard 
                     id = {user.id}
                     name = {user.name} 
                     role = {user.role}
@@ -96,6 +96,6 @@ export default function AdminPanel() {
           </Box>
         </Container>
       </CssVarsProvider>
-  )
+  );
 }
 
