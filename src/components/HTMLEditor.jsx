@@ -2,9 +2,11 @@ import React, { useState, useRef, useMemo } from "react";
 
 import JoditEditor from "jodit-react";
 import Stack from "@mui/joy/Stack";
+import Button from "@mui/joy/Button";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
+import { CONTENT_TEMPLATES } from "../configs/ContentTemplates";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -72,6 +74,10 @@ export default function HTMLEditor(props) {
         setUploadSucceeded(false);
       }
     }.bind(this);
+  }
+
+  function handleUseTemplates() {
+    setContents(CONTENT_TEMPLATES.oer);
   }
 
   const config = useMemo(
@@ -170,6 +176,18 @@ export default function HTMLEditor(props) {
   return (
     <div data-color-mode="light">
       <Stack spacing={1}>
+        <Stack direction="row" spacing={1}>
+          <Button variant="outlined" onClick={handleUseTemplates}>
+            Use template
+          </Button>
+          <Button
+            variant="outlined"
+            color="neutral"
+            onClick={() => setContents("")}
+          >
+            Clear text
+          </Button>
+        </Stack>
         <JoditEditor
           ref={editor}
           value={contents}
