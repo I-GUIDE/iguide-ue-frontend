@@ -16,6 +16,7 @@ export default function HTMLEditor(props) {
 
   const contents = props.contents;
   const setContents = props.setContents;
+  const enableTemplates = props.enableTemplates;
 
   const [uploadSucceeded, setUploadSucceeded] = useState(false);
 
@@ -176,18 +177,20 @@ export default function HTMLEditor(props) {
   return (
     <div data-color-mode="light">
       <Stack spacing={1}>
-        <Stack direction="row" spacing={1}>
-          <Button variant="outlined" onClick={handleUseTemplates}>
-            Use template
-          </Button>
-          <Button
-            variant="outlined"
-            color="neutral"
-            onClick={() => setContents("")}
-          >
-            Clear text
-          </Button>
-        </Stack>
+        {enableTemplates && (
+          <Stack direction="row" spacing={1}>
+            <Button variant="outlined" onClick={handleUseTemplates}>
+              Use template
+            </Button>
+            <Button
+              variant="outlined"
+              color="neutral"
+              onClick={() => setContents("")}
+            >
+              Clear text
+            </Button>
+          </Stack>
+        )}
         <JoditEditor
           ref={editor}
           value={contents}

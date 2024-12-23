@@ -837,7 +837,11 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Suspense fallback={<div>Loading markdown editor...</div>}>
-                  <HTMLEditor contents={contents} setContents={setContents} />
+                  <HTMLEditor
+                    contents={contents}
+                    setContents={setContents}
+                    enableTemplates
+                  />
                 </Suspense>
               </FormControl>
             ) : (
