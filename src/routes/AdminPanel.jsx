@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 
 import Grid from "@mui/material/Grid2";
-import Typography from "@mui/joy/Typography";
-import UserProfileCard from "../components/UserProfileCard";
-import Header from "../components/Layout/Header";
+import Stack from "@mui/material/Stack";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
-
+import Pagination from "@mui/material/Pagination";
+// import Pagination from "@mui/material/Pagination";
 import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
-import CssBaseline from "@mui/material/CssBaseline";
-import { CssVarsProvider} from "@mui/joy/styles";
 
+import UserProfileCard from "../components/UserProfileCard";
+import Header from "../components/Layout/Header";
+
+import CssBaseline from "@mui/material/CssBaseline";
+
+import { CssVarsProvider} from "@mui/joy/styles";
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 
 export default function AdminPanel() {
@@ -93,6 +96,24 @@ export default function AdminPanel() {
                 </Grid>
               ))}
             </Grid>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+              sx={{
+                pt: 2,
+                minHeight: 0,
+              }}
+            >
+              <Pagination
+                count={1}
+                color="primary"
+                page={1}
+                // onChange={handlePageClick}
+              />
+            </Stack>
+            
           </Box>
         </Container>
       </CssVarsProvider>
