@@ -17,6 +17,8 @@ import {
 import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
+
+
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
@@ -63,6 +65,9 @@ export default function Root(props) {
               resObject.userInfo
             );
           setUserInfo(resObject.userInfo);
+          // Tour guide
+          // const tg = new TourGuideClient();
+          // tg.start();
         })
         .catch((err) => {
           setIsAuthenticated(false);
@@ -76,6 +81,8 @@ export default function Root(props) {
       TEST_MODE && console.log("Using demo user...");
       setIsAuthenticated(true);
       setUserInfo(demoCILogonUser);
+      // Tour guide
+      
     } else {
       if (isAuthenticated) {
         getUserInfoFromCILogon();

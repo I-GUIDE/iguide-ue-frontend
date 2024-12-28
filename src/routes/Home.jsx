@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -29,6 +29,9 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 
+import "@sjmc11/tourguidejs/src/scss/tour.scss";
+import {TourGuideClient} from "@sjmc11/tourguidejs/src/Tour";
+
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
 import {
@@ -39,6 +42,25 @@ import {
 export default function Home() {
   usePageTitle("", true);
 
+  const [tour, setTour] = useState(new TourGuideClient());
+  const [hasToured, setHasToured] = useState(false);
+
+  useEffect(() => {
+    if (!hasToured) {
+      tour.addSteps([{
+        content: "Welcome"
+      }]);
+      tour.start();
+      setHasToured(true);
+    } 
+    // console.log("Active step " + tour.activeStep);
+    return () => {
+      console.log(2);
+      tour.exit();
+    }
+  }, []);
+
+  
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -76,6 +98,12 @@ export default function Home() {
               }}
             >
               <Container maxWidth="md">
+                {/*Tour Guide*/}
+                {/* <div 
+                  data-tg-title="Welcome"
+                  data-tg-tour="My first tour"
+                >
+                </div> */}
                 <Box
                   component="main"
                   sx={{
@@ -129,6 +157,8 @@ export default function Home() {
                     }}
                     justifyContent="center"
                     align="center"
+                    // data-tg-title="Second"
+                    // data-tg-tour="My first tour pt 2"
                   >
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
