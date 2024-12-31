@@ -54,6 +54,10 @@ export default function AdminPanel() {
     setUserList(newArray);
   }
 
+  function handlePageClick() {
+    
+  }
+
   return(
       <CssVarsProvider disableTransitionOnChange>
         <CssBaseline />
@@ -110,7 +114,7 @@ export default function AdminPanel() {
                 count={1}
                 color="primary"
                 page={1}
-                // onChange={handlePageClick}
+                onChange={handlePageClick}
               />
             </Stack>
             
