@@ -9,6 +9,8 @@ import Footer from "../components/Layout/Footer.jsx";
 import { StyledEngineProvider } from "@mui/material/styles";
 import Snackbar from "@mui/joy/Snackbar";
 import Button from "@mui/joy/Button";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
 
 import {
   checkUser,
@@ -203,14 +205,24 @@ export default function Root(props) {
             setOpenSnackbar(false);
           }}
         >
-          {SNACKBAR_MESSAGE}
-          <Button
-            variant="plain"
-            color="danger"
-            onClick={() => setOpenSnackbar(false)}
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
           >
-            Close
-          </Button>
+            <Typography level="title-sm">{SNACKBAR_MESSAGE}</Typography>
+            <Button
+              variant="plain"
+              color="danger"
+              onClick={() => setOpenSnackbar(false)}
+            >
+              Close
+            </Button>
+          </Stack>
         </Snackbar>
       )}
     </StyledEngineProvider>
