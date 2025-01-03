@@ -7,6 +7,10 @@ import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
 
 import { StyledEngineProvider } from "@mui/material/styles";
+import Snackbar from "@mui/joy/Snackbar";
+import Button from "@mui/joy/Button";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
 
 import {
   checkUser,
@@ -21,10 +25,12 @@ const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
   const [cookies, setCookie] = useCookies(["user"]);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   const [isAuthenticated, setIsAuthenticated] = useState(cookies.IGPAU);
   const [userInfo, setUserInfo] = useState(null);
@@ -185,6 +191,40 @@ export default function Root(props) {
       <ScrollToTop />
       <ClickToTop />
       <Footer />
+      {/* For displaying notifications or alerts. */}
+      {SNACKBAR_MESSAGE && (
+        <Snackbar
+          open={openSnackbar}
+          variant="soft"
+          color="danger"
+          size="md"
+          onClose={(event, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setOpenSnackbar(false);
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography level="title-sm">{SNACKBAR_MESSAGE}</Typography>
+            <Button
+              variant="plain"
+              color="danger"
+              onClick={() => setOpenSnackbar(false)}
+            >
+              Close
+            </Button>
+          </Stack>
+        </Snackbar>
+      )}
     </StyledEngineProvider>
   );
 }
