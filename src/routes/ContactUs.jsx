@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 import { CssVarsProvider, styled } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";

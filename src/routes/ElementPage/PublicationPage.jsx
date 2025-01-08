@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -8,7 +8,10 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
-import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
+import {
+  fetchSingleElementDetails,
+  fetchSinglePrivateElementDetails,
+} from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../features/Element/MainContent";
@@ -18,6 +21,7 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 
 import ErrorPage from "../ErrorPage";
 
@@ -32,15 +36,23 @@ export default function PublicationPage() {
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode");
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(id)
+          : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
@@ -56,12 +68,14 @@ export default function PublicationPage() {
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setIsLoading(false);
     }
     fetchData();
-  }, [id]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 
@@ -111,9 +125,12 @@ export default function PublicationPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/publications"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 doi={externalLink}
@@ -121,9 +138,11 @@ export default function PublicationPage() {
                 contentsTitle="Abstract"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="publication"
                 creationTime={creationTime}
                 updateTime={updateTime}
+                isLoading={isLoading}
               />
             </Grid>
 

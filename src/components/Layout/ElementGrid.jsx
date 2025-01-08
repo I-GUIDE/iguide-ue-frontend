@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -22,9 +22,15 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
 import InfoCard from "../InfoCard";
+import UserElementCard from "../UserElementCard";
 
-import { elementRetriever } from "../../utils/DataRetrieval";
+import {
+  elementRetriever,
+  retrievePrivateElementsByUserId,
+  retrieveBookmarkedElements,
+} from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
+import { ELEM_VISIBILITY } from "../../configs/VarConfigs";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -45,6 +51,10 @@ export default function ElementGrid(props) {
   const elementType = props.elementType;
   const noElementMsg = props.noElementMsg;
   const showElementType = props.showElementType;
+  const isPrivateElement = props.isPrivateElement;
+  const isBookmarkedElement = props.isBookmarkedElement;
+  const showUserElementCard = props.showUserElementCard;
+  const disableUriChange = props.disableUriChange;
 
   const [elementList, setMetadataList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +86,8 @@ export default function ElementGrid(props) {
           itemsPerPage
         );
 
+        TEST_MODE && console.log("Retrieve elements", data);
+
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
         setMetadataList(data.elements);
@@ -87,16 +99,83 @@ export default function ElementGrid(props) {
       }
     }
 
-    retrieveData(currentStartingIdx);
-  }, [currentStartingIdx, elementType, ranking, fieldName, matchValue]);
+    async function retrievePrivateData(startingIdx) {
+      try {
+        const data = await retrievePrivateElementsByUserId(
+          matchValue,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        TEST_MODE && console.log("Retrieve private elements", data);
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
+    async function retrieveBookmarkedData(startingIdx) {
+      try {
+        const data = await retrieveBookmarkedElements(
+          matchValue,
+          ranking.sortBy,
+          ranking.order,
+          startingIdx,
+          itemsPerPage
+        );
+
+        TEST_MODE && console.log("Retrieve bookmarked elements", data);
+
+        setNumberOfTotalItems(data["total-count"]);
+        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setMetadataList(data.elements);
+        setLoading(false);
+        setResultLength(arrayLength(data.elements));
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
+    if (isPrivateElement) {
+      retrievePrivateData(currentStartingIdx);
+    } else if (isBookmarkedElement) {
+      retrieveBookmarkedData(currentStartingIdx);
+    } else {
+      retrieveData(currentStartingIdx);
+    }
+  }, [
+    isPrivateElement,
+    isBookmarkedElement,
+    currentStartingIdx,
+    elementType,
+    ranking,
+    fieldName,
+    matchValue,
+  ]);
 
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
-    setPageParam({ page: newPageNumber });
-    TEST_MODE &&
-      console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
-    navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
+    // When disableUriChange is true, skip adding "page=" query
+    if (!disableUriChange) {
+      setPageParam({ page: newPageNumber });
+      TEST_MODE &&
+        console.log("Navigating to", `${uriPrefix}?page=${newPageNumber}`);
+      navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
+    } else {
+      TEST_MODE &&
+        console.log(`Skipping URI change... to page ${newPageNumber}`);
+    }
+
     setCurrentPage(newPageNumber);
     window.scrollTo(0, 0);
   }
@@ -136,21 +215,18 @@ export default function ElementGrid(props) {
     );
   }
 
-  if (numberOfTotalItems === 0) {
+  if (!numberOfTotalItems) {
     return (
       <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
           <Stack spacing={2} justifyContent="center" alignItems="center">
             <Card
-              variant="outlined"
+              variant="plain"
               orientation="horizontal"
               sx={{
                 width: "100%",
-                "&:hover": {
-                  boxShadow: "md",
-                  borderColor: "neutral.outlinedHoverBorder",
-                },
+                backgroundColor: "#fff",
               }}
             >
               <CardContent>
@@ -161,7 +237,7 @@ export default function ElementGrid(props) {
                     alignItems="center"
                     display="flex"
                   >
-                    <Typography level="title-lg">{noElementMsg}</Typography>
+                    <Typography level="body-md">{noElementMsg}</Typography>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -214,17 +290,38 @@ export default function ElementGrid(props) {
           >
             {elementList?.map((element) => (
               <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                <InfoCard
-                  cardtype={element["resource-type"] + "s"}
-                  pageid={element.id}
-                  title={element.title}
-                  authors={element.authors}
-                  tags={element.tags}
-                  contents={element.contents}
-                  thumbnailImage={element["thumbnail-image"]}
-                  contributor={element["contributor"]}
-                  showElementType={showElementType}
-                />
+                {showUserElementCard ? (
+                  <UserElementCard
+                    cardtype={element["resource-type"] + "s"}
+                    elementId={element.id}
+                    title={element.title}
+                    authors={element.authors}
+                    tags={element.tags}
+                    contents={element.contents}
+                    thumbnailImage={element["thumbnail-image"]}
+                    contributor={element["contributor"]}
+                    numberOfClicks={element["click-count"]}
+                    showElementType={showElementType}
+                    isPrivateElement={
+                      element.visibility === ELEM_VISIBILITY.private
+                    }
+                  />
+                ) : (
+                  <InfoCard
+                    cardtype={element["resource-type"] + "s"}
+                    elementId={element.id}
+                    title={element.title}
+                    authors={element.authors}
+                    tags={element.tags}
+                    contents={element.contents}
+                    thumbnailImage={element["thumbnail-image"]}
+                    contributor={element["contributor"]}
+                    showElementType={showElementType}
+                    isPrivateElement={
+                      element.visibility === ELEM_VISIBILITY.private
+                    }
+                  />
+                )}
               </Grid>
             ))}
           </Grid>

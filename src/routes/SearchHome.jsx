@@ -97,6 +97,7 @@ export default function SearchHome() {
                   </Typography>
                   <SearchBar
                     placeholder="Start your exploration..."
+                    showTrendingSearchKeywords
                     showSmartSearch
                   />
                   {/* Box to keep the search bar afloat */}

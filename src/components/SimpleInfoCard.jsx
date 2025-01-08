@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Link from "@mui/joy/Link";
@@ -49,7 +49,15 @@ export default function SimpleInfoCard(props) {
     >
       <CardOverflow>
         <AspectRatio ratio="2">
-          <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+          {thumbnailImage ? (
+            <img src={thumbnailImage.low} loading="lazy" alt="thumbnail" />
+          ) : (
+            <img
+              src={`/default-images/${cardType}.png`}
+              loading="lazy"
+              alt="deafult-thumbnail"
+            />
+          )}
         </AspectRatio>
       </CardOverflow>
       <CardContent>

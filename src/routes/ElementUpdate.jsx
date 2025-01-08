@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams, useSearchParams } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -19,6 +19,9 @@ export default function ElementUpdate() {
 
   const id = useParams().id;
   const { isAuthenticated } = useOutletContext();
+
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode");
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
@@ -84,7 +87,11 @@ export default function ElementUpdate() {
               pb: 8,
             }}
           >
-            <SubmissionCard submissionType="update" elementId={id} />
+            <SubmissionCard
+              submissionType="update"
+              elementId={id}
+              isPrivateElement={isPrivateElement === "true"}
+            />
           </Grid>
         </Box>
       </Container>

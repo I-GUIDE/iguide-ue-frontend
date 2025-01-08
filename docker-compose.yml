@@ -1,6 +1,6 @@
 services:
   app:
-    image: iguide-ux-dev-react
+    image: iguide-ue-frontend-${VITE_ENV}
     build:
       context: .
       dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
     restart: always
 
   auth:
-    image: iguide-ux-dev-auth
+    image: iguide-ue-auth-${VITE_ENV}
     build:
       context: ./cilogon/.
       dockerfile: Dockerfile
