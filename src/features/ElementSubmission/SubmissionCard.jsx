@@ -151,6 +151,7 @@ export default function SubmissionCard(props) {
   const [licenseName, setLicenseName] = useState("");
   const [licenseStatement, setLicenseStatement] = useState("");
   const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
@@ -228,6 +229,7 @@ export default function SubmissionCard(props) {
       setLicenseName(thisElement["license-name"]);
       setLicenseStatement(thisElement["license-statement"]);
       setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
 
       setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
@@ -536,6 +538,7 @@ export default function SubmissionCard(props) {
     data["license-name"] = licenseName;
     data["license-statement"] = licenseStatement;
     data["license-url"] = licenseUrl;
+    data["funding-agency"] = fundingAgency;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -1422,6 +1425,19 @@ export default function SubmissionCard(props) {
                 value={licenseUrl}
                 disabled={!licenseId}
                 onChange={(event) => setLicenseUrl(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Acknowledge the source of funding related to this element.">
+                  Funding agency
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="funding-agency"
+                placeholder="NSF, USDA, DOD, ..."
+                value={fundingAgency}
+                onChange={(event) => setFundingAgency(event.target.value)}
               />
             </FormControl>
 
