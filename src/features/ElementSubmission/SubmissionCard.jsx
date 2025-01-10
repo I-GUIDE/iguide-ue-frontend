@@ -50,6 +50,11 @@ import {
 } from "../../configs/VarConfigs";
 
 import {
+  ELEMENT_LICENSES,
+  ELEMENT_LICENSES_INFO,
+} from "../../configs/ElementLicenses";
+
+import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
@@ -142,6 +147,11 @@ export default function SubmissionCard(props) {
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
 
+  const [licenseId, setLicenseId] = useState("");
+  const [licenseName, setLicenseName] = useState("");
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
@@ -213,6 +223,11 @@ export default function SubmissionCard(props) {
           ? thisElement["spatial-index-year"].join(", ")
           : thisElement["spatial-index-year"]
       );
+
+      setLicenseId(thisElement["license-id"]);
+      setLicenseName(thisElement["license-name"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
 
       setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
@@ -425,6 +440,28 @@ export default function SubmissionCard(props) {
     }
   };
 
+  const handleLicenseChange = (value) => {
+    setLicenseId(value);
+
+    if (value === "other") {
+      setLicenseName("Other");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    }
+    // Case when the license is not from the dropdown selection
+    else if (!ELEMENT_LICENSES_INFO[value]) {
+      setLicenseName("");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    } else {
+      setLicenseName(ELEMENT_LICENSES_INFO[value][0]);
+      setLicenseStatement(
+        `This resource is shared under the ${ELEMENT_LICENSES_INFO[value][0]}.`
+      );
+      setLicenseUrl(ELEMENT_LICENSES_INFO[value][1]);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {};
@@ -494,6 +531,11 @@ export default function SubmissionCard(props) {
     data["spatial-centroid"] = centroid;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
+
+    data["license-id"] = licenseId;
+    data["license-name"] = licenseName;
+    data["license-statement"] = licenseStatement;
+    data["license-url"] = licenseUrl;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -1330,6 +1372,56 @@ export default function SubmissionCard(props) {
                 placeholder="1990, 2000, ..."
                 value={indexYears}
                 onChange={(event) => setIndexYears(event.target.value)}
+              />
+            </FormControl>
+
+            <Typography level="h3" sx={{ pt: 1 }}>
+              License and others
+            </Typography>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Select a license for this element.">
+                  License
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select
+                placeholder="Select a license"
+                value={licenseId}
+                onChange={(e, newValue) => handleLicenseChange(newValue)}
+              >
+                <Option value="">
+                  <em>Select a license</em>
+                </Option>
+                {ELEMENT_LICENSES?.map((x, i) => (
+                  <Option key={x} value={x}>
+                    {ELEMENT_LICENSES_INFO[x]}
+                  </Option>
+                ))}
+                <Option value="other">Other</Option>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>
+                  License statement
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-statement"
+                value={licenseStatement}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseStatement(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>License URL</SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-url"
+                value={licenseUrl}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseUrl(event.target.value)}
               />
             </FormControl>
 
