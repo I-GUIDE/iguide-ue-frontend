@@ -4,7 +4,10 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+
 import { fetchUser } from "../../utils/UserManager";
+import CopyButton from "./CopyButton";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 
@@ -42,9 +45,17 @@ export default function CitationGenerator(props) {
 
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Typography level="h4" fontWeight="lg" mb={1}>
-        Cite this element
-      </Typography>
+      <Stack direction="row" spacing={1} alignItems="center">
+        <Typography level="h5" fontWeight="lg" mb={1}>
+          Cite this element
+        </Typography>
+        <CopyButton
+          textToCopy={citation + elementUrl}
+          tooltipText="Copy citation"
+          successText="Citation copied!"
+          icon={<ContentCopyIcon />}
+        />
+      </Stack>
       <Typography level="body-sm">
         {citation}
         <Link href={elementUrl} target="_blank" rel="noopener noreferrer">

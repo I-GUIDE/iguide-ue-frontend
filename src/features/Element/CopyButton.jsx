@@ -8,12 +8,14 @@ import Typography from "@mui/joy/Typography";
 import Badge from "@mui/joy/Badge";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import LinkIcon from "@mui/icons-material/Link";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function CopyButton(props) {
   const textToCopy = props.textToCopy;
+  const tooltipText = props.tooltipText;
+  const successText = props.successText;
+  const icon = props.icon;
   TEST_MODE && console.log("text to copy", textToCopy);
 
   const [copied, setCopied] = useState(false);
@@ -36,7 +38,7 @@ export default function CopyButton(props) {
 
   return (
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
-      <Tooltip title="Copy element URL" placement="top" arrow>
+      <Tooltip title={tooltipText} placement="top" arrow>
         <Badge
           variant="plain"
           color="success"
@@ -50,7 +52,7 @@ export default function CopyButton(props) {
             color={copied ? "success" : "neutral"}
             onClick={() => copyText(textToCopy)}
           >
-            <LinkIcon />
+            {icon}
           </IconButton>
         </Badge>
       </Tooltip>
@@ -63,7 +65,7 @@ export default function CopyButton(props) {
         onClose={() => setCopied(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Typography level="body-md">Element URL copied!</Typography>
+        <Typography level="body-md">{successText}</Typography>
       </Snackbar>
     </Box>
   );

@@ -15,6 +15,7 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import LinkIcon from "@mui/icons-material/Link";
 
 import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
@@ -237,7 +238,12 @@ export default function MainContent(props) {
               )}
               <Stack direction="row" spacing={1}>
                 <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-                <CopyButton textToCopy={shareUrl} />
+                <CopyButton
+                  textToCopy={shareUrl}
+                  tooltipText="Copy element URL"
+                  successText="Element URL copied!"
+                  icon={<LinkIcon />}
+                />
                 {isAuthenticated && (
                   <BookmarkButton
                     elementId={elementId}
@@ -295,7 +301,12 @@ export default function MainContent(props) {
             )}
             <Stack direction="row" spacing={1}>
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-              <CopyButton textToCopy={shareUrl} />
+              <CopyButton
+                textToCopy={shareUrl}
+                tooltipText="Copy element URL"
+                successText="Element URL copied!"
+                icon={<LinkIcon />}
+              />
               {isAuthenticated && (
                 <BookmarkButton
                   elementId={elementId}
