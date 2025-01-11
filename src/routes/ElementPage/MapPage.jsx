@@ -25,6 +25,7 @@ import MapViewer from "../../features/Element/MapViewer";
 import StaticMap from "../../features/Element/StaticMap";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
+import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
 
@@ -169,6 +170,15 @@ export default function MapPage() {
                 licenseStatement={licenseStatement}
                 licenseUrl={licenseUrl}
                 fundingAgency={fundingAgency}
+              />
+            </Grid>
+            <Grid xs={12}>
+              <CitationGenerator
+                contributorId={contributor.id}
+                createdAt={creationTime}
+                title={title}
+                elementType="maps"
+                elementId={id}
               />
             </Grid>
           </Grid>
