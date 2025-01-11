@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
-
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function LicenseAndFunding(props) {
   const licenseStatement = props.licenseStatement;
