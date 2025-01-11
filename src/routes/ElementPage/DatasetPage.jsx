@@ -26,6 +26,7 @@ import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
+import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
 
@@ -175,6 +176,17 @@ export default function DatasetPage() {
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>
+
+            <Grid xs={12}>
+              <CitationGenerator
+                contributorId={contributor.id}
+                createdAt={creationTime}
+                title={title}
+                elementType="datasets"
+                elementId={id}
+              />
+            </Grid>
+
             <Grid xs={12}>
               <LicenseAndFunding
                 licenseStatement={licenseStatement}
