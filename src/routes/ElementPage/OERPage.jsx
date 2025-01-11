@@ -163,13 +163,7 @@ export default function OERPage() {
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>
-            <Grid xs={12}>
-              <LicenseAndFunding
-                licenseStatement={licenseStatement}
-                licenseUrl={licenseUrl}
-                fundingAgency={fundingAgency}
-              />
-            </Grid>
+
             <Grid xs={12}>
               <CitationGenerator
                 contributorId={contributor.id}
@@ -177,6 +171,14 @@ export default function OERPage() {
                 title={title}
                 elementType="oers"
                 elementId={id}
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
               />
             </Grid>
           </Grid>

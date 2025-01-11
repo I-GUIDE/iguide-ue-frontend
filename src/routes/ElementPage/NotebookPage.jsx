@@ -169,13 +169,7 @@ export default function NotebookPage() {
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>
-            <Grid xs={12}>
-              <LicenseAndFunding
-                licenseStatement={licenseStatement}
-                licenseUrl={licenseUrl}
-                fundingAgency={fundingAgency}
-              />
-            </Grid>
+
             <Grid xs={12}>
               <CitationGenerator
                 contributorId={contributor.id}
@@ -183,6 +177,14 @@ export default function NotebookPage() {
                 title={title}
                 elementType="notebooks"
                 elementId={id}
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
               />
             </Grid>
           </Grid>

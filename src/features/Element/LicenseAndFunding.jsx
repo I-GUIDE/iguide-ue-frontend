@@ -9,6 +9,10 @@ export default function LicenseAndFunding(props) {
   const licenseUrl = props.licenseUrl;
   const fundingAgency = props.fundingAgency;
 
+  if (!licenseStatement && !fundingAgency) {
+    return null;
+  }
+
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
       {licenseStatement && (

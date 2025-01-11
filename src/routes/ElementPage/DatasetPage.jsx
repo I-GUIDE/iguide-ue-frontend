@@ -176,13 +176,7 @@ export default function DatasetPage() {
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
             </Grid>
-            <Grid xs={12}>
-              <LicenseAndFunding
-                licenseStatement={licenseStatement}
-                licenseUrl={licenseUrl}
-                fundingAgency={fundingAgency}
-              />
-            </Grid>
+
             <Grid xs={12}>
               <CitationGenerator
                 contributorId={contributor.id}
@@ -190,6 +184,14 @@ export default function DatasetPage() {
                 title={title}
                 elementType="datasets"
                 elementId={id}
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
               />
             </Grid>
           </Grid>
