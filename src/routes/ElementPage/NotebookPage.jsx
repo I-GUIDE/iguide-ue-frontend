@@ -23,6 +23,7 @@ import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
+import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
 
 import ErrorPage from "../ErrorPage";
 
@@ -41,6 +42,9 @@ export default function NotebookPage() {
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -73,6 +77,9 @@ export default function NotebookPage() {
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
     }
     fetchData();
@@ -160,6 +167,13 @@ export default function NotebookPage() {
             </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
+            </Grid>
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
+              />
             </Grid>
           </Grid>
         </Box>
