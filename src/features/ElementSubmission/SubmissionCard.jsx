@@ -458,7 +458,7 @@ export default function SubmissionCard(props) {
     } else {
       setLicenseName(ELEMENT_LICENSES_INFO[value][0]);
       setLicenseStatement(
-        `This resource is shared under the ${ELEMENT_LICENSES_INFO[value][0]}.`
+        `This element is shared under the ${ELEMENT_LICENSES_INFO[value][0]}.`
       );
       setLicenseUrl(ELEMENT_LICENSES_INFO[value][1]);
     }
@@ -1439,6 +1439,15 @@ export default function SubmissionCard(props) {
                 value={fundingAgency}
                 onChange={(event) => setFundingAgency(event.target.value)}
               />
+              {fundingAgency && (
+                <Typography level="body-sm">
+                  Displayed on the element page as:{" "}
+                  <Typography variant="soft">
+                    This project is funded by {fundingAgency}
+                  </Typography>
+                  .
+                </Typography>
+              )}
             </FormControl>
 
             <CardActions sx={{ gridColumn: "1/-1" }}>
