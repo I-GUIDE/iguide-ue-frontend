@@ -137,6 +137,8 @@ export default function SubmissionCard(props) {
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
+  const [gitHubRepoLink, setGitHubRepoLink] = useState("");
+
   const [contributor, setContributor] = useState([]);
 
   const [spatialCoverage, setSpatialCoverage] = useState([]);
@@ -1186,6 +1188,21 @@ export default function SubmissionCard(props) {
                 </Table>
               </Grid>
             )}
+            {resourceTypeSelected === "repo" && (
+              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <FormLabel>
+                  <SubmissionCardFieldTitle fieldRequired>
+                    GitHub repository link
+                  </SubmissionCardFieldTitle>
+                </FormLabel>
+                <Input
+                  name="github-repo-link"
+                  value={gitHubRepoLink}
+                  required
+                  onChange={(event) => setGitHubRepoLink(event.target.value)}
+                />
+              </FormControl>
+            )}
 
             <Typography level="h3" sx={{ pt: 1 }}>
               Related elements
@@ -1250,6 +1267,7 @@ export default function SubmissionCard(props) {
                         <Option value="publication">Publication</Option>
                         <Option value="oer">Educational Resource</Option>
                         <Option value="map">Map</Option>
+                        <Option value="repo">Repository</Option>
                       </Select>
                     </td>
                     <td align="left">

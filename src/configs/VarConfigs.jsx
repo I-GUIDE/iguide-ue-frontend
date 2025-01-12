@@ -9,6 +9,8 @@ export const RESOURCE_TYPE_COLORS = {
   oers: "danger",
   map: "neutral",
   maps: "neutral",
+  repo: "success",
+  repos: "success",
   any: "neutral",
 };
 
@@ -23,6 +25,8 @@ export const RESOURCE_TYPE_NAMES = {
   oers: "Educational Resource",
   map: "Map",
   maps: "Map",
+  repo: "Repository",
+  repos: "Repository",
   any: "All Types",
 };
 

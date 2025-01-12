@@ -7,4 +7,5 @@ export const TAGLINES = {
   publication:
     "Discover connected knowledge from peer-reviewed papers that showcase cutting-edge research and insights in geospatial and related fields.",
   oer: "Harness data-intensive teaching and learning materials with a focus on geospatial data science.",
+  repo: "Empowering collaboration, one commit at a time.",
 };
