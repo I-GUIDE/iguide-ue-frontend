@@ -39,6 +39,9 @@ import ErrorPage from "./routes/ErrorPage";
 import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
 
+import { TourProvider } from "@reactour/tour/";
+import TourSteps from "./configs/TourSteps";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -161,10 +164,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
+  <TourProvider steps={TourSteps}> 
     <Suspense fallback={<div>Loading...</div>}>
       <RouterProvider router={router} />
     </Suspense>
-  </React.StrictMode>
+    </TourProvider>
+  {/* </React.StrictMode> */}
+  </>
 );

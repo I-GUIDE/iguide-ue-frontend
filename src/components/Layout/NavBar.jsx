@@ -545,6 +545,7 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
+                  // classname="tourid-1"
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box

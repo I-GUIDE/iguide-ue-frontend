@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -29,6 +29,8 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 
+import { useTour } from '@reactour/tour';
+
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
 import {
@@ -38,6 +40,13 @@ import {
 
 export default function Home() {
   usePageTitle("", true);
+  
+  const { setIsOpen } = useTour();
+
+  useEffect(() => {
+    console.log("star tour");
+    setIsOpen(true);
+  }, []);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
