@@ -167,13 +167,11 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-  <>
-  <TourProvider steps={TourSteps}> 
-    <Suspense fallback={<div>Loading...</div>}>
-      <RouterProvider router={router} />
-    </Suspense>
+  <React.StrictMode>
+    <TourProvider steps={TourSteps}> 
+      <Suspense fallback={<div>Loading...</div>}>
+        <RouterProvider router={router} />
+      </Suspense>
     </TourProvider>
-  {/* </React.StrictMode> */}
-  </>
+  </React.StrictMode>
 );

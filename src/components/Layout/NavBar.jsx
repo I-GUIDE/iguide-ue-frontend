@@ -545,7 +545,7 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  // classname="tourid-1"
+                  
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -553,6 +553,7 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
+                      // className="tourid-1"
                     />
                   </Tooltip>
                 </Link>
