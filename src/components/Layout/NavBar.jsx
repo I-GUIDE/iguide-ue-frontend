@@ -157,6 +157,18 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                  <Link
+                    to="/admin-panel"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        Admin Panel
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
               {canContributeElements && (

@@ -38,6 +38,7 @@ import DocPage from "./routes/DocPage";
 import ErrorPage from "./routes/ErrorPage";
 import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
+import AdminPanel from "./routes/AdminPanel";
 
 import { TourProvider } from "@reactour/tour/";
 import TourSteps from "./configs/TourSteps";
@@ -155,6 +156,10 @@ const router = createBrowserRouter([
       {
         path: "/docs/:id",
         element: <DocPage />,
+      },
+      {
+        path: "/admin-panel",
+        element: <AdminPanel />,
       },
       {
         path: "/contact-us",
