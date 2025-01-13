@@ -119,6 +119,7 @@ export default function Home() {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      className="tourid-0"
                     >
                       <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
@@ -142,13 +143,14 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
+                  <Box className="tourid-6">
                     <SearchBar
                       placeholder="Start your exploration..."
                       showTrendingSearchKeywords
                       showSmartSearch
-                      className="tourid-6"
                     />
-                  <p className="tourid-1">This is a p</p>
+                  </Box>
+                  
                 </Box>
               </Container>
             </CardContent>

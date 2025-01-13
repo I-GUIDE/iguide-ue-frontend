@@ -248,6 +248,7 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
+            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -553,7 +554,6 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
-                      // className="tourid-1"
                     />
                   </Tooltip>
                 </Link>
@@ -584,31 +584,37 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
+                      className="tourid-1"
                     />
                   </Tooltip>
                 </Link>
-                <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
-                  About
-                </HoverOverMenuTab>
-                {pages?.map((page) => (
-                  <Link
-                    key={page[1]}
-                    to={page[1]}
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <Button
-                      key={page[0]}
-                      variant="plain"
-                      color="neutral"
-                      size="sm"
-                      sx={{ alignSelf: "center" }}
+                <Box className="tourid-2">
+                  <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
+                    About
+                  </HoverOverMenuTab>
+                </Box>
+                <Box className="tourid-3">
+                  {pages?.map((page) => (
+                    <Link
+                      key={page[1]}
+                      to={page[1]}
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
                     >
-                      {page[0]}
-                    </Button>
-                  </Link>
-                ))}
+                      <Button
+                        key={page[0]}
+                        variant="plain"
+                        color="neutral"
+                        size="sm"
+                        sx={{ alignSelf: "center" }}
+                      >
+                        {page[0]}
+                      </Button>
+                    </Link>
+                  ))}
+                </Box>
+                
               </Stack>
               <Stack
                 direction="row"
@@ -636,6 +642,7 @@ export default function NavBar(props) {
                         variant="plain"
                         alt="jupyterhub"
                         src="/images/Jupyter-logo.png"
+                        className="tourid-5"
                       />
                     </Button>
                   </Tooltip>
