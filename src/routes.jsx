@@ -113,6 +113,7 @@ export const routes = [
     element: <UserProfile />,
     label: "User Profile",
     category: "User",
+    requireAuth: true,
   },
   {
     path: "/contributor/:id",
@@ -123,6 +124,7 @@ export const routes = [
     element: <UserProfileUpdate />,
     label: "Update User Profile",
     category: "User",
+    requireAuth: true,
   },
   {
     path: "/contribution/:elementType",
@@ -161,12 +163,14 @@ export const routes = [
     element: <DocSubmission />,
     label: "Create Documentation",
     category: "Documentation",
+    requireAdmin: true,
   },
   {
     path: "/doc-update/:id",
     element: <DocUpdate />,
     label: "Update Documentation",
     category: "Documentation",
+    requireAdmin: true,
   },
   {
     path: "/docs/:id",

@@ -7,27 +7,58 @@ import Divider from "@mui/joy/Divider";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
+import { useOutletContext } from "react-router";
+
 import { routes } from "../routes";
-
+import usePageTitle from "../hooks/usePageTitle";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { PERMISSIONS } from "../configs/Permissions";
 
-function groupRoutesByCategory(routes) {
+const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+
+function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   const items = {};
-  routes.map((route) => {
-    if (route.label && route.category) {
-      if (items.hasOwnProperty(route.category)) {
-        items[route.category] = [...items[route.category], route];
-      } else {
-        items[route.category] = [route];
-      }
+  const isAdmin = localUserInfo.role <= PERMISSIONS["edit_all"];
+
+  for (let i = 0; i < routes.length; i++) {
+    const route = routes[i];
+
+    if (
+      !route.label ||
+      (route.requireAuth === true && !isAuthenticated) ||
+      (route.requireAdmin === true && !isAdmin)
+    ) {
+      continue;
     }
-  });
+
+    if (items.hasOwnProperty(route.category)) {
+      items[route.category] = [...items[route.category], route];
+    } else {
+      items[route.category] = [route];
+    }
+
+    if (!isAuthenticated) {
+      items["User login"] = [
+        {
+          path: `${AUTH_BACKEND_URL}/login`,
+          label: "Login",
+          category: "User login",
+        },
+      ];
+    }
+  }
+
   return items;
 }
 
 export default function Sitemap() {
-  const groupedRoutes = groupRoutesByCategory(routes);
-  console.log(groupedRoutes);
+  usePageTitle("Site Map");
+
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
+  const groupedRoutes = localUserInfo
+    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo)
+    : {};
 
   return (
     <CssVarsProvider disableTransitionOnChange>
