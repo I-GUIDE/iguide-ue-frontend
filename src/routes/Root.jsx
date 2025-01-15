@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
+import ErrorPage from "./ErrorPage.jsx";
 
 import { StyledEngineProvider } from "@mui/material/styles";
 
@@ -152,7 +153,14 @@ export default function Root(props) {
       <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
       <div id="back-to-top-anchor" />
       {customOutlet ? (
-        customOutlet
+        customOutlet.type === ErrorPage ? (
+          <ErrorPage
+            isAuthenticated={isAuthenticated}
+            localUserInfo={localUserInfo}
+          />
+        ) : (
+          customOutlet
+        )
       ) : (
         <Outlet
           context={{

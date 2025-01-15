@@ -18,7 +18,7 @@ const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   const items = {};
-  const isAdmin = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const isAdmin = localUserInfo?.role <= PERMISSIONS["edit_all"];
 
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
@@ -51,13 +51,45 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   return items;
 }
 
+export function SitemapComponent({ isAuthenticated, localUserInfo }) {
+  const groupedRoutes = groupRoutesByCategory(
+    routes,
+    isAuthenticated,
+    localUserInfo,
+    false
+  );
+
+  return (
+    <Grid>
+      <Typography level="h3" style={{ textAlign: "left", margin: "0 20px" }}>
+        I-GUIDE Site Map
+      </Typography>
+      <Divider sx={{ mx: 2, my: 2 }} />
+      <LinkContainer style={{ gridTemplateColumns: "1fr 1fr" }}>
+        {Object.entries(groupedRoutes).map(([category, items]) => (
+          <Group>
+            <Typography level="h4" style={{ textAlign: "left" }}>
+              {category}
+            </Typography>
+            <Group style={{ gap: "5px" }}>
+              {items.map((item) => (
+                <Link href={item.path}>{item.label}</Link>
+              ))}
+            </Group>
+          </Group>
+        ))}
+      </LinkContainer>
+    </Grid>
+  );
+}
+
 export default function Sitemap() {
   usePageTitle("Site Map");
 
   const { isAuthenticated, localUserInfo } = useOutletContext();
 
   const groupedRoutes = localUserInfo
-    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo)
+    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo, false)
     : {};
 
   return (
