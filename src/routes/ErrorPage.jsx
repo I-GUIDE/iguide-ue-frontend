@@ -15,7 +15,7 @@ import Stack from "@mui/joy/Stack";
 import usePageTitle from "../hooks/usePageTitle";
 import SearchBar from "../components/SearchBar";
 
-import { SitemapComponent } from "../components/Sitemap";
+import { SitemapErrorPage } from "../components/Sitemap";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 
@@ -115,7 +115,7 @@ export default function ErrorPage(props) {
                       Go Back
                     </Button>
                   </Stack>
-                  <SitemapComponent
+                  <SitemapErrorPage
                     isAuthenticated={props.isAuthenticated}
                     localUserInfo={props.localUserInfo}
                   />

@@ -51,12 +51,11 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   return items;
 }
 
-export function SitemapComponent({ isAuthenticated, localUserInfo }) {
+export function SitemapErrorPage({ isAuthenticated, localUserInfo }) {
   const groupedRoutes = groupRoutesByCategory(
     routes,
     isAuthenticated,
-    localUserInfo,
-    false
+    localUserInfo
   );
 
   return (
@@ -65,7 +64,7 @@ export function SitemapComponent({ isAuthenticated, localUserInfo }) {
         I-GUIDE Site Map
       </Typography>
       <Divider sx={{ mx: 2, my: 2 }} />
-      <LinkContainer style={{ gridTemplateColumns: "1fr 1fr" }}>
+      <LinkContainerErrorPage>
         {Object.entries(groupedRoutes).map(([category, items]) => (
           <Group>
             <Typography level="h4" style={{ textAlign: "left" }}>
@@ -73,12 +72,14 @@ export function SitemapComponent({ isAuthenticated, localUserInfo }) {
             </Typography>
             <Group style={{ gap: "5px" }}>
               {items.map((item) => (
-                <Link href={item.path}>{item.label}</Link>
+                <Link href={item.path} style={{ textAlign: "left" }}>
+                  {item.label}
+                </Link>
               ))}
             </Group>
           </Group>
         ))}
-      </LinkContainer>
+      </LinkContainerErrorPage>
     </Grid>
   );
 }
@@ -89,7 +90,7 @@ export default function Sitemap() {
   const { isAuthenticated, localUserInfo } = useOutletContext();
 
   const groupedRoutes = localUserInfo
-    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo, false)
+    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo)
     : {};
 
   return (
@@ -164,5 +165,20 @@ const LinkContainer = styled("div")`
 
   @media only screen and (max-width: 900px) {
     grid-template-columns: auto;
+  }
+`;
+
+const LinkContainerErrorPage = styled("div")`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+
+  align-items: start;
+
+  margin: 0 20px;
+
+  @media only screen and (max-width: 400px) {
+    grid-template-columns: 1fr;
   }
 `;
