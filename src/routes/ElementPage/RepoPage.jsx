@@ -29,11 +29,11 @@ import ErrorPage from "../ErrorPage";
 
 export default function RepoPage() {
   const id = useParams().id;
-  const [title, setTitle] = useState("");
-  const [authors, setAuthors] = useState([]);
-  const [contributor, setContributor] = useState([]);
-  const [abstract, setAbstract] = useState("");
-  const [tags, setTags] = useState([]);
+  const [title, setTitle] = useState("Example Repo");
+  const [authors, setAuthors] = useState(["John Smith"]);
+  const [contributor, setContributor] = useState(["adb03aee-8f4c-4cbf-9e7d-99450fef13e5"]);
+  const [abstract, setAbstract] = useState("This is the abstract");
+  const [tags, setTags] = useState(["Tag"]);
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
@@ -42,6 +42,8 @@ export default function RepoPage() {
   const [licenseStatement, setLicenseStatement] = useState("");
   const [licenseUrl, setLicenseUrl] = useState("");
   const [fundingAgency, setFundingAgency] = useState("");
+
+  const [repoLink, setRepoLink] = useState("https://github.com/I-GUIDE/iguide-ue-frontend/")
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -75,8 +77,9 @@ export default function RepoPage() {
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
+      setRepoLink(thisElement["repo"])
     }
-    fetchData();
+    // fetchData();
   }, [isPrivateElement, id]);
 
   usePageTitle(title);
@@ -118,15 +121,15 @@ export default function RepoPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Notebooks", "/notebooks"]]}
-                  currentPage="Notebook"
+                  parentPages={[["All Repos", "/repos"]]}
+                  currentPage="Repo"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/notebooks"
+                  afterDeleteRedirection="/repos"
                   isPrivateElement={isPrivateElement}
                 />
               </Stack>
