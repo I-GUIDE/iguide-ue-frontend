@@ -7,6 +7,9 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
+import Divider from "@mui/joy/Divider";
+import Typography from "@mui/joy/Typography";
+import Link from "@mui/joy/Link";
 
 import {
   fetchSingleElementDetails,
@@ -26,6 +29,7 @@ import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
 import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
+import { Octokit } from "octokit";
 
 export default function RepoPage() {
   const id = useParams().id;
@@ -43,7 +47,10 @@ export default function RepoPage() {
   const [licenseUrl, setLicenseUrl] = useState("");
   const [fundingAgency, setFundingAgency] = useState("");
 
-  const [repoLink, setRepoLink] = useState("https://github.com/I-GUIDE/iguide-ue-frontend/")
+  const [repoLink, setRepoLink] = useState("https://github.com/I-GUIDE/iguide-ue-frontend/");
+  const [watchersCount, setWatchersCount] = useState();
+  const [forksCount, setForksCount] = useState();
+  const [starsCount, setStarsCount] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -77,7 +84,14 @@ export default function RepoPage() {
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
-      setRepoLink(thisElement["repo"])
+      setRepoLink(thisElement["repo"]);
+
+      // Github API get watchers, forks, stars
+      const octokit = new Octokit(); // { auth: 'YOUR-TOKEN' }
+      setWatchersCount(await octokit.request("GET /repos/{owner}/{repo}/subscribers", {
+        owner: "I-GUIDE",
+        repo: "iguide-ue-frontend"
+      }).length);
     }
     // fetchData();
   }, [isPrivateElement, id]);
@@ -149,7 +163,22 @@ export default function RepoPage() {
                 isLoading={isLoading}
               />
             </Grid>
-
+            
+            <Grid xs={12}>
+              <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+                <Typography id="repo-access" level="h5" fontWeight="lg" mb={1}>
+                  Access Repository
+                </Typography>
+                <Divider inset="none" />
+                <Link href={"https://github.com/I-GUIDE/iguide-ue-frontend"} target="_blank" rel="noopener noreferrer">
+                  {"https://github.com/I-GUIDE/iguide-ue-frontend"}
+                </Link>
+              </Stack>
+              <Typography>
+                {watchersCount}
+              </Typography>
+            </Grid>
+            
             {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
@@ -161,12 +190,14 @@ export default function RepoPage() {
               <RelatedElementsNetwork elementId={id} />
             </Grid>
 
+            
+            
             <Grid xs={12}>
               <CitationGenerator
                 contributorId={contributor.id}
                 createdAt={creationTime}
                 title={title}
-                elementType="notebooks"
+                elementType="notebooks" // TODO
                 elementId={id}
               />
             </Grid>
