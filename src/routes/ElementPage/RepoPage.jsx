@@ -10,6 +10,7 @@ import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
+import Button from "@mui/joy/Button";
 
 import {
   fetchSingleElementDetails,
@@ -60,40 +61,57 @@ export default function RepoPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement =
-        isPrivateElement === "true"
-          ? await fetchSinglePrivateElementDetails(id)
-          : await fetchSingleElementDetails(id);
+      // const thisElement =
+      //   isPrivateElement === "true"
+      //     ? await fetchSinglePrivateElementDetails(id)
+      //     : await fetchSingleElementDetails(id);
 
-      if (thisElement === "ERROR") {
-        setError(true);
-        return;
-      }
+      // if (thisElement === "ERROR") {
+      //   setError(true);
+      //   return;
+      // }
 
-      setTitle(thisElement.title);
-      setAuthors(thisElement.authors);
-      setContributor(thisElement["contributor"]);
-      setAbstract(thisElement.contents);
-      setTags(thisElement.tags);
-      setThumbnailImage(thisElement["thumbnail-image"]);
-      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
-      setRelatedElements(thisElement["related-elements"]);
-      setCreationTime(thisElement["created-at"]);
-      setUpdateTime(thisElement["updated-at"]);
-      setLicenseStatement(thisElement["license-statement"]);
-      setLicenseUrl(thisElement["license-url"]);
-      setFundingAgency(thisElement["funding-agency"]);
-      setIsLoading(false);
-      setRepoLink(thisElement["repo"]);
+      // setTitle(thisElement.title);
+      // setAuthors(thisElement.authors);
+      // setContributor(thisElement["contributor"]);
+      // setAbstract(thisElement.contents);
+      // setTags(thisElement.tags);
+      // setThumbnailImage(thisElement["thumbnail-image"]);
+      // setThumbnailImageCredit(thisElement["thumbnail-credit"]);
+      // setRelatedElements(thisElement["related-elements"]);
+      // setCreationTime(thisElement["created-at"]);
+      // setUpdateTime(thisElement["updated-at"]);
+      // setLicenseStatement(thisElement["license-statement"]);
+      // setLicenseUrl(thisElement["license-url"]);
+      // setFundingAgency(thisElement["funding-agency"]);
+      // setIsLoading(false);
+      // setRepoLink(thisElement["repo"]);
 
       // Github API get watchers, forks, stars
-      const octokit = new Octokit(); // { auth: 'YOUR-TOKEN' }
-      setWatchersCount(await octokit.request("GET /repos/{owner}/{repo}/subscribers", {
-        owner: "I-GUIDE",
-        repo: "iguide-ue-frontend"
-      }).length);
+      const octokit = new Octokit();
+      const repoOwner = repoLink.match("github.com/(.*?)/")[1];
+      const repoName = repoLink.match("github.com/.*?/(.+?)($|/)")[1];
+
+      // Do some error checking
+      const watcherData = await octokit.request("GET /repos/{owner}/{repo}/subscribers", {
+        owner: repoOwner,
+        repo: repoName
+      });
+      setWatchersCount(watcherData["data"].length);
+
+      const forksData = await octokit.request("GET /repos/{owner}/{repo}/forks", {
+        owner: repoOwner,
+        repo: repoName,
+      });
+      setForksCount(forksData["data"].length);
+      
+      const starsData = await octokit.request("GET /repos/{owner}/{repo}/stargazers", {
+        owner: repoOwner,
+        repo: repoName,
+      });
+      setStarsCount(starsData["data"].length);
     }
-    // fetchData();
+    fetchData();
   }, [isPrivateElement, id]);
 
   usePageTitle(title);
@@ -170,13 +188,15 @@ export default function RepoPage() {
                   Access Repository
                 </Typography>
                 <Divider inset="none" />
+                <Stack spacing={2} direction="row">
+                  <Button variant="outlined" color="dark">Watch {watchersCount}</Button>
+                  <Button variant="outlined" color="dark">Fork {forksCount}</Button>
+                  <Button variant="outlined" color="dark">Star {starsCount}</Button>
+                </Stack>
                 <Link href={"https://github.com/I-GUIDE/iguide-ue-frontend"} target="_blank" rel="noopener noreferrer">
                   {"https://github.com/I-GUIDE/iguide-ue-frontend"}
                 </Link>
               </Stack>
-              <Typography>
-                {watchersCount}
-              </Typography>
             </Grid>
             
             {/* When the page is narrower than md */}
