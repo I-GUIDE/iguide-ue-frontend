@@ -214,10 +214,11 @@ export default function RepoPage() {
                   <Chip variant="outlined" sx={{fontWeight: "xl"}}><Visibility/>Star {starsCount}</Chip>
                 </Stack>
               </Stack>
+
+              <iframe src={repoReadme}  frame-ancestors="self" width="75%" height="500px"></iframe>
             </Grid>
 
-            <iframe src={repoReadme}  frame-ancestors="self" width="75%" height="50%"></iframe>
-            {/* <embed src="" type="" /> */}
+            
             
             {/* When the page is narrower than md */}
             <Grid xs={12}>

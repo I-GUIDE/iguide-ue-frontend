@@ -444,6 +444,21 @@ export default function SubmissionCard(props) {
     }
   };
 
+  const handleRepoLinkChange = (event) => {
+    const val = event.target.value;
+    setGitHubRepoLink(val);
+
+    // Validate if the URL is in the form of https://github.com/{owner}/{repo}
+    const validNotebookGitHubUrl = new RegExp(
+      "https://(www.)?github.com/.+?/.+?"
+    );
+    if (val === "" || validNotebookGitHubUrl.test(val)) {
+      setNotebookGitHubUrlError(false);
+    } else {
+      setNotebookGitHubUrlError(true);
+    }
+  };
+
   const handleLicenseChange = (value) => {
     setLicenseId(value);
 
