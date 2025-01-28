@@ -10,7 +10,11 @@ import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
-import Button from "@mui/joy/Button";
+import Chip from "@mui/joy/Chip";
+
+import AltRoute from "@mui/icons-material/AltRoute";
+import Visibility from "@mui/icons-material/Visibility";
+import Star from "@mui/icons-material/Star";
 
 import {
   fetchSingleElementDetails,
@@ -49,6 +53,7 @@ export default function RepoPage() {
   const [fundingAgency, setFundingAgency] = useState("");
 
   const [repoLink, setRepoLink] = useState("https://github.com/I-GUIDE/iguide-ue-frontend/");
+  const [repoReadme, setRepoReadme] = useState();
   const [watchersCount, setWatchersCount] = useState();
   const [forksCount, setForksCount] = useState();
   const [starsCount, setStarsCount] = useState();
@@ -91,6 +96,18 @@ export default function RepoPage() {
       const octokit = new Octokit();
       const repoOwner = repoLink.match("github.com/(.*?)/")[1];
       const repoName = repoLink.match("github.com/.*?/(.+?)($|/)")[1];
+
+      const readmeData = await octokit.request('GET /repos/{owner}/{repo}/readme', {
+        owner: repoOwner,
+        repo: repoName,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+          "accept": "application/vnd.github.html+json"
+        }
+      });
+      console.log(readmeData);
+      console.log(readmeData["data"]["html_url"]);
+      setRepoReadme(readmeData["data"]["html_url"]);
 
       // Do some error checking
       const watcherData = await octokit.request("GET /repos/{owner}/{repo}/subscribers", {
@@ -188,16 +205,19 @@ export default function RepoPage() {
                   Access Repository
                 </Typography>
                 <Divider inset="none" />
-                <Stack spacing={2} direction="row">
-                  <Button variant="outlined" color="dark">Watch {watchersCount}</Button>
-                  <Button variant="outlined" color="dark">Fork {forksCount}</Button>
-                  <Button variant="outlined" color="dark">Star {starsCount}</Button>
-                </Stack>
                 <Link href={"https://github.com/I-GUIDE/iguide-ue-frontend"} target="_blank" rel="noopener noreferrer">
                   {"https://github.com/I-GUIDE/iguide-ue-frontend"}
                 </Link>
+                <Stack spacing={2} direction="row">
+                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><Star/>Watch {watchersCount}</Chip>
+                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><AltRoute/>Fork {forksCount}</Chip>
+                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><Visibility/>Star {starsCount}</Chip>
+                </Stack>
               </Stack>
             </Grid>
+
+            <iframe src={repoReadme}  frame-ancestors="self" width="75%" height="50%"></iframe>
+            {/* <embed src="" type="" /> */}
             
             {/* When the page is narrower than md */}
             <Grid xs={12}>
