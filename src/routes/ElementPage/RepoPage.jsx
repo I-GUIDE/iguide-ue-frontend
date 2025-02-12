@@ -38,21 +38,21 @@ import { Octokit } from "octokit";
 
 export default function RepoPage() {
   const id = useParams().id;
-  const [title, setTitle] = useState("Example Repo");
-  const [authors, setAuthors] = useState(["John Smith"]);
-  const [contributor, setContributor] = useState(["adb03aee-8f4c-4cbf-9e7d-99450fef13e5"]);
-  const [abstract, setAbstract] = useState("This is the abstract");
+  const [title, setTitle] = useState();
+  const [authors, setAuthors] = useState();
+  const [contributor, setContributor] = useState();
+  const [abstract, setAbstract] = useState();
   const [tags, setTags] = useState(["Tag"]);
-  const [thumbnailImage, setThumbnailImage] = useState("");
-  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
+  const [thumbnailImage, setThumbnailImage] = useState();
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState();
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
-  const [licenseStatement, setLicenseStatement] = useState("");
-  const [licenseUrl, setLicenseUrl] = useState("");
-  const [fundingAgency, setFundingAgency] = useState("");
+  const [licenseStatement, setLicenseStatement] = useState();
+  const [licenseUrl, setLicenseUrl] = useState();
+  const [fundingAgency, setFundingAgency] = useState();
 
-  const [repoLink, setRepoLink] = useState("https://github.com/I-GUIDE/iguide-ue-frontend/");
+  const [repoLink, setRepoLink] = useState();
   const [repoReadme, setRepoReadme] = useState();
   const [watchersCount, setWatchersCount] = useState();
   const [forksCount, setForksCount] = useState();
@@ -66,31 +66,31 @@ export default function RepoPage() {
 
   useEffect(() => {
     async function fetchData() {
-      // const thisElement =
-      //   isPrivateElement === "true"
-      //     ? await fetchSinglePrivateElementDetails(id)
-      //     : await fetchSingleElementDetails(id);
+      const thisElement =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(id)
+          : await fetchSingleElementDetails(id);
 
-      // if (thisElement === "ERROR") {
-      //   setError(true);
-      //   return;
-      // }
+      if (thisElement === "ERROR") {
+        setError(true);
+        return;
+      }
 
-      // setTitle(thisElement.title);
-      // setAuthors(thisElement.authors);
-      // setContributor(thisElement["contributor"]);
-      // setAbstract(thisElement.contents);
-      // setTags(thisElement.tags);
-      // setThumbnailImage(thisElement["thumbnail-image"]);
-      // setThumbnailImageCredit(thisElement["thumbnail-credit"]);
-      // setRelatedElements(thisElement["related-elements"]);
-      // setCreationTime(thisElement["created-at"]);
-      // setUpdateTime(thisElement["updated-at"]);
-      // setLicenseStatement(thisElement["license-statement"]);
-      // setLicenseUrl(thisElement["license-url"]);
-      // setFundingAgency(thisElement["funding-agency"]);
-      // setIsLoading(false);
-      // setRepoLink(thisElement["repo"]);
+      setTitle(thisElement.title);
+      setAuthors(thisElement.authors);
+      setContributor(thisElement["contributor"]);
+      setAbstract(thisElement.contents);
+      setTags(thisElement.tags);
+      setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
+      setRelatedElements(thisElement["related-elements"]);
+      setCreationTime(thisElement["created-at"]);
+      setUpdateTime(thisElement["updated-at"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
+      setIsLoading(false);
+      setRepoLink(thisElement["repo"]);
 
       // Github API get watchers, forks, stars
       const octokit = new Octokit();
