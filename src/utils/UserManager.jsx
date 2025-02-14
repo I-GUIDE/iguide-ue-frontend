@@ -1,7 +1,35 @@
-import { fetchWithAuth } from "./FetcherWithJWT";
+import { fetchWithAuth, refreshAccessToken } from "./FetcherWithJWT";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+
+/**
+ * Get user role number
+ * @param {string} uid the UserId of the user
+ * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
+ */
+export async function getUserRole(uid) {
+  const response = await fetch(
+    `${USER_BACKEND_URL}/api/users/${encodeURIComponent(uid)}/role`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (!response.ok) {
+    console.warn("Failed to retrieve user role...");
+    TEST_MODE && console.log(`Error: ${response.status} ${error.message}`);
+    return 10;
+  }
+
+  const result = await response.json();
+
+  TEST_MODE &&
+    console.log(`GET user role. UserId: ${uid}, return: ${result.role}`);
+
+  return result.role;
+}
 
 /**
  * Fetch the information of a user given a uid
@@ -164,34 +192,46 @@ export async function checkUser(uid) {
  * The checkTokens function will redirect users to /logout if the refresh token has expired.
  */
 export async function checkTokens() {
+  // Redirect users to auth backend for logout
+  function logout() {
+    const currentLocation = window.location;
+    const redirectURI = currentLocation?.pathname + currentLocation?.search;
+    TEST_MODE &&
+      console.log("Redirect URI for logout (in JWT func)", redirectURI);
+
+    window.open(
+      AUTH_BACKEND_URL +
+        "/logout?redirect-uri=" +
+        encodeURIComponent(redirectURI),
+      "_self"
+    );
+  }
+
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
-}
-
-/**
- * Get user role number
- * @param {string} uid the UserId of the user
- * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
- */
-export async function getUserRole(uid) {
-  const response = await fetch(
-    `${USER_BACKEND_URL}/api/users/${encodeURIComponent(uid)}/role`,
-    {
-      method: "GET",
-    }
-  );
 
   if (!response.ok) {
-    console.warn("Failed to retrieve user role...");
-    TEST_MODE && console.log(`Error: ${response.status} ${error.message}`);
-    return 10;
+    throw new Error(`Error: ${response.status} ${error.message}`);
   }
 
-  const result = await response.json();
+  const resultsFromJWT = await response.json();
+  const userRoleFromJWT = resultsFromJWT.role;
+  const userIdFromJWT = resultsFromJWT.id;
+  const userRoleFromDB = await getUserRole(userIdFromJWT);
 
-  TEST_MODE &&
-    console.log(`GET user role. UserId: ${uid}, return: ${result.role}`);
+  TEST_MODE && console.log("checkTokens(): results from JWT", resultsFromJWT);
+  TEST_MODE && console.log("checkTokens(): role from DB", userRoleFromDB);
 
-  return result.role;
+  // If user permission from DB is higher (role number lower) than JWT, or userRoleFromDB is undefined, refresh token...
+  if (userRoleFromDB < userRoleFromJWT || userRoleFromJWT === undefined) {
+    TEST_MODE && console.log("checkTokens(): refreshAccessToken...");
+    await refreshAccessToken();
+    // If user permission from DB is lower (role number higher) than JWT, log user out...
+  } else if (userRoleFromDB > userRoleFromJWT) {
+    TEST_MODE && console.log("checkTokens(): logging you out...");
+    logout();
+  } else {
+    return userRoleFromJWT;
+  }
 }
