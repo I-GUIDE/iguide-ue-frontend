@@ -2,6 +2,7 @@ import { fetchWithAuth } from "./FetcherWithJWT";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 /**
  * Fetch the information of a user given a uid
@@ -164,6 +165,21 @@ export async function checkUser(uid) {
  * The checkTokens function will redirect users to /logout if the refresh token has expired.
  */
 export async function checkTokens() {
+  // Redirect users to auth backend for logout
+  function logout() {
+    const currentLocation = window.location;
+    const redirectURI = currentLocation?.pathname + currentLocation?.search;
+    TEST_MODE &&
+      console.log("Redirect URI for logout (in JWT func)", redirectURI);
+
+    window.open(
+      AUTH_BACKEND_URL +
+        "/logout?redirect-uri=" +
+        encodeURIComponent(redirectURI),
+      "_self"
+    );
+  }
+
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
@@ -172,8 +188,27 @@ export async function checkTokens() {
     throw new Error(`Error: ${response.status} ${error.message}`);
   }
 
-  const result = await response.json();
-  return result;
+  const resultsFromJWT = await response.json();
+  const userRoleFromJWT = resultsFromJWT.role;
+  const userIdFromJWT = resultsFromJWT.id;
+  const userRoleFromDB = await getUserRole(userIdFromJWT);
+
+  TEST_MODE &&
+    console.log(
+      "checkTokens() returns: results from JWT and role from DB",
+      resultsFromJWT,
+      userRoleFromDB
+    );
+
+  // If user permission from DB is higher (role number lower) than JWT, or userRoleFromDB is undefined, refresh token...
+  if (userRoleFromDB < userRoleFromJWT || userRoleFromDB === undefined) {
+    await refreshAccessToken();
+    // If user permission from DB is lower (role number higher) than JWT, log user out...
+  } else if (userRoleFromDB > userRoleFromJWT) {
+    logout();
+  } else {
+    return userRoleFromJWT;
+  }
 }
 
 /**
