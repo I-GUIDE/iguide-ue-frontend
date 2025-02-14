@@ -194,11 +194,10 @@ export async function checkTokens() {
   const userRoleFromDB = await getUserRole(userIdFromJWT);
 
   TEST_MODE &&
-    console.log(
-      "checkTokens() returns: results from JWT and role from DB",
-      resultsFromJWT,
-      userRoleFromDB
-    );
+    console.log("checkTokens() returns: results from JWT", resultsFromJWT);
+
+  TEST_MODE &&
+    console.log("checkTokens() returns: role from DB", userRoleFromDB);
 
   // If user permission from DB is higher (role number lower) than JWT, or userRoleFromDB is undefined, refresh token...
   if (userRoleFromDB < userRoleFromJWT || userRoleFromDB === undefined) {
