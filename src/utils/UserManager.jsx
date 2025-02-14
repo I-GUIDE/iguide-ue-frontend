@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "./FetcherWithJWT";
+import { fetchWithAuth, refreshAccessToken } from "./FetcherWithJWT";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
