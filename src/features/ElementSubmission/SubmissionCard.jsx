@@ -158,7 +158,11 @@ export default function SubmissionCard(props) {
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    checkTokens();
+    const checkJWTToken = async () => {
+      const message = await checkTokens();
+      TEST_MODE && console.log("Check token returns", message);
+    };
+    checkJWTToken();
   }, []);
 
   // If the submission type is 'update', load the existing element information.

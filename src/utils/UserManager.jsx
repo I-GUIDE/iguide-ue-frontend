@@ -167,6 +167,13 @@ export async function checkTokens() {
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${error.message}`);
+  }
+
+  const result = await response.json();
+  return result;
 }
 
 /**
