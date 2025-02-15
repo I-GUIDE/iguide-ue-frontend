@@ -221,6 +221,9 @@ export default function Footer() {
                       Contributor License Agreement
                     </Typography>
                   </Link>
+                  <Link component={RouterLink} to="/sitemap">
+                    <Typography level="body-xs">Sitemap</Typography>
+                  </Link>
                 </Stack>
               </Grid>
             </Grid>

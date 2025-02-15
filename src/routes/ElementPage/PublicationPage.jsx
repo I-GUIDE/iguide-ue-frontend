@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -49,6 +49,7 @@ export default function PublicationPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
 
@@ -89,7 +90,12 @@ export default function PublicationPage() {
 
   if (error) {
     return (
-      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+      <ErrorPage
+        customStatus="404"
+        customStatusText="Element Not Found"
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
     );
   }
 
