@@ -39,14 +39,60 @@ export const routes = [
     element: <Home />,
   },
   {
+    path: "/about",
+    element: <About />,
+    label: "About",
+    category: "About I-GUIDE",
+  },
+  {
+    path: "/tutorials",
+    element: <Tutorials />,
+    label: "Tutorials",
+    category: "About I-GUIDE",
+  },
+  {
+    path: "/terms-of-use",
+    element: <TermsOfUse />,
+    label: "Terms of Use",
+    category: "About I-GUIDE",
+  },
+  {
+    path: "/contributor-license-agreement",
+    element: <LicenseAgreement />,
+    label: "Contributor License Agreement",
+    category: "About I-GUIDE",
+  },
+  {
+    path: "/contact-us",
+    element: <ContactUs />,
+    label: "Contact Us",
+    category: "About I-GUIDE",
+  },
+  {
     path: "/search-home",
     element: <SearchHome />,
     label: "Search",
-    category: "Searching",
+    category: "Search",
+  },
+  {
+    path: "/element-network",
+    element: <NetworkVisualizer />,
+    label: "Element Network",
+    category: "Search",
   },
   {
     path: "/search",
     element: <SearchResults />,
+  },
+  {
+    path: "/maps",
+    element: <Maps />,
+    label: "Maps",
+    category: "Elements",
+  },
+  {
+    path: "/maps/:id",
+    element: <MapPage />,
   },
   {
     path: "/datasets",
@@ -89,22 +135,6 @@ export const routes = [
     element: <OERPage />,
   },
   {
-    path: "/maps",
-    element: <Maps />,
-    label: "Maps",
-    category: "Elements",
-  },
-  {
-    path: "/maps/:id",
-    element: <MapPage />,
-  },
-  {
-    path: "/element-network",
-    element: <NetworkVisualizer />,
-    label: "Explore Knowledge Network",
-    category: "Searching",
-  },
-  {
     path: "/tag/:id",
     element: <Tag />,
   },
@@ -135,52 +165,16 @@ export const routes = [
     element: <ElementUpdate />,
   },
   {
-    path: "/about",
-    element: <About />,
-    label: "About",
-    category: "About I-GUIDE",
-  },
-  {
-    path: "/terms-of-use",
-    element: <TermsOfUse />,
-    label: "Legal - Terms of Use",
-    category: "About I-GUIDE",
-  },
-  {
-    path: "/contributor-license-agreement",
-    element: <LicenseAgreement />,
-    label: "Legal - Contributor License Agreement",
-    category: "About I-GUIDE",
-  },
-  {
-    path: "/tutorials",
-    element: <Tutorials />,
-    label: "Tutorials",
-    category: "About I-GUIDE",
-  },
-  {
     path: "/new-doc",
     element: <DocSubmission />,
-    label: "Create Documentation",
-    category: "Documentation",
-    requireAdmin: true,
   },
   {
     path: "/doc-update/:id",
     element: <DocUpdate />,
-    label: "Update Documentation",
-    category: "Documentation",
-    requireAdmin: true,
   },
   {
     path: "/docs/:id",
     element: <DocPage />,
-  },
-  {
-    path: "/contact-us",
-    element: <ContactUs />,
-    label: "Contact Us",
-    category: "About I-GUIDE",
   },
   {
     path: "/sitemap",

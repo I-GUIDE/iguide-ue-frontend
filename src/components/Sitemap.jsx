@@ -60,14 +60,14 @@ export function SitemapErrorPage({ isAuthenticated, localUserInfo }) {
 
   return (
     <Grid>
-      <Typography level="h3" style={{ textAlign: "left", margin: "0 20px" }}>
-        I-GUIDE Site Map
-      </Typography>
       <Divider sx={{ mx: 2, my: 2 }} />
+      <Typography level="h4" style={{ textAlign: "left", margin: "0 20px" }} sx={{ pb: 2 }}>
+        Explore other resources...
+      </Typography>
       <LinkContainerErrorPage>
         {Object.entries(groupedRoutes).map(([category, items]) => (
           <Group>
-            <Typography level="h4" style={{ textAlign: "left" }}>
+            <Typography level="title-md" style={{ textAlign: "left" }}>
               {category}
             </Typography>
             <Group style={{ gap: "5px" }}>
@@ -123,14 +123,14 @@ export default function Sitemap() {
                 alignItems={{ xs: "flex-start", md: "center" }}
                 sx={{ p: 2 }}
               >
-                <Typography level="h2">I-GUIDE Site Map</Typography>
+                <Typography level="h3">I-GUIDE Platform Site Map</Typography>
               </Stack>
-              <Divider sx={{ mx: 2, my: 4 }} />
+              <Divider sx={{ mx: 2, my: 2 }} />
 
               <LinkContainer>
                 {Object.entries(groupedRoutes).map(([category, items]) => (
                   <Group>
-                    <Typography level="h4">{category}</Typography>
+                    <Typography level="title-lg">{category}</Typography>
                     <Group style={{ gap: "5px" }}>
                       {items.map((item) => (
                         <Link href={item.path}>{item.label}</Link>
