@@ -135,6 +135,7 @@ export default function Home() {
                   </Typography>
                   <SearchBar
                     placeholder="Start your exploration..."
+                    showTrendingSearchKeywords
                     showSmartSearch
                   />
                 </Box>
@@ -168,7 +169,7 @@ export default function Home() {
                   }}
                 >
                   <TutorialCard
-                    thumbnailImage="/images/homepage/map.png"
+                    iconImage="/images/homepage/map.png"
                     title="Map"
                     link="/maps"
                     content="Transform geospatial data to knowledge and insights"
@@ -176,7 +177,7 @@ export default function Home() {
                     inColumn
                   />
                   <TutorialCard
-                    thumbnailImage="/images/homepage/network.png"
+                    iconImage="/images/homepage/network.png"
                     title="Connect"
                     link="/element-network"
                     content="Gain holistic understanding of linked knowledge elements"
@@ -184,7 +185,7 @@ export default function Home() {
                     inColumn
                   />
                   <TutorialCard
-                    thumbnailImage="/images/homepage/search.png"
+                    iconImage="/images/homepage/search.png"
                     title="Discover"
                     link="/search-home"
                     content="Seek new convergence knowledge through intelligent search"
@@ -223,21 +224,21 @@ export default function Home() {
                   spacing={{ xs: 4, md: 10 }}
                 >
                   <TutorialCard
-                    thumbnailImage="/images/homepage/verify.png"
+                    iconImage="/images/homepage/verify.png"
                     title="Register"
                     content="Become a member of the I-GUIDE community"
                     link="/user-profile"
                     bgColor="#fafafa"
                   />
                   <TutorialCard
-                    thumbnailImage="/images/homepage/reading-book.png"
+                    iconImage="/images/homepage/reading-book.png"
                     title="Learn"
                     content="Explore the power of I-GUIDE Platform"
                     link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
                     bgColor="#fafafa"
                   />
                   <TutorialCard
-                    thumbnailImage="/images/homepage/jigsaw.png"
+                    iconImage="/images/homepage/jigsaw.png"
                     title="Contribute"
                     content="Share your knowledge with our community"
                     link="/user-profile"

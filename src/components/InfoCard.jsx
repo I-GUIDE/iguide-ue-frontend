@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 import AspectRatio from "@mui/joy/AspectRatio";
 import Link from "@mui/joy/Link";
@@ -10,6 +10,9 @@ import CardActions from "@mui/joy/CardActions";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+
+import IconButton from "@mui/joy/IconButton";
+import LockIcon from "@mui/icons-material/Lock";
 
 import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
@@ -23,13 +26,17 @@ export default function InfoCard(props) {
   const title = props.title;
   const authors = props.authors;
   const cardType = props.cardtype;
-  const pageid = props.pageid;
+  const elementId = props.elementId;
   const contents = props.contents;
   const contributor = props.contributor ? props.contributor : {};
   const showElementType = props.showElementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
+  const uri = `/${cardType}/${elementId}${
+    isPrivateElement ? "?private-mode=true" : ""
+  }`;
 
   const contentsWithoutMarkdown = removeMarkdown(contents);
 
@@ -54,7 +61,11 @@ export default function InfoCard(props) {
       <CardOverflow>
         <AspectRatio ratio="2.4">
           {thumbnailImage ? (
-            <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+            <img
+              src={thumbnailImage.low ? thumbnailImage.low : thumbnailImage}
+              loading="lazy"
+              alt="thumbnail"
+            />
           ) : (
             <img
               src={`/default-images/${cardType}.png`}
@@ -63,13 +74,32 @@ export default function InfoCard(props) {
             />
           )}
         </AspectRatio>
+        {isPrivateElement && (
+          <IconButton
+            aria-label="lock icon"
+            size="md"
+            variant="solid"
+            color="neutral"
+            disabled
+            sx={{
+              position: "absolute",
+              zIndex: 2,
+              borderRadius: "50%",
+              right: "1rem",
+              bottom: 0,
+              transform: "translateY(50%)",
+            }}
+          >
+            <LockIcon />
+          </IconButton>
+        )}
       </CardOverflow>
       <CardContent>
         <Link
           overlay
           underline="none"
           component={RouterLink}
-          to={"/" + cardType + "/" + pageid}
+          to={uri}
           sx={{ color: "text.tertiary" }}
         >
           <Typography
@@ -127,8 +157,9 @@ export default function InfoCard(props) {
             <Stack direction="row" alignItems="center" spacing={1.5}>
               <UserAvatar
                 size={30}
-                link={contributorAvatar}
+                userAvatarUrls={contributorAvatar}
                 userId={contributorUserId}
+                avatarResolution="low"
               />
               <Stack direction="column">
                 <Typography

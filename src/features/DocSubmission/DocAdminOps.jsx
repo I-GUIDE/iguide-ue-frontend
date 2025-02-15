@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import DialogTitle from "@mui/joy/DialogTitle";

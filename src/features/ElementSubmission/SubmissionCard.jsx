@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
@@ -33,7 +33,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const MarkdownEditor = lazy(() => import("../../components/MarkdownEditor"));
+const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 
@@ -45,13 +45,21 @@ import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
+  ELEM_VISIBILITY,
+  ACCEPTED_IMAGE_TYPES,
 } from "../../configs/VarConfigs";
+
+import {
+  ELEMENT_LICENSES,
+  ELEMENT_LICENSES_INFO,
+} from "../../configs/ElementLicenses";
 
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
   getMetadataByDOI,
   duplicateDOIExists,
+  fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
 
@@ -76,11 +84,15 @@ export default function SubmissionCard(props) {
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
+  const isPrivateElement = props.isPrivateElement;
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
+  const [visibility, setVisibility] = useState("");
+
   const [thumbnailImageFile, setThumbnailImageFile] = useState("");
-  const [thumbnailImageFileURL, setThumbnailImageFileURL] = useState("");
+  const [thumbnailImageFileURLs, setThumbnailImageFileURLs] = useState();
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
 
   const [relatedResources, setRelatedResources] = useState([]);
   const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
@@ -135,22 +147,42 @@ export default function SubmissionCard(props) {
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
 
+  const [licenseId, setLicenseId] = useState("");
+  const [licenseName, setLicenseName] = useState("");
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
+
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
-    checkTokens();
+    const checkJWTToken = async () => {
+      const message = await checkTokens();
+      TEST_MODE && console.log("Check token returns", message);
+    };
+    checkJWTToken();
   }, []);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = await fetchSingleElementDetails(elementId);
+      const thisElement = isPrivateElement
+        ? await fetchSinglePrivateElementDetails(elementId)
+        : await fetchSingleElementDetails(elementId);
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      setElementURI("/" + thisElement["resource-type"] + "s/" + elementId);
+      const elementUrlReturned = `/${
+        thisElement["resource-type"]
+      }s/${elementId}${
+        thisElement.visibility === ELEM_VISIBILITY.private
+          ? "?private-mode=true"
+          : ""
+      }`;
+      setElementURI(elementUrlReturned);
+      setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
       setResourceTypeSelected(thisElement["resource-type"]);
       setTags(
@@ -164,7 +196,7 @@ export default function SubmissionCard(props) {
           : thisElement.authors
       );
       setContents(thisElement.contents);
-      setThumbnailImageFileURL(thisElement["thumbnail-image"]);
+      setThumbnailImageFileURLs(thisElement["thumbnail-image"]);
 
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
@@ -197,17 +229,24 @@ export default function SubmissionCard(props) {
           : thisElement["spatial-index-year"]
       );
 
+      setLicenseId(thisElement["license-id"]);
+      setLicenseName(thisElement["license-name"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
+
       setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
     };
     if (submissionType === "update") {
       fetchData();
     }
-  }, [elementId, submissionType]);
+  }, [isPrivateElement, elementId, submissionType]);
 
   useEffect(() => {
     if (submissionType === "initial") {
       setResourceTypeSelected(elementType);
+      setVisibility(ELEM_VISIBILITY.public);
     }
   }, [elementType, submissionType]);
 
@@ -226,22 +265,27 @@ export default function SubmissionCard(props) {
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
 
+  const handleVisibilityChange = async (e, newValue) => {
+    TEST_MODE && console.log("Setting visibility to", newValue);
+    setVisibility(newValue);
+  };
+
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
       alert("Please upload an image!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
       alert("Please upload an image smaller than 5MB!");
       setThumbnailImageFile(null);
-      setThumbnailImageFileURL(null);
+      setThumbnailImageFileURLs(null);
       return null;
     }
     setThumbnailImageFile(thumbnailFile);
-    setThumbnailImageFileURL(URL.createObjectURL(thumbnailFile));
+    setThumbnailImageFileURLs(URL.createObjectURL(thumbnailFile));
   };
 
   // Related elements...
@@ -402,6 +446,28 @@ export default function SubmissionCard(props) {
     }
   };
 
+  const handleLicenseChange = (value) => {
+    setLicenseId(value);
+
+    if (value === "other") {
+      setLicenseName("Other");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    }
+    // Case when the license is not from the dropdown selection
+    else if (!ELEMENT_LICENSES_INFO[value]) {
+      setLicenseName("");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    } else {
+      setLicenseName(ELEMENT_LICENSES_INFO[value][0]);
+      setLicenseStatement(
+        `This element is shared under the ${ELEMENT_LICENSES_INFO[value][0]}.`
+      );
+      setLicenseUrl(ELEMENT_LICENSES_INFO[value][1]);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {};
@@ -452,6 +518,8 @@ export default function SubmissionCard(props) {
       }
     });
 
+    data.visibility = visibility;
+
     data["resource-type"] = resourceTypeSelected;
 
     data.metadata = { created_by: localUserInfo.id };
@@ -469,6 +537,12 @@ export default function SubmissionCard(props) {
     data["spatial-centroid"] = centroid;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
+
+    data["license-id"] = licenseId;
+    data["license-name"] = licenseName;
+    data["license-statement"] = licenseStatement;
+    data["license-url"] = licenseUrl;
+    data["funding-agency"] = fundingAgency;
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
@@ -489,14 +563,15 @@ export default function SubmissionCard(props) {
         );
 
         const result = await response.json();
-        data["thumbnail-image"] = result.url;
+        TEST_MODE && console.log("image submission return", result);
+        data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
         setButtonDisabled(false);
         alert("Error uploading thumbnail...");
       }
     } else {
-      data["thumbnail-image"] = thumbnailImageFileURL;
+      data["thumbnail-image"] = thumbnailImageFileURLs;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
@@ -526,6 +601,10 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
+          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+          }`;
+          setElementURI(futureElementUrl);
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
@@ -554,7 +633,12 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            setElementURI("/" + resourceTypeSelected + "s/" + result.elementId);
+            const futureElementUrl = `/${resourceTypeSelected}s/${
+              result.elementId
+            }${
+              visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+            }`;
+            setElementURI(futureElementUrl);
           }
           // Case where there is a duplication on publication DOI
         } else if (
@@ -668,6 +752,20 @@ export default function SubmissionCard(props) {
               gap: 2,
             }}
           >
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Set the visibility of this element"
+                  fieldRequired
+                >
+                  Visibility
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select value={visibility} onChange={handleVisibilityChange}>
+                <Option value={ELEM_VISIBILITY.public}>Public</Option>
+                <Option value={ELEM_VISIBILITY.private}>Private</Option>
+              </Select>
+            </FormControl>
             <Typography level="h3" sx={{ pt: 1 }}>
               Element information
             </Typography>
@@ -788,10 +886,7 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Suspense fallback={<div>Loading markdown editor...</div>}>
-                  <MarkdownEditor
-                    contents={contents}
-                    setContents={setContents}
-                  />
+                  <HTMLEditor contents={contents} setContents={setContents} />
                 </Suspense>
               </FormControl>
             ) : (
@@ -838,21 +933,41 @@ export default function SubmissionCard(props) {
                 Upload a thumbnail image
                 <VisuallyHiddenInput
                   type="file"
+                  accept={ACCEPTED_IMAGE_TYPES}
                   onChange={handleThumbnailImageUpload}
                 />
               </Button>
-              {thumbnailImageFileURL && (
+              {thumbnailImageFileURLs && (
                 <div>
                   <Typography>Thumbnail preview</Typography>
                   <AspectRatio ratio="1" sx={{ width: 190 }}>
                     <img
-                      src={thumbnailImageFileURL}
+                      // This is necessary to show both the newly uploaded image as well as the returned thumbnail
+                      src={
+                        typeof thumbnailImageFileURLs === "string"
+                          ? thumbnailImageFileURLs
+                          : thumbnailImageFileURLs.low
+                      }
                       loading="lazy"
                       alt="thumbnail-preview"
                     />
                   </AspectRatio>
                 </div>
               )}
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Add a credit or the source of the thumbnail image if required">
+                  Thumbnail image credit
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="thumbnail-credit"
+                value={thumbnailImageCredit}
+                onChange={(event) =>
+                  setThumbnailImageCredit(event.target.value)
+                }
+              />
             </FormControl>
             {resourceTypeSelected === "map" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -1267,6 +1382,78 @@ export default function SubmissionCard(props) {
               />
             </FormControl>
 
+            <Typography level="h3" sx={{ pt: 1 }}>
+              License and others
+            </Typography>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Select a license for this element.">
+                  License
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select
+                placeholder="Select a license"
+                value={licenseId}
+                onChange={(e, newValue) => handleLicenseChange(newValue)}
+              >
+                <Option value="">
+                  <em>Select a license</em>
+                </Option>
+                {ELEMENT_LICENSES?.map((x, i) => (
+                  <Option key={x} value={x}>
+                    {ELEMENT_LICENSES_INFO[x]}
+                  </Option>
+                ))}
+                <Option value="other">Other</Option>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>
+                  License statement
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-statement"
+                value={licenseStatement}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseStatement(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>License URL</SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-url"
+                value={licenseUrl}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseUrl(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Acknowledge the source of funding related to this element.">
+                  Funding agency
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="funding-agency"
+                placeholder="NSF, USDA, DOD, ..."
+                value={fundingAgency}
+                onChange={(event) => setFundingAgency(event.target.value)}
+              />
+              {fundingAgency && (
+                <Typography level="body-sm">
+                  Displayed on the element page as:{" "}
+                  <Typography variant="soft">
+                    This project is funded by {fundingAgency}
+                  </Typography>
+                  .
+                </Typography>
+              )}
+            </FormControl>
+
             <CardActions sx={{ gridColumn: "1/-1" }}>
               <Stack spacing={1} sx={{ width: "100%" }}>
                 <Button
@@ -1300,6 +1487,7 @@ export default function SubmissionCard(props) {
           </CardContent>
         </form>
       </Card>
+      {/* Handle submission failure */}
       <Modal
         open={openModal}
         onClose={() => {

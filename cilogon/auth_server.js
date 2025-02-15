@@ -52,7 +52,7 @@ app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
   console.log('-----------------');
-  console.log('serialize user');
+  console.log('Serializing user... ', new Date());
   console.log(user);
   console.log('-----------------');
   done(null, user);
@@ -60,8 +60,8 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (user, done) {
   console.log('-----------------');
-  console.log('deserialize user');
-  console.log(user);
+  console.log('Deserializing user... ', new Date());
+  console.log(user.sub);
   console.log('-----------------');
   done(null, user);
 });
@@ -78,8 +78,6 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
   passport.use(
     'oidc',
     new Strategy({ client, passReqToCallback: true, loadUserInfo: true, }, (req, tokenSet, userinfo, done) => {
-      console.log("tokenSet", tokenSet);
-      console.log("userinfo", userinfo);
       req.session.tokenSet = tokenSet;
       req.session.userinfo = userinfo;
       return done(null, tokenSet.claims());

@@ -99,6 +99,9 @@ router.get(
 router.get("/cilogon-callback", async (req, res, next) => {
   passport.authenticate("oidc", async (err, user, info) => {
     if (err) {
+      console.log('-----------------------------');
+      console.log("Error: ", new Date());
+      console.log("User: ", user);
       console.log(err);
       return res.redirect(`/error`);
     }
@@ -107,6 +110,10 @@ router.get("/cilogon-callback", async (req, res, next) => {
     }
     req.logIn(user, async function (err) {
       if (err) {
+        console.log('-----------------------------');
+        console.log("Error login: ", new Date());
+        console.log("User: ", user);
+        console.log(err);
         return res.redirect(`/errorlogin`);
       }
 
@@ -125,14 +132,14 @@ router.get("/cilogon-callback", async (req, res, next) => {
       await storeRefreshToken(client, refreshToken, user.sub);
 
       // Set the tokens in cookies
-      res.cookie("jwt", accessToken, {
+      res.cookie(process.env.JWT_ACCESS_TOKEN_NAME, accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
         domain: target_domain,
         path: "/",
       });
-      res.cookie("refreshToken", refreshToken, {
+      res.cookie(process.env.JWT_REFRESH_TOKEN_NAME, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
@@ -146,15 +153,18 @@ router.get("/cilogon-callback", async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/logout", function (req, res) {
-  res.clearCookie("jwt", {
+router.get('/logout', function (req, res) {
+  const redirectURI = req.query["redirect-uri"];
+  const decodedRedirectURI = decodeURIComponent(redirectURI);
+  
+  res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
     domain: target_domain,
     path: "/",
   });
-  res.clearCookie("refreshToken", {
+  res.clearCookie(process.env.JWT_REFRESH_TOKEN_NAME, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
@@ -164,7 +174,11 @@ router.get("/logout", function (req, res) {
   res.clearCookie("IGPAU", true, { path: "/" });
 
   req.session.destroy(function (err) {
-    res.redirect(FRONTEND_URL);
+    if (redirectURI) {
+      res.redirect(`${FRONTEND_URL}${decodedRedirectURI}`);
+    } else {
+      res.redirect(`${FRONTEND_URL}`);
+    }
   });
 });
 

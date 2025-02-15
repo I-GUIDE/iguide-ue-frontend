@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteError, useNavigate } from "react-router-dom";
+import { useRouteError, useNavigate } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";

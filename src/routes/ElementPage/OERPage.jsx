@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useOutletContext } from "react-router";
+import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -9,7 +8,10 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
 
-import { fetchSingleElementDetails } from "../../utils/DataRetrieval";
+import {
+  fetchSingleElementDetails,
+  fetchSinglePrivateElementDetails,
+} from "../../utils/DataRetrieval";
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 
 import MainContent from "../../features/Element/MainContent";
@@ -20,6 +22,9 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
+import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
+import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
 
@@ -31,18 +36,28 @@ export default function OERPage() {
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
+  const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const { isAuthenticated, localUserInfo } = useOutletContext();
+  const [pageParam, setPageParam] = useSearchParams();
+  const isPrivateElement = pageParam.get("private-mode");
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement = await fetchSingleElementDetails(id);
+      const thisElement =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(id)
+          : await fetchSingleElementDetails(id);
 
       if (thisElement === "ERROR") {
         setError(true);
@@ -55,13 +70,18 @@ export default function OERPage() {
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setThumbnailImage(thisElement["thumbnail-image"]);
+      setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
+      setIsLoading(false);
     }
     fetchData();
-  }, [id]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 
@@ -116,17 +136,22 @@ export default function OERPage() {
                   elementId={id}
                   contributorId={contributor.id}
                   afterDeleteRedirection="/oers"
+                  isPrivateElement={isPrivateElement}
                 />
               </Stack>
+              <PrivateElementBanner isPrivateElement={isPrivateElement} />
               <MainContent
+                elementId={id}
                 title={title}
                 authors={authors}
                 contributor={contributor}
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
+                thumbnailImageCredit={thumbnailImageCredit}
                 elementType="oer"
                 creationTime={creationTime}
                 updateTime={updateTime}
+                isLoading={isLoading}
                 useMarkdown
                 useOERLayout
               />
@@ -143,6 +168,24 @@ export default function OERPage() {
             </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
+            </Grid>
+
+            <Grid xs={12}>
+              <CitationGenerator
+                contributorId={contributor.id}
+                createdAt={creationTime}
+                title={title}
+                elementType="oers"
+                elementId={id}
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
+              />
             </Grid>
           </Grid>
         </Box>

@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { useCookies } from "react-cookie";
 
 import NavBar from "../components/Layout/NavBar.jsx";
@@ -8,6 +8,10 @@ import Footer from "../components/Layout/Footer.jsx";
 import ErrorPage from "./ErrorPage.jsx";
 
 import { StyledEngineProvider } from "@mui/material/styles";
+import Snackbar from "@mui/joy/Snackbar";
+import Button from "@mui/joy/Button";
+import Stack from "@mui/joy/Stack";
+import Typography from "@mui/joy/Typography";
 
 import {
   checkUser,
@@ -20,11 +24,14 @@ import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
   const [cookies, setCookie] = useCookies(["user"]);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   const [isAuthenticated, setIsAuthenticated] = useState(cookies.IGPAU);
   const [userInfo, setUserInfo] = useState(null);
@@ -95,6 +102,7 @@ export default function Root(props) {
       first_name: "Happy",
       last_name: "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
+      id: DEMO_USERID,
       role: 1,
       gitHubLink: "https://github.com",
       linkedInLink: "https://linkedin.com",
@@ -133,9 +141,26 @@ export default function Root(props) {
         returnedLocalUser.role =
           typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
 
-        TEST_MODE && console.log("set local user: ", returnedLocalUser);
+        TEST_MODE &&
+          console.log("Local user returned from DB: ", returnedLocalUser);
+        const user = {
+          affiliation: returnedLocalUser.affiliation,
+          avatar_url: returnedLocalUser["avatar-url"],
+          bio: returnedLocalUser.bio,
+          email: returnedLocalUser.email,
+          first_name: returnedLocalUser["first-name"],
+          last_name: returnedLocalUser["last-name"],
+          openid: returnedLocalUser.openid,
+          id: returnedLocalUser.id,
+          role: returnedLocalUser.role,
+          gitHubLink: returnedLocalUser.gitHubLink,
+          linkedInLink: returnedLocalUser.linkedInLink,
+          googleScholarLink: returnedLocalUser.googleScholarLink,
+          personalWebsiteLink: returnedLocalUser.personalWebsiteLink,
+        };
+        TEST_MODE && console.log("Setting localUserInfo: ", user);
 
-        setLocalUserInfo(returnedLocalUser);
+        setLocalUserInfo(user);
       }
     }
 
@@ -174,6 +199,40 @@ export default function Root(props) {
       <ScrollToTop />
       <ClickToTop />
       <Footer />
+      {/* For displaying notifications or alerts. */}
+      {SNACKBAR_MESSAGE && (
+        <Snackbar
+          open={openSnackbar}
+          variant="soft"
+          color="danger"
+          size="md"
+          onClose={(event, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setOpenSnackbar(false);
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography level="title-sm">{SNACKBAR_MESSAGE}</Typography>
+            <Button
+              variant="plain"
+              color="danger"
+              onClick={() => setOpenSnackbar(false)}
+            >
+              Close
+            </Button>
+          </Stack>
+        </Snackbar>
+      )}
     </StyledEngineProvider>
   );
 }

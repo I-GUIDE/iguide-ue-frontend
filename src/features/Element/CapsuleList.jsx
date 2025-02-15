@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";

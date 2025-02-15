@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
+import { useOutletContext, Link as RouterLink } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
@@ -13,11 +13,19 @@ import Box from "@mui/joy/Box";
 import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import LinkIcon from "@mui/icons-material/Link";
+
+import BookmarkButton from "./BookmarkButton";
+import ShareButton from "./ShareButton";
+import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
+
+const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
+const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
 
 function AuthorsDisplay(props) {
   const authorsList = props.authorsList;
@@ -87,7 +95,54 @@ function AuthorsDisplay(props) {
   );
 }
 
+function ContributorCard(props) {
+  const encodedUserId = props.encodedUserId;
+  const avatar = props.avatar;
+  const userId = props.userId;
+  const name = props.name;
+  const isLoading = props.isLoading;
+  const timePassedText = props.timePassedText;
+
+  return (
+    <Link
+      component={RouterLink}
+      to={"/contributor/" + encodedUserId}
+      style={{ textDecoration: "none" }}
+    >
+      <Card
+        variant="plain"
+        orientation="horizontal"
+        sx={{
+          maxHeight: "150px",
+          bgcolor: "#fff",
+          p: 0,
+          "&:hover": {
+            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+            transform: "translateY(-2px)",
+          },
+        }}
+      >
+        <CardContent>
+          <Stack direction="row" alignItems="center" spacing={2} sx={{ py: 1 }}>
+            <UserAvatar
+              userAvatarUrls={avatar}
+              userId={userId}
+              avatarResolution="low"
+              isLoading={isLoading}
+            />
+            <Stack direction="column">
+              <Typography level="title-lg">{name}</Typography>
+              <Typography level="body-sm">{timePassedText}</Typography>
+            </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
 export default function MainContent(props) {
+  const elementId = props.elementId;
   const title = props.title;
   const contributor = props.contributor ? props.contributor : {};
   const authors = props.authors;
@@ -95,20 +150,28 @@ export default function MainContent(props) {
   const contentsTitle = props.contentsTitle;
   const contents = props.contents;
   const thumbnailImage = props.thumbnailImage;
+  const thumbnailImageCredit = props.thumbnailImageCredit;
   const elementType = props.elementType;
   const useMarkdown = props.useMarkdown;
   const useOERLayout = props.useOERLayout;
   const creationTime = props.creationTime;
   const updateTime = props.updateTime;
+  const isLoading = props.isLoading;
 
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
     ? PeriodAgoText("Updated ", updateTime)
     : PeriodAgoText("Contributed ", creationTime);
-  const contributorAvatar = contributor["avatar_url"];
+  const contributorAvatar = contributor["avatar-url"];
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
   const encodedUserId = encodeURIComponent(contributor.id);
+
+  // OutletContext retrieving the user object to display user info
+  const { isAuthenticated } = useOutletContext();
+
+  const shareUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
+  const shareTitle = `${WEBSITE_TITLE}: ${title}`;
 
   if (useOERLayout) {
     return (
@@ -124,11 +187,19 @@ export default function MainContent(props) {
             <Card sx={{ minHeight: "400px" }}>
               <CardCover>
                 {thumbnailImage ? (
-                  <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
+                  <img
+                    src={
+                      thumbnailImage.high ? thumbnailImage.high : thumbnailImage
+                    }
+                    loading="lazy"
+                    style={isLoading ? { display: "none" } : null}
+                    alt="thumbnail"
+                  />
                 ) : (
                   <img
                     src={`/default-images/${elementType}.png`}
                     loading="lazy"
+                    style={isLoading ? { display: "none" } : null}
                     alt="deafult-thumbnail"
                   />
                 )}
@@ -151,51 +222,38 @@ export default function MainContent(props) {
               </CardContent>
             </Card>
           </Grid>
-          <Grid xs={12} md={8}>
-            {contributorName && (
-              <Link
-                component={RouterLink}
-                to={"/contributor/" + encodedUserId}
-                style={{ textDecoration: "none" }}
-              >
-                <Card
-                  variant="plain"
-                  orientation="horizontal"
-                  sx={{
-                    maxHeight: "150px",
-                    bgcolor: "#fff",
-                    p: 0,
-                    "&:hover": {
-                      borderColor:
-                        "theme.vars.palette.primary.outlinedHoverBorder",
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                >
-                  <CardContent>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={2}
-                      sx={{ py: 2 }}
-                    >
-                      <UserAvatar
-                        link={contributorAvatar}
-                        userId={contributorUserId}
-                      />
-                      <Stack direction="column">
-                        <Typography level="title-lg">
-                          {contributorName}
-                        </Typography>
-                        <Typography level="body-sm">
-                          {hasTimestamp ? timePassedText : "Contributor"}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Link>
-            )}
+          <Grid xs={12}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              justifyContent={{ xs: "center", sm: "space-between" }}
+              alignItems={{ xs: "flex-start", sm: "center" }}
+            >
+              {contributorName && (
+                <ContributorCard
+                  encodedUserId={encodedUserId}
+                  userId={contributorUserId}
+                  name={contributorName}
+                  avatar={contributorAvatar}
+                  isLoading={isLoading}
+                  timePassedText={hasTimestamp ? timePassedText : "Contributor"}
+                />
+              )}
+              <Stack direction="row" spacing={1}>
+                <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+                <CopyButton
+                  textToCopy={shareUrl}
+                  tooltipText="Copy element URL"
+                  successText="Element URL copied!"
+                  icon={<LinkIcon />}
+                />
+                {isAuthenticated && (
+                  <BookmarkButton
+                    elementId={elementId}
+                    elementType={elementType}
+                  />
+                )}
+              </Stack>
+            </Stack>
           </Grid>
         </Grid>
         {contentsTitle && (
@@ -227,51 +285,40 @@ export default function MainContent(props) {
         alignItems="flex-start"
         sx={{ py: 2 }}
       >
+        <Grid xs={12}>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            justifyContent={{ xs: "center", sm: "space-between" }}
+            alignItems={{ xs: "flex-start", sm: "center" }}
+          >
+            {contributorName && (
+              <ContributorCard
+                encodedUserId={encodedUserId}
+                userId={contributorUserId}
+                name={contributorName}
+                avatar={contributorAvatar}
+                isLoading={isLoading}
+                timePassedText={hasTimestamp ? timePassedText : "Contributor"}
+              />
+            )}
+            <Stack direction="row" spacing={1}>
+              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+              <CopyButton
+                textToCopy={shareUrl}
+                tooltipText="Copy element URL"
+                successText="Element URL copied!"
+                icon={<LinkIcon />}
+              />
+              {isAuthenticated && (
+                <BookmarkButton
+                  elementId={elementId}
+                  elementType={elementType}
+                />
+              )}
+            </Stack>
+          </Stack>
+        </Grid>
         <Grid xs={12} md={8}>
-          {contributorName && (
-            <Link
-              component={RouterLink}
-              to={"/contributor/" + encodedUserId}
-              style={{ textDecoration: "none" }}
-            >
-              <Card
-                variant="plain"
-                orientation="horizontal"
-                sx={{
-                  maxHeight: "150px",
-                  bgcolor: "#fff",
-                  p: 0,
-                  "&:hover": {
-                    borderColor:
-                      "theme.vars.palette.primary.outlinedHoverBorder",
-                    transform: "translateY(-2px)",
-                  },
-                }}
-              >
-                <CardContent>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{ pb: 2 }}
-                  >
-                    <UserAvatar
-                      link={contributorAvatar}
-                      userId={contributorUserId}
-                    />
-                    <Stack direction="column">
-                      <Typography level="title-lg">
-                        {contributorName}
-                      </Typography>
-                      <Typography level="body-sm">
-                        {hasTimestamp ? timePassedText : "Contributor"}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                </CardContent>
-              </Card>
-            </Link>
-          )}
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
@@ -294,20 +341,32 @@ export default function MainContent(props) {
           )}
         </Grid>
         <Grid xs={12} md={4}>
-          <AspectRatio
-            variant="outlined"
-            sx={{ py: 1, borderRadius: "lg", height: "100%" }}
-          >
-            {thumbnailImage ? (
-              <img src={thumbnailImage} loading="lazy" alt="thumbnail" />
-            ) : (
-              <img
-                src={`/default-images/${elementType}.png`}
-                loading="lazy"
-                alt="deafult-thumbnail"
-              />
-            )}
-          </AspectRatio>
+          <Tooltip title={thumbnailImageCredit} placement="top">
+            <AspectRatio
+              variant="outlined"
+              sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+            >
+              {thumbnailImage ? (
+                <img
+                  src={
+                    thumbnailImage.medium
+                      ? thumbnailImage.medium
+                      : thumbnailImage
+                  }
+                  loading="lazy"
+                  style={isLoading ? { display: "none" } : null}
+                  alt="thumbnail"
+                />
+              ) : (
+                <img
+                  src={`/default-images/${elementType}.png`}
+                  loading="lazy"
+                  style={isLoading ? { display: "none" } : null}
+                  alt="deafult-thumbnail"
+                />
+              )}
+            </AspectRatio>
+          </Tooltip>
         </Grid>
       </Grid>
       {contentsTitle && (
