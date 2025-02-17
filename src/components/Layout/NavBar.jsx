@@ -48,7 +48,7 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
-  ["Repositories", "/repos"],
+  ["Repositories", "/repositories"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -236,7 +236,7 @@ export default function NavBar(props) {
                     </Link>
                   )}
                   <Link
-                    to="/contribution/repo"
+                    to="/contribution/repository"
                     underline="none"
                     component={RouterLink}
                     sx={{ color: "text.tertiary" }}
@@ -401,7 +401,7 @@ export default function NavBar(props) {
                 </Link>
               )}
               <Link
-                to="/contribution/repo"
+                to="/contribution/repository"
                 underline="none"
                 component={RouterLink}
                 sx={{ color: "text.tertiary" }}

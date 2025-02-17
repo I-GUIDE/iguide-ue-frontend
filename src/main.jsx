@@ -95,11 +95,11 @@ const router = createBrowserRouter([
         element: <OERPage />,
       },
       {
-        path: "/repos",
+        path: "/repositories",
         element: <Repos />,
       },
       {
-        path: "/repos/:id",
+        path: "/repositories/:id",
         element: <RepoPage />,
       },
       {

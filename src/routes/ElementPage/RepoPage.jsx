@@ -97,39 +97,51 @@ export default function RepoPage() {
       const repoOwner = repoLink.match("github.com/(.*?)/")[1];
       const repoName = repoLink.match("github.com/.*?/(.+?)($|/)")[1];
 
-      const readmeData = await octokit.request('GET /repos/{owner}/{repo}/readme', {
-        owner: repoOwner,
-        repo: repoName,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28',
-          "accept": "application/vnd.github.html+json"
+      const readmeData = await octokit.request(
+        "GET /repos/{owner}/{repo}/readme",
+        {
+          owner: repoOwner,
+          repo: repoName,
+          headers: {
+            "X-GitHub-Api-Version": "2022-11-28",
+            accept: "application/vnd.github.html+json",
+          },
         }
-      });
+      );
       console.log(readmeData);
       console.log(readmeData["data"]["html_url"]);
       setRepoReadme(readmeData["data"]["html_url"]);
 
       // Do some error checking
-      const watcherData = await octokit.request("GET /repos/{owner}/{repo}/subscribers", {
-        owner: repoOwner,
-        repo: repoName
-      });
+      const watcherData = await octokit.request(
+        "GET /repos/{owner}/{repo}/subscribers",
+        {
+          owner: repoOwner,
+          repo: repoName,
+        }
+      );
       setWatchersCount(watcherData["data"].length);
 
-      const forksData = await octokit.request("GET /repos/{owner}/{repo}/forks", {
-        owner: repoOwner,
-        repo: repoName,
-      });
+      const forksData = await octokit.request(
+        "GET /repos/{owner}/{repo}/forks",
+        {
+          owner: repoOwner,
+          repo: repoName,
+        }
+      );
       setForksCount(forksData["data"].length);
-      
-      const starsData = await octokit.request("GET /repos/{owner}/{repo}/stargazers", {
-        owner: repoOwner,
-        repo: repoName,
-      });
+
+      const starsData = await octokit.request(
+        "GET /repos/{owner}/{repo}/stargazers",
+        {
+          owner: repoOwner,
+          repo: repoName,
+        }
+      );
       setStarsCount(starsData["data"].length);
     }
     fetchData();
-  }, [isPrivateElement, id]);
+  }, [isPrivateElement, id, repoLink]);
 
   usePageTitle(title);
 
@@ -170,7 +182,7 @@ export default function RepoPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Repos", "/repos"]]}
+                  parentPages={[["All Repos", "/repositories"]]}
                   currentPage="Repo"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
@@ -178,7 +190,7 @@ export default function RepoPage() {
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/repos"
+                  afterDeleteRedirection="/repositories"
                   isPrivateElement={isPrivateElement}
                 />
               </Stack>
@@ -198,28 +210,44 @@ export default function RepoPage() {
                 isLoading={isLoading}
               />
             </Grid>
-            
+
             <Grid xs={12}>
               <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
                 <Typography id="repo-access" level="h5" fontWeight="lg" mb={1}>
                   Access Repository
                 </Typography>
                 <Divider inset="none" />
-                <Link href={"https://github.com/I-GUIDE/iguide-ue-frontend"} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={"https://github.com/I-GUIDE/iguide-ue-frontend"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {"https://github.com/I-GUIDE/iguide-ue-frontend"}
                 </Link>
                 <Stack spacing={2} direction="row">
-                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><Star/>Watch {watchersCount}</Chip>
-                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><AltRoute/>Fork {forksCount}</Chip>
-                  <Chip variant="outlined" sx={{fontWeight: "xl"}}><Visibility/>Star {starsCount}</Chip>
+                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
+                    <Star />
+                    Watch {watchersCount}
+                  </Chip>
+                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
+                    <AltRoute />
+                    Fork {forksCount}
+                  </Chip>
+                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
+                    <Visibility />
+                    Star {starsCount}
+                  </Chip>
                 </Stack>
               </Stack>
 
-              <iframe src={repoReadme}  frame-ancestors="self" width="75%" height="500px"></iframe>
+              <iframe
+                src={repoReadme}
+                frame-ancestors="self"
+                width="75%"
+                height="500px"
+              ></iframe>
             </Grid>
 
-            
-            
             {/* When the page is narrower than md */}
             <Grid xs={12}>
               <CapsuleList title="Tags" items={tags} />
@@ -231,8 +259,6 @@ export default function RepoPage() {
               <RelatedElementsNetwork elementId={id} />
             </Grid>
 
-            
-            
             <Grid xs={12}>
               <CitationGenerator
                 contributorId={contributor.id}
