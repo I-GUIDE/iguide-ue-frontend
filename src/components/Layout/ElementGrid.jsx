@@ -56,7 +56,7 @@ export default function ElementGrid(props) {
   const showUserElementCard = props.showUserElementCard;
   const disableUriChange = props.disableUriChange;
 
-  const [elementList, setMetadataList] = useState([]);
+  const [elementList, setElementList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resultLength, setResultLength] = useState(null);
@@ -90,7 +90,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {
@@ -113,7 +113,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {
@@ -136,7 +136,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {

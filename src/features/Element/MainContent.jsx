@@ -188,7 +188,9 @@ export default function MainContent(props) {
               <CardCover>
                 {thumbnailImage ? (
                   <img
-                    src={thumbnailImage.high}
+                    src={
+                      thumbnailImage.high ? thumbnailImage.high : thumbnailImage
+                    }
                     loading="lazy"
                     style={isLoading ? { display: "none" } : null}
                     alt="thumbnail"
@@ -346,7 +348,11 @@ export default function MainContent(props) {
             >
               {thumbnailImage ? (
                 <img
-                  src={thumbnailImage.medium}
+                  src={
+                    thumbnailImage.medium
+                      ? thumbnailImage.medium
+                      : thumbnailImage
+                  }
                   loading="lazy"
                   style={isLoading ? { display: "none" } : null}
                   alt="thumbnail"

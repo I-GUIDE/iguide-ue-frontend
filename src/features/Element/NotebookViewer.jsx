@@ -19,10 +19,13 @@ const iFrameStyle = {
 };
 
 // Providing repo url and the notebook filename, return the location of the rendered notebook
-function get_notebook_html(repo_url, notebook_filename) {
+function getNotebookViewerUrl(repo_url, notebook_filename) {
   const match = repo_url.match(
     /^https?:\/\/(www\.)?github.com\/(?<owner>[\w.-]+)\/(?<name>[\w.-]+)/
   );
+  if (!match) {
+    return "NO_MATCH";
+  }
   const ret =
     "https://nbviewer.cgwebhost.cigi.illinois.edu/github/" +
     match.groups.owner +
@@ -33,7 +36,7 @@ function get_notebook_html(repo_url, notebook_filename) {
   return ret;
 }
 
-function get_openwith_url(repo_url, notebook_filename) {
+function getOpenWithUrl(repo_url, notebook_filename) {
   const repo_name = repo_url.split("/").pop();
   const ret =
     "https://jupyter.iguide.illinois.edu/hub/user-redirect/git-pull/?repo=" +
@@ -45,13 +48,48 @@ function get_openwith_url(repo_url, notebook_filename) {
   return ret;
 }
 
+// Handle when the notebook cannot be displayed via nbconvert
+function NotebookUnavailable(props) {
+  const notebookLink = props.notebookLink;
+
+  if (!notebookLink) {
+    return (
+      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+        <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
+          Notebook Viewer
+        </Typography>
+        <Typography id="notebook-tags" level="body-md" mb={1}>
+          Note: The contributor did not provide a notebook link or the link
+          provided is not a Jupyter Notebook.
+        </Typography>
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
+        Notebook Viewer
+      </Typography>
+      <Typography id="notebook-tags" level="body-md" mb={1}>
+        We are having issues displaying this notebook. The notebook link
+        provided is{" "}
+        <Link href={notebookLink} target="_blank" rel="noopener noreferrer">
+          {notebookLink}
+        </Link>
+        .
+      </Typography>
+    </Stack>
+  );
+}
+
 export default function NotebookViewer(props) {
   const repoUrl = props.repoUrl;
   const notebookFile = props.notebookFile;
   const htmlNotebook = props.htmlNotebook;
 
   if (!htmlNotebook && !notebookFile) {
-    return null;
+    return <NotebookUnavailable />;
   }
 
   // If notebook filename is not ipynb or html, do not render
@@ -59,7 +97,7 @@ export default function NotebookViewer(props) {
     !notebookFile ||
     (!notebookFile.endsWith("ipynb") && !notebookFile.endsWith("html"))
   ) {
-    return null;
+    return <NotebookUnavailable />;
   }
 
   let isUsingNbconvert = false;
@@ -72,16 +110,23 @@ export default function NotebookViewer(props) {
     notebookUrl = htmlNotebook;
     isUsingNbconvert = true;
   } else if (repoUrl && repoUrl !== "") {
-    notebookUrl = get_notebook_html(repoUrl, notebookFile);
+    notebookUrl = getNotebookViewerUrl(repoUrl, notebookFile);
+    if (notebookUrl === "NO_MATCH") {
+      return (
+        <NotebookUnavailable
+          notebookLink={repoUrl + "/blob/main/" + notebookFile}
+        />
+      );
+    }
   } else {
-    return null;
+    return <NotebookUnavailable />;
   }
 
   // Don't render if the notebook doesn't exist...
   if (!notebookUrl || notebookUrl === "") {
-    return null;
+    return <NotebookUnavailable />;
   }
-  iGuidePlatformUrl = get_openwith_url(repoUrl, notebookFile);
+  iGuidePlatformUrl = getOpenWithUrl(repoUrl, notebookFile);
 
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
