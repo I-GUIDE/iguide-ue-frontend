@@ -13,9 +13,9 @@ export default function Repos() {
   return (
     // We don't include the new map link, because we won't make this type of contribution publically available
     <ElementGridLayout
-      elementType="repo"
+      elementType="repository"
       title="Repositories"
-      subtitle={TAGLINES.repo}
+      subtitle={TAGLINES.repository}
       icon={<GitHubIcon />}
     />
   );

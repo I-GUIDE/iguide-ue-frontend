@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -42,7 +42,7 @@ export default function RepoPage() {
   const [authors, setAuthors] = useState();
   const [contributor, setContributor] = useState();
   const [abstract, setAbstract] = useState();
-  const [tags, setTags] = useState(["Tag"]);
+  const [tags, setTags] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState();
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState();
   const [relatedElements, setRelatedElements] = useState([]);
@@ -61,6 +61,7 @@ export default function RepoPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
 
@@ -81,6 +82,7 @@ export default function RepoPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
+      setRepoLink(thisElement["github-repo-link"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
@@ -90,7 +92,6 @@ export default function RepoPage() {
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
-      setRepoLink(thisElement["repo"]);
 
       // Github API get watchers, forks, stars
       const octokit = new Octokit();
@@ -147,7 +148,12 @@ export default function RepoPage() {
 
   if (error) {
     return (
-      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+      <ErrorPage
+        customStatus="404"
+        customStatusText="Element Not Found"
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
     );
   }
 
@@ -182,8 +188,8 @@ export default function RepoPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Repos", "/repositories"]]}
-                  currentPage="Repo"
+                  parentPages={[["All Repositories", "/repositories"]]}
+                  currentPage="Repository"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
@@ -264,7 +270,7 @@ export default function RepoPage() {
                 contributorId={contributor.id}
                 createdAt={creationTime}
                 title={title}
-                elementType="notebooks" // TODO
+                elementType="repositories"
                 elementId={id}
               />
             </Grid>

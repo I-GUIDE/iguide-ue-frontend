@@ -1207,7 +1207,7 @@ export default function SubmissionCard(props) {
                 </Table>
               </Grid>
             )}
-            {resourceTypeSelected === "repo" && (
+            {resourceTypeSelected === "repository" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle fieldRequired>
@@ -1286,7 +1286,7 @@ export default function SubmissionCard(props) {
                         <Option value="publication">Publication</Option>
                         <Option value="oer">Educational Resource</Option>
                         <Option value="map">Map</Option>
-                        <Option value="repo">Repository</Option>
+                        <Option value="repository">Repository</Option>
                       </Select>
                     </td>
                     <td align="left">

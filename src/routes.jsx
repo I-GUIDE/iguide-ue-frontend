@@ -103,15 +103,13 @@ export const routes = [
     category: "Elements",
   },
   {
+    path: "/datasets/:id",
+    element: <DatasetPage />,
+  },
+  {
     path: "/notebooks",
     element: <Notebooks />,
     label: "Notebooks",
-    category: "Elements",
-  },
-  {
-    path: "/publications",
-    element: <Publications />,
-    label: "Publications",
     category: "Elements",
   },
   {
@@ -119,8 +117,10 @@ export const routes = [
     element: <NotebookPage />,
   },
   {
-    path: "/datasets/:id",
-    element: <DatasetPage />,
+    path: "/publications",
+    element: <Publications />,
+    label: "Publications",
+    category: "Elements",
   },
   {
     path: "/publications/:id",
