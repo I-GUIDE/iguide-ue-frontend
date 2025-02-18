@@ -215,7 +215,7 @@ export default function ElementGrid(props) {
     );
   }
 
-  if (!numberOfTotalItems) {
+  if (!numberOfTotalItems || numberOfTotalItems <= 0) {
     return (
       <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
         <JoyCssVarsProvider>
