@@ -23,6 +23,7 @@ import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
+import { RESOURCE_TYPE_NAMES_PLURAL } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
@@ -158,6 +159,9 @@ export default function MainContent(props) {
   const updateTime = props.updateTime;
   const isLoading = props.isLoading;
 
+  const elementTypePlural =
+    RESOURCE_TYPE_NAMES_PLURAL[elementType].toLowerCase();
+
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
     ? PeriodAgoText("Updated ", updateTime)
@@ -170,7 +174,7 @@ export default function MainContent(props) {
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated } = useOutletContext();
 
-  const shareUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
+  const shareUrl = `${REACT_FRONTEND_URL}/${elementTypePlural}/${elementId}`;
   const shareTitle = `${WEBSITE_TITLE}: ${title}`;
 
   if (useOERLayout) {

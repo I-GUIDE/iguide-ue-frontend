@@ -43,6 +43,7 @@ import { PERMISSIONS } from "../../configs/Permissions";
 
 import {
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
@@ -176,9 +177,9 @@ export default function SubmissionCard(props) {
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      const elementUrlReturned = `/${
+      const elementUrlReturned = `/${RESOURCE_TYPE_NAMES_PLURAL[
         thisElement["resource-type"]
-      }s/${elementId}${
+      ].toLowerCase()}/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
           : ""
@@ -618,7 +619,9 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
-          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+          const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
+            resourceTypeSelected
+          ].toLowerCase()}/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
           setElementURI(futureElementUrl);
@@ -650,9 +653,9 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            const futureElementUrl = `/${resourceTypeSelected}s/${
-              result.elementId
-            }${
+            const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
+              resourceTypeSelected
+            ].toLowerCase()}/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
             setElementURI(futureElementUrl);
