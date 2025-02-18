@@ -218,6 +218,8 @@ export default function SubmissionCard(props) {
 
       setMapIframeLink(thisElement["external-iframe-link"]);
 
+      setGitHubRepoLink(thisElement["github-repo-link"]);
+
       setContributor(thisElement["contributor"]);
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);

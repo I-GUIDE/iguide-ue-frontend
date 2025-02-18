@@ -7,14 +7,6 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
-import Divider from "@mui/joy/Divider";
-import Typography from "@mui/joy/Typography";
-import Link from "@mui/joy/Link";
-import Chip from "@mui/joy/Chip";
-
-import AltRoute from "@mui/icons-material/AltRoute";
-import Visibility from "@mui/icons-material/Visibility";
-import Star from "@mui/icons-material/Star";
 
 import {
   fetchSingleElementDetails,
@@ -32,9 +24,9 @@ import ContributorOps from "../../features/Element/ContributorOps";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
 import CitationGenerator from "../../features/Element/CitationGenerator";
+import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../ErrorPage";
-import { Octokit } from "octokit";
 
 export default function CodePage() {
   const id = useParams().id;
@@ -43,6 +35,7 @@ export default function CodePage() {
   const [contributor, setContributor] = useState();
   const [abstract, setAbstract] = useState();
   const [tags, setTags] = useState([]);
+  const [repoLink, setRepoLink] = useState();
   const [thumbnailImage, setThumbnailImage] = useState();
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState();
   const [relatedElements, setRelatedElements] = useState([]);
@@ -51,12 +44,6 @@ export default function CodePage() {
   const [licenseStatement, setLicenseStatement] = useState();
   const [licenseUrl, setLicenseUrl] = useState();
   const [fundingAgency, setFundingAgency] = useState();
-
-  const [repoLink, setRepoLink] = useState();
-  const [repoReadme, setRepoReadme] = useState();
-  const [watchersCount, setWatchersCount] = useState();
-  const [forksCount, setForksCount] = useState();
-  const [starsCount, setStarsCount] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -92,57 +79,9 @@ export default function CodePage() {
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
-
-      // Github API get watchers, forks, stars
-      const octokit = new Octokit();
-      const repoOwner = repoLink.match("github.com/(.*?)/")[1];
-      const repoName = repoLink.match("github.com/.*?/(.+?)($|/)")[1];
-
-      const readmeData = await octokit.request(
-        "GET /repos/{owner}/{repo}/readme",
-        {
-          owner: repoOwner,
-          repo: repoName,
-          headers: {
-            "X-GitHub-Api-Version": "2022-11-28",
-            accept: "application/vnd.github.html+json",
-          },
-        }
-      );
-      console.log(readmeData);
-      console.log(readmeData["data"]["html_url"]);
-      setRepoReadme(readmeData["data"]["html_url"]);
-
-      // Do some error checking
-      const watcherData = await octokit.request(
-        "GET /repos/{owner}/{repo}/subscribers",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setWatchersCount(watcherData["data"].length);
-
-      const forksData = await octokit.request(
-        "GET /repos/{owner}/{repo}/forks",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setForksCount(forksData["data"].length);
-
-      const starsData = await octokit.request(
-        "GET /repos/{owner}/{repo}/stargazers",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setStarsCount(starsData["data"].length);
     }
     fetchData();
-  }, [isPrivateElement, id, repoLink]);
+  }, [isPrivateElement, id]);
 
   usePageTitle(title);
 
@@ -218,40 +157,7 @@ export default function CodePage() {
             </Grid>
 
             <Grid xs={12}>
-              <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-                <Typography id="repo-access" level="h5" fontWeight="lg" mb={1}>
-                  Access Repository
-                </Typography>
-                <Divider inset="none" />
-                <Link
-                  href={"https://github.com/I-GUIDE/iguide-ue-frontend"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {"https://github.com/I-GUIDE/iguide-ue-frontend"}
-                </Link>
-                <Stack spacing={2} direction="row">
-                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-                    <Star />
-                    Watch {watchersCount}
-                  </Chip>
-                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-                    <AltRoute />
-                    Fork {forksCount}
-                  </Chip>
-                  <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-                    <Visibility />
-                    Star {starsCount}
-                  </Chip>
-                </Stack>
-              </Stack>
-
-              <iframe
-                src={repoReadme}
-                frame-ancestors="self"
-                width="75%"
-                height="500px"
-              ></iframe>
+              <GitHubRepo repoLink={repoLink} />
             </Grid>
 
             {/* When the page is narrower than md */}
