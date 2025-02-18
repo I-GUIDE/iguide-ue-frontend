@@ -60,7 +60,7 @@ export default function MapPage() {
           ? await fetchSinglePrivateElementDetails(id)
           : await fetchSingleElementDetails(id);
 
-      if (thisElement === "ERROR") {
+      if (!thisElement || thisElement === "ERROR") {
         setError(true);
         return;
       }
@@ -135,7 +135,7 @@ export default function MapPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/maps"
                   isPrivateElement={isPrivateElement}
                 />
@@ -174,7 +174,7 @@ export default function MapPage() {
 
             <Grid xs={12}>
               <CitationGenerator
-                contributorId={contributor.id}
+                contributorId={contributor?.id}
                 createdAt={creationTime}
                 title={title}
                 elementType="maps"
