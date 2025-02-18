@@ -30,6 +30,22 @@ export const RESOURCE_TYPE_NAMES = {
   any: "All Types",
 };
 
+export const RESOURCE_TYPE_NAMES_PLURAL = {
+  dataset: "Datasets",
+  datasets: "Datasets",
+  notebook: "Notebooks",
+  notebooks: "Notebooks",
+  publication: "Publications",
+  publications: "Publications",
+  oer: "Educational Resources",
+  oers: "Educational Resources",
+  map: "Maps",
+  maps: "Maps",
+  repository: "Repositories",
+  repositories: "Repositories",
+  any: "All Types",
+};
+
 export const OER_EXTERNAL_LINK_TYPES = {
   slides: "Slides",
   bok: "Body of Knowledge",

@@ -292,7 +292,7 @@ export default function ElementGrid(props) {
               <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 {showUserElementCard ? (
                   <UserElementCard
-                    cardtype={element["resource-type"] + "s"}
+                    cardtype={element["resource-type"]}
                     elementId={element.id}
                     title={element.title}
                     authors={element.authors}
@@ -308,7 +308,7 @@ export default function ElementGrid(props) {
                   />
                 ) : (
                   <InfoCard
-                    cardtype={element["resource-type"] + "s"}
+                    cardtype={element["resource-type"]}
                     elementId={element.id}
                     title={element.title}
                     authors={element.authors}

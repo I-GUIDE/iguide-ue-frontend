@@ -83,7 +83,7 @@ export default function FeaturedElementsList(props) {
             {featuredElements?.map((featuredElement) => (
               <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
                 <InfoCard
-                  cardtype={featuredElement["resource-type"] + "s"}
+                  cardtype={featuredElement["resource-type"]}
                   elementId={featuredElement.id}
                   title={featuredElement.title}
                   contents={featuredElement.contents}

@@ -19,6 +19,7 @@ import UserAvatar from "./UserAvatar";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL,
 } from "../configs/VarConfigs";
 
 export default function InfoCard(props) {
@@ -34,7 +35,8 @@ export default function InfoCard(props) {
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
-  const uri = `/${cardType}/${elementId}${
+  const categoryNamePlural = RESOURCE_TYPE_NAMES_PLURAL[cardType].toLowerCase();
+  const uri = `/${categoryNamePlural}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
 

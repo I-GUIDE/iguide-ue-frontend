@@ -15,6 +15,7 @@ import { removeMarkdown } from "../helpers/helper";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL,
 } from "../configs/VarConfigs";
 
 export default function SimpleInfoCard(props) {
@@ -71,7 +72,12 @@ export default function SimpleInfoCard(props) {
           component={RouterLink}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
-          to={"/" + cardType + "/" + pageId}
+          to={
+            "/" +
+            RESOURCE_TYPE_NAMES_PLURAL[cardType].toLowerCase() +
+            "/" +
+            pageId
+          }
           sx={{ color: "text.tertiary" }}
         >
           <Stack spacing={1}>
