@@ -21,7 +21,7 @@ import {
   XIcon,
 } from "react-share";
 
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
 
 export default function ShareButton(props) {
   const shareUrl = props.shareUrl;
@@ -31,7 +31,7 @@ export default function ShareButton(props) {
     return null;
   }
 
-  TEST_MODE && console.log("Share url", shareUrl, "title", shareTitle);
+  DEEP_TEST_MODE && console.log("Share url", shareUrl, "title", shareTitle);
 
   return (
     <Box sx={{ display: "flex", alignItems: "flex-start", py: 1 }}>
