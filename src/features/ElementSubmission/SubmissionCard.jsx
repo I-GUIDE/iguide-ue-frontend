@@ -43,7 +43,7 @@ import { PERMISSIONS } from "../../configs/Permissions";
 
 import {
   RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
@@ -177,9 +177,9 @@ export default function SubmissionCard(props) {
 
       TEST_MODE && console.log("returned element", thisElement);
 
-      const elementUrlReturned = `/${RESOURCE_TYPE_NAMES_PLURAL[
-        thisElement["resource-type"]
-      ]?.toLowerCase()}/${elementId}${
+      const elementUrlReturned = `/${
+        RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[thisElement["resource-type"]]
+      }/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
           : ""
@@ -621,9 +621,9 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
-          const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
-            resourceTypeSelected
-          ]?.toLowerCase()}/${elementId}${
+          const futureElementUrl = `/${
+            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+          }/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
           setElementURI(futureElementUrl);
@@ -655,9 +655,9 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
-              resourceTypeSelected
-            ]?.toLowerCase()}/${result.elementId}${
+            const futureElementUrl = `/${
+              RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+            }/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
             setElementURI(futureElementUrl);

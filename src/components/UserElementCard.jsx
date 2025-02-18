@@ -23,7 +23,7 @@ import ElementDeleteButton from "./ElementDeleteButton";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
 } from "../configs/VarConfigs";
 
 export default function UserElementCard(props) {
@@ -36,7 +36,7 @@ export default function UserElementCard(props) {
   const contributor = props.contributor ? props.contributor : {};
   const isPrivateElement = props.isPrivateElement;
 
-  const cardTypePlural = RESOURCE_TYPE_NAMES_PLURAL[cardType]?.toLowerCase();
+  const cardTypePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType];
   const updateFormUri = `/element-update/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;

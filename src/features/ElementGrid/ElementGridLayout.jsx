@@ -12,7 +12,7 @@ import Header from "../../components/Layout/Header";
 
 import {
   DEFAULT_BODY_HEIGHT,
-  RESOURCE_TYPE_NAMES_PLURAL,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
 } from "../../configs/VarConfigs";
 
 export default function ElementGridLayout(props) {
@@ -56,9 +56,7 @@ export default function ElementGridLayout(props) {
             }}
           >
             <ElementGrid
-              uriPrefix={
-                "/" + RESOURCE_TYPE_NAMES_PLURAL[elementType]?.toLowerCase()
-              }
+              uriPrefix={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[elementType]}
               elementType={elementType}
               fieldName={fieldName}
               matchValue={matchValue}

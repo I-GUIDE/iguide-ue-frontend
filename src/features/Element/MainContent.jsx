@@ -23,7 +23,7 @@ import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
-import { RESOURCE_TYPE_NAMES_PLURAL } from "../../configs/VarConfigs";
+import { RESOURCE_TYPE_NAMES_PLURAL_FOR_URI } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
@@ -159,8 +159,7 @@ export default function MainContent(props) {
   const updateTime = props.updateTime;
   const isLoading = props.isLoading;
 
-  const elementTypePlural =
-    RESOURCE_TYPE_NAMES_PLURAL[elementType]?.toLowerCase();
+  const elementTypePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[elementType];
 
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
