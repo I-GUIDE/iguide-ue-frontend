@@ -48,7 +48,7 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
-  ["Repositories", "/repositories"],
+  ["Code", "/code"],
 ];
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -236,14 +236,14 @@ export default function NavBar(props) {
                     </Link>
                   )}
                   <Link
-                    to="/contribution/repository"
+                    to="/contribution/code"
                     underline="none"
                     component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
-                        New Repository
+                        New Code
                       </ListItemButton>
                     </ListItem>
                   </Link>
@@ -401,13 +401,13 @@ export default function NavBar(props) {
                 </Link>
               )}
               <Link
-                to="/contribution/repository"
+                to="/contribution/code"
                 underline="none"
                 component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Repository</ListItemButton>
+                  <ListItemButton>New Code</ListItemButton>
                 </ListItem>
               </Link>
             </>

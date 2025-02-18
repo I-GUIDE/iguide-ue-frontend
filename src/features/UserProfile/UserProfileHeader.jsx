@@ -406,11 +406,8 @@ export default function UserProfileHeader(props) {
                                 New Map
                               </MenuItem>
                             )}
-                            <MenuItem
-                              component="a"
-                              href="/contribution/repository"
-                            >
-                              New Repository
+                            <MenuItem component="a" href="/contribution/code">
+                              New Code
                             </MenuItem>
                           </Menu>
                         </Dropdown>

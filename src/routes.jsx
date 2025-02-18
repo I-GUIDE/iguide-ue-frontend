@@ -8,7 +8,7 @@ import Notebooks from "./routes/Notebooks";
 import Publications from "./routes/Publications";
 import OERs from "./routes/Oers";
 import Maps from "./routes/Maps";
-import Repos from "./routes/Repos";
+import Codes from "./routes/Codes";
 import Tag from "./routes/Tag";
 
 import DatasetPage from "./routes/ElementPage/DatasetPage";
@@ -16,7 +16,7 @@ import NotebookPage from "./routes/ElementPage/NotebookPage";
 import PublicationPage from "./routes/ElementPage/PublicationPage";
 import OERPage from "./routes/ElementPage/OERPage";
 import MapPage from "./routes/ElementPage/MapPage";
-import RepoPage from "./routes/ElementPage/RepoPage";
+import CodePage from "./routes/ElementPage/CodePage";
 
 import UserProfile from "./routes/UserProfile";
 import UserProfileUpdate from "./routes/UserProfileUpdate";
@@ -137,14 +137,14 @@ export const routes = [
     element: <OERPage />,
   },
   {
-    path: "/repositories",
-    element: <Repos />,
-    label: "Repositories",
+    path: "/code",
+    element: <Codes />,
+    label: "Code",
     category: "Elements",
   },
   {
-    path: "/repositories/:id",
-    element: <RepoPage />,
+    path: "/code/:id",
+    element: <CodePage />,
   },
   {
     path: "/tag/:id",

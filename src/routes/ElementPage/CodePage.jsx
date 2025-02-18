@@ -36,7 +36,7 @@ import CitationGenerator from "../../features/Element/CitationGenerator";
 import ErrorPage from "../ErrorPage";
 import { Octokit } from "octokit";
 
-export default function RepoPage() {
+export default function CodePage() {
   const id = useParams().id;
   const [title, setTitle] = useState();
   const [authors, setAuthors] = useState();
@@ -188,15 +188,15 @@ export default function RepoPage() {
                 alignItems="center"
               >
                 <PageNav
-                  parentPages={[["All Repositories", "/repositories"]]}
-                  currentPage="Repository"
+                  parentPages={[["All Code", "/code"]]}
+                  currentPage="Code"
                   sx={{ px: { xs: 2, md: 4 } }}
                 />
                 <ContributorOps
                   title={title}
                   elementId={id}
                   contributorId={contributor.id}
-                  afterDeleteRedirection="/repositories"
+                  afterDeleteRedirection="/code"
                   isPrivateElement={isPrivateElement}
                 />
               </Stack>
@@ -270,7 +270,7 @@ export default function RepoPage() {
                 contributorId={contributor.id}
                 createdAt={creationTime}
                 title={title}
-                elementType="repositories"
+                elementType="code"
                 elementId={id}
               />
             </Grid>
