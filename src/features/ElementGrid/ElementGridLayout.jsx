@@ -57,7 +57,7 @@ export default function ElementGridLayout(props) {
           >
             <ElementGrid
               uriPrefix={
-                "/" + RESOURCE_TYPE_NAMES_PLURAL[elementType].toLowerCase()
+                "/" + RESOURCE_TYPE_NAMES_PLURAL[elementType]?.toLowerCase()
               }
               elementType={elementType}
               fieldName={fieldName}

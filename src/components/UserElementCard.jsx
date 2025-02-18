@@ -36,7 +36,7 @@ export default function UserElementCard(props) {
   const contributor = props.contributor ? props.contributor : {};
   const isPrivateElement = props.isPrivateElement;
 
-  const cardTypePlural = RESOURCE_TYPE_NAMES_PLURAL[cardType].toLowerCase();
+  const cardTypePlural = RESOURCE_TYPE_NAMES_PLURAL[cardType]?.toLowerCase();
   const updateFormUri = `/element-update/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;

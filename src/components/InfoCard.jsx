@@ -35,7 +35,8 @@ export default function InfoCard(props) {
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
-  const categoryNamePlural = RESOURCE_TYPE_NAMES_PLURAL[cardType].toLowerCase();
+  const categoryNamePlural =
+    RESOURCE_TYPE_NAMES_PLURAL[cardType]?.toLowerCase();
   const uri = `/${categoryNamePlural}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;

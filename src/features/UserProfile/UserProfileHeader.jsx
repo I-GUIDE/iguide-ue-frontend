@@ -201,7 +201,7 @@ export default function UserProfileHeader(props) {
                     {/* Don't show user affiliation if it's in the untrusted affiliation list */}
                     {localUserInfo.affiliation &&
                       !UNTRUSTED_AFFILIATIONS.includes(
-                        localUserInfo.affiliation.toLowerCase()
+                        localUserInfo.affiliation?.toLowerCase()
                       ) && (
                         <Typography level="body-lg" fontWeight="sm">
                           {localUserInfo.affiliation}

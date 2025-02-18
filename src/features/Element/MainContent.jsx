@@ -160,7 +160,7 @@ export default function MainContent(props) {
   const isLoading = props.isLoading;
 
   const elementTypePlural =
-    RESOURCE_TYPE_NAMES_PLURAL[elementType].toLowerCase();
+    RESOURCE_TYPE_NAMES_PLURAL[elementType]?.toLowerCase();
 
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime

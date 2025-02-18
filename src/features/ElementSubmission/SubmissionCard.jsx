@@ -179,7 +179,7 @@ export default function SubmissionCard(props) {
 
       const elementUrlReturned = `/${RESOURCE_TYPE_NAMES_PLURAL[
         thisElement["resource-type"]
-      ].toLowerCase()}/${elementId}${
+      ]?.toLowerCase()}/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
           : ""
@@ -621,7 +621,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("update-succeeded");
           const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
             resourceTypeSelected
-          ].toLowerCase()}/${elementId}${
+          ]?.toLowerCase()}/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
           setElementURI(futureElementUrl);
@@ -655,7 +655,7 @@ export default function SubmissionCard(props) {
           if (result.elementId) {
             const futureElementUrl = `/${RESOURCE_TYPE_NAMES_PLURAL[
               resourceTypeSelected
-            ].toLowerCase()}/${result.elementId}${
+            ]?.toLowerCase()}/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
             setElementURI(futureElementUrl);

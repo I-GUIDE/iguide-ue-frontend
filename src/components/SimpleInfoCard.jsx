@@ -74,7 +74,7 @@ export default function SimpleInfoCard(props) {
           rel={openInNewTab ? "noopener noreferrer" : null}
           to={
             "/" +
-            RESOURCE_TYPE_NAMES_PLURAL[cardType].toLowerCase() +
+            RESOURCE_TYPE_NAMES_PLURAL[cardType]?.toLowerCase() +
             "/" +
             pageId
           }
