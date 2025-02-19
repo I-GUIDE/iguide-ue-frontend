@@ -47,7 +47,7 @@ export default function ElementGridLayout(props) {
           }}
         >
           <Grid
-            container
+            // Tip: removing the "container" property from this Grid element fixed incorrect child height (bottom part covered by footer)
             rowSpacing={2}
             direction="column"
             sx={{
