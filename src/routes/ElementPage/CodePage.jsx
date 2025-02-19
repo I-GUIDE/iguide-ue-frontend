@@ -151,7 +151,7 @@ export default function CodePage() {
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 thumbnailImageCredit={thumbnailImageCredit}
-                elementType="notebook"
+                elementType="code"
                 creationTime={creationTime}
                 updateTime={updateTime}
                 isLoading={isLoading}
