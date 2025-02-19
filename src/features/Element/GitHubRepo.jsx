@@ -8,14 +8,15 @@ import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import Chip from "@mui/joy/Chip";
 
-import AltRoute from "@mui/icons-material/AltRoute";
-import Visibility from "@mui/icons-material/Visibility";
-import Star from "@mui/icons-material/Star";
+import AltRouteIcon from "@mui/icons-material/AltRoute";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import StarIcon from "@mui/icons-material/Star";
 
 import {
   fetchGitHubReadme,
   fetchRepoMetadata,
 } from "../../utils/GitHubFetchMethods";
+import { NumberText } from "../../utils/NumberText";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -28,6 +29,8 @@ export default function GitHubRepo(props) {
   const [watchersCount, setWatchersCount] = useState();
   const [forksCount, setForksCount] = useState();
   const [starsCount, setStarsCount] = useState();
+  // True when the GitHub API returns repo metadata
+  const [repoMetadataReady, setRepoMetadataReady] = useState(false);
 
   useEffect(() => {
     async function fetchRepoData() {
@@ -58,9 +61,12 @@ export default function GitHubRepo(props) {
       // Fetch repo metadata
       const repoMetadata = await fetchRepoMetadata(repoOwner, repoName);
       TEST_MODE && console.log("repo metadata", repoMetadata);
-      setWatchersCount(repoMetadata.watchers);
-      setForksCount(repoMetadata.forks);
-      setStarsCount(repoMetadata.stars);
+      if (repoMetadata !== "ERROR") {
+        setWatchersCount(repoMetadata.watchers);
+        setForksCount(repoMetadata.forks);
+        setStarsCount(repoMetadata.stars);
+        setRepoMetadataReady(true);
+      }
     }
     if (repoLink) {
       fetchRepoData();
@@ -76,20 +82,23 @@ export default function GitHubRepo(props) {
       <Link href={repoLink} target="_blank" rel="noopener noreferrer">
         {repoLink}
       </Link>
-      <Stack spacing={2} direction="row">
-        <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-          <Star />
-          Watch {watchersCount}
-        </Chip>
-        <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-          <AltRoute />
-          Fork {forksCount}
-        </Chip>
-        <Chip variant="outlined" sx={{ fontWeight: "xl" }}>
-          <Visibility />
-          Star {starsCount}
-        </Chip>
-      </Stack>
+      {repoMetadataReady && (
+        <Stack spacing={2} direction="row">
+          <Chip
+            variant="outlined"
+            size="md"
+            startDecorator={<VisibilityIcon />}
+          >
+            Watch {NumberText(watchersCount)}
+          </Chip>
+          <Chip variant="outlined" size="md" startDecorator={<AltRouteIcon />}>
+            Fork {NumberText(forksCount)}
+          </Chip>
+          <Chip variant="outlined" size="md" startDecorator={<StarIcon />}>
+            Star {NumberText(starsCount)}
+          </Chip>
+        </Stack>
+      )}
       <Typography
         id="repo-readme"
         level="title-md"
