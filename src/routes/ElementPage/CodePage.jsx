@@ -36,6 +36,7 @@ export default function CodePage() {
   const [abstract, setAbstract] = useState();
   const [tags, setTags] = useState([]);
   const [repoLink, setRepoLink] = useState();
+  const [repoReadme, setRepoReadme] = useState();
   const [thumbnailImage, setThumbnailImage] = useState();
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState();
   const [relatedElements, setRelatedElements] = useState([]);
@@ -70,6 +71,7 @@ export default function CodePage() {
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setRepoLink(thisElement["github-repo-link"]);
+      setRepoReadme(thisElement["github-repo-readme"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
@@ -157,7 +159,7 @@ export default function CodePage() {
             </Grid>
 
             <Grid xs={12}>
-              <GitHubRepo repoLink={repoLink} />
+              <GitHubRepo repoLink={repoLink} repoReadmeFromDB={repoReadme} />
             </Grid>
 
             {/* When the page is narrower than md */}

@@ -17,8 +17,10 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function GitHubRepo(props) {
   const repoLink = props.repoLink;
+  const repoReadmeFromDB = props.repoReadmeFromDB;
 
   const [repoReadme, setRepoReadme] = useState();
+  const [repoReadmeSource, setRepoReadmeSource] = useState();
   const [watchersCount, setWatchersCount] = useState();
   const [forksCount, setForksCount] = useState();
   const [starsCount, setStarsCount] = useState();
@@ -44,7 +46,20 @@ export default function GitHubRepo(props) {
         }
       );
       TEST_MODE && console.log("readme data", readmeData);
-      setRepoReadme(readmeData.data);
+      if (!readmeData?.data) {
+        if (!repoReadmeFromDB) {
+          setRepoReadmeSource("unavailable");
+          setRepoReadme(
+            "<div>This README.md preview is currently unavailable.</div>"
+          );
+        } else {
+          setRepoReadmeSource("db");
+          setRepoReadme(repoReadmeFromDB);
+        }
+      } else {
+        setRepoReadmeSource("github");
+        setRepoReadme(readmeData.data);
+      }
 
       // Do some error checking
       const watcherData = await octokit.request(
@@ -77,7 +92,7 @@ export default function GitHubRepo(props) {
     if (repoLink) {
       fetchRepoData();
     }
-  }, [repoLink]);
+  }, [repoLink, repoReadmeFromDB]);
 
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -111,9 +126,19 @@ export default function GitHubRepo(props) {
         README.md
       </Typography>
       <Typography id="warning-relative-links" level="body-sm">
-        Some links or images may not be displayed due to the use of a relative
-        path.
+        Some links or images may not work due to the use of relative file paths.
       </Typography>
+      {repoReadmeSource === "db" && (
+        <Typography id="warning-relative-links" level="body-sm" color="warning">
+          Due to GitHub API limitations, we are temporarily displaying the
+          version stored in our database. This version may be outdated. Please
+          click{" "}
+          <Link href={repoLink} target="_blank" rel="noopener noreferrer">
+            here
+          </Link>{" "}
+          to view the latest version on GitHub.
+        </Typography>
+      )}
       <Box sx={{ p: 4, border: "0.5px dashed grey" }}>
         <div className="container" data-color-mode="light">
           <Suspense fallback={<p>Loading content...</p>}>
