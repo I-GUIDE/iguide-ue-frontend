@@ -34,19 +34,23 @@ export default function GitHubRepo(props) {
 
       TEST_MODE && console.log("repo owner and name", repoOwner, repoName);
 
-      const readmeData = await octokit.request(
-        "GET /repos/{owner}/{repo}/readme",
-        {
-          owner: repoOwner,
-          repo: repoName,
-          headers: {
-            "X-GitHub-Api-Version": "2022-11-28",
-            accept: "application/vnd.github.html+json",
-          },
-        }
-      );
-      TEST_MODE && console.log("readme data", readmeData);
-      if (!readmeData?.data) {
+      try {
+        const readmeData = await octokit.request(
+          "GET /repos/{owner}/{repo}/readme",
+          {
+            owner: repoOwner,
+            repo: repoName,
+            headers: {
+              "X-GitHub-Api-Version": "2022-11-28",
+              accept: "application/vnd.github.html+json",
+            },
+          }
+        );
+        TEST_MODE && console.log("readme data", readmeData);
+        setRepoReadmeSource("github");
+        setRepoReadme(readmeData.data);
+      } catch (e) {
+        TEST_MODE && console.log("GitHub API unavailable", e);
         if (!repoReadmeFromDB) {
           setRepoReadmeSource("unavailable");
           setRepoReadme(
@@ -56,9 +60,6 @@ export default function GitHubRepo(props) {
           setRepoReadmeSource("db");
           setRepoReadme(repoReadmeFromDB);
         }
-      } else {
-        setRepoReadmeSource("github");
-        setRepoReadme(readmeData.data);
       }
 
       // Do some error checking
