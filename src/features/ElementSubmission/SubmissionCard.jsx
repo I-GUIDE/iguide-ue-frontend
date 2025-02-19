@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-
 import { useOutletContext, Link as RouterLink } from "react-router";
+import { Octokit } from "octokit";
 
 import Grid from "@mui/joy/Grid";
 import Card from "@mui/joy/Card";
@@ -551,6 +551,10 @@ export default function SubmissionCard(props) {
       data["oer-external-links"] = oerExternalLinks;
     }
 
+    if (resourceTypeSelected === "code") {
+      data["github-repo-link"] = gitHubRepoLink;
+    }
+
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
     data["spatial-bounding-box"] = boundingBox;
@@ -601,6 +605,39 @@ export default function SubmissionCard(props) {
     }
 
     TEST_MODE && console.log("data to be submitted", data);
+
+    // If the resourceTypeSelected is code, attempt to store readme to the database
+    if (resourceTypeSelected === "code") {
+      try {
+        const octokit = new Octokit();
+        const repoOwner = gitHubRepoLink?.match("github.com/(.*?)/")[1];
+        const repoName = gitHubRepoLink?.match("github.com/.*?/(.+?)($|/)")[1];
+
+        TEST_MODE &&
+          console.log("Submission: repo owner and name", repoOwner, repoName);
+
+        const readmeData = await octokit.request(
+          "GET /repos/{owner}/{repo}/readme",
+          {
+            owner: repoOwner,
+            repo: repoName,
+            headers: {
+              "X-GitHub-Api-Version": "2022-11-28",
+              accept: "application/vnd.github.html+json",
+            },
+          }
+        );
+        TEST_MODE &&
+          console.log("Submission: readme data recorded", readmeData);
+        data["github-repo-readme"] = readmeData.data;
+      } catch (error) {
+        console.error("GitHub cannot find this repository", error);
+        setButtonDisabled(false);
+        alert(
+          "Error: GitHub cannot find the repository you provided. Please check if the repository link is correct or if the repository is public. If the issue persists, please email help@i-guide.io."
+        );
+      }
+    }
 
     if (submissionType === "update") {
       try {
