@@ -607,7 +607,12 @@ export default function SubmissionCard(props) {
     TEST_MODE && console.log("data to be submitted", data);
 
     // If the resourceTypeSelected is code, attempt to store readme to the database
-    if (resourceTypeSelected === "code") {
+    if (resourceTypeSelected === "code" && gitHubRepoLink) {
+      const repoOwner = gitHubRepoLink?.match("github.com/(.*?)/")[1];
+      const repoName = gitHubRepoLink?.match("github.com/.*?/(.+?)($|/)")[1];
+
+      TEST_MODE &&
+        console.log("Submission: repo owner and name", repoOwner, repoName);
       // Fetch README.md
       const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
       // If GitHub doesn't return raw readme, use the copy from the DB
