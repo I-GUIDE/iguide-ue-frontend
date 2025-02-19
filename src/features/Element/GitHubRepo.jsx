@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Octokit } from "octokit";
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
-import Grid from "@mui/joy/Grid";
+import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
@@ -43,7 +44,7 @@ export default function GitHubRepo(props) {
         }
       );
       TEST_MODE && console.log("readme data", readmeData);
-      setRepoReadme(readmeData["url"]["download_url"]);
+      setRepoReadme(readmeData.data);
 
       // Do some error checking
       const watcherData = await octokit.request(
@@ -101,12 +102,25 @@ export default function GitHubRepo(props) {
           Star {starsCount}
         </Chip>
       </Stack>
-      <iframe
-        src={repoReadme}
-        frame-ancestors="self"
-        width="75%"
-        height="500px"
-      ></iframe>
+      <Typography
+        id="repo-readme"
+        level="title-md"
+        fontWeight="lg"
+        sx={{ pt: 2 }}
+      >
+        README.md
+      </Typography>
+      <Typography id="warning-relative-links" level="body-sm">
+        Some links or images may not be displayed due to the use of a relative
+        path.
+      </Typography>
+      <Box sx={{ p: 4, border: "0.5px dashed grey" }}>
+        <div className="container" data-color-mode="light">
+          <Suspense fallback={<p>Loading content...</p>}>
+            <MarkdownPreview source={repoReadme} />
+          </Suspense>
+        </div>
+      </Box>
     </Stack>
   );
 }
