@@ -1,5 +1,4 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-import { Octokit } from "octokit";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Box from "@mui/joy/Box";
@@ -12,6 +11,11 @@ import Chip from "@mui/joy/Chip";
 import AltRoute from "@mui/icons-material/AltRoute";
 import Visibility from "@mui/icons-material/Visibility";
 import Star from "@mui/icons-material/Star";
+
+import {
+  fetchGitHubReadme,
+  fetchRepoMetadata,
+} from "../../utils/GitHubFetchMethods";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -28,29 +32,18 @@ export default function GitHubRepo(props) {
   useEffect(() => {
     async function fetchRepoData() {
       // Github API get watchers, forks, stars
-      const octokit = new Octokit();
       const repoOwner = repoLink?.match("github.com/(.*?)/")[1];
       const repoName = repoLink?.match("github.com/.*?/(.+?)($|/)")[1];
 
       TEST_MODE && console.log("repo owner and name", repoOwner, repoName);
 
-      try {
-        const readmeData = await octokit.request(
-          "GET /repos/{owner}/{repo}/readme",
-          {
-            owner: repoOwner,
-            repo: repoName,
-            headers: {
-              "X-GitHub-Api-Version": "2022-11-28",
-              accept: "application/vnd.github.html+json",
-            },
-          }
-        );
-        TEST_MODE && console.log("readme data", readmeData);
+      // Fetch README.md
+      const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
+      // If GitHub doesn't return raw readme, use the copy from the DB
+      if (rawReadme !== "ERROR") {
+        setRepoReadme(rawReadme);
         setRepoReadmeSource("github");
-        setRepoReadme(readmeData.data);
-      } catch (e) {
-        TEST_MODE && console.log("GitHub API unavailable", e);
+      } else {
         if (!repoReadmeFromDB) {
           setRepoReadmeSource("unavailable");
           setRepoReadme(
@@ -62,33 +55,12 @@ export default function GitHubRepo(props) {
         }
       }
 
-      // Do some error checking
-      const watcherData = await octokit.request(
-        "GET /repos/{owner}/{repo}/subscribers",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setWatchersCount(watcherData["data"].length);
-
-      const forksData = await octokit.request(
-        "GET /repos/{owner}/{repo}/forks",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setForksCount(forksData["data"].length);
-
-      const starsData = await octokit.request(
-        "GET /repos/{owner}/{repo}/stargazers",
-        {
-          owner: repoOwner,
-          repo: repoName,
-        }
-      );
-      setStarsCount(starsData["data"].length);
+      // Fetch repo metadata
+      const repoMetadata = await fetchRepoMetadata(repoOwner, repoName);
+      TEST_MODE && console.log("repo metadata", repoMetadata);
+      setWatchersCount(repoMetadata.watchers);
+      setForksCount(repoMetadata.forks);
+      setStarsCount(repoMetadata.stars);
     }
     if (repoLink) {
       fetchRepoData();
@@ -140,10 +112,15 @@ export default function GitHubRepo(props) {
           to view the latest version on GitHub.
         </Typography>
       )}
-      <Box sx={{ p: 4, border: "0.5px dashed grey" }}>
+      <Box
+        sx={{ p: 4, border: "0.5px solid #eaecee", backgroundColor: "#feffff" }}
+      >
         <div className="container" data-color-mode="light">
           <Suspense fallback={<p>Loading content...</p>}>
-            <MarkdownPreview source={repoReadme} />
+            <MarkdownPreview
+              source={repoReadme}
+              style={{ backgroundColor: "#feffff" }}
+            />
           </Suspense>
         </div>
       </Box>
