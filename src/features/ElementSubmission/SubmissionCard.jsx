@@ -139,6 +139,7 @@ export default function SubmissionCard(props) {
   const [mapIframeLink, setMapIframeLink] = useState("");
 
   const [gitHubRepoLink, setGitHubRepoLink] = useState("");
+  const [gitHubRepoLinkError, setGitHubRepoLinkError] = useState(false);
 
   const [contributor, setContributor] = useState([]);
 
@@ -442,7 +443,7 @@ export default function SubmissionCard(props) {
 
     // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+/blob/(master|main)/.+.ipynb"
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/blob/(master|main)/([^/]+).ipynb$"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
@@ -456,13 +457,13 @@ export default function SubmissionCard(props) {
     setGitHubRepoLink(val);
 
     // Validate if the URL is in the form of https://github.com/{owner}/{repo}
-    const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+?/.+?"
+    const validGitHubRepoUrl = new RegExp(
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/?$"
     );
-    if (val === "" || validNotebookGitHubUrl.test(val)) {
-      setNotebookGitHubUrlError(false);
+    if (val === "" || validGitHubRepoUrl.test(val)) {
+      setGitHubRepoLinkError(false);
     } else {
-      setNotebookGitHubUrlError(true);
+      setGitHubRepoLinkError(true);
     }
   };
 
@@ -1237,16 +1238,28 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "code" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
-                  <SubmissionCardFieldTitle fieldRequired>
+                  <SubmissionCardFieldTitle
+                    tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
+                    tooltipContent={`An example link may look like "https://github.com/<repo_owner>/<repo_name>"`}
+                    fieldRequired
+                  >
                     GitHub repository link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Input
-                  name="github-repo-link"
-                  value={gitHubRepoLink}
                   required
-                  onChange={(event) => setGitHubRepoLink(event.target.value)}
+                  name="github-repo-link"
+                  placeholder="https://github.com/<repo_owner>/<repo_name>"
+                  value={gitHubRepoLink}
+                  error={gitHubRepoLinkError}
+                  onChange={handleRepoLinkChange}
                 />
+                {gitHubRepoLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The link format is invalid!
+                  </FormHelperText>
+                )}
               </FormControl>
             )}
 
