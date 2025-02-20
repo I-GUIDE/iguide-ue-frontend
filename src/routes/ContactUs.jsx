@@ -20,8 +20,9 @@ import Option from "@mui/joy/Option";
 import FormLabel from "@mui/joy/FormLabel";
 import FormControl from "@mui/joy/FormControl";
 import Alert from "@mui/joy/Alert";
-import ReportIcon from "@mui/icons-material/Report";
 import IconButton from "@mui/joy/IconButton";
+
+import ReportIcon from "@mui/icons-material/Report";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -45,6 +46,59 @@ export default function ContactUs() {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageFilesURL, setImageFilesURL] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const VisuallyHiddenInput = styled("input")`
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+    width: 1px;
+  `;
+
+  const Img = styled("img")`
+    width: 100%;
+    height: 100%;
+    outline: 2px #97c3f0 solid;
+    border-radius: 5px;
+    transition: all 300ms;
+  `;
+
+  const PreviewImgContainer = styled("div")`
+    width: calc((100% / 5) - 10px);
+    min-width: 120px;
+    height: 80px;
+    position: relative;
+    cursor: pointer;
+    transition: all 300ms;
+  `;
+
+  const ImageContainer = styled("div")`
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    transition: all 300ms;
+
+    @media (max-width: 600px) {
+      justify-content: space-between;
+      row-gap: 20px;
+    }
+  `;
+
+  const DeleteBtn = styled(DeleteIcon)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 24px;
+    transition: all 300ms;
+  `;
 
   const handleImageUpload = (event) => {
     if (imageFiles.length === 5) {
@@ -176,6 +230,38 @@ export default function ContactUs() {
     setImageFilesURL([...urlArr]);
   }
 
+  function PreviewImg({ fileURL, imgKey, removeFile }) {
+    const [isShown, setIsShown] = useState(false);
+
+    return (
+      <PreviewImgContainer
+        onMouseEnter={() => {
+          setIsShown(true);
+        }}
+        onMouseLeave={() => {
+          setIsShown(false);
+        }}
+        onClick={() => removeFile(imgKey)}
+      >
+        <Img src={fileURL} loading="lazy" alt="thumbnail-preview" />
+        {isShown && (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "rgba(0,0,0,0.3)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              borderRadius: "5px",
+            }}
+          ></div>
+        )}
+        {isShown && <DeleteBtn />}
+      </PreviewImgContainer>
+    );
+  }
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
@@ -202,19 +288,25 @@ export default function ContactUs() {
           >
             <Grid xs={12}>
               <Stack
-                spacing={3}
+                spacing={2}
                 alignItems={{ xs: "flex-start", md: "center" }}
-                sx={{ p: 2 }}
+                sx={{ p: 1 }}
               >
                 <Typography level="h2">Contact Us</Typography>
+                <Typography level="h5">
+                  Questions, comments, or bug report
+                </Typography>
               </Stack>
 
               <Divider sx={{ mx: 2, my: 4 }} />
 
               <Typography level="body-md" sx={{ p: 2 }}>
                 You may find the answers to your questions{" "}
-                <Tooltip title="Tutorials" placement="top">
-                  <Link component={RouterLink} to="/tutorials">
+                <Tooltip title="FAQ" placement="top">
+                  <Link
+                    component={RouterLink}
+                    to="/docs/frequently-asked-questions"
+                  >
                     here
                   </Link>
                 </Tooltip>
@@ -230,6 +322,7 @@ export default function ContactUs() {
                   help@i-guide.io
                 </Link>{" "}
                 or submit the form below for assistance or to report any issues.
+                We will respond to your inquiries as soon as possible.
               </Typography>
 
               <Box
@@ -436,88 +529,3 @@ export default function ContactUs() {
     </CssVarsProvider>
   );
 }
-
-function PreviewImg({ fileURL, imgKey, removeFile }) {
-  const [isShown, setIsShown] = useState(false);
-
-  return (
-    <PreviewImgContainer
-      onMouseEnter={() => {
-        setIsShown(true);
-      }}
-      onMouseLeave={() => {
-        setIsShown(false);
-      }}
-      onClick={() => removeFile(imgKey)}
-    >
-      <Img src={fileURL} loading="lazy" alt="thumbnail-preview" />
-      {isShown && (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            background: "rgba(0,0,0,0.3)",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            borderRadius: "5px",
-          }}
-        ></div>
-      )}
-      {isShown && <DeleteBtn />}
-    </PreviewImgContainer>
-  );
-}
-
-const VisuallyHiddenInput = styled("input")`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  white-space: nowrap;
-  width: 1px;
-`;
-
-const Img = styled("img")`
-  width: 100%;
-  height: 100%;
-  outline: 2px #97c3f0 solid;
-  border-radius: 5px;
-  transition: all 300ms;
-`;
-
-const PreviewImgContainer = styled("div")`
-  width: calc((100% / 5) - 10px);
-  min-width: 120px;
-  height: 80px;
-  position: relative;
-  cursor: pointer;
-  transition: all 300ms;
-`;
-
-const ImageContainer = styled("div")`
-  display: flex;
-  gap: 10px;
-  width: 100%;
-  flex-wrap: wrap;
-  padding: 10px 0;
-  transition: all 300ms;
-
-  @media (max-width: 600px) {
-    justify-content: space-between;
-    row-gap: 20px;
-  }
-`;
-
-const DeleteBtn = styled(DeleteIcon)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  font-size: 24px;
-  transition: all 300ms;
-`;
