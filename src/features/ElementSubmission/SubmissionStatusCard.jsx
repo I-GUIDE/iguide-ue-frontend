@@ -6,6 +6,9 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
+import Tooltip from "@mui/joy/Tooltip";
+
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
@@ -60,10 +63,6 @@ export default function SubmissionStatusCard(props) {
         orientation="horizontal"
         sx={{
           width: "100%",
-          "&:hover": {
-            boxShadow: "md",
-            borderColor: "neutral.outlinedHoverBorder",
-          },
         }}
       >
         <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
@@ -87,8 +86,26 @@ export default function SubmissionStatusCard(props) {
             justifyContent="center"
             spacing={1}
             useFlexGap
-            sx={{ p: 0.5 }}
+            sx={{ pt: 1.5 }}
           >
+            {/* When submission failed, show Contact Us button */}
+            {!submissionSucceeded && (
+              <Tooltip title="Questions, help, or bug report" placement="top">
+                <Button
+                  component="a"
+                  href="/contact-us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="outlined"
+                  color="danger"
+                  endDecorator={<OpenInNewIcon />}
+                >
+                  Contact Us
+                </Button>
+              </Tooltip>
+            )}
+
+            {/* If submission succeeded, provide below links */}
             {submissionSucceeded && (
               <>
                 <Button

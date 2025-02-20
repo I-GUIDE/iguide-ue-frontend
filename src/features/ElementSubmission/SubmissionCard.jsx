@@ -740,6 +740,18 @@ export default function SubmissionCard(props) {
               WARNING: You are not the contributor
             </Typography>
           )}
+        <Typography level="body-md">
+          If you have questions or run into any issue, please contact us{" "}
+          <Link
+            component={RouterLink}
+            to="/contact-us"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            here
+          </Link>
+          .
+        </Typography>
         <Typography level="body-sm">
           Fields marked <RequiredFieldIndicator /> are required.
         </Typography>
