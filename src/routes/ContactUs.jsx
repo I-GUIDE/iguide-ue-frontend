@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useOutletContext } from "react-router";
 
 import { CssVarsProvider, styled } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -37,6 +37,8 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 export default function ContactUs() {
   usePageTitle("Contact Us");
 
+  const { localUserInfo } = useOutletContext();
+
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactCategory, setContactCategory] = useState("Question"); // "Question" | "Comment" | "Bug Report" | "Other"
@@ -46,6 +48,24 @@ export default function ContactUs() {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageFilesURL, setImageFilesURL] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function setUserInfo() {
+      const userFirstLastName =
+        localUserInfo?.["first_name"] + " " + localUserInfo?.["last_name"];
+      const userEmail = localUserInfo?.["email"];
+      if (userFirstLastName) {
+        setContactName(userFirstLastName);
+      }
+      if (userEmail) {
+        setContactEmail(userEmail);
+      }
+    }
+
+    if (localUserInfo) {
+      setUserInfo();
+    }
+  }, [localUserInfo]);
 
   const VisuallyHiddenInput = styled("input")`
     clip: rect(0 0 0 0);
@@ -197,7 +217,7 @@ export default function ContactUs() {
 
     if (res.status === 200) {
       setSuccessMsg(
-        "Your inquiry has been noted. We will get back to you soon."
+        "We have received your message and will respond to the email you provided as soon as possible."
       );
       setContactName("");
       setContactEmail("");
@@ -206,7 +226,9 @@ export default function ContactUs() {
       setImageFiles("");
       setImageFilesURL("");
     } else {
-      setError("There was an error, please try again later.");
+      setError(
+        "An error has occurred. Please try again later, or you can reach us via email at help@i-guide.io."
+      );
     }
 
     setLoading(false);
@@ -416,7 +438,7 @@ export default function ContactUs() {
                         </FormLabel>
                         <Input
                           required
-                          placeholder="Name"
+                          placeholder="Your name"
                           value={contactName}
                           onChange={(e) => setContactName(e.target.value)}
                         />
@@ -432,7 +454,7 @@ export default function ContactUs() {
                         <Input
                           required
                           type="email"
-                          placeholder="Email"
+                          placeholder="example@email.com"
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
                         />
