@@ -12,9 +12,10 @@ import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+
 import usePageTitle from "../hooks/usePageTitle";
 import SearchBar from "../components/SearchBar";
-
 import { SitemapErrorPage } from "../components/Sitemap";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
@@ -90,6 +91,18 @@ export default function ErrorPage(props) {
                   >
                     <Button
                       component="a"
+                      href="/contact-us"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="solid"
+                      color="warning"
+                      size="sm"
+                      endDecorator={<OpenInNewIcon />}
+                    >
+                      Contact Us
+                    </Button>
+                    <Button
+                      component="a"
                       href="/"
                       variant="outlined"
                       color="neutral"
@@ -97,15 +110,7 @@ export default function ErrorPage(props) {
                     >
                       Homepage
                     </Button>
-                    <Button
-                      component="a"
-                      href="/contact-us"
-                      variant="outlined"
-                      color="neutral"
-                      size="sm"
-                    >
-                      Contact Us
-                    </Button>
+
                     <Button
                       variant="outlined"
                       color="primary"

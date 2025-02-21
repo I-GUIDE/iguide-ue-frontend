@@ -26,8 +26,9 @@ import Divider from "@mui/joy/Divider";
 import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import ModalClose from "@mui/joy/ModalClose";
-import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/joy/Tooltip";
+
+import MenuIcon from "@mui/icons-material/Menu";
 
 import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
@@ -237,6 +238,19 @@ export default function NavBar(props) {
                 </>
               )}
               <ListDivider />
+              <Link
+                to="/contact-us"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton onClick={() => setOpen(false)}>
+                    Contact Us
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+              <ListDivider />
               <ListItem sx={{ width: "100%" }}>
                 <ListItemButton onClick={logout}>Logout</ListItemButton>
               </ListItem>
@@ -389,6 +403,17 @@ export default function NavBar(props) {
               )}
             </>
           )}
+          <Divider sx={{ my: 1 }} />
+          <Link
+            to="/contact-us"
+            underline="none"
+            component={RouterLink}
+            sx={{ color: "text.tertiary" }}
+          >
+            <ListItem sx={{ width: "100%" }}>
+              <ListItemButton>Contact Us</ListItemButton>
+            </ListItem>
+          </Link>
           <Divider sx={{ my: 1 }} />
           <ListItem onClick={logout}>Logout</ListItem>
         </List>
@@ -622,6 +647,19 @@ export default function NavBar(props) {
                   variant="plain"
                   spacing="0.1rem"
                 >
+                  <Tooltip
+                    title="Questions, help, or bug report"
+                    variant="solid"
+                  >
+                    <Button
+                      size="sm"
+                      component={RouterLink}
+                      to="/contact-us"
+                      color="primary"
+                    >
+                      Help
+                    </Button>
+                  </Tooltip>
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"

@@ -15,8 +15,6 @@ dotenv.config();
 
 const router = express.Router();
 
-const web = new WebClient(process.env.SLACK_API_TOKEN);
-
 const os_node = process.env.OPENSEARCH_NODE;
 const os_usr = process.env.OPENSEARCH_USERNAME;
 const os_pswd = process.env.OPENSEARCH_PASSWORD;
@@ -26,6 +24,11 @@ const target_domain = process.env.JWT_TARGET_DOMAIN;
 
 const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
 const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
+
+const slack_channel_id = process.env.SLACK_CHANNEL_ID;
+const slack_api_token = process.env.SLACK_API_TOKEN;
+
+const web = new WebClient(slack_api_token);
 
 if (!os_node) {
   throw new Error("Missing OpenSearch node configuration");
@@ -156,7 +159,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
 router.get('/logout', function (req, res) {
   const redirectURI = req.query["redirect-uri"];
   const decodedRedirectURI = decodeURIComponent(redirectURI);
-  
+
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -183,7 +186,9 @@ router.get('/logout', function (req, res) {
 });
 
 router.get("/", (req, res) => {
-  res.send(" <a href='/login'>Log In with OAuth 2.0 Provider </a>");
+  res.send(`<h2>Welcome to the homepage of I-GUIDE Platform authentication server.</h2>
+    <p>You may login <a href='/login'>here</a> or go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>
+    <p>You may also visit our <a href="${FRONTEND_URL}/contact-us">help page</a> if you have any questions.</p>`);
 });
 
 router.get("/auth-validation", function (req, res) {
@@ -241,17 +246,24 @@ router.get("/userinfo", (req, res) => {
 });
 
 router.get("/error", (req, res) => {
-  res.send("<p>We couldn't authenticate you due to an issue from CILogon</p>");
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 router.get("/nouser", (req, res) => {
-  res.send(
-    "<p>We couldn't proceed because CILogon didn't return a valid user.</p>"
-  );
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 router.get("/errorlogin", (req, res) => {
-  res.send("<p>We are having trouble logging you in.</p>");
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 const storage = multer.diskStorage({
@@ -289,6 +301,7 @@ router.post("/upload-to-slack", async (req, res) => {
   multi_upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
+      console.log("upload-to-slack multer uploading error", err);
       res
         .status(500)
         .send({ error: { message: `Multer uploading error: ${err.message}` } })
@@ -297,11 +310,13 @@ router.post("/upload-to-slack", async (req, res) => {
     } else if (err) {
       // An unknown error occurred when uploading.
       if (err.name == "ExtensionError") {
+        console.log("upload-to-slack ExtensionError", err);
         res
           .status(413)
           .send({ error: { message: err.message } })
           .end();
       } else {
+        console.log("upload-to-slack unknown error", err);
         res
           .status(500)
           .send({
@@ -326,7 +341,7 @@ router.post("/upload-to-slack", async (req, res) => {
       const contactDetails = JSON.parse(req.body.contactDetails);
 
       const result = await web.filesUploadV2({
-        channel_id: process.env.SLACK_CHANNEL_ID,
+        channel_id: slack_channel_id,
         initial_comment: `*${contactDetails.contactCategory}*\n_Name:_ ${contactDetails.contactName}\n_Email:_ ${contactDetails.contactEmail}\n_Message:_\n${contactDetails.contactMessage}`,
         file_uploads,
       });
