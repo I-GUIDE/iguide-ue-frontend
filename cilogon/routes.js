@@ -156,7 +156,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
 router.get('/logout', function (req, res) {
   const redirectURI = req.query["redirect-uri"];
   const decodedRedirectURI = decodeURIComponent(redirectURI);
-  
+
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -183,7 +183,9 @@ router.get('/logout', function (req, res) {
 });
 
 router.get("/", (req, res) => {
-  res.send(" <a href='/login'>Log In with OAuth 2.0 Provider </a>");
+  res.send(`<h2>Welcome to the homepage of I-GUIDE Platform authentication server.</h2>
+    <p>You may login <a href='/login'>here</a> or go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>
+    <p>You may also visit our <a href="${FRONTEND_URL}/contact-us">help page</a> if you have any questions.</p>`);
 });
 
 router.get("/auth-validation", function (req, res) {
@@ -241,17 +243,24 @@ router.get("/userinfo", (req, res) => {
 });
 
 router.get("/error", (req, res) => {
-  res.send("<p>We couldn't authenticate you due to an issue from CILogon</p>");
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 router.get("/nouser", (req, res) => {
-  res.send(
-    "<p>We couldn't proceed because CILogon didn't return a valid user.</p>"
-  );
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 router.get("/errorlogin", (req, res) => {
-  res.send("<p>We are having trouble logging you in.</p>");
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
 const storage = multer.diskStorage({
