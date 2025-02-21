@@ -37,7 +37,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 export default function ContactUs() {
   usePageTitle("Contact Us");
 
-  const { localUserInfo } = useOutletContext();
+  const { isAuthenticated, localUserInfo } = useOutletContext();
 
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -62,10 +62,10 @@ export default function ContactUs() {
       }
     }
 
-    if (localUserInfo) {
+    if (isAuthenticated && localUserInfo) {
       setUserInfo();
     }
-  }, [localUserInfo]);
+  }, [isAuthenticated, localUserInfo]);
 
   const VisuallyHiddenInput = styled("input")`
     clip: rect(0 0 0 0);
