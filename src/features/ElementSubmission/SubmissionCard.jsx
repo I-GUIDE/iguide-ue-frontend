@@ -172,8 +172,9 @@ export default function SubmissionCard(props) {
         setUserRoleFromJWT(parseInt(DEMO_USER_ROLE));
       } else {
         const message = await checkTokens();
-        TEST_MODE && console.log("Check token returns", message);
-        setUserRoleFromJWT(parseInt(message?.role));
+        TEST_MODE &&
+          console.log("Check token returns", message, typeof message);
+        setUserRoleFromJWT(message);
       }
     };
     checkJWTToken();
@@ -713,6 +714,8 @@ export default function SubmissionCard(props) {
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
     if (!isContributor && !canEditAllElements) {
+      TEST_MODE &&
+        console.log("Can't update", localUserInfo.role, userRoleFromJWT);
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
@@ -730,10 +733,24 @@ export default function SubmissionCard(props) {
 
   if (submissionType === "initial") {
     if (!canContribute) {
+      TEST_MODE &&
+        console.log("Can't contribute", localUserInfo.role, userRoleFromJWT);
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     } else if (elementType === "oer" && !canEditOER) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute OER",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     } else if (elementType === "map" && !canEditMap) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute map",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
       return <SubmissionStatusCard submissionStatus="unauthorized" />;
     }
   }
