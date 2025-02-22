@@ -716,7 +716,9 @@ export default function SubmissionCard(props) {
     if (!isContributor && !canEditAllElements) {
       TEST_MODE &&
         console.log("Can't update", localUserInfo.role, userRoleFromJWT);
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-update-element" />
+      );
     }
   }
 
@@ -735,7 +737,9 @@ export default function SubmissionCard(props) {
     if (!canContribute) {
       TEST_MODE &&
         console.log("Can't contribute", localUserInfo.role, userRoleFromJWT);
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
     } else if (elementType === "oer" && !canEditOER) {
       TEST_MODE &&
         console.log(
@@ -743,7 +747,9 @@ export default function SubmissionCard(props) {
           localUserInfo.role,
           userRoleFromJWT
         );
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
     } else if (elementType === "map" && !canEditMap) {
       TEST_MODE &&
         console.log(
@@ -751,7 +757,9 @@ export default function SubmissionCard(props) {
           localUserInfo.role,
           userRoleFromJWT
         );
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
     }
   }
 
