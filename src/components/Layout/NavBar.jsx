@@ -52,13 +52,10 @@ const pages = [
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
 ];
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
-  const currentLocation = useLocation();
 
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
