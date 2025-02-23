@@ -66,6 +66,10 @@ import { printListWithDelimiter } from "../../helpers/helper";
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
+// Demo user setting
+const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USER_ROLE = import.meta.env.VITE_DEMO_USER_ROLE;
+
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -85,6 +89,10 @@ export default function SubmissionCard(props) {
   const elementId = props.elementId;
   const elementType = props.elementType;
   const isPrivateElement = props.isPrivateElement;
+
+  const [userRoleFromJWT, setUserRoleFromJWT] = useState(
+    PERMISSIONS["secure_default_role"]
+  );
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
@@ -159,8 +167,15 @@ export default function SubmissionCard(props) {
 
   useEffect(() => {
     const checkJWTToken = async () => {
-      const message = await checkTokens();
-      TEST_MODE && console.log("Check token returns", message);
+      // If demo user is in use, skip verifying with JWT...
+      if (USE_DEMO_USER) {
+        setUserRoleFromJWT(parseInt(DEMO_USER_ROLE));
+      } else {
+        const message = await checkTokens();
+        TEST_MODE &&
+          console.log("Check token returns", message, typeof message);
+        setUserRoleFromJWT(message);
+      }
     };
     checkJWTToken();
   }, []);
@@ -691,13 +706,60 @@ export default function SubmissionCard(props) {
   }
 
   // Check if the current user is admin, if yes, allow edit
-  const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canEditAllElements =
+    localUserInfo.role <= PERMISSIONS["edit_all"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_all"];
   const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
     if (!isContributor && !canEditAllElements) {
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      TEST_MODE &&
+        console.log("Can't update", localUserInfo.role, userRoleFromJWT);
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-update-element" />
+      );
+    }
+  }
+
+  // Check if the current user can contribute this type of element
+  const canContribute =
+    localUserInfo.role <= PERMISSIONS["contribute"] &&
+    userRoleFromJWT <= PERMISSIONS["contribute"];
+  const canEditOER =
+    localUserInfo.role <= PERMISSIONS["edit_oer"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_oer"];
+  const canEditMap =
+    localUserInfo.role <= PERMISSIONS["edit_map"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_map"];
+
+  if (submissionType === "initial") {
+    if (!canContribute) {
+      TEST_MODE &&
+        console.log("Can't contribute", localUserInfo.role, userRoleFromJWT);
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
+    } else if (elementType === "oer" && !canEditOER) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute OER",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
+    } else if (elementType === "map" && !canEditMap) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute map",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
+      return (
+        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+      );
     }
   }
 

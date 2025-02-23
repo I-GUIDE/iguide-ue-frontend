@@ -24,10 +24,13 @@ import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
-const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
-const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
+
+// Demo user setting
+const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
+const DEMO_USER_ROLE = import.meta.env.VITE_DEMO_USER_ROLE;
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
@@ -109,7 +112,7 @@ export default function Root(props) {
       last_name: "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
       id: DEMO_USERID,
-      role: 1,
+      role: DEMO_USER_ROLE,
       gitHubLink: "https://github.com",
       linkedInLink: "https://linkedin.com",
       googleScholarLink: "https://scholar.google.com",

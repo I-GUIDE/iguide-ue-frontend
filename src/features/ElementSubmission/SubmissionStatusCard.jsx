@@ -12,10 +12,12 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
+  // Provide a link to the existing element if submission fails due to duplicate DOI
   const subMessage = props.subMessage;
   const elementURI = props.elementURI;
 
   let submissionStatusText = "";
+  let subText = "";
   let submissionSucceeded;
 
   // Display the submission status
@@ -42,7 +44,22 @@ export default function SubmissionStatusCard(props) {
       submissionSucceeded = false;
       break;
     case "unauthorized":
+      submissionStatusText = "You don't have permission to access this page.";
+      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
+        use the link below to reach out to us. Thanks.`;
+      submissionSucceeded = false;
+      break;
+    case "unauthorized-update-element":
       submissionStatusText = "You don't have permission to edit this element.";
+      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
+        use the link below to reach out to us. Thanks.`;
+      submissionSucceeded = false;
+      break;
+    case "unauthorized-initial-submission":
+      submissionStatusText =
+        "You don't have permission to contribute this type of elements.";
+      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
+      use the link below to reach out to us. Thanks.`;
       submissionSucceeded = false;
       break;
     default:
@@ -76,6 +93,7 @@ export default function SubmissionStatusCard(props) {
           >
             <Stack spacing={2}>
               <Typography level="h4">{submissionStatusText}</Typography>
+              <Typography level="body-md">{subText}</Typography>
               {subMessage}
             </Stack>
           </Box>
