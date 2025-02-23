@@ -36,7 +36,7 @@ export async function refreshAccessToken() {
 
   // Refresh token expired or missing
   if (!res.ok) {
-    alert("Session expired. Please login again!");
+    alert("Your session has expired. Please log in again.");
     userLogout();
   }
 

@@ -238,6 +238,9 @@ export async function checkTokens() {
     // If user permission from DB is lower (role number higher) than JWT, log user out...
   } else if (userRoleFromDB > userRoleFromJWT) {
     TEST_MODE && console.log("checkTokens(): logging you out...");
+    alert(
+      `We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error: 1001.`
+    );
     userLogout();
   } else {
     return userRoleFromJWT;
