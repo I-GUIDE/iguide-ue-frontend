@@ -34,6 +34,8 @@ import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 import HoverOverMenuTab from "../HoverOverMenuTab";
 
+import { userLogin } from "../../utils/UserManager";
+
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
@@ -77,11 +79,6 @@ export default function NavBar(props) {
       }
       setDrawerOpen(inOpen);
     };
-  }
-
-  // Redirect users to the auth backend for login
-  function login() {
-    window.open(AUTH_BACKEND_URL + "/login", "_self");
   }
 
   // Redirect users to auth backend for logout
@@ -274,7 +271,7 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <Button size="sm" color="primary" onClick={login}>
+        <Button size="sm" color="primary" onClick={userLogin}>
           Login
         </Button>
       );
@@ -421,7 +418,7 @@ export default function NavBar(props) {
     } else {
       return (
         <List>
-          <ListItem size="sm" color="primary" onClick={login}>
+          <ListItem size="sm" color="primary" onClick={userLogin}>
             <ListItemButton>Login</ListItemButton>
           </ListItem>
         </List>

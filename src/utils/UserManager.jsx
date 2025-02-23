@@ -235,3 +235,10 @@ export async function checkTokens() {
     return userRoleFromJWT;
   }
 }
+
+/**
+ * Login user
+ */
+export async function userLogin() {
+  window.open(AUTH_BACKEND_URL + "/login", "_self");
+}
