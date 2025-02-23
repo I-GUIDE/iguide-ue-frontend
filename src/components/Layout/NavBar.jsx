@@ -34,7 +34,7 @@ import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 import HoverOverMenuTab from "../HoverOverMenuTab";
 
-import { userLogin } from "../../utils/UserManager";
+import { userLogin, userLogout } from "../../utils/UserManager";
 
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
@@ -79,19 +79,6 @@ export default function NavBar(props) {
       }
       setDrawerOpen(inOpen);
     };
-  }
-
-  // Redirect users to auth backend for logout
-  function logout() {
-    const redirectURI = currentLocation?.pathname + currentLocation?.search;
-    TEST_MODE && console.log("Redirect URI for logout", redirectURI);
-
-    window.open(
-      AUTH_BACKEND_URL +
-        "/logout?redirect-uri=" +
-        encodeURIComponent(redirectURI),
-      "_self"
-    );
   }
 
   // If the user is logged in, display the logout button, otherwise login
@@ -249,7 +236,7 @@ export default function NavBar(props) {
               </Link>
               <ListDivider />
               <ListItem sx={{ width: "100%" }}>
-                <ListItemButton onClick={logout}>Logout</ListItemButton>
+                <ListItemButton onClick={userLogout}>Logout</ListItemButton>
               </ListItem>
             </List>
           }
@@ -412,7 +399,7 @@ export default function NavBar(props) {
             </ListItem>
           </Link>
           <Divider sx={{ my: 1 }} />
-          <ListItem onClick={logout}>Logout</ListItem>
+          <ListItem onClick={userLogout}>Logout</ListItem>
         </List>
       );
     } else {

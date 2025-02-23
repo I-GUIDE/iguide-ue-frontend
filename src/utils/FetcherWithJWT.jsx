@@ -1,21 +1,7 @@
+import { userLogout } from "./UserManager";
+
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
-
-// Redirect users to auth backend for logout
-function logout() {
-  const currentLocation = window.location;
-  const redirectURI = currentLocation?.pathname + currentLocation?.search;
-  TEST_MODE &&
-    console.log("Redirect URI for logout (in JWT func)", redirectURI);
-
-  window.open(
-    AUTH_BACKEND_URL +
-      "/logout?redirect-uri=" +
-      encodeURIComponent(redirectURI),
-    "_self"
-  );
-}
 
 export async function fetchWithAuth(url, options = {}) {
   let res = await fetch(url, {
@@ -51,7 +37,7 @@ export async function refreshAccessToken() {
   // Refresh token expired or missing
   if (!res.ok) {
     alert("Session expired. Please login again!");
-    logout();
+    userLogout();
   }
 
   const data = await res.json();
