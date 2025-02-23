@@ -5,6 +5,29 @@ const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 
 /**
+ * Log in user
+ */
+export async function userLogin() {
+  window.open(AUTH_BACKEND_URL + "/login", "_self");
+}
+
+/**
+ * Log out user, and redirect user back to where they were before logout
+ */
+export async function userLogout() {
+  const currentLocation = window.location;
+  const redirectURI = currentLocation?.pathname + currentLocation?.search;
+  TEST_MODE && console.log("Redirect URI for logout", redirectURI);
+
+  window.open(
+    AUTH_BACKEND_URL +
+      "/logout?redirect-uri=" +
+      encodeURIComponent(redirectURI),
+    "_self"
+  );
+}
+
+/**
  * Get user role number
  * @param {string} uid the UserId of the user
  * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
@@ -192,21 +215,6 @@ export async function checkUser(uid) {
  * The checkTokens function will redirect users to /logout if the refresh token has expired.
  */
 export async function checkTokens() {
-  // Redirect users to auth backend for logout
-  function logout() {
-    const currentLocation = window.location;
-    const redirectURI = currentLocation?.pathname + currentLocation?.search;
-    TEST_MODE &&
-      console.log("Redirect URI for logout (in JWT func)", redirectURI);
-
-    window.open(
-      AUTH_BACKEND_URL +
-        "/logout?redirect-uri=" +
-        encodeURIComponent(redirectURI),
-      "_self"
-    );
-  }
-
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
@@ -230,7 +238,10 @@ export async function checkTokens() {
     // If user permission from DB is lower (role number higher) than JWT, log user out...
   } else if (userRoleFromDB > userRoleFromJWT) {
     TEST_MODE && console.log("checkTokens(): logging you out...");
-    logout();
+    alert(
+      `We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error: 1001.`
+    );
+    userLogout();
   } else {
     return userRoleFromJWT;
   }

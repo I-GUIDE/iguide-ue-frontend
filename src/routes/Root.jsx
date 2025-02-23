@@ -18,6 +18,7 @@ import {
   fetchUser,
   addUser,
   getUserRole,
+  userLogout,
 } from "../utils/UserManager.jsx";
 import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
@@ -69,7 +70,12 @@ export default function Root(props) {
               "Getting user info from CILogon...",
               resObject.userInfo
             );
-          setUserInfo(resObject.userInfo);
+          // If userInfo doesn't exist in the auth backend anymore, log the user out
+          if (!resObject.userInfo) {
+            userLogout();
+          } else {
+            setUserInfo(resObject.userInfo);
+          }
         })
         .catch((err) => {
           setIsAuthenticated(false);

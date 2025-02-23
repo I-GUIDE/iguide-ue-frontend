@@ -34,6 +34,8 @@ import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 import HoverOverMenuTab from "../HoverOverMenuTab";
 
+import { userLogin, userLogout } from "../../utils/UserManager";
+
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
@@ -50,13 +52,10 @@ const pages = [
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
 ];
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
-  const currentLocation = useLocation();
 
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -77,24 +76,6 @@ export default function NavBar(props) {
       }
       setDrawerOpen(inOpen);
     };
-  }
-
-  // Redirect users to the auth backend for login
-  function login() {
-    window.open(AUTH_BACKEND_URL + "/login", "_self");
-  }
-
-  // Redirect users to auth backend for logout
-  function logout() {
-    const redirectURI = currentLocation?.pathname + currentLocation?.search;
-    TEST_MODE && console.log("Redirect URI for logout", redirectURI);
-
-    window.open(
-      AUTH_BACKEND_URL +
-        "/logout?redirect-uri=" +
-        encodeURIComponent(redirectURI),
-      "_self"
-    );
   }
 
   // If the user is logged in, display the logout button, otherwise login
@@ -252,7 +233,7 @@ export default function NavBar(props) {
               </Link>
               <ListDivider />
               <ListItem sx={{ width: "100%" }}>
-                <ListItemButton onClick={logout}>Logout</ListItemButton>
+                <ListItemButton onClick={userLogout}>Logout</ListItemButton>
               </ListItem>
             </List>
           }
@@ -274,7 +255,7 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <Button size="sm" color="primary" onClick={login}>
+        <Button size="sm" color="primary" onClick={userLogin}>
           Login
         </Button>
       );
@@ -415,13 +396,13 @@ export default function NavBar(props) {
             </ListItem>
           </Link>
           <Divider sx={{ my: 1 }} />
-          <ListItem onClick={logout}>Logout</ListItem>
+          <ListItem onClick={userLogout}>Logout</ListItem>
         </List>
       );
     } else {
       return (
         <List>
-          <ListItem size="sm" color="primary" onClick={login}>
+          <ListItem size="sm" color="primary" onClick={userLogin}>
             <ListItemButton>Login</ListItemButton>
           </ListItem>
         </List>
