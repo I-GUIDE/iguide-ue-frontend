@@ -260,7 +260,6 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
-            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -596,16 +595,15 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
-                      className="tourid-1"
                     />
                   </Tooltip>
                 </Link>
-                <Box className="tourid-2">
+                <Box>
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box className="tourid-3">
+                <Box>
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}

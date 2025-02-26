@@ -110,12 +110,12 @@ export default function AdminPanel() {
                 minHeight: 0,
               }}
             >
-              <Pagination
+              {/* <Pagination
                 count={1}
                 color="primary"
                 page={1}
                 onChange={handlePageClick}
-              />
+              /> */}
             </Stack>
             
           </Box>

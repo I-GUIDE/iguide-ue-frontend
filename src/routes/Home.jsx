@@ -29,7 +29,6 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { useTour } from '@reactour/tour';
 
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
@@ -40,13 +39,6 @@ import {
 
 export default function Home() {
   usePageTitle("", true);
-  
-  const { setIsOpen } = useTour();
-
-  useEffect(() => {
-    console.log("star tour");
-    setIsOpen(true);
-  }, []);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -119,7 +111,6 @@ export default function Home() {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
-                      className="tourid-0"
                     >
                       <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
@@ -143,7 +134,7 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
-                  <Box className="tourid-6">
+                  <Box>
                     <SearchBar
                       placeholder="Start your exploration..."
                       showTrendingSearchKeywords
