@@ -157,18 +157,6 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
-                  <Link
-                    to="/admin-panel"
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        Admin Panel
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
                 </>
               )}
               {canContributeElements && (
@@ -260,7 +248,6 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
-            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -596,16 +583,15 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
-                      className="tourid-1"
                     />
                   </Tooltip>
                 </Link>
-                <Box className="tourid-2">
+                <Box>
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box className="tourid-3">
+                <Box>
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}
@@ -654,7 +640,6 @@ export default function NavBar(props) {
                         variant="plain"
                         alt="jupyterhub"
                         src="/images/Jupyter-logo.png"
-                        className="tourid-5"
                       />
                     </Button>
                   </Tooltip>

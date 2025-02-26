@@ -38,7 +38,6 @@ import DocPage from "./routes/DocPage";
 import ErrorPage from "./routes/ErrorPage";
 import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
-import AdminPanel from "./routes/AdminPanel";
 
 import { TourProvider } from "@reactour/tour/";
 import TourSteps from "./configs/TourSteps";
@@ -158,10 +157,6 @@ const router = createBrowserRouter([
         element: <DocPage />,
       },
       {
-        path: "/admin-panel",
-        element: <AdminPanel />,
-      },
-      {
         path: "/contact-us",
         element: <ContactUs />,
       },
@@ -172,11 +167,11 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <TourProvider steps={TourSteps}> 
       <Suspense fallback={<div>Loading...</div>}>
         <RouterProvider router={router} />
       </Suspense>
     </TourProvider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );
