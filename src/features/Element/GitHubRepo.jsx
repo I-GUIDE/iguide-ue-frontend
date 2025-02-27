@@ -11,6 +11,7 @@ import Chip from "@mui/joy/Chip";
 import AltRouteIcon from "@mui/icons-material/AltRoute";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import StarIcon from "@mui/icons-material/Star";
+import WarningIcon from "@mui/icons-material/Warning";
 
 import {
   fetchGitHubReadme,
@@ -107,7 +108,12 @@ export default function GitHubRepo(props) {
       >
         README.md
       </Typography>
-      <Typography id="warning-relative-links" level="body-sm">
+      <Typography
+        id="warning-relative-links"
+        level="body-sm"
+        color="warning"
+        startDecorator={<WarningIcon />}
+      >
         Some links or images may not work due to the use of relative file paths.
       </Typography>
       {repoReadmeSource === "db" && (
@@ -122,7 +128,14 @@ export default function GitHubRepo(props) {
         </Typography>
       )}
       <Box
-        sx={{ p: 4, border: "0.5px solid #eaecee", backgroundColor: "#feffff" }}
+        component="div"
+        sx={{
+          p: 4,
+          border: "0.5px solid #eaecee",
+          backgroundColor: "#feffff",
+          overflow: "auto",
+          maxHeight: 1000,
+        }}
       >
         <div className="container" data-color-mode="light">
           <Suspense fallback={<p>Loading content...</p>}>
