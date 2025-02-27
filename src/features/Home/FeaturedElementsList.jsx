@@ -22,6 +22,8 @@ import { getHomepageElements } from "../../utils/DataRetrieval";
 
 import { TAGLINES } from "../../configs/Texts";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function FeaturedElementsList(props) {
   const icon = props.icon;
   const title = props.title;
@@ -39,6 +41,9 @@ export default function FeaturedElementsList(props) {
     async function retrieveFeaturedElements() {
       try {
         const data = await getHomepageElements(type, limit);
+        if (!data) {
+          TEST_MODE && console.log("No featured elements returned for", type);
+        }
         setFeaturedElements(data);
       } catch (error) {
         setError(error);
@@ -47,7 +52,10 @@ export default function FeaturedElementsList(props) {
     retrieveFeaturedElements();
   }, [limit, type]);
 
-  if (!featuredElements || featuredElements.length === 0) return null;
+  // Don't render if no featured elements returned
+  if (!featuredElements || featuredElements.length === 0) {
+    return null;
+  }
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -83,7 +91,7 @@ export default function FeaturedElementsList(props) {
             {featuredElements?.map((featuredElement) => (
               <Grid key={featuredElement.id} size={{ xs: 12, sm: 6, md: 3 }}>
                 <InfoCard
-                  cardtype={featuredElement["resource-type"] + "s"}
+                  cardtype={featuredElement["resource-type"]}
                   elementId={featuredElement.id}
                   title={featuredElement.title}
                   contents={featuredElement.contents}

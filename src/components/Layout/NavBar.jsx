@@ -51,6 +51,7 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
+  ["Code", "/code"],
 ];
 
 export default function NavBar(props) {
@@ -216,6 +217,18 @@ export default function NavBar(props) {
                       </ListItem>
                     </Link>
                   )}
+                  <Link
+                    to="/contribution/code"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Code
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
               <ListDivider />
@@ -382,6 +395,16 @@ export default function NavBar(props) {
                   </ListItem>
                 </Link>
               )}
+              <Link
+                to="/contribution/code"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Code</ListItemButton>
+                </ListItem>
+              </Link>
             </>
           )}
           <Divider sx={{ my: 1 }} />

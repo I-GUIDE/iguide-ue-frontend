@@ -8,6 +8,7 @@ import Notebooks from "./routes/Notebooks";
 import Publications from "./routes/Publications";
 import OERs from "./routes/Oers";
 import Maps from "./routes/Maps";
+import Codes from "./routes/Codes";
 import Tag from "./routes/Tag";
 
 import DatasetPage from "./routes/ElementPage/DatasetPage";
@@ -15,6 +16,7 @@ import NotebookPage from "./routes/ElementPage/NotebookPage";
 import PublicationPage from "./routes/ElementPage/PublicationPage";
 import OERPage from "./routes/ElementPage/OERPage";
 import MapPage from "./routes/ElementPage/MapPage";
+import CodePage from "./routes/ElementPage/CodePage";
 
 import UserProfile from "./routes/UserProfile";
 import UserProfileUpdate from "./routes/UserProfileUpdate";
@@ -101,15 +103,13 @@ export const routes = [
     category: "Elements",
   },
   {
+    path: "/datasets/:id",
+    element: <DatasetPage />,
+  },
+  {
     path: "/notebooks",
     element: <Notebooks />,
     label: "Notebooks",
-    category: "Elements",
-  },
-  {
-    path: "/publications",
-    element: <Publications />,
-    label: "Publications",
     category: "Elements",
   },
   {
@@ -117,8 +117,10 @@ export const routes = [
     element: <NotebookPage />,
   },
   {
-    path: "/datasets/:id",
-    element: <DatasetPage />,
+    path: "/publications",
+    element: <Publications />,
+    label: "Publications",
+    category: "Elements",
   },
   {
     path: "/publications/:id",
@@ -133,6 +135,16 @@ export const routes = [
   {
     path: "/oers/:id",
     element: <OERPage />,
+  },
+  {
+    path: "/code",
+    element: <Codes />,
+    label: "Code",
+    category: "Elements",
+  },
+  {
+    path: "/code/:id",
+    element: <CodePage />,
   },
   {
     path: "/tag/:id",

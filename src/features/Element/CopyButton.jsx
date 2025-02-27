@@ -9,14 +9,14 @@ import Badge from "@mui/joy/Badge";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
 
 export default function CopyButton(props) {
   const textToCopy = props.textToCopy;
   const tooltipText = props.tooltipText;
   const successText = props.successText;
   const icon = props.icon;
-  TEST_MODE && console.log("text to copy", textToCopy);
+  DEEP_TEST_MODE && console.log("text to copy", textToCopy);
 
   const [copied, setCopied] = useState(false);
 

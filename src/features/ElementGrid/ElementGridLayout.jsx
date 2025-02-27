@@ -10,7 +10,10 @@ import Container from "@mui/joy/Container";
 import ElementGrid from "../../components/Layout/ElementGrid";
 import Header from "../../components/Layout/Header";
 
-import { DEFAULT_BODY_HEIGHT } from "../../configs/VarConfigs";
+import {
+  DEFAULT_BODY_HEIGHT,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
+} from "../../configs/VarConfigs";
 
 export default function ElementGridLayout(props) {
   const elementType = props.elementType;
@@ -44,7 +47,7 @@ export default function ElementGridLayout(props) {
           }}
         >
           <Grid
-            container
+            // Tip: removing the "container" property from this Grid element fixed incorrect child height (bottom part covered by footer)
             rowSpacing={2}
             direction="column"
             sx={{
@@ -53,7 +56,7 @@ export default function ElementGridLayout(props) {
             }}
           >
             <ElementGrid
-              uriPrefix={"/" + elementType + "s"}
+              uriPrefix={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[elementType]}
               elementType={elementType}
               fieldName={fieldName}
               matchValue={matchValue}

@@ -60,7 +60,7 @@ export default function PublicationPage() {
           ? await fetchSinglePrivateElementDetails(id)
           : await fetchSingleElementDetails(id);
 
-      if (thisElement === "ERROR") {
+      if (!thisElement || thisElement === "ERROR") {
         setError(true);
         return;
       }
@@ -137,7 +137,7 @@ export default function PublicationPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/publications"
                   isPrivateElement={isPrivateElement}
                 />
@@ -172,7 +172,7 @@ export default function PublicationPage() {
 
             <Grid xs={12}>
               <CitationGenerator
-                contributorId={contributor.id}
+                contributorId={contributor?.id}
                 createdAt={creationTime}
                 title={title}
                 elementType="publications"

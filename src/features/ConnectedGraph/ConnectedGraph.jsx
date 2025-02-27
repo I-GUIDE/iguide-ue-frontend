@@ -59,7 +59,7 @@ export default function ConnectedGraph(props) {
             >
               <Typography level="title-md">Selected element</Typography>
               <SimpleInfoCard
-                cardtype={selectedElement.type + "s"}
+                cardtype={selectedElement.type}
                 pageId={selectedElement.id}
                 title={selectedElement.title}
                 thumbnailImage={selectedElement.thumbnail}
