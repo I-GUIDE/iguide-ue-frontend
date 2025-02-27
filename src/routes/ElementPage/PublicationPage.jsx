@@ -146,7 +146,7 @@ export default function PublicationPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/publications"
                   isPrivateElement={isPrivateElement}
                 />
@@ -181,7 +181,7 @@ export default function PublicationPage() {
 
             <Grid xs={12}>
               <CitationGenerator
-                contributorId={contributor.id}
+                contributorId={contributor?.id}
                 createdAt={creationTime}
                 title={title}
                 elementType="publications"

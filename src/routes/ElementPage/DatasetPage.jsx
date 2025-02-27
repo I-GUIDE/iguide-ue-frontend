@@ -149,7 +149,7 @@ export default function DatasetPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/datasets"
                   isPrivateElement={isPrivateElement}
                 />
@@ -194,7 +194,7 @@ export default function DatasetPage() {
 
             <Grid xs={12}>
               <CitationGenerator
-                contributorId={contributor.id}
+                contributorId={contributor?.id}
                 createdAt={creationTime}
                 title={title}
                 elementType="datasets"

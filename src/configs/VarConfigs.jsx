@@ -9,6 +9,8 @@ export const RESOURCE_TYPE_COLORS = {
   oers: "danger",
   map: "neutral",
   maps: "neutral",
+  code: "success",
+  codes: "success",
   any: "neutral",
 };
 
@@ -23,7 +25,24 @@ export const RESOURCE_TYPE_NAMES = {
   oers: "Educational Resource",
   map: "Map",
   maps: "Map",
+  code: "Code",
+  codes: "Code",
   any: "All Types",
+};
+
+export const RESOURCE_TYPE_NAMES_PLURAL_FOR_URI = {
+  dataset: "datasets",
+  datasets: "datasets",
+  notebook: "notebooks",
+  notebooks: "notebooks",
+  publication: "publications",
+  publications: "publications",
+  oer: "oers",
+  oers: "oers",
+  map: "maps",
+  maps: "maps",
+  code: "code",
+  codes: "code",
 };
 
 export const OER_EXTERNAL_LINK_TYPES = {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-
 import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/joy/Grid";
@@ -40,11 +39,13 @@ import CapsuleInput from "../../components/CapsuleInput";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
+import { fetchGitHubReadme } from "../../utils/GitHubFetchMethods";
 
 import ErrorPage from "../../routes/ErrorPage";
 
 import {
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
@@ -147,6 +148,9 @@ export default function SubmissionCard(props) {
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
+  const [gitHubRepoLink, setGitHubRepoLink] = useState("");
+  const [gitHubRepoLinkError, setGitHubRepoLinkError] = useState(false);
+
   const [contributor, setContributor] = useState([]);
 
   const [spatialCoverage, setSpatialCoverage] = useState([]);
@@ -206,8 +210,8 @@ export default function SubmissionCard(props) {
       TEST_MODE && console.log("Returned element", thisElement);
 
       const elementUrlReturned = `/${
-        thisElement["resource-type"]
-      }s/${elementId}${
+        RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[thisElement["resource-type"]]
+      }/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
           : ""
@@ -245,6 +249,8 @@ export default function SubmissionCard(props) {
       setPublicationDOI(thisElement["external-link-publication"]);
 
       setMapIframeLink(thisElement["external-iframe-link"]);
+
+      setGitHubRepoLink(thisElement["github-repo-link"]);
 
       setContributor(thisElement["contributor"]);
 
@@ -470,12 +476,27 @@ export default function SubmissionCard(props) {
 
     // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+/blob/(master|main)/.+.ipynb"
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/blob/(master|main)/([^/]+).ipynb$"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
     } else {
       setNotebookGitHubUrlError(true);
+    }
+  };
+
+  const handleRepoLinkChange = (event) => {
+    const val = event.target.value;
+    setGitHubRepoLink(val);
+
+    // Validate if the URL is in the form of https://github.com/{owner}/{repo}
+    const validGitHubRepoUrl = new RegExp(
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/?$"
+    );
+    if (val === "" || validGitHubRepoUrl.test(val)) {
+      setGitHubRepoLinkError(false);
+    } else {
+      setGitHubRepoLinkError(true);
     }
   };
 
@@ -564,6 +585,10 @@ export default function SubmissionCard(props) {
       data["oer-external-links"] = oerExternalLinks;
     }
 
+    if (resourceTypeSelected === "code") {
+      data["github-repo-link"] = gitHubRepoLink;
+    }
+
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
     data["spatial-bounding-box"] = boundingBox;
@@ -615,6 +640,24 @@ export default function SubmissionCard(props) {
 
     TEST_MODE && console.log("data to be submitted", data);
 
+    // If the resourceTypeSelected is code, attempt to store readme to the database
+    if (resourceTypeSelected === "code" && gitHubRepoLink) {
+      const repoOwner = gitHubRepoLink?.match("github.com/(.*?)/")[1];
+      const repoName = gitHubRepoLink?.match("github.com/.*?/(.+?)($|/)")[1];
+
+      TEST_MODE &&
+        console.log("Submission: repo owner and name", repoOwner, repoName);
+      // Fetch README.md
+      const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
+      // If GitHub doesn't return raw readme, use the copy from the DB
+      if (rawReadme !== "ERROR") {
+        TEST_MODE && console.log("Submission: readme recorded", rawReadme);
+        data["github-repo-readme"] = rawReadme;
+      } else {
+        console.error("GitHub readme API unavailable");
+      }
+    }
+
     if (submissionType === "update") {
       try {
         const response = await fetchWithAuth(
@@ -634,7 +677,9 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
-          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+          const futureElementUrl = `/${
+            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+          }/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
           setElementURI(futureElementUrl);
@@ -666,9 +711,9 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            const futureElementUrl = `/${resourceTypeSelected}s/${
-              result.elementId
-            }${
+            const futureElementUrl = `/${
+              RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+            }/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
             setElementURI(futureElementUrl);
@@ -1295,6 +1340,33 @@ export default function SubmissionCard(props) {
                 </Table>
               </Grid>
             )}
+            {resourceTypeSelected === "code" && (
+              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <FormLabel>
+                  <SubmissionCardFieldTitle
+                    tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
+                    tooltipContent={`An example link may look like "https://github.com/<repo_owner>/<repo_name>"`}
+                    fieldRequired
+                  >
+                    GitHub repository link
+                  </SubmissionCardFieldTitle>
+                </FormLabel>
+                <Input
+                  required
+                  name="github-repo-link"
+                  placeholder="https://github.com/<repo_owner>/<repo_name>"
+                  value={gitHubRepoLink}
+                  error={gitHubRepoLinkError}
+                  onChange={handleRepoLinkChange}
+                />
+                {gitHubRepoLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The link format is invalid!
+                  </FormHelperText>
+                )}
+              </FormControl>
+            )}
 
             <Typography level="h3" sx={{ pt: 1 }}>
               Related elements
@@ -1359,6 +1431,7 @@ export default function SubmissionCard(props) {
                         <Option value="publication">Publication</Option>
                         <Option value="oer">Educational Resource</Option>
                         <Option value="map">Map</Option>
+                        <Option value="code">Code</Option>
                       </Select>
                     </td>
                     <td align="left">

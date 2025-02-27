@@ -143,7 +143,7 @@ export default function OERPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/oers"
                   isPrivateElement={isPrivateElement}
                 />
@@ -181,7 +181,7 @@ export default function OERPage() {
 
             <Grid xs={12}>
               <CitationGenerator
-                contributorId={contributor.id}
+                contributorId={contributor?.id}
                 createdAt={creationTime}
                 title={title}
                 elementType="oers"
