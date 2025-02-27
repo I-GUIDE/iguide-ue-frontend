@@ -30,6 +30,8 @@ import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function DatasetPage() {
   const id = useParams().id;
   const [title, setTitle] = useState("");
@@ -58,15 +60,23 @@ export default function DatasetPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement =
+      const elementObject =
         isPrivateElement === "true"
           ? await fetchSinglePrivateElementDetails(id)
           : await fetchSingleElementDetails(id);
 
-      if (thisElement === "ERROR") {
-        setError(true);
+      if (!elementObject.ok) {
+        setError(elementObject.body);
+        TEST_MODE &&
+          console.log(
+            "Error from fetchSingle(Private)ElementDetails:",
+            elementObject.body
+          );
         return;
       }
+
+      const thisElement = elementObject.body;
+      TEST_MODE && console.log("Returned element", thisElement);
 
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
@@ -94,8 +104,7 @@ export default function DatasetPage() {
   if (error) {
     return (
       <ErrorPage
-        customStatus="404"
-        customStatusText="Element Not Found"
+        customStatusText={error}
         isAuthenticated={isAuthenticated}
         localUserInfo={localUserInfo}
       />

@@ -32,7 +32,7 @@ export default function DocEditCard(props) {
     checkTokens();
   }, []);
 
-  const { localUserInfo } = useOutletContext();
+  const { localUserInfo, isAuthenticated } = useOutletContext();
 
   const [docName, setDocName] = useState("");
   const [docContent, setDocContent] = useState("");
@@ -40,15 +40,25 @@ export default function DocEditCard(props) {
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
   const [docURI, setDocURI] = useState();
 
+  const [error, setError] = useState("");
+
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchDocData = async () => {
-      const thisDoc = await fetchADocumentation(docId);
-      TEST_MODE && console.log("Doc data", thisDoc);
+      const docObject = fetchADocumentation(docId);
 
-      setDocURI("/docs/" + docId);
+      if (!docObject.ok) {
+        setError(docObject.body);
+        TEST_MODE &&
+          console.log("Error from fetchADocumentation():", docObject.body);
+        return;
+      }
+
+      const thisDoc = docObject.body;
+      TEST_MODE && console.log("Returned doc", thisDoc);
       setDocName(thisDoc.name);
       setDocContent(thisDoc.content);
+      setDocURI("/docs/" + docId);
     };
     if (submissionType === "update") {
       fetchDocData();
@@ -109,6 +119,16 @@ export default function DocEditCard(props) {
       }
     }
   };
+
+  if (error) {
+    return (
+      <ErrorPage
+        customStatusText={error}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
+    );
+  }
 
   // After submission, show users the submission status.
   if (submissionStatus !== "no submission") {

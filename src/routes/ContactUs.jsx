@@ -466,7 +466,7 @@ export default function ContactUs() {
                         Category <RequiredFieldIndicator />
                       </FormLabel>
                       <Select
-                        defaultValue={contactCategory}
+                        defaultValue={contactCategory ?? ""}
                         placeholder="Category"
                       >
                         {["Question", "Comment", "Bug Report", "Other"].map(

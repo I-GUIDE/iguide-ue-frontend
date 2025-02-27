@@ -41,6 +41,8 @@ import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
 
+import ErrorPage from "../../routes/ErrorPage";
+
 import {
   RESOURCE_TYPE_NAMES,
   OER_EXTERNAL_LINK_TYPES,
@@ -83,7 +85,7 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
-  const { localUserInfo } = useOutletContext();
+  const { localUserInfo, isAuthenticated } = useOutletContext();
 
   const submissionType = props.submissionType;
   const elementId = props.elementId;
@@ -165,6 +167,8 @@ export default function SubmissionCard(props) {
 
   const [openModal, setOpenModal] = useState(false);
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
     const checkJWTToken = async () => {
       // If demo user is in use, skip verifying with JWT...
@@ -183,11 +187,23 @@ export default function SubmissionCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = isPrivateElement
-        ? await fetchSinglePrivateElementDetails(elementId)
-        : await fetchSingleElementDetails(elementId);
+      const elementObject =
+        isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(elementId)
+          : await fetchSingleElementDetails(elementId);
 
-      TEST_MODE && console.log("returned element", thisElement);
+      if (!elementObject.ok) {
+        setError(elementObject.body);
+        TEST_MODE &&
+          console.log(
+            "Error from fetchSingle(Private)ElementDetails:",
+            elementObject.body
+          );
+        return;
+      }
+
+      const thisElement = elementObject.body;
+      TEST_MODE && console.log("Returned element", thisElement);
 
       const elementUrlReturned = `/${
         thisElement["resource-type"]
@@ -281,8 +297,10 @@ export default function SubmissionCard(props) {
   }, [currentRelatedResourceType]);
 
   const handleVisibilityChange = async (e, newValue) => {
-    TEST_MODE && console.log("Setting visibility to", newValue);
-    setVisibility(newValue);
+    if (newValue) {
+      TEST_MODE && console.log("Setting visibility to", newValue);
+      setVisibility(newValue);
+    }
   };
 
   const handleThumbnailImageUpload = (event) => {
@@ -687,6 +705,16 @@ export default function SubmissionCard(props) {
     setButtonDisabled(false);
   };
 
+  if (error) {
+    return (
+      <ErrorPage
+        customStatusText={error}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
+    );
+  }
+
   // After submission, show users the submission status.
   if (submissionStatus !== "no submission" && !openModal) {
     return (
@@ -835,7 +863,10 @@ export default function SubmissionCard(props) {
                   Visibility
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Select value={visibility} onChange={handleVisibilityChange}>
+              <Select
+                value={visibility ?? ""}
+                onChange={handleVisibilityChange}
+              >
                 <Option value={ELEM_VISIBILITY.public}>Public</Option>
                 <Option value={ELEM_VISIBILITY.private}>Private</Option>
               </Select>
@@ -1206,7 +1237,7 @@ export default function SubmissionCard(props) {
                       <td align="left">
                         <Select
                           placeholder="Type"
-                          value={currentOerExternalLinkType}
+                          value={currentOerExternalLinkType ?? ""}
                           onChange={(e, newValue) =>
                             handleOerExternalLinkTypeChange(newValue)
                           }
@@ -1318,7 +1349,7 @@ export default function SubmissionCard(props) {
                     <td align="left">
                       <Select
                         placeholder="Type"
-                        value={currentRelatedResourceType}
+                        value={currentRelatedResourceType ?? ""}
                         onChange={(e, newValue) =>
                           handleRelatedResourceTypeChange(newValue)
                         }
@@ -1420,7 +1451,7 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Select
                 placeholder="Select true or false"
-                value={isGeoreferenced}
+                value={isGeoreferenced ?? ""}
                 onChange={(e, newValue) => setIsGeoreferenced(newValue)}
               >
                 <Option value="">
@@ -1467,7 +1498,7 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Select
                 placeholder="Select a license"
-                value={licenseId}
+                value={licenseId ?? ""}
                 onChange={(e, newValue) => handleLicenseChange(newValue)}
               >
                 <Option value="">

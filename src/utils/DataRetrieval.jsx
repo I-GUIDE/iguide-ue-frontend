@@ -226,13 +226,54 @@ export async function fetchSingleElementDetails(elementId) {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch resources");
+      throw new Error(`Failed to fetch element: ${elementId}`);
     }
 
-    return response.json();
+    const body = await response.json();
+
+    return { ok: true, body: body };
   } catch (error) {
     console.error("Error fetching a single element: ", error.message);
-    return "ERROR";
+    return {
+      ok: false,
+      body: `Error fetchSingleElementDetails(): ${error.message}`,
+    };
+  }
+}
+
+/**
+ * Fetches a single private element for element pages
+ *
+ * @async
+ * @function fetchSinglePrivateElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSinglePrivateElementDetails(elementId) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch private element: ${elementId}`);
+    }
+
+    const body = await response.json();
+
+    return { ok: true, body: body };
+  } catch (error) {
+    console.error("Error fetching a single private element: ", error.message);
+    return {
+      ok: false,
+      body: `Error fetchSinglePrivateElementDetails(). elementId: ${elementId}. Message: ${error.message}`,
+    };
   }
 }
 
@@ -308,13 +349,18 @@ export async function fetchADocumentation(docName) {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch documentation");
+      throw new Error(`Failed to fetch documentation ${docName}`);
     }
 
-    return response.json();
+    const body = await response.json();
+
+    return { ok: true, body: body };
   } catch (error) {
     console.error("Error fetching a single documentation: ", error.message);
-    return "ERROR";
+    return {
+      ok: false,
+      body: `Error fetchADocumentation(). docName: ${docName}. Message: ${error.message}`,
+    };
   }
 }
 
@@ -477,37 +523,6 @@ export async function retrievePrivateElementsByUserId(
     return response.json();
   } catch (error) {
     console.error("Error fetching a list of private elements: ", error.message);
-    return "ERROR";
-  }
-}
-
-/**
- * Fetches a single private element for element pages
- *
- * @async
- * @function fetchSinglePrivateElementDetails
- * @param {string} elementId - Element ID
- * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function fetchSinglePrivateElementDetails(elementId) {
-  try {
-    const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch a single private element");
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching a single private element: ", error.message);
     return "ERROR";
   }
 }
