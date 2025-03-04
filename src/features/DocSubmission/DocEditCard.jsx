@@ -148,7 +148,7 @@ export default function DocEditCard(props) {
   // Check if the current user is admin, if yes, allow edit
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   if (!canEditAllElements) {
-    return <SubmissionStatusCard submissionStatus="unauthorized" />;
+    return <SubmissionStatusCard submissionStatus="error-unauthorized" />;
   }
 
   let cardTitle = "";

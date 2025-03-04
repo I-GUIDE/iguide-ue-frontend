@@ -13,12 +13,17 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
   // Provide a link to the existing element if submission fails due to duplicate DOI
-  const subMessage = props.subMessage;
+  const extraComponent = props.extraComponent;
   const elementURI = props.elementURI;
 
   let submissionStatusText = "";
   let subText = "";
   let submissionSucceeded;
+
+  // Do not render the status card if the status is "no-submission"
+  if (submissionStatus === "no-submission") {
+    return;
+  }
 
   // Display the submission status
   switch (submissionStatus) {
@@ -27,41 +32,73 @@ export default function SubmissionStatusCard(props) {
         "Thank you for your contribution. You are all set.";
       submissionSucceeded = true;
       break;
-    case "initial-failed":
-      submissionStatusText = "Submission failed. Please try again.";
-      submissionSucceeded = false;
-      break;
-    case "initial-failed-duplicate":
-      submissionStatusText = "Submission failed due to duplicate DOI/URL.";
-      submissionSucceeded = false;
-      break;
     case "update-succeeded":
       submissionStatusText = "Thank you for the update. You are all set.";
       submissionSucceeded = true;
       break;
+
+    case "initial-failed":
+      submissionStatusText = "Submission failed: Rejected by the backend";
+      subText =
+        "Your submission is rejected by our backend. Please try again later or contact us.";
+      submissionSucceeded = false;
+      break;
+
     case "update-failed":
-      submissionStatusText = "Update failed. Please try again.";
+      submissionStatusText = "Submission failed: Rejected by the backend";
+      subText =
+        "Your submission is rejected by our backend. Please try again later or contact us.";
       submissionSucceeded = false;
       break;
-    case "unauthorized":
+    case "error-unauthorized":
       submissionStatusText = "You don't have permission to access this page.";
-      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
-        use the link below to reach out to us. Thanks.`;
+      subText =
+        "If you believe you should have had the permission, please try logging in again before reaching out to us.";
       submissionSucceeded = false;
       break;
-    case "unauthorized-update-element":
+    case "error-unauthorized-update-element":
       submissionStatusText = "You don't have permission to edit this element.";
-      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
-        use the link below to reach out to us. Thanks.`;
+      subText =
+        "If you believe you should have had the permission, please try logging in again before reaching out to us.";
       submissionSucceeded = false;
       break;
-    case "unauthorized-initial-submission":
+    case "error-unauthorized-initial-submission":
       submissionStatusText =
         "You don't have permission to contribute this type of elements.";
-      subText = `If you believe this is an error, please try logging in again. If the problem still persists, please
-      use the link below to reach out to us. Thanks.`;
+      subText =
+        "If you believe you should have had the permission, please try logging in again before reaching out to us.";
       submissionSucceeded = false;
       break;
+
+    case "error-initial-failed-duplicate-doi":
+      submissionStatusText = "Submission failed: Duplicate DOI/URL.";
+      subText =
+        "The DOI or URL you provided has already been in another publication element we currently have.";
+      submissionSucceeded = false;
+      break;
+
+    case "error-unsaved-oer-link":
+      submissionStatusText =
+        "Submission failed: Unsaved educational resource external links";
+      subText =
+        'You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!';
+      submissionSucceeded = false;
+      break;
+
+    case "error-uploading-thumbnail":
+      submissionStatusText = "Submission failed: Cannot uploading thumbnails";
+      subText =
+        "We cannot upload the thumbnail due to a backend issue. Please try again later or contact us.";
+      submissionSucceeded = false;
+      break;
+    case "error-no-thumbnail":
+      submissionStatusText =
+        "Submission failed: A thumbnail is required for the element submission";
+      subText =
+        'Please submit a thumbnail for this element using the "Upload a thumbnail image" button.';
+      submissionSucceeded = false;
+      break;
+
     default:
       submissionSucceeded = false;
       submissionStatusText = "Submission status unknown...";
@@ -92,9 +129,15 @@ export default function SubmissionStatusCard(props) {
             }}
           >
             <Stack spacing={2}>
-              <Typography level="h4">{submissionStatusText}</Typography>
+              <Typography level="title-lg">{submissionStatusText}</Typography>
               <Typography level="body-md">{subText}</Typography>
-              {subMessage}
+              {!submissionSucceeded && (
+                <Typography level="body-xs">
+                  If the issue still persists, please use the link below to
+                  reach us. Thanks.
+                </Typography>
+              )}
+              {extraComponent}
             </Stack>
           </Box>
           <Stack

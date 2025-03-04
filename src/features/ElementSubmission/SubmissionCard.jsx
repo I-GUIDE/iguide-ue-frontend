@@ -125,7 +125,7 @@ export default function SubmissionCard(props) {
     useState("");
 
   const [submissionStatus, setSubmissionStatus] = useState("no submission");
-  const [subMessage, setSubMessage] = useState();
+  const [extraComponent, setExtraComponent] = useState();
 
   const [elementURI, setElementURI] = useState("");
 
@@ -192,7 +192,7 @@ export default function SubmissionCard(props) {
   useEffect(() => {
     const fetchData = async () => {
       const elementObject =
-        isPrivateElement === "true"
+        isPrivateElement === true || isPrivateElement === "true"
           ? await fetchSinglePrivateElementDetails(elementId)
           : await fetchSingleElementDetails(elementId);
 
@@ -312,13 +312,13 @@ export default function SubmissionCard(props) {
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
-      alert("Please upload an image!");
+      alert("Thumbnail type error: Please upload an image.");
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
-      alert("Please upload an image smaller than 5MB!");
+      alert("Thumbnail size error: Please upload an image smaller than 5MB.");
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
@@ -357,15 +357,17 @@ export default function SubmissionCard(props) {
   // OER external links...
   const handleAddingOneOerExternalLink = () => {
     if (!currentOerExternalLinkType || currentOerExternalLinkType === "") {
-      alert("Please select an external link type!");
+      alert("Please select an external link type.");
       return;
     }
     if (!currentOerExternalLinkURL || currentOerExternalLinkURL === "") {
-      alert("Please enter a URL!");
+      alert("Please enter a URL.");
       return;
     }
     if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === "") {
-      alert("Please enter a title!");
+      alert(
+        'Please enter a link title, or click "->" to fetch the title of the provided URL.'
+      );
       return;
     }
     setOerExternalLinks([
@@ -401,9 +403,7 @@ export default function SubmissionCard(props) {
         `${USER_BACKEND_URL}/api/url-title/?url=${encodeURIComponent(url)}`
       );
       if (!response.ok) {
-        alert(
-          "Retrieve website title failed... please input the title manually!"
-        );
+        alert("Retrieving URL title failed. Please manually input the title.");
         return;
       }
       const data = await response.json();
@@ -425,7 +425,7 @@ export default function SubmissionCard(props) {
 
   const handleAutofillPublicationInfo = async () => {
     if (!publicationDOI || publicationDOI === "") {
-      alert("Please enter the DOI first. Thank you!");
+      alert("Please enter the DOI first.");
       return;
     }
 
@@ -526,7 +526,11 @@ export default function SubmissionCard(props) {
     event.preventDefault();
     const data = {};
 
-    // When the user forgets to save the new related element, app will ask the user to submit it
+    // Disable the submission button, preventing accidental multiple submissions
+    setButtonDisabled(true);
+
+    // When the user forgets to save the new related element, app will ask the user to submit it.
+    // 02/27/2025: This case has been prevented through a code update.
     if (currentRelatedResourceTitle && currentRelatedResourceTitle !== "") {
       alert(
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
@@ -539,9 +543,9 @@ export default function SubmissionCard(props) {
       (currentOerExternalLinkURL && currentOerExternalLinkURL !== "") ||
       (currentOerExternalLinkTitle && currentOerExternalLinkTitle !== "")
     ) {
-      alert(
-        'You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!'
-      );
+      setOpenModal(true);
+      setSubmissionStatus("error-unsaved-oer-link");
+      setButtonDisabled(false);
       return;
     }
 
@@ -604,8 +608,6 @@ export default function SubmissionCard(props) {
 
     TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
-    setButtonDisabled(true);
-
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
       const formData = new FormData();
@@ -625,15 +627,17 @@ export default function SubmissionCard(props) {
         data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("error-uploading-thumbnail");
         setButtonDisabled(false);
-        alert("Error uploading thumbnail...");
       }
     } else {
       data["thumbnail-image"] = thumbnailImageFileURLs;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
-      alert("You have to upload a thumbnail image for your contribution!");
+      setOpenModal(true);
+      setSubmissionStatus("error-no-thumbnail");
       setButtonDisabled(false);
       return;
     }
@@ -658,6 +662,7 @@ export default function SubmissionCard(props) {
       }
     }
 
+    // Submit or update the element
     if (submissionType === "update") {
       try {
         const response = await fetchWithAuth(
@@ -677,6 +682,7 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
+          setButtonDisabled(false);
           const futureElementUrl = `/${
             RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
           }/${elementId}${
@@ -686,11 +692,13 @@ export default function SubmissionCard(props) {
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
+          setButtonDisabled(false);
         }
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("update-failed");
         setButtonDisabled(false);
-        alert("Error updating this element...");
       }
     } else if (submissionType === "initial") {
       try {
@@ -723,8 +731,8 @@ export default function SubmissionCard(props) {
           result.message === "Duplicate found while registering resource"
         ) {
           setOpenModal(true);
-          setSubmissionStatus("initial-failed-duplicate");
-          setSubMessage(
+          setSubmissionStatus("error-initial-failed-duplicate-doi");
+          setExtraComponent(
             <Typography level="title-md">
               View exisiting element{" "}
               <Link
@@ -737,16 +745,20 @@ export default function SubmissionCard(props) {
               </Link>
             </Typography>
           );
+          setButtonDisabled(false);
         } else {
           setOpenModal(true);
           setSubmissionStatus("initial-failed");
+          setButtonDisabled(false);
         }
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("initial-failed");
         setButtonDisabled(false);
-        alert("Error submitting this new element..");
       }
     }
+    // Re-enable the submission button. This part, as a fail-safe, is necessary in case of some unexpected early returns.
     setButtonDisabled(false);
   };
 
@@ -790,7 +802,7 @@ export default function SubmissionCard(props) {
       TEST_MODE &&
         console.log("Can't update", localUserInfo.role, userRoleFromJWT);
       return (
-        <SubmissionStatusCard submissionStatus="unauthorized-update-element" />
+        <SubmissionStatusCard submissionStatus="error-unauthorized-update-element" />
       );
     }
   }
@@ -811,7 +823,7 @@ export default function SubmissionCard(props) {
       TEST_MODE &&
         console.log("Can't contribute", localUserInfo.role, userRoleFromJWT);
       return (
-        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
       );
     } else if (elementType === "oer" && !canEditOER) {
       TEST_MODE &&
@@ -821,7 +833,7 @@ export default function SubmissionCard(props) {
           userRoleFromJWT
         );
       return (
-        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
       );
     } else if (elementType === "map" && !canEditMap) {
       TEST_MODE &&
@@ -831,7 +843,7 @@ export default function SubmissionCard(props) {
           userRoleFromJWT
         );
       return (
-        <SubmissionStatusCard submissionStatus="unauthorized-initial-submission" />
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
       );
     }
   }
@@ -1669,15 +1681,16 @@ export default function SubmissionCard(props) {
       <Modal
         open={openModal}
         onClose={() => {
-          setSubmissionStatus("no submission");
+          setSubmissionStatus("no-submission");
           setOpenModal(false);
+          setButtonDisabled(false);
         }}
       >
         <ModalDialog size="lg">
           <ModalClose />
           <SubmissionStatusCard
             submissionStatus={submissionStatus}
-            subMessage={subMessage}
+            extraComponent={extraComponent}
             elementURI={elementURI}
           />
         </ModalDialog>
