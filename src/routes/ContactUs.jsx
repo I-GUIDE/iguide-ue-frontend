@@ -29,8 +29,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
+import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 
-const VITE_SLACK_API_URL = import.meta.env.VITE_SLACK_API_URL;
 const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -178,31 +178,6 @@ export default function ContactUs() {
     return res;
   }
 
-  async function sendMessageToSlack() {
-    const res = await fetch(
-      `https://hooks.slack.com/services/${VITE_SLACK_API_URL}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: JSON.stringify({
-          blocks: [
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: `*${contactCategory}*\n_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`,
-              },
-            },
-          ],
-        }),
-      }
-    );
-
-    return res;
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -212,7 +187,9 @@ export default function ContactUs() {
     if (imageFilesURL.length > 0) {
       res = await uploadImgToSlack();
     } else {
-      res = await sendMessageToSlack();
+      res = await sendMessageToSlack(
+        `*${contactCategory}*\n_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`
+      );
     }
 
     if (res.status === 200) {
