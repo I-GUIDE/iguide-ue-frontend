@@ -21,8 +21,6 @@ import { SitemapErrorPage } from "../components/Sitemap";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 
-const VITE_SEND_ERR_TO_SLACK =
-  import.meta.env.VITE_SEND_ERR_TO_SLACK === "true";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ErrorPage(props) {
@@ -87,9 +85,7 @@ export default function ErrorPage(props) {
   useEffect(() => {
     async function sendMessages() {
       TEST_MODE && console.log("Error message to be sent:", msgToBeSent);
-      if (VITE_SEND_ERR_TO_SLACK) {
-        sendMessageToSlack(msgToBeSent);
-      }
+      sendMessageToSlack(msgToBeSent);
     }
 
     // Set a timer for unwanted double requests...
