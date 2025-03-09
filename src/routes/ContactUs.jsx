@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Link as RouterLink, useOutletContext } from "react-router";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { CssVarsProvider, styled } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -33,6 +34,8 @@ import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 
 const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const VITE_GOOGLE_RECAPTCHA_SITE_KEY = import.meta.env
+  .VITE_GOOGLE_RECAPTCHA_SITE_KEY;
 
 export default function ContactUs() {
   usePageTitle("Contact Us");
@@ -48,6 +51,8 @@ export default function ContactUs() {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageFilesURL, setImageFilesURL] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const recaptcha = useRef();
 
   useEffect(() => {
     async function setUserInfo() {
@@ -181,6 +186,13 @@ export default function ContactUs() {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+
+    const captchaValue = recaptcha.current.getValue();
+    if (!captchaValue) {
+      alert("Please complete the reCAPTCHA verification to continue.");
+      setLoading(false);
+      return;
+    }
 
     let res;
 
@@ -514,6 +526,11 @@ export default function ContactUs() {
                         </div>
                       )}
                     </FormControl>
+
+                    <ReCAPTCHA
+                      ref={recaptcha}
+                      sitekey={VITE_GOOGLE_RECAPTCHA_SITE_KEY}
+                    />
 
                     <Button type="submit" disabled={loading}>
                       Submit

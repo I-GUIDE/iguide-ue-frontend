@@ -1,6 +1,6 @@
 import axios from "axios";
 import { fetchWithAuth } from "./FetcherWithJWT";
-import { sendMessageToSlack } from "./AutomaticBugReporting";
+import { sendBugToSlack } from "./AutomaticBugReporting";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -46,7 +46,7 @@ export async function getHomepageElements(elementType, limit = 4) {
 
   if (!response.ok) {
     const msgToBeSent = getErrorMessageToSend(apiCall, response.statusText);
-    sendMessageToSlack(msgToBeSent);
+    sendBugToSlack(msgToBeSent);
 
     throw new Error(`Error fetching featured elements: ${response.statusText}`);
   }
@@ -449,7 +449,7 @@ export async function fetchConnectedGraph() {
     });
     if (!response.ok) {
       const msgToBeSent = getErrorMessageToSend(apiCall, response.statusText);
-      sendMessageToSlack(msgToBeSent);
+      sendBugToSlack(msgToBeSent);
 
       throw new Error("Failed to fetch the connected graph");
     }
