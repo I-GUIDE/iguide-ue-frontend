@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Link as RouterLink, useOutletContext } from "react-router";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { CssVarsProvider, styled } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -33,6 +34,8 @@ import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 
 const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const VITE_GOOGLE_RECAPTCHA_SITE_KEY = import.meta.env
+  .VITE_GOOGLE_RECAPTCHA_SITE_KEY;
 
 export default function ContactUs() {
   usePageTitle("Contact Us");
@@ -48,6 +51,8 @@ export default function ContactUs() {
   const [imageFiles, setImageFiles] = useState([]);
   const [imageFilesURL, setImageFilesURL] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const recaptchaRef = useRef();
 
   useEffect(() => {
     async function setUserInfo() {
@@ -182,6 +187,35 @@ export default function ContactUs() {
     e.preventDefault();
     setLoading(true);
 
+    const recaptchaToken = recaptchaRef.current.getValue();
+    if (!recaptchaToken) {
+      alert("Please complete the reCAPTCHA verification to continue.");
+      setLoading(false);
+      recaptchaRef.current.reset();
+      return;
+    } else {
+      const res = await fetch(
+        `${VITE_EXPRESS_BACKEND_URL}/recaptcha-verification`,
+        {
+          method: "POST",
+          body: JSON.stringify({ recaptchaToken }),
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
+      const verification = await res.json();
+      TEST_MODE && console.log("reCAPTCHA verification result", verification);
+      if (!verification.success) {
+        alert(
+          "reCAPTCHA validation failed. Please try again later or reach us via email."
+        );
+        setLoading(false);
+        recaptchaRef.current.reset();
+        return;
+      }
+    }
+
     let res;
 
     if (imageFilesURL.length > 0) {
@@ -190,6 +224,16 @@ export default function ContactUs() {
       res = await sendMessageToSlack(
         `*${contactCategory}*\n_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`
       );
+    }
+
+    // When send to Slack feature is disabled...
+    if (!res) {
+      setError(
+        "Failed to send this message because this feature is temporarily disabled. Please try again later, or you can reach us via email at help@i-guide.io."
+      );
+      setLoading(false);
+      recaptchaRef.current.reset();
+      return;
     }
 
     if (res.status === 200) {
@@ -209,6 +253,7 @@ export default function ContactUs() {
     }
 
     setLoading(false);
+    recaptchaRef.current.reset();
   }
 
   function RequiredFieldIndicator() {
@@ -514,6 +559,11 @@ export default function ContactUs() {
                         </div>
                       )}
                     </FormControl>
+
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={VITE_GOOGLE_RECAPTCHA_SITE_KEY}
+                    />
 
                     <Button type="submit" disabled={loading}>
                       Submit
