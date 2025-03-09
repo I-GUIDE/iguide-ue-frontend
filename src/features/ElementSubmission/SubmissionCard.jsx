@@ -39,7 +39,10 @@ import CapsuleInput from "../../components/CapsuleInput";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
-import { fetchGitHubReadme } from "../../utils/GitHubFetchMethods";
+import {
+  fetchGitHubReadme,
+  fetchRepoMetadata,
+} from "../../utils/GitHubFetchMethods";
 
 import ErrorPage from "../../routes/ErrorPage";
 
@@ -652,6 +655,14 @@ export default function SubmissionCard(props) {
       TEST_MODE &&
         console.log("Submission: repo owner and name", repoOwner, repoName);
       // Fetch README.md
+      const repoStatus = await fetchRepoMetadata(repoOwner, repoName);
+      // This is for verifying the GitHub repo
+      if (repoStatus === "ERROR") {
+        setOpenModal(true);
+        setSubmissionStatus("error-cannot-verify-github-repo-status");
+        setButtonDisabled(false);
+        return;
+      }
       const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
       // If GitHub doesn't return raw readme, use the copy from the DB
       if (rawReadme !== "ERROR") {
@@ -1360,7 +1371,7 @@ export default function SubmissionCard(props) {
                     tooltipContent={`An example link may look like "https://github.com/<repo_owner>/<repo_name>"`}
                     fieldRequired
                   >
-                    GitHub repository link
+                    GitHub repository link (Repository must be public)
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Input

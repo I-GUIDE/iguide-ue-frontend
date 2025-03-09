@@ -99,6 +99,15 @@ export default function SubmissionStatusCard(props) {
       submissionSucceeded = false;
       break;
 
+    case "error-cannot-verify-github-repo-status":
+      submissionStatusText =
+        "Submission failed: Cannot verify GitHub repository link";
+      subText = `We cannot verify the GitHub repository link you provided. Please ensure
+      the link is correct and the repository is public; otherwise, the GitHub API for verification
+      may be temporarily unavailable. Please try again later.`;
+      submissionSucceeded = false;
+      break;
+
     default:
       submissionSucceeded = false;
       submissionStatusText = "Submission status unknown...";
