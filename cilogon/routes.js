@@ -28,6 +28,8 @@ const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 const slack_channel_id = process.env.SLACK_CHANNEL_ID;
 const slack_api_token = process.env.SLACK_API_TOKEN;
 
+const recaptcha_secret_key = process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
+
 const web = new WebClient(slack_api_token);
 
 if (!os_node) {
@@ -244,6 +246,21 @@ router.get("/userinfo", (req, res) => {
     res.end(JSON.stringify(no_user_info));
   }
 });
+
+router.post('/recaptcha-verification', async (req, res) => {
+  const recaptchaToken = req.body
+  const response = await fetch(
+    `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret_key}&response=${recaptchaToken?.recaptchaToken}`, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+  })
+  if (!response.ok) {
+    res.send()
+  }
+
+  const result = await response.json();
+  res.send(result)
+})
 
 router.get("/error", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>

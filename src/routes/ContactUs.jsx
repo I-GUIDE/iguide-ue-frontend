@@ -52,7 +52,7 @@ export default function ContactUs() {
   const [imageFilesURL, setImageFilesURL] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const recaptcha = useRef();
+  const recaptchaRef = useRef();
 
   useEffect(() => {
     async function setUserInfo() {
@@ -187,11 +187,33 @@ export default function ContactUs() {
     e.preventDefault();
     setLoading(true);
 
-    const captchaValue = recaptcha.current.getValue();
-    if (!captchaValue) {
+    const recaptchaToken = recaptchaRef.current.getValue();
+    if (!recaptchaToken) {
       alert("Please complete the reCAPTCHA verification to continue.");
       setLoading(false);
+      recaptchaRef.current.reset();
       return;
+    } else {
+      const res = await fetch(
+        `${VITE_EXPRESS_BACKEND_URL}/recaptcha-verification`,
+        {
+          method: "POST",
+          body: JSON.stringify({ recaptchaToken }),
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
+      const verification = await res.json();
+      TEST_MODE && console.log("reCAPTCHA verification result", verification);
+      if (!verification.success) {
+        alert(
+          "reCAPTCHA validation failed. Please try again later or reach us via email."
+        );
+        setLoading(false);
+        recaptchaRef.current.reset();
+        return;
+      }
     }
 
     let res;
@@ -202,6 +224,16 @@ export default function ContactUs() {
       res = await sendMessageToSlack(
         `*${contactCategory}*\n_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`
       );
+    }
+
+    // When send to Slack feature is disabled...
+    if (!res) {
+      setError(
+        "Failed to send this message because this feature is temporarily disabled. Please try again later, or you can reach us via email at help@i-guide.io."
+      );
+      setLoading(false);
+      recaptchaRef.current.reset();
+      return;
     }
 
     if (res.status === 200) {
@@ -221,6 +253,7 @@ export default function ContactUs() {
     }
 
     setLoading(false);
+    recaptchaRef.current.reset();
   }
 
   function RequiredFieldIndicator() {
@@ -528,7 +561,7 @@ export default function ContactUs() {
                     </FormControl>
 
                     <ReCAPTCHA
-                      ref={recaptcha}
+                      ref={recaptchaRef}
                       sitekey={VITE_GOOGLE_RECAPTCHA_SITE_KEY}
                     />
 
