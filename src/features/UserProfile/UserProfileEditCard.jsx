@@ -67,7 +67,7 @@ export default function UserProfileEditCard(props) {
   const { localUserInfo } = useOutletContext();
 
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
-    useState("no submission");
+    useState("no-submission");
 
   const [firstNameFromDB, setFirstNameFromDB] = useState();
   const [lastNameFromDB, setLastNameFromDB] = useState();
@@ -211,7 +211,7 @@ export default function UserProfileEditCard(props) {
   }
 
   // After submission, show users the submission status.
-  if (userProfileSubmissionStatus !== "no submission") {
+  if (userProfileSubmissionStatus !== "no-submission") {
     return (
       <UserProfileEditStatusCard
         userProfileSubmissionStatus={userProfileSubmissionStatus}

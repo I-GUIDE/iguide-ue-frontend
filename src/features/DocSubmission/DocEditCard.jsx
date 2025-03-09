@@ -37,7 +37,7 @@ export default function DocEditCard(props) {
   const [docName, setDocName] = useState("");
   const [docContent, setDocContent] = useState("");
 
-  const [submissionStatus, setSubmissionStatus] = useState("no submission");
+  const [submissionStatus, setSubmissionStatus] = useState("no-submission");
   const [docURI, setDocURI] = useState();
 
   const [error, setError] = useState("");
@@ -131,7 +131,7 @@ export default function DocEditCard(props) {
   }
 
   // After submission, show users the submission status.
-  if (submissionStatus !== "no submission") {
+  if (submissionStatus !== "no-submission") {
     return (
       <SubmissionStatusCard
         submissionStatus={submissionStatus}

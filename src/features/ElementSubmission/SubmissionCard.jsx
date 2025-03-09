@@ -127,7 +127,7 @@ export default function SubmissionCard(props) {
   const [currentOerExternalLinkTitle, setCurrentOerExternalLinkTitle] =
     useState("");
 
-  const [submissionStatus, setSubmissionStatus] = useState("no submission");
+  const [submissionStatus, setSubmissionStatus] = useState("no-submission");
   const [extraComponent, setExtraComponent] = useState();
 
   const [elementURI, setElementURI] = useState("");
@@ -633,6 +633,7 @@ export default function SubmissionCard(props) {
         setOpenModal(true);
         setSubmissionStatus("error-uploading-thumbnail");
         setButtonDisabled(false);
+        return;
       }
     } else {
       data["thumbnail-image"] = thumbnailImageFileURLs;
@@ -704,12 +705,14 @@ export default function SubmissionCard(props) {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
           setButtonDisabled(false);
+          return;
         }
       } catch (error) {
         console.error("Error:", error);
         setOpenModal(true);
         setSubmissionStatus("update-failed");
         setButtonDisabled(false);
+        return;
       }
     } else if (submissionType === "initial") {
       try {
@@ -757,16 +760,19 @@ export default function SubmissionCard(props) {
             </Typography>
           );
           setButtonDisabled(false);
+          return;
         } else {
           setOpenModal(true);
           setSubmissionStatus("initial-failed");
           setButtonDisabled(false);
+          return;
         }
       } catch (error) {
         console.error("Error:", error);
         setOpenModal(true);
         setSubmissionStatus("initial-failed");
         setButtonDisabled(false);
+        return;
       }
     }
     // Re-enable the submission button. This part, as a fail-safe, is necessary in case of some unexpected early returns.
@@ -784,7 +790,7 @@ export default function SubmissionCard(props) {
   }
 
   // After submission, show users the submission status.
-  if (submissionStatus !== "no submission" && !openModal) {
+  if (submissionStatus !== "no-submission" && !openModal) {
     return (
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
