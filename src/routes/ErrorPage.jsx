@@ -37,10 +37,16 @@ export default function ErrorPage(props) {
   let errorType = "";
   let errorMessage = "";
 
+  const errorTitle = "Something went wrong...";
+  let errorSubtitle =
+    'Please try again later, or you can report this issue to us using the "Contact Us" link.';
+
   // Check error types
   if (isRouteErrorResponse(error)) {
     errorType = "0";
     errorMessage = error.error?.message || error.statusText;
+    errorSubtitle =
+      'Please double-check the URL and make sure it is correct, or you can report this issue to us using the "Contact Us" link.';
   } else if (error instanceof Error) {
     errorType = "1";
     errorMessage = `${error.name}: ${error.message}`;
@@ -51,9 +57,6 @@ export default function ErrorPage(props) {
     errorType = "3";
     errorMessage = errorStatusText ?? "No error message...";
   }
-
-  const errorTitle = "Something went wrong...";
-  const errorSubtitle = "Our developers have been notified of this issue.";
 
   var currentTime = new Date();
   currentTime.toUTCString();
@@ -83,6 +86,8 @@ export default function ErrorPage(props) {
   }
 
   useEffect(() => {
+    const noReportingErrorTypes = ["0"];
+
     async function sendMessages() {
       TEST_MODE && console.log("Error message to be sent:", msgToBeSent);
       sendMessageToSlack(msgToBeSent);
@@ -90,13 +95,13 @@ export default function ErrorPage(props) {
 
     // Set a timer for unwanted double requests...
     const timer = setTimeout(() => {
-      if (msgToBeSent) {
+      if (msgToBeSent && !noReportingErrorTypes.includes(errorType)) {
         sendMessages();
       }
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [msgToBeSent]);
+  }, [msgToBeSent, errorType]);
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -133,6 +138,7 @@ export default function ErrorPage(props) {
                   boxShadow: "md",
                   borderColor: "neutral.outlinedHoverBorder",
                 },
+                maxWidth: "700px",
               }}
             >
               <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
@@ -144,7 +150,7 @@ export default function ErrorPage(props) {
                   }}
                 >
                   <Typography level="h2">{errorTitle}</Typography>
-                  <Typography level="title-md">{errorSubtitle}</Typography>
+                  <Typography level="body-md">{errorSubtitle}</Typography>
                   <Stack
                     direction="row"
                     flexWrap="wrap"
