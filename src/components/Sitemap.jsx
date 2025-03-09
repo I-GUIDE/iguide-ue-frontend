@@ -61,18 +61,26 @@ export function SitemapErrorPage({ isAuthenticated, localUserInfo }) {
   return (
     <Grid>
       <Divider sx={{ mx: 2, my: 2 }} />
-      <Typography level="h4" style={{ textAlign: "left", margin: "0 20px" }} sx={{ pb: 2 }}>
+      <Typography
+        level="h4"
+        style={{ textAlign: "left", margin: "0 20px" }}
+        sx={{ pb: 2 }}
+      >
         Explore other resources...
       </Typography>
       <LinkContainerErrorPage>
         {Object.entries(groupedRoutes).map(([category, items]) => (
-          <Group>
+          <Group key={category}>
             <Typography level="title-md" style={{ textAlign: "left" }}>
               {category}
             </Typography>
             <Group style={{ gap: "5px" }}>
               {items.map((item) => (
-                <Link href={item.path} style={{ textAlign: "left" }}>
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  style={{ textAlign: "left" }}
+                >
                   {item.label}
                 </Link>
               ))}

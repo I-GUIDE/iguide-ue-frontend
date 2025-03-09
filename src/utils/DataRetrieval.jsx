@@ -1,22 +1,56 @@
 import axios from "axios";
 import { fetchWithAuth } from "./FetcherWithJWT";
+import { sendMessageToSlack } from "./AutomaticBugReporting";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 /**
- * Retrieve elements for the homepage from the database.
- * @return {Promise<Array<Dict>>} an array of all elements for homepage.
+ * Form the error message for the fetch functions
+ *
+ * @function getErrorMessageToSend
+ * @param {string} apiCall - API call
+ * @param {string} errorStatus - the error message
+ * @returns {string} A markdown message to be sent to the bug report agents
+ */
+function getErrorMessageToSend(apiCall, errorStatus) {
+  var currentTime = new Date();
+  currentTime.toUTCString();
+  const currentUrl = window.location.href;
+
+  const msgToBeSent = `
+    *An error occurred!*
+    *Error info*:
+      * API call: ${apiCall},
+      * Type: Error from backend,
+      * Message: ${errorStatus},
+      * Time: ${currentTime},
+      * URL: ${currentUrl}`;
+
+  return msgToBeSent;
+}
+
+/**
+ * Retrieve featured elements.
+ *
+ * @async
+ * @function getHomepageElements
+ * @param {string} elementType - Element type
+ * @param {number} [limit=4] - max number of featured elements returned
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the featured elements.
+ * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function getHomepageElements(elementType, limit = 4) {
-  const response = await fetch(
-    `${BACKEND_URL_PORT}/api/elements/homepage?element-type=${elementType}&limit=${limit}`
-  );
+  const apiCall = `${BACKEND_URL_PORT}/api/elements/homepage?element-type=${elementType}&limit=${limit}`;
+  const response = await fetch(apiCall);
+
   if (!response.ok) {
-    throw new Error(
-      `Error fetching featured resources: ${response.statusText}`
-    );
+    const msgToBeSent = getErrorMessageToSend(apiCall, response.statusText);
+    sendMessageToSlack(msgToBeSent);
+
+    throw new Error(`Error fetching featured elements: ${response.statusText}`);
   }
+
   const data = await response.json();
   return data["elements"];
 }
@@ -226,13 +260,54 @@ export async function fetchSingleElementDetails(elementId) {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch resources");
+      throw new Error(`Failed to fetch element: ${elementId}`);
     }
 
-    return response.json();
+    const body = await response.json();
+
+    return { ok: true, body: body };
   } catch (error) {
     console.error("Error fetching a single element: ", error.message);
-    return "ERROR";
+    return {
+      ok: false,
+      body: `Error fetchSingleElementDetails(): ${error.message}`,
+    };
+  }
+}
+
+/**
+ * Fetches a single private element for element pages
+ *
+ * @async
+ * @function fetchSinglePrivateElementDetails
+ * @param {string} elementId - Element ID
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchSinglePrivateElementDetails(elementId) {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch private element: ${elementId}`);
+    }
+
+    const body = await response.json();
+
+    return { ok: true, body: body };
+  } catch (error) {
+    console.error("Error fetching a single private element: ", error.message);
+    return {
+      ok: false,
+      body: `Error fetchSinglePrivateElementDetails(). elementId: ${elementId}. Message: ${error.message}`,
+    };
   }
 }
 
@@ -308,13 +383,18 @@ export async function fetchADocumentation(docName) {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch documentation");
+      throw new Error(`Failed to fetch documentation ${docName}`);
     }
 
-    return response.json();
+    const body = await response.json();
+
+    return { ok: true, body: body };
   } catch (error) {
     console.error("Error fetching a single documentation: ", error.message);
-    return "ERROR";
+    return {
+      ok: false,
+      body: `Error fetchADocumentation(). docName: ${docName}. Message: ${error.message}`,
+    };
   }
 }
 
@@ -331,7 +411,6 @@ export async function fetchADocumentation(docName) {
 export async function fetchNeighbors(elementId, depth = 2) {
   try {
     const response = await fetch(
-      // `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors?depth=${depth}`,
       `${BACKEND_URL_PORT}/api/elements/${elementId}/neighbors`,
       {
         method: "GET",
@@ -360,14 +439,18 @@ export async function fetchNeighbors(elementId, depth = 2) {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function fetchConnectedGraph() {
+  const apiCall = `${BACKEND_URL_PORT}/api/connected-graph`;
   try {
-    const response = await fetch(`${BACKEND_URL_PORT}/api/connected-graph`, {
+    const response = await fetch(apiCall, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     if (!response.ok) {
+      const msgToBeSent = getErrorMessageToSend(apiCall, response.statusText);
+      sendMessageToSlack(msgToBeSent);
+
       throw new Error("Failed to fetch the connected graph");
     }
 
@@ -477,37 +560,6 @@ export async function retrievePrivateElementsByUserId(
     return response.json();
   } catch (error) {
     console.error("Error fetching a list of private elements: ", error.message);
-    return "ERROR";
-  }
-}
-
-/**
- * Fetches a single private element for element pages
- *
- * @async
- * @function fetchSinglePrivateElementDetails
- * @param {string} elementId - Element ID
- * @returns {Promise<Object>} A promise that resolves to the JSON response containing the resources.
- * @throws {Error} Throws an error if the fetch operation fails.
- */
-export async function fetchSinglePrivateElementDetails(elementId) {
-  try {
-    const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/api/elements/private/${elementId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch a single private element");
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching a single private element: ", error.message);
     return "ERROR";
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
-import { useParams } from "react-router";
+import { useParams, useOutletContext } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -30,16 +30,21 @@ export default function DocPage() {
 
   const [error, setError] = useState(false);
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
   useEffect(() => {
     async function fetchData() {
-      const thisDoc = await fetchADocumentation(id);
-      TEST_MODE && console.log("Doc", thisDoc);
+      const docObject = await fetchADocumentation(id);
 
-      if (thisDoc === "ERROR") {
-        setError(true);
+      if (!docObject.ok) {
+        setError(docObject.body);
+        TEST_MODE &&
+          console.log("Error from fetchADocumentation():", docObject.body);
         return;
       }
 
+      const thisDoc = docObject.body;
+      TEST_MODE && console.log("Returned doc", thisDoc);
       setTitle(thisDoc.name);
       setContent(thisDoc.content);
     }
@@ -50,7 +55,11 @@ export default function DocPage() {
 
   if (error) {
     return (
-      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+      <ErrorPage
+        customStatusText={error}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
     );
   }
 

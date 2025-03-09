@@ -1,5 +1,5 @@
-import React from "react";
-import { useRouteError, useNavigate } from "react-router";
+import React, { useEffect } from "react";
+import { useRouteError, isRouteErrorResponse, useNavigate } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -19,18 +19,89 @@ import SearchBar from "../components/SearchBar";
 import { SitemapErrorPage } from "../components/Sitemap";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ErrorPage(props) {
+  const errorStatusText = props.customStatusText;
+  const isAuthenticated = props.isAuthenticated;
+  const localUserInfo = props.localUserInfo;
+
   usePageTitle("Error");
   const navigate = useNavigate();
 
   const error = useRouteError();
-  error && console.error("Err msg", error);
+  error && console.error("Error from useRouteError:", error);
 
-  const errorStatus = props.customStatus ? props.customStatus : error.status;
-  const errorStatusText = props.customStatusText
-    ? props.customStatusText
-    : error.statusText;
+  let errorType = "";
+  let errorMessage = "";
+
+  const errorTitle = "Something went wrong...";
+  let errorSubtitle =
+    'Please try again later, or you can report this issue to us using the "Contact Us" link.';
+
+  // Check error types
+  if (isRouteErrorResponse(error)) {
+    errorType = "0";
+    errorMessage = error.error?.message || error.statusText;
+    errorSubtitle =
+      'Please double-check the URL and make sure it is correct, or you can report this issue to us using the "Contact Us" link.';
+  } else if (error instanceof Error) {
+    errorType = "1";
+    errorMessage = `${error.name}: ${error.message}`;
+  } else if (typeof error === "string") {
+    errorType = "2";
+    errorMessage = error;
+  } else {
+    errorType = "3";
+    errorMessage = errorStatusText ?? "No error message...";
+  }
+
+  var currentTime = new Date();
+  currentTime.toUTCString();
+  const currentUrl = window.location.href;
+
+  let msgToBeSent = `
+  *An error occurred!*
+    *Error info*:
+      * Type: ${errorType},
+      * Message: ${errorMessage},
+      * Time: ${currentTime},
+      * URL: ${currentUrl}
+    *User Info*:`;
+
+  if (isAuthenticated) {
+    msgToBeSent += `
+      * Logged in: ${isAuthenticated},
+      * First name: ${localUserInfo?.["first_name"]},
+      * Last name: ${localUserInfo?.["last_name"]},
+      * Email: ${localUserInfo?.email},
+      * Affiliation: ${localUserInfo?.affiliation}.
+    `;
+  } else {
+    msgToBeSent += `
+      * Logged in: ${isAuthenticated}.
+    `;
+  }
+
+  useEffect(() => {
+    const noReportingErrorTypes = ["0"];
+
+    async function sendMessages() {
+      TEST_MODE && console.log("Error message to be sent:", msgToBeSent);
+      sendMessageToSlack(msgToBeSent);
+    }
+
+    // Set a timer for unwanted double requests...
+    const timer = setTimeout(() => {
+      if (msgToBeSent && !noReportingErrorTypes.includes(errorType)) {
+        sendMessages();
+      }
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [msgToBeSent, errorType]);
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -67,6 +138,7 @@ export default function ErrorPage(props) {
                   boxShadow: "md",
                   borderColor: "neutral.outlinedHoverBorder",
                 },
+                maxWidth: "700px",
               }}
             >
               <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
@@ -77,9 +149,8 @@ export default function ErrorPage(props) {
                     display: "flex",
                   }}
                 >
-                  <Typography level="h1">{`${errorStatus}`}</Typography>
-                  <Typography level="title-lg">{`${errorStatusText} :(`}</Typography>
-                  <SearchBar placeholder="Search elements..." />
+                  <Typography level="h2">{errorTitle}</Typography>
+                  <Typography level="body-md">{errorSubtitle}</Typography>
                   <Stack
                     direction="row"
                     flexWrap="wrap"
@@ -120,9 +191,10 @@ export default function ErrorPage(props) {
                       Go Back
                     </Button>
                   </Stack>
+                  <SearchBar placeholder="Search elements..." />
                   <SitemapErrorPage
-                    isAuthenticated={props.isAuthenticated}
-                    localUserInfo={props.localUserInfo}
+                    isAuthenticated={isAuthenticated}
+                    localUserInfo={localUserInfo}
                   />
                 </Stack>
               </CardContent>
