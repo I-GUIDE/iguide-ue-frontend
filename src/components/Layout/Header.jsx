@@ -13,9 +13,14 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Add from "@mui/icons-material/Add";
 
-import { HEADER_HEIGHT } from "../../configs/VarConfigs";
+import {
+  HEADER_HEIGHT,
+  RESOURCE_TYPE_NAMES_PLURAL,
+  RESOURCE_TYPE_NAMES_FOR_URI,
+} from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 import PageNav from "../PageNav";
+import SearchBar from "../SearchBar";
 
 export default function Header(props) {
   const title = props.title ? props.title : "";
@@ -25,10 +30,17 @@ export default function Header(props) {
   const parentPages = props.parentPages;
   const contribution = props.contribution ? props.contribution : {};
 
+  const elementTypeDisplayPlural = props.elementType
+    ? RESOURCE_TYPE_NAMES_PLURAL[props.elementType]
+    : "Elements";
+  const elementTypeUri = props.elementType
+    ? RESOURCE_TYPE_NAMES_FOR_URI[props.elementType]
+    : "any";
+
   const contributionText = contribution.text;
   const contributionLink = contribution.link;
 
-  const { isAuthenticated, localUserInfo } = useOutletContext();
+  const { localUserInfo } = useOutletContext();
 
   const canContributeElements =
     localUserInfo?.role <= PERMISSIONS["contribute"];
@@ -51,7 +63,7 @@ export default function Header(props) {
         </CardCover>
         <CardContent>
           <Container maxWidth="lg">
-            <Stack spacing={2} sx={{ px: 4, py: 2 }}>
+            <Stack spacing={3} sx={{ px: 4, py: 2 }}>
               <PageNav
                 parentPages={parentPages}
                 currentPage={currentPage}
@@ -105,6 +117,19 @@ export default function Header(props) {
                     </Button>
                   </Tooltip>
                 )}
+              </Stack>
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                }}
+              >
+                <SearchBar
+                  placeholder={`Search ${elementTypeDisplayPlural}...`}
+                  searchCategory={elementTypeUri}
+                />
               </Stack>
             </Stack>
           </Container>

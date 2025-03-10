@@ -20,6 +20,7 @@ export default function SearchBar(props) {
   const onSearch = props.onSearch;
   const showSmartSearch = props.showSmartSearch;
   const showTrendingSearchKeywords = props.showTrendingSearchKeywords;
+  const searchCategory = props.searchCategory || "any";
   const placeholder = props.placeholder;
 
   // define search data
@@ -33,7 +34,6 @@ export default function SearchBar(props) {
   // the term that will be immediately passed to the database for search
   const [searchTerm, setSearchTerm] = useState("");
   const [trendingSearchKeywords, setTrendingSearchKeywords] = useState([]);
-  const searchCategory = "any";
 
   useEffect(() => {
     async function retrieveTrendingSearchKeywords() {
