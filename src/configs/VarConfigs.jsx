@@ -30,6 +30,37 @@ export const RESOURCE_TYPE_NAMES = {
   any: "All Types",
 };
 
+export const RESOURCE_TYPE_NAMES_PLURAL = {
+  dataset: "Datasets",
+  datasets: "Datasets",
+  notebook: "Notebooks",
+  notebooks: "Notebooks",
+  publication: "Publications",
+  publications: "Publications",
+  oer: "Educational Resources",
+  oers: "Educational Resources",
+  map: "Maps",
+  maps: "Maps",
+  code: "Code",
+  codes: "Code",
+  any: "All Types",
+};
+
+export const RESOURCE_TYPE_NAMES_FOR_URI = {
+  dataset: "dataset",
+  datasets: "dataset",
+  notebook: "notebook",
+  notebooks: "notebook",
+  publication: "publication",
+  publications: "publication",
+  oer: "oer",
+  oers: "oer",
+  map: "map",
+  maps: "map",
+  code: "code",
+  codes: "code",
+};
+
 export const RESOURCE_TYPE_NAMES_PLURAL_FOR_URI = {
   dataset: "datasets",
   datasets: "datasets",
