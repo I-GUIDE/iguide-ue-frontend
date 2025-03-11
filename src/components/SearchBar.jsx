@@ -15,6 +15,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { retrieveTopSearchKeywords } from "../utils/DataRetrieval";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const TRENDING_SEARCH_TERM_THRESHOLD =
+  import.meta.env.VITE_TRENDING_SEARCH_TERM_THRESHOLD || 5;
 
 export default function SearchBar(props) {
   const onSearch = props.onSearch;
@@ -41,9 +43,9 @@ export default function SearchBar(props) {
       TEST_MODE && console.log("Trending search keywords returned", data);
 
       if (data && data !== "ERROR") {
-        // Only display search keywords more than 10 times
+        // Only display search keywords more than TRENDING_SEARCH_TERM_THRESHOLD times
         const keywordCountList = data["top_keywords"].filter(
-          (keywordCount) => keywordCount.count > 10
+          (keywordCount) => keywordCount.count > TRENDING_SEARCH_TERM_THRESHOLD
         );
         const keywordList = keywordCountList.map((keyword) => {
           return keyword.keyword;
