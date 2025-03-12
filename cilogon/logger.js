@@ -6,8 +6,13 @@ const logger = pino({
   level: process.env.LOGGER_LOG_LEVEL || "info",
   transport: {
     target: "pino-pretty",
+    options: {
+      colorize: true,
+      translateTime: 'UTC:yyyy-mm-dd HH:MM:ss.l o'
+    }
   },
-});
+}, pino.destination("./pino-logger.log"));
+
 const httpLogger = pinoHttp({ logger });
 
 module.exports = {
