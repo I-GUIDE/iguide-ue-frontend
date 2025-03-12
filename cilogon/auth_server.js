@@ -29,10 +29,15 @@ const CLIENT_SECRET = process.env.REACT_APP_IDENTITY_CLIENT_SECRET;
 // Redirect URL (specified during the CILogon registration)
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
 
+const USE_HTTP_LOGGER = process.env.USE_HTTP_LOGGER === "true";
+
 const app = express();
 
 // Use Pino HTTP middleware
-app.use(httpLogger);
+if (USE_HTTP_LOGGER) {
+  app.use(httpLogger);
+}
+
 app.use(cors({ credentials: true, origin: FRONTEND_URL }));
 
 app.use(cookieParser());
