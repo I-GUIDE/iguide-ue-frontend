@@ -59,12 +59,18 @@ app.use(passport.session());
 app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
-  logger.info("Serializing user", user);
+  logger.info({
+    "event": "Serializing user",
+    "user": user
+  });
   done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-  logger.info("Serializing user", user.sub);
+  logger.info({
+    "event": "Deserializing user",
+    "user": user.sub
+  });
   done(null, user);
 });
 
