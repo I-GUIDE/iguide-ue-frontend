@@ -10,8 +10,7 @@ const dotenv = require("dotenv");
 // const fetch = require('node-fetch');
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
-
-import { logger } from './logger';
+const { logger } = require("./logger.js");
 
 dotenv.config();
 

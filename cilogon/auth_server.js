@@ -11,6 +11,7 @@ const router = require("express").Router();
 const fs = require('fs');
 require('dotenv').config();
 const { Issuer, Strategy } = require('openid-client');
+const { logger, httpLogger } = require("./logger.js");
 
 const credentials = {
   key: fs.readFileSync('credentials/privkey.pem'),
@@ -27,8 +28,6 @@ const CLIENT_ID = process.env.REACT_APP_IDENTITY_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_APP_IDENTITY_CLIENT_SECRET;
 // Redirect URL (specified during the CILogon registration)
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
-
-import { logger, httpLogger } from './logger';
 
 const app = express();
 
