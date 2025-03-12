@@ -73,3 +73,6 @@ certbot/*
 
 # Ignore robots.txt
 public/robots*
+
+# Ignore any log file
+*.log

@@ -11,7 +11,7 @@ const logger = pino({
       translateTime: 'UTC:yyyy-mm-dd HH:MM:ss.l o'
     }
   },
-}, pino.destination("./pino-logger.log"));
+}, pino.destination("./auth-server.log"));
 
 const httpLogger = pinoHttp({ logger });
 
