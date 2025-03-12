@@ -17,8 +17,6 @@ const credentials = {
   cert: fs.readFileSync('credentials/fullchain.pem')
 };
 
-const app = express();
-
 // React frontend URL
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 // CILogon discovery endpoint (https://www.cilogon.org/oidc)
@@ -30,6 +28,12 @@ const CLIENT_SECRET = process.env.REACT_APP_IDENTITY_CLIENT_SECRET;
 // Redirect URL (specified during the CILogon registration)
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
 
+import { logger, httpLogger } from './logger';
+
+const app = express();
+
+// Use Pino HTTP middleware
+app.use(httpLogger);
 app.use(cors({ credentials: true, origin: FRONTEND_URL }));
 
 app.use(cookieParser());
@@ -51,18 +55,12 @@ app.use(passport.session());
 app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
-  console.log('-----------------');
-  console.log('Serializing user... ', new Date());
-  console.log(user);
-  console.log('-----------------');
+  logger.info("Serializing user", user);
   done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-  console.log('-----------------');
-  console.log('Deserializing user... ', new Date());
-  console.log(user.sub);
-  console.log('-----------------');
+  logger.info("Serializing user", user.sub);
   done(null, user);
 });
 
@@ -93,5 +91,5 @@ const httpsServer = https.createServer(credentials, app);
 // });
 
 httpsServer.listen(8443, () => {
-  console.log(`Https Server Running on port 8443`)
+  logger.info("HTTPS authentication server running on port 8443")
 });
