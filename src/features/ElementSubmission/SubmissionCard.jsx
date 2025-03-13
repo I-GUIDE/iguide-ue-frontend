@@ -931,7 +931,7 @@ export default function SubmissionCard(props) {
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <SubmissionCardFieldTitle
-                  tooltipTitle="Set the visibility of this element"
+                  tooltipTitle="If you set the visibility of this element to private, only you and the Platform admins can view it."
                   fieldRequired
                 >
                   Visibility
@@ -1607,8 +1607,9 @@ export default function SubmissionCard(props) {
                   <em>Select a license</em>
                 </Option>
                 {ELEMENT_LICENSES?.map((x, i) => (
+                  // Display name of the license
                   <Option key={x} value={x}>
-                    {ELEMENT_LICENSES_INFO[x]}
+                    {ELEMENT_LICENSES_INFO[x][0]}
                   </Option>
                 ))}
                 <Option value="other">Other</Option>
