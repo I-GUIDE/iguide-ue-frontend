@@ -11,6 +11,8 @@ services:
 
   auth:
     image: iguide-ue-auth-${VITE_ENV}
+    volumes:
+      - ./cilogon/logs:/app/logs
     build:
       context: ./cilogon/.
       dockerfile: Dockerfile
