@@ -11,13 +11,12 @@ const router = require("express").Router();
 const fs = require('fs');
 require('dotenv').config();
 const { Issuer, Strategy } = require('openid-client');
+const { logger, httpLogger } = require("./logger.js");
 
 const credentials = {
   key: fs.readFileSync('credentials/privkey.pem'),
   cert: fs.readFileSync('credentials/fullchain.pem')
 };
-
-const app = express();
 
 // React frontend URL
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
@@ -29,6 +28,15 @@ const CLIENT_ID = process.env.REACT_APP_IDENTITY_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_APP_IDENTITY_CLIENT_SECRET;
 // Redirect URL (specified during the CILogon registration)
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
+
+const USE_HTTP_LOGGER = process.env.USE_HTTP_LOGGER === "true";
+
+const app = express();
+
+// Use Pino HTTP middleware
+if (USE_HTTP_LOGGER) {
+  app.use(httpLogger);
+}
 
 app.use(cors({ credentials: true, origin: FRONTEND_URL }));
 
@@ -51,18 +59,26 @@ app.use(passport.session());
 app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
-  console.log('-----------------');
-  console.log('Serializing user... ', new Date());
-  console.log(user);
-  console.log('-----------------');
+  logger.info({
+    event: "Serializing user",
+    user: {
+      sub: user?.sub,
+      idp_name: user?.["idp_name"],
+      email_exists: user?.email && typeof user?.email === "string",
+      first_name_exists: user?.["given_name"] && typeof user?.["given_name"] === "string",
+      last_name: user?.["family_name"]
+    },
+  });
   done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-  console.log('-----------------');
-  console.log('Deserializing user... ', new Date());
-  console.log(user.sub);
-  console.log('-----------------');
+  logger.info({
+    event: "Deserializing user",
+    user: {
+      sub: user?.sub
+    }
+  });
   done(null, user);
 });
 
@@ -93,5 +109,5 @@ const httpsServer = https.createServer(credentials, app);
 // });
 
 httpsServer.listen(8443, () => {
-  console.log(`Https Server Running on port 8443`)
+  logger.info("HTTPS authentication server running on port 8443")
 });

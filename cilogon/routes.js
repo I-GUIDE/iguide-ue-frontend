@@ -10,6 +10,7 @@ const dotenv = require("dotenv");
 // const fetch = require('node-fetch');
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
+const { logger } = require("./logger.js");
 
 dotenv.config();
 
@@ -57,6 +58,12 @@ const getUserRole = async (user_id) => {
   const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
   if (!response.ok) {
+    logger.error({
+      type: "Couldn't fetch user role",
+      user: {
+        id: user_id,
+      }
+    });
     return 10;
   }
 
@@ -91,8 +98,7 @@ const generateRefreshToken = (user) => {
 router.get(
   "/login",
   function (req, res, next) {
-    console.log("-----------------------------");
-    console.log("/Start login handler");
+    logger.info("Starting login handler");
     next();
   },
   passport.authenticate("oidc", {
@@ -104,10 +110,11 @@ router.get(
 router.get("/cilogon-callback", async (req, res, next) => {
   passport.authenticate("oidc", async (err, user, info) => {
     if (err) {
-      console.log('-----------------------------');
-      console.log("Error: ", new Date());
-      console.log("User: ", user);
-      console.log(err);
+      logger.error({
+        type: "CILogon callback error",
+        message: err,
+        user: user
+      });
       return res.redirect(`/error`);
     }
     if (!user) {
@@ -115,16 +122,16 @@ router.get("/cilogon-callback", async (req, res, next) => {
     }
     req.logIn(user, async function (err) {
       if (err) {
-        console.log('-----------------------------');
-        console.log("Error login: ", new Date());
-        console.log("User: ", user);
-        console.log(err);
+        logger.error({
+          type: "req.logIn() error",
+          message: err,
+          user: user
+        });
         return res.redirect(`/errorlogin`);
       }
 
       // Retrieve user role from OpenSearch
       const role = await getUserRole(user.sub);
-      console.log("user: ", user.sub, " role: ", role);
 
       // Generate JWT token with role
       const userPayload = { id: user.sub, role };
@@ -235,14 +242,12 @@ router.get("/userinfo", (req, res) => {
       },
     });
 
-    console.log("req passport", req.session.passport);
     res.end(user_info);
   } else {
     const no_user_info = JSON.stringify({
       userInfo: null,
     });
 
-    console.log("No users");
     res.end(JSON.stringify(no_user_info));
   }
 });
@@ -318,7 +323,10 @@ router.post("/upload-to-slack", async (req, res) => {
   multi_upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
-      console.log("upload-to-slack multer uploading error", err);
+      logger.error({
+        type: "upload-to-slack MulterError",
+        message: err
+      });
       res
         .status(500)
         .send({ error: { message: `Multer uploading error: ${err.message}` } })
@@ -327,13 +335,19 @@ router.post("/upload-to-slack", async (req, res) => {
     } else if (err) {
       // An unknown error occurred when uploading.
       if (err.name == "ExtensionError") {
-        console.log("upload-to-slack ExtensionError", err);
+        logger.error({
+          type: "upload-to-slack ExtensionError",
+          message: err
+        });
         res
           .status(413)
           .send({ error: { message: err.message } })
           .end();
       } else {
-        console.log("upload-to-slack unknown error", err);
+        logger.error({
+          type: "upload-to-slack unknown error",
+          message: err
+        });
         res
           .status(500)
           .send({
