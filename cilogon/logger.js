@@ -11,6 +11,7 @@ const logger = pino({
       translateTime: 'UTC:yyyy-mm-dd HH:MM:ss.l o'
     }
   },
+  redact: ["user.email", "user.given_name"],
 }, pino.destination("./auth-server.log"));
 
 const httpLogger = pinoHttp({ logger });

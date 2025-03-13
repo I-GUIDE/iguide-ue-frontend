@@ -60,16 +60,24 @@ app.use("/", authRoute)
 
 passport.serializeUser(function (user, done) {
   logger.info({
-    "event": "Serializing user",
-    "user": user
+    event: "Serializing user",
+    user: {
+      sub: user?.sub,
+      idp_name: user?.["idp_name"],
+      email_exists: user?.email && typeof user?.email === "string",
+      first_name_exists: user?.["given_name"] && typeof user?.["given_name"] === "string",
+      last_name: user?.["family_name"]
+    },
   });
   done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
   logger.info({
-    "event": "Deserializing user",
-    "user": user.sub
+    event: "Deserializing user",
+    user: {
+      sub: user?.sub
+    }
   });
   done(null, user);
 });

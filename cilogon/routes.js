@@ -58,6 +58,12 @@ const getUserRole = async (user_id) => {
   const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
 
   if (!response.ok) {
+    logger.error({
+      type: "Couldn't fetch user role",
+      user: {
+        id: user_id,
+      }
+    });
     return 10;
   }
 
@@ -105,9 +111,9 @@ router.get("/cilogon-callback", async (req, res, next) => {
   passport.authenticate("oidc", async (err, user, info) => {
     if (err) {
       logger.error({
-        "type": "CILogon callback",
-        "message": err,
-        "user": user
+        type: "CILogon callback error",
+        message: err,
+        user: user
       });
       return res.redirect(`/error`);
     }
@@ -117,19 +123,15 @@ router.get("/cilogon-callback", async (req, res, next) => {
     req.logIn(user, async function (err) {
       if (err) {
         logger.error({
-          "type": "logIn()",
-          "message": err,
-          "user": user
+          type: "req.logIn() error",
+          message: err,
+          user: user
         });
         return res.redirect(`/errorlogin`);
       }
 
       // Retrieve user role from OpenSearch
       const role = await getUserRole(user.sub);
-      logger.info({
-        "openid": user.sub,
-        "role": role
-      });
 
       // Generate JWT token with role
       const userPayload = { id: user.sub, role };
@@ -322,8 +324,8 @@ router.post("/upload-to-slack", async (req, res) => {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
       logger.error({
-        "type": "upload-to-slack MulterError",
-        "message": err
+        type: "upload-to-slack MulterError",
+        message: err
       });
       res
         .status(500)
@@ -334,8 +336,8 @@ router.post("/upload-to-slack", async (req, res) => {
       // An unknown error occurred when uploading.
       if (err.name == "ExtensionError") {
         logger.error({
-          "type": "upload-to-slack ExtensionError",
-          "message": err
+          type: "upload-to-slack ExtensionError",
+          message: err
         });
         res
           .status(413)
@@ -343,8 +345,8 @@ router.post("/upload-to-slack", async (req, res) => {
           .end();
       } else {
         logger.error({
-          "type": "upload-to-slack unknown error",
-          "message": err
+          type: "upload-to-slack unknown error",
+          message: err
         });
         res
           .status(500)
