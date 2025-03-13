@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Grid from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
 import Pagination from "@mui/material/Pagination";
-// import Pagination from "@mui/material/Pagination";
 import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
 
 import UserProfileCard from "../components/UserProfileCard";
@@ -16,46 +15,35 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CssVarsProvider} from "@mui/joy/styles";
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 
+import { fetchWithAuth } from "../utils/FetcherWithJWT";
+import { PERMISSIONS } from "../configs/Permissions";
+
+const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function AdminPanel() {
-  const [userList, setUserList] = useState([
-    {
-      id: "0",
-      name: "Joe Doe",
-      role: "Admin",
-      org: "University of Illinois Urbana-Champaign",
-      email: "joedoe@gmail.com"
-    },
-    {
-      id: "1",
-      name: "James Jamerson",
-      role: "User",
-      org: "University of Arkansas",
-      email: "jamesyguy@gmail.com"
-    },
-    {
-      id: "2",
-      name: "Ryan Berwick",
-      role: "Trusted User",
-      org: "Naperville North High School",
-      email: "rberw@gmail.com"
-    },
-    {
-      id: "3",
-      name: "Michael Kiwanuka",
-      role: "Trusted User",
-      org: "Royal Academy of Music London",
-      email: "michaelkiwanuka@gmail.com"
-    }
-  ]);
+  // Format as list of objects with attributes: id, name role, org, email
+  const [userList, setUserList] = useState([]); 
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+        const response = await fetchWithAuth(
+          `${BACKEND_URL_PORT}/api/users`,
+          {
+            method: "GET",
+          }
+        );
+        const result = await response.json();
+        TEST_MODE && console.log("Response - all users", result);
+      };
+      
+      fetchAllUsers();
+    }, []);
 
   function deleteContributor(contributorId) {
     const index = userList.findIndex((user) => user["id"] === contributorId);
     const newArray = [...userList.slice(0, index), ...userList.slice(index + 1)];
     setUserList(newArray);
-  }
-
-  function handlePageClick() {
-    
   }
 
   return(
