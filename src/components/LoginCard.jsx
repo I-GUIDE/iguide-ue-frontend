@@ -7,14 +7,9 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+import { userLogin } from "../utils/UserManager";
 
 export default function LoginCard() {
-  // Redirect users to the auth backend for login
-  const login = () => {
-    window.open(AUTH_BACKEND_URL + "/login", "_self");
-  };
-
   return (
     <Box
       sx={{
@@ -23,7 +18,7 @@ export default function LoginCard() {
         overflow: { xs: "auto", sm: "initial" },
       }}
     >
-      <Button variant="plain" color="success" onClick={login}>
+      <Button variant="plain" color="success" onClick={userLogin}>
         <Card variant="outlined" sx={{ width: 320 }}>
           <CardOverflow>
             <img

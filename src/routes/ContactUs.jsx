@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useOutletContext } from "react-router";
+import ReCAPTCHA from "react-google-recaptcha";
 
-import { CssVarsProvider } from "@mui/joy/styles";
+import { CssVarsProvider, styled } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
@@ -20,68 +21,239 @@ import Option from "@mui/joy/Option";
 import FormLabel from "@mui/joy/FormLabel";
 import FormControl from "@mui/joy/FormControl";
 import Alert from "@mui/joy/Alert";
-import ReportIcon from "@mui/icons-material/Report";
 import IconButton from "@mui/joy/IconButton";
+
+import ReportIcon from "@mui/icons-material/Report";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
+import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 
-const VITE_SLACK_API_URL = import.meta.env.VITE_SLACK_API_URL;
+const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const VITE_GOOGLE_RECAPTCHA_SITE_KEY = import.meta.env
+  .VITE_GOOGLE_RECAPTCHA_SITE_KEY;
 
 export default function ContactUs() {
   usePageTitle("Contact Us");
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
-  const [contactCategory, setContactCategory] = useState("Question");
+  const [contactCategory, setContactCategory] = useState("Question"); // "Question" | "Comment" | "Bug Report" | "Other"
   const [contactMessage, setContactMessage] = useState("");
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imageFilesURL, setImageFilesURL] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const recaptchaRef = useRef();
+
+  useEffect(() => {
+    async function setUserInfo() {
+      const userFirstLastName =
+        localUserInfo?.["first_name"] + " " + localUserInfo?.["last_name"];
+      const userEmail = localUserInfo?.["email"];
+      if (userFirstLastName) {
+        setContactName(userFirstLastName);
+      }
+      if (userEmail) {
+        setContactEmail(userEmail);
+      }
+    }
+
+    if (isAuthenticated && localUserInfo) {
+      setUserInfo();
+    }
+  }, [isAuthenticated, localUserInfo]);
+
+  const VisuallyHiddenInput = styled("input")`
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+    width: 1px;
+  `;
+
+  const Img = styled("img")`
+    width: 100%;
+    height: 100%;
+    outline: 2px #97c3f0 solid;
+    border-radius: 5px;
+    transition: all 300ms;
+  `;
+
+  const PreviewImgContainer = styled("div")`
+    width: calc((100% / 5) - 10px);
+    min-width: 120px;
+    height: 80px;
+    position: relative;
+    cursor: pointer;
+    transition: all 300ms;
+  `;
+
+  const ImageContainer = styled("div")`
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    transition: all 300ms;
+
+    @media (max-width: 600px) {
+      justify-content: space-between;
+      row-gap: 20px;
+    }
+  `;
+
+  const DeleteBtn = styled(DeleteIcon)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 24px;
+    transition: all 300ms;
+  `;
+
+  const handleImageUpload = (event) => {
+    if (imageFiles.length === 5) {
+      alert("You can upload only up to 5 images");
+      return;
+    }
+
+    const arrImg = [];
+    const arrURL = [];
+
+    for (let idx = 0; idx < event.target.files.length; ++idx) {
+      if (arrImg.length === 5) {
+        alert("You can upload only up to 5 images");
+        return;
+      }
+
+      const file = event.target.files[idx];
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image!");
+        continue;
+      }
+      if (file.size > IMAGE_SIZE_LIMIT) {
+        alert("Please upload an image smaller than 5MB!");
+        continue;
+      }
+
+      arrImg.push(file);
+      arrURL.push(URL.createObjectURL(file));
+    }
+
+    setImageFiles([...imageFiles, ...arrImg]);
+    setImageFilesURL([...imageFilesURL, ...arrURL]);
+  };
+
+  async function uploadImgToSlack() {
+    const formData = new FormData();
+    const contactDetails = {
+      contactCategory,
+      contactEmail,
+      contactMessage,
+      contactName,
+    };
+
+    TEST_MODE && console.log("Uploaded files", imageFiles);
+    for (const file of imageFiles) {
+      formData.append("files", file);
+    }
+    formData.append("contactDetails", JSON.stringify(contactDetails));
+
+    const res = await fetch(`${VITE_EXPRESS_BACKEND_URL}/upload-to-slack`, {
+      method: "POST",
+      body: formData,
+    });
+
+    TEST_MODE && console.log("Img upload server response", res);
+
+    return res;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
-    // Send text data to Slack channel
-    const res = await fetch(
-      `https://hooks.slack.com/services/${VITE_SLACK_API_URL}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: JSON.stringify({
-          blocks: [
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: `*${contactCategory}*`,
-              },
-            },
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: `_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`,
-              },
-            },
-          ],
-        }),
+    const recaptchaToken = recaptchaRef.current.getValue();
+    if (!recaptchaToken) {
+      alert("Please complete the reCAPTCHA verification to continue.");
+      setLoading(false);
+      recaptchaRef.current.reset();
+      return;
+    } else {
+      const res = await fetch(
+        `${VITE_EXPRESS_BACKEND_URL}/recaptcha-verification`,
+        {
+          method: "POST",
+          body: JSON.stringify({ recaptchaToken }),
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
+      const verification = await res.json();
+      TEST_MODE && console.log("reCAPTCHA verification result", verification);
+      if (!verification.success) {
+        alert(
+          "reCAPTCHA validation failed. Please try again later or reach us via email."
+        );
+        setLoading(false);
+        recaptchaRef.current.reset();
+        return;
       }
-    );
+    }
 
-    if (res.ok) {
+    let res;
+
+    if (imageFilesURL.length > 0) {
+      res = await uploadImgToSlack();
+    } else {
+      res = await sendMessageToSlack(
+        `*${contactCategory}*\n_Name:_ ${contactName}\n_Email:_ ${contactEmail}\n_Message:_\n${contactMessage}`
+      );
+    }
+
+    // When send to Slack feature is disabled...
+    if (!res) {
+      setError(
+        "Failed to send this message because this feature is temporarily disabled. Please try again later, or you can reach us via email at help@i-guide.io."
+      );
+      setLoading(false);
+      recaptchaRef.current.reset();
+      return;
+    }
+
+    if (res.status === 200) {
       setSuccessMsg(
-        "Your inquiry has been noted. We will get back to you soon."
+        "We have received your message and will respond to the email you provided as soon as possible."
       );
       setContactName("");
       setContactEmail("");
       setContactMessage("");
+      setContactCategory("Question");
+      setImageFiles("");
+      setImageFilesURL("");
     } else {
-      setError("There was an error, please try again later.");
+      setError(
+        "An error has occurred. Please try again later, or you can reach us via email at help@i-guide.io."
+      );
     }
+
+    setLoading(false);
+    recaptchaRef.current.reset();
   }
 
   function RequiredFieldIndicator() {
@@ -89,6 +261,48 @@ export default function ContactUs() {
       <Typography color="danger" level="title-lg">
         *
       </Typography>
+    );
+  }
+
+  function removeFile(idx) {
+    const imgArr = [...imageFiles];
+    imgArr.splice(idx, 1);
+    setImageFiles([...imgArr]);
+
+    const urlArr = [...imageFilesURL];
+    urlArr.splice(idx, 1);
+    setImageFilesURL([...urlArr]);
+  }
+
+  function PreviewImg({ fileURL, imgKey, removeFile }) {
+    const [isShown, setIsShown] = useState(false);
+
+    return (
+      <PreviewImgContainer
+        onMouseEnter={() => {
+          setIsShown(true);
+        }}
+        onMouseLeave={() => {
+          setIsShown(false);
+        }}
+        onClick={() => removeFile(imgKey)}
+      >
+        <Img src={fileURL} loading="lazy" alt="thumbnail-preview" />
+        {isShown && (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "rgba(0,0,0,0.3)",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              borderRadius: "5px",
+            }}
+          ></div>
+        )}
+        {isShown && <DeleteBtn />}
+      </PreviewImgContainer>
     );
   }
 
@@ -118,19 +332,25 @@ export default function ContactUs() {
           >
             <Grid xs={12}>
               <Stack
-                spacing={3}
+                spacing={2}
                 alignItems={{ xs: "flex-start", md: "center" }}
-                sx={{ p: 2 }}
+                sx={{ p: 1 }}
               >
                 <Typography level="h2">Contact Us</Typography>
+                <Typography level="h5">
+                  Questions, comments, or bug report
+                </Typography>
               </Stack>
 
               <Divider sx={{ mx: 2, my: 4 }} />
 
               <Typography level="body-md" sx={{ p: 2 }}>
                 You may find the answers to your questions{" "}
-                <Tooltip title="Tutorials" placement="top">
-                  <Link component={RouterLink} to="/tutorials">
+                <Tooltip title="FAQ" placement="top">
+                  <Link
+                    component={RouterLink}
+                    to="/docs/frequently-asked-questions"
+                  >
                     here
                   </Link>
                 </Tooltip>
@@ -146,6 +366,7 @@ export default function ContactUs() {
                   help@i-guide.io
                 </Link>{" "}
                 or submit the form below for assistance or to report any issues.
+                We will respond to your inquiries as soon as possible.
               </Typography>
 
               <Box
@@ -226,6 +447,7 @@ export default function ContactUs() {
                       sx={{
                         justifyContent: "space-between",
                         alignItems: "center",
+                        rowGap: "20px",
                       }}
                     >
                       <FormControl
@@ -238,7 +460,7 @@ export default function ContactUs() {
                         </FormLabel>
                         <Input
                           required
-                          placeholder="Name"
+                          placeholder="Your name"
                           value={contactName}
                           onChange={(e) => setContactName(e.target.value)}
                         />
@@ -254,7 +476,7 @@ export default function ContactUs() {
                         <Input
                           required
                           type="email"
-                          placeholder="Email"
+                          placeholder="example@email.com"
                           value={contactEmail}
                           onChange={(e) => setContactEmail(e.target.value)}
                         />
@@ -266,7 +488,7 @@ export default function ContactUs() {
                         Category <RequiredFieldIndicator />
                       </FormLabel>
                       <Select
-                        defaultValue={contactCategory}
+                        defaultValue={contactCategory ?? ""}
                         placeholder="Category"
                       >
                         {["Question", "Comment", "Bug Report", "Other"].map(
@@ -274,7 +496,7 @@ export default function ContactUs() {
                             <Option
                               key={i}
                               value={option}
-                              onClick={(e) => setContactCategory(option)}
+                              onClick={() => setContactCategory(option)}
                             >
                               {option}
                             </Option>
@@ -302,7 +524,50 @@ export default function ContactUs() {
                       />
                     </FormControl>
 
-                    <Button type="submit">Submit</Button>
+                    <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                      <FormLabel>
+                        Images {"(Up to 5 images, each < 5MB)"}
+                      </FormLabel>
+                      <Button
+                        component="label"
+                        role={undefined}
+                        tabIndex={-1}
+                        variant="outlined"
+                        color="primary"
+                        name="thumbnail-image"
+                      >
+                        Upload images
+                        <VisuallyHiddenInput
+                          type="file"
+                          onChange={handleImageUpload}
+                          accept="image/png, image/gif, image/jpeg"
+                          multiple
+                        />
+                      </Button>
+                      {imageFilesURL.length > 0 && (
+                        <div style={{ marginTop: "20px" }}>
+                          <Typography>Image preview (tap to remove)</Typography>
+                          <ImageContainer>
+                            {imageFilesURL.map((fileURL, key) => (
+                              <PreviewImg
+                                fileURL={fileURL}
+                                imgKey={key}
+                                removeFile={removeFile}
+                              />
+                            ))}
+                          </ImageContainer>
+                        </div>
+                      )}
+                    </FormControl>
+
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={VITE_GOOGLE_RECAPTCHA_SITE_KEY}
+                    />
+
+                    <Button type="submit" disabled={loading}>
+                      Submit
+                    </Button>
                   </Stack>
                 </form>
               </Box>

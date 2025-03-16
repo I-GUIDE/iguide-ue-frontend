@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -24,8 +24,12 @@ import ContributorOps from "../../features/Element/ContributorOps";
 import MapViewer from "../../features/Element/MapViewer";
 import StaticMap from "../../features/Element/StaticMap";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
+import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
+import CitationGenerator from "../../features/Element/CitationGenerator";
 
 import ErrorPage from "../ErrorPage";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function MapPage() {
   const id = useParams().id;
@@ -40,24 +44,36 @@ export default function MapPage() {
   const [relatedElements, setRelatedElements] = useState([]);
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
 
   useEffect(() => {
     async function fetchData() {
-      const thisElement =
+      const elementObject =
         isPrivateElement === "true"
           ? await fetchSinglePrivateElementDetails(id)
           : await fetchSingleElementDetails(id);
 
-      if (thisElement === "ERROR") {
-        setError(true);
+      if (!elementObject.ok) {
+        setError(elementObject.body);
+        TEST_MODE &&
+          console.log(
+            "Error from fetchSingle(Private)ElementDetails:",
+            elementObject.body
+          );
         return;
       }
+
+      const thisElement = elementObject.body;
+      TEST_MODE && console.log("Returned element", thisElement);
 
       setTitle(thisElement.title);
       setAuthors(thisElement.authors);
@@ -70,6 +86,9 @@ export default function MapPage() {
       setRelatedElements(thisElement["related-elements"]);
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
       setIsLoading(false);
     }
     fetchData();
@@ -79,7 +98,11 @@ export default function MapPage() {
 
   if (error) {
     return (
-      <ErrorPage customStatus="404" customStatusText="Element Not Found" />
+      <ErrorPage
+        customStatusText={error}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
     );
   }
 
@@ -121,7 +144,7 @@ export default function MapPage() {
                 <ContributorOps
                   title={title}
                   elementId={id}
-                  contributorId={contributor.id}
+                  contributorId={contributor?.id}
                   afterDeleteRedirection="/maps"
                   isPrivateElement={isPrivateElement}
                 />
@@ -156,6 +179,24 @@ export default function MapPage() {
             </Grid>
             <Grid xs={12}>
               <RelatedElementsNetwork elementId={id} />
+            </Grid>
+
+            <Grid xs={12}>
+              <CitationGenerator
+                contributorId={contributor?.id}
+                createdAt={creationTime}
+                title={title}
+                elementType="maps"
+                elementId={id}
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <LicenseAndFunding
+                licenseStatement={licenseStatement}
+                licenseUrl={licenseUrl}
+                fundingAgency={fundingAgency}
+              />
             </Grid>
           </Grid>
         </Box>

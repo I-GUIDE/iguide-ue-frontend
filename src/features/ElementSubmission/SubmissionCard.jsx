@@ -1,5 +1,4 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
-
 import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/joy/Grid";
@@ -40,14 +39,26 @@ import CapsuleInput from "../../components/CapsuleInput";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
+import {
+  fetchGitHubReadme,
+  fetchRepoMetadata,
+} from "../../utils/GitHubFetchMethods";
+
+import ErrorPage from "../../routes/ErrorPage";
 
 import {
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
   ACCEPTED_IMAGE_TYPES,
 } from "../../configs/VarConfigs";
+
+import {
+  ELEMENT_LICENSES,
+  ELEMENT_LICENSES_INFO,
+} from "../../configs/ElementLicenses";
 
 import {
   fetchSingleElementDetails,
@@ -60,6 +71,10 @@ import { printListWithDelimiter } from "../../helpers/helper";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
+// Demo user setting
+const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
+const DEMO_USER_ROLE = import.meta.env.VITE_DEMO_USER_ROLE;
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -74,12 +89,16 @@ const VisuallyHiddenInput = styled("input")`
 `;
 
 export default function SubmissionCard(props) {
-  const { localUserInfo } = useOutletContext();
+  const { localUserInfo, isAuthenticated } = useOutletContext();
 
   const submissionType = props.submissionType;
   const elementId = props.elementId;
   const elementType = props.elementType;
   const isPrivateElement = props.isPrivateElement;
+
+  const [userRoleFromJWT, setUserRoleFromJWT] = useState(
+    PERMISSIONS["secure_default_role"]
+  );
 
   const [resourceTypeSelected, setResourceTypeSelected] = useState("");
 
@@ -108,8 +127,8 @@ export default function SubmissionCard(props) {
   const [currentOerExternalLinkTitle, setCurrentOerExternalLinkTitle] =
     useState("");
 
-  const [submissionStatus, setSubmissionStatus] = useState("no submission");
-  const [subMessage, setSubMessage] = useState();
+  const [submissionStatus, setSubmissionStatus] = useState("no-submission");
+  const [extraComponent, setExtraComponent] = useState();
 
   const [elementURI, setElementURI] = useState("");
 
@@ -132,6 +151,9 @@ export default function SubmissionCard(props) {
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
+  const [gitHubRepoLink, setGitHubRepoLink] = useState("");
+  const [gitHubRepoLinkError, setGitHubRepoLinkError] = useState(false);
+
   const [contributor, setContributor] = useState([]);
 
   const [spatialCoverage, setSpatialCoverage] = useState([]);
@@ -142,26 +164,57 @@ export default function SubmissionCard(props) {
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
 
+  const [licenseId, setLicenseId] = useState("");
+  const [licenseName, setLicenseName] = useState("");
+  const [licenseStatement, setLicenseStatement] = useState("");
+  const [licenseUrl, setLicenseUrl] = useState("");
+  const [fundingAgency, setFundingAgency] = useState("");
+
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
+  const [error, setError] = useState(false);
+
   useEffect(() => {
-    checkTokens();
+    const checkJWTToken = async () => {
+      // If demo user is in use, skip verifying with JWT...
+      if (USE_DEMO_USER) {
+        setUserRoleFromJWT(parseInt(DEMO_USER_ROLE));
+      } else {
+        const message = await checkTokens();
+        TEST_MODE &&
+          console.log("Check token returns", message, typeof message);
+        setUserRoleFromJWT(message);
+      }
+    };
+    checkJWTToken();
   }, []);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchData = async () => {
-      const thisElement = isPrivateElement
-        ? await fetchSinglePrivateElementDetails(elementId)
-        : await fetchSingleElementDetails(elementId);
+      const elementObject =
+        isPrivateElement === true || isPrivateElement === "true"
+          ? await fetchSinglePrivateElementDetails(elementId)
+          : await fetchSingleElementDetails(elementId);
 
-      TEST_MODE && console.log("returned element", thisElement);
+      if (!elementObject.ok) {
+        setError(elementObject.body);
+        TEST_MODE &&
+          console.log(
+            "Error from fetchSingle(Private)ElementDetails:",
+            elementObject.body
+          );
+        return;
+      }
+
+      const thisElement = elementObject.body;
+      TEST_MODE && console.log("Returned element", thisElement);
 
       const elementUrlReturned = `/${
-        thisElement["resource-type"]
-      }s/${elementId}${
+        RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[thisElement["resource-type"]]
+      }/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
           : ""
@@ -200,6 +253,8 @@ export default function SubmissionCard(props) {
 
       setMapIframeLink(thisElement["external-iframe-link"]);
 
+      setGitHubRepoLink(thisElement["github-repo-link"]);
+
       setContributor(thisElement["contributor"]);
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
@@ -213,6 +268,12 @@ export default function SubmissionCard(props) {
           ? thisElement["spatial-index-year"].join(", ")
           : thisElement["spatial-index-year"]
       );
+
+      setLicenseId(thisElement["license-id"]);
+      setLicenseName(thisElement["license-name"]);
+      setLicenseStatement(thisElement["license-statement"]);
+      setLicenseUrl(thisElement["license-url"]);
+      setFundingAgency(thisElement["funding-agency"]);
 
       setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
@@ -245,20 +306,22 @@ export default function SubmissionCard(props) {
   }, [currentRelatedResourceType]);
 
   const handleVisibilityChange = async (e, newValue) => {
-    TEST_MODE && console.log("Setting visibility to", newValue);
-    setVisibility(newValue);
+    if (newValue) {
+      TEST_MODE && console.log("Setting visibility to", newValue);
+      setVisibility(newValue);
+    }
   };
 
   const handleThumbnailImageUpload = (event) => {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
-      alert("Please upload an image!");
+      alert("Thumbnail type error: Please upload an image.");
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
-      alert("Please upload an image smaller than 5MB!");
+      alert("Thumbnail size error: Please upload an image smaller than 5MB.");
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
@@ -297,15 +360,17 @@ export default function SubmissionCard(props) {
   // OER external links...
   const handleAddingOneOerExternalLink = () => {
     if (!currentOerExternalLinkType || currentOerExternalLinkType === "") {
-      alert("Please select an external link type!");
+      alert("Please select an external link type.");
       return;
     }
     if (!currentOerExternalLinkURL || currentOerExternalLinkURL === "") {
-      alert("Please enter a URL!");
+      alert("Please enter a URL.");
       return;
     }
     if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === "") {
-      alert("Please enter a title!");
+      alert(
+        'Please enter a link title, or click "->" to fetch the title of the provided URL.'
+      );
       return;
     }
     setOerExternalLinks([
@@ -341,9 +406,7 @@ export default function SubmissionCard(props) {
         `${USER_BACKEND_URL}/api/url-title/?url=${encodeURIComponent(url)}`
       );
       if (!response.ok) {
-        alert(
-          "Retrieve website title failed... please input the title manually!"
-        );
+        alert("Retrieving URL title failed. Please manually input the title.");
         return;
       }
       const data = await response.json();
@@ -365,7 +428,7 @@ export default function SubmissionCard(props) {
 
   const handleAutofillPublicationInfo = async () => {
     if (!publicationDOI || publicationDOI === "") {
-      alert("Please enter the DOI first. Thank you!");
+      alert("Please enter the DOI first.");
       return;
     }
 
@@ -416,7 +479,7 @@ export default function SubmissionCard(props) {
 
     // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/.+/blob/(master|main)/.+.ipynb"
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/blob/(master|main)/([^/]+).ipynb$"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
@@ -425,11 +488,52 @@ export default function SubmissionCard(props) {
     }
   };
 
+  const handleRepoLinkChange = (event) => {
+    const val = event.target.value;
+    setGitHubRepoLink(val);
+
+    // Validate if the URL is in the form of https://github.com/{owner}/{repo}
+    const validGitHubRepoUrl = new RegExp(
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/?$"
+    );
+    if (val === "" || validGitHubRepoUrl.test(val)) {
+      setGitHubRepoLinkError(false);
+    } else {
+      setGitHubRepoLinkError(true);
+    }
+  };
+
+  const handleLicenseChange = (value) => {
+    setLicenseId(value);
+
+    if (value === "other") {
+      setLicenseName("Other");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    }
+    // Case when the license is not from the dropdown selection
+    else if (!ELEMENT_LICENSES_INFO[value]) {
+      setLicenseName("");
+      setLicenseStatement("");
+      setLicenseUrl("");
+    } else {
+      setLicenseName(ELEMENT_LICENSES_INFO[value][0]);
+      setLicenseStatement(
+        `This element is shared under the ${ELEMENT_LICENSES_INFO[value][0]}.`
+      );
+      setLicenseUrl(ELEMENT_LICENSES_INFO[value][1]);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {};
 
-    // When the user forgets to save the new related element, app will ask the user to submit it
+    // Disable the submission button, preventing accidental multiple submissions
+    setButtonDisabled(true);
+
+    // When the user forgets to save the new related element, app will ask the user to submit it.
+    // 02/27/2025: This case has been prevented through a code update.
     if (currentRelatedResourceTitle && currentRelatedResourceTitle !== "") {
       alert(
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
@@ -442,9 +546,9 @@ export default function SubmissionCard(props) {
       (currentOerExternalLinkURL && currentOerExternalLinkURL !== "") ||
       (currentOerExternalLinkTitle && currentOerExternalLinkTitle !== "")
     ) {
-      alert(
-        'You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!'
-      );
+      setOpenModal(true);
+      setSubmissionStatus("error-unsaved-oer-link");
+      setButtonDisabled(false);
       return;
     }
 
@@ -488,6 +592,10 @@ export default function SubmissionCard(props) {
       data["oer-external-links"] = oerExternalLinks;
     }
 
+    if (resourceTypeSelected === "code") {
+      data["github-repo-link"] = gitHubRepoLink;
+    }
+
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
     data["spatial-bounding-box"] = boundingBox;
@@ -495,9 +603,13 @@ export default function SubmissionCard(props) {
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
 
-    TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
+    data["license-id"] = licenseId;
+    data["license-name"] = licenseName;
+    data["license-statement"] = licenseStatement;
+    data["license-url"] = licenseUrl;
+    data["funding-agency"] = fundingAgency;
 
-    setButtonDisabled(true);
+    TEST_MODE && console.log("data to be submitted (pre-thumbnail)", data);
 
     // If user uploads a new thumbnail, use the new one, otherwise, use the existing one.
     if (thumbnailImageFile) {
@@ -518,21 +630,51 @@ export default function SubmissionCard(props) {
         data["thumbnail-image"] = result["image-urls"];
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("error-uploading-thumbnail");
         setButtonDisabled(false);
-        alert("Error uploading thumbnail...");
+        return;
       }
     } else {
       data["thumbnail-image"] = thumbnailImageFileURLs;
     }
 
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
-      alert("You have to upload a thumbnail image for your contribution!");
+      setOpenModal(true);
+      setSubmissionStatus("error-no-thumbnail");
       setButtonDisabled(false);
       return;
     }
 
     TEST_MODE && console.log("data to be submitted", data);
 
+    // If the resourceTypeSelected is code, attempt to store readme to the database
+    if (resourceTypeSelected === "code" && gitHubRepoLink) {
+      const repoOwner = gitHubRepoLink?.match("github.com/(.*?)/")[1];
+      const repoName = gitHubRepoLink?.match("github.com/.*?/(.+?)($|/)")[1];
+
+      TEST_MODE &&
+        console.log("Submission: repo owner and name", repoOwner, repoName);
+      // Fetch README.md
+      const repoStatus = await fetchRepoMetadata(repoOwner, repoName);
+      // This is for verifying the GitHub repo
+      if (repoStatus === "ERROR") {
+        setOpenModal(true);
+        setSubmissionStatus("error-cannot-verify-github-repo-status");
+        setButtonDisabled(false);
+        return;
+      }
+      const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
+      // If GitHub doesn't return raw readme, use the copy from the DB
+      if (rawReadme !== "ERROR") {
+        TEST_MODE && console.log("Submission: readme recorded", rawReadme);
+        data["github-repo-readme"] = rawReadme;
+      } else {
+        console.error("GitHub readme API unavailable");
+      }
+    }
+
+    // Submit or update the element
     if (submissionType === "update") {
       try {
         const response = await fetchWithAuth(
@@ -552,18 +694,25 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
-          const futureElementUrl = `/${resourceTypeSelected}s/${elementId}${
+          setButtonDisabled(false);
+          const futureElementUrl = `/${
+            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+          }/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
           setElementURI(futureElementUrl);
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
+          setButtonDisabled(false);
+          return;
         }
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("update-failed");
         setButtonDisabled(false);
-        alert("Error updating this element...");
+        return;
       }
     } else if (submissionType === "initial") {
       try {
@@ -584,9 +733,9 @@ export default function SubmissionCard(props) {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
-            const futureElementUrl = `/${resourceTypeSelected}s/${
-              result.elementId
-            }${
+            const futureElementUrl = `/${
+              RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+            }/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
             setElementURI(futureElementUrl);
@@ -596,8 +745,8 @@ export default function SubmissionCard(props) {
           result.message === "Duplicate found while registering resource"
         ) {
           setOpenModal(true);
-          setSubmissionStatus("initial-failed-duplicate");
-          setSubMessage(
+          setSubmissionStatus("error-initial-failed-duplicate-doi");
+          setExtraComponent(
             <Typography level="title-md">
               View exisiting element{" "}
               <Link
@@ -610,21 +759,38 @@ export default function SubmissionCard(props) {
               </Link>
             </Typography>
           );
+          setButtonDisabled(false);
+          return;
         } else {
           setOpenModal(true);
           setSubmissionStatus("initial-failed");
+          setButtonDisabled(false);
+          return;
         }
       } catch (error) {
         console.error("Error:", error);
+        setOpenModal(true);
+        setSubmissionStatus("initial-failed");
         setButtonDisabled(false);
-        alert("Error submitting this new element..");
+        return;
       }
     }
+    // Re-enable the submission button. This part, as a fail-safe, is necessary in case of some unexpected early returns.
     setButtonDisabled(false);
   };
 
+  if (error) {
+    return (
+      <ErrorPage
+        customStatusText={error}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
+    );
+  }
+
   // After submission, show users the submission status.
-  if (submissionStatus !== "no submission" && !openModal) {
+  if (submissionStatus !== "no-submission" && !openModal) {
     return (
       <SubmissionStatusCard
         submissionStatus={submissionStatus}
@@ -642,13 +808,60 @@ export default function SubmissionCard(props) {
   }
 
   // Check if the current user is admin, if yes, allow edit
-  const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canEditAllElements =
+    localUserInfo.role <= PERMISSIONS["edit_all"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_all"];
   const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
     if (!isContributor && !canEditAllElements) {
-      return <SubmissionStatusCard submissionStatus="unauthorized" />;
+      TEST_MODE &&
+        console.log("Can't update", localUserInfo.role, userRoleFromJWT);
+      return (
+        <SubmissionStatusCard submissionStatus="error-unauthorized-update-element" />
+      );
+    }
+  }
+
+  // Check if the current user can contribute this type of element
+  const canContribute =
+    localUserInfo.role <= PERMISSIONS["contribute"] &&
+    userRoleFromJWT <= PERMISSIONS["contribute"];
+  const canEditOER =
+    localUserInfo.role <= PERMISSIONS["edit_oer"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_oer"];
+  const canEditMap =
+    localUserInfo.role <= PERMISSIONS["edit_map"] &&
+    userRoleFromJWT <= PERMISSIONS["edit_map"];
+
+  if (submissionType === "initial") {
+    if (!canContribute) {
+      TEST_MODE &&
+        console.log("Can't contribute", localUserInfo.role, userRoleFromJWT);
+      return (
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
+      );
+    } else if (elementType === "oer" && !canEditOER) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute OER",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
+      return (
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
+      );
+    } else if (elementType === "map" && !canEditMap) {
+      TEST_MODE &&
+        console.log(
+          "Can't contribute map",
+          localUserInfo.role,
+          userRoleFromJWT
+        );
+      return (
+        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
+      );
     }
   }
 
@@ -691,6 +904,18 @@ export default function SubmissionCard(props) {
               WARNING: You are not the contributor
             </Typography>
           )}
+        <Typography level="body-md">
+          If you have questions or run into any issue, please contact us{" "}
+          <Link
+            component={RouterLink}
+            to="/contact-us"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            here
+          </Link>
+          .
+        </Typography>
         <Typography level="body-sm">
           Fields marked <RequiredFieldIndicator /> are required.
         </Typography>
@@ -706,13 +931,16 @@ export default function SubmissionCard(props) {
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <SubmissionCardFieldTitle
-                  tooltipTitle="Set the visibility of this element"
+                  tooltipTitle="If you set the visibility of this element to private, only you and the Platform admins can view it."
                   fieldRequired
                 >
                   Visibility
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Select value={visibility} onChange={handleVisibilityChange}>
+              <Select
+                value={visibility ?? ""}
+                onChange={handleVisibilityChange}
+              >
                 <Option value={ELEM_VISIBILITY.public}>Public</Option>
                 <Option value={ELEM_VISIBILITY.private}>Private</Option>
               </Select>
@@ -1083,7 +1311,7 @@ export default function SubmissionCard(props) {
                       <td align="left">
                         <Select
                           placeholder="Type"
-                          value={currentOerExternalLinkType}
+                          value={currentOerExternalLinkType ?? ""}
                           onChange={(e, newValue) =>
                             handleOerExternalLinkTypeChange(newValue)
                           }
@@ -1141,6 +1369,33 @@ export default function SubmissionCard(props) {
                 </Table>
               </Grid>
             )}
+            {resourceTypeSelected === "code" && (
+              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <FormLabel>
+                  <SubmissionCardFieldTitle
+                    tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
+                    tooltipContent={`An example link may look like "https://github.com/<repo_owner>/<repo_name>"`}
+                    fieldRequired
+                  >
+                    GitHub repository link (Repository must be public)
+                  </SubmissionCardFieldTitle>
+                </FormLabel>
+                <Input
+                  required
+                  name="github-repo-link"
+                  placeholder="https://github.com/<repo_owner>/<repo_name>"
+                  value={gitHubRepoLink}
+                  error={gitHubRepoLinkError}
+                  onChange={handleRepoLinkChange}
+                />
+                {gitHubRepoLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The link format is invalid!
+                  </FormHelperText>
+                )}
+              </FormControl>
+            )}
 
             <Typography level="h3" sx={{ pt: 1 }}>
               Related elements
@@ -1195,7 +1450,7 @@ export default function SubmissionCard(props) {
                     <td align="left">
                       <Select
                         placeholder="Type"
-                        value={currentRelatedResourceType}
+                        value={currentRelatedResourceType ?? ""}
                         onChange={(e, newValue) =>
                           handleRelatedResourceTypeChange(newValue)
                         }
@@ -1205,6 +1460,7 @@ export default function SubmissionCard(props) {
                         <Option value="publication">Publication</Option>
                         <Option value="oer">Educational Resource</Option>
                         <Option value="map">Map</Option>
+                        <Option value="code">Code</Option>
                       </Select>
                     </td>
                     <td align="left">
@@ -1297,7 +1553,7 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Select
                 placeholder="Select true or false"
-                value={isGeoreferenced}
+                value={isGeoreferenced ?? ""}
                 onChange={(e, newValue) => setIsGeoreferenced(newValue)}
               >
                 <Option value="">
@@ -1331,6 +1587,79 @@ export default function SubmissionCard(props) {
                 value={indexYears}
                 onChange={(event) => setIndexYears(event.target.value)}
               />
+            </FormControl>
+
+            <Typography level="h3" sx={{ pt: 1 }}>
+              License and others
+            </Typography>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Select a license for this element.">
+                  License
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Select
+                placeholder="Select a license"
+                value={licenseId ?? ""}
+                onChange={(e, newValue) => handleLicenseChange(newValue)}
+              >
+                <Option value="">
+                  <em>Select a license</em>
+                </Option>
+                {ELEMENT_LICENSES?.map((x, i) => (
+                  // Display name of the license
+                  <Option key={x} value={x}>
+                    {ELEMENT_LICENSES_INFO[x][0]}
+                  </Option>
+                ))}
+                <Option value="other">Other</Option>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>
+                  License statement
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-statement"
+                value={licenseStatement}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseStatement(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle>License URL</SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="license-url"
+                value={licenseUrl}
+                disabled={!licenseId}
+                onChange={(event) => setLicenseUrl(event.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="Acknowledge the source of funding related to this element.">
+                  Funding agency
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                name="funding-agency"
+                placeholder="NSF, USDA, DOD, ..."
+                value={fundingAgency}
+                onChange={(event) => setFundingAgency(event.target.value)}
+              />
+              {fundingAgency && (
+                <Typography level="body-sm">
+                  Displayed on the element page as:{" "}
+                  <Typography variant="soft">
+                    This project is funded by {fundingAgency}
+                  </Typography>
+                  .
+                </Typography>
+              )}
             </FormControl>
 
             <CardActions sx={{ gridColumn: "1/-1" }}>
@@ -1370,15 +1699,16 @@ export default function SubmissionCard(props) {
       <Modal
         open={openModal}
         onClose={() => {
-          setSubmissionStatus("no submission");
+          setSubmissionStatus("no-submission");
           setOpenModal(false);
+          setButtonDisabled(false);
         }}
       >
         <ModalDialog size="lg">
           <ModalClose />
           <SubmissionStatusCard
             submissionStatus={submissionStatus}
-            subMessage={subMessage}
+            extraComponent={extraComponent}
             elementURI={elementURI}
           />
         </ModalDialog>

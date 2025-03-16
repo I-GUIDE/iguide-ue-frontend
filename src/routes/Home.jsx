@@ -18,11 +18,12 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
 
+import MapIcon from "@mui/icons-material/Map";
 import DatasetIcon from "@mui/icons-material/Dataset";
 import CodeIcon from "@mui/icons-material/Code";
 import ArticleIcon from "@mui/icons-material/Article";
 import SchoolIcon from "@mui/icons-material/School";
-import MapIcon from "@mui/icons-material/Map";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 import FeaturedElementsList from "../features/Home/FeaturedElementsList";
 import TutorialCard from "../features/Home/TutorialCard";
@@ -284,6 +285,13 @@ export default function Home() {
                   title="Educational Resources"
                   pageLink="/oers"
                   type="oer"
+                  limit={4}
+                />
+                <FeaturedElementsList
+                  icon={<GitHubIcon />}
+                  title="Code"
+                  pageLink="/code"
+                  type="code"
                   limit={4}
                 />
               </Stack>

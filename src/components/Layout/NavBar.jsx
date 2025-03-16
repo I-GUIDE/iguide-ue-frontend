@@ -26,12 +26,15 @@ import Divider from "@mui/joy/Divider";
 import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 import ModalClose from "@mui/joy/ModalClose";
-import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/joy/Tooltip";
+
+import MenuIcon from "@mui/icons-material/Menu";
 
 import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
 import HoverOverMenuTab from "../HoverOverMenuTab";
+
+import { userLogin, userLogout } from "../../utils/UserManager";
 
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
@@ -48,14 +51,12 @@ const pages = [
   ["Notebooks", "/notebooks"],
   ["Publications", "/publications"],
   ["Educational Resources", "/oers"],
+  ["Code", "/code"],
 ];
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
-  const currentLocation = useLocation();
 
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -76,24 +77,6 @@ export default function NavBar(props) {
       }
       setDrawerOpen(inOpen);
     };
-  }
-
-  // Redirect users to the auth backend for login
-  function login() {
-    window.open(AUTH_BACKEND_URL + "/login", "_self");
-  }
-
-  // Redirect users to auth backend for logout
-  function logout() {
-    const redirectURI = currentLocation?.pathname + currentLocation?.search;
-    TEST_MODE && console.log("Redirect URI for logout", redirectURI);
-
-    window.open(
-      AUTH_BACKEND_URL +
-        "/logout?redirect-uri=" +
-        encodeURIComponent(redirectURI),
-      "_self"
-    );
   }
 
   // If the user is logged in, display the logout button, otherwise login
@@ -246,11 +229,36 @@ export default function NavBar(props) {
                       </ListItem>
                     </Link>
                   )}
+                  <Link
+                    to="/contribution/code"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Code
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
               <ListDivider />
+              <Link
+                to="/contact-us"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton onClick={() => setOpen(false)}>
+                    Contact Us
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+              <ListDivider />
               <ListItem sx={{ width: "100%" }}>
-                <ListItemButton onClick={logout}>Logout</ListItemButton>
+                <ListItemButton onClick={userLogout}>Logout</ListItemButton>
               </ListItem>
             </List>
           }
@@ -272,7 +280,7 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <Button size="sm" color="primary" onClick={login}>
+        <Button size="sm" color="primary" onClick={userLogin}>
           Login
         </Button>
       );
@@ -399,16 +407,37 @@ export default function NavBar(props) {
                   </ListItem>
                 </Link>
               )}
+              <Link
+                to="/contribution/code"
+                underline="none"
+                component={RouterLink}
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Code</ListItemButton>
+                </ListItem>
+              </Link>
             </>
           )}
           <Divider sx={{ my: 1 }} />
-          <ListItem onClick={logout}>Logout</ListItem>
+          <Link
+            to="/contact-us"
+            underline="none"
+            component={RouterLink}
+            sx={{ color: "text.tertiary" }}
+          >
+            <ListItem sx={{ width: "100%" }}>
+              <ListItemButton>Contact Us</ListItemButton>
+            </ListItem>
+          </Link>
+          <Divider sx={{ my: 1 }} />
+          <ListItem onClick={userLogout}>Logout</ListItem>
         </List>
       );
     } else {
       return (
         <List>
-          <ListItem size="sm" color="primary" onClick={login}>
+          <ListItem size="sm" color="primary" onClick={userLogin}>
             <ListItemButton>Login</ListItemButton>
           </ListItem>
         </List>
@@ -640,6 +669,19 @@ export default function NavBar(props) {
                   variant="plain"
                   spacing="0.1rem"
                 >
+                  <Tooltip
+                    title="Questions, help, or bug report"
+                    variant="solid"
+                  >
+                    <Button
+                      size="sm"
+                      component={RouterLink}
+                      to="/contact-us"
+                      color="primary"
+                    >
+                      Help
+                    </Button>
+                  </Tooltip>
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"

@@ -70,3 +70,10 @@ nginx-config/nginx.test.conf
 
 # Ignore certbot
 certbot/*
+
+# Ignore robots.txt
+public/robots*
+
+# Ignore any log files and directories
+logs/*
+*.log

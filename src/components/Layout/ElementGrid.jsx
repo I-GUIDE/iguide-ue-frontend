@@ -56,7 +56,7 @@ export default function ElementGrid(props) {
   const showUserElementCard = props.showUserElementCard;
   const disableUriChange = props.disableUriChange;
 
-  const [elementList, setMetadataList] = useState([]);
+  const [elementList, setElementList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [resultLength, setResultLength] = useState(null);
@@ -90,7 +90,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {
@@ -113,7 +113,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {
@@ -136,7 +136,7 @@ export default function ElementGrid(props) {
 
         setNumberOfTotalItems(data["total-count"]);
         setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
-        setMetadataList(data.elements);
+        setElementList(data.elements);
         setLoading(false);
         setResultLength(arrayLength(data.elements));
       } catch (error) {
@@ -215,7 +215,7 @@ export default function ElementGrid(props) {
     );
   }
 
-  if (!numberOfTotalItems) {
+  if (!numberOfTotalItems || numberOfTotalItems <= 0) {
     return (
       <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
         <JoyCssVarsProvider>
@@ -292,7 +292,7 @@ export default function ElementGrid(props) {
               <Grid key={element.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 {showUserElementCard ? (
                   <UserElementCard
-                    cardtype={element["resource-type"] + "s"}
+                    cardtype={element["resource-type"]}
                     elementId={element.id}
                     title={element.title}
                     authors={element.authors}
@@ -308,7 +308,7 @@ export default function ElementGrid(props) {
                   />
                 ) : (
                   <InfoCard
-                    cardtype={element["resource-type"] + "s"}
+                    cardtype={element["resource-type"]}
                     elementId={element.id}
                     title={element.title}
                     authors={element.authors}

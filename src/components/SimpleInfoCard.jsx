@@ -15,6 +15,7 @@ import { removeMarkdown } from "../helpers/helper";
 import {
   RESOURCE_TYPE_COLORS,
   RESOURCE_TYPE_NAMES,
+  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
 } from "../configs/VarConfigs";
 
 export default function SimpleInfoCard(props) {
@@ -50,7 +51,11 @@ export default function SimpleInfoCard(props) {
       <CardOverflow>
         <AspectRatio ratio="2">
           {thumbnailImage ? (
-            <img src={thumbnailImage.low} loading="lazy" alt="thumbnail" />
+            <img
+              src={thumbnailImage.low ? thumbnailImage.low : thumbnailImage}
+              loading="lazy"
+              alt="thumbnail"
+            />
           ) : (
             <img
               src={`/default-images/${cardType}.png`}
@@ -67,7 +72,7 @@ export default function SimpleInfoCard(props) {
           component={RouterLink}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
-          to={"/" + cardType + "/" + pageId}
+          to={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] + "/" + pageId}
           sx={{ color: "text.tertiary" }}
         >
           <Stack spacing={1}>

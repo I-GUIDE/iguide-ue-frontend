@@ -15,6 +15,7 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import LinkIcon from "@mui/icons-material/Link";
 
 import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
@@ -22,6 +23,7 @@ import CopyButton from "./CopyButton";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
+import { RESOURCE_TYPE_NAMES_PLURAL_FOR_URI } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
@@ -157,6 +159,8 @@ export default function MainContent(props) {
   const updateTime = props.updateTime;
   const isLoading = props.isLoading;
 
+  const elementTypePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[elementType];
+
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
     ? PeriodAgoText("Updated ", updateTime)
@@ -169,7 +173,7 @@ export default function MainContent(props) {
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated } = useOutletContext();
 
-  const shareUrl = `${REACT_FRONTEND_URL}/${elementType}s/${elementId}`;
+  const shareUrl = `${REACT_FRONTEND_URL}/${elementTypePlural}/${elementId}`;
   const shareTitle = `${WEBSITE_TITLE}: ${title}`;
 
   if (useOERLayout) {
@@ -187,7 +191,9 @@ export default function MainContent(props) {
               <CardCover>
                 {thumbnailImage ? (
                   <img
-                    src={thumbnailImage.high}
+                    src={
+                      thumbnailImage.high ? thumbnailImage.high : thumbnailImage
+                    }
                     loading="lazy"
                     style={isLoading ? { display: "none" } : null}
                     alt="thumbnail"
@@ -237,7 +243,12 @@ export default function MainContent(props) {
               )}
               <Stack direction="row" spacing={1}>
                 <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-                <CopyButton textToCopy={shareUrl} />
+                <CopyButton
+                  textToCopy={shareUrl}
+                  tooltipText="Copy element URL"
+                  successText="Element URL copied!"
+                  icon={<LinkIcon />}
+                />
                 {isAuthenticated && (
                   <BookmarkButton
                     elementId={elementId}
@@ -295,7 +306,12 @@ export default function MainContent(props) {
             )}
             <Stack direction="row" spacing={1}>
               <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-              <CopyButton textToCopy={shareUrl} />
+              <CopyButton
+                textToCopy={shareUrl}
+                tooltipText="Copy element URL"
+                successText="Element URL copied!"
+                icon={<LinkIcon />}
+              />
               {isAuthenticated && (
                 <BookmarkButton
                   elementId={elementId}
@@ -335,7 +351,11 @@ export default function MainContent(props) {
             >
               {thumbnailImage ? (
                 <img
-                  src={thumbnailImage.medium}
+                  src={
+                    thumbnailImage.medium
+                      ? thumbnailImage.medium
+                      : thumbnailImage
+                  }
                   loading="lazy"
                   style={isLoading ? { display: "none" } : null}
                   alt="thumbnail"
