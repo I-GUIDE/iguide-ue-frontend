@@ -10,6 +10,8 @@ import { fetchUser } from "../../utils/UserManager";
 import CopyButton from "./CopyButton";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
+const DISABLE_ELEMENT_CITATION =
+  import.meta.env.VITE_DISABLE_ELEMENT_CITATION === "true";
 
 export default function CitationGenerator(props) {
   const contributorId = props.contributorId;
@@ -42,6 +44,11 @@ export default function CitationGenerator(props) {
 
   const citation = `${contributorLastName}, ${contributorFirstNameInitial}. (${createdAt}). ${title}, I-GUIDE Platform, `;
   const elementUrl = `${REACT_FRONTEND_URL}/${elementType}/${elementId}`;
+
+  // Temporarily disable element citations
+  if (DISABLE_ELEMENT_CITATION) {
+    return;
+  }
 
   return (
     <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
