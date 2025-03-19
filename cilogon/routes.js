@@ -52,16 +52,16 @@ const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 // Function to retrieve the role from the "user_dev" index
-const getUserRole = async (user_id) => {
-  const openid = encodeURIComponent(user_id);
+const getUserRole = async (userOpenId) => {
+  const encodedOpenId = encodeURIComponent(userOpenId);
 
-  const response = await fetch(`${BACKEND_URL}/api/users/${openid}/role`);
+  const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
 
   if (!response.ok) {
     logger.error({
       type: "Couldn't fetch user role",
       user: {
-        id: user_id,
+        id: userOpenId,
       }
     });
     return 10;
@@ -72,12 +72,12 @@ const getUserRole = async (user_id) => {
 };
 
 // Store refresh token in OpenSearch
-const storeRefreshToken = async (client, token, user_id) => {
+const storeRefreshToken = async (client, token, userOpenId) => {
   await client.index({
     index: os_index,
     body: {
       token,
-      user_id,
+      userOpenId,
       created_at: new Date(),
     },
   });

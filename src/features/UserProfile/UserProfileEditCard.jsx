@@ -188,7 +188,7 @@ export default function UserProfileEditCard(props) {
     }
 
     const result = await updateUser(
-      localUserInfo.openid,
+      localUserInfo.id,
       firstName,
       lastName,
       email,
