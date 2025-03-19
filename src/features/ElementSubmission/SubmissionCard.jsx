@@ -35,6 +35,7 @@ import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
 const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
+import LoadingCard from "../../components/Layout/LoadingCard";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -175,6 +176,7 @@ export default function SubmissionCard(props) {
   const [openModal, setOpenModal] = useState(false);
 
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkJWTToken = async () => {
@@ -187,6 +189,7 @@ export default function SubmissionCard(props) {
           console.log("Check token returns", message, typeof message);
         setUserRoleFromJWT(message);
       }
+      setLoading(false);
     };
     checkJWTToken();
   }, []);
@@ -787,6 +790,10 @@ export default function SubmissionCard(props) {
         localUserInfo={localUserInfo}
       />
     );
+  }
+
+  if (loading) {
+    return <LoadingCard title="Loading the contribution form..." />;
   }
 
   // After submission, show users the submission status.
