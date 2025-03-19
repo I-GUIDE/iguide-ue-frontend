@@ -23,6 +23,7 @@ export default function LoadingCard(props) {
         orientation="horizontal"
         sx={{
           width: "100%",
+          bgcolor: "#fff",
         }}
       >
         <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
@@ -35,7 +36,7 @@ export default function LoadingCard(props) {
             }}
           >
             <Stack spacing={2}>
-              <Typography level="title-lg">{title}</Typography>
+              <Typography level="title-md">{title}</Typography>
               {content && <Typography level="body-md">{content}</Typography>}
             </Stack>
           </Box>

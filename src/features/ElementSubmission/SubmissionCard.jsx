@@ -793,7 +793,7 @@ export default function SubmissionCard(props) {
   }
 
   if (loading) {
-    return <LoadingCard title="Loading the contribution form..." />;
+    return <LoadingCard title="Loading the element contribution form..." />;
   }
 
   // After submission, show users the submission status.
