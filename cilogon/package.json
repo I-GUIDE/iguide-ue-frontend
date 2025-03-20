@@ -7,7 +7,7 @@
         "dev": "npx nodemon -r dotenv/config auth_server.js"
     },
     "dependencies": {
-        "@opensearch-project/opensearch": "^2.12.0",
+        "@opensearch-project/opensearch": "^3.4.0",
         "@slack/web-api": "^7.9.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
