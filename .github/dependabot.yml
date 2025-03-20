@@ -12,7 +12,7 @@ updates:
       interval: "daily"
       time: "08:30"
       timezone: "America/Chicago"
-    open-pull-requests-limit: 15
+    open-pull-requests-limit: 8
 
   # Backend
   - package-ecosystem: "npm"
@@ -22,4 +22,4 @@ updates:
       day: "monday"
       time: "08:30"
       timezone: "America/Chicago"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
