@@ -3564,10 +3564,10 @@ react@^18.3.1:
   dependencies:
     loose-envify "^1.1.0"
 
-reagraph@^4.19.3:
-  version "4.19.4"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.19.4.tgz#58e3b8e5836737a4d84488f546dcc9f546b1e1f3"
-  integrity sha512-KJNh8ycYkxdZFGODLJIZ+LILDEX2XwakStbHwJyoBmV+Kgze4RU6lOakLUU8/EB8s70lh/B5M9Rzr/Ty7kTQbw==
+reagraph@^4.21.5:
+  version "4.21.5"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.21.5.tgz#b19e4d6c069114982e10ac034783dd2abca0e18b"
+  integrity sha512-tor9F1lkhxt9Qvh4i8C/HFD3WKg71cQGLM3I/oUJFcqdUu8hj6J++RbRj2by4RkWBwIk6n7rD1ops7lmTFx9eQ==
   dependencies:
     "@react-spring/three" "9.6.1"
     "@react-three/fiber" "8.13.5"
