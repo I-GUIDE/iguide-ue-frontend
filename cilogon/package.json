@@ -19,7 +19,7 @@
         "multer": "^1.4.5-lts.2",
         "node-fetch": "3",
         "nodemon": "^3.1.9",
-        "openid-client": "^5.7.0",
+        "openid-client": "^6.3.4",
         "passport": "^0.7.0",
         "pino": "^9.6.0",
         "pino-http": "^10.4.0",
