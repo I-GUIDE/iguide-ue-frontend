@@ -273,7 +273,17 @@ export default function MainContent(props) {
             </div>
           </Box>
         ) : (
-          <Typography level="body-lg">{contents}</Typography>
+          <Typography
+            level="body-lg"
+            sx={{
+              pt: 2,
+              wordBreak: "break-word",
+              whiteSpace: "pre-wrap",
+              lineHeight: "150%",
+            }}
+          >
+            {contents}
+          </Typography>
         )}
       </Stack>
     );
@@ -388,7 +398,12 @@ export default function MainContent(props) {
       ) : (
         <Typography
           level="body-lg"
-          sx={{ pt: 2, wordBreak: "break-word", lineHeight: "150%" }}
+          sx={{
+            pt: 2,
+            wordBreak: "break-word",
+            whiteSpace: "pre-wrap",
+            lineHeight: "150%",
+          }}
         >
           {contents}
         </Typography>
