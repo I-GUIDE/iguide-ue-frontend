@@ -5,12 +5,14 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Frontend
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
 
- - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/cilogon" # Location of package manifests
+  # Backend
+  - package-ecosystem: "npm"
+    directory: "/cilogon"
     schedule:
       interval: "weekly"
