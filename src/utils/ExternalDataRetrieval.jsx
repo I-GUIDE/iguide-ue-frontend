@@ -26,6 +26,5 @@ export async function getSpatialMetadata(location) {
     return null;
   }
 
-  // Only return the highest ranked result
-  return data[0];
+  return data;
 }

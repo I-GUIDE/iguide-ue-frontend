@@ -36,6 +36,7 @@ const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 import LoadingCard from "../../components/Layout/LoadingCard";
+import SpatialMetadataInfoCard from "./SpatialMetadataInfoCard";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -69,6 +70,8 @@ import {
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
+
+import { getSpatialMetadata } from "../../utils/ExternalDataRetrieval";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -157,6 +160,10 @@ export default function SubmissionCard(props) {
 
   const [contributor, setContributor] = useState([]);
 
+  const [spatialMetadataList, setSpatialMetadataList] = useState([]);
+  const [selectedSpatialMetadataIndex, setSelectedSpatialMetadataIndex] =
+    useState(-1);
+  const [spatialDescription, setSpatialDescription] = useState("");
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
@@ -307,6 +314,22 @@ export default function SubmissionCard(props) {
     };
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
+
+  // For autofilling the selected metadata
+  useEffect(() => {
+    if (selectedSpatialMetadataIndex !== -1) {
+      const selectedSpatialMetadata =
+        spatialMetadataList[selectedSpatialMetadataIndex];
+      setSpatialCoverage(selectedSpatialMetadata.display_name);
+      setGeometry(selectedSpatialMetadata.geotext);
+      setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
+      setCentroid(
+        `${selectedSpatialMetadata.lat}, ${selectedSpatialMetadata.lon}`
+      );
+      setSelectedSpatialMetadataIndex(-1);
+      setSpatialMetadataList([]);
+    }
+  }, [selectedSpatialMetadataIndex, spatialMetadataList]);
 
   const handleVisibilityChange = async (e, newValue) => {
     if (newValue) {
@@ -503,6 +526,24 @@ export default function SubmissionCard(props) {
       setGitHubRepoLinkError(false);
     } else {
       setGitHubRepoLinkError(true);
+    }
+  };
+
+  // Autofill spatial metadata
+  const handleAutofillSpatialMetadata = async () => {
+    if (!spatialDescription || spatialDescription === "") {
+      alert("Please enter the spatial metadata first.");
+      return;
+    }
+
+    const returnedList = await getSpatialMetadata(spatialDescription);
+    setSpatialMetadataList(returnedList);
+
+    if (!returnedList || returnedList.length === 0) {
+      alert(
+        "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
+      );
+      return;
     }
   };
 
@@ -1503,14 +1544,66 @@ export default function SubmissionCard(props) {
             </Typography>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
-                  Spatial coverage (Click &#10004; button to save)
+                <SubmissionCardFieldTitle tooltipTitle="The location name for spatial metadata autofill, e.g., Chicago, Lake Michigan, a house address...">
+                  Enter the location name (only for spatial metadata autofill)
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <CapsuleInput
-                array={spatialCoverage}
-                setArray={setSpatialCoverage}
-                placeholder="Chicago, IL"
+              <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                <Grid xs>
+                  <Input
+                    placeholder="Examples: Chicago; Lake Michigan; 123 Main St, City, State..."
+                    value={spatialDescription}
+                    onChange={(event) =>
+                      setSpatialDescription(event.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid xs="auto">
+                  <Button
+                    variant="outlined"
+                    onClick={handleAutofillSpatialMetadata}
+                  >
+                    Autofill metadata
+                  </Button>
+                </Grid>
+              </Grid>
+            </FormControl>
+            {spatialMetadataList.length > 0 && (
+              <Grid sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <Typography level="title-sm">
+                  We have found one or more matching locations. Please select
+                  one for metadata autofill:
+                </Typography>
+                <Stack
+                  spacing={1}
+                  direction="width"
+                  useFlexGap
+                  sx={{ flexWrap: "wrap", width: "100%" }}
+                >
+                  {spatialMetadataList?.map((spatialMetadata, index) => (
+                    <SpatialMetadataInfoCard
+                      displayName={spatialMetadata.display_name}
+                      addressType={spatialMetadata.addresstype}
+                      type={spatialMetadata.type}
+                      category={spatialMetadata.category}
+                      listIndex={index}
+                      setListIndex={setSelectedSpatialMetadataIndex}
+                    />
+                  ))}
+                </Stack>
+              </Grid>
+            )}
+
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="A text description of the spatial extent out to the national level, e.g., Chicago, Illinois, United States">
+                  Spatial coverage name
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                placeholder="Chicago, Cook County, Illinois, United States"
+                value={spatialCoverage}
+                onChange={(event) => setSpatialCoverage(event.target.value)}
               />
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -1519,8 +1612,10 @@ export default function SubmissionCard(props) {
                   Geometry
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
+              <Textarea
                 placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+                minRows={4}
+                maxRows={10}
                 value={geometry}
                 onChange={(event) => setGeometry(event.target.value)}
               />
@@ -1531,14 +1626,26 @@ export default function SubmissionCard(props) {
                   tooltipTitle="The bounding box in the format:"
                   tooltipContent="ENVELOPE(West, East, North, South)"
                 >
-                  Bounding Box
+                  Bounding box
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
-                value={boundingBox}
-                onChange={(event) => setBoundingBox(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={2}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid xs="auto">{"ENVELOPE("}</Grid>
+                <Grid xs>
+                  <Input
+                    placeholder="-111.1, -104.0, 45.0, 40.9"
+                    value={boundingBox}
+                    onChange={(event) =>
+                      setBoundingBox("ENVELOPE(" + event.target.value + ")")
+                    }
+                  />
+                </Grid>
+                <Grid xs="auto">{")"}</Grid>
+              </Grid>
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
@@ -1547,7 +1654,7 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
-                placeholder="46.4218,-94.087"
+                placeholder="46.4218, -94.087"
                 value={centroid}
                 onChange={(event) => setCentroid(event.target.value)}
               />
