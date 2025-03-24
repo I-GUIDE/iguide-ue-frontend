@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useOutletContext, Link as RouterLink } from "react-router";
 
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Card from "@mui/joy/Card";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Select from "@mui/joy/Select";
@@ -36,6 +36,7 @@ const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 import LoadingCard from "../../components/Layout/LoadingCard";
+import SpatialMetadataInfoCard from "./SpatialMetadataInfoCard";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -64,11 +65,15 @@ import {
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
-  getMetadataByDOI,
   duplicateDOIExists,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
+
+import {
+  getSpatialMetadata,
+  getPublicationMetadata,
+} from "../../utils/ExternalDataRetrieval";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -148,6 +153,10 @@ export default function SubmissionCard(props) {
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState("");
+  const [
+    publicationMetadataAutofillLoading,
+    setPublicationMetadataAutofillLoading,
+  ] = useState(false);
   const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] = useState();
 
   const [mapIframeLink, setMapIframeLink] = useState("");
@@ -157,6 +166,12 @@ export default function SubmissionCard(props) {
 
   const [contributor, setContributor] = useState([]);
 
+  const [spatialMetadataList, setSpatialMetadataList] = useState([]);
+  const [selectedSpatialMetadataIndex, setSelectedSpatialMetadataIndex] =
+    useState(-1);
+  const [spatialMetadataAutofillLoading, setSpatialMetadataAutofillLoading] =
+    useState(false);
+  const [spatialDescription, setSpatialDescription] = useState("");
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
@@ -308,6 +323,20 @@ export default function SubmissionCard(props) {
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
 
+  // For autofilling the selected metadata
+  useEffect(() => {
+    if (selectedSpatialMetadataIndex !== -1) {
+      const selectedSpatialMetadata =
+        spatialMetadataList[selectedSpatialMetadataIndex];
+      setSpatialCoverage(selectedSpatialMetadata.display_name);
+      setGeometry(selectedSpatialMetadata.geotext);
+      setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
+      setCentroid(
+        `${selectedSpatialMetadata.lat}, ${selectedSpatialMetadata.lon}`
+      );
+    }
+  }, [selectedSpatialMetadataIndex, spatialMetadataList]);
+
   const handleVisibilityChange = async (e, newValue) => {
     if (newValue) {
       TEST_MODE && console.log("Setting visibility to", newValue);
@@ -435,7 +464,9 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    const metadataDOI = await getMetadataByDOI(publicationDOI);
+    setPublicationMetadataAutofillLoading(true);
+    const metadataDOI = await getPublicationMetadata(publicationDOI);
+    setPublicationMetadataAutofillLoading(false);
     TEST_MODE && console.log("pub metadata", metadataDOI);
 
     if (!metadataDOI || metadataDOI === "") {
@@ -504,6 +535,35 @@ export default function SubmissionCard(props) {
     } else {
       setGitHubRepoLinkError(true);
     }
+  };
+
+  // Autofill spatial metadata
+  const handleAutofillSpatialMetadata = async () => {
+    setSelectedSpatialMetadataIndex(-1);
+    setSpatialMetadataList([]);
+    if (!spatialDescription || spatialDescription === "") {
+      alert("Please enter the spatial metadata first.");
+      return;
+    }
+
+    setSpatialMetadataAutofillLoading(true);
+    const returnedList = await getSpatialMetadata(spatialDescription);
+    setSpatialMetadataAutofillLoading(false);
+
+    if (returnedList === "ERROR") {
+      alert(
+        "The Nominatim API is not available at this moment. Please try again later or manually enter the spatial metadata."
+      );
+      return;
+    }
+
+    if (!returnedList || returnedList.length === 0) {
+      alert(
+        "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
+      );
+      return;
+    }
+    setSpatialMetadataList(returnedList);
   };
 
   const handleLicenseChange = (value) => {
@@ -970,7 +1030,7 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                  <Grid xs>
+                  <Grid size="grow">
                     {submissionType === "initial" ? (
                       <Input
                         required
@@ -982,15 +1042,31 @@ export default function SubmissionCard(props) {
                       <Typography>{publicationDOI}</Typography>
                     )}
                   </Grid>
-                  <Grid xs="auto">
+                  <Grid size="auto">
                     <Button
                       variant="outlined"
+                      loading={publicationMetadataAutofillLoading}
                       onClick={handleAutofillPublicationInfo}
                     >
                       Autofill metadata
                     </Button>
                   </Grid>
                 </Grid>
+                <FormHelperText>
+                  <Typography level="body-sm">
+                    To learn more about Crossref, the autofill API provider,
+                    please click&nbsp;
+                    <Link
+                      component={RouterLink}
+                      to={`https://www.crossref.org/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </Link>
+                    .
+                  </Typography>
+                </FormHelperText>
                 {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
@@ -1503,14 +1579,93 @@ export default function SubmissionCard(props) {
             </Typography>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
-                  Spatial coverage (Click &#10004; button to save)
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Provide the location name for spatial metadata autofill. It can be a city, landmark, organization, or even a street address."
+                  tooltipContent={`Feature powered by Nominatim. Please note that the API may not return the correct result, or may return no result at all.`}
+                >
+                  Enter the location name (only for spatial metadata autofill)
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <CapsuleInput
-                array={spatialCoverage}
-                setArray={setSpatialCoverage}
-                placeholder="Chicago, IL"
+              <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                <Grid size="grow">
+                  <Input
+                    placeholder="Examples: Chicago; Lake Michigan; 123 Main St, City, State..."
+                    value={spatialDescription}
+                    onChange={(event) =>
+                      setSpatialDescription(event.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid size="auto">
+                  <Button
+                    variant="outlined"
+                    loading={spatialMetadataAutofillLoading}
+                    onClick={handleAutofillSpatialMetadata}
+                  >
+                    Autofill metadata
+                  </Button>
+                </Grid>
+              </Grid>
+              <FormHelperText>
+                <Typography level="body-sm">
+                  To learn more about Nominatim, the autofill API provider,
+                  please click&nbsp;
+                  <Link
+                    component={RouterLink}
+                    to={`https://nominatim.org/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    here
+                  </Link>
+                  .
+                </Typography>
+              </FormHelperText>
+            </FormControl>
+            {spatialMetadataList?.length > 0 && (
+              <Grid sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <Typography level="title-sm" sx={{ pb: 1 }}>
+                  We have found {spatialMetadataList.length} matching location
+                  {spatialMetadataList.length > 1 && "s"}. Please click{" "}
+                  {spatialMetadataList.length > 1 && "one"} to autofill spatial
+                  metadata:
+                </Typography>
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
+                >
+                  {spatialMetadataList?.map((spatialMetadata, index) => (
+                    <Grid key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                      <SpatialMetadataInfoCard
+                        displayName={spatialMetadata.display_name}
+                        addressType={spatialMetadata.addresstype}
+                        type={spatialMetadata.type}
+                        category={spatialMetadata.category}
+                        listIndex={index}
+                        setListIndex={setSelectedSpatialMetadataIndex}
+                        selectedSpatialMetadataIndex={
+                          selectedSpatialMetadataIndex
+                        }
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            )}
+
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="A text description of the spatial extent out to the national level, e.g., Chicago, Illinois, United States">
+                  Spatial coverage name
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                placeholder="Chicago, Cook County, Illinois, United States"
+                value={spatialCoverage}
+                onChange={(event) => setSpatialCoverage(event.target.value)}
               />
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -1519,8 +1674,10 @@ export default function SubmissionCard(props) {
                   Geometry
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
+              <Textarea
                 placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+                minRows={4}
+                maxRows={10}
                 value={geometry}
                 onChange={(event) => setGeometry(event.target.value)}
               />
@@ -1531,14 +1688,26 @@ export default function SubmissionCard(props) {
                   tooltipTitle="The bounding box in the format:"
                   tooltipContent="ENVELOPE(West, East, North, South)"
                 >
-                  Bounding Box
+                  Bounding box
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
-                value={boundingBox}
-                onChange={(event) => setBoundingBox(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={2}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid size="auto">{"ENVELOPE("}</Grid>
+                <Grid size="grow">
+                  <Input
+                    placeholder="-111.1, -104.0, 45.0, 40.9"
+                    value={boundingBox}
+                    onChange={(event) =>
+                      setBoundingBox("ENVELOPE(" + event.target.value + ")")
+                    }
+                  />
+                </Grid>
+                <Grid size="auto">{")"}</Grid>
+              </Grid>
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
@@ -1547,7 +1716,7 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Input
-                placeholder="46.4218,-94.087"
+                placeholder="46.4218, -94.087"
                 value={centroid}
                 onChange={(event) => setCentroid(event.target.value)}
               />
