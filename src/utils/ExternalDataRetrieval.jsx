@@ -46,7 +46,7 @@ export async function getPublicationMetadata(doi) {
 export async function getSpatialMetadata(location) {
   const encodedLocation = encodeURIComponent(location);
   try {
-    const apiCall = `https://nominatim.openstreetmap.org/search?q=${encodedLocation}&format=jsonv2&polygon_text=true&polygon_threshold=0.001`;
+    const apiCall = `https://nominatim.openstreetmap.org/search?q=${encodedLocation}&format=jsonv2&polygon_text=true&polygon_threshold=0.0010060&accept-language=en`;
     const response = await fetch(apiCall);
 
     if (!response.ok) {

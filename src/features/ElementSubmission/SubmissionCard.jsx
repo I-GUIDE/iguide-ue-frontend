@@ -68,7 +68,10 @@ import {
   duplicateDOIExists,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
-import { printListWithDelimiter } from "../../helpers/helper";
+import {
+  printListWithDelimiter,
+  isValidNumberWithinRange,
+} from "../../helpers/helper";
 
 import {
   getSpatialMetadata,
@@ -175,7 +178,15 @@ export default function SubmissionCard(props) {
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
+  const [boundingBoxError, setBoundingBoxError] = useState({
+    status: false,
+    message: "",
+  });
   const [centroid, setCentroid] = useState("");
+  const [centroidError, setCentroidError] = useState({
+    status: false,
+    message: "",
+  });
   const [isGeoreferenced, setIsGeoreferenced] = useState("");
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
@@ -211,6 +222,15 @@ export default function SubmissionCard(props) {
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
+    function parseNumbers(text, numberOfExpectedNumbers, delimiter = ", ") {
+      const regex = /-?\b\d+(\.\d+)?\b/g;
+      const matches = text.match(regex);
+
+      if (matches.length !== numberOfExpectedNumbers) {
+        return text;
+      }
+      return matches.join(delimiter);
+    }
     const fetchData = async () => {
       const elementObject =
         isPrivateElement === true || isPrivateElement === "true"
@@ -277,8 +297,8 @@ export default function SubmissionCard(props) {
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
       setGeometry(thisElement["spatial-geometry"]);
-      setBoundingBox(thisElement["spatial-bounding-box"]);
-      setCentroid(thisElement["spatial-centroid"]);
+      setBoundingBox(parseNumbers(thisElement["spatial-bounding-box"], 4));
+      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2, " "));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
@@ -332,7 +352,7 @@ export default function SubmissionCard(props) {
       setGeometry(selectedSpatialMetadata.geotext);
       setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
       setCentroid(
-        `${selectedSpatialMetadata.lat}, ${selectedSpatialMetadata.lon}`
+        `${selectedSpatialMetadata.lat} ${selectedSpatialMetadata.lon}`
       );
     }
   }, [selectedSpatialMetadataIndex, spatialMetadataList]);
@@ -566,6 +586,70 @@ export default function SubmissionCard(props) {
     setSpatialMetadataList(returnedList);
   };
 
+  // Validate the format of the bounding box input
+  const handleBoundingBoxChange = (event) => {
+    const val = event.target.value;
+    setBoundingBox(val);
+
+    const array = val.split(",");
+
+    if (array.length !== 4) {
+      setBoundingBoxError({
+        status: true,
+        message: "It must consist of 4 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The second number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[2], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The third number must be between -90 and 90",
+      });
+    } else if (!isValidNumberWithinRange(array[3], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The fouth number must be between -90 and 90",
+      });
+    } else {
+      setBoundingBoxError({ status: false, message: "" });
+    }
+  };
+
+  // Validate the format of the centroid input
+  const handleCentroidChange = (event) => {
+    const val = event.target.value;
+    setCentroid(val);
+
+    const array = val.split(" ");
+
+    if (array.length !== 2) {
+      setCentroidError({
+        status: true,
+        message: "It must consist of 2 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setCentroidError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -90, 90)) {
+      setCentroidError({
+        status: true,
+        message: "The second number must be between -90 and 90",
+      });
+    } else {
+      setCentroidError({ status: false, message: "" });
+    }
+  };
+
   const handleLicenseChange = (value) => {
     setLicenseId(value);
 
@@ -661,8 +745,8 @@ export default function SubmissionCard(props) {
 
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
-    data["spatial-bounding-box"] = boundingBox;
-    data["spatial-centroid"] = centroid;
+    data["spatial-bounding-box"] = `ENVELOPE (${boundingBox})`;
+    data["spatial-centroid"] = `POINT (${centroid})`;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
 
@@ -1302,7 +1386,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "notebook" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={notebookGitHubUrlError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the notebook on GitHub you would like featured for this Knowledge Element"
@@ -1322,7 +1409,6 @@ export default function SubmissionCard(props) {
                   name="notebook-url"
                   placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                   value={notebookGitHubUrl}
-                  error={notebookGitHubUrlError}
                   onChange={handleNotebookGitHubUrlChange}
                 />
                 {notebookGitHubUrlError && (
@@ -1453,7 +1539,10 @@ export default function SubmissionCard(props) {
               </Grid>
             )}
             {resourceTypeSelected === "code" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={gitHubRepoLinkError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
@@ -1468,7 +1557,6 @@ export default function SubmissionCard(props) {
                   name="github-repo-link"
                   placeholder="https://github.com/<repo_owner>/<repo_name>"
                   value={gitHubRepoLink}
-                  error={gitHubRepoLinkError}
                   onChange={handleRepoLinkChange}
                 />
                 {gitHubRepoLinkError && (
@@ -1682,44 +1770,71 @@ export default function SubmissionCard(props) {
                 onChange={(event) => setGeometry(event.target.value)}
               />
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={boundingBoxError.status}
+            >
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
-                  tooltipContent="ENVELOPE(West, East, North, South)"
+                  tooltipContent="ENVELOPE (minimum longitude, minimum latitude, maximum longitude, maximum latitude) aka ENVELOPE (westernmost, southernmost, easternmost, northernmost)"
                 >
                   Bounding box
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Grid
                 container
-                spacing={2}
+                spacing={0.5}
                 sx={{ flexGrow: 1, alignItems: "center" }}
               >
-                <Grid size="auto">{"ENVELOPE("}</Grid>
+                <Grid size="auto">{"ENVELOPE ("}</Grid>
                 <Grid size="grow">
                   <Input
                     placeholder="-111.1, -104.0, 45.0, 40.9"
                     value={boundingBox}
-                    onChange={(event) =>
-                      setBoundingBox("ENVELOPE(" + event.target.value + ")")
-                    }
+                    onChange={handleBoundingBoxChange}
                   />
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
               </Grid>
+              {boundingBoxError.status && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The bounding box format is invalid! {boundingBoxError.message}
+                  .
+                </FormHelperText>
+              )}
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={centroidError.status}
+            >
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
+                <SubmissionCardFieldTitle tooltipTitle="The longitude and latitude of the centroid of the data.">
                   Centroid
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="46.4218, -94.087"
-                value={centroid}
-                onChange={(event) => setCentroid(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={0.5}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid size="auto">{"POINT ("}</Grid>
+                <Grid size="grow">
+                  <Input
+                    placeholder="-94.087 46.4218"
+                    value={centroid}
+                    onChange={handleCentroidChange}
+                  />
+                </Grid>
+                <Grid size="auto">{")"}</Grid>
+              </Grid>
+              {centroidError.status && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The centroid format is invalid! {centroidError.message}.
+                </FormHelperText>
+              )}
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
