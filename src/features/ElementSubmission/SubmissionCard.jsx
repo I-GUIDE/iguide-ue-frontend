@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useOutletContext, Link as RouterLink } from "react-router";
 
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Card from "@mui/joy/Card";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Select from "@mui/joy/Select";
@@ -326,8 +326,6 @@ export default function SubmissionCard(props) {
       setCentroid(
         `${selectedSpatialMetadata.lat}, ${selectedSpatialMetadata.lon}`
       );
-      setSelectedSpatialMetadataIndex(-1);
-      setSpatialMetadataList([]);
     }
   }, [selectedSpatialMetadataIndex, spatialMetadataList]);
 
@@ -531,20 +529,20 @@ export default function SubmissionCard(props) {
 
   // Autofill spatial metadata
   const handleAutofillSpatialMetadata = async () => {
+    setSelectedSpatialMetadataIndex(-1);
     if (!spatialDescription || spatialDescription === "") {
       alert("Please enter the spatial metadata first.");
       return;
     }
 
     const returnedList = await getSpatialMetadata(spatialDescription);
-    setSpatialMetadataList(returnedList);
-
     if (!returnedList || returnedList.length === 0) {
       alert(
         "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
       );
       return;
     }
+    setSpatialMetadataList(returnedList);
   };
 
   const handleLicenseChange = (value) => {
@@ -1011,7 +1009,7 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                  <Grid xs>
+                  <Grid size="grow">
                     {submissionType === "initial" ? (
                       <Input
                         required
@@ -1023,7 +1021,7 @@ export default function SubmissionCard(props) {
                       <Typography>{publicationDOI}</Typography>
                     )}
                   </Grid>
-                  <Grid xs="auto">
+                  <Grid size="auto">
                     <Button
                       variant="outlined"
                       onClick={handleAutofillPublicationInfo}
@@ -1549,7 +1547,7 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                <Grid xs>
+                <Grid size="grow">
                   <Input
                     placeholder="Examples: Chicago; Lake Michigan; 123 Main St, City, State..."
                     value={spatialDescription}
@@ -1558,7 +1556,7 @@ export default function SubmissionCard(props) {
                     }
                   />
                 </Grid>
-                <Grid xs="auto">
+                <Grid size="auto">
                   <Button
                     variant="outlined"
                     onClick={handleAutofillSpatialMetadata}
@@ -1568,29 +1566,37 @@ export default function SubmissionCard(props) {
                 </Grid>
               </Grid>
             </FormControl>
-            {spatialMetadataList.length > 0 && (
+            {spatialMetadataList?.length > 0 && (
               <Grid sx={{ gridColumn: "1/-1", py: 0.5 }}>
-                <Typography level="title-sm">
-                  We have found one or more matching locations. Please select
-                  one for metadata autofill:
+                <Typography level="title-sm" sx={{ pb: 1 }}>
+                  We have found {spatialMetadataList.length} matching location
+                  {spatialMetadataList.length > 1 && "s"}. Please click{" "}
+                  {spatialMetadataList.length > 1 && "one"} to autofill spatial
+                  metadata:
                 </Typography>
-                <Stack
-                  spacing={1}
-                  direction="width"
-                  useFlexGap
-                  sx={{ flexWrap: "wrap", width: "100%" }}
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
                 >
                   {spatialMetadataList?.map((spatialMetadata, index) => (
-                    <SpatialMetadataInfoCard
-                      displayName={spatialMetadata.display_name}
-                      addressType={spatialMetadata.addresstype}
-                      type={spatialMetadata.type}
-                      category={spatialMetadata.category}
-                      listIndex={index}
-                      setListIndex={setSelectedSpatialMetadataIndex}
-                    />
+                    <Grid key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                      <SpatialMetadataInfoCard
+                        displayName={spatialMetadata.display_name}
+                        addressType={spatialMetadata.addresstype}
+                        type={spatialMetadata.type}
+                        category={spatialMetadata.category}
+                        listIndex={index}
+                        setListIndex={setSelectedSpatialMetadataIndex}
+                        selectedSpatialMetadataIndex={
+                          selectedSpatialMetadataIndex
+                        }
+                      />
+                    </Grid>
                   ))}
-                </Stack>
+                </Grid>
               </Grid>
             )}
 
@@ -1634,8 +1640,8 @@ export default function SubmissionCard(props) {
                 spacing={2}
                 sx={{ flexGrow: 1, alignItems: "center" }}
               >
-                <Grid xs="auto">{"ENVELOPE("}</Grid>
-                <Grid xs>
+                <Grid size="auto">{"ENVELOPE("}</Grid>
+                <Grid size="grow">
                   <Input
                     placeholder="-111.1, -104.0, 45.0, 40.9"
                     value={boundingBox}
@@ -1644,7 +1650,7 @@ export default function SubmissionCard(props) {
                     }
                   />
                 </Grid>
-                <Grid xs="auto">{")"}</Grid>
+                <Grid size="auto">{")"}</Grid>
               </Grid>
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
