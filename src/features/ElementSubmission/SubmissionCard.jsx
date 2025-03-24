@@ -211,6 +211,15 @@ export default function SubmissionCard(props) {
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
+    function parseNumbers(text, numberOfExpectedNumbers) {
+      const regex = /-?\b\d+(\.\d+)?\b/g;
+      const matches = text.match(regex);
+
+      if (matches.length !== numberOfExpectedNumbers) {
+        return text;
+      }
+      return matches.join(", ");
+    }
     const fetchData = async () => {
       const elementObject =
         isPrivateElement === true || isPrivateElement === "true"
@@ -277,8 +286,8 @@ export default function SubmissionCard(props) {
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
       setGeometry(thisElement["spatial-geometry"]);
-      setBoundingBox(thisElement["spatial-bounding-box"]);
-      setCentroid(thisElement["spatial-centroid"]);
+      setBoundingBox(parseNumbers(thisElement["spatial-bounding-box"], 4));
+      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
