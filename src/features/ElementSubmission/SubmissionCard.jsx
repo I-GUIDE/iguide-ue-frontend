@@ -68,7 +68,10 @@ import {
   duplicateDOIExists,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
-import { printListWithDelimiter } from "../../helpers/helper";
+import {
+  printListWithDelimiter,
+  isValidNumberWithinRange,
+} from "../../helpers/helper";
 
 import {
   getSpatialMetadata,
@@ -175,9 +178,15 @@ export default function SubmissionCard(props) {
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
-  const [boundingBoxError, setBoundingBoxError] = useState(false);
+  const [boundingBoxError, setBoundingBoxError] = useState({
+    status: false,
+    message: "",
+  });
   const [centroid, setCentroid] = useState("");
-  const [centroidError, setCentroidError] = useState(false);
+  const [centroidError, setCentroidError] = useState({
+    status: false,
+    message: "",
+  });
   const [isGeoreferenced, setIsGeoreferenced] = useState("");
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
@@ -582,13 +591,35 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setBoundingBox(val);
 
-    // Validate if the bounding box text consists of 4 real numbers with commas as delimiters
-    const validBoundingBox =
-      /^(-?\d{1,3}(?:,\d{3})*(\.\d+)?)(?:\s*,\s*(-?\d{1,3}(?:,\d{3})*(\.\d+)?)){3}$/;
-    if (val === "" || validBoundingBox.test(val)) {
-      setBoundingBoxError(false);
+    const array = val.split(",");
+
+    if (array.length !== 4) {
+      setBoundingBoxError({
+        status: true,
+        message: "It must consist of 4 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The second number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[2], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The third number must be between -90 and 90",
+      });
+    } else if (!isValidNumberWithinRange(array[3], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The fouth number must be between -90 and 90",
+      });
     } else {
-      setBoundingBoxError(true);
+      setBoundingBoxError({ status: false, message: "" });
     }
   };
 
@@ -597,13 +628,25 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setCentroid(val);
 
-    // Validate if the centroid text consists of 2 real numbers with commas as delimiters
-    const validCentroid =
-      /^(-?\d{1,3}(?:,\d{3})*(\.\d+)?),\s*(-?\d{1,3}(?:,\d{3})*(\.\d+)?)$/;
-    if (val === "" || validCentroid.test(val)) {
-      setCentroidError(false);
+    const array = val.split(",");
+
+    if (array.length !== 2) {
+      setCentroidError({
+        status: true,
+        message: "It must consist of 2 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setCentroidError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -90, 90)) {
+      setCentroidError({
+        status: true,
+        message: "The second number must be between -90 and 90",
+      });
     } else {
-      setCentroidError(true);
+      setCentroidError({ status: false, message: "" });
     }
   };
 
@@ -1729,7 +1772,7 @@ export default function SubmissionCard(props) {
             </FormControl>
             <FormControl
               sx={{ gridColumn: "1/-1", py: 0.5 }}
-              error={boundingBoxError}
+              error={boundingBoxError.status}
             >
               <FormLabel>
                 <SubmissionCardFieldTitle
@@ -1754,17 +1797,17 @@ export default function SubmissionCard(props) {
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
               </Grid>
-              {boundingBoxError && (
+              {boundingBoxError.status && (
                 <FormHelperText>
                   <InfoOutlined />
-                  The bounding box format is invalid! It must be in the format
-                  of "number, number, number, number".
+                  The bounding box format is invalid! {boundingBoxError.message}
+                  .
                 </FormHelperText>
               )}
             </FormControl>
             <FormControl
               sx={{ gridColumn: "1/-1", py: 0.5 }}
-              error={centroidError}
+              error={centroidError.status}
             >
               <FormLabel>
                 <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
@@ -1786,11 +1829,10 @@ export default function SubmissionCard(props) {
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
               </Grid>
-              {centroidError && (
+              {centroidError.status && (
                 <FormHelperText>
                   <InfoOutlined />
-                  The centroid format is invalid! It must be in the format of
-                  "number, number".
+                  The centroid format is invalid! {centroidError.message}.
                 </FormHelperText>
               )}
             </FormControl>
