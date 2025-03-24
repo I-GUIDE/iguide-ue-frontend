@@ -137,6 +137,7 @@ export default function SubmissionCard(props) {
     useState("");
 
   const [submissionStatus, setSubmissionStatus] = useState("no-submission");
+  const [submissionStatusText, setSubmissionStatusText] = useState("");
   const [extraComponent, setExtraComponent] = useState();
 
   const [elementURI, setElementURI] = useState("");
@@ -748,6 +749,7 @@ export default function SubmissionCard(props) {
       alert(
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
       );
+      setButtonDisabled(false);
       return;
     }
 
@@ -758,6 +760,77 @@ export default function SubmissionCard(props) {
     ) {
       setOpenModal(true);
       setSubmissionStatus("error-unsaved-oer-link");
+      setButtonDisabled(false);
+      return;
+    }
+
+    // Other form input errors
+    if (elementIdWithDuplicateGitHubRepoLink) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate GitHub repository link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (elementIdWithDuplicateDOI) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate DOI/URL link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (elementIdWithDuplicateDatasetExternalLink) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate dataset host link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (notebookGitHubUrlError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid GitHub notebook URL."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (gitHubRepoLinkError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid GitHub repository link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (boundingBoxError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid bounding box format."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (centroidError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid centroid format."
+      );
       setButtonDisabled(false);
       return;
     }
@@ -2091,6 +2164,7 @@ export default function SubmissionCard(props) {
         open={openModal}
         onClose={() => {
           setSubmissionStatus("no-submission");
+          setSubmissionStatusText("");
           setOpenModal(false);
           setButtonDisabled(false);
         }}
@@ -2099,6 +2173,7 @@ export default function SubmissionCard(props) {
           <ModalClose />
           <SubmissionStatusCard
             submissionStatus={submissionStatus}
+            submissionStatusText={submissionStatusText}
             extraComponent={extraComponent}
             elementURI={elementURI}
           />
