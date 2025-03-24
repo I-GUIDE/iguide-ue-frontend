@@ -1777,7 +1777,7 @@ export default function SubmissionCard(props) {
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
-                  tooltipContent="ENVELOPE (West, East, North, South)"
+                  tooltipContent="ENVELOPE (minimum longitude, minimum latitude, maximum longitude, maximum latitude) aka ENVELOPE (westernmost, southernmost, easternmost, northernmost)"
                 >
                   Bounding box
                 </SubmissionCardFieldTitle>
