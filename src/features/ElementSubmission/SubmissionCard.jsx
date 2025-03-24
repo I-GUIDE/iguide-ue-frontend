@@ -662,7 +662,7 @@ export default function SubmissionCard(props) {
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
     data["spatial-bounding-box"] = `ENVELOPE (${boundingBox})`;
-    data["spatial-centroid"] = centroid;
+    data["spatial-centroid"] = `POINT (${centroid})`;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
 
@@ -1713,11 +1713,21 @@ export default function SubmissionCard(props) {
                   Centroid
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="46.4218, -94.087"
-                value={centroid}
-                onChange={(event) => setCentroid(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={0.5}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid size="auto">{"POINT ("}</Grid>
+                <Grid size="grow">
+                  <Input
+                    placeholder="46.4218, -94.087"
+                    value={centroid}
+                    onChange={(event) => setCentroid(event.target.value)}
+                  />
+                </Grid>
+                <Grid size="auto">{")"}</Grid>
+              </Grid>
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
