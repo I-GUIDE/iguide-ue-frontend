@@ -222,14 +222,14 @@ export default function SubmissionCard(props) {
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
-    function parseNumbers(text, numberOfExpectedNumbers) {
+    function parseNumbers(text, numberOfExpectedNumbers, delimiter = ", ") {
       const regex = /-?\b\d+(\.\d+)?\b/g;
       const matches = text.match(regex);
 
       if (matches.length !== numberOfExpectedNumbers) {
         return text;
       }
-      return matches.join(", ");
+      return matches.join(delimiter);
     }
     const fetchData = async () => {
       const elementObject =
@@ -298,7 +298,7 @@ export default function SubmissionCard(props) {
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
       setGeometry(thisElement["spatial-geometry"]);
       setBoundingBox(parseNumbers(thisElement["spatial-bounding-box"], 4));
-      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2));
+      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2, " "));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
@@ -352,7 +352,7 @@ export default function SubmissionCard(props) {
       setGeometry(selectedSpatialMetadata.geotext);
       setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
       setCentroid(
-        `${selectedSpatialMetadata.lat}, ${selectedSpatialMetadata.lon}`
+        `${selectedSpatialMetadata.lat} ${selectedSpatialMetadata.lon}`
       );
     }
   }, [selectedSpatialMetadataIndex, spatialMetadataList]);
@@ -628,7 +628,7 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setCentroid(val);
 
-    const array = val.split(",");
+    const array = val.split(" ");
 
     if (array.length !== 2) {
       setCentroidError({
@@ -1777,7 +1777,7 @@ export default function SubmissionCard(props) {
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
-                  tooltipContent="ENVELOPE(West, East, North, South)"
+                  tooltipContent="ENVELOPE (West, East, North, South)"
                 >
                   Bounding box
                 </SubmissionCardFieldTitle>
@@ -1810,7 +1810,7 @@ export default function SubmissionCard(props) {
               error={centroidError.status}
             >
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
+                <SubmissionCardFieldTitle tooltipTitle="The longitude and latitude of the centroid of the data.">
                   Centroid
                 </SubmissionCardFieldTitle>
               </FormLabel>
@@ -1822,7 +1822,7 @@ export default function SubmissionCard(props) {
                 <Grid size="auto">{"POINT ("}</Grid>
                 <Grid size="grow">
                   <Input
-                    placeholder="46.4218, -94.087"
+                    placeholder="-94.087 46.4218"
                     value={centroid}
                     onChange={handleCentroidChange}
                   />
