@@ -12,10 +12,10 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
+  const statusText = props.submissionStatusText;
   // Provide a link to the existing element if submission fails due to duplicate DOI
   const extraComponent = props.extraComponent;
   const elementURI = props.elementURI;
-  const statusText = props.statusText;
 
   let submissionStatusText = "";
   let subText = "";
