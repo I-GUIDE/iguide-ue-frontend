@@ -175,7 +175,9 @@ export default function SubmissionCard(props) {
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
+  const [boundingBoxError, setBoundingBoxError] = useState(false);
   const [centroid, setCentroid] = useState("");
+  const [centroidError, setCentroidError] = useState(false);
   const [isGeoreferenced, setIsGeoreferenced] = useState("");
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
@@ -573,6 +575,36 @@ export default function SubmissionCard(props) {
       return;
     }
     setSpatialMetadataList(returnedList);
+  };
+
+  // Validate the format of the bounding box input
+  const handleBoundingBoxChange = (event) => {
+    const val = event.target.value;
+    setBoundingBox(val);
+
+    // Validate if the bounding box text consists of 4 real numbers with commas as delimiters
+    const validBoundingBox =
+      /^(-?\d{1,3}(?:,\d{3})*(\.\d+)?)(?:\s*,\s*(-?\d{1,3}(?:,\d{3})*(\.\d+)?)){3}$/;
+    if (val === "" || validBoundingBox.test(val)) {
+      setBoundingBoxError(false);
+    } else {
+      setBoundingBoxError(true);
+    }
+  };
+
+  // Validate the format of the centroid input
+  const handleCentroidChange = (event) => {
+    const val = event.target.value;
+    setCentroid(val);
+
+    // Validate if the centroid text consists of 2 real numbers with commas as delimiters
+    const validCentroid =
+      /^(-?\d{1,3}(?:,\d{3})*(\.\d+)?),\s*(-?\d{1,3}(?:,\d{3})*(\.\d+)?)$/;
+    if (val === "" || validCentroid.test(val)) {
+      setCentroidError(false);
+    } else {
+      setCentroidError(true);
+    }
   };
 
   const handleLicenseChange = (value) => {
@@ -1311,7 +1343,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "notebook" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={notebookGitHubUrlError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the notebook on GitHub you would like featured for this Knowledge Element"
@@ -1331,7 +1366,6 @@ export default function SubmissionCard(props) {
                   name="notebook-url"
                   placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                   value={notebookGitHubUrl}
-                  error={notebookGitHubUrlError}
                   onChange={handleNotebookGitHubUrlChange}
                 />
                 {notebookGitHubUrlError && (
@@ -1462,7 +1496,10 @@ export default function SubmissionCard(props) {
               </Grid>
             )}
             {resourceTypeSelected === "code" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={gitHubRepoLinkError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
@@ -1477,7 +1514,6 @@ export default function SubmissionCard(props) {
                   name="github-repo-link"
                   placeholder="https://github.com/<repo_owner>/<repo_name>"
                   value={gitHubRepoLink}
-                  error={gitHubRepoLinkError}
                   onChange={handleRepoLinkChange}
                 />
                 {gitHubRepoLinkError && (
@@ -1691,7 +1727,10 @@ export default function SubmissionCard(props) {
                 onChange={(event) => setGeometry(event.target.value)}
               />
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={boundingBoxError}
+            >
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
@@ -1710,13 +1749,23 @@ export default function SubmissionCard(props) {
                   <Input
                     placeholder="-111.1, -104.0, 45.0, 40.9"
                     value={boundingBox}
-                    onChange={(event) => setBoundingBox(event.target.value)}
+                    onChange={handleBoundingBoxChange}
                   />
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
               </Grid>
+              {boundingBoxError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The bounding box format is invalid! It must be in the format
+                  of "number, number, number, number".
+                </FormHelperText>
+              )}
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={centroidError}
+            >
               <FormLabel>
                 <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
                   Centroid
@@ -1732,11 +1781,18 @@ export default function SubmissionCard(props) {
                   <Input
                     placeholder="46.4218, -94.087"
                     value={centroid}
-                    onChange={(event) => setCentroid(event.target.value)}
+                    onChange={handleCentroidChange}
                   />
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
               </Grid>
+              {centroidError && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The centroid format is invalid! It must be in the format of
+                  "number, number".
+                </FormHelperText>
+              )}
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
