@@ -661,7 +661,7 @@ export default function SubmissionCard(props) {
 
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
-    data["spatial-bounding-box"] = boundingBox;
+    data["spatial-bounding-box"] = `ENVELOPE (${boundingBox})`;
     data["spatial-centroid"] = centroid;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
@@ -1693,17 +1693,15 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Grid
                 container
-                spacing={2}
+                spacing={0.5}
                 sx={{ flexGrow: 1, alignItems: "center" }}
               >
-                <Grid size="auto">{"ENVELOPE("}</Grid>
+                <Grid size="auto">{"ENVELOPE ("}</Grid>
                 <Grid size="grow">
                   <Input
                     placeholder="-111.1, -104.0, 45.0, 40.9"
                     value={boundingBox}
-                    onChange={(event) =>
-                      setBoundingBox("ENVELOPE(" + event.target.value + ")")
-                    }
+                    onChange={(event) => setBoundingBox(event.target.value)}
                   />
                 </Grid>
                 <Grid size="auto">{")"}</Grid>
