@@ -1043,6 +1043,21 @@ export default function SubmissionCard(props) {
                     </Button>
                   </Grid>
                 </Grid>
+                <FormHelperText>
+                  <Typography level="body-sm">
+                    To learn more about Crossref, the autofill API provider,
+                    please click&nbsp;
+                    <Link
+                      component={RouterLink}
+                      to={`https://www.crossref.org/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </Link>
+                    .
+                  </Typography>
+                </FormHelperText>
                 {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
@@ -1555,7 +1570,10 @@ export default function SubmissionCard(props) {
             </Typography>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="The location name for spatial metadata autofill, e.g., Chicago, Lake Michigan, a house address...">
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Provide the location name for spatial metadata autofill. It can be a city, landmark, organization, or even a street address."
+                  tooltipContent={`Feature powered by Nominatim. Please note that the API may not return the correct result, or may return no result at all.`}
+                >
                   Enter the location name (only for spatial metadata autofill)
                 </SubmissionCardFieldTitle>
               </FormLabel>
@@ -1579,6 +1597,21 @@ export default function SubmissionCard(props) {
                   </Button>
                 </Grid>
               </Grid>
+              <FormHelperText>
+                <Typography level="body-sm">
+                  To learn more about Nominatim, the autofill API provider,
+                  please click&nbsp;
+                  <Link
+                    component={RouterLink}
+                    to={`https://nominatim.org/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    here
+                  </Link>
+                  .
+                </Typography>
+              </FormHelperText>
             </FormControl>
             {spatialMetadataList?.length > 0 && (
               <Grid sx={{ gridColumn: "1/-1", py: 0.5 }}>
