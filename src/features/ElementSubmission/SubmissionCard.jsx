@@ -65,13 +65,15 @@ import {
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
-  getMetadataByDOI,
   duplicateDOIExists,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import { printListWithDelimiter } from "../../helpers/helper";
 
-import { getSpatialMetadata } from "../../utils/ExternalDataRetrieval";
+import {
+  getSpatialMetadata,
+  getPublicationMetadata,
+} from "../../utils/ExternalDataRetrieval";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -463,7 +465,7 @@ export default function SubmissionCard(props) {
     }
 
     setPublicationMetadataAutofillLoading(true);
-    const metadataDOI = await getMetadataByDOI(publicationDOI);
+    const metadataDOI = await getPublicationMetadata(publicationDOI);
     setPublicationMetadataAutofillLoading(false);
     TEST_MODE && console.log("pub metadata", metadataDOI);
 
@@ -547,6 +549,13 @@ export default function SubmissionCard(props) {
     setSpatialMetadataAutofillLoading(true);
     const returnedList = await getSpatialMetadata(spatialDescription);
     setSpatialMetadataAutofillLoading(false);
+
+    if (returnedList === "ERROR") {
+      alert(
+        "The Nominatim API is not available at this moment. Please try again later or manually enter the spatial metadata."
+      );
+      return;
+    }
 
     if (!returnedList || returnedList.length === 0) {
       alert(
