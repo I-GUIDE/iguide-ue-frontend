@@ -433,20 +433,21 @@ export async function fetchConnectedGraph() {
 }
 
 /**
- * Verify if there is a duplicate DOI or URL for publication
+ * Verify if there is a duplicate provided the field name and value
  *
  * @async
- * @function duplicateDOIExists
- * @param {string} url - DOI or URL
- * @returns {Promise<Object>} A promise that resolves to the JSON response related to DOI duplication.
+ * @function checkDuplicate
+ * @param {string} fieldName - The field name of which value needs to be checked with duplicates
+ * @param {string} value - The value to be checked
+ * @returns {Promise<Object>} A promise that resolves to the JSON response related to duplication.
  * @throws {Error} Throws an error if the verification fails.
  */
-export async function duplicateDOIExists(url) {
-  const encodedUrl = encodeURIComponent(url);
+export async function checkDuplicate(fieldName, value) {
+  const encodedValue = encodeURIComponent(value);
 
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/api/duplicate?field-name=doi&&value=${encodedUrl}`,
+      `${BACKEND_URL_PORT}/api/duplicate?field-name=${fieldName}&value=${encodedValue}`,
       {
         method: "GET",
       }

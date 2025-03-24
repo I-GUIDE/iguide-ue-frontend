@@ -65,7 +65,7 @@ import {
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
-  duplicateDOIExists,
+  checkDuplicate,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import {
@@ -147,6 +147,10 @@ export default function SubmissionCard(props) {
   const [contents, setContents] = useState("");
 
   const [datasetExternalLink, setDatasetExternalLink] = useState("");
+  const [
+    elementIdWithDuplicateDatasetExternalLink,
+    setElementIdWithDuplicateDatasetExternalLink,
+  ] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [dataSize, setDataSize] = useState("");
 
@@ -160,12 +164,17 @@ export default function SubmissionCard(props) {
     publicationMetadataAutofillLoading,
     setPublicationMetadataAutofillLoading,
   ] = useState(false);
-  const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] = useState();
+  const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] =
+    useState("");
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
   const [gitHubRepoLink, setGitHubRepoLink] = useState("");
   const [gitHubRepoLinkError, setGitHubRepoLinkError] = useState(false);
+  const [
+    elementIdWithDuplicateGitHubRepoLink,
+    setElementIdWithDuplicateGitHubRepoLink,
+  ] = useState("");
 
   const [contributor, setContributor] = useState([]);
 
@@ -226,7 +235,7 @@ export default function SubmissionCard(props) {
       const regex = /-?\b\d+(\.\d+)?\b/g;
       const matches = text.match(regex);
 
-      if (matches.length !== numberOfExpectedNumbers) {
+      if (!matches || matches.length !== numberOfExpectedNumbers) {
         return text;
       }
       return matches.join(delimiter);
@@ -467,14 +476,24 @@ export default function SubmissionCard(props) {
     }
   };
 
-  const handleDOIInputChange = async (e) => {
-    setPublicationDOI(e.target.value);
+  const handleDOIChange = async (event) => {
+    const val = event.target.value;
+    setPublicationDOI(val);
 
-    const doiVerification = await duplicateDOIExists(e.target.value);
-    if (doiVerification && doiVerification.duplicate) {
+    if (!val) {
+      return;
+    }
+
+    // Verify duplication of DOI links
+    const doiVerification = await checkDuplicate("doi", val);
+    if (
+      doiVerification &&
+      doiVerification.duplicate &&
+      doiVerification.elementId !== elementId
+    ) {
       setElementIdWithDuplicateDOI(doiVerification.elementId);
     } else {
-      setElementIdWithDuplicateDOI(null);
+      setElementIdWithDuplicateDOI("");
     }
   };
 
@@ -527,6 +546,29 @@ export default function SubmissionCard(props) {
     setContents(metadataDOI["abstract"]);
   };
 
+  const handleDatasetExternalLinkChange = async (event) => {
+    const val = event.target.value;
+    setDatasetExternalLink(val);
+
+    // Verify duplication of dataset external links
+    if (!val) {
+      return;
+    }
+
+    const datasetLinkVerification = await checkDuplicate("dataset-link", val);
+    if (
+      datasetLinkVerification &&
+      datasetLinkVerification.duplicate &&
+      datasetLinkVerification.elementId !== elementId
+    ) {
+      setElementIdWithDuplicateDatasetExternalLink(
+        datasetLinkVerification.elementId
+      );
+    } else {
+      setElementIdWithDuplicateDatasetExternalLink("");
+    }
+  };
+
   const handleNotebookGitHubUrlChange = (event) => {
     const val = event.target.value;
     setNotebookGitHubUrl(val);
@@ -542,9 +584,30 @@ export default function SubmissionCard(props) {
     }
   };
 
-  const handleRepoLinkChange = (event) => {
+  const handleRepoLinkChange = async (event) => {
     const val = event.target.value;
     setGitHubRepoLink(val);
+
+    if (!val) {
+      return;
+    }
+
+    // Verify duplication of GitHub repo links
+    const gitHubRepoLinkVerification = await checkDuplicate(
+      "github-repo-link",
+      val
+    );
+    if (
+      gitHubRepoLinkVerification &&
+      gitHubRepoLinkVerification.duplicate &&
+      gitHubRepoLinkVerification.elementId !== elementId
+    ) {
+      setElementIdWithDuplicateGitHubRepoLink(
+        gitHubRepoLinkVerification.elementId
+      );
+    } else {
+      setElementIdWithDuplicateGitHubRepoLink("");
+    }
 
     // Validate if the URL is in the form of https://github.com/{owner}/{repo}
     const validGitHubRepoUrl = new RegExp(
@@ -1102,7 +1165,7 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "publication" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={!!elementIdWithDuplicateDOI}
+                error={elementIdWithDuplicateDOI}
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -1120,7 +1183,7 @@ export default function SubmissionCard(props) {
                         required
                         name="external-link-publication"
                         value={publicationDOI}
-                        onChange={(event) => handleDOIInputChange(event)}
+                        onChange={handleDOIChange}
                       />
                     ) : (
                       <Typography>{publicationDOI}</Typography>
@@ -1154,8 +1217,8 @@ export default function SubmissionCard(props) {
                 {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
-                      WARNING: The DOI/URL you entered matches one already on
-                      the I-GUIDE Platform and cannot be submitted again.&nbsp;
+                      Error: The DOI/URL you entered matches one already on the
+                      I-GUIDE Platform and cannot be submitted again.&nbsp;
                       <Link
                         component={RouterLink}
                         to={`/publications/${elementIdWithDuplicateDOI}`}
@@ -1330,7 +1393,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={elementIdWithDuplicateDatasetExternalLink}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="Add a link to the primary page for this dataset"
@@ -1343,10 +1409,25 @@ export default function SubmissionCard(props) {
                   required
                   name="external-link"
                   value={datasetExternalLink}
-                  onChange={(event) =>
-                    setDatasetExternalLink(event.target.value)
-                  }
+                  onChange={handleDatasetExternalLinkChange}
                 />
+                {elementIdWithDuplicateDatasetExternalLink && (
+                  <FormHelperText>
+                    <Typography level="title-sm" color="danger">
+                      Error: The dataset host link you entered matches one
+                      already on the I-GUIDE Platform and cannot be submitted
+                      again.&nbsp;
+                      <Link
+                        component={RouterLink}
+                        to={`/datasets/${elementIdWithDuplicateDatasetExternalLink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View the element
+                      </Link>
+                    </Typography>
+                  </FormHelperText>
+                )}
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
@@ -1541,7 +1622,9 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "code" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={gitHubRepoLinkError}
+                error={
+                  gitHubRepoLinkError || elementIdWithDuplicateGitHubRepoLink
+                }
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -1563,6 +1646,23 @@ export default function SubmissionCard(props) {
                   <FormHelperText>
                     <InfoOutlined />
                     The link format is invalid!
+                  </FormHelperText>
+                )}
+                {elementIdWithDuplicateGitHubRepoLink && (
+                  <FormHelperText>
+                    <Typography level="title-sm" color="danger">
+                      Error: The GitHub repository link you entered matches one
+                      already on the I-GUIDE Platform and cannot be submitted
+                      again.&nbsp;
+                      <Link
+                        component={RouterLink}
+                        to={`/code/${elementIdWithDuplicateGitHubRepoLink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View the element
+                      </Link>
+                    </Typography>
                   </FormHelperText>
                 )}
               </FormControl>
