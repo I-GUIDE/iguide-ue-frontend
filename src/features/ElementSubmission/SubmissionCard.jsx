@@ -151,6 +151,10 @@ export default function SubmissionCard(props) {
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState("");
+  const [
+    publicationMetadataAutofillLoading,
+    setPublicationMetadataAutofillLoading,
+  ] = useState(false);
   const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] = useState();
 
   const [mapIframeLink, setMapIframeLink] = useState("");
@@ -163,6 +167,8 @@ export default function SubmissionCard(props) {
   const [spatialMetadataList, setSpatialMetadataList] = useState([]);
   const [selectedSpatialMetadataIndex, setSelectedSpatialMetadataIndex] =
     useState(-1);
+  const [spatialMetadataAutofillLoading, setSpatialMetadataAutofillLoading] =
+    useState(false);
   const [spatialDescription, setSpatialDescription] = useState("");
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
@@ -456,7 +462,9 @@ export default function SubmissionCard(props) {
       return;
     }
 
+    setPublicationMetadataAutofillLoading(true);
     const metadataDOI = await getMetadataByDOI(publicationDOI);
+    setPublicationMetadataAutofillLoading(false);
     TEST_MODE && console.log("pub metadata", metadataDOI);
 
     if (!metadataDOI || metadataDOI === "") {
@@ -530,12 +538,16 @@ export default function SubmissionCard(props) {
   // Autofill spatial metadata
   const handleAutofillSpatialMetadata = async () => {
     setSelectedSpatialMetadataIndex(-1);
+    setSpatialMetadataList([]);
     if (!spatialDescription || spatialDescription === "") {
       alert("Please enter the spatial metadata first.");
       return;
     }
 
+    setSpatialMetadataAutofillLoading(true);
     const returnedList = await getSpatialMetadata(spatialDescription);
+    setSpatialMetadataAutofillLoading(false);
+
     if (!returnedList || returnedList.length === 0) {
       alert(
         "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
@@ -1024,6 +1036,7 @@ export default function SubmissionCard(props) {
                   <Grid size="auto">
                     <Button
                       variant="outlined"
+                      loading={publicationMetadataAutofillLoading}
                       onClick={handleAutofillPublicationInfo}
                     >
                       Autofill metadata
@@ -1559,6 +1572,7 @@ export default function SubmissionCard(props) {
                 <Grid size="auto">
                   <Button
                     variant="outlined"
+                    loading={spatialMetadataAutofillLoading}
                     onClick={handleAutofillSpatialMetadata}
                   >
                     Autofill metadata
