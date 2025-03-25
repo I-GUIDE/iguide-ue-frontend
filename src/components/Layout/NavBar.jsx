@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link as RouterLink, useLocation } from "react-router";
+import { Link as RouterLink } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -155,9 +155,8 @@ export default function NavBar(props) {
                   </Typography>
                   {canEditMap && (
                     <Link
-                      to="/contribution/map"
+                      href="/contribution/map"
                       underline="none"
-                      component={RouterLink}
                       sx={{ color: "text.tertiary" }}
                     >
                       <ListItem sx={{ width: "100%" }}>
@@ -168,9 +167,8 @@ export default function NavBar(props) {
                     </Link>
                   )}
                   <Link
-                    to="/contribution/dataset"
+                    href="/contribution/dataset"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -180,9 +178,8 @@ export default function NavBar(props) {
                     </ListItem>
                   </Link>
                   <Link
-                    to="/contribution/notebook"
+                    href="/contribution/notebook"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -192,9 +189,8 @@ export default function NavBar(props) {
                     </ListItem>
                   </Link>
                   <Link
-                    to="/contribution/publication"
+                    href="/contribution/publication"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -205,9 +201,8 @@ export default function NavBar(props) {
                   </Link>
                   {canEditOER && (
                     <Link
-                      to="/contribution/oer"
+                      href="/contribution/oer"
                       underline="none"
-                      component={RouterLink}
                       sx={{ color: "text.tertiary" }}
                     >
                       <ListItem sx={{ width: "100%" }}>
@@ -218,9 +213,8 @@ export default function NavBar(props) {
                     </Link>
                   )}
                   <Link
-                    to="/contribution/code"
+                    href="/contribution/code"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -343,9 +337,8 @@ export default function NavBar(props) {
               </Typography>
               {canEditMap && (
                 <Link
-                  to="/contribution/map"
+                  href="/contribution/map"
                   underline="none"
-                  component={RouterLink}
                   sx={{ color: "text.tertiary" }}
                 >
                   <ListItem sx={{ width: "100%" }}>
@@ -354,9 +347,8 @@ export default function NavBar(props) {
                 </Link>
               )}
               <Link
-                to="/contribution/dataset"
+                href="/contribution/dataset"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
@@ -364,9 +356,8 @@ export default function NavBar(props) {
                 </ListItem>
               </Link>
               <Link
-                to="/contribution/notebook"
+                href="/contribution/notebook"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
@@ -374,9 +365,8 @@ export default function NavBar(props) {
                 </ListItem>
               </Link>
               <Link
-                to="/contribution/publication"
+                href="/contribution/publication"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
@@ -385,9 +375,8 @@ export default function NavBar(props) {
               </Link>
               {canEditOER && (
                 <Link
-                  to="/contribution/oer"
+                  href="/contribution/oer"
                   underline="none"
-                  component={RouterLink}
                   sx={{ color: "text.tertiary" }}
                 >
                   <ListItem sx={{ width: "100%" }}>
@@ -396,9 +385,8 @@ export default function NavBar(props) {
                 </Link>
               )}
               <Link
-                to="/contribution/code"
+                href="/contribution/code"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>

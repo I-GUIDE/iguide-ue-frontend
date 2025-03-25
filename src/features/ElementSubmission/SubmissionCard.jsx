@@ -1094,15 +1094,19 @@ export default function SubmissionCard(props) {
     return null;
   }
 
-  // Check if the current user is admin, if yes, allow edit
-  const canEditAllElements =
+  // NOTE (March 25, 2025): Check if userRoleFromJWT is undefined, if yes, only test it against
+  //   the user role from the database. The reason is when the user first registers, JWT doesn't
+  //   contain a user role, which is undefined at this point.
+  // Check if the current user is a moderator, if yes, allow to edit anyway
+  const isModerator =
     localUserInfo.role <= PERMISSIONS["edit_all"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_all"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_all"]);
   const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
-    if (!isContributor && !canEditAllElements) {
+    if (!isContributor && !isModerator) {
       TEST_MODE &&
         console.log("Can't update", localUserInfo.role, userRoleFromJWT);
       return (
@@ -1114,13 +1118,16 @@ export default function SubmissionCard(props) {
   // Check if the current user can contribute this type of element
   const canContribute =
     localUserInfo.role <= PERMISSIONS["contribute"] &&
-    userRoleFromJWT <= PERMISSIONS["contribute"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["contribute"]);
   const canEditOER =
     localUserInfo.role <= PERMISSIONS["edit_oer"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_oer"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_oer"]);
   const canEditMap =
     localUserInfo.role <= PERMISSIONS["edit_map"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_map"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_map"]);
 
   if (submissionType === "initial") {
     if (!canContribute) {
@@ -1159,7 +1166,7 @@ export default function SubmissionCard(props) {
   } else if (submissionType === "update") {
     if (isContributor) {
       cardTitle = "Edit your contribution";
-    } else if (canEditAllElements) {
+    } else if (isModerator) {
       cardTitle = "Edit this element as a moderator";
     }
   } else {
@@ -1184,13 +1191,11 @@ export default function SubmissionCard(props) {
         }}
       >
         <Typography level="h2">{cardTitle}</Typography>
-        {canEditAllElements &&
-          !isContributor &&
-          submissionType === "update" && (
-            <Typography color="danger" level="title-md">
-              WARNING: You are not the contributor
-            </Typography>
-          )}
+        {isModerator && !isContributor && submissionType === "update" && (
+          <Typography color="danger" level="title-md">
+            WARNING: You are not the contributor
+          </Typography>
+        )}
         <Typography level="body-md">
           If you have questions or run into any issue, please contact us{" "}
           <Link
