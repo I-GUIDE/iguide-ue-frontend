@@ -51,7 +51,7 @@ export default function Home() {
     if (!cookies.seenTour) {
       TEST_MODE && console.log("Start tour");
       setIsOpen(true);
-      setCookie("seenTour", true, {path: "/"});
+      setCookie("seenTour", false, {path: "/"});
     } else {
       TEST_MODE && console.log("Already seen tour");
     }

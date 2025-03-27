@@ -545,7 +545,7 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  
+                  className="tourid-1"
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -553,6 +553,7 @@ export default function NavBar(props) {
                       sx={{ height: 40, mt: 1, px: 2 }}
                       alt="Logo"
                       src="/images/Logo.png"
+                      
                     />
                   </Tooltip>
                 </Link>
@@ -570,23 +571,25 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-              >
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
-                    <Box
-                      component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
-                      alt="Logo"
-                      src="/images/Logo.png"
-                    />
-                  </Tooltip>
-                </Link>
-                <Box>
+              > 
+                <Box className="tourid-1">
+                  {/* <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  > */}
+                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                      <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                      />
+                    </Tooltip>
+                  {/* </Link> */}
+                </Box>
+                <Box className="tourid-2">
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
