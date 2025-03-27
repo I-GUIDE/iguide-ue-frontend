@@ -1,15 +1,7 @@
-import { useState } from "react";
-
-import Button from "@mui/joy/Button";
-import Edit from "@mui/icons-material/Edit";
-import ManageAccounts from "@mui/icons-material/ManageAccounts";
-import Delete from "@mui/icons-material/Delete";
-import Done from "@mui/icons-material/Done";
-import Close from "@mui/icons-material/Close";
+import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router";
 
-// import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -18,35 +10,34 @@ import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Tooltip from '@mui/joy/Tooltip';
+import Tooltip from "@mui/joy/Tooltip";
 import CardContent from "@mui/joy/CardContent";
 import Link from "@mui/joy/Link";
+import Button from "@mui/joy/Button";
 
-import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
+import Edit from "@mui/icons-material/Edit";
+import ManageAccounts from "@mui/icons-material/ManageAccounts";
+import Delete from "@mui/icons-material/Delete";
+import Done from "@mui/icons-material/Done";
+import Close from "@mui/icons-material/Close";
+
 import UserAvatar from "./UserAvatar";
-import {
-  RESOURCE_TYPE_COLORS,
-  RESOURCE_TYPE_NAMES,
-} from "../configs/VarConfigs";
-import { EditAttributesOutlined } from "@mui/icons-material";
-
 
 export default function UserProfileCard(props) {
-  const contributorId = props.id;
-  const contributorName = props.name;
-  const [contributorRole, setContributorRole] = useState(props.role);
-  const contributorAvatar = props.avatar;
-  const contributorOrg = props.org;
-  const contributorEmail = props.email;
-
-  const deleteContributor = props.deleteContributor;
+  const userId = props.id;
+  const userFirstName = props.firstName;
+  const userLastName = props.lastName;
+  const [userRole, setUserRole] = useState(props.role);
+  const userAvatar = props.avatar;
+  const userAffiliation = props.affiliation;
+  const userEmail = props.email;
+  const deleteUser = props.deleteUser;
 
   const [roleOpen, setRoleOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
     <>
-    
       <Card
         variant="outlined"
         sx={{
@@ -54,222 +45,204 @@ export default function UserProfileCard(props) {
           height: "100%",
           "--Card-radius": "15px",
           "&:hover": {
-          borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-          transform: "translateY(-2px)",
-          }
+            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+            transform: "translateY(-2px)",
+          },
         }}
       >
         <CardContent>
-          <Stack
-            direction="row"
-          >
+          <Stack direction="row">
             <Stack
-                direction="column"
-                alignItems="left"
-                spacing={2}
-                sx={{ width: "85%", py: 2 }}
+              direction="column"
+              alignItems="left"
+              spacing={2}
+              sx={{ width: "85%", py: 2 }}
             >
               <Link
                 overlay
                 component={RouterLink}
-                to={"/contributor/adb03aee-8f4c-4cbf-9e7d-99450fef13e5"}
+                to={`/contributor/${userId}`}
                 style={{ textDecoration: "none" }}
               >
-                <Typography level="title-lg" sx={{lineHeight: 1}}>{contributorName}</Typography>
+                <Typography level="title-lg" sx={{ lineHeight: 1 }}>
+                  {userLastName}, {userFirstName}
+                </Typography>
               </Link>
-              <Typography 
-                level="title-md" 
-                sx={{lineHeight: 0, fontWeight: "bold"}} 
-                textColor="	#696969">
-                  {contributorRole}
+              <Typography
+                level="title-sm"
+                sx={{ lineHeight: 0, fontWeight: "bold" }}
+                textColor="#696969"
+              >
+                Role: {userRole}
               </Typography>
             </Stack>
             <Stack
               direction="row"
               justifyContent="flex-end"
               sx={{ width: "25%" }}
-            > 
+            >
               <UserAvatar
-                  link={contributorAvatar}
-                  userId={contributorId}
-                  sx={{ ml: "auto" }}
-              /> 
+                link={userAvatar}
+                userId={userId}
+                sx={{ ml: "auto" }}
+              />
             </Stack>
           </Stack>
           <Stack direction="column">
-            <Typography level="title-sm">{contributorOrg}</Typography>
-            <Typography level="title-sm">{contributorEmail}</Typography>
+            <Typography level="title-sm">{userAffiliation}</Typography>
+            <Typography level="title-sm">{userEmail}</Typography>
           </Stack>
-          <Stack
-              direction="row"
-              alignItems="center"
-              spacing={0}
-              sx={{ py: 2 }}
-          >
+          <Stack direction="row" alignItems="center" spacing={0} sx={{ py: 2 }}>
             <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
-                sx={{ py: 2 }}
-            >
-            </Stack>
+              direction="column"
+              alignItems="center"
+              spacing={2}
+              sx={{ py: 2 }}
+            ></Stack>
             {/*User Options*/}
             <Stack
-                direction="row"
-                width="100%"
-                justifyContent="space-between"
-                // alignItems="center"
-                spacing={2}
-                sx={{ margin: "auto"}} 
+              direction="row"
+              width="100%"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={2}
+              sx={{ margin: "auto" }}
             >
-            
-            
-            <Tooltip title="Manage Role">
-              <Button 
-                color="primary" 
-                size="sm" 
-                sx={{ width: "50%" }} 
-                onClick={()=>setRoleOpen(true)}>
-                  <ManageAccounts/>
-              </Button>
-            </Tooltip>
-            <Tooltip title="Edit Contributor Profile">
-              <Button 
-                color="primary" 
-                size="sm" 
-                sx={{ width: "50%" }}>
-                  <Edit/>
+              <Tooltip title="Manage user role">
+                <Button
+                  color="primary"
+                  size="sm"
+                  sx={{ width: "50%" }}
+                  onClick={() => setRoleOpen(true)}
+                >
+                  <ManageAccounts />
                 </Button>
-            </Tooltip>
-            <Tooltip title="Delete User">
-            <Button 
-                color="danger" 
-                size="sm" 
-                sx={{ width: "50%"}} 
-                onClick={()=>setDeleteOpen(true)}>
-                  <Delete/>
-              </Button>
-            </Tooltip>
+              </Tooltip>
+              <Tooltip title="Edit user profile">
+                <Button color="primary" size="sm" sx={{ width: "50%" }}>
+                  <Edit />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Delete User">
+                <Button
+                  color="danger"
+                  size="sm"
+                  sx={{ width: "50%" }}
+                  onClick={() => setDeleteOpen(true)}
+                >
+                  <Delete />
+                </Button>
+              </Tooltip>
             </Stack>
           </Stack>
         </CardContent>
-        
       </Card>
 
-
-
-  {/* Change Role Modal */}
-  <Modal
-    open={roleOpen}
-    onClose={() => setRoleOpen(false)}
-    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-  >
-    <form
-      onSubmit={(event) => {
-        
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formJson = Object.fromEntries((formData).entries());
-        setContributorRole(formJson["role"]);
-        setRoleOpen(false);
-        // Do backend request
-      }}
-    >
-        <Sheet
-          variant="outlined"
-          sx={{ maxWidth: 500, borderRadius: 'md', p: 3, boxShadow: 'lg' }}
+      {/* Change Role Modal */}
+      <Modal
+        open={roleOpen}
+        onClose={() => setRoleOpen(false)}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            setUserRole(formJson["role"]);
+            setRoleOpen(false);
+            // Do backend request
+          }}
         >
-          <ModalClose />
-          <Typography
-            level="h3"
-            sx={{ fontWeight: 'lg', mb: 1 }}
+          <Sheet
+            variant="outlined"
+            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
           >
-            Change User Role
-          </Typography>
-          <Select defaultValue={contributorRole} name="role">
-            <Option value="Admin">Admin</Option>
-            <Option value="Trusted User"> Trusted User</Option>
-            <Option value="User">User</Option>
-          </Select>
-          <Button 
-            color="danger" 
-            size="sm" 
-            sx={{ width: "100%", my: 1, mx: 0.5 }}
-            onClick={()=>setRoleOpen(false)}
+            <ModalClose />
+            <Typography level="title-lg" sx={{ fontWeight: "lg", mb: 1 }}>
+              Change User Role (WIP)
+            </Typography>
+            <Select defaultValue={userRole} name="role">
+              <Option value="Admin">Admin</Option>
+              <Option value="Trusted User"> Trusted User</Option>
+              <Option value="User">User</Option>
+            </Select>
+            <Button
+              color="danger"
+              size="sm"
+              sx={{ width: "100%", my: 1, mx: 0.5 }}
+              onClick={() => setRoleOpen(false)}
             >
               Cancel
-              <Close/>
-          </Button>
-          <Button 
-            type="submit" 
-            color="primary" 
-            size="sm" 
-            sx={{ width: "100%", my: 1, mx: 0.5 }}>
-              Confirm 
-              <Done/>
-          </Button>
-        </Sheet>
-      </form>
-    </Modal>
-
-  {/* Delete User Modal */}
-  <Modal
-    open={deleteOpen}
-    onClose={() => setDeleteOpen(false)}
-    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-  >
-    <form
-      onSubmit={(event) => {
-        
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formJson = Object.fromEntries((formData).entries());
-        deleteContributor(contributorId);
-        // Do backend request
-        setDeleteOpen(false);
-        
-      }}
-    >
-        <Sheet
-          variant="outlined"
-          sx={{ maxWidth: 500, borderRadius: 'md', p: 3, boxShadow: 'lg' }}
-        >
-          <ModalClose />
-          <Typography
-            align="center"
-            level="h3"
-            sx={{ fontWeight: 'lg', mb: 1 }}
-          >
-            Delete User {contributorName}
-          </Typography>
-          <Typography
-            align="center"
-            level="title-sm"
-          >
-            Are you sure you would like to delete user? This action cannot be undone.
-          </Typography>
-          <Stack direction="row">
-            <Button 
-              color="primary" 
-              size="sm" 
+              <Close />
+            </Button>
+            <Button
+              type="submit"
+              color="primary"
+              size="sm"
               sx={{ width: "100%", my: 1, mx: 0.5 }}
-              onClick={()=>setDeleteOpen(false)}
+            >
+              Confirm
+              <Done />
+            </Button>
+          </Sheet>
+        </form>
+      </Modal>
+
+      {/* Delete User Modal */}
+      <Modal
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            deleteUser(userId);
+            // Do backend request
+            setDeleteOpen(false);
+          }}
+        >
+          <Sheet
+            variant="outlined"
+            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
+          >
+            <ModalClose />
+            <Typography
+              align="center"
+              level="title-lg"
+              sx={{ fontWeight: "lg", mb: 1 }}
+            >
+              Delete User {userFirstName} {userLastName} (WIP)
+            </Typography>
+            <Typography align="center" level="title-sm" color="danger">
+              Are you sure you would like to delete user? This action cannot be
+              undone.
+            </Typography>
+            <Stack direction="row">
+              <Button
+                color="primary"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                onClick={() => setDeleteOpen(false)}
               >
                 Cancel
-                
-            </Button>
-            <Button 
-              type="submit" 
-              color="danger" 
-              size="sm" 
-              sx={{ width: "100%", my: 1, mx: 0.5 }}>
-                Delete 
-                <Delete/>
-            </Button>
-          </Stack>
-        </Sheet>
-      </form>
-    </Modal>
-  </>
+              </Button>
+              <Button
+                type="submit"
+                color="danger"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+              >
+                Delete
+                <Delete />
+              </Button>
+            </Stack>
+          </Sheet>
+        </form>
+      </Modal>
+    </>
   );
 }

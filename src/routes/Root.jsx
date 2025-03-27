@@ -30,7 +30,7 @@ const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 // Demo user setting
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
-const DEMO_USER_ROLE = import.meta.env.VITE_DEMO_USER_ROLE;
+const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
