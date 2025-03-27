@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router";
+import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";
@@ -45,8 +45,8 @@ export default function ContributorOps(props) {
         <Link
           aria-label="Edit this element"
           underline="none"
-          component={RouterLink}
-          to={updateFormUri}
+          component="a"
+          href={updateFormUri}
           sx={{ color: "inherit" }}
         >
           <Tooltip title="Edit this element" placement="top" arrow>

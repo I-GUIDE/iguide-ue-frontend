@@ -12,6 +12,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
+  const statusText = props.submissionStatusText;
   // Provide a link to the existing element if submission fails due to duplicate DOI
   const extraComponent = props.extraComponent;
   const elementURI = props.elementURI;
@@ -105,6 +106,12 @@ export default function SubmissionStatusCard(props) {
       subText = `We cannot verify the GitHub repository link you provided. Please ensure
       the link is correct and the repository is public; otherwise, the GitHub API for verification
       may be temporarily unavailable. Please try again later.`;
+      submissionSucceeded = false;
+      break;
+
+    case "error-invalid-inputs":
+      submissionStatusText = "Submission failed: Form input errors";
+      subText = statusText;
       submissionSucceeded = false;
       break;
 

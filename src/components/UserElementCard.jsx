@@ -146,8 +146,8 @@ export default function UserElementCard(props) {
           <Link
             aria-label="Edit this element"
             underline="none"
-            component={RouterLink}
-            to={updateFormUri}
+            component="a"
+            href={updateFormUri}
             sx={{ color: "inherit" }}
           >
             <Typography
