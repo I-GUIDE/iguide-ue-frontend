@@ -28,7 +28,7 @@ import {
   DEFAULT_BODY_HEIGHT,
   NO_HEADER_BODY_HEIGHT,
 } from "../configs/VarConfigs";
-
+import { arrayLength } from "../helpers/helper";
 import { getAllUsers } from "../utils/UserManager";
 import { PERMISSIONS } from "../configs/Permissions";
 
@@ -42,7 +42,7 @@ export default function AdminPanel() {
 
   const navigate = useNavigate();
   const [pageParam, setPageParam] = useSearchParams();
-  const itemsPerPage = 20;
+  const itemsPerPage = 24;
   const uriPrefix = "/admin-panel";
 
   const fromPageParam =
@@ -73,10 +73,8 @@ export default function AdminPanel() {
       try {
         const data = await getAllUsers(startingIdx, itemsPerPage);
 
-        TEST_MODE && console.log("Retrieved user list", data);
-
-        setNumberOfTotalItems(data["total-count"]);
-        setNumberOfPages(Math.ceil(data["total-count"] / itemsPerPage));
+        setNumberOfTotalItems(data["total-users"]);
+        setNumberOfPages(Math.ceil(data["total-users"] / itemsPerPage));
         setUserList(data.users);
         setLoading(false);
         setResultLength(arrayLength(data.users));
@@ -86,7 +84,7 @@ export default function AdminPanel() {
       }
     }
 
-    fetchAllUsers();
+    fetchAllUsers(currentStartingIdx);
   }, [currentStartingIdx]);
 
   function deleteUser(contributorId) {
@@ -225,7 +223,7 @@ export default function AdminPanel() {
                         role={user.role}
                         affiliation={user.affiliation}
                         email={user.email}
-                        avatar={user?.["avatar-url"].low}
+                        avatar={user["avatar-url"]?.low}
                         deleteUser={deleteUser}
                       />
                     </Grid>

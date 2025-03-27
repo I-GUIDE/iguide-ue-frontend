@@ -82,7 +82,7 @@ export default function UserProfileCard(props) {
               sx={{ width: "25%" }}
             >
               <UserAvatar
-                link={userAvatar}
+                userAvatarUrls={userAvatar}
                 userId={userId}
                 sx={{ ml: "auto" }}
               />

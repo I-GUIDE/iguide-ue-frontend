@@ -30,13 +30,13 @@ export async function userLogout() {
 /**
  * Get all user information with pagination
  * @param {number} [from=0] - The starting index for pagination. Defaults to 0.
- * @param {number} [size=20] - The number of resources to return. Defaults to 20.
+ * @param {number} [size=24] - The number of resources to return. Defaults to 24.
  * @return {Promise<Array<Dict>>} the information of the user
  * @throws {Error} Throws an error if fetching the user failed.
  */
-export async function getAllUsers(from = 0, size = 20) {
+export async function getAllUsers(from = 0, size = 24) {
   const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/users?from=${from}&size=${size}`,
+    `${USER_BACKEND_URL}/api/users?from=${from}&size=${size}`,
     {
       method: "GET",
     }
@@ -45,7 +45,8 @@ export async function getAllUsers(from = 0, size = 20) {
     throw new Error(`Error: ${response.statusText}`);
   }
   const result = await response.json();
-  TEST_MODE && console.log("Get all users", result);
+  TEST_MODE &&
+    console.log("Retrieve users from index", from, "of size", size, result);
 
   return result;
 }
