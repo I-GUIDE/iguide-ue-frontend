@@ -14,6 +14,7 @@ import Tooltip from "@mui/joy/Tooltip";
 import CardContent from "@mui/joy/CardContent";
 import Link from "@mui/joy/Link";
 import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
 
 import Edit from "@mui/icons-material/Edit";
 import ManageAccounts from "@mui/icons-material/ManageAccounts";
@@ -51,89 +52,84 @@ export default function UserProfileCard(props) {
         }}
       >
         <CardContent>
-          <Stack direction="row">
-            <Stack
-              direction="column"
-              alignItems="left"
-              spacing={2}
-              sx={{ width: "85%", py: 2 }}
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              width: "100%",
+              py: 1,
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Link
+              overlay
+              component={RouterLink}
+              to={`/contributor/${userId}`}
+              style={{ textDecoration: "none" }}
             >
-              <Link
-                overlay
-                component={RouterLink}
-                to={`/contributor/${userId}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Typography level="title-lg" sx={{ lineHeight: 1 }}>
-                  {userLastName}, {userFirstName}
-                </Typography>
-              </Link>
-              <Typography
-                level="title-sm"
-                sx={{ lineHeight: 0, fontWeight: "bold" }}
-                textColor="#696969"
-              >
-                Role: {userRole}
+              <Typography level="title-lg" sx={{ lineHeight: 1 }}>
+                {userLastName || <Typography color="danger">nln</Typography>},{" "}
+                {userFirstName || <Typography color="danger">nfn</Typography>}
               </Typography>
-            </Stack>
-            <Stack
-              direction="row"
-              justifyContent="flex-end"
-              sx={{ width: "25%" }}
-            >
-              <UserAvatar
-                userAvatarUrls={userAvatar}
-                userId={userId}
-                sx={{ ml: "auto" }}
-              />
-            </Stack>
+            </Link>
+            <UserAvatar
+              userAvatarUrls={userAvatar}
+              userId={userId}
+              sx={{ ml: "auto" }}
+            />
           </Stack>
           <Stack direction="column">
-            <Typography level="title-sm">{userAffiliation}</Typography>
-            <Typography level="title-sm">{userEmail}</Typography>
+            <Typography level="title-sm">
+              Role:{" "}
+              {userRole || <Typography color="danger">no role</Typography>}
+            </Typography>
+            <Typography level="title-sm">
+              {userAffiliation || (
+                <Typography color="danger">no affiliation</Typography>
+              )}
+            </Typography>
+            <Typography level="title-sm">
+              {userEmail || <Typography color="danger">no email</Typography>}
+            </Typography>
           </Stack>
-          <Stack direction="row" alignItems="center" spacing={0} sx={{ py: 2 }}>
-            <Stack
-              direction="column"
-              alignItems="center"
-              spacing={2}
-              sx={{ py: 2 }}
-            ></Stack>
-            {/*User Options*/}
-            <Stack
-              direction="row"
-              width="100%"
-              justifyContent="space-between"
-              alignItems="center"
-              spacing={2}
-              sx={{ margin: "auto" }}
-            >
-              <Tooltip title="Manage user role">
-                <Button
-                  color="primary"
-                  size="sm"
-                  sx={{ width: "50%" }}
-                  onClick={() => setRoleOpen(true)}
-                >
-                  <ManageAccounts />
-                </Button>
-              </Tooltip>
-              <Tooltip title="Edit user profile">
-                <Button color="primary" size="sm" sx={{ width: "50%" }}>
-                  <Edit />
-                </Button>
-              </Tooltip>
-              <Tooltip title="Delete User">
-                <Button
-                  color="danger"
-                  size="sm"
-                  sx={{ width: "50%" }}
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  <Delete />
-                </Button>
-              </Tooltip>
-            </Stack>
+          <Divider sx={{ my: 1.5 }} />
+          {/*User Options*/}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              width: "100%",
+              margin: "auto",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Tooltip title="Manage user role">
+              <Button
+                color="primary"
+                size="sm"
+                sx={{ width: "50%" }}
+                onClick={() => setRoleOpen(true)}
+              >
+                <ManageAccounts />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Edit user profile">
+              <Button color="primary" size="sm" sx={{ width: "50%" }}>
+                <Edit />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Delete User">
+              <Button
+                color="danger"
+                size="sm"
+                sx={{ width: "50%" }}
+                onClick={() => setDeleteOpen(true)}
+              >
+                <Delete />
+              </Button>
+            </Tooltip>
           </Stack>
         </CardContent>
       </Card>
