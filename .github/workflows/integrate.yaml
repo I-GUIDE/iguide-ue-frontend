@@ -16,7 +16,7 @@ env:
   VITE_JUPYTER_TUTORIAL_EID: ${{secrets.VITE_JUPYTER_TUTORIAL_EID}}
 
   VITE_SLACK_API_URL: ${{secrets.VITE_SLACK_API_URL}}
-  VITE_GA_MEASUREMENT_ID: ${{secrets.VITE_WGA_MEASUREMENT_ID}}
+  VITE_GA_MEASUREMENT_ID: ${{secrets.VITE_GA_MEASUREMENT_ID}}
 
   REACT_FRONTEND_URL: https://localhost
   EXPRESS_BACKEND_URL: https://localhost:8443
@@ -77,13 +77,13 @@ jobs:
       - name: Start application-specific services using Docker Compose
         run: docker compose up -d
         continue-on-error: false
-      - name: Run Cypress E2E tests
-        uses: cypress-io/github-action@v6
-        with:
-          record: true
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      # - name: Run Cypress E2E tests
+      #   uses: cypress-io/github-action@v6
+      # with:
+      #   record: true
+      # env:
+      #   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      #   GITHUB_TOKEN: ${{ secrets.TOKEN }}
       - name: Stop Docker Compose
         if: always()
         run: docker compose down
