@@ -79,6 +79,7 @@ export default function Root(props) {
     } else {
       if (isAuthenticated) {
         getUserInfoFromCILogon();
+        if (cookies.seenTour === undefined) setCookie("seenTour", false, {path: "/"});
       } else {
         setLocalUserInfo({ userInfo: null });
         setCookie("IGPAU", false, { path: "/" });

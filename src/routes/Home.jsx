@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 import {
   extendTheme as materialExtendTheme,
@@ -31,7 +32,9 @@ import usePageTitle from "../hooks/usePageTitle";
 
 import { useTour } from '@reactour/tour';
 
+
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 import {
   NO_HEADER_BODY_HEIGHT,
@@ -40,12 +43,18 @@ import {
 
 export default function Home() {
   usePageTitle("", true);
+  const [cookies, setCookie] = useCookies(["user"]);
   
   const { setIsOpen } = useTour();
 
   useEffect(() => {
-    console.log("star tour");
-    setIsOpen(true);
+    if (!cookies.seenTour) {
+      TEST_MODE && console.log("Start tour");
+      setIsOpen(true);
+      setCookie("seenTour", true, {path: "/"});
+    } else {
+      TEST_MODE && console.log("Already seen tour");
+    }
   }, []);
 
   return (
