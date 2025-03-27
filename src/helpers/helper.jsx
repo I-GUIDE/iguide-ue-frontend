@@ -142,3 +142,13 @@ export function removeMarkdown(markdown) {
 
   return markdown;
 }
+
+export function isValidNumberWithinRange(number, min, max) {
+  const parsedNumber = parseFloat(number);
+  return (
+    !isNaN(parsedNumber) &&
+    parsedNumber.toString() === number.trim() &&
+    parsedNumber >= min &&
+    parsedNumber <= max
+  );
+}
