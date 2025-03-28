@@ -232,24 +232,22 @@ export default function UserProfileCard(props) {
                 Are you sure you would like to delete user {userFirstName}{" "}
                 {userLastName}? This action cannot be undone.
               </Typography>
-              <Stack direction="row">
-                <Button
-                  color="primary"
-                  size="sm"
-                  sx={{ width: "100%", my: 1, mx: 0.5 }}
-                  onClick={() => setDeleteOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  color="danger"
-                  size="sm"
-                  sx={{ width: "100%", my: 1, mx: 0.5 }}
-                >
-                  Delete
-                </Button>
-              </Stack>
+              <Button
+                color="primary"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                onClick={() => setDeleteOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="danger"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+              >
+                Delete
+              </Button>
             </Stack>
           </Sheet>
         </form>
