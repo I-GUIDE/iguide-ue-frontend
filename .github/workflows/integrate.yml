@@ -1,0 +1,90 @@
+name: Node integration and deployment
+
+on:
+  pull_request:
+    branches:
+      - master
+
+env:
+  VITE_ENV: github-actions
+  VITE_WEBSITE_TITLE: I-GUIDE Platform (localhost)
+  VITE_USE_DEMO_USER: true
+  VITE_TEST_MODE: true
+  VITE_DO_NOT_USE_LLM_ENDPOINT: true
+  VITE_REACT_FRONTEND_URL: https://localhost
+  VITE_EXPRESS_BACKEND_URL: https://localhost:8443
+  VITE_DATABASE_BACKEND_URL: https://backend-dev.i-guide.io:3500
+  VITE_JUPYTER_TUTORIAL_EID: ${{secrets.VITE_JUPYTER_TUTORIAL_EID}}
+
+  VITE_SLACK_API_URL: ${{secrets.VITE_SLACK_API_URL}}
+  VITE_GA_MEASUREMENT_ID: ${{secrets.VITE_GA_MEASUREMENT_ID}}
+
+  REACT_FRONTEND_URL: https://localhost
+  EXPRESS_BACKEND_URL: https://localhost:8443
+  REACT_DATABASE_BACKEND_URL: https://backend-dev.i-guide.io:3500
+
+  REACT_APP_AUTH_URL: https://cilogon.org
+  REACT_APP_AUTH_DISCOVERY_URL: https://cilogon.org/.well-known/openid-configuration
+  REACT_APP_IDENTITY_CLIENT_ID: cilogon:/client_id/6
+  REACT_APP_IDENTITY_CLIENT_SECRET: ${{secrets.REACT_APP_IDENTITY_CLIENT_SECRET}}
+  REACT_APP_REDIRECT_URL: https://localhost:8443/cilogon-callback
+  REACT_APP_LOGOFF_REDIRECT_URL: localhost
+
+  JWT_ACCESS_TOKEN_SECRET: ${{secrets.JWT_ACCESS_TOKEN_SECRET}}
+  JWT_REFRESH_TOKEN_SECRET: ${{secrets.JWT_REFRESH_TOKEN_SECRET}}
+  JWT_ACCESS_TOKEN_EXPIRATION: 30000
+  JWT_REFRESH_TOKEN_EXPIRATION: 1m
+  JWT_TARGET_DOMAIN: localhost
+  OPENSEARCH_USERNAME: admin
+  OPENSEARCH_PASSWORD: ${{secrets.OPENSEARCH_PASSWORD}}
+  OPENSEARCH_INDEX: refresh_tokens
+  OPENSEARCH_NODE: https://149.165.152.189:9200
+  USER_INDEX: users_dev
+
+  SLACK_API_TOKEN: ${{secrets.SLACK_API_TOKEN}}
+  SLACK_CHANNEL_ID: ${{secrets.SLACK_CHANNEL_ID}}
+
+jobs:
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "18"
+  #     - name: Install dependencies
+  #       run: yarn
+  #     - name: Run lint
+  #       run: npx eslint
+  build-and-test:
+    runs-on: ubuntu-latest
+    # needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Configure dummy SSL keys
+        run: |
+          echo "${{ secrets.FULLCHAIN_BASE64 }}" | base64 --decode > ./cilogon/credentials/fullchain.pem
+          echo "${{ secrets.PRIVKEY_BASE64 }}" | base64 --decode > ./cilogon/credentials/privkey.pem
+          echo "${{ secrets.FULLCHAIN_BASE64 }}" | base64 --decode > ./nginx-config/fullchain.pem
+          echo "${{ secrets.PRIVKEY_BASE64 }}" | base64 --decode > ./nginx-config/privkey.pem
+      - name: Install Docker using Docker's official script
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+        continue-on-error: false
+      - name: Start application-specific services using Docker Compose
+        run: docker compose up -d
+        continue-on-error: false
+      # - name: Run Cypress E2E tests
+      #   uses: cypress-io/github-action@v6
+      # with:
+      #   record: true
+      # env:
+      #   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+      #   GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - name: Stop Docker Compose
+        if: always()
+        run: docker compose down

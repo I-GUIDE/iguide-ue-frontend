@@ -53,12 +53,13 @@ export async function getAllUsers(from = 0, size = 24) {
 
 /**
  * Get user role number
- * @param {string} uid the UserId of the user
+ * @param {string} uid OpenID (Only when getting user role during authentication) or userId
  * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
  */
 export async function getUserRole(uid) {
+  const encodedUid = encodeURIComponent(uid);
   const response = await fetch(
-    `${USER_BACKEND_URL}/api/users/${encodeURIComponent(uid)}/role`,
+    `${USER_BACKEND_URL}/api/users/${encodedUid}/role`,
     {
       method: "GET",
     }
@@ -80,13 +81,13 @@ export async function getUserRole(uid) {
 
 /**
  * Fetch the information of a user given a uid
- * @param {string} uid the user's OpenID
+ * @param {string} uid OpenID (Only when fetching user info during authentication) or userId
  * @return {Promise<Array<Dict>>} the information of the user
  * @throws {Error} Throws an error if fetching the user failed.
  */
 export async function fetchUser(uid) {
-  const openid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`);
+  const encodedUid = encodeURIComponent(uid);
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${encodedUid}`);
 
   if (!response.ok) {
     throw new Error(`Error: ${response.statusText}`);
@@ -142,7 +143,7 @@ export async function addUser(
 
 /**
  * Update a user
- * @param {string} openid the OpenID of the user
+ * @param {string} uid UserId
  * @param {string} first_name the first name of the user
  * @param {string} last_name the last name of the user
  * @param {string} email the work email of the user
@@ -153,7 +154,7 @@ export async function addUser(
  * @throws {Error} Throws an error if updating a user failed
  */
 export async function updateUser(
-  openid,
+  uid,
   first_name,
   last_name,
   email,
@@ -165,9 +166,9 @@ export async function updateUser(
   personalWebsiteLink,
   avatar_url
 ) {
-  const openId = encodeURIComponent(openid);
+  const encodedUid = encodeURIComponent(uid);
   const user = {
-    openid: openid,
+    id: encodedUid,
     first_name: first_name,
     last_name: last_name,
     email: email,
@@ -183,7 +184,7 @@ export async function updateUser(
   TEST_MODE && console.log("User update", user);
 
   const response = await fetchWithAuth(
-    `${USER_BACKEND_URL}/api/users/${openId}`,
+    `${USER_BACKEND_URL}/api/users/${encodedUid}`,
     {
       method: "PUT",
       headers: {
@@ -203,13 +204,13 @@ export async function updateUser(
 
 /**
  * Delete a user
- * @param {string} uid the OpenID of the user
+ * @param {string} uid UserId
  * @return {Promise<Array<Dict>>} information of whether the operation was successful
  * @throws {Error} Throws an error if deleting a user failed
  */
 export async function deleteUser(uid) {
-  const openid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}`, {
+  const encodedUid = encodeURIComponent(uid);
+  const response = await fetch(`${USER_BACKEND_URL}/api/users/${encodedUid}`, {
     method: "DELETE",
   });
 
@@ -223,12 +224,14 @@ export async function deleteUser(uid) {
 
 /**
  * Verify the existence of a user
- * @param {string} uid the OpenID of the user
+ * @param {string} uid OpenID (Only when checking user during authentication) or userId
  * @return {Promise<boolean>} boolean value of whether the user exists
  */
 export async function checkUser(uid) {
-  const openid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${openid}/valid`);
+  const encodedUid = encodeURIComponent(uid);
+  const response = await fetch(
+    `${USER_BACKEND_URL}/api/users/${encodedUid}/valid`
+  );
   const exists = await response.json();
 
   return exists;

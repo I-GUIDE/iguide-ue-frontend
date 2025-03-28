@@ -134,18 +134,18 @@ export default function Root(props) {
     }
 
     async function handleCheckUser(userInfo) {
-      const uid = userInfo.sub;
-      if (uid) {
-        const localUserExists = await checkUser(uid);
+      const openId = userInfo.sub;
+      if (openId) {
+        const localUserExists = await checkUser(openId);
         if (localUserExists) {
           TEST_MODE && console.log("Found the user from our database");
         } else {
           TEST_MODE &&
-            console.log("Couldn't find the user from our database...", uid);
+            console.log("Couldn't find the user from our database...", openId);
           await saveUserToLocalDB(userInfo);
         }
-        const returnedLocalUser = await fetchUser(uid);
-        const userRole = await getUserRole(uid);
+        const returnedLocalUser = await fetchUser(openId);
+        const userRole = await getUserRole(openId);
         // Make sure the function returns a number, otherwise assign 10
         returnedLocalUser.role =
           typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];

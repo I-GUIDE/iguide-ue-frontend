@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useOutletContext, Link as RouterLink } from "react-router";
 
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Card from "@mui/joy/Card";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Select from "@mui/joy/Select";
@@ -35,6 +35,8 @@ import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
 const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
+import LoadingCard from "../../components/Layout/LoadingCard";
+import SpatialMetadataInfoCard from "./SpatialMetadataInfoCard";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -63,11 +65,18 @@ import {
 import {
   fetchSingleElementDetails,
   fetchAllTitlesByElementType,
-  getMetadataByDOI,
-  duplicateDOIExists,
+  checkDuplicate,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
-import { printListWithDelimiter } from "../../helpers/helper";
+import {
+  printListWithDelimiter,
+  isValidNumberWithinRange,
+} from "../../helpers/helper";
+
+import {
+  getSpatialMetadata,
+  getPublicationMetadata,
+} from "../../utils/ExternalDataRetrieval";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -128,6 +137,7 @@ export default function SubmissionCard(props) {
     useState("");
 
   const [submissionStatus, setSubmissionStatus] = useState("no-submission");
+  const [submissionStatusText, setSubmissionStatusText] = useState("");
   const [extraComponent, setExtraComponent] = useState();
 
   const [elementURI, setElementURI] = useState("");
@@ -138,6 +148,10 @@ export default function SubmissionCard(props) {
   const [contents, setContents] = useState("");
 
   const [datasetExternalLink, setDatasetExternalLink] = useState("");
+  const [
+    elementIdWithDuplicateDatasetExternalLink,
+    setElementIdWithDuplicateDatasetExternalLink,
+  ] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
   const [dataSize, setDataSize] = useState("");
 
@@ -147,19 +161,42 @@ export default function SubmissionCard(props) {
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
   const [publicationDOI, setPublicationDOI] = useState("");
-  const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] = useState();
+  const [
+    publicationMetadataAutofillLoading,
+    setPublicationMetadataAutofillLoading,
+  ] = useState(false);
+  const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] =
+    useState("");
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
   const [gitHubRepoLink, setGitHubRepoLink] = useState("");
   const [gitHubRepoLinkError, setGitHubRepoLinkError] = useState(false);
+  const [
+    elementIdWithDuplicateGitHubRepoLink,
+    setElementIdWithDuplicateGitHubRepoLink,
+  ] = useState("");
 
   const [contributor, setContributor] = useState([]);
 
+  const [spatialMetadataList, setSpatialMetadataList] = useState([]);
+  const [selectedSpatialMetadataIndex, setSelectedSpatialMetadataIndex] =
+    useState(-1);
+  const [spatialMetadataAutofillLoading, setSpatialMetadataAutofillLoading] =
+    useState(false);
+  const [spatialDescription, setSpatialDescription] = useState("");
   const [spatialCoverage, setSpatialCoverage] = useState([]);
   const [geometry, setGeometry] = useState("");
   const [boundingBox, setBoundingBox] = useState("");
+  const [boundingBoxError, setBoundingBoxError] = useState({
+    status: false,
+    message: "",
+  });
   const [centroid, setCentroid] = useState("");
+  const [centroidError, setCentroidError] = useState({
+    status: false,
+    message: "",
+  });
   const [isGeoreferenced, setIsGeoreferenced] = useState("");
   const [temporalCoverage, setTemporalCoverage] = useState([]);
   const [indexYears, setIndexYears] = useState([]);
@@ -175,6 +212,7 @@ export default function SubmissionCard(props) {
   const [openModal, setOpenModal] = useState(false);
 
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkJWTToken = async () => {
@@ -187,12 +225,22 @@ export default function SubmissionCard(props) {
           console.log("Check token returns", message, typeof message);
         setUserRoleFromJWT(message);
       }
+      setLoading(false);
     };
     checkJWTToken();
   }, []);
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
+    function parseNumbers(text, numberOfExpectedNumbers, delimiter = ", ") {
+      const regex = /-?\b\d+(\.\d+)?\b/g;
+      const matches = text.match(regex);
+
+      if (!matches || matches.length !== numberOfExpectedNumbers) {
+        return text;
+      }
+      return matches.join(delimiter);
+    }
     const fetchData = async () => {
       const elementObject =
         isPrivateElement === true || isPrivateElement === "true"
@@ -259,8 +307,8 @@ export default function SubmissionCard(props) {
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
       setGeometry(thisElement["spatial-geometry"]);
-      setBoundingBox(thisElement["spatial-bounding-box"]);
-      setCentroid(thisElement["spatial-centroid"]);
+      setBoundingBox(parseNumbers(thisElement["spatial-bounding-box"], 4));
+      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2, " "));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
@@ -304,6 +352,20 @@ export default function SubmissionCard(props) {
     };
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
+
+  // For autofilling the selected metadata
+  useEffect(() => {
+    if (selectedSpatialMetadataIndex !== -1) {
+      const selectedSpatialMetadata =
+        spatialMetadataList[selectedSpatialMetadataIndex];
+      setSpatialCoverage(selectedSpatialMetadata.display_name);
+      setGeometry(selectedSpatialMetadata.geotext);
+      setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
+      setCentroid(
+        `${selectedSpatialMetadata.lat} ${selectedSpatialMetadata.lon}`
+      );
+    }
+  }, [selectedSpatialMetadataIndex, spatialMetadataList]);
 
   const handleVisibilityChange = async (e, newValue) => {
     if (newValue) {
@@ -415,14 +477,24 @@ export default function SubmissionCard(props) {
     }
   };
 
-  const handleDOIInputChange = async (e) => {
-    setPublicationDOI(e.target.value);
+  const handleDOIChange = async (event) => {
+    const val = event.target.value;
+    setPublicationDOI(val);
 
-    const doiVerification = await duplicateDOIExists(e.target.value);
-    if (doiVerification && doiVerification.duplicate) {
+    if (!val) {
+      return;
+    }
+
+    // Verify duplication of DOI links
+    const doiVerification = await checkDuplicate("doi", val);
+    if (
+      doiVerification &&
+      doiVerification.duplicate &&
+      doiVerification.elementId !== elementId
+    ) {
       setElementIdWithDuplicateDOI(doiVerification.elementId);
     } else {
-      setElementIdWithDuplicateDOI(null);
+      setElementIdWithDuplicateDOI("");
     }
   };
 
@@ -432,7 +504,9 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    const metadataDOI = await getMetadataByDOI(publicationDOI);
+    setPublicationMetadataAutofillLoading(true);
+    const metadataDOI = await getPublicationMetadata(publicationDOI);
+    setPublicationMetadataAutofillLoading(false);
     TEST_MODE && console.log("pub metadata", metadataDOI);
 
     if (!metadataDOI || metadataDOI === "") {
@@ -473,6 +547,29 @@ export default function SubmissionCard(props) {
     setContents(metadataDOI["abstract"]);
   };
 
+  const handleDatasetExternalLinkChange = async (event) => {
+    const val = event.target.value;
+    setDatasetExternalLink(val);
+
+    // Verify duplication of dataset external links
+    if (!val) {
+      return;
+    }
+
+    const datasetLinkVerification = await checkDuplicate("dataset-link", val);
+    if (
+      datasetLinkVerification &&
+      datasetLinkVerification.duplicate &&
+      datasetLinkVerification.elementId !== elementId
+    ) {
+      setElementIdWithDuplicateDatasetExternalLink(
+        datasetLinkVerification.elementId
+      );
+    } else {
+      setElementIdWithDuplicateDatasetExternalLink("");
+    }
+  };
+
   const handleNotebookGitHubUrlChange = (event) => {
     const val = event.target.value;
     setNotebookGitHubUrl(val);
@@ -488,9 +585,30 @@ export default function SubmissionCard(props) {
     }
   };
 
-  const handleRepoLinkChange = (event) => {
+  const handleRepoLinkChange = async (event) => {
     const val = event.target.value;
     setGitHubRepoLink(val);
+
+    if (!val) {
+      return;
+    }
+
+    // Verify duplication of GitHub repo links
+    const gitHubRepoLinkVerification = await checkDuplicate(
+      "github-repo-link",
+      val
+    );
+    if (
+      gitHubRepoLinkVerification &&
+      gitHubRepoLinkVerification.duplicate &&
+      gitHubRepoLinkVerification.elementId !== elementId
+    ) {
+      setElementIdWithDuplicateGitHubRepoLink(
+        gitHubRepoLinkVerification.elementId
+      );
+    } else {
+      setElementIdWithDuplicateGitHubRepoLink("");
+    }
 
     // Validate if the URL is in the form of https://github.com/{owner}/{repo}
     const validGitHubRepoUrl = new RegExp(
@@ -500,6 +618,99 @@ export default function SubmissionCard(props) {
       setGitHubRepoLinkError(false);
     } else {
       setGitHubRepoLinkError(true);
+    }
+  };
+
+  // Autofill spatial metadata
+  const handleAutofillSpatialMetadata = async () => {
+    setSelectedSpatialMetadataIndex(-1);
+    setSpatialMetadataList([]);
+    if (!spatialDescription || spatialDescription === "") {
+      alert("Please enter the spatial metadata first.");
+      return;
+    }
+
+    setSpatialMetadataAutofillLoading(true);
+    const returnedList = await getSpatialMetadata(spatialDescription);
+    setSpatialMetadataAutofillLoading(false);
+
+    if (returnedList === "ERROR") {
+      alert(
+        "The Nominatim API is not available at this moment. Please try again later or manually enter the spatial metadata."
+      );
+      return;
+    }
+
+    if (!returnedList || returnedList.length === 0) {
+      alert(
+        "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
+      );
+      return;
+    }
+    setSpatialMetadataList(returnedList);
+  };
+
+  // Validate the format of the bounding box input
+  const handleBoundingBoxChange = (event) => {
+    const val = event.target.value;
+    setBoundingBox(val);
+
+    const array = val.split(",");
+
+    if (array.length !== 4) {
+      setBoundingBoxError({
+        status: true,
+        message: "It must consist of 4 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -180, 180)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The second number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[2], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The third number must be between -90 and 90",
+      });
+    } else if (!isValidNumberWithinRange(array[3], -90, 90)) {
+      setBoundingBoxError({
+        status: true,
+        message: "The fouth number must be between -90 and 90",
+      });
+    } else {
+      setBoundingBoxError({ status: false, message: "" });
+    }
+  };
+
+  // Validate the format of the centroid input
+  const handleCentroidChange = (event) => {
+    const val = event.target.value;
+    setCentroid(val);
+
+    const array = val.split(" ");
+
+    if (array.length !== 2) {
+      setCentroidError({
+        status: true,
+        message: "It must consist of 2 numbers",
+      });
+    } else if (!isValidNumberWithinRange(array[0], -180, 180)) {
+      setCentroidError({
+        status: true,
+        message: "The first number must be between -180 and 180",
+      });
+    } else if (!isValidNumberWithinRange(array[1], -90, 90)) {
+      setCentroidError({
+        status: true,
+        message: "The second number must be between -90 and 90",
+      });
+    } else {
+      setCentroidError({ status: false, message: "" });
     }
   };
 
@@ -538,6 +749,7 @@ export default function SubmissionCard(props) {
       alert(
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
       );
+      setButtonDisabled(false);
       return;
     }
 
@@ -548,6 +760,77 @@ export default function SubmissionCard(props) {
     ) {
       setOpenModal(true);
       setSubmissionStatus("error-unsaved-oer-link");
+      setButtonDisabled(false);
+      return;
+    }
+
+    // Other form input errors
+    if (elementIdWithDuplicateGitHubRepoLink) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate GitHub repository link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (elementIdWithDuplicateDOI) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate DOI/URL link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (elementIdWithDuplicateDatasetExternalLink) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the duplicate dataset host link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (notebookGitHubUrlError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid GitHub notebook URL."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (gitHubRepoLinkError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid GitHub repository link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (boundingBoxError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid bounding box format."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (centroidError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid centroid format."
+      );
       setButtonDisabled(false);
       return;
     }
@@ -598,8 +881,8 @@ export default function SubmissionCard(props) {
 
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
-    data["spatial-bounding-box"] = boundingBox;
-    data["spatial-centroid"] = centroid;
+    data["spatial-bounding-box"] = `ENVELOPE (${boundingBox})`;
+    data["spatial-centroid"] = `POINT (${centroid})`;
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
 
@@ -789,6 +1072,10 @@ export default function SubmissionCard(props) {
     );
   }
 
+  if (loading) {
+    return <LoadingCard title="Loading the element contribution form..." />;
+  }
+
   // After submission, show users the submission status.
   if (submissionStatus !== "no-submission" && !openModal) {
     return (
@@ -807,15 +1094,19 @@ export default function SubmissionCard(props) {
     return null;
   }
 
-  // Check if the current user is admin, if yes, allow edit
-  const canEditAllElements =
+  // NOTE (March 25, 2025): Check if userRoleFromJWT is undefined, if yes, only test it against
+  //   the user role from the database. The reason is when the user first registers, JWT doesn't
+  //   contain a user role, which is undefined at this point.
+  // Check if the current user is a moderator, if yes, allow to edit anyway
+  const isModerator =
     localUserInfo.role <= PERMISSIONS["edit_all"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_all"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_all"]);
   const isContributor = localUserInfo.id === contributor.id;
 
   // If the user is not the contributor, deny access to the update form.
   if (submissionType === "update") {
-    if (!isContributor && !canEditAllElements) {
+    if (!isContributor && !isModerator) {
       TEST_MODE &&
         console.log("Can't update", localUserInfo.role, userRoleFromJWT);
       return (
@@ -827,13 +1118,16 @@ export default function SubmissionCard(props) {
   // Check if the current user can contribute this type of element
   const canContribute =
     localUserInfo.role <= PERMISSIONS["contribute"] &&
-    userRoleFromJWT <= PERMISSIONS["contribute"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["contribute"]);
   const canEditOER =
     localUserInfo.role <= PERMISSIONS["edit_oer"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_oer"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_oer"]);
   const canEditMap =
     localUserInfo.role <= PERMISSIONS["edit_map"] &&
-    userRoleFromJWT <= PERMISSIONS["edit_map"];
+    (typeof userRoleFromJWT === "undefined" ||
+      userRoleFromJWT <= PERMISSIONS["edit_map"]);
 
   if (submissionType === "initial") {
     if (!canContribute) {
@@ -872,7 +1166,7 @@ export default function SubmissionCard(props) {
   } else if (submissionType === "update") {
     if (isContributor) {
       cardTitle = "Edit your contribution";
-    } else if (canEditAllElements) {
+    } else if (isModerator) {
       cardTitle = "Edit this element as a moderator";
     }
   } else {
@@ -897,13 +1191,11 @@ export default function SubmissionCard(props) {
         }}
       >
         <Typography level="h2">{cardTitle}</Typography>
-        {canEditAllElements &&
-          !isContributor &&
-          submissionType === "update" && (
-            <Typography color="danger" level="title-md">
-              WARNING: You are not the contributor
-            </Typography>
-          )}
+        {isModerator && !isContributor && submissionType === "update" && (
+          <Typography color="danger" level="title-md">
+            WARNING: You are not the contributor
+          </Typography>
+        )}
         <Typography level="body-md">
           If you have questions or run into any issue, please contact us{" "}
           <Link
@@ -951,7 +1243,7 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "publication" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={!!elementIdWithDuplicateDOI}
+                error={elementIdWithDuplicateDOI}
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -963,32 +1255,48 @@ export default function SubmissionCard(props) {
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                  <Grid xs>
+                  <Grid size="grow">
                     {submissionType === "initial" ? (
                       <Input
                         required
                         name="external-link-publication"
                         value={publicationDOI}
-                        onChange={(event) => handleDOIInputChange(event)}
+                        onChange={handleDOIChange}
                       />
                     ) : (
                       <Typography>{publicationDOI}</Typography>
                     )}
                   </Grid>
-                  <Grid xs="auto">
+                  <Grid size="auto">
                     <Button
                       variant="outlined"
+                      loading={publicationMetadataAutofillLoading}
                       onClick={handleAutofillPublicationInfo}
                     >
                       Autofill metadata
                     </Button>
                   </Grid>
                 </Grid>
+                <FormHelperText>
+                  <Typography level="body-sm">
+                    To learn more about Crossref, the autofill API provider,
+                    please click&nbsp;
+                    <Link
+                      component={RouterLink}
+                      to={`https://www.crossref.org/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </Link>
+                    .
+                  </Typography>
+                </FormHelperText>
                 {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
-                      WARNING: The DOI/URL you entered matches one already on
-                      the I-GUIDE Platform and cannot be submitted again.&nbsp;
+                      Error: The DOI/URL you entered matches one already on the
+                      I-GUIDE Platform and cannot be submitted again.&nbsp;
                       <Link
                         component={RouterLink}
                         to={`/publications/${elementIdWithDuplicateDOI}`}
@@ -1163,7 +1471,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={elementIdWithDuplicateDatasetExternalLink}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="Add a link to the primary page for this dataset"
@@ -1176,10 +1487,25 @@ export default function SubmissionCard(props) {
                   required
                   name="external-link"
                   value={datasetExternalLink}
-                  onChange={(event) =>
-                    setDatasetExternalLink(event.target.value)
-                  }
+                  onChange={handleDatasetExternalLinkChange}
                 />
+                {elementIdWithDuplicateDatasetExternalLink && (
+                  <FormHelperText>
+                    <Typography level="title-sm" color="danger">
+                      Error: The dataset host link you entered matches one
+                      already on the I-GUIDE Platform and cannot be submitted
+                      again.&nbsp;
+                      <Link
+                        component={RouterLink}
+                        to={`/datasets/${elementIdWithDuplicateDatasetExternalLink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View the element
+                      </Link>
+                    </Typography>
+                  </FormHelperText>
+                )}
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
@@ -1219,7 +1545,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "notebook" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={notebookGitHubUrlError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the notebook on GitHub you would like featured for this Knowledge Element"
@@ -1239,7 +1568,6 @@ export default function SubmissionCard(props) {
                   name="notebook-url"
                   placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
                   value={notebookGitHubUrl}
-                  error={notebookGitHubUrlError}
                   onChange={handleNotebookGitHubUrlChange}
                 />
                 {notebookGitHubUrlError && (
@@ -1370,7 +1698,12 @@ export default function SubmissionCard(props) {
               </Grid>
             )}
             {resourceTypeSelected === "code" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={
+                  gitHubRepoLinkError || elementIdWithDuplicateGitHubRepoLink
+                }
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="This is a link to the repository on GitHub you would like featured for this Knowledge Element"
@@ -1385,13 +1718,29 @@ export default function SubmissionCard(props) {
                   name="github-repo-link"
                   placeholder="https://github.com/<repo_owner>/<repo_name>"
                   value={gitHubRepoLink}
-                  error={gitHubRepoLinkError}
                   onChange={handleRepoLinkChange}
                 />
                 {gitHubRepoLinkError && (
                   <FormHelperText>
                     <InfoOutlined />
                     The link format is invalid!
+                  </FormHelperText>
+                )}
+                {elementIdWithDuplicateGitHubRepoLink && (
+                  <FormHelperText>
+                    <Typography level="title-sm" color="danger">
+                      Error: The GitHub repository link you entered matches one
+                      already on the I-GUIDE Platform and cannot be submitted
+                      again.&nbsp;
+                      <Link
+                        component={RouterLink}
+                        to={`/code/${elementIdWithDuplicateGitHubRepoLink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View the element
+                      </Link>
+                    </Typography>
                   </FormHelperText>
                 )}
               </FormControl>
@@ -1496,14 +1845,93 @@ export default function SubmissionCard(props) {
             </Typography>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="A list of text description of the spatial extent out to the national level.">
-                  Spatial coverage (Click &#10004; button to save)
+                <SubmissionCardFieldTitle
+                  tooltipTitle="Provide the location name for spatial metadata autofill. It can be a city, landmark, organization, or even a street address."
+                  tooltipContent={`Feature powered by Nominatim. Please note that the API may not return the correct result, or may return no result at all.`}
+                >
+                  Enter the location name (only for spatial metadata autofill)
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <CapsuleInput
-                array={spatialCoverage}
-                setArray={setSpatialCoverage}
-                placeholder="Chicago, IL"
+              <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                <Grid size="grow">
+                  <Input
+                    placeholder="Examples: Chicago; Lake Michigan; 123 Main St, City, State..."
+                    value={spatialDescription}
+                    onChange={(event) =>
+                      setSpatialDescription(event.target.value)
+                    }
+                  />
+                </Grid>
+                <Grid size="auto">
+                  <Button
+                    variant="outlined"
+                    loading={spatialMetadataAutofillLoading}
+                    onClick={handleAutofillSpatialMetadata}
+                  >
+                    Autofill metadata
+                  </Button>
+                </Grid>
+              </Grid>
+              <FormHelperText>
+                <Typography level="body-sm">
+                  To learn more about Nominatim, the autofill API provider,
+                  please click&nbsp;
+                  <Link
+                    component={RouterLink}
+                    to={`https://nominatim.org/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    here
+                  </Link>
+                  .
+                </Typography>
+              </FormHelperText>
+            </FormControl>
+            {spatialMetadataList?.length > 0 && (
+              <Grid sx={{ gridColumn: "1/-1", py: 0.5 }}>
+                <Typography level="title-sm" sx={{ pb: 1 }}>
+                  We have found {spatialMetadataList.length} matching location
+                  {spatialMetadataList.length > 1 && "s"}. Please click{" "}
+                  {spatialMetadataList.length > 1 && "one"} to autofill spatial
+                  metadata:
+                </Typography>
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
+                >
+                  {spatialMetadataList?.map((spatialMetadata, index) => (
+                    <Grid key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                      <SpatialMetadataInfoCard
+                        displayName={spatialMetadata.display_name}
+                        addressType={spatialMetadata.addresstype}
+                        type={spatialMetadata.type}
+                        category={spatialMetadata.category}
+                        listIndex={index}
+                        setListIndex={setSelectedSpatialMetadataIndex}
+                        selectedSpatialMetadataIndex={
+                          selectedSpatialMetadataIndex
+                        }
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            )}
+
+            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormLabel>
+                <SubmissionCardFieldTitle tooltipTitle="A text description of the spatial extent out to the national level, e.g., Chicago, Illinois, United States">
+                  Spatial coverage name
+                </SubmissionCardFieldTitle>
+              </FormLabel>
+              <Input
+                placeholder="Chicago, Cook County, Illinois, United States"
+                value={spatialCoverage}
+                onChange={(event) => setSpatialCoverage(event.target.value)}
               />
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
@@ -1512,38 +1940,79 @@ export default function SubmissionCard(props) {
                   Geometry
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
+              <Textarea
                 placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+                minRows={4}
+                maxRows={10}
                 value={geometry}
                 onChange={(event) => setGeometry(event.target.value)}
               />
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={boundingBoxError.status}
+            >
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
-                  tooltipContent="ENVELOPE(West, East, North, South)"
+                  tooltipContent="ENVELOPE (minimum longitude, minimum latitude, maximum longitude, maximum latitude) aka ENVELOPE (westernmost, southernmost, easternmost, northernmost)"
                 >
-                  Bounding Box
+                  Bounding box
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="ENVELOPE(-111.1, -104.0, 45.0, 40.9)"
-                value={boundingBox}
-                onChange={(event) => setBoundingBox(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={0.5}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid size="auto">{"ENVELOPE ("}</Grid>
+                <Grid size="grow">
+                  <Input
+                    placeholder="-111.1, -104.0, 45.0, 40.9"
+                    value={boundingBox}
+                    onChange={handleBoundingBoxChange}
+                  />
+                </Grid>
+                <Grid size="auto">{")"}</Grid>
+              </Grid>
+              {boundingBoxError.status && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The bounding box format is invalid! {boundingBoxError.message}
+                  .
+                </FormHelperText>
+              )}
             </FormControl>
-            <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+            <FormControl
+              sx={{ gridColumn: "1/-1", py: 0.5 }}
+              error={centroidError.status}
+            >
               <FormLabel>
-                <SubmissionCardFieldTitle tooltipTitle="The latitude and longitude of the centroid of the data.">
+                <SubmissionCardFieldTitle tooltipTitle="The longitude and latitude of the centroid of the data.">
                   Centroid
                 </SubmissionCardFieldTitle>
               </FormLabel>
-              <Input
-                placeholder="46.4218,-94.087"
-                value={centroid}
-                onChange={(event) => setCentroid(event.target.value)}
-              />
+              <Grid
+                container
+                spacing={0.5}
+                sx={{ flexGrow: 1, alignItems: "center" }}
+              >
+                <Grid size="auto">{"POINT ("}</Grid>
+                <Grid size="grow">
+                  <Input
+                    placeholder="-94.087 46.4218"
+                    value={centroid}
+                    onChange={handleCentroidChange}
+                  />
+                </Grid>
+                <Grid size="auto">{")"}</Grid>
+              </Grid>
+              {centroidError.status && (
+                <FormHelperText>
+                  <InfoOutlined />
+                  The centroid format is invalid! {centroidError.message}.
+                </FormHelperText>
+              )}
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
@@ -1700,6 +2169,7 @@ export default function SubmissionCard(props) {
         open={openModal}
         onClose={() => {
           setSubmissionStatus("no-submission");
+          setSubmissionStatusText("");
           setOpenModal(false);
           setButtonDisabled(false);
         }}
@@ -1708,6 +2178,7 @@ export default function SubmissionCard(props) {
           <ModalClose />
           <SubmissionStatusCard
             submissionStatus={submissionStatus}
+            submissionStatusText={submissionStatusText}
             extraComponent={extraComponent}
             elementURI={elementURI}
           />
