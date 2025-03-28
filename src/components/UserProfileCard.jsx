@@ -12,12 +12,12 @@ import Tooltip from "@mui/joy/Tooltip";
 import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import CardActions from "@mui/joy/CardActions";
-import Link from "@mui/joy/Link";
 import Button from "@mui/joy/Button";
 import IconButton from "@mui/joy/IconButton";
 
 import Edit from "@mui/icons-material/Edit";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 import Delete from "@mui/icons-material/Delete";
 
 import UserAvatar from "./UserAvatar";
@@ -44,10 +44,6 @@ export default function UserProfileCard(props) {
           width: "100%",
           height: "100%",
           "--Card-radius": "15px",
-          "&:hover": {
-            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-            transform: "translateY(-2px)",
-          },
         }}
       >
         <CardContent
@@ -60,7 +56,7 @@ export default function UserProfileCard(props) {
             spacing={3}
             sx={{
               width: "100%",
-              p: 1,
+              px: 1,
               justifyContent: "flex-start",
               alignItems: "center",
             }}
@@ -72,18 +68,10 @@ export default function UserProfileCard(props) {
               sx={{ ml: "auto" }}
             />
             <Stack direction="column" spacing={1}>
-              <Link
-                overlay
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`/contributor/${userId}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Typography level="h2">
-                  {userLastName || <Typography color="danger">nln</Typography>},{" "}
-                  {userFirstName || <Typography color="danger">nfn</Typography>}
-                </Typography>
-              </Link>
+              <Typography level="h4" sx={{ fontWeight: "bold" }}>
+                {userLastName || <Typography color="danger">nln</Typography>},{" "}
+                {userFirstName || <Typography color="danger">nfn</Typography>}
+              </Typography>
               <Typography level="title-sm">
                 ID: {userId || <Typography color="danger">No ID</Typography>}
               </Typography>
@@ -104,19 +92,23 @@ export default function UserProfileCard(props) {
         </CardContent>
         <CardOverflow variant="plain">
           <CardActions>
-            <Stack
-              direction="column"
-              spacing={1}
-              sx={{
-                justifyContent: "center",
-                alignItems: "space-around",
-                p: 1,
-              }}
-            >
-              <Tooltip title="Manage user role" placement="right">
+            <Stack direction="column" spacing={1} sx={{ px: 1 }}>
+              <Tooltip title="Open user profile in new page" placement="right">
+                <IconButton
+                  color="warning"
+                  size="sm"
+                  component="a"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`/contributor/${userId}`}
+                >
+                  <ContactPageIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Change user role" placement="right">
                 <IconButton
                   color="primary"
-                  size="lg"
+                  size="sm"
                   onClick={() => setRoleOpen(true)}
                 >
                   <AssignmentIndIcon />
@@ -125,7 +117,7 @@ export default function UserProfileCard(props) {
               <Tooltip title="Edit user profile" placement="right">
                 <IconButton
                   color="primary"
-                  size="lg"
+                  size="sm"
                   component="a"
                   href="#future-user-edit-page"
                 >
@@ -135,7 +127,7 @@ export default function UserProfileCard(props) {
               <Tooltip title="Delete User" placement="right">
                 <IconButton
                   color="danger"
-                  size="lg"
+                  size="sm"
                   onClick={() => setDeleteOpen(true)}
                 >
                   <Delete />
@@ -171,7 +163,11 @@ export default function UserProfileCard(props) {
               <Typography align="center" level="h4">
                 Change User Role
               </Typography>
-              <Typography align="center" level="body-sm">
+              <Typography
+                align="center"
+                level="body-sm"
+                sx={{ fontStyle: "italic" }}
+              >
                 Work in progress...
               </Typography>
               <Select defaultValue={userRole} name="role">
@@ -225,7 +221,11 @@ export default function UserProfileCard(props) {
               <Typography align="center" level="h4">
                 Delete User: {userFirstName} {userLastName}
               </Typography>
-              <Typography align="center" level="body-sm">
+              <Typography
+                align="center"
+                level="body-sm"
+                sx={{ fontStyle: "italic" }}
+              >
                 Work in progress...
               </Typography>
               <Typography align="center" level="title-sm" color="danger">
