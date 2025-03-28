@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -29,6 +29,7 @@ import FeaturedElementsList from "../features/Home/FeaturedElementsList";
 import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
+
 
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
@@ -134,11 +135,14 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
-                  <SearchBar
-                    placeholder="Start your exploration..."
-                    showTrendingSearchKeywords
-                    showSmartSearch
-                  />
+                  <Box>
+                    <SearchBar
+                      placeholder="Start your exploration..."
+                      showTrendingSearchKeywords
+                      showSmartSearch
+                    />
+                  </Box>
+                  
                 </Box>
               </Container>
             </CardContent>

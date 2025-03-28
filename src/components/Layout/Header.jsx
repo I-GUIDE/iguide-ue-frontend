@@ -29,12 +29,13 @@ export default function Header(props) {
   const currentPage = props.currentPage;
   const parentPages = props.parentPages;
   const contribution = props.contribution ? props.contribution : {};
+  const elementType = props.elementType;
 
-  const elementTypeDisplayPlural = props.elementType
-    ? RESOURCE_TYPE_NAMES_PLURAL[props.elementType]
+  const elementTypeDisplayPlural = elementType
+    ? RESOURCE_TYPE_NAMES_PLURAL[elementType]
     : "Elements";
-  const elementTypeUri = props.elementType
-    ? RESOURCE_TYPE_NAMES_FOR_URI[props.elementType]
+  const elementTypeUri = elementType
+    ? RESOURCE_TYPE_NAMES_FOR_URI[elementType]
     : "any";
 
   const contributionText = contribution.text;
@@ -118,19 +119,21 @@ export default function Header(props) {
                   </Tooltip>
                 )}
               </Stack>
-              <Stack
-                direction="row"
-                spacing={2}
-                sx={{
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                }}
-              >
-                <SearchBar
-                  placeholder={`Search ${elementTypeDisplayPlural}...`}
-                  searchCategory={elementTypeUri}
-                />
-              </Stack>
+              {elementType && (
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  sx={{
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                  }}
+                >
+                  <SearchBar
+                    placeholder={`Search ${elementTypeDisplayPlural}...`}
+                    searchCategory={elementTypeUri}
+                  />
+                </Stack>
+              )}
             </Stack>
           </Container>
         </CardContent>

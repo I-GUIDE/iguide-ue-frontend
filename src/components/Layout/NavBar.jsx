@@ -140,6 +140,18 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                  <Link
+                    to="/admin-panel"
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        Admin Panel
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
               {canContributeElements && (
@@ -562,6 +574,7 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
+                  
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -602,28 +615,33 @@ export default function NavBar(props) {
                     />
                   </Tooltip>
                 </Link>
-                <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
-                  About
-                </HoverOverMenuTab>
-                {pages?.map((page) => (
-                  <Link
-                    key={page[1]}
-                    to={page[1]}
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <Button
-                      key={page[0]}
-                      variant="plain"
-                      color="neutral"
-                      size="sm"
-                      sx={{ alignSelf: "center" }}
+                <Box>
+                  <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
+                    About
+                  </HoverOverMenuTab>
+                </Box>
+                <Box>
+                  {pages?.map((page) => (
+                    <Link
+                      key={page[1]}
+                      to={page[1]}
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
                     >
-                      {page[0]}
-                    </Button>
-                  </Link>
-                ))}
+                      <Button
+                        key={page[0]}
+                        variant="plain"
+                        color="neutral"
+                        size="sm"
+                        sx={{ alignSelf: "center" }}
+                      >
+                        {page[0]}
+                      </Button>
+                    </Link>
+                  ))}
+                </Box>
+                
               </Stack>
               <Stack
                 direction="row"
@@ -664,6 +682,7 @@ export default function NavBar(props) {
                         variant="plain"
                         alt="jupyterhub"
                         src="/images/Jupyter-logo.png"
+                        className="tourid-5"
                       />
                     </Button>
                   </Tooltip>

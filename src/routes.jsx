@@ -35,6 +35,8 @@ import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
 import Sitemap from "./components/Sitemap";
 
+import AdminPanel from "./routes/AdminPanel";
+
 export const routes = [
   {
     path: "/",
@@ -191,5 +193,9 @@ export const routes = [
   {
     path: "/sitemap",
     element: <Sitemap />,
+  },
+  {
+    path: "/admin-panel",
+    element: <AdminPanel />,
   },
 ];
