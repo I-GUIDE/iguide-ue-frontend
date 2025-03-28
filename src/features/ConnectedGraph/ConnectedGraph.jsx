@@ -1,10 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { GraphCanvas, useSelection } from "reagraph";
 
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Tooltip from "@mui/joy/Tooltip";
+import Stack from "@mui/joy/Stack";
+import Link from "@mui/joy/Link";
 
 import SimpleInfoCard from "../../components/SimpleInfoCard";
 
@@ -19,6 +21,25 @@ export default function ConnectedGraph(props) {
 
   const graphRef = useRef(null);
   const [selectedElement, setSelectedElement] = useState(null);
+
+  // Check if WebGL2 is supported
+  const [webGL2Available, setWebGL2Available] = useState(false);
+  useEffect(() => {
+    // Function to check WebGL2 support
+    const checkWebGL2 = () => {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("webgl2");
+
+      // If context is null, WebGL2 is not supported
+      if (context) {
+        setWebGL2Available(true);
+      } else {
+        setWebGL2Available(false);
+      }
+    };
+
+    checkWebGL2();
+  }, []);
 
   const { selections, actives, onNodeClick, onCanvasClick } = useSelection({
     ref: graphRef,
@@ -42,6 +63,29 @@ export default function ConnectedGraph(props) {
   // If there are no nodes, return null
   if (!nodes || !edges) {
     return null;
+  }
+
+  if (!webGL2Available) {
+    return (
+      <Stack spacing={2}>
+        <Typography level="title-md">
+          The graph cannot be rendered because WebGL2 is either not supported or
+          not enabled in your browser.
+        </Typography>
+        <Typography level="title-sm">
+          You can visit this{" "}
+          <Link
+            href={"https://www.wikihow.com/Enable-Webgl"}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
+          >
+            WikiHow page
+          </Link>{" "}
+          to see how to enable WebGL2 in your browser.
+        </Typography>
+      </Stack>
+    );
   }
 
   return (
