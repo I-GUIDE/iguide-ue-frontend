@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import { Link as RouterLink } from "react-router";
-
 import Card from "@mui/joy/Card";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -12,15 +10,15 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Tooltip from "@mui/joy/Tooltip";
 import CardContent from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
+import CardActions from "@mui/joy/CardActions";
 import Link from "@mui/joy/Link";
 import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
+import IconButton from "@mui/joy/IconButton";
 
 import Edit from "@mui/icons-material/Edit";
-import ManageAccounts from "@mui/icons-material/ManageAccounts";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Delete from "@mui/icons-material/Delete";
-import Done from "@mui/icons-material/Done";
-import Close from "@mui/icons-material/Close";
 
 import UserAvatar from "./UserAvatar";
 
@@ -41,6 +39,7 @@ export default function UserProfileCard(props) {
     <>
       <Card
         variant="outlined"
+        orientation="horizontal"
         sx={{
           width: "100%",
           height: "100%",
@@ -51,87 +50,100 @@ export default function UserProfileCard(props) {
           },
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            justifyContent: "center",
+          }}
+        >
           <Stack
             direction="row"
-            spacing={1}
+            spacing={3}
             sx={{
               width: "100%",
-              py: 1,
-              justifyContent: "space-between",
+              p: 1,
+              justifyContent: "flex-start",
               alignItems: "center",
             }}
           >
-            <Link
-              overlay
-              component={RouterLink}
-              to={`/contributor/${userId}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Typography level="title-lg" sx={{ lineHeight: 1 }}>
-                {userLastName || <Typography color="danger">nln</Typography>},{" "}
-                {userFirstName || <Typography color="danger">nfn</Typography>}
-              </Typography>
-            </Link>
             <UserAvatar
               userAvatarUrls={userAvatar}
               userId={userId}
+              size="75px"
               sx={{ ml: "auto" }}
             />
-          </Stack>
-          <Stack direction="column">
-            <Typography level="title-sm">
-              Role:{" "}
-              {userRole || <Typography color="danger">no role</Typography>}
-            </Typography>
-            <Typography level="title-sm">
-              {userAffiliation || (
-                <Typography color="danger">no affiliation</Typography>
-              )}
-            </Typography>
-            <Typography level="title-sm">
-              {userEmail || <Typography color="danger">no email</Typography>}
-            </Typography>
-          </Stack>
-          <Divider sx={{ my: 1.5 }} />
-          {/*User Options*/}
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              width: "100%",
-              margin: "auto",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Tooltip title="Manage user role">
-              <Button
-                color="primary"
-                size="sm"
-                sx={{ width: "50%" }}
-                onClick={() => setRoleOpen(true)}
+            <Stack direction="column" spacing={1}>
+              <Link
+                overlay
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`/contributor/${userId}`}
+                style={{ textDecoration: "none" }}
               >
-                <ManageAccounts />
-              </Button>
-            </Tooltip>
-            <Tooltip title="Edit user profile">
-              <Button color="primary" size="sm" sx={{ width: "50%" }}>
-                <Edit />
-              </Button>
-            </Tooltip>
-            <Tooltip title="Delete User">
-              <Button
-                color="danger"
-                size="sm"
-                sx={{ width: "50%" }}
-                onClick={() => setDeleteOpen(true)}
-              >
-                <Delete />
-              </Button>
-            </Tooltip>
+                <Typography level="h2">
+                  {userLastName || <Typography color="danger">nln</Typography>},{" "}
+                  {userFirstName || <Typography color="danger">nfn</Typography>}
+                </Typography>
+              </Link>
+              <Typography level="title-sm">
+                ID: {userId || <Typography color="danger">No ID</Typography>}
+              </Typography>
+              <Typography level="title-sm">
+                Role:{" "}
+                {userRole || <Typography color="danger">No role</Typography>}
+              </Typography>
+              <Typography level="title-sm">
+                {userAffiliation || (
+                  <Typography color="danger">No affiliation</Typography>
+                )}
+              </Typography>
+              <Typography level="title-sm">
+                {userEmail || <Typography color="danger">No email</Typography>}
+              </Typography>
+            </Stack>
           </Stack>
         </CardContent>
+        <CardOverflow variant="plain">
+          <CardActions>
+            <Stack
+              direction="column"
+              spacing={1}
+              sx={{
+                justifyContent: "center",
+                alignItems: "space-around",
+                p: 1,
+              }}
+            >
+              <Tooltip title="Manage user role" placement="right">
+                <IconButton
+                  color="primary"
+                  size="lg"
+                  onClick={() => setRoleOpen(true)}
+                >
+                  <AssignmentIndIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Edit user profile" placement="right">
+                <IconButton
+                  color="primary"
+                  size="lg"
+                  component="a"
+                  href="#future-user-edit-page"
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete User" placement="right">
+                <IconButton
+                  color="danger"
+                  size="lg"
+                  onClick={() => setDeleteOpen(true)}
+                >
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </CardActions>
+        </CardOverflow>
       </Card>
 
       {/* Change Role Modal */}
@@ -155,32 +167,35 @@ export default function UserProfileCard(props) {
             sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
           >
             <ModalClose />
-            <Typography level="title-lg" sx={{ fontWeight: "lg", mb: 1 }}>
-              Change User Role (WIP)
-            </Typography>
-            <Select defaultValue={userRole} name="role">
-              <Option value="Admin">Admin</Option>
-              <Option value="Trusted User"> Trusted User</Option>
-              <Option value="User">User</Option>
-            </Select>
-            <Button
-              color="danger"
-              size="sm"
-              sx={{ width: "100%", my: 1, mx: 0.5 }}
-              onClick={() => setRoleOpen(false)}
-            >
-              Cancel
-              <Close />
-            </Button>
-            <Button
-              type="submit"
-              color="primary"
-              size="sm"
-              sx={{ width: "100%", my: 1, mx: 0.5 }}
-            >
-              Confirm
-              <Done />
-            </Button>
+            <Stack spacing={2} sx={{ px: 2 }}>
+              <Typography align="center" level="h4">
+                Change User Role
+              </Typography>
+              <Typography align="center" level="body-sm">
+                Work in progress...
+              </Typography>
+              <Select defaultValue={userRole} name="role">
+                <Option value="Admin">Admin</Option>
+                <Option value="Trusted User"> Trusted User</Option>
+                <Option value="User">User</Option>
+              </Select>
+              <Button
+                color="primary"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                onClick={() => setRoleOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="danger"
+                size="sm"
+                sx={{ width: "100%", my: 1, mx: 0.5 }}
+              >
+                Confirm
+              </Button>
+            </Stack>
           </Sheet>
         </form>
       </Modal>
@@ -206,35 +221,35 @@ export default function UserProfileCard(props) {
             sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
           >
             <ModalClose />
-            <Typography
-              align="center"
-              level="title-lg"
-              sx={{ fontWeight: "lg", mb: 1 }}
-            >
-              Delete User {userFirstName} {userLastName} (WIP)
-            </Typography>
-            <Typography align="center" level="title-sm" color="danger">
-              Are you sure you would like to delete user? This action cannot be
-              undone.
-            </Typography>
-            <Stack direction="row">
-              <Button
-                color="primary"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-                onClick={() => setDeleteOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                color="danger"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-              >
-                Delete
-                <Delete />
-              </Button>
+            <Stack spacing={2} sx={{ px: 2 }}>
+              <Typography align="center" level="h4">
+                Delete User: {userFirstName} {userLastName}
+              </Typography>
+              <Typography align="center" level="body-sm">
+                Work in progress...
+              </Typography>
+              <Typography align="center" level="title-sm" color="danger">
+                Are you sure you would like to delete user {userFirstName}{" "}
+                {userLastName}? This action cannot be undone.
+              </Typography>
+              <Stack direction="row">
+                <Button
+                  color="primary"
+                  size="sm"
+                  sx={{ width: "100%", my: 1, mx: 0.5 }}
+                  onClick={() => setDeleteOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  color="danger"
+                  size="sm"
+                  sx={{ width: "100%", my: 1, mx: 0.5 }}
+                >
+                  Delete
+                </Button>
+              </Stack>
             </Stack>
           </Sheet>
         </form>

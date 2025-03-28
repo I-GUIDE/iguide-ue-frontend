@@ -215,7 +215,7 @@ export default function AdminPanel() {
                   justifyContent="flex-start"
                 >
                   {userList?.map((user) => (
-                    <Grid key={user.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                    <Grid key={user.id} size={{ xs: 12, lg: 6 }}>
                       <UserProfileCard
                         id={user.id}
                         firstName={user["first-name"]}
