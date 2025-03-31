@@ -2,8 +2,23 @@ import { userLogout } from "./UserManager";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const ENV = import.meta.env.VITE_ENV;
+const LOCALHOST_API_KEY = import.meta.env.VITE_LOCALHOST_API_KEY;
 
 export async function fetchWithAuth(url, options = {}) {
+  if (ENV === "localhost" && LOCALHOST_API_KEY) {
+    TEST_MODE && console.log("By passing JWT for localhost", url, options);
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "JWT-API-KEY": { LOCALHOST_API_KEY },
+      },
+    });
+
+    return res;
+  }
+
+  TEST_MODE && console.log("Fetch with JWT", url, options);
   let res = await fetch(url, {
     ...options,
     credentials: "include", // Ensure cookies are sent with the request
