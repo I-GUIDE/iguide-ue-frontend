@@ -27,7 +27,7 @@
     "react-ga4": "^2.1.0",
     "react-google-recaptcha": "^3.1.0",
     "react-multi-carousel": "^2.8.5",
-    "react-router": "^7.4.0",
+    "react-router": "^7.4.1",
     "react-share": "^5.2.2",
     "react-zoom-pan-pinch": "^3.7.0",
     "reagraph": "^4.21.5"
