@@ -77,3 +77,6 @@ public/robots*
 # Ignore any log files and directories
 logs/*
 *.log
+
+# Ignore any package-lock.json file, because this project uses yarn.lock
+package-lock.json
