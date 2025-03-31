@@ -11,7 +11,7 @@ export async function fetchWithAuth(url, options = {}) {
     const res = await fetch(url, {
       ...options,
       headers: {
-        "JWT-API-KEY": { LOCALHOST_API_KEY },
+        "JWT-API-KEY": LOCALHOST_API_KEY,
       },
     });
 
