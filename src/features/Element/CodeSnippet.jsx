@@ -1,20 +1,29 @@
-import * as React from "react";
+import React, { lazy, Suspense } from "react";
+
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
-import { CopyBlock, dracula } from "react-code-blocks";
-
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
-import TabPanel from "@mui/joy/TabPanel";
 
 import { generateDataAccessCode } from "../../utils/DataAccessCodeGenerator";
 
 export default function CodeSnippet(props) {
   const directDownloadLink = props.directDownloadLink;
+
+  // Used for generating code styles
+  const accessCodeShell = `
+\`\`\`shell
+${generateDataAccessCode(directDownloadLink, "iguide")}
+\`\`\`
+`;
+
+  const accessCodePython = `
+\`\`\`python
+${generateDataAccessCode(directDownloadLink, "python")}
+\`\`\`
+`;
 
   if (directDownloadLink && directDownloadLink !== "") {
     return (
@@ -26,35 +35,20 @@ export default function CodeSnippet(props) {
             fontWeight="lg"
             mb={1}
           >
-            Direct Data Access
+            Direct Data Access (Python)
           </Typography>
           <Divider inset="none" />
-          <Tabs aria-label="Basic tabs" defaultValue={0}>
-            <TabList>
-              <Tab>I-GUIDE Platform</Tab>
-              <Tab>Python</Tab>
-            </TabList>
-            <TabPanel value={0}>
-              <CopyBlock
-                language={"shell"}
-                text={generateDataAccessCode(directDownloadLink, "iguide")}
-                showLineNumbers={false}
-                theme={dracula}
-                wrapLines={true}
-                codeBlock
-              />
-            </TabPanel>
-            <TabPanel value={1}>
-              <CopyBlock
-                language={"python"}
-                text={generateDataAccessCode(directDownloadLink, "python")}
-                showLineNumbers={false}
-                theme={dracula}
-                wrapLines={true}
-                codeBlock
-              />
-            </TabPanel>
-          </Tabs>
+
+          <div
+            className="container"
+            data-color-mode="light"
+            style={{ fontFamily: "Arial, sans-serif" }}
+          >
+            <Suspense fallback={<p>Loading code block...</p>}>
+              {/* April 1, 2025: <Tabs> is temporarily removed, due to download_to_notebook not available */}
+              <MarkdownPreview source={accessCodePython} />
+            </Suspense>
+          </div>
         </Box>
       </Stack>
     );
