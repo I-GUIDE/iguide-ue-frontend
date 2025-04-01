@@ -134,7 +134,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
       const role = await getUserRole(user.sub);
 
       // Generate JWT token with role
-      const userPayload = { id: user.sub, role };
+      const userPayload = { id: user.sub, role, email: user.email };
 
       // Generate tokens
       const accessToken = generateAccessToken(userPayload);
