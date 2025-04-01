@@ -1,10 +1,10 @@
-import * as React from "react";
+import React, { lazy, Suspense } from "react";
 
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
-import { CopyBlock, dracula } from "react-code-blocks";
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -15,6 +15,19 @@ import { generateDataAccessCode } from "../../utils/DataAccessCodeGenerator";
 
 export default function CodeSnippet(props) {
   const directDownloadLink = props.directDownloadLink;
+
+  // Used for generating code styles
+  const accessCodeShell = `
+\`\`\`shell
+${generateDataAccessCode(directDownloadLink, "iguide")}
+\`\`\`
+`;
+
+  const accessCodePython = `
+\`\`\`python
+${generateDataAccessCode(directDownloadLink, "python")}
+\`\`\`
+`;
 
   if (directDownloadLink && directDownloadLink !== "") {
     return (
@@ -29,32 +42,27 @@ export default function CodeSnippet(props) {
             Direct Data Access
           </Typography>
           <Divider inset="none" />
-          <Tabs aria-label="Basic tabs" defaultValue={0}>
-            <TabList>
-              <Tab>I-GUIDE Platform</Tab>
-              <Tab>Python</Tab>
-            </TabList>
-            <TabPanel value={0}>
-              <CopyBlock
-                language={"shell"}
-                text={generateDataAccessCode(directDownloadLink, "iguide")}
-                showLineNumbers={false}
-                theme={dracula}
-                wrapLines={true}
-                codeBlock
-              />
-            </TabPanel>
-            <TabPanel value={1}>
-              <CopyBlock
-                language={"python"}
-                text={generateDataAccessCode(directDownloadLink, "python")}
-                showLineNumbers={false}
-                theme={dracula}
-                wrapLines={true}
-                codeBlock
-              />
-            </TabPanel>
-          </Tabs>
+
+          <div
+            className="container"
+            data-color-mode="light"
+            style={{ fontFamily: "Arial, sans-serif" }}
+          >
+            <Suspense fallback={<p>Loading code block...</p>}>
+              <Tabs aria-label="Basic tabs" defaultValue={0}>
+                <TabList>
+                  <Tab>I-GUIDE JupyterHub</Tab>
+                  <Tab>Python</Tab>
+                </TabList>
+                <TabPanel value={0}>
+                  <MarkdownPreview source={accessCodeShell} />
+                </TabPanel>
+                <TabPanel value={1}>
+                  <MarkdownPreview source={accessCodePython} />
+                </TabPanel>
+              </Tabs>
+            </Suspense>
+          </div>
         </Box>
       </Stack>
     );
