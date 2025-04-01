@@ -1,15 +1,11 @@
 import React, { lazy, Suspense } from "react";
 
+const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
-
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
-import TabPanel from "@mui/joy/TabPanel";
 
 import { generateDataAccessCode } from "../../utils/DataAccessCodeGenerator";
 
@@ -39,7 +35,7 @@ ${generateDataAccessCode(directDownloadLink, "python")}
             fontWeight="lg"
             mb={1}
           >
-            Direct Data Access
+            Direct Data Access (Python)
           </Typography>
           <Divider inset="none" />
 
@@ -49,18 +45,8 @@ ${generateDataAccessCode(directDownloadLink, "python")}
             style={{ fontFamily: "Arial, sans-serif" }}
           >
             <Suspense fallback={<p>Loading code block...</p>}>
-              <Tabs aria-label="Basic tabs" defaultValue={0}>
-                <TabList>
-                  <Tab>I-GUIDE JupyterHub</Tab>
-                  <Tab>Python</Tab>
-                </TabList>
-                <TabPanel value={0}>
-                  <MarkdownPreview source={accessCodeShell} />
-                </TabPanel>
-                <TabPanel value={1}>
-                  <MarkdownPreview source={accessCodePython} />
-                </TabPanel>
-              </Tabs>
+              {/* April 1, 2025: <Tabs> is temporarily removed, due to download_to_notebook not available */}
+              <MarkdownPreview source={accessCodePython} />
             </Suspense>
           </div>
         </Box>
