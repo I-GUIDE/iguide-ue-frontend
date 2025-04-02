@@ -10,6 +10,7 @@ const dayUTC = String(currentTime.getUTCDate()).padStart(2, '0');
 
 const logger = pino({
   level: process.env.LOGGER_LOG_LEVEL || "info",
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
   transport: {
     targets: [
       // Channel the log to a destination file
