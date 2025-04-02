@@ -36,6 +36,20 @@ const logger = pino({
   redact: ["user.email", "user.given_name"],
 });
 
+// Handling uncaught exceptions
+process.on('uncaughtException', (err) => {
+  logger.fatal({ err }, 'Uncaught Exception occurred!');
+  // Exit the process after logging the error
+  process.exit(1);
+});
+
+// Handling unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  logger.fatal({ reason, promise }, 'Unhandled Rejection occurred!');
+  // Exit the process after logging the error
+  process.exit(1);
+});
+
 const httpLogger = pinoHttp({ logger });
 
 module.exports = {
