@@ -98,7 +98,6 @@ const generateRefreshToken = (user) => {
 router.get(
   "/login",
   function (req, res, next) {
-    logger.info("Starting login handler");
     next();
   },
   passport.authenticate("oidc", {

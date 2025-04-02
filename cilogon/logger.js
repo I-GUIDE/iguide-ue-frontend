@@ -10,6 +10,7 @@ const dayUTC = String(currentTime.getUTCDate()).padStart(2, '0');
 
 const logger = pino({
   level: process.env.LOGGER_LOG_LEVEL || "info",
+  timestamp: () => `,"time":"${new Date().toISOString()}"`,
   transport: {
     targets: [
       // Channel the log to a destination file
@@ -33,6 +34,20 @@ const logger = pino({
   },
   // Redact sensitive information and PII
   redact: ["user.email", "user.given_name"],
+});
+
+// Handling uncaught exceptions
+process.on('uncaughtException', (err) => {
+  logger.fatal({ err }, 'Uncaught Exception occurred!');
+  // Exit the process after logging the error
+  process.exit(1);
+});
+
+// Handling unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  logger.fatal({ reason, promise }, 'Unhandled Rejection occurred!');
+  // Exit the process after logging the error
+  process.exit(1);
 });
 
 const httpLogger = pinoHttp({ logger });
