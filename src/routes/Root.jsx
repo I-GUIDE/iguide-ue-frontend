@@ -22,6 +22,7 @@ import {
 } from "../utils/UserManager.jsx";
 import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
+import { sendBugToSlack } from "../utils/AutomaticBugReporting.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -31,6 +32,27 @@ const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
 const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
+
+function invalidUserRoleMsg(userRole, isAuthenticated, localUserInfo) {
+  var currentTime = new Date();
+  currentTime.toUTCString();
+  const currentUrl = window.location.href;
+
+  const msgToBeSent = `
+    *An error occurred!*
+    *Error info*:
+      * Type: User role invalid,
+      * Message: User role is ${userRole},
+      * Time: ${currentTime},
+      * URL: ${currentUrl},
+      * Logged in: ${isAuthenticated},
+      * First name: ${localUserInfo?.["first_name"]},
+      * Last name: ${localUserInfo?.["last_name"]},
+      * Email: ${localUserInfo?.email},
+      * Affiliation: ${localUserInfo?.affiliation}.`;
+
+  return msgToBeSent;
+}
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
@@ -150,6 +172,14 @@ export default function Root(props) {
         returnedLocalUser.role =
           typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
 
+        // If user role is not a number, send a report to Slack
+        if (typeof userRole !== "number") {
+          TEST_MODE && console.warn("User role invalid");
+          sendBugToSlack(
+            invalidUserRoleMsg(userRole, isAuthenticated, localUserInfo)
+          );
+        }
+
         TEST_MODE &&
           console.log("Local user returned from DB: ", returnedLocalUser);
         const user = {
@@ -180,7 +210,7 @@ export default function Root(props) {
         handleCheckUser(userInfo);
       }
     }
-  }, [userInfo]);
+  }, [userInfo, isAuthenticated, localUserInfo]);
 
   return (
     <StyledEngineProvider injectFirst>
