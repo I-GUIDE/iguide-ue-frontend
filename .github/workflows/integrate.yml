@@ -63,7 +63,7 @@ jobs:
   #     - name: Run lint
   #       run: npx eslint
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     # needs: lint
     steps:
       - name: Checkout code
