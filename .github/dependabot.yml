@@ -14,7 +14,7 @@ updates:
       timezone: "America/Chicago"
     open-pull-requests-limit: 8
 
-  # Backend
+  # Authentication backend
   - package-ecosystem: "npm"
     directory: "/cilogon"
     schedule:
@@ -23,3 +23,6 @@ updates:
       time: "08:30"
       timezone: "America/Chicago"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "openid-client"
+        versions: ["6.x.x"]  # Ignore openid-client v6 due to major module changes
