@@ -27,6 +27,16 @@ export default [
   },
   {
     selector: ".tourid-6",
+    content: "Explore data rich maps to support your research or education.",
+    position: "bottom"
+  },
+  {
+    selector: ".tourid-7",
+    content: "Invesitgate the vast web of related knowledge using our connected elements tool.",
+    position: "bottom"
+  },
+  {
+    selector: ".tourid-8",
     content: "Looking for something specific? Utilize our simple search tool to find anything on the platform!"
   }
 ];

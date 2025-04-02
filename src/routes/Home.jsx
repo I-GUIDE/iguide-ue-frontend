@@ -152,7 +152,7 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
-                  <Box className="tourid-6">
+                  <Box className="tourid-8">
                     <SearchBar
                       placeholder="Start your exploration..."
                       showTrendingSearchKeywords
