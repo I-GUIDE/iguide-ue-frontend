@@ -129,11 +129,14 @@ router.get("/cilogon-callback", async (req, res, next) => {
         return res.redirect(`/errorlogin`);
       }
 
-      // Retrieve user role from OpenSearch
-      const role = await getUserRole(user.sub);
+      // Retrieve user role from the database and save it to JWT tokens.
+      // April 2, 2025: Even if the function returns undefined, DO NOT make it as 10,
+      //   because the contribution page will check if the role number in JWT is undefined.
+      //   If it's undefined, the system will use the backend as a backup verification.
+      const roleFromDB = await getUserRole(user.sub);
 
       // Generate JWT token with role
-      const userPayload = { id: user.sub, role, email: user.email };
+      const userPayload = { id: user.sub, role: roleFromDB, email: user.email };
 
       // Generate tokens
       const accessToken = generateAccessToken(userPayload);
