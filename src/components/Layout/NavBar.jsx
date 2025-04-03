@@ -60,6 +60,7 @@ export default function NavBar(props) {
 
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
 
   // Check if the current user is admin, if yes, allow edit
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
@@ -77,208 +78,6 @@ export default function NavBar(props) {
       }
       setDrawerOpen(inOpen);
     };
-  }
-
-  // If the user is logged in, display the logout button, otherwise login
-  function AuthButton() {
-    const [open, setOpen] = useState(false);
-    if (isAuthenticated) {
-      return (
-        <Tooltip
-          placement="bottom-start"
-          variant="outlined"
-          open={open}
-          onOpen={() => setOpen(true)}
-          onClose={() => setOpen(false)}
-          leaveDelay={100}
-          title={
-            <List>
-              <Link
-                to="/user-profile"
-                underline="none"
-                component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton onClick={() => setOpen(false)}>
-                    My Profile
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Link
-                to="/user-profile-update"
-                underline="none"
-                component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton onClick={() => setOpen(false)}>
-                    Update Profile
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              {canEditAllElements && (
-                <>
-                  <ListDivider />
-                  <Typography
-                    level="body-xs"
-                    textTransform="uppercase"
-                    fontWeight="lg"
-                    sx={{ px: 1.5, py: 1 }}
-                  >
-                    Admin
-                  </Typography>
-                  <Link
-                    to="/new-doc"
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        New Documentation
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  <Link
-                    to="/admin-panel"
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        Admin Panel
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                </>
-              )}
-              {canContributeElements && (
-                <>
-                  <ListDivider />
-                  <Typography
-                    level="body-xs"
-                    textTransform="uppercase"
-                    fontWeight="lg"
-                    sx={{ px: 1.5, py: 1 }}
-                  >
-                    New Contribution
-                  </Typography>
-                  {canEditMap && (
-                    <Link
-                      href="/contribution/map"
-                      underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton onClick={() => setOpen(false)}>
-                          New Map
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
-                  <Link
-                    href="/contribution/dataset"
-                    underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        New Dataset
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  <Link
-                    href="/contribution/notebook"
-                    underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        New Notebook
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  <Link
-                    href="/contribution/publication"
-                    underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        New Publication
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  {canEditOER && (
-                    <Link
-                      href="/contribution/oer"
-                      underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton onClick={() => setOpen(false)}>
-                          New Educational Resource
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
-                  <Link
-                    href="/contribution/code"
-                    underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        New Code
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                </>
-              )}
-              <ListDivider />
-              <Link
-                to="/contact-us"
-                underline="none"
-                component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton onClick={() => setOpen(false)}>
-                    Contact Us
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <ListDivider />
-              <ListItem sx={{ width: "100%" }}>
-                <ListItemButton onClick={userLogout}>Logout</ListItemButton>
-              </ListItem>
-            </List>
-          }
-        >
-          <Button
-            variant="plain"
-            color="neutral"
-            size="sm"
-            sx={{ alignSelf: "center" }}
-          >
-            <UserAvatar
-              userAvatarUrls={localUserInfo["avatar_url"]}
-              userId={localUserInfo.id}
-              avatarResolution="low"
-              isLoading={Object.keys(localUserInfo).length === 0}
-            />
-          </Button>
-        </Tooltip>
-      );
-    } else {
-      return (
-        <Button size="sm" color="primary" onClick={userLogin}>
-          Login
-        </Button>
-      );
-    }
   }
 
   function AuthInDrawer() {
@@ -574,7 +373,6 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -641,7 +439,6 @@ export default function NavBar(props) {
                     </Link>
                   ))}
                 </Box>
-                
               </Stack>
               <Stack
                 direction="row"
@@ -686,7 +483,219 @@ export default function NavBar(props) {
                       />
                     </Button>
                   </Tooltip>
-                  <AuthButton />
+
+                  {/* User menu dropdown */}
+                  {isAuthenticated ? (
+                    <Tooltip
+                      placement="bottom-start"
+                      variant="outlined"
+                      open={openUserMenu}
+                      onOpen={() => setOpenUserMenu(true)}
+                      onClose={() => setOpenUserMenu(false)}
+                      leaveDelay={100}
+                      title={
+                        <List>
+                          <Link
+                            to="/user-profile"
+                            underline="none"
+                            component={RouterLink}
+                            sx={{ color: "text.tertiary" }}
+                          >
+                            <ListItem sx={{ width: "100%" }}>
+                              <ListItemButton onClick={() => setOpen(false)}>
+                                My Profile
+                              </ListItemButton>
+                            </ListItem>
+                          </Link>
+                          <Link
+                            to="/user-profile-update"
+                            underline="none"
+                            component={RouterLink}
+                            sx={{ color: "text.tertiary" }}
+                          >
+                            <ListItem sx={{ width: "100%" }}>
+                              <ListItemButton onClick={() => setOpen(false)}>
+                                Update Profile
+                              </ListItemButton>
+                            </ListItem>
+                          </Link>
+                          {canEditAllElements && (
+                            <>
+                              <ListDivider />
+                              <Typography
+                                level="body-xs"
+                                textTransform="uppercase"
+                                fontWeight="lg"
+                                sx={{ px: 1.5, py: 1 }}
+                              >
+                                Admin
+                              </Typography>
+                              <Link
+                                to="/new-doc"
+                                underline="none"
+                                component={RouterLink}
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    New Documentation
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                              <Link
+                                to="/admin-panel"
+                                underline="none"
+                                component={RouterLink}
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    Admin Panel
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                            </>
+                          )}
+                          {canContributeElements && (
+                            <>
+                              <ListDivider />
+                              <Typography
+                                level="body-xs"
+                                textTransform="uppercase"
+                                fontWeight="lg"
+                                sx={{ px: 1.5, py: 1 }}
+                              >
+                                New Contribution
+                              </Typography>
+                              {canEditMap && (
+                                <Link
+                                  href="/contribution/map"
+                                  underline="none"
+                                  sx={{ color: "text.tertiary" }}
+                                >
+                                  <ListItem sx={{ width: "100%" }}>
+                                    <ListItemButton
+                                      onClick={() => setOpen(false)}
+                                    >
+                                      New Map
+                                    </ListItemButton>
+                                  </ListItem>
+                                </Link>
+                              )}
+                              <Link
+                                href="/contribution/dataset"
+                                underline="none"
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    New Dataset
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                              <Link
+                                href="/contribution/notebook"
+                                underline="none"
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    New Notebook
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                              <Link
+                                href="/contribution/publication"
+                                underline="none"
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    New Publication
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                              {canEditOER && (
+                                <Link
+                                  href="/contribution/oer"
+                                  underline="none"
+                                  sx={{ color: "text.tertiary" }}
+                                >
+                                  <ListItem sx={{ width: "100%" }}>
+                                    <ListItemButton
+                                      onClick={() => setOpen(false)}
+                                    >
+                                      New Educational Resource
+                                    </ListItemButton>
+                                  </ListItem>
+                                </Link>
+                              )}
+                              <Link
+                                href="/contribution/code"
+                                underline="none"
+                                sx={{ color: "text.tertiary" }}
+                              >
+                                <ListItem sx={{ width: "100%" }}>
+                                  <ListItemButton
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    New Code
+                                  </ListItemButton>
+                                </ListItem>
+                              </Link>
+                            </>
+                          )}
+                          <ListDivider />
+                          <Link
+                            to="/contact-us"
+                            underline="none"
+                            component={RouterLink}
+                            sx={{ color: "text.tertiary" }}
+                          >
+                            <ListItem sx={{ width: "100%" }}>
+                              <ListItemButton onClick={() => setOpen(false)}>
+                                Contact Us
+                              </ListItemButton>
+                            </ListItem>
+                          </Link>
+                          <ListDivider />
+                          <ListItem sx={{ width: "100%" }}>
+                            <ListItemButton onClick={userLogout}>
+                              Logout
+                            </ListItemButton>
+                          </ListItem>
+                        </List>
+                      }
+                    >
+                      <Button
+                        variant="plain"
+                        color="neutral"
+                        size="sm"
+                        sx={{ alignSelf: "center" }}
+                      >
+                        <UserAvatar
+                          userAvatarUrls={localUserInfo["avatar_url"]}
+                          userId={localUserInfo.id}
+                          avatarResolution="low"
+                          isLoading={Object.keys(localUserInfo).length === 0}
+                        />
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <Button size="sm" color="primary" onClick={userLogin}>
+                      Login
+                    </Button>
+                  )}
                 </ButtonGroup>
               </Stack>
             </Stack>
