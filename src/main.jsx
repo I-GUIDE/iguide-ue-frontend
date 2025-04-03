@@ -168,7 +168,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <TourProvider steps={TourSteps}> 
+    <TourProvider steps={TourSteps} showBadge={false}> 
       <Suspense fallback={<div>Loading...</div>}>
         <RouterProvider router={router} />
       </Suspense>

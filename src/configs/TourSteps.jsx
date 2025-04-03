@@ -1,7 +1,7 @@
 export default [
   {
     selector: ".tourid-0",
-    content: "Welcome to the I-GUIDE Platform, a tool for exploring and sharing geospatial data via maps, datasets, formal publications and more!",
+    content: "Welcome to the I-GUIDE Platform, an outlet for exploring and sharing geospatial data via maps, datasets, formal publications and more!",
   },
   {
     selector: ".tourid-1",
@@ -9,15 +9,15 @@ export default [
   },
   {
     selector: ".tourid-2",
-    content: "View additional site information including FAQ and a Getting Started guide."
+    content: "View additional site information including FAQ and a Getting Started guide on our About page."
   },
   {
     selector: ".tourid-3",
-    content: "Explore knowledge elements by type from the nav-bar."
+    content: "Explore knowledge elements by type from the Nav-bar."
   },
   {
     selector: ".tourid-4",
-    content: "Contribute knowledge or manage your profile by hovering over your avatar.",
+    content: "Contribute knowledge or manage your profile by hovering over your user avatar.",
     position: "bottom"
   },
   {
@@ -27,7 +27,7 @@ export default [
   },
   {
     selector: ".tourid-6",
-    content: "Explore data rich maps to support your research or education.",
+    content: "Explore data rich maps to support your research and education.",
     position: "bottom"
   },
   {

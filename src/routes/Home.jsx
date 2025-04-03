@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { useState } from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -44,16 +45,17 @@ import {
 export default function Home() {
   usePageTitle("", true);
   const [cookies, setCookie] = useCookies(["user"]);
-  
+  const [pageWidth, setPageWidth] = useState(window.innerWidth);
+
   const { setIsOpen } = useTour();
 
   useEffect(() => {
-    if (!cookies.seenTour) {
+    if (!cookies.seenTour && pageWidth >= 960) {
       TEST_MODE && console.log("Start tour");
       setIsOpen(true);
-      setCookie("seenTour", false, {path: "/"});
+      setCookie("seenTour", true, {path: "/"});
     } else {
-      TEST_MODE && console.log("Already seen tour");
+      TEST_MODE && console.log("Already seen tour or page is too small");
     }
   }, []);
 
@@ -152,14 +154,11 @@ export default function Home() {
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
-                  <Box className="tourid-8">
-                    <SearchBar
-                      placeholder="Start your exploration..."
-                      showTrendingSearchKeywords
-                      showSmartSearch
-                    />
-                  </Box>
-                  
+                  <SearchBar
+                    placeholder="Start your exploration..."
+                    showTrendingSearchKeywords
+                    showSmartSearch
+                  />
                 </Box>
               </Container>
             </CardContent>
@@ -189,31 +188,37 @@ export default function Home() {
                     backgroundColor: "inherit",
                     py: "50px",
                   }}
-                >
-                  <TutorialCard
-                    iconImage="/images/homepage/map.png"
-                    title="Map"
-                    link="/maps"
-                    content="Transform geospatial data to knowledge and insights"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/network.png"
-                    title="Connect"
-                    link="/element-network"
-                    content="Gain holistic understanding of linked knowledge elements"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/search.png"
-                    title="Discover"
-                    link="/search-home"
-                    content="Seek new convergence knowledge through intelligent search"
-                    bgColor="#fff"
-                    inColumn
-                  />
+                > 
+                  <Box className="tourid-6">
+                    <TutorialCard
+                      iconImage="/images/homepage/map.png"
+                      title="Map"
+                      link="/maps"
+                      content="Transform geospatial data to knowledge and insights"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-7">
+                    <TutorialCard
+                      iconImage="/images/homepage/network.png"
+                      title="Connect"
+                      link="/element-network"
+                      content="Gain holistic understanding of linked knowledge elements"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-8">
+                    <TutorialCard
+                      iconImage="/images/homepage/search.png"
+                      title="Discover"
+                      link="/search-home"
+                      content="Seek new convergence knowledge through intelligent search"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
                 </Stack>
               </Stack>
             </Container>

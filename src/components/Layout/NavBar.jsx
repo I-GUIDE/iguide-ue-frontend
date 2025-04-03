@@ -28,6 +28,7 @@ import ListItemButton from "@mui/joy/ListItemButton";
 import ModalClose from "@mui/joy/ModalClose";
 import MenuIcon from "@mui/icons-material/Menu";
 import Tooltip from "@mui/joy/Tooltip";
+import Image from "@mui/icons-material/Image";
 
 import SearchBar from "../SearchBar";
 import UserAvatar from "../UserAvatar";
@@ -546,7 +547,6 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  className="tourid-1"
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -572,7 +572,7 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               > 
-                <Box>
+                <Box className="tourid-1">
                   <Link
                     to={"/"}
                     underline="none"
