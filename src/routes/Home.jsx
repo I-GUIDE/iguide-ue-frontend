@@ -50,7 +50,7 @@ export default function Home() {
   const { setIsOpen } = useTour();
 
   useEffect(() => {
-    if (!cookies.seenTour && pageWidth >= 960) {
+    if (!cookies.seenTour && pageWidth >= 1200) {
       TEST_MODE && console.log("Start tour");
       setIsOpen(true);
       setCookie("seenTour", true, {path: "/"});
