@@ -148,11 +148,14 @@ export default function SubmissionCard(props) {
   const [contents, setContents] = useState("");
 
   const [datasetExternalLink, setDatasetExternalLink] = useState("");
+  const [datasetExternalLinkError, setDatasetExternalLinkError] =
+    useState(false);
   const [
     elementIdWithDuplicateDatasetExternalLink,
     setElementIdWithDuplicateDatasetExternalLink,
   ] = useState("");
   const [directDownloadLink, setDirectDownloadLink] = useState("");
+  const [directDownloadLinkError, setDirectDownloadLinkError] = useState(false);
   const [dataSize, setDataSize] = useState("");
 
   const [notebookFile, setNotebookFile] = useState("");
@@ -551,11 +554,21 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setDatasetExternalLink(val);
 
-    // Verify duplication of dataset external links
+    // Validate if the URL format is correct
+    const validURL = new RegExp(
+      "^(https?|ftp):\\/\\/(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:\\/[^\\s]*)?$"
+    );
+    if (val === "" || validURL.test(val)) {
+      setDatasetExternalLinkError(false);
+    } else {
+      setDatasetExternalLinkError(true);
+    }
+
+    // If no value, do not validate duplicate
     if (!val) {
       return;
     }
-
+    // Verify duplication of dataset external links
     const datasetLinkVerification = await checkDuplicate("dataset-link", val);
     if (
       datasetLinkVerification &&
@@ -567,6 +580,21 @@ export default function SubmissionCard(props) {
       );
     } else {
       setElementIdWithDuplicateDatasetExternalLink("");
+    }
+  };
+
+  const handleDirectDownloadLinkChange = async (event) => {
+    const val = event.target.value;
+    setDirectDownloadLink(val);
+
+    // Validate if the URL format is correct
+    const validURL = new RegExp(
+      "^(https?|ftp):\\/\\/(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:\\/[^\\s]*)?$"
+    );
+    if (val === "" || validURL.test(val)) {
+      setDirectDownloadLinkError(false);
+    } else {
+      setDirectDownloadLinkError(true);
     }
   };
 
@@ -795,6 +823,25 @@ export default function SubmissionCard(props) {
       return;
     }
 
+    if (datasetExternalLinkError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid dataset host link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+    if (directDownloadLinkError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid dataset direct download link."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
     if (notebookGitHubUrlError) {
       setOpenModal(true);
       setSubmissionStatus("error-invalid-inputs");
@@ -815,7 +862,7 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    if (boundingBoxError) {
+    if (boundingBoxError.status) {
       setOpenModal(true);
       setSubmissionStatus("error-invalid-inputs");
       setSubmissionStatusText(
@@ -825,7 +872,7 @@ export default function SubmissionCard(props) {
       return;
     }
 
-    if (centroidError) {
+    if (centroidError.status) {
       setOpenModal(true);
       setSubmissionStatus("error-invalid-inputs");
       setSubmissionStatusText(
@@ -1473,7 +1520,10 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "dataset" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={elementIdWithDuplicateDatasetExternalLink}
+                error={
+                  datasetExternalLinkError ||
+                  elementIdWithDuplicateDatasetExternalLink
+                }
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -1486,9 +1536,17 @@ export default function SubmissionCard(props) {
                 <Input
                   required
                   name="external-link"
+                  placeholder="https://example.com"
                   value={datasetExternalLink}
                   onChange={handleDatasetExternalLinkChange}
                 />
+                {datasetExternalLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The input is not a valid URL. Don't forget to include the
+                    protocol (https:// or http://).
+                  </FormHelperText>
+                )}
                 {elementIdWithDuplicateDatasetExternalLink && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
@@ -1509,7 +1567,10 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
-              <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+              <FormControl
+                sx={{ gridColumn: "1/-1", py: 0.5 }}
+                error={directDownloadLinkError}
+              >
                 <FormLabel>
                   <SubmissionCardFieldTitle
                     tooltipTitle="If there is a direct download link available for the dataset, indicate it here"
@@ -1521,10 +1582,15 @@ export default function SubmissionCard(props) {
                 <Input
                   name="direct-download-link"
                   value={directDownloadLink}
-                  onChange={(event) =>
-                    setDirectDownloadLink(event.target.value)
-                  }
+                  onChange={handleDirectDownloadLinkChange}
                 />
+                {directDownloadLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The input is not a valid URL. Don't forget to include the
+                    protocol (https:// or http://).
+                  </FormHelperText>
+                )}
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
