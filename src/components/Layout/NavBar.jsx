@@ -36,8 +36,12 @@ import HoverOverMenuTab from "../HoverOverMenuTab";
 
 import { userLogin, userLogout } from "../../utils/UserManager";
 
+import { useTour } from "@reactour/tour";
+
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const aboutDropdown = [
   ["Getting Started", "/docs/getting-started"],
@@ -66,6 +70,17 @@ export default function NavBar(props) {
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+
+  const { setIsOpen } = useTour();
+
+  function startTour() {
+    if (window.innerWidth >= 1200) {
+      TEST_MODE && console.log("Start tour");
+      setIsOpen(true);
+    } else {
+      TEST_MODE && console.log("Cannot start tour: page is too small");
+    }
+  }
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -97,8 +112,7 @@ export default function NavBar(props) {
                 to="/user-profile"
                 underline="none"
                 component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton onClick={() => setOpen(false)}>
                     My Profile
@@ -109,8 +123,7 @@ export default function NavBar(props) {
                 to="/user-profile-update"
                 underline="none"
                 component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton onClick={() => setOpen(false)}>
                     Update Profile
@@ -124,16 +137,14 @@ export default function NavBar(props) {
                     level="body-xs"
                     textTransform="uppercase"
                     fontWeight="lg"
-                    sx={{ px: 1.5, py: 1 }}
-                  >
+                    sx={{ px: 1.5, py: 1 }}>
                     Admin
                   </Typography>
                   <Link
                     to="/new-doc"
                     underline="none"
                     component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         New Documentation
@@ -144,8 +155,7 @@ export default function NavBar(props) {
                     to="/admin-panel"
                     underline="none"
                     component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         Admin Panel
@@ -161,16 +171,14 @@ export default function NavBar(props) {
                     level="body-xs"
                     textTransform="uppercase"
                     fontWeight="lg"
-                    sx={{ px: 1.5, py: 1 }}
-                  >
+                    sx={{ px: 1.5, py: 1 }}>
                     New Contribution
                   </Typography>
                   {canEditMap && (
                     <Link
                       href="/contribution/map"
                       underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
+                      sx={{ color: "text.tertiary" }}>
                       <ListItem sx={{ width: "100%" }}>
                         <ListItemButton onClick={() => setOpen(false)}>
                           New Map
@@ -181,8 +189,7 @@ export default function NavBar(props) {
                   <Link
                     href="/contribution/dataset"
                     underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         New Dataset
@@ -192,8 +199,7 @@ export default function NavBar(props) {
                   <Link
                     href="/contribution/notebook"
                     underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         New Notebook
@@ -203,8 +209,7 @@ export default function NavBar(props) {
                   <Link
                     href="/contribution/publication"
                     underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         New Publication
@@ -215,8 +220,7 @@ export default function NavBar(props) {
                     <Link
                       href="/contribution/oer"
                       underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
+                      sx={{ color: "text.tertiary" }}>
                       <ListItem sx={{ width: "100%" }}>
                         <ListItemButton onClick={() => setOpen(false)}>
                           New Educational Resource
@@ -227,8 +231,7 @@ export default function NavBar(props) {
                   <Link
                     href="/contribution/code"
                     underline="none"
-                    sx={{ color: "text.tertiary" }}
-                  >
+                    sx={{ color: "text.tertiary" }}>
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
                         New Code
@@ -242,8 +245,7 @@ export default function NavBar(props) {
                 to="/contact-us"
                 underline="none"
                 component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton onClick={() => setOpen(false)}>
                     Contact Us
@@ -255,14 +257,13 @@ export default function NavBar(props) {
                 <ListItemButton onClick={userLogout}>Logout</ListItemButton>
               </ListItem>
             </List>
-          }
-        >
+          }>
           <Button
             variant="plain"
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
-          >
+            className="tourid-4">
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
               userId={localUserInfo.id}
@@ -289,16 +290,14 @@ export default function NavBar(props) {
             level="body-xs"
             textTransform="uppercase"
             fontWeight="lg"
-            sx={{ px: 1.5, py: 1 }}
-          >
+            sx={{ px: 1.5, py: 1 }}>
             User profile
           </Typography>
           <Link
             to="/user-profile"
             underline="none"
             component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
+            sx={{ color: "text.tertiary" }}>
             <ListItem sx={{ width: "100%" }}>
               <ListItemButton>My Profile</ListItemButton>
             </ListItem>
@@ -307,8 +306,7 @@ export default function NavBar(props) {
             to="/user-profile-update"
             underline="none"
             component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
+            sx={{ color: "text.tertiary" }}>
             <ListItem sx={{ width: "100%" }}>
               <ListItemButton>Update Profile</ListItemButton>
             </ListItem>
@@ -320,16 +318,14 @@ export default function NavBar(props) {
                 level="body-xs"
                 textTransform="uppercase"
                 fontWeight="lg"
-                sx={{ px: 1.5, py: 1 }}
-              >
+                sx={{ px: 1.5, py: 1 }}>
                 Admin
               </Typography>
               <Link
                 to="/new-doc"
                 underline="none"
                 component={RouterLink}
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Documentation</ListItemButton>
                 </ListItem>
@@ -343,16 +339,14 @@ export default function NavBar(props) {
                 level="body-xs"
                 textTransform="uppercase"
                 fontWeight="lg"
-                sx={{ px: 1.5, py: 1 }}
-              >
+                sx={{ px: 1.5, py: 1 }}>
                 New Contribution
               </Typography>
               {canEditMap && (
                 <Link
                   href="/contribution/map"
                   underline="none"
-                  sx={{ color: "text.tertiary" }}
-                >
+                  sx={{ color: "text.tertiary" }}>
                   <ListItem sx={{ width: "100%" }}>
                     <ListItemButton>New Map</ListItemButton>
                   </ListItem>
@@ -361,8 +355,7 @@ export default function NavBar(props) {
               <Link
                 href="/contribution/dataset"
                 underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Dataset</ListItemButton>
                 </ListItem>
@@ -370,8 +363,7 @@ export default function NavBar(props) {
               <Link
                 href="/contribution/notebook"
                 underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Notebook</ListItemButton>
                 </ListItem>
@@ -379,8 +371,7 @@ export default function NavBar(props) {
               <Link
                 href="/contribution/publication"
                 underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Publication</ListItemButton>
                 </ListItem>
@@ -389,8 +380,7 @@ export default function NavBar(props) {
                 <Link
                   href="/contribution/oer"
                   underline="none"
-                  sx={{ color: "text.tertiary" }}
-                >
+                  sx={{ color: "text.tertiary" }}>
                   <ListItem sx={{ width: "100%" }}>
                     <ListItemButton>New Educational Resource</ListItemButton>
                   </ListItem>
@@ -399,8 +389,7 @@ export default function NavBar(props) {
               <Link
                 href="/contribution/code"
                 underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
+                sx={{ color: "text.tertiary" }}>
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Code</ListItemButton>
                 </ListItem>
@@ -412,8 +401,7 @@ export default function NavBar(props) {
             to="/contact-us"
             underline="none"
             component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
+            sx={{ color: "text.tertiary" }}>
             <ListItem sx={{ width: "100%" }}>
               <ListItemButton>Contact Us</ListItemButton>
             </ListItem>
@@ -445,21 +433,18 @@ export default function NavBar(props) {
               mx: 2,
               display: "auto",
               bgcolor: "neutral",
-            }}
-          >
+            }}>
             {/* When page is narrower than 960px */}
             <Stack
               direction="row"
               justifyContent="flex-start"
               alignItems="center"
               spacing={2}
-              sx={{ display: { xs: "flex", lg: "none" } }}
-            >
+              sx={{ display: { xs: "flex", lg: "none" } }}>
               <Stack
                 direction="row"
                 justifyContent="flex-start"
-                alignItems="center"
-              >
+                alignItems="center">
                 <Button
                   size="lg"
                   ref={buttonRef}
@@ -470,8 +455,7 @@ export default function NavBar(props) {
                   aria-expanded={drawerOpen ? "true" : undefined}
                   variant="plain"
                   color="neutral"
-                  onClick={toggleDrawer(true)}
-                >
+                  onClick={toggleDrawer(true)}>
                   <MenuIcon />
                 </Button>
                 <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
@@ -483,15 +467,13 @@ export default function NavBar(props) {
                       ml: "auto",
                       mt: 1,
                       mr: 2,
-                    }}
-                  >
+                    }}>
                     <Typography
                       component="label"
                       htmlFor="close-icon"
                       fontSize="sm"
                       fontWeight="lg"
-                      sx={{ cursor: "pointer" }}
-                    >
+                      sx={{ cursor: "pointer" }}>
                       Close
                     </Typography>
                     <ModalClose id="close-icon" sx={{ position: "initial" }} />
@@ -505,15 +487,13 @@ export default function NavBar(props) {
                   <Box
                     onClick={toggleDrawer(false)}
                     onKeyDown={toggleDrawer(false)}
-                    sx={{ px: 2, py: 1 }}
-                  >
+                    sx={{ px: 2, py: 1 }}>
                     <List>
                       <Typography
                         level="body-xs"
                         textTransform="uppercase"
                         fontWeight="lg"
-                        sx={{ px: 1.5, py: 1 }}
-                      >
+                        sx={{ px: 1.5, py: 1 }}>
                         About
                       </Typography>
                       <Link
@@ -521,8 +501,7 @@ export default function NavBar(props) {
                         to={"/about"}
                         underline="none"
                         component={RouterLink}
-                        sx={{ color: "text.tertiary" }}
-                      >
+                        sx={{ color: "text.tertiary" }}>
                         <ListItem sx={{ width: "100%" }}>
                           <ListItemButton>About Us</ListItemButton>
                         </ListItem>
@@ -533,8 +512,7 @@ export default function NavBar(props) {
                           to={page[1]}
                           underline="none"
                           component={RouterLink}
-                          sx={{ color: "text.tertiary" }}
-                        >
+                          sx={{ color: "text.tertiary" }}>
                           <ListItem sx={{ width: "100%" }}>
                             <ListItemButton>{page[0]}</ListItemButton>
                           </ListItem>
@@ -547,8 +525,7 @@ export default function NavBar(props) {
                         level="body-xs"
                         textTransform="uppercase"
                         fontWeight="lg"
-                        sx={{ px: 1.5, py: 1 }}
-                      >
+                        sx={{ px: 1.5, py: 1 }}>
                         Elements
                       </Typography>
                       {pages?.map((page) => (
@@ -557,8 +534,7 @@ export default function NavBar(props) {
                           to={page[1]}
                           underline="none"
                           component={RouterLink}
-                          sx={{ color: "text.tertiary" }}
-                        >
+                          sx={{ color: "text.tertiary" }}>
                           <ListItem sx={{ width: "100%" }}>
                             <ListItemButton>{page[0]}</ListItemButton>
                           </ListItem>
@@ -573,9 +549,7 @@ export default function NavBar(props) {
                   to={"/"}
                   underline="none"
                   component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                  
-                >
+                  sx={{ color: "text.tertiary" }}>
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
                       component="img"
@@ -593,81 +567,80 @@ export default function NavBar(props) {
               direction="row"
               justifyContent="space-between"
               alignItems="center"
-              sx={{ display: { xs: "none", lg: "flex" } }}
-            >
+              sx={{ display: { xs: "none", lg: "flex" } }}>
               <Stack
                 direction="row"
                 justifyContent="flex-start"
-                alignItems="center"
-              >
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
-                    <Box
-                      component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
-                      alt="Logo"
-                      src="/images/Logo.png"
-                    />
-                  </Tooltip>
-                </Link>
-                <Box>
+                alignItems="center">
+                <Box className="tourid-1">
+                  <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}>
+                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                      <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                      />
+                    </Tooltip>
+                  </Link>
+                </Box>
+                <Box className="tourid-2">
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box>
+                <Box className="tourid-3">
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}
                       to={page[1]}
                       underline="none"
                       component={RouterLink}
-                      sx={{ color: "text.tertiary" }}
-                    >
+                      sx={{ color: "text.tertiary" }}>
                       <Button
                         key={page[0]}
                         variant="plain"
                         color="neutral"
                         size="sm"
-                        sx={{ alignSelf: "center" }}
-                      >
+                        sx={{ alignSelf: "center" }}>
                         {page[0]}
                       </Button>
                     </Link>
                   ))}
                 </Box>
-                
               </Stack>
               <Stack
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-                spacing={0.1}
-              >
+                spacing={0.1}>
                 <SearchBar placeholder="Search..." />
                 <ButtonGroup
                   color="primary"
                   orientation="horizontal"
                   size="sm"
                   variant="plain"
-                  spacing="0.1rem"
-                >
+                  spacing="0.1rem">
                   <Tooltip
                     title="Questions, help, or bug report"
-                    variant="solid"
-                  >
+                    variant="solid">
                     <Button
                       size="sm"
                       component={RouterLink}
                       to="/contact-us"
-                      color="primary"
-                    >
+                      color="primary">
                       Help
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Take a guided tour of our homepage (Mobile not supported)"
+                    variant="solid">
+                    <Button size="sm" color="primary" onClick={startTour}>
+                      Tour
                     </Button>
                   </Tooltip>
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
@@ -676,8 +649,7 @@ export default function NavBar(props) {
                       component="a"
                       href="https://jupyter.iguide.illinois.edu/"
                       target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                      rel="noopener noreferrer">
                       <Avatar
                         variant="plain"
                         alt="jupyterhub"

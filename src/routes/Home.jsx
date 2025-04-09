@@ -30,7 +30,6 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 
-
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
 import {
@@ -52,8 +51,7 @@ export default function Home() {
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
-          }}
-        >
+          }}>
           <Card
             variant="plain"
             component="li"
@@ -62,8 +60,7 @@ export default function Home() {
               borderRadius: 0,
               minWidth: 300,
               flexGrow: 1,
-            }}
-          >
+            }}>
             <CardCover>
               <img
                 src="/images/network-bg.png"
@@ -75,8 +72,7 @@ export default function Home() {
                 justifyContent: "flex-end",
                 alignItems: "center",
                 minHeight: HOME_SEARCH_SEC_HEIGHT,
-              }}
-            >
+              }}>
               <Container maxWidth="md">
                 <Box
                   component="main"
@@ -86,8 +82,7 @@ export default function Home() {
                     gridTemplateColumns: { xs: "auto", md: "100%" },
                     gridTemplateRows: "auto 1fr auto",
                     pb: 1,
-                  }}
-                >
+                  }}>
                   <Typography
                     level="h1"
                     textColor={"#000"}
@@ -103,8 +98,7 @@ export default function Home() {
                         BETA
                       </Chip>
                     }
-                    justifyContent="center"
-                  >
+                    justifyContent="center">
                     <Stack
                       direction={{ sx: "column", sm: "row" }}
                       spacing={0}
@@ -112,7 +106,7 @@ export default function Home() {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
-                    >
+                      className="tourid-0">
                       <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
                         src="/images/platform-word-gray.png"
@@ -130,8 +124,7 @@ export default function Home() {
                       pb: 4,
                     }}
                     justifyContent="center"
-                    align="center"
-                  >
+                    align="center">
                     Harnessing the Geospatial Data Revolution to Empower
                     Convergence Science
                   </Typography>
@@ -142,7 +135,6 @@ export default function Home() {
                       showSmartSearch
                     />
                   </Box>
-                  
                 </Box>
               </Container>
             </CardContent>
@@ -154,8 +146,7 @@ export default function Home() {
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
               py: 4,
-            }}
-          >
+            }}>
             <Container maxWidth="lg">
               <Stack
                 direction="column"
@@ -163,40 +154,44 @@ export default function Home() {
                 spacing={2}
                 sx={{
                   backgroundColor: "inherit",
-                }}
-              >
+                }}>
                 <Stack
                   direction={{ xs: "column", md: "row" }}
                   spacing={{ xs: "50px", md: "100px" }}
                   sx={{
                     backgroundColor: "inherit",
                     py: "50px",
-                  }}
-                >
-                  <TutorialCard
-                    iconImage="/images/homepage/map.png"
-                    title="Map"
-                    link="/maps"
-                    content="Transform geospatial data to knowledge and insights"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/network.png"
-                    title="Connect"
-                    link="/element-network"
-                    content="Gain holistic understanding of linked knowledge elements"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/search.png"
-                    title="Discover"
-                    link="/search-home"
-                    content="Seek new convergence knowledge through intelligent search"
-                    bgColor="#fff"
-                    inColumn
-                  />
+                  }}>
+                  <Box className="tourid-6">
+                    <TutorialCard
+                      iconImage="/images/homepage/map.png"
+                      title="Map"
+                      link="/maps"
+                      content="Transform geospatial data to knowledge and insights"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-7">
+                    <TutorialCard
+                      iconImage="/images/homepage/network.png"
+                      title="Connect"
+                      link="/element-network"
+                      content="Gain holistic understanding of linked knowledge elements"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-8">
+                    <TutorialCard
+                      iconImage="/images/homepage/search.png"
+                      title="Discover"
+                      link="/search-home"
+                      content="Seek new convergence knowledge through intelligent search"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
                 </Stack>
               </Stack>
             </Container>
@@ -209,8 +204,7 @@ export default function Home() {
               gridTemplateRows: "auto 1fr auto",
               pt: 4,
               pb: 8,
-            }}
-          >
+            }}>
             <Container maxWidth="lg">
               <Stack
                 direction="column"
@@ -219,15 +213,13 @@ export default function Home() {
                 sx={{
                   backgroundColor: "inherit",
                   py: "50px",
-                }}
-              >
+                }}>
                 <Typography level="h3" textColor="#000">
                   What to do next?
                 </Typography>
                 <Stack
                   direction={{ xs: "column", md: "row" }}
-                  spacing={{ xs: 4, md: 10 }}
-                >
+                  spacing={{ xs: 4, md: 10 }}>
                   <TutorialCard
                     iconImage="/images/homepage/verify.png"
                     title="Register"
