@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useLocation } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -70,6 +70,8 @@ export default function NavBar(props) {
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+
+  const location = useLocation();
 
   const { setIsOpen } = useTour();
 
@@ -636,13 +638,15 @@ export default function NavBar(props) {
                       Help
                     </Button>
                   </Tooltip>
-                  <Tooltip
-                    title="Take a guided tour of our homepage (Mobile not supported)"
-                    variant="solid">
-                    <Button size="sm" color="primary" onClick={startTour}>
-                      Tour
-                    </Button>
-                  </Tooltip>
+                  {location.pathname == "/" && (
+                    <Tooltip
+                      title="Take a guided tour of our homepage (Mobile not supported)"
+                      variant="solid">
+                      <Button size="sm" color="primary" onClick={startTour}>
+                        Tour
+                      </Button>
+                    </Tooltip>
+                  )}
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"
