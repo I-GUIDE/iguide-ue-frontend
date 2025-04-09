@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useLocation } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -36,8 +36,12 @@ import HoverOverMenuTab from "../HoverOverMenuTab";
 
 import { userLogin, userLogout } from "../../utils/UserManager";
 
+import { useTour } from "@reactour/tour";
+
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const aboutDropdown = [
   ["Getting Started", "/docs/getting-started"],
@@ -66,6 +70,19 @@ export default function NavBar(props) {
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+
+  const location = useLocation();
+
+  const { setIsOpen } = useTour();
+
+  function startTour() {
+    if (window.innerWidth >= 1200) {
+      TEST_MODE && console.log("Start tour");
+      setIsOpen(true);
+    } else {
+      TEST_MODE && console.log("Cannot start tour: page is too small");
+    }
+  }
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -262,6 +279,7 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
+            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -574,7 +592,6 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -600,27 +617,29 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
-                    <Box
-                      component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
-                      alt="Logo"
-                      src="/images/Logo.png"
-                    />
-                  </Tooltip>
-                </Link>
-                <Box>
+                <Box className="tourid-1">
+                  <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                      <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                      />
+                    </Tooltip>
+                  </Link>
+                </Box>
+                <Box className="tourid-2">
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box>
+                <Box className="tourid-3">
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}
@@ -641,7 +660,6 @@ export default function NavBar(props) {
                     </Link>
                   ))}
                 </Box>
-                
               </Stack>
               <Stack
                 direction="row"
@@ -670,6 +688,16 @@ export default function NavBar(props) {
                       Help
                     </Button>
                   </Tooltip>
+                  {location.pathname === "/" && (
+                    <Tooltip
+                      title="Take a guided tour of our homepage (Mobile not supported)"
+                      variant="solid"
+                    >
+                      <Button size="sm" color="primary" onClick={startTour}>
+                        Tour
+                      </Button>
+                    </Tooltip>
+                  )}
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"

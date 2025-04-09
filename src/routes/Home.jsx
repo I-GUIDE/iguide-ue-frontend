@@ -30,7 +30,6 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import usePageTitle from "../hooks/usePageTitle";
 
-
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 
 import {
@@ -112,6 +111,7 @@ export default function Home() {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      className="tourid-0"
                     >
                       <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
@@ -142,7 +142,6 @@ export default function Home() {
                       showSmartSearch
                     />
                   </Box>
-                  
                 </Box>
               </Container>
             </CardContent>
@@ -173,30 +172,36 @@ export default function Home() {
                     py: "50px",
                   }}
                 >
-                  <TutorialCard
-                    iconImage="/images/homepage/map.png"
-                    title="Map"
-                    link="/maps"
-                    content="Transform geospatial data to knowledge and insights"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/network.png"
-                    title="Connect"
-                    link="/element-network"
-                    content="Gain holistic understanding of linked knowledge elements"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/search.png"
-                    title="Discover"
-                    link="/search-home"
-                    content="Seek new convergence knowledge through intelligent search"
-                    bgColor="#fff"
-                    inColumn
-                  />
+                  <Box className="tourid-6">
+                    <TutorialCard
+                      iconImage="/images/homepage/map.png"
+                      title="Map"
+                      link="/maps"
+                      content="Transform geospatial data to knowledge and insights"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-7">
+                    <TutorialCard
+                      iconImage="/images/homepage/network.png"
+                      title="Connect"
+                      link="/element-network"
+                      content="Gain holistic understanding of linked knowledge elements"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-8">
+                    <TutorialCard
+                      iconImage="/images/homepage/search.png"
+                      title="Discover"
+                      link="/search-home"
+                      content="Seek new convergence knowledge through intelligent search"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
                 </Stack>
               </Stack>
             </Container>
