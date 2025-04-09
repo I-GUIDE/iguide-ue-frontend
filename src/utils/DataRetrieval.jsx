@@ -679,7 +679,10 @@ export async function fetchLlmSearchMemoryId() {
       throw new Error("Failed to fetch a memory-id");
     }
 
-    return response.json();
+    const ret = await response.json();
+    TEST_MODE && console.log("llm memory returned", ret);
+
+    return ret;
   } catch (error) {
     console.error("Error fetching a memory-id: ", error.message);
     return "ERROR";
@@ -713,7 +716,11 @@ export async function fetchLlmSearchResult(searchInput, memoryId) {
       throw new Error("Failed to fetch the llm search result");
     }
 
-    return response.json();
+    const ret = await response.json();
+    TEST_MODE &&
+      console.log("Input", searchInput, "MemoryId", memoryId, "Response", ret);
+
+    return ret;
   } catch (error) {
     console.error("Error fetching the llm search result: ", error.message);
     return "ERROR";
