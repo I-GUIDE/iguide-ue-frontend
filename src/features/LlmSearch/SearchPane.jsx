@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
+import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import Chip from "@mui/joy/Chip";
 
 import MessageBubble from "./MessageBubble";
 import SearchInput from "./SearchInput";
@@ -13,7 +15,6 @@ import {
   streamLlmSearchResult,
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
-import { SampleChats } from "./SampleChats";
 
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
@@ -80,25 +81,69 @@ async function getLlmSearchResult(
   setWaitingForResponse(false);
 }
 
-export default function SearchPane(props) {
-  // Greetings from I-GUIDE
-  const starterChat = [
-    [
-      {
-        message_id: "0",
-        answer: "Hi! What can I help you today :)",
-        sender: "I-GUIDE AI",
-      },
-    ],
-  ];
-  const startingChat =
-    DO_NOT_USE_LLM_ENDPOINT === "true" ? SampleChats[0] : starterChat[0];
-
+export default function SearchPane() {
   const [memoryId, setMemoryId] = useState("");
-  const [chatMessages, setChatMessages] = useState(startingChat);
+  const [chatMessages, setChatMessages] = useState([]);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
+
+  // Starting page
+  if (chatMessages.length === 0) {
+    return (
+      <Box
+        sx={{
+          height: NO_HEADER_BODY_HEIGHT,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Container maxWidth="md">
+          <Typography
+            level="h2"
+            justifyContent="center"
+            endDecorator={
+              <Chip component="span" size="sm" color="primary">
+                BETA
+              </Chip>
+            }
+            sx={{
+              p: 3,
+            }}
+          >
+            I-GUIDE Platform Smart Search
+          </Typography>
+          <Typography
+            level="h4"
+            align="center"
+            sx={{
+              p: 3,
+            }}
+          >
+            Hi! What can I help with today?
+          </Typography>
+          <SearchInput
+            searchInputValue={searchInputValue}
+            setSearchInputValue={setSearchInputValue}
+            waitingForResponse={waitingForResponse}
+            onSubmit={() => {
+              getLlmSearchResult(
+                searchInputValue,
+                memoryId,
+                setMemoryId,
+                chatMessages,
+                setChatMessages,
+                setWaitingForResponse,
+                setStatus
+              );
+            }}
+          />
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Sheet
