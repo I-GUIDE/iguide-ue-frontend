@@ -10,7 +10,7 @@ import SearchInput from "./SearchInput";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import {
-  fetchLlmSearchResult,
+  streamLlmSearchResult,
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 import { SampleChats } from "./SampleChats";
@@ -36,7 +36,8 @@ async function getLlmSearchResult(
   setMemoryId,
   chatMessages,
   setChatMessages,
-  setWaitingForResponse
+  setWaitingForResponse,
+  setStatus
 ) {
   let result;
   const newId = chatMessages.length + 1;
@@ -54,9 +55,9 @@ async function getLlmSearchResult(
   if (!memoryId) {
     const newMemoryId = await fetchMemoryIdForNewConversation();
     setMemoryId(newMemoryId);
-    result = await fetchLlmSearchResult(input, newMemoryId);
+    result = await streamLlmSearchResult(input, newMemoryId, setStatus);
   } else {
-    result = await fetchLlmSearchResult(input, memoryId);
+    result = await streamLlmSearchResult(input, memoryId, setStatus);
   }
 
   if (!result) {
@@ -97,6 +98,7 @@ export default function SearchPane(props) {
   const [chatMessages, setChatMessages] = useState(startingChat);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
+  const [status, setStatus] = useState("");
 
   return (
     <Sheet
@@ -144,7 +146,7 @@ export default function SearchPane(props) {
             );
           })}
           {waitingForResponse && (
-            <Typography level="body-sm">Thinking...</Typography>
+            <Typography level="body-md">{status}</Typography>
           )}
         </Stack>
       </Box>
@@ -159,7 +161,8 @@ export default function SearchPane(props) {
             setMemoryId,
             chatMessages,
             setChatMessages,
-            setWaitingForResponse
+            setWaitingForResponse,
+            setStatus
           );
         }}
       />

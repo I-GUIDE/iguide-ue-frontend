@@ -690,39 +690,43 @@ export async function fetchLlmSearchMemoryId() {
 }
 
 /**
- * Fetches llm search results.
+ * Stream llm search results with status update.
  *
  * @async
- * @function fetchLlmSearchResult
+ * @function streamLlmSearchResult
  * @param {string} searchInput - The input of the llm search request from end users.
  * @param {string} memoryId - The memoryId from /api/llm/memory-id endpoint.
+ * @param {callback} setStatus - callback function that sets result update status
  * @returns {Promise<Object>} A promise that resolves to the JSON response containing the llm search results.
  * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function fetchLlmSearchResult(searchInput, memoryId) {
-  const llmSearchRequestBody = {
-    userQuery: searchInput,
-    memoryId: memoryId,
-  };
-  try {
-    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/search`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(llmSearchRequestBody),
+export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
+  return new Promise((resolve, reject) => {
+    const eventSource = new EventSource(
+      `${BACKEND_URL_PORT}/beta/llm/search?userQuery=${encodeURIComponent(
+        searchInput
+      )}&memoryId=${memoryId}`
+    );
+
+    eventSource.addEventListener("status", (event) => {
+      const data = JSON.parse(event.data);
+      TEST_MODE && console.log("Event received:", data);
+      setStatus(data.status);
     });
-    if (!response.ok) {
-      throw new Error("Failed to fetch the llm search result");
-    }
 
-    const ret = await response.json();
-    TEST_MODE &&
-      console.log("Input", searchInput, "MemoryId", memoryId, "Response", ret);
+    eventSource.addEventListener("result", (event) => {
+      const data = JSON.parse(event.data);
+      TEST_MODE && console.log("Result received:", data);
+      setStatus("");
+      resolve(data);
+      eventSource.close();
+    });
 
-    return ret;
-  } catch (error) {
-    console.error("Error fetching the llm search result: ", error.message);
-    return "ERROR";
-  }
+    eventSource.addEventListener("error", (event) => {
+      console.error("Error getting LLM search result");
+      setStatus("");
+      resolve("ERROR");
+      eventSource.close();
+    });
+  });
 }
