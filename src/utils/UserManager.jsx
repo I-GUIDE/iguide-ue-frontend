@@ -3,6 +3,7 @@ import { fetchWithAuth, refreshAccessToken } from "./FetcherWithJWT";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const ENV = import.meta.env.VITE_ENV;
 
 /**
  * Log in user
@@ -242,6 +243,10 @@ export async function checkUser(uid) {
  * The checkTokens function will redirect users to /logout if the refresh token has expired.
  */
 export async function checkTokens() {
+  // Don't check token in the localhost environment
+  if (ENV === "localhost") {
+    return;
+  }
   const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/check-tokens`, {
     method: "GET",
   });
