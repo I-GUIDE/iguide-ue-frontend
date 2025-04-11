@@ -718,15 +718,15 @@ export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
       const data = JSON.parse(event.data);
       TEST_MODE && console.log("Result received:", data);
       setStatus("");
-      resolve(data);
       eventSource.close();
+      resolve(data);
     });
 
     eventSource.addEventListener("error", (event) => {
       console.error("Error getting LLM search result");
       setStatus("");
-      resolve("ERROR");
       eventSource.close();
+      resolve("ERROR");
     });
   });
 }
