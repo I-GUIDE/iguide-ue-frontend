@@ -701,32 +701,80 @@ export async function fetchLlmSearchMemoryId() {
  * @throws {Error} Throws an error if the fetch operation fails.
  */
 export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
-  return new Promise((resolve, reject) => {
-    const eventSource = new EventSource(
-      `${BACKEND_URL_PORT}/beta/llm/search?userQuery=${encodeURIComponent(
-        searchInput
-      )}&memoryId=${memoryId}`
-    );
-
-    eventSource.addEventListener("status", (event) => {
-      const data = JSON.parse(event.data);
-      TEST_MODE && console.log("Event received:", data);
-      setStatus(data.status);
+  const llmSearchRequestBody = {
+    userQuery: searchInput,
+    memoryId: memoryId,
+  };
+  try {
+    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(llmSearchRequestBody),
     });
 
-    eventSource.addEventListener("result", (event) => {
-      const data = JSON.parse(event.data);
-      TEST_MODE && console.log("Result received:", data);
-      setStatus("");
-      eventSource.close();
-      resolve(data);
-    });
+    if (!response.ok) {
+      throw new Error("Failed to fetch the llm search result");
+    }
 
-    eventSource.addEventListener("error", (event) => {
-      console.error("Error getting LLM search result");
-      setStatus("");
-      eventSource.close();
-      resolve("ERROR");
-    });
-  });
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let result;
+
+    // Keeps listening until the reader is done
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      // buffer should contain two lines
+      // event: ...
+      // data: ...
+
+      const lines = buffer.split("\n");
+      buffer = lines.pop(); // incomplete line stays in buffer
+      // buffer should be empty now if nothing is wrong
+
+      for (const line of lines) {
+        if (line.startsWith("event:")) {
+          // Skip this line because it only indicates the type of the event
+          continue;
+        }
+
+        if (line.startsWith("data:")) {
+          const json = line.replace("data: ", "");
+          const data = JSON.parse(json);
+
+          // Set return status and result, error if applicable
+          if (data.status) {
+            TEST_MODE && console.log("Event received:", data.status);
+            setStatus(`🟡 ${data.status}`);
+          } else if (data.error) {
+            setStatus(`❌ Error: ${data.error}`);
+          } else {
+            TEST_MODE && console.log("Result received:", data);
+            setStatus("");
+            result = data;
+          }
+        }
+      }
+    }
+
+    TEST_MODE &&
+      console.log(
+        "Input",
+        searchInput,
+        "MemoryId",
+        memoryId,
+        "Response",
+        result
+      );
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching the llm search result: ", error.message);
+    return "ERROR";
+  }
 }
