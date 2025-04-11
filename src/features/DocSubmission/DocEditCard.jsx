@@ -45,7 +45,7 @@ export default function DocEditCard(props) {
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
     const fetchDocData = async () => {
-      const docObject = fetchADocumentation(docId);
+      const docObject = await fetchADocumentation(docId);
 
       if (!docObject.ok) {
         setError(docObject.body);
