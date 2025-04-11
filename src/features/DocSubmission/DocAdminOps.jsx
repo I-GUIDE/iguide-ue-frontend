@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router";
+import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import DialogTitle from "@mui/joy/DialogTitle";
@@ -13,6 +13,8 @@ import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
 import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
@@ -83,11 +85,12 @@ export default function DocAdminOps(props) {
       >
         <Link
           underline="none"
-          component={RouterLink}
-          to={"/doc-update/" + docId}
+          href={"/doc-update/" + docId}
           sx={{ color: "inherit" }}
         >
-          <EditIcon />
+          <Tooltip title="Edit this documentation" placement="top" arrow>
+            <EditIcon />
+          </Tooltip>
         </Link>
       </IconButton>
       <IconButton
@@ -101,7 +104,9 @@ export default function DocAdminOps(props) {
           TEST_MODE && console.log("Attempting to delete:", title, docId);
         }}
       >
-        <DeleteForeverIcon />
+        <Tooltip title="Delete this documentation" placement="top" arrow>
+          <DeleteForeverIcon />
+        </Tooltip>
       </IconButton>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}
