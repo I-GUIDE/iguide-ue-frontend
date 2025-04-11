@@ -669,12 +669,15 @@ export async function retrieveBookmarkedElements(
  */
 export async function fetchLlmSearchMemoryId() {
   try {
-    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/memory-id`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/memory-id`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch a memory-id");
     }
@@ -706,13 +709,16 @@ export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
     memoryId: memoryId,
   };
   try {
-    const response = await fetch(`${BACKEND_URL_PORT}/beta/llm/search`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(llmSearchRequestBody),
-    });
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/search`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(llmSearchRequestBody),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to fetch the llm search result");
