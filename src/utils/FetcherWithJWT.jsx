@@ -8,11 +8,12 @@ const LOCALHOST_API_KEY = import.meta.env.VITE_LOCALHOST_API_KEY;
 export async function fetchWithAuth(url, options = {}) {
   // When the environment is lcoalhost with correct API key, by pass JWT...
   if (ENV === "localhost" && LOCALHOST_API_KEY) {
-    TEST_MODE && console.log("By passing JWT for localhost", url, options);
+    TEST_MODE && console.log("Bypassing JWT for localhost", url, options);
     const res = await fetch(url, {
       ...options,
       headers: {
         "JWT-API-KEY": LOCALHOST_API_KEY,
+        ...(options.headers || {}),
       },
     });
 
