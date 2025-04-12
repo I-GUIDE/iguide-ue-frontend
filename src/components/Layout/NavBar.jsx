@@ -1,6 +1,6 @@
 import { React, useState, useRef } from "react";
 
-import { Link as RouterLink, useLocation } from "react-router";
+import { Link as RouterLink } from "react-router";
 
 import {
   extendTheme as materialExtendTheme,
@@ -36,12 +36,8 @@ import HoverOverMenuTab from "../HoverOverMenuTab";
 
 import { userLogin, userLogout } from "../../utils/UserManager";
 
-import { useTour } from "@reactour/tour";
-
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
-
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 const aboutDropdown = [
   ["Getting Started", "/docs/getting-started"],
@@ -70,19 +66,6 @@ export default function NavBar(props) {
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
-
-  const location = useLocation();
-
-  const { setIsOpen } = useTour();
-
-  function startTour() {
-    if (window.innerWidth >= 1200) {
-      TEST_MODE && console.log("Start tour");
-      setIsOpen(true);
-    } else {
-      TEST_MODE && console.log("Cannot start tour: page is too small");
-    }
-  }
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -688,16 +671,6 @@ export default function NavBar(props) {
                       Help
                     </Button>
                   </Tooltip>
-                  {location.pathname === "/" && (
-                    <Tooltip
-                      title="Take a guided tour of our homepage (Mobile not supported)"
-                      variant="solid"
-                    >
-                      <Button size="sm" color="primary" onClick={startTour}>
-                        Tour
-                      </Button>
-                    </Tooltip>
-                  )}
                   <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                     <Button
                       size="sm"
