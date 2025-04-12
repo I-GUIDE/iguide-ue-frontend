@@ -264,6 +264,7 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
+            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -612,27 +613,29 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
-                    <Box
-                      component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
-                      alt="Logo"
-                      src="/images/Logo.png"
-                    />
-                  </Tooltip>
-                </Link>
-                <Box>
+                <Box className="tourid-1">
+                  <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                      <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                      />
+                    </Tooltip>
+                  </Link>
+                </Box>
+                <Box className="tourid-2">
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box>
+                <Box className="tourid-3">
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}
