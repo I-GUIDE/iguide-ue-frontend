@@ -7,7 +7,6 @@ const { createReadStream, unlinkSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
 const dotenv = require("dotenv");
-// const fetch = require('node-fetch');
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const { logger } = require("./logger.js");
@@ -55,20 +54,29 @@ const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 const getUserRole = async (userOpenId) => {
   const encodedOpenId = encodeURIComponent(userOpenId);
 
-  const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
-
-  if (!response.ok) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
+    if (!response.ok) {
+      logger.error({
+        type: "Couldn't fetch user role",
+        user: {
+          id: userOpenId,
+        }
+      });
+      return 10;
+    }
+    const result = await response.json();
+    return result.role;
+  } catch (err) {
     logger.error({
-      type: "Couldn't fetch user role",
+      type: "Fetch user role failed",
+      message: err,
       user: {
         id: userOpenId,
       }
     });
-    return 10;
+    return "ERROR"
   }
-
-  const result = await response.json();
-  return result.role;
 };
 
 // Store refresh token in OpenSearch
@@ -114,10 +122,10 @@ router.get("/cilogon-callback", async (req, res, next) => {
         message: err,
         user: user
       });
-      return res.redirect(`/error`);
+      return res.redirect(`/error/cilogon`);
     }
     if (!user) {
-      return res.redirect(`/nouser`);
+      return res.redirect(`/error/nouser`);
     }
     req.logIn(user, async function (err) {
       if (err) {
@@ -126,14 +134,19 @@ router.get("/cilogon-callback", async (req, res, next) => {
           message: err,
           user: user
         });
-        return res.redirect(`/errorlogin`);
+        return res.redirect(`/error/other`);
       }
 
       // Retrieve user role from OpenSearch
       const role = await getUserRole(user.sub);
 
+      // If role returns ERROR, redirect users to the database error page
+      if (role === "ERROR") {
+        return res.redirect(`/error/database`);
+      }
+
       // Generate JWT token with role
-      const userPayload = { id: user.sub, role, email: user.email };
+      const userPayload = { id: user.sub, role: role, email: user.email };
 
       // Generate tokens
       const accessToken = generateAccessToken(userPayload);
@@ -252,38 +265,52 @@ router.get("/userinfo", (req, res) => {
 });
 
 router.post('/recaptcha-verification', async (req, res) => {
-  const recaptchaToken = req.body
-  const response = await fetch(
-    `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret_key}&response=${recaptchaToken?.recaptchaToken}`, {
-    method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-  })
-  if (!response.ok) {
-    res.send()
-  }
+  const recaptchaToken = req.body;
+  try {
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret_key}&response=${recaptchaToken?.recaptchaToken}`, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+    })
+    if (!response.ok) {
+      res.send()
+    }
 
-  const result = await response.json();
-  res.send(result)
+    const result = await response.json();
+    res.send(result)
+  } catch (err) {
+    logger.warn({
+      type: "reCAPTCHA failed",
+      message: err
+    });
+  }
 })
 
-router.get("/error", (req, res) => {
+router.get("/error/cilogon", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
-router.get("/nouser", (req, res) => {
+router.get("/error/nouser", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
-router.get("/errorlogin", (req, res) => {
+router.get("/error/other", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
+});
+
+router.get("/error/database", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 

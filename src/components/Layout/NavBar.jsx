@@ -66,6 +66,7 @@ export default function NavBar(props) {
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+  const isSuperAdmin = localUserInfo.role <= PERMISSIONS["super_admin"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -129,9 +130,8 @@ export default function NavBar(props) {
                     Admin
                   </Typography>
                   <Link
-                    to="/new-doc"
+                    href="/new-doc"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -140,19 +140,21 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
-                  <Link
-                    to="/admin-panel"
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        Admin Panel
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
                 </>
+              )}
+              {isSuperAdmin && (
+                <Link
+                  to="/admin-panel"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton onClick={() => setOpen(false)}>
+                      Admin Panel
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
               )}
               {canContributeElements && (
                 <>
@@ -326,9 +328,8 @@ export default function NavBar(props) {
                 Admin
               </Typography>
               <Link
-                to="/new-doc"
+                href="/new-doc"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
@@ -336,6 +337,18 @@ export default function NavBar(props) {
                 </ListItem>
               </Link>
             </>
+          )}
+          {isSuperAdmin && (
+            <Link
+              to="/admin-panel"
+              underline="none"
+              component={RouterLink}
+              sx={{ color: "text.tertiary" }}
+            >
+              <ListItem sx={{ width: "100%" }}>
+                <ListItemButton>Admin Panel</ListItemButton>
+              </ListItem>
+            </Link>
           )}
           {canContributeElements && (
             <>
