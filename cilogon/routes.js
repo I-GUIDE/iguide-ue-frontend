@@ -7,7 +7,6 @@ const { createReadStream, unlinkSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
 const dotenv = require("dotenv");
-// const fetch = require('node-fetch');
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const { logger } = require("./logger.js");
@@ -55,20 +54,28 @@ const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 const getUserRole = async (userOpenId) => {
   const encodedOpenId = encodeURIComponent(userOpenId);
 
-  const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
-
-  if (!response.ok) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
+    if (!response.ok) {
+      logger.error({
+        type: "Couldn't fetch user role",
+        user: {
+          id: userOpenId,
+        }
+      });
+      return 10;
+    }
+    const result = await response.json();
+    return result.role;
+  } catch (err) {
     logger.error({
-      type: "Couldn't fetch user role",
+      type: "Fetch user role failed",
+      message: err,
       user: {
         id: userOpenId,
       }
     });
-    return 10;
   }
-
-  const result = await response.json();
-  return result.role;
 };
 
 // Store refresh token in OpenSearch
@@ -252,18 +259,26 @@ router.get("/userinfo", (req, res) => {
 });
 
 router.post('/recaptcha-verification', async (req, res) => {
-  const recaptchaToken = req.body
-  const response = await fetch(
-    `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret_key}&response=${recaptchaToken?.recaptchaToken}`, {
-    method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-  })
-  if (!response.ok) {
-    res.send()
+  const recaptchaToken = req.body;
+  try {
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${recaptcha_secret_key}&response=${recaptchaToken?.recaptchaToken}`, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+    })
+    if (!response.ok) {
+      res.send()
+    }
+
+    const result = await response.json();
+    res.send(result)
+  } catch (err) {
+    logger.warn({
+      type: "reCAPTCHA failed",
+      message: err
+    });
   }
 
-  const result = await response.json();
-  res.send(result)
 })
 
 router.get("/error", (req, res) => {
