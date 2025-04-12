@@ -23,8 +23,7 @@ async function fetchMemoryIdForNewConversation() {
     DO_NOT_USE_LLM_ENDPOINT === "true" ? {} : await fetchLlmSearchMemoryId();
 
   if (llmMemory === "ERROR") {
-    setError(true);
-    return;
+    return "ERROR";
   }
 
   return llmMemory.memoryId;
@@ -55,6 +54,11 @@ async function getLlmSearchResult(
 
   if (!memoryId) {
     const newMemoryId = await fetchMemoryIdForNewConversation();
+    // When memory id cannot be generated
+    if (newMemoryId === "ERROR") {
+      alert("Error initializing I-GUIDE AI.");
+      return;
+    }
     setMemoryId(newMemoryId);
     result = await streamLlmSearchResult(input, newMemoryId, setStatus);
   } else {
