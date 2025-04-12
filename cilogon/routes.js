@@ -75,6 +75,7 @@ const getUserRole = async (userOpenId) => {
         id: userOpenId,
       }
     });
+    return "ERROR"
   }
 };
 
@@ -121,10 +122,10 @@ router.get("/cilogon-callback", async (req, res, next) => {
         message: err,
         user: user
       });
-      return res.redirect(`/error`);
+      return res.redirect(`/error/cilogon`);
     }
     if (!user) {
-      return res.redirect(`/nouser`);
+      return res.redirect(`/error/nouser`);
     }
     req.logIn(user, async function (err) {
       if (err) {
@@ -133,14 +134,19 @@ router.get("/cilogon-callback", async (req, res, next) => {
           message: err,
           user: user
         });
-        return res.redirect(`/errorlogin`);
+        return res.redirect(`/error/other`);
       }
 
       // Retrieve user role from OpenSearch
       const role = await getUserRole(user.sub);
 
+      // If role returns ERROR, redirect users to the database error page
+      if (role === "ERROR") {
+        return res.redirect(`/error/database`);
+      }
+
       // Generate JWT token with role
-      const userPayload = { id: user.sub, role, email: user.email };
+      const userPayload = { id: user.sub, role: role, email: user.email };
 
       // Generate tokens
       const accessToken = generateAccessToken(userPayload);
@@ -278,27 +284,33 @@ router.post('/recaptcha-verification', async (req, res) => {
       message: err
     });
   }
-
 })
 
-router.get("/error", (req, res) => {
+router.get("/error/cilogon", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
-router.get("/nouser", (req, res) => {
+router.get("/error/nouser", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
-router.get("/errorlogin", (req, res) => {
+router.get("/error/other", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please visit <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
+});
+
+router.get("/error/database", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
 
