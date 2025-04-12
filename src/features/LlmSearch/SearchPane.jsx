@@ -57,6 +57,7 @@ async function getLlmSearchResult(
     // When memory id cannot be generated
     if (newMemoryId === "ERROR") {
       alert("Error initializing I-GUIDE AI.");
+      setWaitingForResponse(false);
       return;
     }
     setMemoryId(newMemoryId);
@@ -67,6 +68,7 @@ async function getLlmSearchResult(
 
   if (!result) {
     alert("Error getting response from I-GUIDE AI.");
+    setWaitingForResponse(false);
     return;
   }
 

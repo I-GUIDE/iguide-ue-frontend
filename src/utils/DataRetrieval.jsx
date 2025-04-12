@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "./FetcherWithJWT";
 import { sendBugToSlack } from "./AutomaticBugReporting";
+import AnimatedEllipsis from "./AnimatedEllipsis";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -756,7 +757,7 @@ export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
           // Set return status and result, error if applicable
           if (data.status) {
             TEST_MODE && console.log("Event received:", data.status);
-            setStatus(`🟡 ${data.status}`);
+            setStatus(<AnimatedEllipsis text={`🟡 ${data.status}`} />);
           } else if (data.error) {
             setStatus(`❌ Error: ${data.error}`);
           } else {
