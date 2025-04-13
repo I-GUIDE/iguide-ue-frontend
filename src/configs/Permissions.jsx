@@ -9,3 +9,32 @@ export const PERMISSIONS = {
   edit_all: 3,
   super_admin: 1,
 };
+
+export const PERMISSION_DETAIL = {
+  1: {
+    role_name: "Super Admin",
+    description: "You have all permissions and privileges.",
+  },
+  2: {
+    role_name: "Admin",
+    description: "You have all permissions EXCEPT user management.",
+  },
+  3: {
+    role_name: "Moderator",
+    description: "You have all permissions EXCEPT user management.",
+  },
+  4: {
+    role_name: "Trusted User Plus",
+    description: "You can contribute to all types of elements.",
+  },
+  8: {
+    role_name: "Trusted User",
+    description:
+      "You can contribute datasets, notebooks, publications, and code.",
+  },
+  10: {
+    role_name: "User",
+    description:
+      "You don't have contribution access yet. Please log in with your school or institute email to enable it. If you believe this is incorrect, please contact us.",
+  },
+};

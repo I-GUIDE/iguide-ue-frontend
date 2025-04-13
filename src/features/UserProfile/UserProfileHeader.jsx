@@ -26,6 +26,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import WebIcon from "@mui/icons-material/Web";
 
 import UserAvatar from "../../components/UserAvatar";
+import UserRoleChip from "./UserRoleChip";
 import {
   USER_PROFILE_HEADER_HEIGHT,
   UNTRUSTED_AFFILIATIONS,
@@ -189,15 +190,24 @@ export default function UserProfileHeader(props) {
                       md: "flex-start",
                     }}
                   >
-                    <Typography level="h1" fontWeight="lg" textColor="#000">
-                      {localUserInfo.first_name
-                        ? localUserInfo.first_name
-                        : "First name unknown"}
-                      &nbsp;
-                      {localUserInfo.last_name
-                        ? localUserInfo.last_name
-                        : "Last name unknown"}
-                    </Typography>
+                    <Stack
+                      direction={{ xs: "column", md: "row" }}
+                      sx={{ m: 3 }}
+                      spacing={1}
+                      alignItems="center"
+                    >
+                      <Typography level="h1" fontWeight="lg" textColor="#000">
+                        {localUserInfo.first_name
+                          ? localUserInfo.first_name
+                          : "First name unknown"}
+                        &nbsp;
+                        {localUserInfo.last_name
+                          ? localUserInfo.last_name
+                          : "Last name unknown"}
+                      </Typography>
+                      <UserRoleChip roleNumber={localUserInfo.role} />
+                    </Stack>
+
                     {/* Don't show user affiliation if it's in the untrusted affiliation list */}
                     {localUserInfo.affiliation &&
                       !UNTRUSTED_AFFILIATIONS.includes(
