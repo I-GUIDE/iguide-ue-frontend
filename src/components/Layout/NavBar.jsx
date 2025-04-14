@@ -67,6 +67,7 @@ export default function NavBar(props) {
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["access_llm"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+  const isSuperAdmin = localUserInfo.role <= PERMISSIONS["super_admin"];
 
   function toggleDrawer(inOpen) {
     return (event) => {
@@ -130,9 +131,8 @@ export default function NavBar(props) {
                     Admin
                   </Typography>
                   <Link
-                    to="/new-doc"
+                    href="/new-doc"
                     underline="none"
-                    component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
                     <ListItem sx={{ width: "100%" }}>
@@ -141,18 +141,20 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
-                  <Link
-                    to="/admin-panel"
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <ListItem sx={{ width: "100%" }}>
-                      <ListItemButton onClick={() => setOpen(false)}>
-                        Admin Panel
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
+                  {isSuperAdmin && (
+                    <Link
+                      to="/admin-panel"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          Admin Panel
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
                 </>
               )}
               {canAccessLLMSearch && (
@@ -179,6 +181,7 @@ export default function NavBar(props) {
                   </Link>
                 </>
               )}
+
               {canContributeElements && (
                 <>
                   <ListDivider />
@@ -287,6 +290,7 @@ export default function NavBar(props) {
             color="neutral"
             size="sm"
             sx={{ alignSelf: "center" }}
+            className="tourid-4"
           >
             <UserAvatar
               userAvatarUrls={localUserInfo["avatar_url"]}
@@ -299,7 +303,12 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <Button size="sm" color="primary" onClick={userLogin}>
+        <Button
+          size="sm"
+          color="primary"
+          onClick={userLogin}
+          className="tourid-4"
+        >
           Login
         </Button>
       );
@@ -350,15 +359,26 @@ export default function NavBar(props) {
                 Admin
               </Typography>
               <Link
-                to="/new-doc"
+                href="/new-doc"
                 underline="none"
-                component={RouterLink}
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>New Documentation</ListItemButton>
                 </ListItem>
               </Link>
+              {isSuperAdmin && (
+                <Link
+                  to="/admin-panel"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>Admin Panel</ListItemButton>
+                  </ListItem>
+                </Link>
+              )}
             </>
           )}
           {canAccessLLMSearch && (
@@ -646,27 +666,29 @@ export default function NavBar(props) {
                 justifyContent="flex-start"
                 alignItems="center"
               >
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
-                    <Box
-                      component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
-                      alt="Logo"
-                      src="/images/Logo.png"
-                    />
-                  </Tooltip>
-                </Link>
-                <Box>
+                <Box className="tourid-1">
+                  <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                      <Box
+                        component="img"
+                        sx={{ height: 40, mt: 1, px: 2 }}
+                        alt="Logo"
+                        src="/images/Logo.png"
+                      />
+                    </Tooltip>
+                  </Link>
+                </Box>
+                <Box className="tourid-2">
                   <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
                     About
                   </HoverOverMenuTab>
                 </Box>
-                <Box>
+                <Box className="tourid-3">
                   {pages?.map((page) => (
                     <Link
                       key={page[1]}

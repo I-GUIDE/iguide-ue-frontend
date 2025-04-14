@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@opensearch-project/opensearch@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@opensearch-project/opensearch/-/opensearch-3.4.0.tgz#34bcd0ab7e6f344a5170e661e6928813c8cded3c"
-  integrity sha512-NdVWpBxa2mA8fQvn3jWgoDnIHk/xNtxrPA8joQVBP75CJMEr/379wzDpnIq+HZn3E0zyE0VQOxDV+LbbyGkefA==
+"@opensearch-project/opensearch@^3.5.1":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@opensearch-project/opensearch/-/opensearch-3.5.1.tgz#bec6e20c45d2ae57a3c6a167d3f508748f86ff69"
+  integrity sha512-6bf+HcuERzAtHZxrm6phjref54ABse39BpkDie/YO3AUFMCBrb3SK5okKSdT5n3+nDRuEEQLhQCl0RQV3s1qpA==
   dependencies:
     aws4 "^1.11.0"
     debug "^4.3.1"

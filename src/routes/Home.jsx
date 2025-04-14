@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import {
   extendTheme as materialExtendTheme,
@@ -9,6 +9,8 @@ import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 
+import { useTour } from "@reactour/tour";
+
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
@@ -17,6 +19,8 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
+import Tooltip from "@mui/joy/Tooltip";
+import Button from "@mui/joy/Button";
 
 import MapIcon from "@mui/icons-material/Map";
 import DatasetIcon from "@mui/icons-material/Dataset";
@@ -28,10 +32,11 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import FeaturedElementsList from "../features/Home/FeaturedElementsList";
 import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
+import FloatingButton from "../components/FloatingButton";
 import usePageTitle from "../hooks/usePageTitle";
 
-
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 import {
   NO_HEADER_BODY_HEIGHT,
@@ -40,6 +45,17 @@ import {
 
 export default function Home() {
   usePageTitle("", true);
+
+  const { setIsOpen } = useTour();
+
+  function startTour() {
+    if (window.innerWidth >= 1200) {
+      TEST_MODE && console.log("Start tour");
+      setIsOpen(true);
+    } else {
+      TEST_MODE && console.log("Cannot start tour: page is too small");
+    }
+  }
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
@@ -112,6 +128,7 @@ export default function Home() {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      className="tourid-0"
                     >
                       <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
                       <img
@@ -142,7 +159,6 @@ export default function Home() {
                       showSmartSearch
                     />
                   </Box>
-                  
                 </Box>
               </Container>
             </CardContent>
@@ -173,30 +189,36 @@ export default function Home() {
                     py: "50px",
                   }}
                 >
-                  <TutorialCard
-                    iconImage="/images/homepage/map.png"
-                    title="Map"
-                    link="/maps"
-                    content="Transform geospatial data to knowledge and insights"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/network.png"
-                    title="Connect"
-                    link="/element-network"
-                    content="Gain holistic understanding of linked knowledge elements"
-                    bgColor="#fff"
-                    inColumn
-                  />
-                  <TutorialCard
-                    iconImage="/images/homepage/search.png"
-                    title="Discover"
-                    link="/search-home"
-                    content="Seek new convergence knowledge through intelligent search"
-                    bgColor="#fff"
-                    inColumn
-                  />
+                  <Box className="tourid-6">
+                    <TutorialCard
+                      iconImage="/images/homepage/map.png"
+                      title="Map"
+                      link="/maps"
+                      content="Transform geospatial data to knowledge and insights"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-7">
+                    <TutorialCard
+                      iconImage="/images/homepage/network.png"
+                      title="Connect"
+                      link="/element-network"
+                      content="Gain holistic understanding of linked knowledge elements"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
+                  <Box className="tourid-8">
+                    <TutorialCard
+                      iconImage="/images/homepage/search.png"
+                      title="Discover"
+                      link="/search-home"
+                      content="Seek new convergence knowledge through intelligent search"
+                      bgColor="#fff"
+                      inColumn
+                    />
+                  </Box>
                 </Stack>
               </Stack>
             </Container>
@@ -297,6 +319,9 @@ export default function Home() {
               </Stack>
             </Container>
           </Box>
+        </Box>
+        <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+          <FloatingButton onClick={startTour} label="🚀 Tour" />
         </Box>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>
