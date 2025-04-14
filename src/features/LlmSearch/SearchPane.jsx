@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
@@ -94,6 +94,17 @@ export default function SearchPane() {
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
 
+  const scrollRef = useRef(null);
+
+  // Scroll to the bottom whenever the items change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      console.log("Hi");
+    }
+    console.log("I tried");
+  }, [chatMessages]);
+
   // Starting page
   if (chatMessages.length === 0) {
     return (
@@ -168,8 +179,13 @@ export default function SearchPane() {
           px: 2,
           py: 3,
           overflowY: "auto",
-          flexDirection: "column-reverse",
+          flexDirection: "column",
+          maskImage:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)", // Content fade out from 95% to 100%
+          WebkitMaskImage:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)", // For Webkit browsers (Safari)
         }}
+        ref={scrollRef}
       >
         <Stack spacing={2} sx={{ justifyContent: "flex-end" }}>
           {chatMessages.map((message, index) => {
@@ -196,27 +212,31 @@ export default function SearchPane() {
               </Stack>
             );
           })}
-          {waitingForResponse && (
-            <Typography level="body-md">{status}</Typography>
-          )}
         </Stack>
       </Box>
-      <SearchInput
-        searchInputValue={searchInputValue}
-        setSearchInputValue={setSearchInputValue}
-        waitingForResponse={waitingForResponse}
-        onSubmit={() => {
-          getLlmSearchResult(
-            searchInputValue,
-            memoryId,
-            setMemoryId,
-            chatMessages,
-            setChatMessages,
-            setWaitingForResponse,
-            setStatus
-          );
-        }}
-      />
+      <Box sx={{ py: 0 }}>
+        {waitingForResponse && (
+          <Typography level="body-sm">{status}</Typography>
+        )}
+      </Box>
+      <Box sx={{ py: 2 }}>
+        <SearchInput
+          searchInputValue={searchInputValue}
+          setSearchInputValue={setSearchInputValue}
+          waitingForResponse={waitingForResponse}
+          onSubmit={() => {
+            getLlmSearchResult(
+              searchInputValue,
+              memoryId,
+              setMemoryId,
+              chatMessages,
+              setChatMessages,
+              setWaitingForResponse,
+              setStatus
+            );
+          }}
+        />
+      </Box>
     </Sheet>
   );
 }
