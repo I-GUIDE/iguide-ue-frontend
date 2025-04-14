@@ -100,9 +100,7 @@ export default function SearchPane() {
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      console.log("Hi");
     }
-    console.log("I tried");
   }, [chatMessages]);
 
   // Starting page
