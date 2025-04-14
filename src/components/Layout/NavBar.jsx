@@ -153,19 +153,30 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
-                  {canAccessLLMSearch && (
-                    <Link
-                      href="/smart-search"
-                      underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton onClick={() => setOpen(false)}>
-                          Smart Search (Beta)
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
+                </>
+              )}
+              {canAccessLLMSearch && (
+                <>
+                  <ListDivider />
+                  <Typography
+                    level="body-xs"
+                    textTransform="uppercase"
+                    fontWeight="lg"
+                    sx={{ px: 1.5, py: 1 }}
+                  >
+                    Pre-release
+                  </Typography>
+                  <Link
+                    href="/smart-search"
+                    underline="none"
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        Smart Search (Beta)
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
               {canContributeElements && (
@@ -348,17 +359,28 @@ export default function NavBar(props) {
                   <ListItemButton>New Documentation</ListItemButton>
                 </ListItem>
               </Link>
-              {canAccessLLMSearch && (
-                <Link
-                  href="/smart-search"
-                  underline="none"
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton>Smart Search (Beta)</ListItemButton>
-                  </ListItem>
-                </Link>
-              )}
+            </>
+          )}
+          {canAccessLLMSearch && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              <Typography
+                level="body-xs"
+                textTransform="uppercase"
+                fontWeight="lg"
+                sx={{ px: 1.5, py: 1 }}
+              >
+                Pre-release
+              </Typography>
+              <Link
+                href="/smart-search"
+                underline="none"
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>Smart Search (Beta)</ListItemButton>
+                </ListItem>
+              </Link>
             </>
           )}
           {canContributeElements && (
