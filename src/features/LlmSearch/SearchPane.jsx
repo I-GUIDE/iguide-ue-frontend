@@ -184,10 +184,17 @@ export default function SearchPane() {
           // Message box bottom fade out for Webkit browsers (Safari)
           WebkitMaskImage:
             "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)",
+          alignItems: "center",
         }}
         ref={scrollRef}
       >
-        <Stack spacing={2} sx={{ justifyContent: "flex-end" }}>
+        <Stack
+          spacing={2}
+          sx={{
+            width: "100%",
+            maxWidth: "960px",
+          }}
+        >
           {chatMessages.map((message, index) => {
             const isYou = message.sender === "You";
             return (
@@ -214,30 +221,34 @@ export default function SearchPane() {
           })}
         </Stack>
       </Box>
-      <Box sx={{ py: 0 }}>
-        {waitingForResponse ? (
-          <Typography level="body-sm">{status}</Typography>
-        ) : (
-          <Typography level="body-sm">&nbsp;</Typography>
-        )}
-      </Box>
-      <Box sx={{ py: 2 }}>
-        <SearchInput
-          searchInputValue={searchInputValue}
-          setSearchInputValue={setSearchInputValue}
-          waitingForResponse={waitingForResponse}
-          onSubmit={() => {
-            getLlmSearchResult(
-              searchInputValue,
-              memoryId,
-              setMemoryId,
-              chatMessages,
-              setChatMessages,
-              setWaitingForResponse,
-              setStatus
-            );
-          }}
-        />
+      <Box sx={{ pb: 3, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ width: "100%", maxWidth: 960 }}>
+          {waitingForResponse ? (
+            <Typography level="body-sm" sx={{ pb: 2 }}>
+              {status}
+            </Typography>
+          ) : (
+            <Typography level="body-sm" sx={{ pb: 2 }}>
+              &nbsp;22
+            </Typography>
+          )}
+          <SearchInput
+            searchInputValue={searchInputValue}
+            setSearchInputValue={setSearchInputValue}
+            waitingForResponse={waitingForResponse}
+            onSubmit={() => {
+              getLlmSearchResult(
+                searchInputValue,
+                memoryId,
+                setMemoryId,
+                chatMessages,
+                setChatMessages,
+                setWaitingForResponse,
+                setStatus
+              );
+            }}
+          />
+        </Box>
       </Box>
     </Sheet>
   );

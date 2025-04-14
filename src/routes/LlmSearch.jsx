@@ -132,22 +132,21 @@ export default function LlmSearch() {
       </CssVarsProvider>
     );
   }
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="lg">
-        <Box
-          component="main"
-          sx={{
-            minHeight: NO_HEADER_BODY_HEIGHT,
-            display: "grid",
-            gridTemplateColumns: { xs: "auto", md: "100%" },
-            gridTemplateRows: "auto 1fr auto",
-          }}
-        >
-          <SearchPane />
-        </Box>
-      </Container>
+      <Box
+        component="main"
+        sx={{
+          minHeight: NO_HEADER_BODY_HEIGHT,
+          display: "grid",
+          gridTemplateColumns: { xs: "auto", md: "100%" },
+          gridTemplateRows: "auto 1fr auto",
+        }}
+      >
+        <SearchPane />
+      </Box>
     </CssVarsProvider>
   );
 }

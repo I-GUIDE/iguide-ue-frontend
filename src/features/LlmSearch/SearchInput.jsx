@@ -30,7 +30,9 @@ export default function SearchInput(props) {
             ? "We are processing your inquery"
             : "Ask me anything..."
         }
-        aria-label="llm-search-input"
+        name="llm-search-input"
+        aria-label="llm search input"
+        autoComplete="off"
         disabled={!!waitingForResponse}
         ref={textAreaRef}
         onChange={(e) => {
