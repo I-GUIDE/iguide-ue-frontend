@@ -6,6 +6,7 @@ export const PERMISSIONS = {
   contribute: 8,
   edit_oer: 4,
   edit_map: 4,
+  access_llm: 4,
   edit_all: 3,
   super_admin: 1,
 };

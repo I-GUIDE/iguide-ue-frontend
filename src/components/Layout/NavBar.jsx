@@ -65,6 +65,7 @@ export default function NavBar(props) {
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["access_llm"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
   const isSuperAdmin = localUserInfo.role <= PERMISSIONS["super_admin"];
 
@@ -140,22 +141,47 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                  {isSuperAdmin && (
+                    <Link
+                      to="/admin-panel"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          Admin Panel
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
                 </>
               )}
-              {isSuperAdmin && (
-                <Link
-                  to="/admin-panel"
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton onClick={() => setOpen(false)}>
-                      Admin Panel
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
+              {canAccessLLMSearch && (
+                <>
+                  <ListDivider />
+                  <Typography
+                    level="body-xs"
+                    textTransform="uppercase"
+                    fontWeight="lg"
+                    sx={{ px: 1.5, py: 1 }}
+                  >
+                    Pre-release
+                  </Typography>
+                  <Link
+                    href="/smart-search"
+                    underline="none"
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        Smart Search (Beta)
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                </>
               )}
+
               {canContributeElements && (
                 <>
                   <ListDivider />
@@ -341,19 +367,41 @@ export default function NavBar(props) {
                   <ListItemButton>New Documentation</ListItemButton>
                 </ListItem>
               </Link>
+              {isSuperAdmin && (
+                <Link
+                  to="/admin-panel"
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>Admin Panel</ListItemButton>
+                  </ListItem>
+                </Link>
+              )}
             </>
           )}
-          {isSuperAdmin && (
-            <Link
-              to="/admin-panel"
-              underline="none"
-              component={RouterLink}
-              sx={{ color: "text.tertiary" }}
-            >
-              <ListItem sx={{ width: "100%" }}>
-                <ListItemButton>Admin Panel</ListItemButton>
-              </ListItem>
-            </Link>
+          {canAccessLLMSearch && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              <Typography
+                level="body-xs"
+                textTransform="uppercase"
+                fontWeight="lg"
+                sx={{ px: 1.5, py: 1 }}
+              >
+                Pre-release
+              </Typography>
+              <Link
+                href="/smart-search"
+                underline="none"
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>Smart Search (Beta)</ListItemButton>
+                </ListItem>
+              </Link>
+            </>
           )}
           {canContributeElements && (
             <>

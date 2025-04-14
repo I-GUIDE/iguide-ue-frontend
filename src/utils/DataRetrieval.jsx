@@ -1,5 +1,6 @@
 import { fetchWithAuth } from "./FetcherWithJWT";
 import { sendBugToSlack } from "./AutomaticBugReporting";
+import AnimatedEllipsis from "./AnimatedEllipsis";
 
 const BACKEND_URL_PORT = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -655,6 +656,132 @@ export async function retrieveBookmarkedElements(
       "Error fetching a list of bookmarked elements: ",
       error.message
     );
+    return "ERROR";
+  }
+}
+
+/**
+ * Fetches a memoryId for the llm search
+ *
+ * @async
+ * @function fetchLlmSearchMemoryId
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the memory-id.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function fetchLlmSearchMemoryId() {
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/memory-id`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch a memory-id");
+    }
+
+    const ret = await response.json();
+    TEST_MODE && console.log("llm memory returned", ret);
+
+    return ret;
+  } catch (error) {
+    console.error("Error fetching a memory-id: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Stream llm search results with status update.
+ *
+ * @async
+ * @function streamLlmSearchResult
+ * @param {string} searchInput - The input of the llm search request from end users.
+ * @param {string} memoryId - The memoryId from /api/llm/memory-id endpoint.
+ * @param {callback} setStatus - callback function that sets result update status
+ * @returns {Promise<Object>} A promise that resolves to the JSON response containing the llm search results.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
+  const llmSearchRequestBody = {
+    userQuery: searchInput,
+    memoryId: memoryId,
+  };
+  try {
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/search`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(llmSearchRequestBody),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch the llm search result");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+    let result;
+
+    // Keeps listening until the reader is done
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      // buffer should contain two lines
+      // event: ...
+      // data: ...
+
+      const lines = buffer.split("\n");
+      buffer = lines.pop(); // incomplete line stays in buffer
+      // buffer should be empty now if nothing is wrong
+
+      for (const line of lines) {
+        if (line.startsWith("event:")) {
+          // Skip this line because it only indicates the type of the event
+          continue;
+        }
+
+        if (line.startsWith("data:")) {
+          const json = line.replace("data: ", "");
+          const data = JSON.parse(json);
+
+          // Set return status and result, error if applicable
+          if (data.status) {
+            TEST_MODE && console.log("Event received:", data.status);
+            setStatus(<AnimatedEllipsis text={`🟡 ${data.status}`} />);
+          } else if (data.error) {
+            setStatus(`❌ Error: ${data.error}`);
+          } else {
+            TEST_MODE && console.log("Result received:", data);
+            setStatus("");
+            result = data;
+          }
+        }
+      }
+    }
+
+    TEST_MODE &&
+      console.log(
+        "Input",
+        searchInput,
+        "MemoryId",
+        memoryId,
+        "Response",
+        result
+      );
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching the llm search result: ", error.message);
     return "ERROR";
   }
 }

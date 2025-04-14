@@ -3,6 +3,8 @@ import Home from "./routes/Home";
 import SearchHome from "./routes/SearchHome";
 import SearchResults from "./routes/SearchResults";
 
+import LlmSearch from "./routes/LlmSearch";
+
 import Datasets from "./routes/Datasets";
 import Notebooks from "./routes/Notebooks";
 import Publications from "./routes/Publications";
@@ -36,6 +38,8 @@ import ContactUs from "./routes/ContactUs";
 import Sitemap from "./components/Sitemap";
 
 import AdminPanel from "./routes/AdminPanel";
+
+const ENABLE_LLM = import.meta.env.VITE_ENABLE_LLM === "true";
 
 export const routes = [
   {
@@ -77,6 +81,10 @@ export const routes = [
     element: <SearchHome />,
     label: "Search",
     category: "Search",
+  },
+  ENABLE_LLM && {
+    path: "/smart-search",
+    element: <LlmSearch />,
   },
   {
     path: "/element-network",
