@@ -20,7 +20,7 @@ export default [
   {
     selector: ".tourid-4",
     content:
-      "Contribute knowledge or manage your profile by hovering over your user avatar.",
+      "Once logged in, you can manage your profile or contribute knowledge elements by hovering over your user avatar.",
     position: "bottom",
   },
   {

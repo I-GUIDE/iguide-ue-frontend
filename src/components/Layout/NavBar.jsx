@@ -277,7 +277,12 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <Button size="sm" color="primary" onClick={userLogin}>
+        <Button
+          size="sm"
+          color="primary"
+          onClick={userLogin}
+          className="tourid-4"
+        >
           Login
         </Button>
       );
