@@ -180,10 +180,12 @@ export default function SearchPane() {
           py: 3,
           overflowY: "auto",
           flexDirection: "column",
+          // Message box bottom fade out
           maskImage:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)", // Content fade out from 95% to 100%
+            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)",
+          // Message box bottom fade out for Webkit browsers (Safari)
           WebkitMaskImage:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)", // For Webkit browsers (Safari)
+            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 99.5%, rgba(0, 0, 0, 0) 100%)",
         }}
         ref={scrollRef}
       >
@@ -215,8 +217,10 @@ export default function SearchPane() {
         </Stack>
       </Box>
       <Box sx={{ py: 0 }}>
-        {waitingForResponse && (
+        {waitingForResponse ? (
           <Typography level="body-sm">{status}</Typography>
+        ) : (
+          <Typography level="body-sm">&nbsp;</Typography>
         )}
       </Box>
       <Box sx={{ py: 2 }}>
