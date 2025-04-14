@@ -65,6 +65,7 @@ export default function NavBar(props) {
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
 
   function toggleDrawer(inOpen) {
@@ -152,6 +153,19 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                  {canAccessLLMSearch && (
+                    <Link
+                      href="/smart-search"
+                      underline="none"
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton onClick={() => setOpen(false)}>
+                          Smart Search (Beta)
+                        </ListItemButton>
+                      </ListItem>
+                    </Link>
+                  )}
                 </>
               )}
               {canContributeElements && (
@@ -334,6 +348,17 @@ export default function NavBar(props) {
                   <ListItemButton>New Documentation</ListItemButton>
                 </ListItem>
               </Link>
+              {canAccessLLMSearch && (
+                <Link
+                  href="/smart-search"
+                  underline="none"
+                  sx={{ color: "text.tertiary" }}
+                >
+                  <ListItem sx={{ width: "100%" }}>
+                    <ListItemButton>Smart Search (Beta)</ListItemButton>
+                  </ListItem>
+                </Link>
+              )}
             </>
           )}
           {canContributeElements && (
@@ -574,7 +599,6 @@ export default function NavBar(props) {
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
-                  
                 >
                   <Tooltip title="I-GUIDE Platform Home" variant="solid">
                     <Box
@@ -641,7 +665,6 @@ export default function NavBar(props) {
                     </Link>
                   ))}
                 </Box>
-                
               </Stack>
               <Stack
                 direction="row"
