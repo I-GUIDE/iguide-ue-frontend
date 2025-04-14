@@ -44,7 +44,7 @@ export default function SearchInput(props) {
             <IconButton
               size="lg"
               variant="solid"
-              color="primary"
+              color={!!waitingForResponse ? "neutral" : "primary"}
               sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
               onClick={handleClick}
             >

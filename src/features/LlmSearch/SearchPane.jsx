@@ -229,7 +229,7 @@ export default function SearchPane() {
             </Typography>
           ) : (
             <Typography level="body-sm" sx={{ pb: 2 }}>
-              &nbsp;22
+              &nbsp;
             </Typography>
           )}
           <SearchInput
