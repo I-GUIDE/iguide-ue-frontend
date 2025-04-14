@@ -65,7 +65,7 @@ export default function NavBar(props) {
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
-  const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["edit_all"];
+  const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["access_llm"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
 
   function toggleDrawer(inOpen) {

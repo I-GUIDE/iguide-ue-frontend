@@ -94,7 +94,7 @@ export default function LlmSearch() {
     );
   }
 
-  const canAccessLLMSearch = localUserInfo?.role <= PERMISSIONS["edit_all"];
+  const canAccessLLMSearch = localUserInfo?.role <= PERMISSIONS["access_llm"];
   if (!canAccessLLMSearch) {
     return (
       <CssVarsProvider disableTransitionOnChange>
