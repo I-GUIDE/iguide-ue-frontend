@@ -221,7 +221,7 @@ export default function SearchPane() {
           })}
         </Stack>
       </Box>
-      <Box sx={{ pb: 3, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ px: 2, pb: 3, display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "100%", maxWidth: 960 }}>
           {waitingForResponse ? (
             <Typography level="body-sm" sx={{ pb: 2 }}>
