@@ -45,8 +45,12 @@ export default function UserProfileCard(props) {
       return;
     }
     const result = await updateUserRole(userId, selectedUserRole);
-    setRoleChangeStatus(result === "ERROR" ? "error" : "good");
-    setUserRole(selectedUserRole);
+    if (result === "ERROR") {
+      setRoleChangeStatus("error");
+    } else {
+      setRoleChangeStatus("good");
+      setUserRole(selectedUserRole);
+    }
   }
 
   async function handleRoleChange(e, newValue) {
