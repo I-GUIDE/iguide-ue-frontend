@@ -89,27 +89,32 @@ export async function getUserRole(uid) {
 export async function updateUserRole(uid, newRole) {
   TEST_MODE && console.log("Update user role", uid, newRole);
   const encodedUid = encodeURIComponent(uid);
-  const response = await fetchWithAuth(
-    `${USER_BACKEND_URL}/api/users/${encodedUid}/role`,
-    {
-      method: "PUT",
-      body: JSON.stringify({ role: newRole }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const response = await fetchWithAuth(
+      `${USER_BACKEND_URL}/api/users/${encodedUid}/role`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ role: newRole }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (!response.ok) {
-    console.error("Failed to update user role...");
-    TEST_MODE && console.log(`Error: ${response.status}`);
+    if (!response.ok) {
+      console.error("Failed to update user role...");
+      TEST_MODE && console.log(`Error: ${response.status}`);
+      return "ERROR";
+    }
+
+    TEST_MODE &&
+      console.log(`Changed user role. UserId: ${uid}, return: ${newRole}`);
+
+    return newRole;
+  } catch (error) {
+    console.error("Error updating user role: ", error.message);
     return "ERROR";
   }
-
-  TEST_MODE &&
-    console.log(`Changed user role. UserId: ${uid}, return: ${newRole}`);
-
-  return newRole;
 }
 
 /**
