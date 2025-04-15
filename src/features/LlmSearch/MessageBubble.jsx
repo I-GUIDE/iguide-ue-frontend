@@ -11,6 +11,8 @@ import Divider from "@mui/joy/Divider";
 
 import SimpleInfoCard from "../../components/SimpleInfoCard";
 
+const LLM_ELEMENTS_DOMAIN = import.meta.env.VITE_LLM_ELEMENTS_DOMAIN;
+
 export default function MessageBubble(props) {
   const variant = props.variant;
   const messageBody = props.messageBody;
@@ -102,6 +104,7 @@ export default function MessageBubble(props) {
                       width="100%"
                       showElementType
                       openInNewTab
+                      customDomain={LLM_ELEMENTS_DOMAIN}
                     />
                   </Grid>
                 ))}

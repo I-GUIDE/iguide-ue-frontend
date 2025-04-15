@@ -28,6 +28,8 @@ export default function SimpleInfoCard(props) {
   const width = props.width;
   const showElementType = props.showElementType;
   const openInNewTab = props.openInNewTab;
+  // customDomain is for LLM search, which only returns elements from production
+  const customDomain = props.customDomain;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = RESOURCE_TYPE_NAMES[cardType];
@@ -69,10 +71,20 @@ export default function SimpleInfoCard(props) {
         <Link
           overlay
           underline="none"
-          component={RouterLink}
+          // When there is customDomain, do not use react router
+          component={customDomain ? "a" : RouterLink}
+          // href is used when customDomain is defined as react router is not used
+          href={
+            customDomain +
+            "/" +
+            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] +
+            "/" +
+            pageId
+          }
+          // to is used when react router is used
+          to={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] + "/" + pageId}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
-          to={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] + "/" + pageId}
           sx={{ color: "text.tertiary" }}
         >
           <Stack spacing={1}>
