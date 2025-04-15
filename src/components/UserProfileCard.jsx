@@ -18,22 +18,53 @@ import IconButton from "@mui/joy/IconButton";
 import Edit from "@mui/icons-material/Edit";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import Delete from "@mui/icons-material/Delete";
 
 import UserAvatar from "./UserAvatar";
+import { updateUserRole } from "../utils/UserManager";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function UserProfileCard(props) {
   const userId = props.id;
   const userFirstName = props.firstName;
   const userLastName = props.lastName;
-  const [userRole, setUserRole] = useState(props.role);
+  const roleFromDB = props.role;
+  // Actual user role
+  const [userRole, setUserRole] = useState(roleFromDB);
+  // User role displayed on the select user role modal
+  const [selectedUserRole, setSelectedUserRole] = useState(roleFromDB);
   const userAvatar = props.avatar;
   const userAffiliation = props.affiliation;
   const userEmail = props.email;
-  const deleteUser = props.deleteUser;
 
-  const [roleOpen, setRoleOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [roleChangeModalOpen, setRoleChangeModalOpen] = useState(false);
+  const [roleChangeStatus, setRoleChangeStatus] = useState("no-status");
+
+  async function handleSubmitNewRole() {
+    if (!selectedUserRole) {
+      return;
+    }
+    const result = await updateUserRole(userId, selectedUserRole);
+    if (result === "ERROR") {
+      setRoleChangeStatus("error");
+    } else {
+      setRoleChangeStatus("good");
+      setUserRole(selectedUserRole);
+    }
+  }
+
+  async function handleRoleChange(e, newValue) {
+    if (newValue) {
+      TEST_MODE && console.log("Setting role to", newValue);
+      setSelectedUserRole(newValue);
+    }
+  }
+
+  function closeChangeUserRoleModal() {
+    setRoleChangeStatus("no-status");
+    setSelectedUserRole(userRole);
+    setRoleChangeModalOpen(false);
+  }
 
   return (
     <>
@@ -109,28 +140,19 @@ export default function UserProfileCard(props) {
                 <IconButton
                   color="primary"
                   size="sm"
-                  onClick={() => setRoleOpen(true)}
+                  onClick={() => setRoleChangeModalOpen(true)}
                 >
                   <AssignmentIndIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Edit user profile" placement="right">
                 <IconButton
-                  color="primary"
+                  color="success"
                   size="sm"
                   component="a"
                   href="#future-user-edit-page"
                 >
                   <Edit />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete User" placement="right">
-                <IconButton
-                  color="danger"
-                  size="sm"
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  <Delete />
                 </IconButton>
               </Tooltip>
             </Stack>
@@ -140,46 +162,46 @@ export default function UserProfileCard(props) {
 
       {/* Change Role Modal */}
       <Modal
-        open={roleOpen}
-        onClose={() => setRoleOpen(false)}
+        open={roleChangeModalOpen}
+        onClose={closeChangeUserRoleModal}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            setUserRole(formJson["role"]);
-            setRoleOpen(false);
-            // Do backend request
-          }}
+        <Sheet
+          variant="outlined"
+          sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
         >
-          <Sheet
-            variant="outlined"
-            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
-          >
-            <ModalClose />
-            <Stack spacing={2} sx={{ px: 2 }}>
-              <Typography align="center" level="h4">
-                Change User Role
-              </Typography>
-              <Typography
-                align="center"
-                level="body-sm"
-                sx={{ fontStyle: "italic" }}
-              >
-                Work in progress...
-              </Typography>
-              <Select defaultValue={userRole} name="role">
-                <Option value="Admin">Admin</Option>
-                <Option value="Trusted User"> Trusted User</Option>
-                <Option value="User">User</Option>
-              </Select>
+          <ModalClose />
+          <Stack spacing={1} sx={{ p: 1 }}>
+            <Typography align="center" level="title-lg">
+              Change User Role
+            </Typography>
+            <Typography align="center" level="title-md">
+              {userLastName || "nln"}, {userFirstName || "nfn"}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              ID: {userId}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              Current role number: {userRole}
+            </Typography>
+            <Select
+              defaultValue={userRole}
+              value={selectedUserRole}
+              name="role"
+              onChange={handleRoleChange}
+            >
+              <Option value={2}>Admin (2)</Option>
+              <Option value={3}>Moderator (3)</Option>
+              <Option value={4}>Trusted User Plus (4)</Option>
+              <Option value={8}>Trusted User (8)</Option>
+              <Option value={10}>User (10)</Option>
+            </Select>
+            <Stack direction="row" spacing={1} sx={{ width: "100%", py: 1 }}>
               <Button
                 color="primary"
                 size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-                onClick={() => setRoleOpen(false)}
+                sx={{ width: "100%", my: 1 }}
+                onClick={closeChangeUserRoleModal}
               >
                 Cancel
               </Button>
@@ -187,70 +209,26 @@ export default function UserProfileCard(props) {
                 type="submit"
                 color="danger"
                 size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                sx={{ width: "100%", my: 1 }}
+                // Disable the button if the selected role is the same as the current one
+                disabled={userRole === selectedUserRole}
+                onClick={handleSubmitNewRole}
               >
-                Confirm
+                Change
               </Button>
             </Stack>
-          </Sheet>
-        </form>
-      </Modal>
-
-      {/* Delete User Modal */}
-      <Modal
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            deleteUser(userId);
-            // Do backend request
-            setDeleteOpen(false);
-          }}
-        >
-          <Sheet
-            variant="outlined"
-            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
-          >
-            <ModalClose />
-            <Stack spacing={2} sx={{ px: 2 }}>
-              <Typography align="center" level="h4">
-                Delete User: {userFirstName} {userLastName}
+            {roleChangeStatus === "error" && (
+              <Typography color="danger" level="body-sm">
+                Role change failed!
               </Typography>
-              <Typography
-                align="center"
-                level="body-sm"
-                sx={{ fontStyle: "italic" }}
-              >
-                Work in progress...
+            )}
+            {roleChangeStatus === "good" && (
+              <Typography color="success" level="body-sm">
+                Role change succeeded!
               </Typography>
-              <Typography align="center" level="title-sm" color="danger">
-                Are you sure you would like to delete user {userFirstName}{" "}
-                {userLastName}? This action cannot be undone.
-              </Typography>
-              <Button
-                color="primary"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-                onClick={() => setDeleteOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                color="danger"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-              >
-                Delete
-              </Button>
-            </Stack>
-          </Sheet>
-        </form>
+            )}
+          </Stack>
+        </Sheet>
       </Modal>
     </>
   );

@@ -68,7 +68,7 @@ export async function getUserRole(uid) {
 
   if (!response.ok) {
     console.warn("Failed to retrieve user role...");
-    TEST_MODE && console.log(`Error: ${response.status} ${error.message}`);
+    TEST_MODE && console.log(`Error: ${response.status}`);
     return 10;
   }
 
@@ -78,6 +78,43 @@ export async function getUserRole(uid) {
     console.log(`GET user role. UserId: ${uid}, return: ${result.role}`);
 
   return result.role;
+}
+
+/**
+ * Get user role number
+ * @param {string} uid OpenID (Only when getting user role during authentication) or userId
+ * @param {string} newRole New role number
+ * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
+ */
+export async function updateUserRole(uid, newRole) {
+  TEST_MODE && console.log("Update user role", uid, newRole);
+  const encodedUid = encodeURIComponent(uid);
+  try {
+    const response = await fetchWithAuth(
+      `${USER_BACKEND_URL}/api/users/${encodedUid}/role`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ role: newRole }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.error("Failed to update user role...");
+      TEST_MODE && console.log(`Error: ${response.status}`);
+      return "ERROR";
+    }
+
+    TEST_MODE &&
+      console.log(`Changed user role. UserId: ${uid}, return: ${newRole}`);
+
+    return newRole;
+  } catch (error) {
+    console.error("Error updating user role: ", error.message);
+    return "ERROR";
+  }
 }
 
 /**

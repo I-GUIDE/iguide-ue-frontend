@@ -87,15 +87,6 @@ export default function AdminPanel() {
     fetchAllUsers(currentStartingIdx);
   }, [currentStartingIdx]);
 
-  function deleteUser(contributorId) {
-    const index = userList.findIndex((user) => user["id"] === contributorId);
-    const newArray = [
-      ...userList.slice(0, index),
-      ...userList.slice(index + 1),
-    ];
-    setUserList(newArray);
-  }
-
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
     setCurrentStartingIdx(newStartingIdx);
@@ -224,7 +215,6 @@ export default function AdminPanel() {
                         affiliation={user.affiliation}
                         email={user.email}
                         avatar={user["avatar-url"]?.low}
-                        deleteUser={deleteUser}
                       />
                     </Grid>
                   ))}
