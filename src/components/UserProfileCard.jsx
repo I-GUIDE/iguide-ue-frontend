@@ -21,12 +21,19 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import Delete from "@mui/icons-material/Delete";
 
 import UserAvatar from "./UserAvatar";
+import { updateUserRole } from "../utils/UserManager";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function UserProfileCard(props) {
   const userId = props.id;
   const userFirstName = props.firstName;
   const userLastName = props.lastName;
-  const [userRole, setUserRole] = useState(props.role);
+  const roleFromDB = props.role;
+  // Actual user role
+  const [userRole, setUserRole] = useState(roleFromDB);
+  // User role displayed on the select user role modal
+  const [selectedUserRole, setSelectedUserRole] = useState(roleFromDB);
   const userAvatar = props.avatar;
   const userAffiliation = props.affiliation;
   const userEmail = props.email;
@@ -34,6 +41,27 @@ export default function UserProfileCard(props) {
 
   const [roleOpen, setRoleOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  async function handleSubmitNewRole() {
+    if (!selectedUserRole) {
+      return;
+    }
+    await updateUserRole(userId, selectedUserRole);
+    setRoleOpen(false);
+    setUserRole(selectedUserRole);
+  }
+
+  async function handleRoleChange(e, newValue) {
+    if (newValue) {
+      TEST_MODE && console.log("Setting role to", newValue);
+      setSelectedUserRole(newValue);
+    }
+  }
+
+  function closeChangeUserRoleModal() {
+    setRoleOpen(false);
+    setSelectedUserRole(userRole);
+  }
 
   return (
     <>
@@ -141,45 +169,45 @@ export default function UserProfileCard(props) {
       {/* Change Role Modal */}
       <Modal
         open={roleOpen}
-        onClose={() => setRoleOpen(false)}
+        onClose={closeChangeUserRoleModal}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            setUserRole(formJson["role"]);
-            setRoleOpen(false);
-            // Do backend request
-          }}
+        <Sheet
+          variant="outlined"
+          sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
         >
-          <Sheet
-            variant="outlined"
-            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
-          >
-            <ModalClose />
-            <Stack spacing={2} sx={{ px: 2 }}>
-              <Typography align="center" level="h4">
-                Change User Role
-              </Typography>
-              <Typography
-                align="center"
-                level="body-sm"
-                sx={{ fontStyle: "italic" }}
-              >
-                Work in progress...
-              </Typography>
-              <Select defaultValue={userRole} name="role">
-                <Option value="Admin">Admin</Option>
-                <Option value="Trusted User"> Trusted User</Option>
-                <Option value="User">User</Option>
-              </Select>
+          <ModalClose />
+          <Stack spacing={1} sx={{ p: 1 }}>
+            <Typography align="center" level="title-lg">
+              Change User Role
+            </Typography>
+            <Typography align="center" level="title-md">
+              {userLastName || "nln"}, {userFirstName || "nfn"}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              ID: {userId}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              Current role number: {userRole}
+            </Typography>
+            <Select
+              defaultValue={userRole}
+              value={selectedUserRole}
+              name="role"
+              onChange={handleRoleChange}
+            >
+              <Option value={2}>Admin (2)</Option>
+              <Option value={3}>Moderator (3)</Option>
+              <Option value={4}>Trusted User Plus (4)</Option>
+              <Option value={8}>Trusted User (8)</Option>
+              <Option value={10}>User (10)</Option>
+            </Select>
+            <Stack direction="row">
               <Button
                 color="primary"
                 size="sm"
                 sx={{ width: "100%", my: 1, mx: 0.5 }}
-                onClick={() => setRoleOpen(false)}
+                onClick={closeChangeUserRoleModal}
               >
                 Cancel
               </Button>
@@ -188,12 +216,15 @@ export default function UserProfileCard(props) {
                 color="danger"
                 size="sm"
                 sx={{ width: "100%", my: 1, mx: 0.5 }}
+                // Disable the button if the selected role is the same as the current one
+                disabled={userRole === selectedUserRole}
+                onClick={handleSubmitNewRole}
               >
-                Confirm
+                Change
               </Button>
             </Stack>
-          </Sheet>
-        </form>
+          </Stack>
+        </Sheet>
       </Modal>
 
       {/* Delete User Modal */}
