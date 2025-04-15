@@ -1233,6 +1233,7 @@
   version "4.11.2"
   resolved "https://registry.yarnpkg.com/@rooks/use-mutation-observer/-/use-mutation-observer-4.11.2.tgz#a0466c4338e0a4487ea19253c86bcd427c29f4af"
   integrity sha512-vpsdrZdr6TkB1zZJcHx+fR1YC/pHs2BaqcuYiEGjBVbwY5xcC49+h0hAUtQKHth3oJqXfIX/Ng8S7s5HFHdM/A==
+
 "@sigstore/bundle@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@sigstore/bundle/-/bundle-3.1.0.tgz#74f8f3787148400ddd364be8a9a9212174c66646"
@@ -4566,10 +4567,10 @@ read@^4.0.0:
   dependencies:
     mute-stream "^2.0.0"
 
-reagraph@^4.21.5:
-  version "4.21.5"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.21.5.tgz#b19e4d6c069114982e10ac034783dd2abca0e18b"
-  integrity sha512-tor9F1lkhxt9Qvh4i8C/HFD3WKg71cQGLM3I/oUJFcqdUu8hj6J++RbRj2by4RkWBwIk6n7rD1ops7lmTFx9eQ==
+reagraph@^4.21.6:
+  version "4.21.6"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.21.6.tgz#30c85cdb40e1fe428dfe4600e1823ce02fa0596f"
+  integrity sha512-FpoQGo3rNBGuLPhksAyBKvJX40tg6LSO/kMB/SZNshUW2lLJWT3b9+ak71Suc/bm/wvONDebRrwKa+hBWdmheA==
   dependencies:
     "@react-spring/three" "9.6.1"
     "@react-three/fiber" "8.13.5"
@@ -4589,15 +4590,15 @@ reagraph@^4.21.5:
     graphology-metrics "^2.1.0"
     graphology-shortest-path "^2.0.2"
     hold-event "^0.2.0"
-    reakeys "^2.0.3"
+    reakeys "^2.0.6"
     three "^0.154.0"
     three-stdlib "^2.23.13"
     zustand "4.3.9"
 
-reakeys@^2.0.3:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/reakeys/-/reakeys-2.0.5.tgz#3ccca2a747915d4087c71c53229160a0fef2b159"
-  integrity sha512-vLzYVYZHyPcYcsVnnYLZXwLlI0fHtR4vWIgomXQ+7Gn0XLwmlaMa/+Uqv29vn6YM9MCu31EPia2tvZRfllFImQ==
+reakeys@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/reakeys/-/reakeys-2.0.6.tgz#fd670099ce587895900a787dc0933a94c36e500e"
+  integrity sha512-dmZPhOwU3NuLjy61CLqf3dGEhhetx4Du7m/DlX1eqZrBKcKrDqpR0O1tHyYMB95KVdhVRjrfcuFFawI7EqGyxQ==
   dependencies:
     ctrl-keys "^1.0.6"
 
