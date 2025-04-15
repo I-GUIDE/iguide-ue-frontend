@@ -103,11 +103,13 @@ export async function updateUserRole(uid, newRole) {
   if (!response.ok) {
     console.error("Failed to update user role...");
     TEST_MODE && console.log(`Error: ${response.status}`);
-    return;
+    return "ERROR";
   }
 
   TEST_MODE &&
     console.log(`Changed user role. UserId: ${uid}, return: ${newRole}`);
+
+  return newRole;
 }
 
 /**

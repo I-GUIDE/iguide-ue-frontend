@@ -40,14 +40,15 @@ export default function UserProfileCard(props) {
   const deleteUser = props.deleteUser;
 
   const [roleOpen, setRoleOpen] = useState(false);
+  const [roleChangeStatus, setRoleChangeStatus] = useState("no-status");
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   async function handleSubmitNewRole() {
     if (!selectedUserRole) {
       return;
     }
-    await updateUserRole(userId, selectedUserRole);
-    setRoleOpen(false);
+    const result = await updateUserRole(userId, selectedUserRole);
+    setRoleChangeStatus(result === "ERROR" ? "error" : "good");
     setUserRole(selectedUserRole);
   }
 
@@ -59,8 +60,9 @@ export default function UserProfileCard(props) {
   }
 
   function closeChangeUserRoleModal() {
-    setRoleOpen(false);
+    setRoleChangeStatus("no-status");
     setSelectedUserRole(userRole);
+    setRoleOpen(false);
   }
 
   return (
@@ -202,11 +204,11 @@ export default function UserProfileCard(props) {
               <Option value={8}>Trusted User (8)</Option>
               <Option value={10}>User (10)</Option>
             </Select>
-            <Stack direction="row">
+            <Stack direction="row" spacing={1} sx={{ width: "100%", py: 1 }}>
               <Button
                 color="primary"
                 size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                sx={{ width: "100%", my: 1 }}
                 onClick={closeChangeUserRoleModal}
               >
                 Cancel
@@ -215,7 +217,7 @@ export default function UserProfileCard(props) {
                 type="submit"
                 color="danger"
                 size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
+                sx={{ width: "100%", my: 1 }}
                 // Disable the button if the selected role is the same as the current one
                 disabled={userRole === selectedUserRole}
                 onClick={handleSubmitNewRole}
@@ -223,6 +225,16 @@ export default function UserProfileCard(props) {
                 Change
               </Button>
             </Stack>
+            {roleChangeStatus === "error" && (
+              <Typography color="danger" level="body-sm">
+                Role change failed!
+              </Typography>
+            )}
+            {roleChangeStatus === "good" && (
+              <Typography color="success" level="body-sm">
+                Role change succeeded!
+              </Typography>
+            )}
           </Stack>
         </Sheet>
       </Modal>
