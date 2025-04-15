@@ -18,7 +18,6 @@ import IconButton from "@mui/joy/IconButton";
 import Edit from "@mui/icons-material/Edit";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import Delete from "@mui/icons-material/Delete";
 
 import UserAvatar from "./UserAvatar";
 import { updateUserRole } from "../utils/UserManager";
@@ -37,11 +36,9 @@ export default function UserProfileCard(props) {
   const userAvatar = props.avatar;
   const userAffiliation = props.affiliation;
   const userEmail = props.email;
-  const deleteUser = props.deleteUser;
 
-  const [roleOpen, setRoleOpen] = useState(false);
+  const [roleChangeModalOpen, setRoleChangeModalOpen] = useState(false);
   const [roleChangeStatus, setRoleChangeStatus] = useState("no-status");
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   async function handleSubmitNewRole() {
     if (!selectedUserRole) {
@@ -62,7 +59,7 @@ export default function UserProfileCard(props) {
   function closeChangeUserRoleModal() {
     setRoleChangeStatus("no-status");
     setSelectedUserRole(userRole);
-    setRoleOpen(false);
+    setRoleChangeModalOpen(false);
   }
 
   return (
@@ -139,28 +136,19 @@ export default function UserProfileCard(props) {
                 <IconButton
                   color="primary"
                   size="sm"
-                  onClick={() => setRoleOpen(true)}
+                  onClick={() => setRoleChangeModalOpen(true)}
                 >
                   <AssignmentIndIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Edit user profile" placement="right">
                 <IconButton
-                  color="primary"
+                  color="success"
                   size="sm"
                   component="a"
                   href="#future-user-edit-page"
                 >
                   <Edit />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete User" placement="right">
-                <IconButton
-                  color="danger"
-                  size="sm"
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  <Delete />
                 </IconButton>
               </Tooltip>
             </Stack>
@@ -170,7 +158,7 @@ export default function UserProfileCard(props) {
 
       {/* Change Role Modal */}
       <Modal
-        open={roleOpen}
+        open={roleChangeModalOpen}
         onClose={closeChangeUserRoleModal}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
@@ -237,63 +225,6 @@ export default function UserProfileCard(props) {
             )}
           </Stack>
         </Sheet>
-      </Modal>
-
-      {/* Delete User Modal */}
-      <Modal
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            deleteUser(userId);
-            // Do backend request
-            setDeleteOpen(false);
-          }}
-        >
-          <Sheet
-            variant="outlined"
-            sx={{ maxWidth: 500, borderRadius: "md", p: 3, boxShadow: "lg" }}
-          >
-            <ModalClose />
-            <Stack spacing={2} sx={{ px: 2 }}>
-              <Typography align="center" level="h4">
-                Delete User: {userFirstName} {userLastName}
-              </Typography>
-              <Typography
-                align="center"
-                level="body-sm"
-                sx={{ fontStyle: "italic" }}
-              >
-                Work in progress...
-              </Typography>
-              <Typography align="center" level="title-sm" color="danger">
-                Are you sure you would like to delete user {userFirstName}{" "}
-                {userLastName}? This action cannot be undone.
-              </Typography>
-              <Button
-                color="primary"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-                onClick={() => setDeleteOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                color="danger"
-                size="sm"
-                sx={{ width: "100%", my: 1, mx: 0.5 }}
-              >
-                Delete
-              </Button>
-            </Stack>
-          </Sheet>
-        </form>
       </Modal>
     </>
   );
