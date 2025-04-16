@@ -13,5 +13,6 @@ COPY ./nginx-config/nginx.conf /etc/nginx/conf.d/default.conf
 # NOTE: Make sure the location has the latest .pem files
 COPY ./nginx-config/fullchain.pem /etc/nginx/ssl/fullchain.pem
 COPY ./nginx-config/privkey.pem /etc/nginx/ssl/privkey.pem
+COPY ./nginx-config/ip-list.d/ip-list*.conf /etc/nginx/
 EXPOSE 80 443
 CMD ["/usr/sbin/nginx", "-g", "daemon off;"]

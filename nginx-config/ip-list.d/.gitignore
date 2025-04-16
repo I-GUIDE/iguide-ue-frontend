@@ -1,0 +1,5 @@
+# This file is to ensure that GitHub tracks this folder.
+# The purpose of this folder is to provide a place to store ip whitelist and blacklist.
+# Make sure to name the conf file "ip-list.conf"
+*
+!.gitignore
