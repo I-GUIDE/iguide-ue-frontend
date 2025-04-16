@@ -39,6 +39,8 @@ import { userLogin, userLogout } from "../../utils/UserManager";
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
+const ENV = import.meta.env.VITE_ENV;
+
 const aboutDropdown = [
   ["Getting Started", "/docs/getting-started"],
   ["FAQ", "/docs/frequently-asked-questions"],
@@ -514,6 +516,24 @@ export default function NavBar(props) {
               bgcolor: "neutral",
             }}
           >
+            {ENV !== "production" && (
+              // Warning for non-production environments
+              <Typography
+                color="danger"
+                sx={{
+                  position: "absolute",
+                  top: "1px",
+                  left: "30px",
+                  fontSize: "0.7rem",
+                  fontWeight: 800,
+                  whiteSpace: "nowrap",
+                  pointerEvents: "none",
+                  zIndex: 0,
+                }}
+              >
+                FOR TESTING ONLY
+              </Typography>
+            )}
             {/* When page is narrower than 960px */}
             <Stack
               direction="row"
