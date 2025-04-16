@@ -3,3 +3,4 @@
 # Make sure to name the conf file "ip-list.conf"
 *
 !.gitignore
+!ip-list-example.conf
