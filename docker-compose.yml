@@ -17,6 +17,16 @@ services:
       context: ./cilogon/.
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "8000:8000"
       - "8443:8443"
     restart: always
+
+  server:
+    image: prerender-${VITE_ENV}
+    build:
+      context: ./server/.
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - CHROME_BIN=/usr/bin/google-chrome # Explicit in case it's needed

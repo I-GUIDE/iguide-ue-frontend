@@ -1,21 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const passport = require('passport')
-const authRoute = require('./routes')
+const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const passport = require("passport");
+const authRoute = require("./routes");
 const http = require("http");
-const https = require('https');
+const https = require("https");
 const router = require("express").Router();
-const fs = require('fs');
-require('dotenv').config();
-const { Issuer, Strategy } = require('openid-client');
+const fs = require("fs");
+require("dotenv").config();
+const { Issuer, Strategy } = require("openid-client");
 const { logger, httpLogger } = require("./logger.js");
 
 const credentials = {
-  key: fs.readFileSync('credentials/privkey.pem'),
-  cert: fs.readFileSync('credentials/fullchain.pem')
+  key: fs.readFileSync("credentials/privkey.pem"),
+  cert: fs.readFileSync("credentials/fullchain.pem"),
 };
 
 // React frontend URL
@@ -41,22 +41,25 @@ if (USE_HTTP_LOGGER) {
 app.use(cors({ credentials: true, origin: FRONTEND_URL }));
 
 app.use(cookieParser());
-app.use(express.urlencoded({
-  extended: true,
-}));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-
-app.use(express.json({ limit: '15mb' }));
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(express.json({ limit: "15mb" }));
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 app.use(helmet());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", authRoute)
+app.use("/", authRoute);
 
 passport.serializeUser(function (user, done) {
   logger.info({
@@ -65,8 +68,9 @@ passport.serializeUser(function (user, done) {
       sub: user?.sub,
       idp_name: user?.["idp_name"],
       email_exists: user?.email && typeof user?.email === "string",
-      first_name_exists: user?.["given_name"] && typeof user?.["given_name"] === "string",
-      last_name: user?.["family_name"]
+      first_name_exists:
+        user?.["given_name"] && typeof user?.["given_name"] === "string",
+      last_name: user?.["family_name"],
     },
   });
   done(null, user);
@@ -76,8 +80,8 @@ passport.deserializeUser(function (user, done) {
   logger.info({
     event: "Deserializing user",
     user: {
-      sub: user?.sub
-    }
+      sub: user?.sub,
+    },
   });
   done(null, user);
 });
@@ -87,17 +91,20 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
     redirect_uris: [REDIRECT_URL],
-    response_types: ['code'],
-    scope: 'openid profile email org.cilogon.userinfo',
+    response_types: ["code"],
+    scope: "openid profile email org.cilogon.userinfo",
   });
 
   passport.use(
-    'oidc',
-    new Strategy({ client, passReqToCallback: true, loadUserInfo: true, }, (req, tokenSet, userinfo, done) => {
-      req.session.tokenSet = tokenSet;
-      req.session.userinfo = userinfo;
-      return done(null, tokenSet.claims());
-    })
+    "oidc",
+    new Strategy(
+      { client, passReqToCallback: true, loadUserInfo: true },
+      (req, tokenSet, userinfo, done) => {
+        req.session.tokenSet = tokenSet;
+        req.session.userinfo = userinfo;
+        return done(null, tokenSet.claims());
+      }
+    )
   );
 });
 
@@ -109,5 +116,5 @@ const httpsServer = https.createServer(credentials, app);
 // });
 
 httpsServer.listen(8443, () => {
-  logger.info("HTTPS authentication server running on port 8443")
+  logger.info("HTTPS authentication server running on port 8443");
 });

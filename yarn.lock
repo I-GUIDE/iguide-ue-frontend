@@ -3315,6 +3315,11 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
+prerender-node@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/prerender-node/-/prerender-node-3.8.0.tgz#446061cded637994abdb56e2b06b9acc6a9c048f"
+  integrity sha512-MJcdr/RePzCaYw30XQ2H64rXAkGuHDGitHmx2D1OPsNxEDMho5ha8GfwJVLxstPdj49vgerwZqnsE+2M/4Ov2A==
+
 prismjs@^1.27.0:
   version "1.29.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.29.0.tgz#f113555a8fa9b57c35e637bba27509dcf802dd12"
