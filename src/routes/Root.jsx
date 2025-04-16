@@ -3,15 +3,15 @@ import { React, useState, useEffect } from "react";
 import { Outlet } from "react-router";
 import { useCookies } from "react-cookie";
 
-import NavBar from "../components/Layout/NavBar.jsx";
-import Footer from "../components/Layout/Footer.jsx";
-import ErrorPage from "./ErrorPage.jsx";
-
 import { StyledEngineProvider } from "@mui/material/styles";
 import Snackbar from "@mui/joy/Snackbar";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+
+import NavBar from "../components/Layout/NavBar.jsx";
+import Footer from "../components/Layout/Footer.jsx";
+import ErrorPage from "./ErrorPage.jsx";
 
 import {
   checkUser,
