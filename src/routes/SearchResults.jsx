@@ -29,7 +29,12 @@ import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
+// import Select from "@mui/joy/Select";
+// import Option from "@mui/joy/Option";
 
+import TuneIcon from "@mui/icons-material/Tune";
+
+import AdvancedSearch from "../components/AdvancedSearch";
 import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
@@ -48,6 +53,13 @@ export default function SearchResults() {
     content: "",
     status: "initial",
   });
+
+  const [ranking, setRanking] = useState({
+    sortBy: "creation_time",
+    order: "desc",
+  });
+
+  const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -104,7 +116,7 @@ export default function SearchResults() {
           searchTerm,
           searchCategory,
           "_score",
-          "desc",
+          ranking.order,
           currentStartingIdx,
           itemsPerPage
         );
@@ -134,7 +146,7 @@ export default function SearchResults() {
     if (searchTerm && searchTerm !== "") {
       retrieveSearchData();
     }
-  }, [currentStartingIdx, searchTerm, searchCategory]);
+  }, [currentStartingIdx, searchTerm, searchCategory, ranking]);
 
   // Determine the search result page URL based on different variables
   function searchUriBuilder(keyword, type) {
@@ -209,6 +221,31 @@ export default function SearchResults() {
     setSearchTerm(nextSearchTerm);
     setSearchParams({ keyword: nextSearchTerm, type: searchCategory });
     navigate(searchUriBuilder(nextSearchTerm, searchCategory));
+  }
+
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "newest":
+        setRanking({
+          sortBy: "creation_time",
+          order: "desc",
+        });
+        break;
+      case "most-popular":
+        setRanking({
+          sortBy: "click_count",
+          order: "desc",
+        });
+        break;
+      case "a-z":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      default:
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
   }
 
   return (
@@ -406,14 +443,38 @@ export default function SearchResults() {
                         , no items matched your criteria.
                       </Typography>
                     )}
-                    <Button
-                      key="clear-search"
-                      size="sm"
-                      variant="outlined"
-                      onClick={handleReset}
-                    >
-                      Reset
-                    </Button>
+                    <Stack direction="row" spacing={2}>
+                      {/* <Select
+                        defaultValue="newest"
+                        onChange={handleSortingChange}
+                        sx={{ width: 150 }}
+                      >
+                        <Option value="newest">Newest</Option>
+                        <Option value="most-popular">Most Popular</Option>
+                        <Option value="a-z">A-Z</Option>
+                      </Select> */}
+                      <Button
+                        key="clear-search"
+                        size="sm"
+                        variant="plain"
+                        startDecorator={<TuneIcon />}
+                        onClick={() => setOpenAdvancedSearch(true)}
+                      >
+                        Advanced Search
+                      </Button>
+                      <AdvancedSearch
+                        open={openAdvancedSearch}
+                        onClose={() => setOpenAdvancedSearch(false)}
+                      />
+                      <Button
+                        key="clear-search"
+                        size="sm"
+                        variant="outlined"
+                        onClick={handleReset}
+                      >
+                        Reset
+                      </Button>
+                    </Stack>
                   </Stack>
                 )}
                 <Grid
