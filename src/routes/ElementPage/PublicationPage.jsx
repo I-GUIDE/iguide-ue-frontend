@@ -23,7 +23,7 @@ import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
-import CitationGenerator from "../../features/Element/CitationGenerator";
+import DoiCitation from "../../features/Element/DoiCitation";
 
 import ErrorPage from "../ErrorPage";
 
@@ -180,13 +180,7 @@ export default function PublicationPage() {
             </Grid>
 
             <Grid xs={12}>
-              <CitationGenerator
-                contributorId={contributor?.id}
-                createdAt={creationTime}
-                title={title}
-                elementType="publications"
-                elementId={id}
-              />
+              <DoiCitation doi={externalLink} />
             </Grid>
 
             <Grid xs={12}>
