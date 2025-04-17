@@ -9,6 +9,7 @@ import Badge from "@mui/joy/Badge";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
 
 export default function CopyButton(props) {
