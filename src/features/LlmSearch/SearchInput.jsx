@@ -44,8 +44,18 @@ export default function SearchInput(props) {
             <IconButton
               size="lg"
               variant="solid"
-              color={!!waitingForResponse ? "neutral" : "primary"}
-              sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              disabled={waitingForResponse}
+              sx={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                background: `linear-gradient(135deg, #F2C20F 0%, #5B9A5A 60%)`,
+                color: "#fff",
+                "&:hover": {
+                  background: `linear-gradient(135deg, #5B9A5A 0%, #F2C20F 100%)`,
+                },
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
+                transition: "background 0.3s ease",
+              }}
               onClick={handleClick}
             >
               <ArrowUpwardIcon />
