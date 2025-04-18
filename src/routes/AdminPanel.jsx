@@ -166,7 +166,8 @@ export default function AdminPanel() {
       default:
         TEST_MODE && console.log(`Unknown filter: ${newValue}`);
     }
-    if (newValue === "none") {
+    // Only re-render list when there is currently a filterValue applied
+    if (newValue === "none" && filter.filterValue) {
       setFilter({ filterName: "none", filterValue: "" });
       handlePageClick(undefined, 1);
     }
@@ -174,10 +175,13 @@ export default function AdminPanel() {
   }
 
   function handleFilterValueChangeForRoles(event, newValue) {
-    setFilterName("role-no");
-    setFilterValue(newValue);
-    setFilter({ filterName: "role-no", filterValue: newValue });
-    handlePageClick(undefined, 1);
+    // Will trigger re-rendering only when there is a valid role number
+    if (newValue) {
+      setFilterName("role-no");
+      setFilterValue(newValue);
+      setFilter({ filterName: "role-no", filterValue: newValue });
+      handlePageClick(undefined, 1);
+    }
   }
 
   function handleFilterValueChange(event) {
@@ -185,12 +189,13 @@ export default function AdminPanel() {
     setFilterValue(val);
   }
 
+  // Will trigger re-rendering
   function handleFilterButtonClick(event) {
-    if (filterName !== "none") {
-      setFilter({ filterName: filterName, filterValue: filterValue });
-      handlePageClick(undefined, 1);
-    }
+    setFilter({ filterName: filterName, filterValue: filterValue });
+    handlePageClick(undefined, 1);
   }
+
+  // Will trigger re-rendering
   function handleResetButtonClick(event) {
     setFilter({ filterName: "none", filterValue: "" });
     setFilterName("none");
@@ -367,7 +372,7 @@ export default function AdminPanel() {
                             />
                             <Button
                               size="sm"
-                              disabled={filterName === "none"}
+                              disabled={filterName === "none" || !filterValue}
                               onClick={handleFilterButtonClick}
                             >
                               GO
