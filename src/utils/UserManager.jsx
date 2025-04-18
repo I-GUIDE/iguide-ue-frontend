@@ -34,6 +34,8 @@ export async function userLogout() {
  * @param {number} [size=24] - The number of resources to return. Defaults to 24.
  * @param {number} [sortBy="last_name"] - Sorting method. Defaults to last name.
  * @param {string} [order="asc"] - The order of sorting, either 'asc' or 'desc'. Defaults to 'asc'.
+ * @param {string} filterName - Filter name
+ * @param {string} filterValue - Filter value
  * @return {Promise<Array<Dict>>} the information of the user
  * @throws {Error} Throws an error if fetching the user failed.
  */
@@ -41,14 +43,18 @@ export async function getAllUsers(
   from = 0,
   size = 24,
   sortBy = "last_name",
-  order = "asc"
+  order = "asc",
+  filterName,
+  filterValue
 ) {
-  const response = await fetchWithAuth(
-    `${USER_BACKEND_URL}/api/users?from=${from}&size=${size}&sort-by=${sortBy}&sort-order=${order}`,
-    {
-      method: "GET",
-    }
-  );
+  let uri = `${USER_BACKEND_URL}/api/users?from=${from}&size=${size}&sort-by=${sortBy}&sort-order=${order}`;
+  if (filterName && filterValue) {
+    uri += `&filter-name=${filterName}&filter-value=${filterValue}`;
+  }
+
+  const response = await fetchWithAuth(uri, {
+    method: "GET",
+  });
   if (!response.ok) {
     throw new Error(`Error: ${response.statusText}`);
   }

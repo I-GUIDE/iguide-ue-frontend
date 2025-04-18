@@ -19,6 +19,8 @@ import Typography from "@mui/joy/Typography";
 import Pagination from "@mui/material/Pagination";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import Button from "@mui/joy/Button";
+import Input from "@mui/joy/Input";
 
 import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
 
@@ -38,7 +40,7 @@ import { PERMISSIONS } from "../configs/Permissions";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function AdminPanel() {
-  usePageTitle("User Profile");
+  usePageTitle("Admin Panel");
 
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated, localUserInfo } = useOutletContext();
@@ -63,6 +65,9 @@ export default function AdminPanel() {
   const [resultLength, setResultLength] = useState(0);
 
   const [ranking, setRanking] = useState({ sortBy: "last_name", order: "asc" });
+  const [filterName, setFilterName] = useState("none");
+  const [filterValue, setFilterValue] = useState("");
+  const [filter, setFilter] = useState({ filterName: "none", filterValue: "" });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -80,7 +85,9 @@ export default function AdminPanel() {
           startingIdx,
           itemsPerPage,
           ranking.sortBy,
-          ranking.order
+          ranking.order,
+          filter.filterName,
+          filter.filterValue
         );
 
         setNumberOfTotalItems(data["total-users"]);
@@ -95,7 +102,7 @@ export default function AdminPanel() {
     }
 
     fetchAllUsers(currentStartingIdx);
-  }, [currentStartingIdx, ranking]);
+  }, [currentStartingIdx, ranking, filter]);
 
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
@@ -137,6 +144,58 @@ export default function AdminPanel() {
       default:
         TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
     }
+  }
+
+  function handleFilterNameChange(event, newValue) {
+    switch (newValue) {
+      case "none":
+        setFilterName("none");
+        break;
+      case "last-name":
+        setFilterName("last-name");
+        break;
+      case "first-name":
+        setFilterName("first-name");
+        break;
+      case "affiliation":
+        setFilterName("affiliation");
+        break;
+      case "role-no":
+        setFilterName("role-no");
+        break;
+      default:
+        TEST_MODE && console.log(`Unknown filter: ${newValue}`);
+    }
+    if (newValue === "none") {
+      setFilter({ filterName: "none", filterValue: "" });
+      handlePageClick(undefined, 1);
+    }
+    setFilterValue("");
+  }
+
+  function handleFilterValueChangeForRoles(event, newValue) {
+    setFilterName("role-no");
+    setFilterValue(newValue);
+    setFilter({ filterName: "role-no", filterValue: newValue });
+    handlePageClick(undefined, 1);
+  }
+
+  function handleFilterValueChange(event) {
+    const val = event.target.value;
+    setFilterValue(val);
+  }
+
+  function handleFilterButtonClick(event) {
+    if (filterName !== "none") {
+      setFilter({ filterName: filterName, filterValue: filterValue });
+      handlePageClick(undefined, 1);
+    }
+  }
+  function handleResetButtonClick(event) {
+    setFilter({ filterName: "none", filterValue: "" });
+    setFilterName("none");
+    setFilterValue("");
+    handlePageClick(undefined, 1);
   }
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
@@ -220,31 +279,111 @@ export default function AdminPanel() {
             >
               <Stack spacing={2}>
                 <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
+                  direction={{ xs: "column", md: "row" }}
+                  justifyContent={{ xs: "center", md: "space-between" }}
+                  alignItems={{ xs: "flex-start", md: "center" }}
+                  spacing={1}
                 >
-                  <Typography>
-                    Showing {currentStartingIdx + 1}-
-                    {currentStartingIdx + resultLength} of {numberOfTotalItems}
-                  </Typography>
-                  <Stack
-                    sx={{
-                      justifyContent: "center",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <Typography level="body-xs">Sort by</Typography>
-                    <Select
-                      defaultValue="last_name_asc"
-                      onChange={handleUserListSortingChange}
-                      sx={{ width: 170 }}
+                  {/* If no results, don't render */}
+                  {resultLength !== 0 ? (
+                    <Typography>
+                      Showing {currentStartingIdx + 1}-
+                      {currentStartingIdx + resultLength} of{" "}
+                      {numberOfTotalItems}
+                    </Typography>
+                  ) : (
+                    <Typography color="danger">No results returned</Typography>
+                  )}
+                  <Stack direction="row" spacing={1}>
+                    <Stack
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      }}
                     >
-                      <Option value="last_name_asc">Last Name</Option>
-                      <Option value="last_name_desc">Last Name (Z-A)</Option>
-                      <Option value="first_name_asc">First Name</Option>
-                      <Option value="first_name_desc">First Name (Z-A)</Option>
-                    </Select>
+                      <Typography level="body-xs">Sort by</Typography>
+                      <Select
+                        defaultValue="last_name_asc"
+                        onChange={handleUserListSortingChange}
+                        sx={{ width: 170 }}
+                      >
+                        <Option value="last_name_asc">Last Name</Option>
+                        <Option value="last_name_desc">Last Name (Z-A)</Option>
+                        <Option value="first_name_asc">First Name</Option>
+                        <Option value="first_name_desc">
+                          First Name (Z-A)
+                        </Option>
+                      </Select>
+                    </Stack>
+                    <Stack
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Typography level="body-xs">Filter Name</Typography>
+                      <Select
+                        defaultValue="none"
+                        value={filterName || "none"}
+                        onChange={handleFilterNameChange}
+                        sx={{ width: 130 }}
+                      >
+                        <Option value="none">No Filter</Option>
+                        <Option value="role-no">Role</Option>
+                        <Option value="affiliation">Affiliation</Option>
+                        <Option value="last-name">Last Name</Option>
+                        <Option value="first-name">First Name</Option>
+                      </Select>
+                    </Stack>
+                    <Stack
+                      sx={{
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Typography level="body-xs">Filter Value</Typography>
+                      <Stack direction="row" spacing={1}>
+                        {filterName === "role-no" ? (
+                          <Select
+                            value={filterValue || ""}
+                            name="role"
+                            onChange={handleFilterValueChangeForRoles}
+                            sx={{ width: 210 }}
+                          >
+                            <Option value={1}>Super Admin (1)</Option>
+                            <Option value={2}>Admin (2)</Option>
+                            <Option value={3}>Moderator (3)</Option>
+                            <Option value={4}>Trusted User Plus (4)</Option>
+                            <Option value={8}>Trusted User (8)</Option>
+                            <Option value={10}>User (10)</Option>
+                          </Select>
+                        ) : (
+                          <>
+                            <Input
+                              disabled={filterName === "none"}
+                              value={filterValue || ""}
+                              onChange={handleFilterValueChange}
+                              sx={{ maxWidth: 180 }}
+                            />
+                            <Button
+                              size="sm"
+                              disabled={filterName === "none"}
+                              onClick={handleFilterButtonClick}
+                            >
+                              GO
+                            </Button>
+                          </>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="outlined"
+                          disabled={filterName === "none"}
+                          onClick={handleResetButtonClick}
+                        >
+                          Reset
+                        </Button>
+                      </Stack>
+                    </Stack>
                   </Stack>
                 </Stack>
                 {loading ? (
