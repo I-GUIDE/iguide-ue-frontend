@@ -17,6 +17,9 @@ import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Pagination from "@mui/material/Pagination";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+
 import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
 
 import UserProfileCard from "../components/UserProfileCard";
@@ -59,6 +62,8 @@ export default function AdminPanel() {
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
   const [resultLength, setResultLength] = useState(0);
 
+  const [ranking, setRanking] = useState({ sortBy: "last_name", order: "asc" });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -71,7 +76,12 @@ export default function AdminPanel() {
     async function fetchAllUsers(startingIdx) {
       setLoading(true);
       try {
-        const data = await getAllUsers(startingIdx, itemsPerPage);
+        const data = await getAllUsers(
+          startingIdx,
+          itemsPerPage,
+          ranking.sortBy,
+          ranking.order
+        );
 
         setNumberOfTotalItems(data["total-users"]);
         setNumberOfPages(Math.ceil(data["total-users"] / itemsPerPage));
@@ -85,7 +95,7 @@ export default function AdminPanel() {
     }
 
     fetchAllUsers(currentStartingIdx);
-  }, [currentStartingIdx]);
+  }, [currentStartingIdx, ranking]);
 
   function handlePageClick(event, newPageNumber) {
     const newStartingIdx = (newPageNumber - 1) * itemsPerPage;
@@ -96,6 +106,37 @@ export default function AdminPanel() {
     navigate(`${uriPrefix}?page=${newPageNumber}`, { replace: true });
     setCurrentPage(newPageNumber);
     window.scrollTo(0, 0);
+  }
+
+  function handleUserListSortingChange(event, newValue) {
+    switch (newValue) {
+      case "last_name_asc":
+        setRanking({
+          sortBy: "last_name",
+          order: "asc",
+        });
+        break;
+      case "last_name_desc":
+        setRanking({
+          sortBy: "last_name",
+          order: "desc",
+        });
+        break;
+      case "first_name_asc":
+        setRanking({
+          sortBy: "first_name",
+          order: "asc",
+        });
+        break;
+      case "first_name_desc":
+        setRanking({
+          sortBy: "first_name",
+          order: "desc",
+        });
+        break;
+      default:
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
   }
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
@@ -150,16 +191,6 @@ export default function AdminPanel() {
     );
   }
 
-  if (loading) {
-    return (
-      <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-        <JoyCssVarsProvider>
-          <CssBaseline enableColorScheme />
-        </JoyCssVarsProvider>
-      </MaterialCssVarsProvider>
-    );
-  }
-
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -197,45 +228,69 @@ export default function AdminPanel() {
                     Showing {currentStartingIdx + 1}-
                     {currentStartingIdx + resultLength} of {numberOfTotalItems}
                   </Typography>
+                  <Stack
+                    sx={{
+                      justifyContent: "center",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Typography level="body-xs">Sort by</Typography>
+                    <Select
+                      defaultValue="last_name_asc"
+                      onChange={handleUserListSortingChange}
+                      sx={{ width: 170 }}
+                    >
+                      <Option value="last_name_asc">Last Name</Option>
+                      <Option value="last_name_desc">Last Name (Z-A)</Option>
+                      <Option value="first_name_asc">First Name</Option>
+                      <Option value="first_name_desc">First Name (Z-A)</Option>
+                    </Select>
+                  </Stack>
                 </Stack>
-                <Grid
-                  container
-                  spacing={3}
-                  columns={12}
-                  sx={{ flexGrow: 1 }}
-                  justifyContent="flex-start"
-                >
-                  {userList?.map((user) => (
-                    <Grid key={user.id} size={{ xs: 12, lg: 6 }}>
-                      <UserProfileCard
-                        id={user.id}
-                        firstName={user["first-name"]}
-                        lastName={user["last-name"]}
-                        role={user.role}
-                        affiliation={user.affiliation}
-                        email={user.email}
-                        avatar={user["avatar-url"]?.low}
-                      />
+                {loading ? (
+                  <Typography>Loading...</Typography>
+                ) : (
+                  <>
+                    <Grid
+                      container
+                      spacing={3}
+                      columns={12}
+                      sx={{ flexGrow: 1 }}
+                      justifyContent="flex-start"
+                    >
+                      {userList?.map((user) => (
+                        <Grid key={user.id} size={{ xs: 12, lg: 6 }}>
+                          <UserProfileCard
+                            id={user.id}
+                            firstName={user["first-name"]}
+                            lastName={user["last-name"]}
+                            role={user.role}
+                            affiliation={user.affiliation}
+                            email={user.email}
+                            avatar={user["avatar-url"]?.low}
+                          />
+                        </Grid>
+                      ))}
                     </Grid>
-                  ))}
-                </Grid>
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{
-                    pt: 2,
-                    minHeight: 0,
-                  }}
-                >
-                  <Pagination
-                    count={numberOfPages}
-                    color="primary"
-                    page={currentPage}
-                    onChange={handlePageClick}
-                  />
-                </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{
+                        pt: 2,
+                        minHeight: 0,
+                      }}
+                    >
+                      <Pagination
+                        count={numberOfPages}
+                        color="primary"
+                        page={currentPage}
+                        onChange={handlePageClick}
+                      />
+                    </Stack>
+                  </>
+                )}
               </Stack>
             </Grid>
           </Box>
