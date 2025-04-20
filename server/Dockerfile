@@ -1,42 +1,40 @@
-# Fetching the minified node image on apline linux
 FROM node:slim
 
-# Install Chromium and dependencies
-RUN apt-get update && apt-get install -y \
-    chromium \
-    fonts-liberation \
-    libappindicator3-1 \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libdbus-1-3 \
-    libgdk-pixbuf2.0-0 \
-    libnspr4 \
-    libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    xdg-utils \
-    --no-install-recommends && \
-    ln -s /usr/bin/chromium /usr/bin/google-chrome && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-
 WORKDIR /server
-
-# Copying all the files in our project
 COPY . .
 
-# Installing dependencies
-RUN yarn install
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      wget \
+      ca-certificates \
+      fonts-liberation \
+      libasound2 \
+      libatk1.0-0 \
+      libcups2 \
+      libdbus-1-3 \
+      libgtk-3-0 \
+      libnspr4 \
+      libnss3 \
+      libx11-xcb1 \
+      libxcomposite1 \
+      libxdamage1 \
+      libxkbcommon0 \
+      libxrandr2 \
+      libxss1 \
+      libxtst6 \
+ && wget -qO /usr/share/keyrings/google-linux-signing-keyring.gpg \
+      https://dl.google.com/linux/linux_signing_key.pub \
+ && echo \
+   "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] \
+    http://dl.google.com/linux/chrome/deb/ stable main" \
+    > /etc/apt/sources.list.d/google-chrome.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends google-chrome-stable \
+ && rm -rf /var/lib/apt/lists/*
 
-ENV CHROME_BIN=/usr/bin/google-chrome
+RUN yarn install --frozen-lockfile
 
-# Starting our application
-CMD [ "node", "server.js" ]
+ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
-# Exposing server port
 EXPOSE 3000
+CMD ["node", "server.js"]
