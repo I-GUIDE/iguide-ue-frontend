@@ -18,9 +18,6 @@ import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
-import Tooltip from "@mui/joy/Tooltip";
-import Button from "@mui/joy/Button";
 
 import MapIcon from "@mui/icons-material/Map";
 import DatasetIcon from "@mui/icons-material/Dataset";
@@ -34,6 +31,7 @@ import TutorialCard from "../features/Home/TutorialCard";
 import SearchBar from "../components/SearchBar";
 import FloatingButton from "../components/FloatingButton";
 import usePageTitle from "../hooks/usePageTitle";
+import Logo from "../components/Logo";
 
 const JUPYTER_TUTORIAL_EID = import.meta.env.VITE_JUPYTER_TUTORIAL_EID;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -104,9 +102,7 @@ export default function Home() {
                     pb: 1,
                   }}
                 >
-                  <Typography
-                    level="h1"
-                    textColor={"#000"}
+                  <Logo
                     sx={{
                       display: "flex",
                       flexDirection: "row",
@@ -114,29 +110,7 @@ export default function Home() {
                       pt: 4,
                       pb: 0.5,
                     }}
-                    endDecorator={
-                      <Chip component="span" size="sm" color="primary">
-                        BETA
-                      </Chip>
-                    }
-                    justifyContent="center"
-                  >
-                    <Stack
-                      direction={{ sx: "column", sm: "row" }}
-                      spacing={0}
-                      sx={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      className="tourid-0"
-                    >
-                      <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
-                      <img
-                        src="/images/platform-word-gray.png"
-                        alt="Platform"
-                      />
-                    </Stack>
-                  </Typography>
+                  />
                   <Typography
                     level="title-lg"
                     textColor={"#696969"}

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import {
+  useNavigate,
+  useOutletContext,
+  Link as RouterLink,
+} from "react-router";
 
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
@@ -14,6 +18,7 @@ import IconButton from "@mui/joy/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
 import { retrieveTopSearchKeywords } from "../utils/DataRetrieval";
+import { PERMISSIONS } from "../configs/Permissions";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const TRENDING_SEARCH_TERM_THRESHOLD =
@@ -25,6 +30,9 @@ export default function SearchBar(props) {
   const showTrendingSearchKeywords = props.showTrendingSearchKeywords;
   const searchCategory = props.searchCategory || "any";
   const placeholder = props.placeholder;
+
+  const { isAuthenticated, localUserInfo } = useOutletContext() || {};
+  const canAccessLLMSearch = localUserInfo?.role <= PERMISSIONS["access_llm"];
 
   // define search data
   const [data, setData] = useState({
@@ -161,26 +169,45 @@ export default function SearchBar(props) {
               </Tooltip>
             }
           />
-          {showSmartSearch && (
-            <Tooltip title="Conversational search coming soon" placement="top">
-              <IconButton
-                size="lg"
-                variant="plain"
-                loading={data.status === "loading"}
-                type="submit"
-                sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                onClick={() => {
-                  onSearch();
-                  setSearchType("llm");
-                }}
-              >
-                <Avatar
-                  alt="Smart search button"
-                  src="/images/smart-search-button.png"
-                />
-              </IconButton>
-            </Tooltip>
-          )}
+          {showSmartSearch &&
+            (isAuthenticated && canAccessLLMSearch ? (
+              <Tooltip title="Try Smart Search" placement="top">
+                <IconButton
+                  size="lg"
+                  variant="plain"
+                  component={RouterLink}
+                  to="/smart-search"
+                  sx={{
+                    borderRadius: "50%",
+                    minWidth: 0,
+                    minHeight: 0,
+                    padding: 0,
+                    transition: "all 0.5s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.3)",
+                    },
+                  }}
+                >
+                  <Avatar
+                    alt="Smart search button"
+                    src="/images/smart-search-button.png"
+                  />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Smart Search coming soon" placement="top">
+                <IconButton
+                  size="lg"
+                  variant="plain"
+                  sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                >
+                  <Avatar
+                    alt="Smart search button"
+                    src="/images/smart-search-button.png"
+                  />
+                </IconButton>
+              </Tooltip>
+            ))}
         </Stack>
         {showTrendingSearchKeywords && trendingSearchKeywords.length > 0 && (
           <ClickableKeywordList>{trendingSearchKeywords}</ClickableKeywordList>
