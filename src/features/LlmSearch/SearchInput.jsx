@@ -2,8 +2,12 @@ import React, { useRef } from "react";
 
 import IconButton from "@mui/joy/IconButton";
 import FormControl from "@mui/joy/FormControl";
+import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Tooltip from "@mui/joy/Tooltip";
+import Typography from "@mui/joy/Typography";
+
+import WarningIcon from "@mui/icons-material/Warning";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 export default function SearchInput(props) {
@@ -76,6 +80,12 @@ export default function SearchInput(props) {
           "--Input-paddingInline": "20px",
         }}
       />
+      <FormHelperText>
+        <Typography level="body-xs" startDecorator={<WarningIcon />}>
+          Smart Search is still under development. Not all responses may be
+          accurate.
+        </Typography>
+      </FormHelperText>
     </FormControl>
   );
 }
