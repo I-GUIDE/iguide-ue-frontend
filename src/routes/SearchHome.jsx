@@ -11,18 +11,14 @@ const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
-import Stack from "@mui/joy/Stack";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
 
 import SearchBar from "../components/SearchBar";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
-
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+import Logo from "../components/Logo";
 
 export default function SearchHome() {
   usePageTitle("Search");
@@ -52,6 +48,7 @@ export default function SearchHome() {
               <Container maxWidth="md">
                 <Box
                   component="main"
+                  gap={3}
                   sx={{
                     height: "25%",
                     display: "grid",
@@ -59,42 +56,14 @@ export default function SearchHome() {
                     gridTemplateRows: "auto 1fr auto",
                   }}
                 >
-                  <Typography
-                    level="h1"
-                    textColor={"#000"}
+                  <Logo
                     sx={{
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "flex-start",
                       py: 1.5,
                     }}
-                    endDecorator={
-                      <Chip component="span" color="primary" size="sm">
-                        BETA
-                      </Chip>
-                    }
-                    justifyContent="center"
-                  >
-                    <Stack
-                      direction={{ sx: "column", sm: "row" }}
-                      spacing={0}
-                      sx={{
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img
-                        src="/images/iguide-word-color.png"
-                        loading="lazy"
-                        alt="I-GUIDE"
-                      />
-                      <img
-                        src="/images/platform-word-gray.png"
-                        loading="lazy"
-                        alt="Platform"
-                      />
-                    </Stack>
-                  </Typography>
+                  />
                   <SearchBar
                     placeholder="Start your exploration..."
                     showTrendingSearchKeywords
@@ -103,7 +72,7 @@ export default function SearchHome() {
                   {/* Box to keep the search bar afloat */}
                   <Box
                     sx={{
-                      height: `calc(100vh * 0.3)`,
+                      height: `calc(100vh * 0.25)`,
                     }}
                   />
                 </Box>

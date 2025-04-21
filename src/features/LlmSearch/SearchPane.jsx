@@ -1,14 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link as RouterLink } from "react-router";
 
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
+import Link from "@mui/joy/Link";
 
 import MessageBubble from "./MessageBubble";
 import SearchInput from "./SearchInput";
+import Logo from "../../components/Logo";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import {
@@ -116,19 +118,23 @@ export default function SearchPane() {
         }}
       >
         <Container maxWidth="md">
+          <Logo
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              py: 1.5,
+            }}
+          />
           <Typography
-            level="h2"
+            level="h1"
+            align="center"
             justifyContent="center"
-            endDecorator={
-              <Chip component="span" size="sm" color="primary">
-                BETA
-              </Chip>
-            }
             sx={{
               p: 3,
             }}
           >
-            I-GUIDE Platform Smart Search
+            Smart Search
           </Typography>
           <Typography
             level="h4"
@@ -155,6 +161,24 @@ export default function SearchPane() {
               );
             }}
           />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            spacing={5}
+            sx={{ pt: 5 }}
+          >
+            <Typography level="title-md" color="primary" align="center">
+              <Link component={RouterLink} to="/search-home">
+                Go back to traditional search
+              </Link>
+            </Typography>
+            <Typography level="title-md" color="primary" align="center">
+              <Link component={RouterLink} to="/">
+                Go back to home page
+              </Link>
+            </Typography>
+          </Stack>
         </Container>
       </Box>
     );
