@@ -18,6 +18,8 @@ import {
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 
+import myIcon from "./smart.svg";
+
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
 async function fetchMemoryIdForNewConversation() {
@@ -127,14 +129,14 @@ export default function SearchPane() {
             }}
           />
           <Typography
-            level="h1"
+            level="h2"
             align="center"
             justifyContent="center"
             sx={{
               p: 3,
             }}
           >
-            Smart Search
+            <img src={myIcon} alt="icon" style={{ height: "2em" }} /> Search
           </Typography>
           <Typography
             level="h4"
