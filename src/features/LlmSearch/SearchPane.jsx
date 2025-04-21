@@ -18,7 +18,7 @@ import {
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 
-import myIcon from "./smart.svg";
+import myIcon from "./smart-logo.svg";
 
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
@@ -97,6 +97,7 @@ export default function SearchPane() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
+  const [svgError, setSvgError] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -136,7 +137,17 @@ export default function SearchPane() {
               p: 3,
             }}
           >
-            <img src={myIcon} alt="icon" style={{ height: "2em" }} /> Search
+            {!svgError ? (
+              <img
+                src={myIcon}
+                alt="icon"
+                onError={() => setSvgError(true)}
+                style={{ height: "2em" }}
+              />
+            ) : (
+              "Smart"
+            )}{" "}
+            Search
           </Typography>
           <Typography
             level="h4"
