@@ -18,6 +18,8 @@ import {
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 
+import myIcon from "./smart-logo.svg";
+
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
 
 async function fetchMemoryIdForNewConversation() {
@@ -95,6 +97,7 @@ export default function SearchPane() {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
+  const [svgError, setSvgError] = useState(false);
 
   const scrollRef = useRef(null);
 
@@ -127,14 +130,24 @@ export default function SearchPane() {
             }}
           />
           <Typography
-            level="h1"
+            level="h2"
             align="center"
             justifyContent="center"
             sx={{
               p: 3,
             }}
           >
-            Smart Search
+            {!svgError ? (
+              <img
+                src={myIcon}
+                alt="icon"
+                onError={() => setSvgError(true)}
+                style={{ height: "2em" }}
+              />
+            ) : (
+              "Smart"
+            )}{" "}
+            Search
           </Typography>
           <Typography
             level="h4"
