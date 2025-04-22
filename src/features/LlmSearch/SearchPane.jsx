@@ -11,6 +11,7 @@ import Link from "@mui/joy/Link";
 import MessageBubble from "./MessageBubble";
 import SearchInput from "./SearchInput";
 import Logo from "../../components/Logo";
+import { SampleChatHistory } from "./SampleChatHistory";
 
 import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import {
@@ -21,6 +22,7 @@ import {
 import myIcon from "./smart-logo.svg";
 
 const DO_NOT_USE_LLM_ENDPOINT = import.meta.env.VITE_DO_NOT_USE_LLM_ENDPOINT;
+const USE_LLM_SAMPLE_CHAT = import.meta.env.VITE_USE_LLM_SAMPLE_CHAT === "true";
 
 async function fetchMemoryIdForNewConversation() {
   const llmMemory =
@@ -93,7 +95,9 @@ async function getLlmSearchResult(
 
 export default function SearchPane() {
   const [memoryId, setMemoryId] = useState("");
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState(
+    USE_LLM_SAMPLE_CHAT ? SampleChatHistory : []
+  );
   const [searchInputValue, setSearchInputValue] = useState("");
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
