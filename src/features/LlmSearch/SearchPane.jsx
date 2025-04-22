@@ -254,8 +254,9 @@ export default function SearchPane() {
                   />
                 )}
                 <MessageBubble
-                  variant={isYou ? "sent" : "received"}
+                  messageType={isYou ? "out" : "in"}
                   messageBody={message}
+                  memoryId={memoryId}
                 />
               </Stack>
             );

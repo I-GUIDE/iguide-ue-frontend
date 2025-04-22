@@ -785,3 +785,38 @@ export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
     return "ERROR";
   }
 }
+
+/**
+ * Submit a Smart Search response rating
+ *
+ * @async
+ * @function submitLlmResponseRating
+ * @param {dictionary} ratingBody - a dictionary that contains the memoryId, messageId, and the rating information.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function submitLlmResponseRating(ratingBody) {
+  try {
+    TEST_MODE && console.log("Submitting rating", ratingBody);
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/rating`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ratingBody),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to submit a LLM rating");
+    }
+
+    const ret = await response.json();
+    TEST_MODE && console.log("LLM rating submission returned", ret);
+
+    return ret;
+  } catch (error) {
+    console.error("Error submitting a rating: ", error.message);
+    return "ERROR";
+  }
+}
