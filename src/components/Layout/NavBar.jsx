@@ -40,6 +40,7 @@ import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
 const ENV = import.meta.env.VITE_ENV;
+const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
 const aboutDropdown = [
   ["Getting Started", "/docs/getting-started"],
@@ -317,6 +318,7 @@ export default function NavBar(props) {
     }
   }
 
+  // Used when window width is smaller than 1200px
   function AuthInDrawer() {
     if (isAuthenticated) {
       return (
@@ -478,6 +480,19 @@ export default function NavBar(props) {
           )}
           <Divider sx={{ my: 1 }} />
           <Link
+            underline="none"
+            component="a"
+            href={JUPYTERHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ color: "text.tertiary" }}
+          >
+            <ListItem sx={{ width: "100%" }}>
+              <ListItemButton>I-GUIDE JupyterHub</ListItemButton>
+            </ListItem>
+          </Link>
+          <Divider sx={{ my: 1 }} />
+          <Link
             to="/contact-us"
             underline="none"
             component={RouterLink}
@@ -534,7 +549,7 @@ export default function NavBar(props) {
                 FOR TESTING ONLY
               </Typography>
             )}
-            {/* When page is narrower than 960px */}
+            {/* When page is narrower than 1200px */}
             <Stack
               direction="row"
               justifyContent="flex-start"
@@ -674,7 +689,7 @@ export default function NavBar(props) {
               </Stack>
             </Stack>
 
-            {/* When page is wider than 960px */}
+            {/* When page is wider than 1200px */}
             <Stack
               direction="row"
               justifyContent="space-between"
@@ -761,7 +776,7 @@ export default function NavBar(props) {
                     <Button
                       size="sm"
                       component="a"
-                      href="https://jupyter.iguide.illinois.edu/"
+                      href={JUPYTERHUB_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
