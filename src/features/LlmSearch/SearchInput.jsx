@@ -37,18 +37,22 @@ export default function SearchInput(props) {
         name="llm-search-input"
         aria-label="llm search input"
         autoComplete="off"
-        disabled={!!waitingForResponse}
+        disabled={waitingForResponse}
         ref={textAreaRef}
         onChange={(e) => {
           setSearchInputValue(e.target.value);
         }}
         value={searchInputValue}
         endDecorator={
-          <Tooltip title="Send" variant="solid">
+          <Tooltip
+            title={!waitingForResponse && "Send"}
+            variant="solid"
+            placement="top"
+          >
             <IconButton
               size="lg"
               variant="solid"
-              disabled={waitingForResponse}
+              loading={waitingForResponse}
               sx={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
