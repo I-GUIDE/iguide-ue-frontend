@@ -376,9 +376,12 @@ export default function MessageBubble(props) {
                     </AccordionGroup>
                   </>
                 ) : (
-                  <Typography level="title-sm" color="success" sx={{ pt: 2 }}>
-                    You've rated this response. Thank you for your feedback!
-                  </Typography>
+                  <>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography level="title-sm" color="success" sx={{ pt: 2 }}>
+                      You've rated this response. Thank you for your feedback!
+                    </Typography>
+                  </>
                 ))}
             </Sheet>
           </Box>
