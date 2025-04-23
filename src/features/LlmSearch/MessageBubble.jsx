@@ -190,7 +190,6 @@ export default function MessageBubble(props) {
                     },
                 outgoingMessage
                   ? {
-                      // backgroundColor: "#4A90E2",
                       background: `linear-gradient(170deg, #5B9A5A 60%, #A8B400 95%)`,
                     }
                   : {

@@ -9,6 +9,8 @@ import Box from "@mui/joy/Box";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
+const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
+
 const iFrameStyle = {
   top: 0,
   left: 0,
@@ -39,7 +41,8 @@ function getNotebookViewerUrl(repo_url, notebook_filename) {
 function getOpenWithUrl(repo_url, notebook_filename) {
   const repo_name = repo_url.split("/").pop();
   const ret =
-    "https://jupyter.iguide.illinois.edu/hub/user-redirect/git-pull/?repo=" +
+    JUPYTERHUB_URL +
+    "/hub/user-redirect/git-pull/?repo=" +
     repo_url +
     "&urlpath=/lab/tree/" +
     repo_name +
