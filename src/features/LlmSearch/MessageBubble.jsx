@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
@@ -11,6 +11,7 @@ import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
 import Rating from "@mui/material/Rating";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
@@ -25,6 +26,7 @@ import AccordionSummary from "@mui/joy/AccordionSummary";
 import FormControl from "@mui/joy/FormControl";
 import Textarea from "@mui/joy/Textarea";
 import Button from "@mui/joy/Button";
+import { useTheme } from "@mui/joy";
 
 import SimpleInfoCard from "../../components/SimpleInfoCard";
 import { submitLlmResponseRating } from "../../utils/DataRetrieval";
@@ -53,7 +55,7 @@ function RatingItem(props) {
 }
 
 export default function MessageBubble(props) {
-  const isSent = props.messageType === "out";
+  const outgoingMessage = props.messageType === "out";
   const messageBody = props.messageBody;
   const memoryId = props.memoryId;
 
@@ -61,6 +63,39 @@ export default function MessageBubble(props) {
   const answer = messageBody.answer;
   const elements = messageBody.elements;
   const sender = messageBody.sender;
+
+  // Responsive breakpoints for number of visible elements
+  const theme = useTheme();
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+  const [needToExpand, setNeedToExpand] = useState();
+  const [expanded, setExpanded] = useState(false);
+
+  let numberOfElementsVisibleWithoutExpansion;
+  if (isSm) {
+    numberOfElementsVisibleWithoutExpansion = 4;
+  } else if (isMdUp) {
+    numberOfElementsVisibleWithoutExpansion = 6;
+  } else {
+    numberOfElementsVisibleWithoutExpansion = 2;
+  }
+
+  // Decide if there is a need to provide expansion...
+  useEffect(() => {
+    if (!elements) {
+      setNeedToExpand(false);
+    } else if (elements.length <= numberOfElementsVisibleWithoutExpansion) {
+      setNeedToExpand(false);
+    } else {
+      setNeedToExpand(true);
+    }
+  }, [elements, numberOfElementsVisibleWithoutExpansion]);
+
+  // Visible elements contains all elements when it doesn't need to expand or expanded or empty
+  const visibleElements =
+    expanded || !elements || !needToExpand
+      ? elements
+      : elements.slice(0, numberOfElementsVisibleWithoutExpansion);
 
   const [ratingRelevance, setRatingRelevance] = useState(-1);
   const [ratingSufficiency, setRatingSufficiency] = useState(-1);
@@ -122,7 +157,7 @@ export default function MessageBubble(props) {
             direction="row"
             spacing={2}
             sx={{
-              justifyContent: isSent ? "flex-end" : "flex-start",
+              justifyContent: outgoingMessage ? "flex-end" : "flex-start",
               mb: 0.25,
             }}
           >
@@ -132,37 +167,38 @@ export default function MessageBubble(props) {
           {/* Message body */}
           <Box sx={{ position: "relative" }}>
             <Sheet
-              color={isSent ? "primary" : "neutral"}
-              variant={isSent ? "solid" : "outlined"}
+              color={outgoingMessage ? "primary" : "neutral"}
+              variant={outgoingMessage ? "solid" : "outlined"}
               sx={[
                 {
                   p: 2,
                   borderRadius: "lg",
                 },
-                isSent
+                outgoingMessage
                   ? {
                       borderTopRightRadius: 0,
                     }
                   : {
                       borderTopRightRadius: "lg",
                     },
-                isSent
+                outgoingMessage
                   ? {
                       borderTopLeftRadius: "lg",
                     }
                   : {
                       borderTopLeftRadius: 0,
                     },
-                isSent
+                outgoingMessage
                   ? {
-                      backgroundColor: "var(--joy-palette-primary-solidBg)",
+                      // backgroundColor: "#4A90E2",
+                      background: `linear-gradient(170deg, #5B9A5A 60%, #A8B400 95%)`,
                     }
                   : {
                       backgroundColor: "background.body",
                     },
               ]}
             >
-              {isSent ? (
+              {outgoingMessage ? (
                 <Typography
                   level="body-md"
                   sx={{ color: "var(--joy-palette-common-white)" }}
@@ -180,16 +216,32 @@ export default function MessageBubble(props) {
                   </Suspense>
                 </div>
               )}
-              {elements && elements.length > 0 && (
+              {visibleElements && visibleElements.length > 0 && (
                 <>
                   <Divider sx={{ my: 2 }} />
+                  <Typography level="title-md" sx={{ pb: 1 }}>
+                    Related Knowledge Elements
+                  </Typography>
                   <Grid
                     container
                     spacing={2}
                     columns={12}
-                    sx={{ flexGrow: 1, width: "100%" }}
+                    sx={{
+                      flexGrow: 1,
+                      width: "100%", // Message box bottom fade out
+                      height: !expanded && needToExpand && 300,
+                      maskImage:
+                        !expanded &&
+                        needToExpand &&
+                        "linear-gradient(to bottom, black, 80%, transparent)",
+                      // Message box bottom fade out for Webkit browsers (Safari)
+                      WebkitMaskImage:
+                        !expanded &&
+                        needToExpand &&
+                        "linear-gradient(to bottom, black, 80%, transparent)",
+                    }}
                   >
-                    {elements?.map((element) => (
+                    {visibleElements?.map((element) => (
                       <Grid key={element._id} size={{ xs: 12, sm: 6, md: 4 }}>
                         <SimpleInfoCard
                           cardtype={element["resource-type"] + "s"}
@@ -205,20 +257,38 @@ export default function MessageBubble(props) {
                       </Grid>
                     ))}
                   </Grid>
+                  {needToExpand &&
+                    (!expanded ? (
+                      <Button
+                        variant="plain"
+                        sx={{ my: 1 }}
+                        onClick={() => setExpanded(true)}
+                      >
+                        Show all
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="plain"
+                        sx={{ my: 2 }}
+                        onClick={() => setExpanded(false)}
+                      >
+                        Show less
+                      </Button>
+                    ))}
                 </>
               )}
-              {!isSent &&
+              {!outgoingMessage &&
                 (!ratingSubmitted ? (
                   <>
                     <Divider sx={{ my: 2 }} />
                     <AccordionGroup disableDivider>
                       <Accordion>
                         <AccordionSummary>
-                          <Typography level="title-md">
+                          <Typography level="title-sm">
                             Provide your feedback on this answer
                           </Typography>
                         </AccordionSummary>
-                        <AccordionDetails>
+                        <AccordionDetails sx={{ bgcolor: "#f9fcff" }}>
                           <Stack spacing={2} direction="column" sx={{ py: 1 }}>
                             <RatingItem
                               title="Relevance"
@@ -275,6 +345,7 @@ export default function MessageBubble(props) {
                               />
                             </FormControl>
                             <Button
+                              variant="soft"
                               size="sm"
                               sx={{ width: 150 }}
                               loading={loading}

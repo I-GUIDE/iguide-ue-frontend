@@ -52,13 +52,12 @@ export default function SearchInput(props) {
               sx={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
-                background: `linear-gradient(135deg, #F2C20F 0%, #5B9A5A 60%)`,
-                color: "#fff",
+                backgroundColor: "#5B9A5A",
                 "&:hover": {
-                  background: `linear-gradient(135deg, #5B9A5A 0%, #F2C20F 100%)`,
+                  backgroundColor: "#A8B400",
                 },
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
-                transition: "background 0.3s ease",
+                transition: "background 0.5s ease",
               }}
               onClick={handleClick}
             >
