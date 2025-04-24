@@ -787,18 +787,18 @@ export async function streamLlmSearchResult(searchInput, memoryId, setStatus) {
 }
 
 /**
- * Submit a Smart Search response rating
+ * Submit a Smart Search response advanced rating
  *
  * @async
- * @function submitLlmResponseRating
+ * @function submitLlmResponseAdvancedRating
  * @param {dictionary} ratingBody - a dictionary that contains the memoryId, messageId, and the rating information.
  * @throws {Error} Throws an error if the fetch operation fails.
  */
-export async function submitLlmResponseRating(ratingBody) {
+export async function submitLlmResponseAdvancedRating(ratingBody) {
   try {
-    TEST_MODE && console.log("Submitting rating", ratingBody);
+    TEST_MODE && console.log("Submitting LLM advanced rating", ratingBody);
     const response = await fetchWithAuth(
-      `${BACKEND_URL_PORT}/beta/llm/rating`,
+      `${BACKEND_URL_PORT}/beta/llm/advanced-rating`,
       {
         method: "POST",
         headers: {
@@ -808,15 +808,50 @@ export async function submitLlmResponseRating(ratingBody) {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to submit a LLM rating");
+      throw new Error("Failed to submit a LLM advanced rating");
     }
 
     const ret = await response.json();
-    TEST_MODE && console.log("LLM rating submission returned", ret);
+    TEST_MODE && console.log("LLM advacned rating submission returned", ret);
 
     return ret;
   } catch (error) {
-    console.error("Error submitting a rating: ", error.message);
+    console.error("Error submitting an advanced rating: ", error.message);
+    return "ERROR";
+  }
+}
+
+/**
+ * Submit a Smart Search response basic rating
+ *
+ * @async
+ * @function submitLlmResponseBasicRating
+ * @param {dictionary} ratingBody - a dictionary that contains the memoryId, messageId, and the rating information.
+ * @throws {Error} Throws an error if the fetch operation fails.
+ */
+export async function submitLlmResponseBasicRating(ratingBody) {
+  try {
+    TEST_MODE && console.log("Submitting LLM basic rating", ratingBody);
+    const response = await fetchWithAuth(
+      `${BACKEND_URL_PORT}/beta/llm/basic-rating`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ratingBody),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to submit a LLM basic rating");
+    }
+
+    const ret = await response.json();
+    TEST_MODE && console.log("LLM basic rating submission returned", ret);
+
+    return ret;
+  } catch (error) {
+    console.error("Error submitting a basic rating: ", error.message);
     return "ERROR";
   }
 }

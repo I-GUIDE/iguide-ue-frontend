@@ -60,7 +60,6 @@ export default function SearchInput(props) {
                 "&:hover": {
                   backgroundColor: "#A8B400",
                 },
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
                 transition: "background 0.5s ease",
               }}
               onClick={handleClick}
