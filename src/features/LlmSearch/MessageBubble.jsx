@@ -26,10 +26,20 @@ import AccordionSummary from "@mui/joy/AccordionSummary";
 import FormControl from "@mui/joy/FormControl";
 import Textarea from "@mui/joy/Textarea";
 import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
 import { useTheme } from "@mui/joy";
 
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+
 import SimpleInfoCard from "../../components/SimpleInfoCard";
-import { submitLlmResponseRating } from "../../utils/DataRetrieval";
+import {
+  submitLlmResponseBasicRating,
+  submitLlmResponseAdvancedRating,
+} from "../../utils/DataRetrieval";
 
 const LLM_ELEMENTS_DOMAIN = import.meta.env.VITE_LLM_ELEMENTS_DOMAIN;
 
@@ -97,6 +107,10 @@ export default function MessageBubble(props) {
       ? elements
       : elements.slice(0, numberOfElementsVisibleWithoutExpansion);
 
+  const [thumbsUp, setThumbsUp] = useState(false);
+  const [thumbsDown, setThumbsDown] = useState(false);
+  const [basicRatingError, setBasicRatingError] = useState(false);
+
   const [ratingRelevance, setRatingRelevance] = useState(-1);
   const [ratingSufficiency, setRatingSufficiency] = useState(-1);
   const [ratingAccuracy, setRatingAccuracy] = useState(-1);
@@ -104,10 +118,42 @@ export default function MessageBubble(props) {
   const [ratingCompleteness, setRatingCompleteness] = useState(-1);
   const [ratingTrust, setRatingTrust] = useState(-1);
   const [ratingComment, setRatingComment] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [ratingSubmitted, setRatingSubmitted] = useState(false);
+  const [advancedRatingLoading, setAdvancedRatingLoading] = useState(false);
+  const [advancedRatingError, setAdvancedRatingError] = useState(false);
+  const [advancedRatingSubmitted, setAdvancedRatingSubmitted] = useState(false);
   const [invalidSubmission, setInvalidSubmission] = useState(false);
+
+  // Handlers for thumbs-up button clicks
+  async function handleThumbsUp() {
+    const ratingBody = {
+      memoryId: memoryId,
+      messageId: messageId,
+      thumbsUp: 1,
+    };
+    const response = await submitLlmResponseBasicRating(ratingBody);
+    if (response === "ERROR") {
+      setBasicRatingError(true);
+    } else {
+      setThumbsUp(!thumbsUp);
+      setThumbsDown(false);
+    }
+  }
+
+  // Handlers for thumbs-down button clicks
+  async function handleThumbsDown() {
+    const ratingBody = {
+      memoryId: memoryId,
+      messageId: messageId,
+      thumbsUp: 0,
+    };
+    const response = await submitLlmResponseBasicRating(ratingBody);
+    if (response === "ERROR") {
+      setBasicRatingError(true);
+    } else {
+      setThumbsDown(!thumbsDown);
+      setThumbsUp(false);
+    }
+  }
 
   async function handleFeedbackSubmission() {
     // If every rating added up equals to - and comment being null, it means the user never rates
@@ -135,15 +181,15 @@ export default function MessageBubble(props) {
       trust: ratingTrust,
       comment: ratingComment,
     };
-    setError(false);
+    setAdvancedRatingError(false);
     setInvalidSubmission(false);
-    setLoading(true);
-    const response = await submitLlmResponseRating(ratingBody);
-    setLoading(false);
+    setAdvancedRatingLoading(true);
+    const response = await submitLlmResponseAdvancedRating(ratingBody);
+    setAdvancedRatingLoading(false);
     if (response === "ERROR") {
-      setError(true);
+      setAdvancedRatingError(true);
     } else {
-      setRatingSubmitted(true);
+      setAdvancedRatingSubmitted(true);
     }
   }
 
@@ -276,15 +322,56 @@ export default function MessageBubble(props) {
                     ))}
                 </>
               )}
-              {!outgoingMessage &&
-                (!ratingSubmitted ? (
-                  <>
-                    <Divider sx={{ my: 2 }} />
-                    <AccordionGroup disableDivider>
+              {!outgoingMessage && (
+                <>
+                  <Divider sx={{ my: 1.5 }} />
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                    sx={{ px: 1.5 }}
+                  >
+                    <Typography level="title-sm">
+                      Was this answer helpful?
+                    </Typography>
+                    <Tooltip title="Positive" placement="top">
+                      <IconButton
+                        size="sm"
+                        color={thumbsUp ? "success" : "neutral"}
+                        onClick={handleThumbsUp}
+                      >
+                        {thumbsUp ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Negative" placement="top">
+                      <IconButton
+                        size="sm"
+                        color={thumbsDown ? "danger" : "neutral"}
+                        onClick={handleThumbsDown}
+                      >
+                        {thumbsDown ? (
+                          <ThumbDownAltIcon />
+                        ) : (
+                          <ThumbDownOffAltIcon />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
+                  {basicRatingError && (
+                    <Typography
+                      level="body-xs"
+                      color="warning"
+                      sx={{ px: 1.5 }}
+                    >
+                      We couldn't submit your rating due to an error!
+                    </Typography>
+                  )}
+                  {!advancedRatingSubmitted ? (
+                    <AccordionGroup disableDivider sx={{ pt: 1 }}>
                       <Accordion>
                         <AccordionSummary>
                           <Typography level="title-sm">
-                            Provide your feedback on this answer
+                            You may also provide more detailed feedback here
                           </Typography>
                         </AccordionSummary>
                         <AccordionDetails sx={{ bgcolor: "#f9fcff" }}>
@@ -347,7 +434,7 @@ export default function MessageBubble(props) {
                               variant="soft"
                               size="sm"
                               sx={{ width: 150 }}
-                              loading={loading}
+                              loading={advancedRatingLoading}
                               onClick={handleFeedbackSubmission}
                             >
                               Submit Feedback
@@ -361,7 +448,7 @@ export default function MessageBubble(props) {
                                 Please provide feedback for at least one field.
                               </Typography>
                             )}
-                            {error && (
+                            {advancedRatingError && (
                               <Typography
                                 level="body-md"
                                 color="danger"
@@ -374,15 +461,13 @@ export default function MessageBubble(props) {
                         </AccordionDetails>
                       </Accordion>
                     </AccordionGroup>
-                  </>
-                ) : (
-                  <>
-                    <Divider sx={{ my: 2 }} />
+                  ) : (
                     <Typography level="title-sm" color="success" sx={{ pt: 2 }}>
                       You've rated this response. Thank you for your feedback!
                     </Typography>
-                  </>
-                ))}
+                  )}
+                </>
+              )}
             </Sheet>
           </Box>
         </Box>

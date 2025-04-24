@@ -71,6 +71,7 @@ export default function ContributorProfile() {
             localUserInfo={contributorInfo}
             contributionCount={numberOfTotalItems}
             loading={contributorInfoLoading}
+            hideEmail
           />
         )}
         <Container maxWidth="lg">

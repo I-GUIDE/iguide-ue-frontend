@@ -40,6 +40,7 @@ export default function UserProfileHeader(props) {
     ? props.contributionCount
     : 0;
   const loading = props.loading;
+  const hideEmail = props.hideEmail;
 
   // When the localUserInfo is still loading...
   if (loading) {
@@ -277,7 +278,7 @@ export default function UserProfileHeader(props) {
                           {localUserInfo.bio}
                         </Typography>
                       ))}
-                    {localUserInfo.email && (
+                    {localUserInfo.email && !hideEmail && (
                       <Link
                         href={"mailto:" + localUserInfo.email}
                         target="_blank"
