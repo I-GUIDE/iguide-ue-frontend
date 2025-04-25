@@ -1,40 +1,24 @@
-FROM node:slim
+FROM --platform=linux/amd64 node:18-slim
 
 WORKDIR /server
 COPY . .
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-      wget \
-      ca-certificates \
-      fonts-liberation \
-      libasound2 \
-      libatk1.0-0 \
-      libcups2 \
-      libdbus-1-3 \
-      libgtk-3-0 \
-      libnspr4 \
-      libnss3 \
-      libx11-xcb1 \
-      libxcomposite1 \
-      libxdamage1 \
-      libxkbcommon0 \
-      libxrandr2 \
-      libxss1 \
-      libxtst6 \
- && wget -qO /usr/share/keyrings/google-linux-signing-keyring.gpg \
-      https://dl.google.com/linux/linux_signing_key.pub \
- && echo \
-   "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] \
-    http://dl.google.com/linux/chrome/deb/ stable main" \
-    > /etc/apt/sources.list.d/google-chrome.list \
- && apt-get update \
- && apt-get install -y --no-install-recommends google-chrome-stable \
- && rm -rf /var/lib/apt/lists/*
+# Install Google Chrome Stable and fonts
+# Note: this installs the necessary libs to make the browser work with Puppeteer.
+RUN apt-get update && apt-get install gnupg wget -y && \
+    wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    apt-get update && \
+    apt-get install google-chrome-stable -y --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
+# Optional: Verify version
+RUN google-chrome --version
+
+# Install node deps
 RUN yarn install --frozen-lockfile
 
-ENV CHROME_BIN=/usr/bin/google-chrome-stable
+ENV CHROME_BIN=/usr/bin/google-chrome
 
 EXPOSE 3000
 CMD ["node", "server.js"]

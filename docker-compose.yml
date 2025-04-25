@@ -29,4 +29,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - CHROME_BIN=/usr/bin/google-chrome # Explicit in case it's needed
+      - CHROME_BIN=/usr/bin/google-chrome

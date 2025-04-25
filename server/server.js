@@ -1,7 +1,6 @@
 const prerender = require("prerender");
 const server = prerender({
-  // point directly at the real binary
-  chromeLocation: process.env.CHROME_BIN,
+  chromeLocation: "/usr/bin/google-chrome",
   chromeFlags: [
     "--no-sandbox",
     "--headless",
