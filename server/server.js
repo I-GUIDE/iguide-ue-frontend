@@ -1,6 +1,6 @@
 const prerender = require("prerender");
 const server = prerender({
-  chromeLocation: "/usr/bin/google-chrome",
+  chromeLocation: "/usr/bin/google-chrome-stable",
   chromeFlags: [
     "--no-sandbox",
     "--headless",
