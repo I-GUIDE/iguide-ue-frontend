@@ -28,5 +28,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+      - "9222:9222"
     environment:
       - CHROME_BIN=/usr/bin/google-chrome
