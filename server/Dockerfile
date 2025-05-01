@@ -18,7 +18,5 @@ RUN google-chrome --version
 # Install node deps
 RUN yarn install --frozen-lockfile
 
-ENV CHROME_BIN=/usr/bin/google-chrome
-
 EXPOSE 3000 9222
 CMD ["node", "server.js"]
