@@ -176,6 +176,20 @@ export default function MainContent(props) {
   const shareUrl = `${REACT_FRONTEND_URL}/${elementTypePlural}/${elementId}`;
   const shareTitle = `${WEBSITE_TITLE}: ${title}`;
 
+  // Only display when the URL or DOI is validated
+  const validDOI = new RegExp("10\\.\\d{4,9}/[-._;()/:A-Z0-9]+", "i");
+  const validURL = new RegExp(
+    "^(https?|ftp):\\/\\/(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:\\/[^\\s]*)?$"
+  );
+  let validatedPublicationURL = "";
+  if (doi) {
+    if (validURL.test(doi)) {
+      validatedPublicationURL = doi;
+    } else if (validDOI.test(doi)) {
+      validatedPublicationURL = "https://doi.org/" + doi;
+    }
+  }
+
   if (useOERLayout) {
     return (
       <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
@@ -336,9 +350,9 @@ export default function MainContent(props) {
             {title}
           </Typography>
           <AuthorsDisplay authorsList={authors} />
-          {doi && (
+          {validatedPublicationURL && (
             <Link
-              href={doi}
+              href={validatedPublicationURL}
               target="_blank"
               rel="noopener noreferrer"
               underline="always"
@@ -348,7 +362,7 @@ export default function MainContent(props) {
                 startDecorator={<OpenInNewIcon />}
                 sx={{ py: 1, wordBreak: "break-word" }}
               >
-                {doi}
+                {validatedPublicationURL}
               </Typography>
             </Link>
           )}

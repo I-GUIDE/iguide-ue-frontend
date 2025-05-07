@@ -37,8 +37,6 @@ export default function PublicationPage() {
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
   const [externalLink, setExternalLink] = useState("");
-  const [directDownloadLink, setDirectDownloadLink] = useState("");
-  const [size, setSize] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
@@ -81,8 +79,6 @@ export default function PublicationPage() {
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
       setExternalLink(thisElement["external-link-publication"]);
-      setDirectDownloadLink(thisElement["direct-download-link"]);
-      setSize(thisElement.size);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
