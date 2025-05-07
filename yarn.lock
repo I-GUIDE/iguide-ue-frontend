@@ -1095,10 +1095,10 @@
   dependencies:
     "@reactour/utils" "*"
 
-"@reactour/tour@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-3.7.0.tgz#b725d09259aa73b31182d93f5e1b79069ccafe50"
-  integrity sha512-p0USaOBc5fcNBS5ZiQ2lsmztAhIGCUfx913Zw14FbEM8bhSXpR1F2JD0alVj9Ya1N+pnTNYatf14rSNGJsEnCg==
+"@reactour/tour@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@reactour/tour/-/tour-3.8.0.tgz#b538c802a0aad2dbef87212ff2966ac3bb33edb5"
+  integrity sha512-KZTFi1pAvoTVKKRdBN5+XCYxXBp4k4Ql/acZcXyPvec8VU24fkMSEeV+v8krfYQpoVcewxIu3gM6xWZZLjxi7w==
   dependencies:
     "@reactour/mask" "*"
     "@reactour/popover" "*"
