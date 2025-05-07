@@ -170,6 +170,8 @@ export default function SubmissionCard(props) {
   ] = useState(false);
   const [elementIdWithDuplicateDOI, setElementIdWithDuplicateDOI] =
     useState("");
+  const [doiLinkError, setDoiLinkError] = useState(false);
+  const [doiLinkType, setDoiLinkType] = useState("");
 
   const [mapIframeLink, setMapIframeLink] = useState("");
 
@@ -485,7 +487,32 @@ export default function SubmissionCard(props) {
     setPublicationDOI(val);
 
     if (!val) {
+      // Reset duplicate and format checks
+      setElementIdWithDuplicateDOI("");
+      setDoiLinkError(false);
+      setDoiLinkType("");
       return;
+    }
+
+    // Format check
+    const validDOI = new RegExp("^10\\.\\d{4,9}/[-._;()/:A-Z0-9]+$", "i");
+    const validDOIURL = new RegExp(
+      "^https://doi.org/10\\.\\d{4,9}/[-._;()/:A-Z0-9]+$",
+      "i"
+    );
+    const validURL = new RegExp(
+      "^(https?|ftp):\\/\\/(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:\\/[^\\s]*)?$"
+    );
+
+    if (validDOI.test(val) || validDOIURL.test(val)) {
+      setDoiLinkType("DOI");
+      setDoiLinkError(false);
+    } else if (validURL.test(val)) {
+      setDoiLinkType("URL");
+      setDoiLinkError(false);
+    } else {
+      setDoiLinkType("");
+      setDoiLinkError(true);
     }
 
     // Verify duplication of DOI links
@@ -847,6 +874,16 @@ export default function SubmissionCard(props) {
       setSubmissionStatus("error-invalid-inputs");
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid GitHub notebook URL."
+      );
+      setButtonDisabled(false);
+      return;
+    }
+
+    if (doiLinkError) {
+      setOpenModal(true);
+      setSubmissionStatus("error-invalid-inputs");
+      setSubmissionStatusText(
+        "You cannot submit this element due to the invalid DOI or URL of the publication."
       );
       setButtonDisabled(false);
       return;
@@ -1290,7 +1327,7 @@ export default function SubmissionCard(props) {
             {resourceTypeSelected === "publication" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
-                error={elementIdWithDuplicateDOI}
+                error={elementIdWithDuplicateDOI || doiLinkError}
               >
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -1317,6 +1354,11 @@ export default function SubmissionCard(props) {
                   <Grid size="auto">
                     <Button
                       variant="outlined"
+                      disabled={
+                        !publicationDOI ||
+                        doiLinkError ||
+                        elementIdWithDuplicateDOI
+                      }
                       loading={publicationMetadataAutofillLoading}
                       onClick={handleAutofillPublicationInfo}
                     >
@@ -1324,21 +1366,26 @@ export default function SubmissionCard(props) {
                     </Button>
                   </Grid>
                 </Grid>
-                <FormHelperText>
-                  <Typography level="body-sm">
-                    To learn more about Crossref, the autofill API provider,
-                    please click&nbsp;
-                    <Link
-                      component={RouterLink}
-                      to={`https://www.crossref.org/`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                {doiLinkType && (
+                  <FormHelperText>
+                    <Typography
+                      level="title-sm"
+                      color="success"
+                      startDecorator={<CheckIcon />}
                     >
-                      here
-                    </Link>
-                    .
-                  </Typography>
-                </FormHelperText>
+                      Format check: Valid {doiLinkType}.
+                    </Typography>
+                  </FormHelperText>
+                )}
+                {doiLinkError && (
+                  <FormHelperText>
+                    <InfoOutlined />
+                    The DOI or URL format is not valid. For DOIs, the format
+                    follows 10.xxxx/xxxxx or https://doi.org/10.xxxx/xxxxx, and
+                    for URLs, don't forget to include the protocol (https:// or
+                    http://).
+                  </FormHelperText>
+                )}
                 {elementIdWithDuplicateDOI && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
@@ -1355,6 +1402,21 @@ export default function SubmissionCard(props) {
                     </Typography>
                   </FormHelperText>
                 )}
+                <FormHelperText>
+                  <Typography level="body-sm">
+                    To learn more about Crossref, the autofill API provider,
+                    please click&nbsp;
+                    <Link
+                      component={RouterLink}
+                      to={`https://www.crossref.org/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </Link>
+                    .
+                  </Typography>
+                </FormHelperText>
               </FormControl>
             )}
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
