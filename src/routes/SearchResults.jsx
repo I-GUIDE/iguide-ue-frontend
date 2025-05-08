@@ -29,7 +29,9 @@ import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
+import TuneIcon from "@mui/icons-material/Tune";
 
+import AdvancedSearch from "../components/AdvancedSearch";
 import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
@@ -74,6 +76,15 @@ export default function SearchResults() {
   // Number of elements displayed per page
   const itemsPerPage = 12;
 
+  const [ranking, setRanking] = useState({
+    sortBy: "_score",
+    order: "desc",
+  });
+
+  const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
+
+  const [adtlFields, setAdtlFields] = useState("");
+
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
 
@@ -93,6 +104,42 @@ export default function SearchResults() {
     setNextSearchTerm(keywordParam);
   }, [keywordParam, typeParam]);
 
+  function encodeQueryArray(queryString) {
+    const items = queryString
+      .split(";")
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+
+    const jsonArray = JSON.stringify(items);
+    return encodeURIComponent(jsonArray);
+  }
+
+  function handleChangeAdtlFields(fields) {
+    let query = "";
+    fields.map((field) => {
+      if (Object.keys(field.type) !== 0 && field.query !== "") {
+        if (field.type?.type === "array") {
+          query += `&${field.type.name}=${encodeQueryArray(field.query)}`;
+        } else {
+          query += `&${field.type.name}=${field.query}`;
+        }
+      }
+    });
+    setAdtlFields(query);
+  }
+
+  useEffect(() => {
+    const filters = JSON.parse(localStorage.getItem("advanced_search"));
+    if (filters && Object.keys(filters).length !== 0) {
+      setSearchCategory(filters.elementType);
+      setRanking({
+        sortBy: filters.sortBy,
+        order: filters.orderBy,
+      });
+      handleChangeAdtlFields(filters.adtlFields);
+    }
+  }, []);
+
   // When there is an update on searchTerm (new search) or current starting
   //   index (when users click another page), retrieve the search results
   //   based on the current starting index.
@@ -103,10 +150,11 @@ export default function SearchResults() {
         const returnResults = await DataSearcher(
           searchTerm,
           searchCategory,
-          "_score",
-          "desc",
+          ranking.sortBy,
+          ranking.order,
           currentStartingIdx,
-          itemsPerPage
+          itemsPerPage,
+          adtlFields
         );
 
         const returnElements = returnResults.elements
@@ -134,7 +182,7 @@ export default function SearchResults() {
     if (searchTerm && searchTerm !== "") {
       retrieveSearchData();
     }
-  }, [currentStartingIdx, searchTerm, searchCategory]);
+  }, [currentStartingIdx, searchTerm, searchCategory, ranking, adtlFields]);
 
   // Determine the search result page URL based on different variables
   function searchUriBuilder(keyword, type) {
@@ -192,6 +240,24 @@ export default function SearchResults() {
     setNumberOfTotalItems(0);
     setNumberOfPages(0);
     setSearchResults([]);
+
+    setRanking({ sortBy: "_score", order: "desc" });
+    setAdtlFields("");
+
+    const defaultElement = "any";
+    const defaultFields = [{ type: {}, query: "" }];
+    const defaultSortBy = "_score";
+    const defaultOrder = "desc";
+
+    localStorage.setItem(
+      "advanced_search",
+      JSON.stringify({
+        elementType: defaultElement,
+        adtlFields: defaultFields,
+        sortBy: defaultSortBy,
+        orderBy: defaultOrder,
+      })
+    );
 
     setSearchParams({ keyword: "", type: "any" });
     navigate(`/search`);
@@ -406,14 +472,32 @@ export default function SearchResults() {
                         , no items matched your criteria.
                       </Typography>
                     )}
-                    <Button
-                      key="clear-search"
-                      size="sm"
-                      variant="outlined"
-                      onClick={handleReset}
-                    >
-                      Reset
-                    </Button>
+                    <Stack direction="row" spacing={2}>
+                      <Button
+                        key="clear-search"
+                        size="sm"
+                        variant="plain"
+                        startDecorator={<TuneIcon />}
+                        onClick={() => setOpenAdvancedSearch(true)}
+                      >
+                        Advanced Search
+                      </Button>
+                      <AdvancedSearch
+                        open={openAdvancedSearch}
+                        onClose={() => setOpenAdvancedSearch(false)}
+                        handleChangeAdtlFields={handleChangeAdtlFields}
+                        setRanking={setRanking}
+                        setSearchCategory={setSearchCategory}
+                      />
+                      <Button
+                        key="clear-search"
+                        size="sm"
+                        variant="outlined"
+                        onClick={handleReset}
+                      >
+                        Reset
+                      </Button>
+                    </Stack>
                   </Stack>
                 )}
                 <Grid
