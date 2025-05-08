@@ -74,7 +74,8 @@ export async function DataSearcher(
   sortBy = "_score",
   order = "desc",
   from = 0,
-  size = 10
+  size = 10,
+  adtlFields = ""
 ) {
   if (!keyword || keyword === "") {
     return {
@@ -85,7 +86,7 @@ export async function DataSearcher(
 
   try {
     const response = await fetch(
-      `${BACKEND_URL_PORT}/api/search?keyword=${keyword}&element-type=${elementType}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}`,
+      `${BACKEND_URL_PORT}/api/search?keyword=${keyword}&element-type=${elementType}&sort-by=${sortBy}&order=${order}&from=${from}&size=${size}${adtlFields}`,
       {
         method: "GET",
       }

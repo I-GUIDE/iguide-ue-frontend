@@ -1,0 +1,397 @@
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import Typography from "@mui/joy/Typography";
+import Sheet from "@mui/joy/Sheet";
+import Button from "@mui/joy/Button";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
+import Stack from "@mui/joy/Stack";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import ButtonGroup from "@mui/joy/ButtonGroup";
+import Add from "@mui/icons-material/Add";
+import IconButton from "@mui/joy/IconButton";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { styled } from "@mui/joy/styles";
+
+import { useEffect, useState } from "react";
+
+const universalFieldProperties = [
+  {
+    name: "contributor",
+    type: "",
+    dataType: "string",
+    isSortable: false,
+  },
+  {
+    name: "contents",
+    type: "",
+    dataType: "string",
+    isSortable: false,
+  },
+  {
+    name: "title",
+    type: "",
+    dataType: "string",
+    isSortable: true,
+  },
+  {
+    name: "authors",
+    type: "array",
+    dataType: "string",
+    isSortable: true,
+  },
+  {
+    name: "tags",
+    type: "array",
+    dataType: "string",
+    isSortable: true,
+  },
+];
+const fieldProperties = {
+  dataset: [],
+  notebook: [],
+  publication: [],
+  oer: [],
+  map: [
+    {
+      name: "spatial-coverage",
+      type: "array",
+      dataType: "string",
+      isSortable: false,
+      placeholder:
+        "Ex. Pembroke; Honolulu County All Jurisdictions, Honolulu County, Hawaii",
+    },
+    {
+      name: "spatial-index-year",
+      type: "array",
+      dataType: "date",
+      isSortable: false,
+      placeholder: "Ex. 2014",
+    },
+    {
+      name: "spatial-temporal-coverage",
+      type: "array",
+      dataType: "date",
+      isSortable: false,
+      placeholder: "Ex. 09/12/2014",
+    },
+    {
+      name: "spatial-georeferenced",
+      type: "",
+      dataType: "bool",
+      isSortable: false,
+      placeholder: "Ex. true/false",
+    },
+  ],
+  code: [],
+};
+
+export default function AdvancedSearch({
+  open,
+  onClose,
+  handleChangeAdtlFields,
+  setRanking,
+  setSearchCategory,
+}) {
+  const [adtlFields, setAdtlFields] = useState([{ type: {}, query: "" }]);
+  const [elementType, setElementType] = useState("any");
+  const [orderBy, setOrderBy] = useState("");
+  const [sortBy, setSortBy] = useState("");
+
+  function resetSearch() {
+    setAdtlFields([{ type: {}, query: "" }]);
+    setElementType("any");
+    setOrderBy("desc");
+    setSortBy("_score");
+
+    setSearchCategory("any");
+    handleChangeAdtlFields([{ type: {}, query: "" }]);
+    setRanking({
+      sortBy: "_score",
+      order: "desc",
+    });
+
+    const defaultElement = "any";
+    const defaultFields = [{ type: {}, query: "" }];
+    const defaultSortBy = "_score";
+    const defaultOrder = "desc";
+
+    localStorage.setItem(
+      "advanced_search",
+      JSON.stringify({
+        elementType: defaultElement,
+        adtlFields: defaultFields,
+        sortBy: defaultSortBy,
+        orderBy: defaultOrder,
+      })
+    );
+
+    onClose();
+  }
+
+  useEffect(() => {
+    const filters = JSON.parse(localStorage.getItem("advanced_search"));
+    if (filters) {
+      setElementType(filters.elementType);
+      setOrderBy(filters.orderBy);
+      setSortBy(filters.sortBy);
+      setAdtlFields(filters.adtlFields);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (elementType !== "any") {
+      const wantedFields = [
+        ...universalFieldProperties.map((f) => f.name),
+        ...fieldProperties[elementType].map((f) => f.name),
+      ];
+
+      const updateFields = adtlFields.filter((field) =>
+        wantedFields.includes(field.type.name)
+      );
+
+      if (updateFields.length === 0) {
+        updateFields.push({ type: {}, query: "" });
+      }
+
+      setAdtlFields(updateFields);
+    }
+  }, [elementType]);
+
+  function handleSaveFilter() {
+    const currentFields = [...adtlFields];
+    const currentElement = elementType;
+    const currentSortBy = sortBy || "_score";
+    const currentOrder = orderBy || "desc";
+
+    setSearchCategory(currentElement);
+    handleChangeAdtlFields(currentFields);
+    setRanking({
+      sortBy: currentSortBy,
+      order: currentOrder,
+    });
+
+    localStorage.setItem(
+      "advanced_search",
+      JSON.stringify({
+        elementType: currentElement,
+        adtlFields: currentFields,
+        sortBy: currentSortBy,
+        orderBy: currentOrder,
+      })
+    );
+
+    onClose();
+  }
+
+  return (
+    <Modal
+      aria-labelledby="modal-title"
+      aria-describedby="modal-desc"
+      open={open}
+      onClose={onClose}
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
+      <Sheet
+        variant="outlined"
+        sx={{ width: "fit-content", borderRadius: "md", p: 3, boxShadow: "lg" }}
+      >
+        <ModalClose variant="plain" sx={{ m: 1 }} />
+        <Typography
+          component="h2"
+          id="modal-title"
+          level="h4"
+          textColor="inherit"
+          sx={{ fontWeight: "lg", mb: 2 }}
+        >
+          Advanced Search
+        </Typography>
+        <form>
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={2}>
+              <FormControl>
+                <FormLabel>Element Type</FormLabel>
+                <Select
+                  sx={{ width: "200px" }}
+                  value={elementType}
+                  onChange={(e, newValue) => setElementType(newValue)}
+                >
+                  <Option value="any">Any</Option>
+                  <Option value="dataset">Dataset</Option>
+                  <Option value="notebook">Notebook</Option>
+                  <Option value="publication">Publication</Option>
+                  <Option value="map">Map</Option>
+                  <Option value="oer">Educational Resource</Option>
+                  <Option value="code">Code</Option>
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Sort By</FormLabel>
+                <Select
+                  sx={{ width: "200px" }}
+                  value={sortBy}
+                  onChange={(e, newValue) => setSortBy(newValue)}
+                >
+                  {elementType !== "any"
+                    ? [
+                        ...universalFieldProperties,
+                        ...fieldProperties[elementType],
+                      ]
+                        .filter((field) => field.isSortable)
+                        .map((f, key) => (
+                          <Option value={f.name} key={key}>
+                            {f.name}
+                          </Option>
+                        ))
+                    : universalFieldProperties
+                        .filter((field) => field.isSortable)
+                        .map((f, key) => (
+                          <Option value={f.name} key={key}>
+                            {f.name}
+                          </Option>
+                        ))}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Order By</FormLabel>
+                <Select
+                  sx={{ width: "200px" }}
+                  value={orderBy}
+                  onChange={(e, newValue) => setOrderBy(newValue)}
+                >
+                  <Option value="asc">asc</Option>
+                  <Option value="desc">desc</Option>
+                </Select>
+              </FormControl>
+            </Stack>
+            <Stack>
+              <Typography level="title-sm">Additional Fields</Typography>
+              {adtlFields.map((field, index) => (
+                <AdditionalField
+                  fieldTypes={
+                    elementType === "any"
+                      ? universalFieldProperties
+                      : [
+                          ...universalFieldProperties,
+                          ...fieldProperties[elementType],
+                        ]
+                  }
+                  field={field}
+                  isDisabled={adtlFields.length === 1}
+                  onChange={(updatedField) => {
+                    const updatedFields = [...adtlFields];
+                    updatedFields[index] = updatedField;
+                    setAdtlFields(updatedFields);
+                  }}
+                  removeField={() => {
+                    const newFields = [...adtlFields];
+                    newFields.splice(index, 1);
+                    setAdtlFields(
+                      newFields.length ? newFields : [{ type: {}, query: "" }]
+                    );
+                  }}
+                />
+              ))}
+              <AddButton
+                startDecorator={<Add />}
+                onClick={() =>
+                  setAdtlFields([...adtlFields, { type: {}, query: "" }])
+                }
+                variant="plain"
+                sx={{
+                  width: "fit-content",
+                  padding: "0 5px",
+                }}
+                disabled={
+                  Object.keys(adtlFields[adtlFields.length - 1].type).length ===
+                    0 || adtlFields[adtlFields.length - 1].query === ""
+                }
+              >
+                Add another
+              </AddButton>
+            </Stack>
+          </Stack>
+
+          <ButtonGroup
+            spacing="0.5rem"
+            aria-label="spacing button group"
+            sx={{
+              marginTop: "40px",
+            }}
+          >
+            <Button color="primary" variant="solid" onClick={handleSaveFilter}>
+              Save
+            </Button>
+            <Button color="primary" variant="outlined" onClick={resetSearch}>
+              Reset
+            </Button>
+          </ButtonGroup>
+        </form>
+      </Sheet>
+    </Modal>
+  );
+}
+
+function AdditionalField({
+  fieldTypes,
+  isDisabled,
+  onChange,
+  field,
+  removeField,
+}) {
+  const selectedIndex = fieldTypes.findIndex(
+    (f) => f.name === field.type?.name
+  );
+
+  const handleFieldChange = (e, newValue) => {
+    const selectedType = fieldTypes[newValue];
+    onChange({
+      type: selectedType,
+      query: "",
+    });
+  };
+
+  const handleQueryChange = (e) => {
+    onChange({ ...field, query: e.target.value });
+  };
+
+  return (
+    <Stack direction="row" spacing={2} mt={1}>
+      <Select
+        sx={{ width: "250px" }}
+        value={selectedIndex !== -1 ? selectedIndex : null}
+        onChange={handleFieldChange}
+        placeholder="Select Field"
+      >
+        {fieldTypes.map((f, key) => (
+          <Option value={key} key={key}>
+            {f.name}
+          </Option>
+        ))}
+      </Select>
+
+      <Input
+        key="search"
+        variant="outlined"
+        placeholder={field.type.placeholder}
+        value={field.query}
+        onChange={handleQueryChange}
+        type="text"
+        sx={{
+          minWidth: "300px",
+        }}
+      />
+      <IconButton disabled={isDisabled} onClick={removeField}>
+        <RemoveCircleOutlineIcon color={isDisabled ? "disabled" : "error"} />
+      </IconButton>
+    </Stack>
+  );
+}
+
+const AddButton = styled(Button)`
+  &:hover {
+    background-color: transparent;
+  }
+`;
