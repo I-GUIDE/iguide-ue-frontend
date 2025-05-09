@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 
-import Modal from "@mui/joy/Modal";
-import ModalClose from "@mui/joy/ModalClose";
+import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import Button from "@mui/joy/Button";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
 import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Select from "@mui/joy/Select";
@@ -18,64 +14,64 @@ import { styled } from "@mui/joy/styles";
 import Add from "@mui/icons-material/Add";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
-const universalFieldProperties = [
+const additionalFieldProperties = [
   {
+    displayName: "Contributor",
     name: "contributor",
     type: "",
     dataType: "string",
-    isSortable: false,
   },
   {
+    displayName: "Contents",
     name: "contents",
     type: "",
     dataType: "string",
-    isSortable: false,
   },
   {
+    displayName: "Title",
     name: "title",
     type: "",
     dataType: "string",
-    isSortable: true,
   },
   {
+    displayName: "Authors",
     name: "authors",
     type: "array",
     dataType: "string",
-    isSortable: true,
   },
   {
+    displayName: "Tags",
     name: "tags",
     type: "array",
     dataType: "string",
-    isSortable: false,
   },
   {
+    displayName: "Spatial Coverage",
     name: "spatial-coverage",
     type: "array",
     dataType: "string",
-    isSortable: false,
     placeholder:
       "Ex. Pembroke; Honolulu County All Jurisdictions, Honolulu County, Hawaii",
   },
   {
+    displayName: "Index Year",
     name: "spatial-index-year",
     type: "array",
     dataType: "date",
-    isSortable: false,
     placeholder: "Ex. 2014",
   },
   {
+    displayName: "Temporal Coverage",
     name: "spatial-temporal-coverage",
     type: "array",
     dataType: "date",
-    isSortable: false,
     placeholder: "Ex. 09/12/2014",
   },
   {
+    displayName: "Georeferenced",
     name: "spatial-georeferenced",
     type: "",
     dataType: "bool",
-    isSortable: false,
     placeholder: "Ex. true/false",
   },
 ];
@@ -113,7 +109,7 @@ function AdditionalField({
       >
         {fieldTypes.map((f, key) => (
           <Option value={key} key={key}>
-            {f.name}
+            {f.displayName}
           </Option>
         ))}
       </Select>
@@ -146,33 +142,18 @@ export default function AdvancedSearch({
   open,
   onClose,
   handleChangeAdtlFields,
-  setRanking,
 }) {
   const [adtlFields, setAdtlFields] = useState([{ type: {}, query: "" }]);
-  const [orderBy, setOrderBy] = useState("");
-  const [sortBy, setSortBy] = useState("");
 
   function handleResetAdvancedSearch() {
     setAdtlFields([{ type: {}, query: "" }]);
-    setOrderBy("desc");
-    setSortBy("_score");
-
     handleChangeAdtlFields([{ type: {}, query: "" }]);
-    setRanking({
-      sortBy: "_score",
-      order: "desc",
-    });
-
     const defaultFields = [{ type: {}, query: "" }];
-    const defaultSortBy = "_score";
-    const defaultOrder = "desc";
 
     sessionStorage.setItem(
       "advanced_search",
       JSON.stringify({
         adtlFields: defaultFields,
-        sortBy: defaultSortBy,
-        orderBy: defaultOrder,
       })
     );
 
@@ -181,21 +162,12 @@ export default function AdvancedSearch({
 
   function handleSaveAdvancedSearch() {
     const currentFields = [...adtlFields];
-    const currentSortBy = sortBy || "_score";
-    const currentOrder = orderBy || "desc";
-
     handleChangeAdtlFields(currentFields);
-    setRanking({
-      sortBy: currentSortBy,
-      order: currentOrder,
-    });
 
     sessionStorage.setItem(
       "advanced_search",
       JSON.stringify({
         adtlFields: currentFields,
-        sortBy: currentSortBy,
-        orderBy: currentOrder,
       })
     );
 
@@ -206,105 +178,75 @@ export default function AdvancedSearch({
   useEffect(() => {
     const filters = JSON.parse(sessionStorage.getItem("advanced_search"));
     if (filters) {
-      setOrderBy(filters.orderBy);
-      setSortBy(filters.sortBy);
       setAdtlFields(filters.adtlFields);
     }
   }, []);
 
   return (
-    <Modal
-      aria-labelledby="modal-title"
-      aria-describedby="modal-desc"
-      open={open}
-      onClose={onClose}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    <Box
+      sx={{
+        overflow: "hidden",
+        transition: "max-height 0.3s ease, opacity 0.3s ease",
+        maxHeight: open ? 500 : 0,
+        opacity: open ? 1 : 0,
+      }}
     >
-      <Sheet
-        variant="outlined"
-        sx={{ width: "fit-content", borderRadius: "md", p: 3, boxShadow: "lg" }}
+      <Box
+        sx={{
+          p: 3,
+          border: "1px solid",
+          borderColor: "neutral.outlinedBorder",
+          borderRadius: "lg",
+          bgcolor: "background.level1",
+        }}
       >
-        <ModalClose variant="plain" sx={{ m: 1 }} />
         <Typography
-          component="h2"
           id="modal-title"
-          level="h4"
+          level="title-lg"
           textColor="inherit"
           sx={{ fontWeight: "lg", mb: 2 }}
         >
-          Advanced Search
+          Additional Filters
         </Typography>
         <form>
           <Stack spacing={2}>
-            <Stack direction="row" spacing={2}>
-              <FormControl>
-                <FormLabel>Sort By</FormLabel>
-                <Select
-                  sx={{ width: "200px" }}
-                  value={sortBy}
-                  onChange={(e, newValue) => setSortBy(newValue)}
-                >
-                  {universalFieldProperties
-                    .filter((field) => field.isSortable)
-                    .map((f, key) => (
-                      <Option value={f.name} key={key}>
-                        {f.name}
-                      </Option>
-                    ))}
-                </Select>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Order By</FormLabel>
-                <Select
-                  sx={{ width: "200px" }}
-                  value={orderBy}
-                  onChange={(e, newValue) => setOrderBy(newValue)}
-                >
-                  <Option value="asc">asc</Option>
-                  <Option value="desc">desc</Option>
-                </Select>
-              </FormControl>
-            </Stack>
-            <Stack>
-              <Typography level="title-sm">Additional Fields</Typography>
-              {adtlFields.map((field, index) => (
-                <AdditionalField
-                  key={index}
-                  fieldTypes={universalFieldProperties}
-                  field={field}
-                  isDisabled={adtlFields.length === 1}
-                  onChange={(updatedField) => {
-                    const updatedFields = [...adtlFields];
-                    updatedFields[index] = updatedField;
-                    setAdtlFields(updatedFields);
-                  }}
-                  removeField={() => {
-                    const newFields = [...adtlFields];
-                    newFields.splice(index, 1);
-                    setAdtlFields(
-                      newFields.length ? newFields : [{ type: {}, query: "" }]
-                    );
-                  }}
-                />
-              ))}
-              <AddButton
-                startDecorator={<Add />}
-                onClick={() =>
-                  setAdtlFields([...adtlFields, { type: {}, query: "" }])
-                }
-                variant="plain"
-                sx={{
-                  width: "fit-content",
-                  padding: "0 5px",
+            {adtlFields.map((field, index) => (
+              <AdditionalField
+                key={index}
+                fieldTypes={additionalFieldProperties}
+                field={field}
+                isDisabled={adtlFields.length === 1}
+                onChange={(updatedField) => {
+                  const updatedFields = [...adtlFields];
+                  updatedFields[index] = updatedField;
+                  setAdtlFields(updatedFields);
                 }}
-                disabled={
-                  Object.keys(adtlFields[adtlFields.length - 1].type).length ===
-                    0 || adtlFields[adtlFields.length - 1].query === ""
-                }
-              >
-                Add another
-              </AddButton>
-            </Stack>
+                removeField={() => {
+                  const newFields = [...adtlFields];
+                  newFields.splice(index, 1);
+                  setAdtlFields(
+                    newFields.length ? newFields : [{ type: {}, query: "" }]
+                  );
+                }}
+              />
+            ))}
+            <AddButton
+              startDecorator={<Add />}
+              onClick={() =>
+                setAdtlFields([...adtlFields, { type: {}, query: "" }])
+              }
+              variant="plain"
+              sx={{
+                width: "fit-content",
+                padding: "0 5px",
+              }}
+              disabled={
+                Object.keys(adtlFields[adtlFields.length - 1].type).length ===
+                  0 || adtlFields[adtlFields.length - 1].query === ""
+              }
+            >
+              Add another
+            </AddButton>
           </Stack>
 
           <ButtonGroup
@@ -330,7 +272,7 @@ export default function AdvancedSearch({
             </Button>
           </ButtonGroup>
         </form>
-      </Sheet>
-    </Modal>
+      </Box>
+    </Box>
   );
 }

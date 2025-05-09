@@ -29,6 +29,9 @@ import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+
 import TuneIcon from "@mui/icons-material/Tune";
 
 import AdvancedSearch from "../components/AdvancedSearch";
@@ -233,23 +236,41 @@ export default function SearchResults() {
     }
   }
 
-  // Handle reset search
-  function handleReset(event) {
-    setRanking({ sortBy: "_score", order: "desc" });
-    setAdtlFields("");
-
-    const defaultFields = [{ type: {}, query: "" }];
-    const defaultSortBy = "_score";
-    const defaultOrder = "desc";
-
-    sessionStorage.setItem(
-      "advanced_search",
-      JSON.stringify({
-        adtlFields: defaultFields,
-        sortBy: defaultSortBy,
-        orderBy: defaultOrder,
-      })
-    );
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "_score":
+        setRanking({
+          sortBy: "_score",
+          order: "desc",
+        });
+        break;
+      case "authors":
+        setRanking({
+          sortBy: "authors",
+          order: "asc",
+        });
+        break;
+      case "authors-desc":
+        setRanking({
+          sortBy: "authors",
+          order: "desc",
+        });
+        break;
+      case "title":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      case "title-desc":
+        setRanking({
+          sortBy: "title",
+          order: "desc",
+        });
+        break;
+      default:
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
   }
 
   // Function that handles submit events. This function will update the search term.
@@ -434,59 +455,77 @@ export default function SearchResults() {
 
                 {/* Search result summary and "clear search button" */}
                 {hasSearchParam && (
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    {numberOfTotalItems > 0 ? (
-                      <Typography>
-                        Searched "{searchTerm}"
-                        {searchCategory !== "any" &&
-                          ' under "' +
-                            RESOURCE_TYPE_NAMES[searchCategory] +
-                            '"'}
-                        , returned {currentStartingIdx + 1}-
-                        {currentStartingIdx + arrayLength(searchResults)} of{" "}
-                        {numberOfTotalItems}
-                      </Typography>
-                    ) : (
-                      <Typography>
-                        Searched "{searchTerm}"
-                        {searchCategory !== "any" &&
-                          ' under "' +
-                            RESOURCE_TYPE_NAMES[searchCategory] +
-                            '"'}
-                        , no items matched your criteria.
-                      </Typography>
-                    )}
-                    <Stack direction="row" spacing={2}>
+                  <>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={2}
+                    >
+                      {numberOfTotalItems > 0 ? (
+                        <Typography>
+                          Searched "{searchTerm}"
+                          {searchCategory !== "any" &&
+                            ' under "' +
+                              RESOURCE_TYPE_NAMES[searchCategory] +
+                              '"'}
+                          , returned {currentStartingIdx + 1}-
+                          {currentStartingIdx + arrayLength(searchResults)} of{" "}
+                          {numberOfTotalItems}
+                        </Typography>
+                      ) : (
+                        <Typography>
+                          Searched "{searchTerm}"
+                          {searchCategory !== "any" &&
+                            ' under "' +
+                              RESOURCE_TYPE_NAMES[searchCategory] +
+                              '"'}
+                          , no items matched your criteria.
+                        </Typography>
+                      )}
+                      <Stack
+                        sx={{
+                          justifyContent: "center",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Typography level="body-xs">Sort by</Typography>
+                        <Select
+                          defaultValue="_score"
+                          onChange={handleSortingChange}
+                          sx={{ width: 150 }}
+                        >
+                          <Option value="_score">Popular</Option>
+                          <Option value="authors">Author</Option>
+                          <Option value="authors-desc">Author (Z-A)</Option>
+                          <Option value="title">Title</Option>
+                          <Option value="title-desc">Title (Z-A)</Option>
+                        </Select>
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
                       <Button
                         key="advanced-search"
                         size="sm"
                         variant="plain"
                         startDecorator={<TuneIcon />}
-                        onClick={() => setOpenAdvancedSearch(true)}
+                        onClick={() =>
+                          setOpenAdvancedSearch(!openAdvancedSearch)
+                        }
                       >
                         Advanced Search
                       </Button>
-                      <AdvancedSearch
-                        open={openAdvancedSearch}
-                        onClose={() => setOpenAdvancedSearch(false)}
-                        handleChangeAdtlFields={handleChangeAdtlFields}
-                        setRanking={setRanking}
-                      />
-                      <Button
-                        key="clear-search"
-                        size="sm"
-                        variant="outlined"
-                        onClick={handleReset}
-                      >
-                        Reset
-                      </Button>
                     </Stack>
-                  </Stack>
+                    <AdvancedSearch
+                      open={openAdvancedSearch}
+                      onClose={() => setOpenAdvancedSearch(false)}
+                      handleChangeAdtlFields={handleChangeAdtlFields}
+                    />
+                  </>
                 )}
                 <Grid
                   container
