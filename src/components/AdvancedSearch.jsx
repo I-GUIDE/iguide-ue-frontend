@@ -47,7 +47,7 @@ const universalFieldProperties = [
     name: "tags",
     type: "array",
     dataType: "string",
-    isSortable: true,
+    isSortable: false,
   },
   {
     name: "spatial-coverage",
@@ -147,27 +147,22 @@ export default function AdvancedSearch({
   onClose,
   handleChangeAdtlFields,
   setRanking,
-  setSearchCategory,
 }) {
   const [adtlFields, setAdtlFields] = useState([{ type: {}, query: "" }]);
-  const [elementType, setElementType] = useState("any");
   const [orderBy, setOrderBy] = useState("");
   const [sortBy, setSortBy] = useState("");
 
   function handleResetAdvancedSearch() {
     setAdtlFields([{ type: {}, query: "" }]);
-    setElementType("any");
     setOrderBy("desc");
     setSortBy("_score");
 
-    setSearchCategory("any");
     handleChangeAdtlFields([{ type: {}, query: "" }]);
     setRanking({
       sortBy: "_score",
       order: "desc",
     });
 
-    const defaultElement = "any";
     const defaultFields = [{ type: {}, query: "" }];
     const defaultSortBy = "_score";
     const defaultOrder = "desc";
@@ -175,7 +170,6 @@ export default function AdvancedSearch({
     sessionStorage.setItem(
       "advanced_search",
       JSON.stringify({
-        elementType: defaultElement,
         adtlFields: defaultFields,
         sortBy: defaultSortBy,
         orderBy: defaultOrder,
@@ -187,11 +181,9 @@ export default function AdvancedSearch({
 
   function handleSaveAdvancedSearch() {
     const currentFields = [...adtlFields];
-    const currentElement = elementType;
     const currentSortBy = sortBy || "_score";
     const currentOrder = orderBy || "desc";
 
-    setSearchCategory(currentElement);
     handleChangeAdtlFields(currentFields);
     setRanking({
       sortBy: currentSortBy,
@@ -201,7 +193,6 @@ export default function AdvancedSearch({
     sessionStorage.setItem(
       "advanced_search",
       JSON.stringify({
-        elementType: currentElement,
         adtlFields: currentFields,
         sortBy: currentSortBy,
         orderBy: currentOrder,
@@ -215,7 +206,6 @@ export default function AdvancedSearch({
   useEffect(() => {
     const filters = JSON.parse(sessionStorage.getItem("advanced_search"));
     if (filters) {
-      setElementType(filters.elementType);
       setOrderBy(filters.orderBy);
       setSortBy(filters.sortBy);
       setAdtlFields(filters.adtlFields);
@@ -247,22 +237,6 @@ export default function AdvancedSearch({
         <form>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2}>
-              <FormControl>
-                <FormLabel>Element Type</FormLabel>
-                <Select
-                  sx={{ width: "200px" }}
-                  value={elementType}
-                  onChange={(e, newValue) => setElementType(newValue)}
-                >
-                  <Option value="any">Any</Option>
-                  <Option value="dataset">Dataset</Option>
-                  <Option value="notebook">Notebook</Option>
-                  <Option value="publication">Publication</Option>
-                  <Option value="map">Map</Option>
-                  <Option value="oer">Educational Resource</Option>
-                  <Option value="code">Code</Option>
-                </Select>
-              </FormControl>
               <FormControl>
                 <FormLabel>Sort By</FormLabel>
                 <Select

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 import {
@@ -114,31 +114,33 @@ export default function SearchResults() {
     return encodeURIComponent(jsonArray);
   }
 
-  function handleChangeAdtlFields(fields) {
-    let query = "";
-    fields.map((field) => {
-      if (Object.keys(field.type) !== 0 && field.query !== "") {
-        if (field.type?.type === "array") {
-          query += `&${field.type.name}=${encodeQueryArray(field.query)}`;
-        } else {
-          query += `&${field.type.name}=${field.query}`;
+  const handleChangeAdtlFields = useCallback(
+    (fields) => {
+      let query = "";
+      fields.map((field) => {
+        if (Object.keys(field.type).length !== 0 && field.query !== "") {
+          if (field.type?.type === "array") {
+            query += `&${field.type.name}=${encodeQueryArray(field.query)}`;
+          } else {
+            query += `&${field.type.name}=${field.query}`;
+          }
         }
-      }
-    });
-    setAdtlFields(query);
-  }
+      });
+      setAdtlFields(query);
+    },
+    [setAdtlFields]
+  );
 
   useEffect(() => {
-    const filters = JSON.parse(localStorage.getItem("advanced_search"));
+    const filters = JSON.parse(sessionStorage.getItem("advanced_search"));
     if (filters && Object.keys(filters).length !== 0) {
-      setSearchCategory(filters.elementType);
       setRanking({
         sortBy: filters.sortBy,
         order: filters.orderBy,
       });
       handleChangeAdtlFields(filters.adtlFields);
     }
-  }, []);
+  }, [handleChangeAdtlFields]);
 
   // When there is an update on searchTerm (new search) or current starting
   //   index (when users click another page), retrieve the search results
@@ -233,34 +235,21 @@ export default function SearchResults() {
 
   // Handle reset search
   function handleReset(event) {
-    setHasSearchParam(false);
-    setNextSearchTerm("");
-    setSearchTerm("");
-    setSearchCategory("any");
-    setNumberOfTotalItems(0);
-    setNumberOfPages(0);
-    setSearchResults([]);
-
     setRanking({ sortBy: "_score", order: "desc" });
     setAdtlFields("");
 
-    const defaultElement = "any";
     const defaultFields = [{ type: {}, query: "" }];
     const defaultSortBy = "_score";
     const defaultOrder = "desc";
 
-    localStorage.setItem(
+    sessionStorage.setItem(
       "advanced_search",
       JSON.stringify({
-        elementType: defaultElement,
         adtlFields: defaultFields,
         sortBy: defaultSortBy,
         orderBy: defaultOrder,
       })
     );
-
-    setSearchParams({ keyword: "", type: "any" });
-    navigate(`/search`);
   }
 
   // Function that handles submit events. This function will update the search term.
@@ -474,7 +463,7 @@ export default function SearchResults() {
                     )}
                     <Stack direction="row" spacing={2}>
                       <Button
-                        key="clear-search"
+                        key="advanced-search"
                         size="sm"
                         variant="plain"
                         startDecorator={<TuneIcon />}
@@ -487,7 +476,6 @@ export default function SearchResults() {
                         onClose={() => setOpenAdvancedSearch(false)}
                         handleChangeAdtlFields={handleChangeAdtlFields}
                         setRanking={setRanking}
-                        setSearchCategory={setSearchCategory}
                       />
                       <Button
                         key="clear-search"
