@@ -473,27 +473,25 @@ export default function SearchResults() {
                       alignItems="center"
                       spacing={2}
                     >
-                      {numberOfTotalItems > 0 ? (
-                        <Typography>
-                          Searched "{searchTerm}"
-                          {searchCategory !== "any" &&
-                            ' under "' +
-                              RESOURCE_TYPE_NAMES[searchCategory] +
-                              '"'}
-                          , returned {currentStartingIdx + 1}-
-                          {currentStartingIdx + arrayLength(searchResults)} of{" "}
-                          {numberOfTotalItems}
-                        </Typography>
-                      ) : (
-                        <Typography>
-                          Searched "{searchTerm}"
-                          {searchCategory !== "any" &&
-                            ' under "' +
-                              RESOURCE_TYPE_NAMES[searchCategory] +
-                              '"'}
-                          , no items matched your criteria.
-                        </Typography>
-                      )}
+                      <Typography>
+                        Searched "{searchTerm}"
+                        {searchCategory !== "any" &&
+                          ' under "' +
+                            RESOURCE_TYPE_NAMES[searchCategory] +
+                            '"'}
+                        ,{" "}
+                        {adtlFieldsQuery && (
+                          <Typography fontWeight="bold">
+                            with additional filter(s),{" "}
+                          </Typography>
+                        )}
+                        {numberOfTotalItems > 0
+                          ? `returned ${currentStartingIdx + 1}-${
+                              currentStartingIdx + arrayLength(searchResults)
+                            } of ${numberOfTotalItems}`
+                          : `no items matched your criteria`}
+                        .
+                      </Typography>
                       <Stack
                         sx={{
                           justifyContent: "center",
