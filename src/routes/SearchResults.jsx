@@ -31,6 +31,7 @@ import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import Badge from "@mui/joy/Badge";
 
 import TuneIcon from "@mui/icons-material/Tune";
 
@@ -86,7 +87,8 @@ export default function SearchResults() {
 
   const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
 
-  const [adtlFields, setAdtlFields] = useState("");
+  const [adtlFieldsQuery, setAdtlFieldsQuery] = useState("");
+  const [numberOfActiveFields, setNumberOfActiveFields] = useState(0);
 
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
@@ -120,6 +122,7 @@ export default function SearchResults() {
   const handleChangeAdtlFields = useCallback(
     (fields) => {
       let query = "";
+      let numberOfFields = 0;
       fields.map((field) => {
         if (Object.keys(field.type).length !== 0 && field.query !== "") {
           if (field.type?.type === "array") {
@@ -127,11 +130,13 @@ export default function SearchResults() {
           } else {
             query += `&${field.type.name}=${field.query}`;
           }
+          numberOfFields += 1;
         }
       });
-      setAdtlFields(query);
+      setAdtlFieldsQuery(query);
+      setNumberOfActiveFields(numberOfFields);
     },
-    [setAdtlFields]
+    [setAdtlFieldsQuery, setNumberOfActiveFields]
   );
 
   useEffect(() => {
@@ -159,7 +164,7 @@ export default function SearchResults() {
           ranking.order,
           currentStartingIdx,
           itemsPerPage,
-          adtlFields
+          adtlFieldsQuery
         );
 
         const returnElements = returnResults.elements
@@ -187,7 +192,13 @@ export default function SearchResults() {
     if (searchTerm && searchTerm !== "") {
       retrieveSearchData();
     }
-  }, [currentStartingIdx, searchTerm, searchCategory, ranking, adtlFields]);
+  }, [
+    currentStartingIdx,
+    searchTerm,
+    searchCategory,
+    ranking,
+    adtlFieldsQuery,
+  ]);
 
   // Determine the search result page URL based on different variables
   function searchUriBuilder(keyword, type) {
@@ -508,17 +519,24 @@ export default function SearchResults() {
                       justifyContent="flex-end"
                       alignItems="center"
                     >
-                      <Button
-                        key="advanced-search"
-                        size="sm"
-                        variant="plain"
-                        startDecorator={<TuneIcon />}
-                        onClick={() =>
-                          setOpenAdvancedSearch(!openAdvancedSearch)
-                        }
+                      <Badge
+                        badgeContent={numberOfActiveFields}
+                        invisible={!numberOfActiveFields}
+                        color="success"
                       >
-                        Advanced Search
-                      </Button>
+                        <Button
+                          key="advanced-search"
+                          size="sm"
+                          color={adtlFieldsQuery ? "success" : "primary"}
+                          variant={adtlFieldsQuery ? "solid" : "plain"}
+                          startDecorator={<TuneIcon />}
+                          onClick={() =>
+                            setOpenAdvancedSearch(!openAdvancedSearch)
+                          }
+                        >
+                          Filters
+                        </Button>
+                      </Badge>
                     </Stack>
                     <AdvancedSearch
                       open={openAdvancedSearch}

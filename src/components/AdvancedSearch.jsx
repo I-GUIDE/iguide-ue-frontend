@@ -202,9 +202,9 @@ export default function AdvancedSearch({
       >
         <Typography
           id="modal-title"
-          level="title-lg"
+          level="title-md"
           textColor="inherit"
-          sx={{ fontWeight: "lg", mb: 2 }}
+          sx={{ mb: 2 }}
         >
           Additional Filters
         </Typography>
