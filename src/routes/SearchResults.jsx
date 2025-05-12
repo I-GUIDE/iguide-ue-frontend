@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 import {
@@ -29,7 +29,13 @@ import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import Badge from "@mui/joy/Badge";
 
+import TuneIcon from "@mui/icons-material/Tune";
+
+import AdvancedSearch from "../components/AdvancedSearch";
 import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
 import { arrayLength } from "../helpers/helper";
@@ -74,6 +80,16 @@ export default function SearchResults() {
   // Number of elements displayed per page
   const itemsPerPage = 12;
 
+  const [ranking, setRanking] = useState({
+    sortBy: "_score",
+    order: "desc",
+  });
+
+  const [openAdvancedSearch, setOpenAdvancedSearch] = useState(false);
+
+  const [adtlFieldsQuery, setAdtlFieldsQuery] = useState("");
+  const [numberOfActiveFields, setNumberOfActiveFields] = useState(0);
+
   const keywordParam = searchParams.get("keyword");
   const typeParam = searchParams.get("type") ? searchParams.get("type") : "any";
 
@@ -93,6 +109,47 @@ export default function SearchResults() {
     setNextSearchTerm(keywordParam);
   }, [keywordParam, typeParam]);
 
+  function encodeQueryArray(queryString) {
+    const items = queryString
+      .split(";")
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+
+    const jsonArray = JSON.stringify(items);
+    return encodeURIComponent(jsonArray);
+  }
+
+  const handleChangeAdtlFields = useCallback(
+    (fields) => {
+      let query = "";
+      let numberOfFields = 0;
+      fields.map((field) => {
+        if (Object.keys(field.type).length !== 0 && field.query !== "") {
+          if (field.type?.type === "array") {
+            query += `&${field.type.name}=${encodeQueryArray(field.query)}`;
+          } else {
+            query += `&${field.type.name}=${field.query}`;
+          }
+          numberOfFields += 1;
+        }
+      });
+      setAdtlFieldsQuery(query);
+      setNumberOfActiveFields(numberOfFields);
+    },
+    [setAdtlFieldsQuery, setNumberOfActiveFields]
+  );
+
+  useEffect(() => {
+    const filters = JSON.parse(sessionStorage.getItem("advanced_search"));
+    if (filters && Object.keys(filters).length !== 0) {
+      setRanking({
+        sortBy: filters.sortBy,
+        order: filters.orderBy,
+      });
+      handleChangeAdtlFields(filters.adtlFields);
+    }
+  }, [handleChangeAdtlFields]);
+
   // When there is an update on searchTerm (new search) or current starting
   //   index (when users click another page), retrieve the search results
   //   based on the current starting index.
@@ -103,10 +160,11 @@ export default function SearchResults() {
         const returnResults = await DataSearcher(
           searchTerm,
           searchCategory,
-          "_score",
-          "desc",
+          ranking.sortBy,
+          ranking.order,
           currentStartingIdx,
-          itemsPerPage
+          itemsPerPage,
+          adtlFieldsQuery
         );
 
         const returnElements = returnResults.elements
@@ -134,7 +192,13 @@ export default function SearchResults() {
     if (searchTerm && searchTerm !== "") {
       retrieveSearchData();
     }
-  }, [currentStartingIdx, searchTerm, searchCategory]);
+  }, [
+    currentStartingIdx,
+    searchTerm,
+    searchCategory,
+    ranking,
+    adtlFieldsQuery,
+  ]);
 
   // Determine the search result page URL based on different variables
   function searchUriBuilder(keyword, type) {
@@ -183,18 +247,41 @@ export default function SearchResults() {
     }
   }
 
-  // Handle reset search
-  function handleReset(event) {
-    setHasSearchParam(false);
-    setNextSearchTerm("");
-    setSearchTerm("");
-    setSearchCategory("any");
-    setNumberOfTotalItems(0);
-    setNumberOfPages(0);
-    setSearchResults([]);
-
-    setSearchParams({ keyword: "", type: "any" });
-    navigate(`/search`);
+  function handleSortingChange(event, newValue) {
+    switch (newValue) {
+      case "_score":
+        setRanking({
+          sortBy: "_score",
+          order: "desc",
+        });
+        break;
+      case "authors":
+        setRanking({
+          sortBy: "authors",
+          order: "asc",
+        });
+        break;
+      case "authors-desc":
+        setRanking({
+          sortBy: "authors",
+          order: "desc",
+        });
+        break;
+      case "title":
+        setRanking({
+          sortBy: "title",
+          order: "asc",
+        });
+        break;
+      case "title-desc":
+        setRanking({
+          sortBy: "title",
+          order: "desc",
+        });
+        break;
+      default:
+        TEST_MODE && console.log(`Unknown sorting mechanism: ${newValue}`);
+    }
   }
 
   // Function that handles submit events. This function will update the search term.
@@ -379,42 +466,82 @@ export default function SearchResults() {
 
                 {/* Search result summary and "clear search button" */}
                 {hasSearchParam && (
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    {numberOfTotalItems > 0 ? (
-                      <Typography>
-                        Searched "{searchTerm}"
-                        {searchCategory !== "any" &&
-                          ' under "' +
-                            RESOURCE_TYPE_NAMES[searchCategory] +
-                            '"'}
-                        , returned {currentStartingIdx + 1}-
-                        {currentStartingIdx + arrayLength(searchResults)} of{" "}
-                        {numberOfTotalItems}
-                      </Typography>
-                    ) : (
-                      <Typography>
-                        Searched "{searchTerm}"
-                        {searchCategory !== "any" &&
-                          ' under "' +
-                            RESOURCE_TYPE_NAMES[searchCategory] +
-                            '"'}
-                        , no items matched your criteria.
-                      </Typography>
-                    )}
-                    <Button
-                      key="clear-search"
-                      size="sm"
-                      variant="outlined"
-                      onClick={handleReset}
+                  <>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={2}
                     >
-                      Reset
-                    </Button>
-                  </Stack>
+                      <Typography>
+                        Searched "{searchTerm}"
+                        {searchCategory !== "any" &&
+                          ' under "' +
+                            RESOURCE_TYPE_NAMES[searchCategory] +
+                            '"'}
+                        ,{" "}
+                        {adtlFieldsQuery && (
+                          <Typography fontWeight="bold">
+                            with additional filter(s),{" "}
+                          </Typography>
+                        )}
+                        {numberOfTotalItems > 0
+                          ? `returned ${currentStartingIdx + 1}-${
+                              currentStartingIdx + arrayLength(searchResults)
+                            } of ${numberOfTotalItems}`
+                          : `no items matched your criteria`}
+                        .
+                      </Typography>
+                      <Stack
+                        sx={{
+                          justifyContent: "center",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Typography level="body-xs">Sort by</Typography>
+                        <Select
+                          defaultValue="_score"
+                          onChange={handleSortingChange}
+                          sx={{ width: 150 }}
+                        >
+                          <Option value="_score">Popular</Option>
+                          <Option value="authors">Author</Option>
+                          <Option value="authors-desc">Author (Z-A)</Option>
+                          <Option value="title">Title</Option>
+                          <Option value="title-desc">Title (Z-A)</Option>
+                        </Select>
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="flex-end"
+                      alignItems="center"
+                    >
+                      <Badge
+                        badgeContent={numberOfActiveFields}
+                        invisible={!numberOfActiveFields}
+                        color="success"
+                      >
+                        <Button
+                          key="advanced-search"
+                          size="sm"
+                          color={adtlFieldsQuery ? "success" : "primary"}
+                          variant={adtlFieldsQuery ? "solid" : "plain"}
+                          startDecorator={<TuneIcon />}
+                          onClick={() =>
+                            setOpenAdvancedSearch(!openAdvancedSearch)
+                          }
+                        >
+                          Filters
+                        </Button>
+                      </Badge>
+                    </Stack>
+                    <AdvancedSearch
+                      open={openAdvancedSearch}
+                      onClose={() => setOpenAdvancedSearch(false)}
+                      handleChangeAdtlFields={handleChangeAdtlFields}
+                    />
+                  </>
                 )}
                 <Grid
                   container
