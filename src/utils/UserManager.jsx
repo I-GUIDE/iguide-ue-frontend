@@ -20,9 +20,10 @@ export async function userLogout() {
   const redirectURI = currentLocation?.pathname + currentLocation?.search;
   TEST_MODE && console.log("Redirect URI for logout", redirectURI);
 
+  // Log user out with redirect path
   window.open(
     AUTH_BACKEND_URL +
-      "/logout?redirect-uri=" +
+      "/logout?redirect-path=" +
       encodeURIComponent(redirectURI),
     "_self"
   );

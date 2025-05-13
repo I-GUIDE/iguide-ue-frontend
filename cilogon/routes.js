@@ -3,7 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { Client } = require("@opensearch-project/opensearch");
 const multer = require("multer");
-const { createReadStream, unlinkSync } = require("fs");
+const { createReadStream, unlinkSync, existsSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
 const dotenv = require("dotenv");
@@ -32,6 +32,14 @@ const recaptcha_secret_key = process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
 
 const web = new WebClient(slack_api_token);
 
+const redirect_whitelist_filename = "./redirect-whitelist.json";
+
+let redirect_whitelist = []
+// If the JSON file exists, use the whitelist
+if (existsSync(redirect_whitelist_filename)) {
+  redirect_whitelist = require(redirect_whitelist_filename);
+}
+
 if (!os_node) {
   throw new Error("Missing OpenSearch node configuration");
 }
@@ -49,6 +57,37 @@ const client = new Client({
 
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
+
+function getValidatedRedirectFullURL(redirectDomainCode, redirectPath) {
+  const defaultURL = FRONTEND_URL;
+
+  let redirectDomain = defaultURL;
+
+  // If the redirectDomainCode exists, find the domain
+  if (redirectDomainCode) {
+    // Search the domain object from the whitelist
+    const domainObject = redirect_whitelist.find(domain => domain.id === redirectDomainCode);
+    // If found, set redirect domain as what's found, otherwise stays as the default frontend URL
+    if (domainObject) {
+      redirectDomain = domainObject.domain;
+    }
+  } // Otherwise, the redirectDomain will remain as the defaultURL
+
+  // Check if redirectPath is a string, if not, return default URL
+  if (!redirectPath || typeof redirectPath !== "string") {
+    return defaultURL;
+  }
+
+  // Decode the path
+  const decodedRedirectPath = decodeURIComponent(redirectPath);
+
+  // Verify if the path is an absolute path, if not, use the default URL
+  if (decodedRedirectPath.startsWith("/")) {
+    return redirectDomain + decodedRedirectPath;
+  } else {
+    return defaultURL;
+  }
+}
 
 // Function to retrieve the role from the "user_dev" index
 const getUserRole = async (userOpenId) => {
@@ -178,8 +217,9 @@ router.get("/cilogon-callback", async (req, res, next) => {
 });
 
 router.get('/logout', function (req, res) {
-  const redirectURI = req.query["redirect-uri"];
-  const decodedRedirectURI = decodeURIComponent(redirectURI);
+  const redirectDomainCode = req.query["domain-code"];
+  const redirectPath = req.query["redirect-path"];
+  const redirectFullURL = getValidatedRedirectFullURL(redirectDomainCode, redirectPath);
 
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
@@ -198,11 +238,7 @@ router.get('/logout', function (req, res) {
   res.clearCookie("IGPAU", true, { path: "/" });
 
   req.session.destroy(function (err) {
-    if (redirectURI) {
-      res.redirect(`${FRONTEND_URL}${decodedRedirectURI}`);
-    } else {
-      res.redirect(`${FRONTEND_URL}`);
-    }
+    res.redirect(redirectFullURL);
   });
 });
 
