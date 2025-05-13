@@ -58,10 +58,9 @@ const client = new Client({
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
-function getValidatedRedirectFullURL(redirectDomainCode, redirectPath) {
-  const defaultURL = FRONTEND_URL;
-
-  let redirectDomain = defaultURL;
+// Get validated redirect full URL
+function getValidatedRedirectFullURL(redirectDomainCode, redirectPath, defaultRedirectURL = FRONTEND_URL) {
+  let redirectDomain = defaultRedirectURL;
 
   // If the redirectDomainCode exists, find the domain
   if (redirectDomainCode) {
@@ -71,11 +70,11 @@ function getValidatedRedirectFullURL(redirectDomainCode, redirectPath) {
     if (domainObject) {
       redirectDomain = domainObject.domain;
     }
-  } // Otherwise, the redirectDomain will remain as the defaultURL
+  } // Otherwise, the redirectDomain will remain as the defaultRedirectURL
 
   // Check if redirectPath is a string, if not, return default URL
   if (!redirectPath || typeof redirectPath !== "string") {
-    return defaultURL;
+    return defaultRedirectURL;
   }
 
   // Decode the path
@@ -85,7 +84,7 @@ function getValidatedRedirectFullURL(redirectDomainCode, redirectPath) {
   if (decodedRedirectPath.startsWith("/")) {
     return redirectDomain + decodedRedirectPath;
   } else {
-    return defaultURL;
+    return defaultRedirectURL;
   }
 }
 
@@ -145,6 +144,13 @@ const generateRefreshToken = (user) => {
 router.get(
   "/login",
   function (req, res, next) {
+    const redirectDomainCode = req.query["domain-code"];
+    const redirectPath = req.query["redirect-path"];
+    const redirectFullURL = getValidatedRedirectFullURL(redirectDomainCode, redirectPath, `${FRONTEND_URL}/user-profile`);
+
+    // Save the redirectFullURL to session
+    req.session.redirectFullURL = redirectFullURL;
+
     next();
   },
   passport.authenticate("oidc", {
@@ -154,6 +160,10 @@ router.get(
 );
 
 router.get("/cilogon-callback", async (req, res, next) => {
+  // Retrieve the redirectURL from session, and then destory the session variable
+  const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
+  delete req.session.redirectFullURL;
+
   passport.authenticate("oidc", async (err, user, info) => {
     if (err) {
       logger.error({
@@ -210,8 +220,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
         path: "/",
       });
       res.cookie("IGPAU", true, { path: "/" });
-
-      res.redirect(`${FRONTEND_URL}/user-profile`);
+      res.redirect(redirectFullURL);
     });
   })(req, res, next);
 });
