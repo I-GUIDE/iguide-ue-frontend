@@ -9,7 +9,22 @@ const ENV = import.meta.env.VITE_ENV;
  * Log in user
  */
 export async function userLogin() {
-  window.open(AUTH_BACKEND_URL + "/login", "_self");
+  const currentLocation = window.location;
+
+  // redirect users to the default page if the login appears at the home page
+  if (currentLocation.pathname === "/") {
+    window.open(AUTH_BACKEND_URL + "/login", "_self");
+    return;
+  }
+  const redirectURI = currentLocation?.pathname + currentLocation?.search;
+  TEST_MODE && console.log("Redirect URI for login", redirectURI);
+
+  window.open(
+    AUTH_BACKEND_URL +
+      "/login?redirect-path=" +
+      encodeURIComponent(redirectURI),
+    "_self"
+  );
 }
 
 /**
@@ -20,9 +35,10 @@ export async function userLogout() {
   const redirectURI = currentLocation?.pathname + currentLocation?.search;
   TEST_MODE && console.log("Redirect URI for logout", redirectURI);
 
+  // Log user out with redirect path
   window.open(
     AUTH_BACKEND_URL +
-      "/logout?redirect-uri=" +
+      "/logout?redirect-path=" +
       encodeURIComponent(redirectURI),
     "_self"
   );

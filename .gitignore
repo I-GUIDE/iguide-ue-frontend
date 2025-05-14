@@ -80,3 +80,6 @@ logs/*
 
 # Ignore any package-lock.json file, because this project uses yarn.lock
 package-lock.json
+
+# Ignore the whitelist URL JSON file for login or logout redirection
+redirect-whitelist.json

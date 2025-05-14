@@ -3,7 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { Client } = require("@opensearch-project/opensearch");
 const multer = require("multer");
-const { createReadStream, unlinkSync } = require("fs");
+const { createReadStream, unlinkSync, existsSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
 const dotenv = require("dotenv");
@@ -32,6 +32,14 @@ const recaptcha_secret_key = process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
 
 const web = new WebClient(slack_api_token);
 
+const redirect_whitelist_filename = "./redirect-whitelist.json";
+
+let redirect_whitelist = []
+// If the JSON file exists, use the whitelist
+if (existsSync(redirect_whitelist_filename)) {
+  redirect_whitelist = require(redirect_whitelist_filename);
+}
+
 if (!os_node) {
   throw new Error("Missing OpenSearch node configuration");
 }
@@ -49,6 +57,50 @@ const client = new Client({
 
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
+
+// Get validated redirect full URL
+function getValidatedRedirectFullURL(redirectDomainId, redirectPath, defaultRedirectURL = FRONTEND_URL) {
+  // No redirectPath? redirect to defaultRedirectURL
+  // No redirectDomainId? Use FRONTEND_URL (used by redirect within the platform)
+  // Invalid redirectDoaminId? Use defaultRedirectURL
+
+  // Fail-safe
+  let redirectDomain = defaultRedirectURL;
+
+  // If the redirectDomainId exists, find the domain
+  if (redirectDomainId) {
+    // Search the domain object from the whitelist
+    const domainObject = redirect_whitelist.find(domain => domain.id === redirectDomainId);
+    // If found, set redirect domain as what's found, otherwise redirect to the default
+    if (domainObject) {
+      redirectDomain = domainObject.domain;
+    } else {
+      logger.warn({
+        type: "Invalid domain id",
+        message: redirectDomainId
+      });
+      return defaultRedirectURL;
+    }
+  } else {
+    // Otherwise, the redirectDomain will use the frontend URL
+    redirectDomain = FRONTEND_URL;
+  }
+
+  // Check if redirectPath is a string, if not, return default URL
+  if (!redirectPath || typeof redirectPath !== "string") {
+    return defaultRedirectURL;
+  }
+
+  // Decode the path
+  const decodedRedirectPath = decodeURIComponent(redirectPath);
+
+  // Verify if the path is an absolute path, if not, use the default URL
+  if (decodedRedirectPath.startsWith("/")) {
+    return redirectDomain + decodedRedirectPath;
+  } else {
+    return defaultRedirectURL;
+  }
+}
 
 // Function to retrieve the role from the "user_dev" index
 const getUserRole = async (userOpenId) => {
@@ -106,6 +158,13 @@ const generateRefreshToken = (user) => {
 router.get(
   "/login",
   function (req, res, next) {
+    const redirectDomainId = req.query["redirect-domain-id"];
+    const redirectPath = req.query["redirect-path"];
+    const redirectFullURL = getValidatedRedirectFullURL(redirectDomainId, redirectPath, `${FRONTEND_URL}/user-profile`);
+
+    // Save the redirectFullURL to session
+    req.session.redirectFullURL = redirectFullURL;
+
     next();
   },
   passport.authenticate("oidc", {
@@ -115,6 +174,10 @@ router.get(
 );
 
 router.get("/cilogon-callback", async (req, res, next) => {
+  // Retrieve the redirectURL from session, and then destory the session variable
+  const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
+  delete req.session.redirectFullURL;
+
   passport.authenticate("oidc", async (err, user, info) => {
     if (err) {
       logger.error({
@@ -171,15 +234,15 @@ router.get("/cilogon-callback", async (req, res, next) => {
         path: "/",
       });
       res.cookie("IGPAU", true, { path: "/" });
-
-      res.redirect(`${FRONTEND_URL}/user-profile`);
+      res.redirect(redirectFullURL);
     });
   })(req, res, next);
 });
 
 router.get('/logout', function (req, res) {
-  const redirectURI = req.query["redirect-uri"];
-  const decodedRedirectURI = decodeURIComponent(redirectURI);
+  const redirectDomainId = req.query["redirect-domain-id"];
+  const redirectPath = req.query["redirect-path"];
+  const redirectFullURL = getValidatedRedirectFullURL(redirectDomainId, redirectPath);
 
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
@@ -198,11 +261,7 @@ router.get('/logout', function (req, res) {
   res.clearCookie("IGPAU", true, { path: "/" });
 
   req.session.destroy(function (err) {
-    if (redirectURI) {
-      res.redirect(`${FRONTEND_URL}${decodedRedirectURI}`);
-    } else {
-      res.redirect(`${FRONTEND_URL}`);
-    }
+    res.redirect(redirectFullURL);
   });
 });
 
