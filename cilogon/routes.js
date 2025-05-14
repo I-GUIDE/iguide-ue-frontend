@@ -59,18 +59,32 @@ const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
 const BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 // Get validated redirect full URL
-function getValidatedRedirectFullURL(redirectDomainCode, redirectPath, defaultRedirectURL = FRONTEND_URL) {
+function getValidatedRedirectFullURL(redirectDomainId, redirectPath, defaultRedirectURL = FRONTEND_URL) {
+  // No redirectPath? redirect to defaultRedirectURL
+  // No redirectDomainId? Use FRONTEND_URL (used by redirect within the platform)
+  // Invalid redirectDoaminId? Use defaultRedirectURL
+
+  // Fail-safe
   let redirectDomain = defaultRedirectURL;
 
-  // If the redirectDomainCode exists, find the domain
-  if (redirectDomainCode) {
+  // If the redirectDomainId exists, find the domain
+  if (redirectDomainId) {
     // Search the domain object from the whitelist
-    const domainObject = redirect_whitelist.find(domain => domain.id === redirectDomainCode);
-    // If found, set redirect domain as what's found, otherwise stays as the default frontend URL
+    const domainObject = redirect_whitelist.find(domain => domain.id === redirectDomainId);
+    // If found, set redirect domain as what's found, otherwise redirect to the default
     if (domainObject) {
       redirectDomain = domainObject.domain;
+    } else {
+      logger.warn({
+        type: "Invalid domain id",
+        message: redirectDomainId
+      });
+      return defaultRedirectURL;
     }
-  } // Otherwise, the redirectDomain will remain as the defaultRedirectURL
+  } else {
+    // Otherwise, the redirectDomain will use the frontend URL
+    redirectDomain = FRONTEND_URL;
+  }
 
   // Check if redirectPath is a string, if not, return default URL
   if (!redirectPath || typeof redirectPath !== "string") {
@@ -144,9 +158,9 @@ const generateRefreshToken = (user) => {
 router.get(
   "/login",
   function (req, res, next) {
-    const redirectDomainCode = req.query["domain-code"];
+    const redirectDomainId = req.query["redirect-domain-id"];
     const redirectPath = req.query["redirect-path"];
-    const redirectFullURL = getValidatedRedirectFullURL(redirectDomainCode, redirectPath, `${FRONTEND_URL}/user-profile`);
+    const redirectFullURL = getValidatedRedirectFullURL(redirectDomainId, redirectPath, `${FRONTEND_URL}/user-profile`);
 
     // Save the redirectFullURL to session
     req.session.redirectFullURL = redirectFullURL;
@@ -226,9 +240,9 @@ router.get("/cilogon-callback", async (req, res, next) => {
 });
 
 router.get('/logout', function (req, res) {
-  const redirectDomainCode = req.query["domain-code"];
+  const redirectDomainId = req.query["redirect-domain-id"];
   const redirectPath = req.query["redirect-path"];
-  const redirectFullURL = getValidatedRedirectFullURL(redirectDomainCode, redirectPath);
+  const redirectFullURL = getValidatedRedirectFullURL(redirectDomainId, redirectPath);
 
   res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
     httpOnly: true,
