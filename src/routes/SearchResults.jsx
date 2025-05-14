@@ -504,7 +504,7 @@ export default function SearchResults() {
                           onChange={handleSortingChange}
                           sx={{ width: 150 }}
                         >
-                          <Option value="_score">Popular</Option>
+                          <Option value="_score">Relevance</Option>
                           <Option value="authors">Author</Option>
                           <Option value="authors-desc">Author (Z-A)</Option>
                           <Option value="title">Title</Option>
