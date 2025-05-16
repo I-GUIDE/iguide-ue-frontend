@@ -24,7 +24,7 @@ services:
   prerender:
     image: iguide-ue-prerender-${VITE_ENV}
     build:
-      context: ./server/.
+      context: ./prerender/.
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
