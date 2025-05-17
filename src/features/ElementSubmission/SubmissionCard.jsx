@@ -225,10 +225,9 @@ export default function SubmissionCard(props) {
       if (USE_DEMO_USER) {
         setUserRoleFromJWT(parseInt(DEMO_USER_ROLE));
       } else {
-        const message = await checkTokens();
-        TEST_MODE &&
-          console.log("Check token returns", message, typeof message);
-        setUserRoleFromJWT(message);
+        const userInfoFromToken = await checkTokens();
+        TEST_MODE && console.log("Check token returns", userInfoFromToken);
+        setUserRoleFromJWT(userInfoFromToken.role);
       }
       setLoading(false);
     };
