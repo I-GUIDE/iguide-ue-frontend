@@ -206,7 +206,7 @@ export default function AdvancedSearch({
           textColor="inherit"
           sx={{ mb: 2 }}
         >
-          Additional Filters
+          Additional Filters (Beta)
         </Typography>
         <form>
           <Stack spacing={2}>

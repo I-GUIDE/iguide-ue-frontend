@@ -37,7 +37,7 @@ const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
 export default function Root(props) {
   const customOutlet = props.customOutlet;
   const [cookies] = useCookies();
-  const jwtTokensExistName = "jwt-tokens-exist-" + COOKIE_SUFFIX;
+  const jwtTokensExistName = "iguide-jwt-tokens-exist-" + COOKIE_SUFFIX;
   const [openSnackbar, setOpenSnackbar] = useState(true);
 
   // If the JWT tokens exist, set the status as isAuthenticated
