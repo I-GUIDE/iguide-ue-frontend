@@ -233,7 +233,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
         domain: target_domain,
         path: "/",
       });
-      res.cookie("IGPAU", true, { path: "/" });
+      res.cookie("jwt_tokens_exist", true, { path: "/" });
       res.redirect(redirectFullURL);
     });
   })(req, res, next);
@@ -258,7 +258,7 @@ router.get('/logout', function (req, res) {
     domain: target_domain,
     path: "/",
   });
-  res.clearCookie("IGPAU", true, { path: "/" });
+  res.clearCookie("jwt_tokens_exist", { path: "/" });
 
   req.session.destroy(function (err) {
     res.redirect(redirectFullURL);

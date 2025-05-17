@@ -322,8 +322,8 @@ export async function checkTokens() {
   }
 
   const resultsFromJWT = await response.json();
-  const userRoleFromJWT = resultsFromJWT.role;
-  const userIdFromJWT = resultsFromJWT.id;
+  const userRoleFromJWT = resultsFromJWT?.role;
+  const userIdFromJWT = resultsFromJWT?.id;
   const userRoleFromDB = await getUserRole(userIdFromJWT);
 
   TEST_MODE && console.log("checkTokens(): results from JWT", resultsFromJWT);
@@ -341,6 +341,6 @@ export async function checkTokens() {
     );
     userLogout();
   } else {
-    return userRoleFromJWT;
+    return resultsFromJWT;
   }
 }
