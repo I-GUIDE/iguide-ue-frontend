@@ -25,6 +25,11 @@ const target_domain = process.env.JWT_TARGET_DOMAIN;
 const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
 const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 
+const cookie_suffix = process.env.COOKIE_SUFFIX;
+const jwt_access_token_name = "jwt-access-token-" + cookie_suffix;
+const jwt_refresh_token_name = "jwt-refresh-token-" + cookie_suffix;
+const jwt_tokens_exist_name = "jwt-tokens-exist-" + cookie_suffix;
+
 const slack_channel_id = process.env.SLACK_CHANNEL_ID;
 const slack_api_token = process.env.SLACK_API_TOKEN;
 
@@ -219,21 +224,21 @@ router.get("/cilogon-callback", async (req, res, next) => {
       await storeRefreshToken(client, refreshToken, user.sub);
 
       // Set the tokens in cookies
-      res.cookie(process.env.JWT_ACCESS_TOKEN_NAME, accessToken, {
+      res.cookie(jwt_access_token_name, accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
         domain: target_domain,
         path: "/",
       });
-      res.cookie(process.env.JWT_REFRESH_TOKEN_NAME, refreshToken, {
+      res.cookie(jwt_refresh_token_name, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
         domain: target_domain,
         path: "/",
       });
-      res.cookie("jwt_tokens_exist", true, { path: "/" });
+      res.cookie(jwt_tokens_exist_name, true, { path: "/" });
       res.redirect(redirectFullURL);
     });
   })(req, res, next);
@@ -244,21 +249,21 @@ router.get('/logout', function (req, res) {
   const redirectPath = req.query["redirect-path"];
   const redirectFullURL = getValidatedRedirectFullURL(redirectDomainId, redirectPath);
 
-  res.clearCookie(process.env.JWT_ACCESS_TOKEN_NAME, {
+  res.clearCookie(jwt_access_token_name, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
     domain: target_domain,
     path: "/",
   });
-  res.clearCookie(process.env.JWT_REFRESH_TOKEN_NAME, {
+  res.clearCookie(jwt_refresh_token_name, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
     domain: target_domain,
     path: "/",
   });
-  res.clearCookie("jwt_tokens_exist", { path: "/" });
+  res.clearCookie(jwt_tokens_exist_name, { path: "/" });
 
   req.session.destroy(function (err) {
     res.redirect(redirectFullURL);

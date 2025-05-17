@@ -26,6 +26,7 @@ import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const COOKIE_SUFFIX = import.meta.env.VITE_COOKIE_SUFFIX;
 const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 
 // Demo user setting
@@ -35,12 +36,13 @@ const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies] = useCookies();
+  const jwtTokensExistName = "jwt-tokens-exist-" + COOKIE_SUFFIX;
   const [openSnackbar, setOpenSnackbar] = useState(true);
 
   // If the JWT tokens exist, set the status as isAuthenticated
   const [isAuthenticated, setIsAuthenticated] = useState(
-    USE_DEMO_USER ? true : cookies.jwt_tokens_exist
+    USE_DEMO_USER ? true : cookies[jwtTokensExistName]
   );
   const [localUserInfo, setLocalUserInfo] = useState(null);
 
