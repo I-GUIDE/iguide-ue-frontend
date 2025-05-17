@@ -26,8 +26,8 @@ const access_token_expiration = process.env.JWT_ACCESS_TOKEN_EXPIRATION;
 const refresh_token_expiration = process.env.JWT_REFRESH_TOKEN_EXPIRATION;
 
 const cookie_suffix = process.env.COOKIE_SUFFIX;
-const jwt_access_token_name = "iguide-jwt-access-token-" + cookie_suffix;
-const jwt_refresh_token_name = "iguide-jwt-refresh-token-" + cookie_suffix;
+const jwt_access_token_name = "jwt-access-token-" + cookie_suffix;
+const jwt_refresh_token_name = "jwt-refresh-token-" + cookie_suffix;
 const jwt_tokens_exist_name = "iguide-jwt-tokens-exist-" + cookie_suffix;
 
 const slack_channel_id = process.env.SLACK_CHANNEL_ID;
