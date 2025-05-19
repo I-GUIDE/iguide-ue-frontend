@@ -3,7 +3,6 @@ import { useLocation } from "react-router";
 
 import Tooltip from "@mui/joy/Tooltip";
 import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Fab from "@mui/material/Fab";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -60,15 +59,6 @@ export function ClickToTop() {
       </Fade>
     );
   }
-
-  ScrollTop.propTypes = {
-    children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-  };
 
   return (
     <ScrollTop>
