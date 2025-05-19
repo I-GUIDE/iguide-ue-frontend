@@ -240,8 +240,9 @@ export default function SubmissionCard(props) {
       const regex = /-?\b\d+(\.\d+)?\b/g;
       const matches = text.match(regex);
 
+      // If the format is incorrect, return empty
       if (!matches || matches.length !== numberOfExpectedNumbers) {
-        return text;
+        return "";
       }
       return matches.join(delimiter);
     }
@@ -983,8 +984,10 @@ export default function SubmissionCard(props) {
 
     data["spatial-coverage"] = spatialCoverage;
     data["spatial-geometry"] = geometry;
-    data["spatial-bounding-box"] = `ENVELOPE (${boundingBox})`;
-    data["spatial-centroid"] = `POINT (${centroid})`;
+    data["spatial-bounding-box"] =
+      boundingBox.trim() !== "" ? `ENVELOPE (${boundingBox})` : "";
+    data["spatial-centroid"] =
+      centroid.trim() !== "" ? `POINT (${centroid})` : "";
     data["spatial-georeferenced"] = isGeoreferenced;
     data["spatial-temporal-coverage"] = temporalCoverage;
 
