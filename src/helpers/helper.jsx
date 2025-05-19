@@ -145,10 +145,5 @@ export function removeMarkdown(markdown) {
 
 export function isValidNumberWithinRange(number, min, max) {
   const parsedNumber = parseFloat(number);
-  return (
-    !isNaN(parsedNumber) &&
-    parsedNumber.toString() === number.trim() &&
-    parsedNumber >= min &&
-    parsedNumber <= max
-  );
+  return !isNaN(parsedNumber) && parsedNumber >= min && parsedNumber <= max;
 }
