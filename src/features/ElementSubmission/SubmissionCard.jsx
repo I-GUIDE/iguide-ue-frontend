@@ -364,9 +364,16 @@ export default function SubmissionCard(props) {
         spatialMetadataList[selectedSpatialMetadataIndex];
       setSpatialCoverage(selectedSpatialMetadata.display_name);
       setGeometry(selectedSpatialMetadata.geotext);
-      setBoundingBox(selectedSpatialMetadata.boundingbox.join(", "));
+      const boundingBox = selectedSpatialMetadata.boundingbox;
+      if (boundingBox && boundingBox.length === 4) {
+        const minLat = boundingBox[0];
+        const maxLat = boundingBox[1];
+        const minLon = boundingBox[2];
+        const maxLon = boundingBox[3];
+        setBoundingBox(`${minLon},${maxLon},${minLat},${maxLat}`);
+      }
       setCentroid(
-        `${selectedSpatialMetadata.lat} ${selectedSpatialMetadata.lon}`
+        `${selectedSpatialMetadata.lon} ${selectedSpatialMetadata.lat}`
       );
     }
   }, [selectedSpatialMetadataIndex, spatialMetadataList]);
@@ -709,7 +716,13 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setBoundingBox(val);
 
+    if (!val) {
+      setBoundingBoxError({ status: false, message: "" });
+      return;
+    }
+
     const array = val.split(",");
+    TEST_MODE && console.log("Bounding box", array);
 
     if (array.length !== 4) {
       setBoundingBoxError({
@@ -746,7 +759,13 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setCentroid(val);
 
+    if (!val) {
+      setCentroidError({ status: false, message: "" });
+      return;
+    }
+
     const array = val.split(" ");
+    TEST_MODE && console.log("Centroid", array);
 
     if (array.length !== 2) {
       setCentroidError({
@@ -2068,7 +2087,7 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <Textarea
-                placeholder="POLYGON((-80 25, -65 18, -64 33, -80 25))"
+                placeholder="POLYGON((-80 25,-65 18,-64 33,-80 25))"
                 minRows={4}
                 maxRows={10}
                 value={geometry}
@@ -2082,7 +2101,7 @@ export default function SubmissionCard(props) {
               <FormLabel>
                 <SubmissionCardFieldTitle
                   tooltipTitle="The bounding box in the format:"
-                  tooltipContent="ENVELOPE (minimum longitude, minimum latitude, maximum longitude, maximum latitude) aka ENVELOPE (westernmost, southernmost, easternmost, northernmost)"
+                  tooltipContent="ENVELOPE (minimum longitude, maximum longitude, minimum latitude, maximum latitude) aka ENVELOPE (westernmost, easternmost, southernmost, northernmost)"
                 >
                   Bounding box
                 </SubmissionCardFieldTitle>
@@ -2095,7 +2114,7 @@ export default function SubmissionCard(props) {
                 <Grid size="auto">{"ENVELOPE ("}</Grid>
                 <Grid size="grow">
                   <Input
-                    placeholder="-111.1, -104.0, 45.0, 40.9"
+                    placeholder="-111.1,-104.0,40.9,45.0"
                     value={boundingBox}
                     onChange={handleBoundingBoxChange}
                   />
