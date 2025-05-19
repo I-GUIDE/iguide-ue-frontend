@@ -1,0 +1,53 @@
+import React, { lazy, Suspense } from "react";
+
+import { CssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import Box from "@mui/joy/Box";
+import Grid from "@mui/joy/Grid";
+
+import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import usePageTitle from "../hooks/usePageTitle";
+const ElementsMapContainer = lazy(() =>
+  import("../features/ElementsMap/ElementsMapContainer")
+);
+
+export default function ElementsMap() {
+  usePageTitle("Elements Map");
+
+  const usCenter = [39.8283, -98.5795];
+  const defaultZoom = 5;
+
+  return (
+    <CssVarsProvider disableTransitionOnChange>
+      <CssBaseline />
+      <Box
+        component="main"
+        sx={{
+          minHeight: NO_HEADER_BODY_HEIGHT,
+          display: "grid",
+          gridTemplateColumns: { xs: "auto", md: "100%" },
+          gridTemplateRows: "auto 1fr auto",
+        }}
+      >
+        <Grid
+          container
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+          sx={{
+            minHeight: NO_HEADER_BODY_HEIGHT,
+            backgroundColor: "inherit",
+          }}
+        >
+          <Suspense fallback={<p>Loading the map...</p>}>
+            <ElementsMapContainer
+              startingCenter={usCenter}
+              startingZoom={defaultZoom}
+            />
+          </Suspense>
+        </Grid>
+      </Box>
+    </CssVarsProvider>
+  );
+}
