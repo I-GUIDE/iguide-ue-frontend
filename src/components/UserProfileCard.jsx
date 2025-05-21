@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { useNavigate } from "react-router";
+
 import Card from "@mui/joy/Card";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -30,6 +32,9 @@ export default function UserProfileCard(props) {
   const userFirstName = props.firstName;
   const userLastName = props.lastName;
   const roleFromDB = props.role;
+
+  const navigate = useNavigate();
+
   // Actual user role
   const [userRole, setUserRole] = useState(roleFromDB);
   // User role displayed on the select user role modal
@@ -84,6 +89,10 @@ export default function UserProfileCard(props) {
   }
 
   function closeUserDeletionModal() {
+    if (userDeletionStatus === "good") {
+      // Reload page when exiting the modal after a successful user deletion
+      navigate(0);
+    }
     setUserDeletionStatus("no-status");
     setUserDeletionModalOpen(false);
   }
