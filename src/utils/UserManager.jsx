@@ -201,7 +201,7 @@ export async function addUser(
   });
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const result = await response.json();
@@ -262,7 +262,7 @@ export async function updateUser(
   );
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const result = await response.json();
@@ -276,17 +276,32 @@ export async function updateUser(
  * @throws {Error} Throws an error if deleting a user failed
  */
 export async function deleteUser(uid) {
-  const encodedUid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${encodedUid}`, {
-    method: "DELETE",
-  });
+  try {
+    const encodedUid = encodeURIComponent(uid);
+    const response = await fetchWithAuth(
+      `${USER_BACKEND_URL}/api/users/${encodedUid}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    // Handle case when there is a logical conflict that prevents a user from being deleted.
+    //  Could be either: the user is a super admin. 2. the user has contributions.
+    if (response.status === 409) {
+      console.warn("Cannot delete this user due to a conflict.");
+      return "CONFLICT";
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting user: ", error.message);
+    return "ERROR";
   }
-
-  const result = await response.json();
-  return result;
 }
 
 /**
@@ -318,7 +333,7 @@ export async function checkTokens() {
   });
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const resultsFromJWT = await response.json();
