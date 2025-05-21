@@ -276,17 +276,25 @@ export async function updateUser(
  * @throws {Error} Throws an error if deleting a user failed
  */
 export async function deleteUser(uid) {
-  const encodedUid = encodeURIComponent(uid);
-  const response = await fetch(`${USER_BACKEND_URL}/api/users/${encodedUid}`, {
-    method: "DELETE",
-  });
+  try {
+    const encodedUid = encodeURIComponent(uid);
+    const response = await fetch(
+      `${USER_BACKEND_URL}/api/users/${encodedUid}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${error.message}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error deleting user: ", error.message);
+    return "ERROR";
   }
-
-  const result = await response.json();
-  return result;
 }
 
 /**

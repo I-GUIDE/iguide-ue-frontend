@@ -18,9 +18,10 @@ import IconButton from "@mui/joy/IconButton";
 import Edit from "@mui/icons-material/Edit";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import UserAvatar from "./UserAvatar";
-import { updateUserRole } from "../utils/UserManager";
+import { updateUserRole, deleteUser } from "../utils/UserManager";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -40,6 +41,10 @@ export default function UserProfileCard(props) {
   const [roleChangeModalOpen, setRoleChangeModalOpen] = useState(false);
   const [roleChangeStatus, setRoleChangeStatus] = useState("no-status");
 
+  const [userDeletionModalOpen, setUserDeletionModalOpen] = useState(false);
+  const [userDeletionStatus, setUserDeletionStatus] = useState("no-status");
+
+  // Handling role changes
   async function handleSubmitNewRole() {
     if (!selectedUserRole) {
       return;
@@ -54,7 +59,7 @@ export default function UserProfileCard(props) {
   }
 
   async function handleRoleChange(e, newValue) {
-    if (newValue) {
+    if (newValue && newValue !== 1) {
       TEST_MODE && console.log("Setting role to", newValue);
       setSelectedUserRole(newValue);
     }
@@ -64,6 +69,21 @@ export default function UserProfileCard(props) {
     setRoleChangeStatus("no-status");
     setSelectedUserRole(userRole);
     setRoleChangeModalOpen(false);
+  }
+
+  // Handling user deletion
+  async function handleUserDeletion() {
+    const result = await deleteUser(userId);
+    if (result === "ERROR") {
+      setUserDeletionStatus("error");
+    } else {
+      setUserDeletionStatus("good");
+    }
+  }
+
+  function closeUserDeletionModal() {
+    setUserDeletionStatus("no-status");
+    setUserDeletionModalOpen(false);
   }
 
   return (
@@ -155,6 +175,17 @@ export default function UserProfileCard(props) {
                   <Edit />
                 </IconButton>
               </Tooltip>
+              <Tooltip title="Delete this user" placement="right">
+                <IconButton
+                  color="danger"
+                  size="sm"
+                  // Disable the button if the user is super admin
+                  disabled={userRole === 1}
+                  onClick={() => setUserDeletionModalOpen(true)}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </CardActions>
         </CardOverflow>
@@ -190,6 +221,10 @@ export default function UserProfileCard(props) {
               name="role"
               onChange={handleRoleChange}
             >
+              {/* You cannot bump users to super admin using the admin panel */}
+              <Option value={1} disabled>
+                Super Admin (1)
+              </Option>
               <Option value={2}>Admin (2)</Option>
               <Option value={3}>Moderator (3)</Option>
               <Option value={4}>Trusted User Plus (4)</Option>
@@ -225,6 +260,70 @@ export default function UserProfileCard(props) {
             {roleChangeStatus === "good" && (
               <Typography color="success" level="body-sm">
                 Role change succeeded!
+              </Typography>
+            )}
+          </Stack>
+        </Sheet>
+      </Modal>
+
+      {/* Delete User Modal */}
+      <Modal
+        open={userDeletionModalOpen}
+        onClose={() => setUserDeletionModalOpen(false)}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={{ maxWidth: 400, borderRadius: "md", p: 3, boxShadow: "lg" }}
+        >
+          <ModalClose />
+          <Stack spacing={1} sx={{ p: 1 }}>
+            <Typography align="center" level="title-lg">
+              Delete User
+            </Typography>
+            <Typography align="center" level="title-md">
+              {userLastName || "nln"}, {userFirstName || "nfn"}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              ID: {userId}
+            </Typography>
+            <Typography align="center" level="body-xs">
+              Current role number: {userRole}
+            </Typography>
+            <Typography color="danger" align="center" level="title-sm">
+              Are you sure you would like to delete this user? This action
+              cannot be undone.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ width: "100%", py: 1 }}>
+              <Button
+                color="primary"
+                size="sm"
+                sx={{ width: "100%", my: 1 }}
+                onClick={() => setUserDeletionModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="danger"
+                size="sm"
+                sx={{ width: "100%", my: 1 }}
+                // Disable the button if the user is super admin
+                disabled={userRole === 1}
+                onClick={handleUserDeletion}
+              >
+                Delete
+                <DeleteForeverIcon />
+              </Button>
+            </Stack>
+            {userDeletionStatus === "error" && (
+              <Typography color="danger" level="body-sm">
+                User deletion failed!
+              </Typography>
+            )}
+            {userDeletionStatus === "good" && (
+              <Typography color="success" level="body-sm">
+                User deletion succeeded!
               </Typography>
             )}
           </Stack>
