@@ -201,7 +201,7 @@ export async function addUser(
   });
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const result = await response.json();
@@ -262,7 +262,7 @@ export async function updateUser(
   );
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const result = await response.json();
@@ -286,7 +286,7 @@ export async function deleteUser(uid) {
     );
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${error.message}`);
+      throw new Error(`Error: ${response.status}`);
     }
 
     const result = await response.json();
@@ -326,7 +326,7 @@ export async function checkTokens() {
   });
 
   if (!response.ok) {
-    throw new Error(`Error: ${response.status} ${error.message}`);
+    throw new Error(`Error: ${response.status}`);
   }
 
   const resultsFromJWT = await response.json();
