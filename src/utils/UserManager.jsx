@@ -278,7 +278,7 @@ export async function updateUser(
 export async function deleteUser(uid) {
   try {
     const encodedUid = encodeURIComponent(uid);
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${USER_BACKEND_URL}/api/users/${encodedUid}`,
       {
         method: "DELETE",
