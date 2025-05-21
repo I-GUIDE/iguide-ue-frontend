@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { Link as RouterLink, useOutletContext } from "react-router";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -31,6 +31,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
+import { useAlertModal } from "../utils/AlertModalProvider";
 
 const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -41,6 +42,7 @@ export default function ContactUs() {
   usePageTitle("Contact Us");
 
   const { isAuthenticated, localUserInfo } = useOutletContext();
+  const alertModal = useAlertModal();
 
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -127,7 +129,7 @@ export default function ContactUs() {
 
   const handleImageUpload = (event) => {
     if (imageFiles.length === 5) {
-      alert("You can upload only up to 5 images");
+      alertModal("Image upload error", "You can upload only up to 5 images");
       return;
     }
 
@@ -136,17 +138,23 @@ export default function ContactUs() {
 
     for (let idx = 0; idx < event.target.files.length; ++idx) {
       if (arrImg.length === 5) {
-        alert("You can upload only up to 5 images");
+        alertModal("Image upload error", "You can upload only up to 5 images");
         return;
       }
 
       const file = event.target.files[idx];
       if (!file.type.startsWith("image/")) {
-        alert("Please upload an image!");
+        alertModal(
+          "Image upload error",
+          "The file you provided is not an image. Please upload an image."
+        );
         continue;
       }
       if (file.size > IMAGE_SIZE_LIMIT) {
-        alert("Please upload an image smaller than 5MB!");
+        alertModal(
+          "Image upload error",
+          "The file you provided is too large. Please upload an image smaller than 5MB."
+        );
         continue;
       }
 
@@ -189,7 +197,10 @@ export default function ContactUs() {
 
     const recaptchaToken = recaptchaRef.current.getValue();
     if (!recaptchaToken) {
-      alert("Please complete the reCAPTCHA verification to continue.");
+      alertModal(
+        "reCAPTCHA error",
+        "Please complete the reCAPTCHA verification to continue."
+      );
       setLoading(false);
       recaptchaRef.current.reset();
       return;
@@ -207,7 +218,8 @@ export default function ContactUs() {
       const verification = await res.json();
       TEST_MODE && console.log("reCAPTCHA verification result", verification);
       if (!verification.success) {
-        alert(
+        alertModal(
+          "reCAPTCHA error",
           "reCAPTCHA validation failed. Please try again later or reach us via email."
         );
         setLoading(false);

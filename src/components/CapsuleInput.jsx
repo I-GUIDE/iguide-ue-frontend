@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Grid from "@mui/joy/Grid";
 import IconButton from "@mui/joy/IconButton";
@@ -9,6 +9,8 @@ import ChipDelete from "@mui/joy/ChipDelete";
 import CheckIcon from "@mui/icons-material/Check";
 import Stack from "@mui/joy/Stack";
 
+import { useAlertModal } from "../utils/AlertModalProvider";
+
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function CapsuleInput(props) {
@@ -18,10 +20,12 @@ export default function CapsuleInput(props) {
 
   const [inputValue, setInputValue] = useState("");
 
+  const alertModal = useAlertModal();
+
   // Add one item
   const handleAddingOneItem = (event) => {
     if (!inputValue || inputValue === "") {
-      alert("Please enter a value!");
+      alertModal("Input error", "Please enter a value!");
       return;
     }
     setArray([...array, inputValue]);

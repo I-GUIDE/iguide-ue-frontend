@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 
 import JoditEditor from "jodit-react";
 import Stack from "@mui/joy/Stack";
@@ -6,11 +6,15 @@ import Stack from "@mui/joy/Stack";
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
 
+import { useAlertModal } from "../utils/AlertModalProvider";
+
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function HTMLEditor(props) {
   const editor = useRef(null);
+
+  const alertModal = useAlertModal();
 
   const contents = props.contents;
   const setContents = props.setContents;
@@ -29,11 +33,11 @@ export default function HTMLEditor(props) {
       TEST_MODE && console.log("image to be uploaded", toBeUploaded);
 
       if (!toBeUploaded.type.startsWith("image/")) {
-        alert("Please upload an image!");
+        alertModal("Upload error", "Please upload an image!");
         return null;
       }
       if (toBeUploaded.size > IMAGE_SIZE_LIMIT) {
-        alert("Please upload an image smaller than 5MB!");
+        alertModal("Upload error", "Please upload an image smaller than 5MB!");
         return null;
       }
       const imgFile = toBeUploaded;
