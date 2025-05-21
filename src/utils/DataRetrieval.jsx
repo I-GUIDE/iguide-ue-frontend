@@ -213,6 +213,60 @@ export async function elementRetriever(
 }
 
 /**
+ * Retrieve elements from the database based on the spatial metadata.
+ *
+ * @param {string} minLon
+ * @param {string} maxLon
+ * @param {string} minLat
+ * @param {string} maxLat
+ * @returns {Promise<Object|number>} The retrieved elements.
+ * @throws {Error} If the request fails.
+ */
+export async function retrieveElementsBySpatialMetadata(
+  minLon,
+  maxLon,
+  minLat,
+  maxLat
+) {
+  if (!minLon || !maxLon || !minLat || !maxLat) {
+    return;
+  }
+
+  const northwest = [minLon, maxLat];
+  const northeast = [maxLon, maxLat];
+  const southwest = [minLon, minLat];
+  const southeast = [maxLon, minLat];
+
+  const viewbox = [northwest, northeast, southeast, southwest, northwest];
+  const encodedViewbox = encodeURIComponent(JSON.stringify(viewbox));
+
+  TEST_MODE && console.log("Current map bound", viewbox, encodedViewbox);
+
+  try {
+    const response = await fetch(
+      `${BACKEND_URL_PORT}/api/search/spatial?coords=${encodedViewbox}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to retrieve elements by spatial metadata");
+    }
+
+    const data = await response.json();
+
+    return data.elements;
+  } catch (error) {
+    console.error(
+      "Error retrieveing elements by spatial metadata",
+      error.message
+    );
+    return "ERROR";
+  }
+}
+
+/**
  * Fetches a single element for element pages
  *
  * @async
