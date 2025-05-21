@@ -242,6 +242,9 @@ export async function retrieveElementsBySpatialMetadata(
 
   TEST_MODE && console.log("Current map bound", viewbox, encodedViewbox);
 
+  // The endpoint is not yet ready to use. Return an empty array as for now.
+  return [];
+
   try {
     const response = await fetch(
       `${BACKEND_URL_PORT}/api/search/spatial?coords=${encodedViewbox}`,
