@@ -285,6 +285,13 @@ export async function deleteUser(uid) {
       }
     );
 
+    // Handle case when there is a logical conflict that prevents a user from being deleted.
+    //  Could be either: the user is a super admin. 2. the user has contributions.
+    if (response.status === 409) {
+      console.warn("Cannot delete this user due to a conflict.");
+      return "CONFLICT";
+    }
+
     if (!response.ok) {
       throw new Error(`Error: ${response.status}`);
     }

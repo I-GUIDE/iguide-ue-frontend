@@ -76,6 +76,8 @@ export default function UserProfileCard(props) {
     const result = await deleteUser(userId);
     if (result === "ERROR") {
       setUserDeletionStatus("error");
+    } else if (result === "CONFLICT") {
+      setUserDeletionStatus("conflict");
     } else {
       setUserDeletionStatus("good");
     }
@@ -269,7 +271,7 @@ export default function UserProfileCard(props) {
       {/* Delete User Modal */}
       <Modal
         open={userDeletionModalOpen}
-        onClose={() => setUserDeletionModalOpen(false)}
+        onClose={closeUserDeletionModal}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
         <Sheet
@@ -299,7 +301,7 @@ export default function UserProfileCard(props) {
                 color="primary"
                 size="sm"
                 sx={{ width: "100%", my: 1 }}
-                onClick={() => setUserDeletionModalOpen(false)}
+                onClick={closeUserDeletionModal}
               >
                 Cancel
               </Button>
@@ -319,6 +321,12 @@ export default function UserProfileCard(props) {
             {userDeletionStatus === "error" && (
               <Typography color="danger" level="body-sm">
                 User deletion failed!
+              </Typography>
+            )}
+            {userDeletionStatus === "conflict" && (
+              <Typography color="warning" level="body-sm">
+                User deletion failed due to one of these scenarios: 1. The user
+                is a super admin. 2. The user has contributions.
               </Typography>
             )}
             {userDeletionStatus === "good" && (
