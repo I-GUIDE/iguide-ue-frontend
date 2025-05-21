@@ -30,6 +30,7 @@ import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
 
 import NetworkVisualizer from "./routes/NetworkVisualizer";
+import ElementsMap from "./routes/ElementsMap";
 import DocSubmission from "./routes/DocSubmission";
 import DocUpdate from "./routes/DocUpdate";
 import DocPage from "./routes/DocPage";
@@ -90,6 +91,12 @@ export const routes = [
     path: "/element-network",
     element: <NetworkVisualizer />,
     label: "Element Network",
+    category: "Search",
+  },
+  {
+    path: "/elements-map",
+    element: <ElementsMap />,
+    label: "Elements Map",
     category: "Search",
   },
   {
