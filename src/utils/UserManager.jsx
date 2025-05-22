@@ -350,9 +350,15 @@ export async function checkTokens() {
     await refreshAccessToken();
     // If user permission from DB is lower (role number higher) than JWT, log user out...
   } else if (userRoleFromDB > userRoleFromJWT) {
-    TEST_MODE && console.log("checkTokens(): logging you out...");
-    alert(
-      `We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error: 1001.`
+    console.warn("Logging out due to a role conflict");
+    const sessionExpiration = {
+      showModal: true,
+      message:
+        "We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error: 1001.",
+    };
+    sessionStorage.setItem(
+      "iguideSessionExpired",
+      JSON.stringify(sessionExpiration)
     );
     userLogout();
   } else {
