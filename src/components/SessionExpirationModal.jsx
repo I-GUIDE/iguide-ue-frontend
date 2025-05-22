@@ -17,20 +17,24 @@ export default function SessionExpirationModal() {
   const [message, setMessage] = useState();
 
   useEffect(() => {
-    function handleSessionExpired(event) {
-      const sessionExpirationMessage = event.detail?.message;
+    const sessionExpirationJSONString = sessionStorage.getItem(
+      "iguideSessionExpired"
+    );
+    const sessionExpiration = sessionExpirationJSONString
+      ? JSON.parse(sessionExpirationJSONString)
+      : null;
+
+    const shouldShow = sessionExpiration?.showModal;
+    const sessionExpirationMessage = sessionExpiration?.message;
+
+    if (shouldShow) {
+      setOpenModal(true);
       setMessage(
         sessionExpirationMessage ||
           "Your session has expired. Please log in again."
       );
-      setOpenModal(true);
     }
-
-    window.addEventListener("session-expired", handleSessionExpired);
-
-    return () => {
-      window.removeEventListener("session-expired", handleSessionExpired);
-    };
+    sessionStorage.removeItem("iguideSessionExpired");
   }, []);
 
   function handleLoginRedirect() {

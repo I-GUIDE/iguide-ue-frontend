@@ -53,13 +53,15 @@ export async function refreshAccessToken() {
 
   // Refresh token expired or missing
   if (!res.ok) {
-    const sessionExpirationEvent = new CustomEvent("session-expired", {
-      detail: {
-        message:
-          "To keep your account safe, we logged you out after some time. Just log back in to continue.",
-      },
-    });
-    window.dispatchEvent(sessionExpirationEvent);
+    const sessionExpiration = {
+      showModal: true,
+      message:
+        "To keep your account safe, we logged you out after some time. Just log back in to continue.",
+    };
+    sessionStorage.setItem(
+      "iguideSessionExpired",
+      JSON.stringify(sessionExpiration)
+    );
     userLogout();
   }
 
