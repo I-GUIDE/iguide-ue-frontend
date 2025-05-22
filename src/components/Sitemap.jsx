@@ -1,13 +1,21 @@
-import { CssVarsProvider, styled } from "@mui/joy/styles";
+import { useOutletContext } from "react-router";
+
+import {
+  extendTheme as materialExtendTheme,
+  ThemeProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from "@mui/material/styles";
+import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+const materialTheme = materialExtendTheme();
+
 import Link from "@mui/joy/Link";
 import Box from "@mui/joy/Box";
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Typography from "@mui/joy/Typography";
 import Divider from "@mui/joy/Divider";
-import CssBaseline from "@mui/joy/CssBaseline";
 import Container from "@mui/joy/Container";
 import Stack from "@mui/joy/Stack";
-import { useOutletContext } from "react-router";
 
 import { routes } from "../routes";
 import usePageTitle from "../hooks/usePageTitle";
@@ -38,7 +46,7 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
     }
 
     if (!isAuthenticated) {
-      items["User login"] = [
+      items["Authentication"] = [
         {
           path: `${AUTH_BACKEND_URL}/login`,
           label: "Login",
@@ -51,7 +59,11 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   return items;
 }
 
-export function SitemapErrorPage({ isAuthenticated, localUserInfo }) {
+export default function Sitemap() {
+  usePageTitle("Site Map");
+
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+
   const groupedRoutes = groupRoutesByCategory(
     routes,
     isAuthenticated,
@@ -59,134 +71,64 @@ export function SitemapErrorPage({ isAuthenticated, localUserInfo }) {
   );
 
   return (
-    <Grid>
-      <Divider sx={{ mx: 2, my: 2 }} />
-      <Typography
-        level="h4"
-        style={{ textAlign: "left", margin: "0 20px" }}
-        sx={{ pb: 2 }}
-      >
-        Explore other resources...
-      </Typography>
-      <LinkContainerErrorPage>
-        {Object.entries(groupedRoutes).map(([category, items]) => (
-          <Group key={category}>
-            <Typography level="title-md" style={{ textAlign: "left" }}>
-              {category}
-            </Typography>
-            <Group style={{ gap: "5px" }}>
-              {items.map((item) => (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  style={{ textAlign: "left" }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </Group>
-          </Group>
-        ))}
-      </LinkContainerErrorPage>
-    </Grid>
-  );
-}
-
-export default function Sitemap() {
-  usePageTitle("Site Map");
-
-  const { isAuthenticated, localUserInfo } = useOutletContext();
-
-  const groupedRoutes = localUserInfo
-    ? groupRoutesByCategory(routes, isAuthenticated, localUserInfo)
-    : {};
-
-  return (
-    <CssVarsProvider disableTransitionOnChange>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <Box
-          component="main"
-          sx={{
-            minHeight: NO_HEADER_BODY_HEIGHT,
-            display: "grid",
-            gridTemplateColumns: { xs: "auto", md: "100%" },
-            gridTemplateRows: "auto 1fr auto",
-          }}
-        >
-          <Grid
-            container
-            rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider>
+        <CssBaseline enableColorScheme />
+        <Container maxWidth="md">
+          <Box
+            component="main"
             sx={{
-              backgroundColor: "inherit",
-              px: { xs: 2, md: 4 },
-              pt: 4,
-              pb: 8,
+              minHeight: NO_HEADER_BODY_HEIGHT,
+              display: "grid",
+              gridTemplateColumns: { xs: "auto", md: "100%" },
+              gridTemplateRows: "auto 1fr auto",
             }}
           >
-            <Grid xs={12}>
-              <Stack
-                spacing={3}
-                alignItems={{ xs: "flex-start", md: "center" }}
-                sx={{ p: 2 }}
-              >
-                <Typography level="h3">I-GUIDE Platform Site Map</Typography>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              sx={{
+                backgroundColor: "inherit",
+                px: { xs: 2, md: 4 },
+                pt: 4,
+                pb: 8,
+              }}
+            >
+              <Stack>
+                <Stack spacing={3} alignItems="flex-start" sx={{ py: 2 }}>
+                  <Typography level="title-lg">
+                    I-GUIDE Platform Site Map
+                  </Typography>
+                </Stack>
+                <Divider sx={{ my: 2 }} />
+                <Grid
+                  container
+                  spacing={3}
+                  columns={12}
+                  sx={{ flexGrow: 1 }}
+                  justifyContent="flex-start"
+                >
+                  {Object.entries(groupedRoutes).map(([category, items]) => (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={category}>
+                      <Stack spacing={1} sx={{ py: 2 }}>
+                        <Typography level="title-lg">{category}</Typography>
+                        {items.map((item) => (
+                          <Link href={item.path} key={item.label}>
+                            <Typography style={{ textAlign: "left" }}>
+                              {item.label}
+                            </Typography>
+                          </Link>
+                        ))}
+                      </Stack>
+                    </Grid>
+                  ))}
+                </Grid>
               </Stack>
-              <Divider sx={{ mx: 2, my: 2 }} />
-
-              <LinkContainer>
-                {Object.entries(groupedRoutes).map(([category, items]) => (
-                  <Group>
-                    <Typography level="title-lg">{category}</Typography>
-                    <Group style={{ gap: "5px" }}>
-                      {items.map((item) => (
-                        <Link href={item.path}>{item.label}</Link>
-                      ))}
-                    </Group>
-                  </Group>
-                ))}
-              </LinkContainer>
             </Grid>
-          </Grid>
-        </Box>
-      </Container>
-    </CssVarsProvider>
+          </Box>
+        </Container>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
 }
-
-const Group = styled("div")`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const LinkContainer = styled("div")`
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-
-  align-items: start;
-
-  margin: 0 20px;
-
-  @media only screen and (max-width: 900px) {
-    grid-template-columns: auto;
-  }
-`;
-
-const LinkContainerErrorPage = styled("div")`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-
-  align-items: start;
-
-  margin: 0 20px;
-
-  @media only screen and (max-width: 400px) {
-    grid-template-columns: 1fr;
-  }
-`;

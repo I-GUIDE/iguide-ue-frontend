@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Link as RouterLink } from "react-router";
 
 import Typography from "@mui/joy/Typography";
@@ -222,7 +220,7 @@ export default function Footer() {
                     </Typography>
                   </Link>
                   <Link component={RouterLink} to="/sitemap">
-                    <Typography level="body-xs">Sitemap</Typography>
+                    <Typography level="body-xs">Site Map</Typography>
                   </Link>
                 </Stack>
               </Grid>

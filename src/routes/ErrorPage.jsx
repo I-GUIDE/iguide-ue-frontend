@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { useRouteError, isRouteErrorResponse, useNavigate } from "react-router";
+import { useEffect } from "react";
+
+import {
+  useRouteError,
+  isRouteErrorResponse,
+  useNavigate,
+  Link as RouterLink,
+} from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -11,12 +17,12 @@ import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
+import Link from "@mui/joy/Link";
 
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import usePageTitle from "../hooks/usePageTitle";
 import SearchBar from "../components/SearchBar";
-import { SitemapErrorPage } from "../components/Sitemap";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import { sendBugToSlack } from "../utils/AutomaticBugReporting";
@@ -143,7 +149,7 @@ export default function ErrorPage(props) {
             >
               <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
                 <Stack
-                  spacing={2}
+                  spacing={3}
                   sx={{
                     p: 1,
                     display: "flex",
@@ -181,7 +187,6 @@ export default function ErrorPage(props) {
                     >
                       Homepage
                     </Button>
-
                     <Button
                       variant="outlined"
                       color="primary"
@@ -192,10 +197,11 @@ export default function ErrorPage(props) {
                     </Button>
                   </Stack>
                   <SearchBar placeholder="Search elements..." />
-                  <SitemapErrorPage
-                    isAuthenticated={isAuthenticated}
-                    localUserInfo={localUserInfo}
-                  />
+                  <Typography level="title-md" style={{ textAlign: "center" }}>
+                    <Link component={RouterLink} to="/sitemap">
+                      Or see our site map {">"}
+                    </Link>
+                  </Typography>
                 </Stack>
               </CardContent>
             </Card>
