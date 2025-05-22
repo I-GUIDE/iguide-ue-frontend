@@ -2,15 +2,12 @@ import React, { Suspense } from "react";
 
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { CookiesProvider } from "react-cookie";
-import { TourProvider } from "@reactour/tour/";
 
 import Root from "./routes/Root";
 import ErrorPage from "./routes/ErrorPage";
 import { routes } from "./routes";
-import TourSteps from "./configs/TourSteps";
-import GoogleAnalytics from "./utils/GoogleAnalytics";
 import Maintenance from "./routes/Maintenance";
+import { AppProviders } from "./AppProviders";
 
 const MAINTENANCE_MODE = import.meta.env.VITE_MAINTENANCE_MODE === "true";
 
@@ -31,15 +28,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     {MAINTENANCE_MODE ? (
       <Maintenance />
     ) : (
-      <TourProvider steps={TourSteps} showBadge={false}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <GoogleAnalytics>
-            <CookiesProvider defaultSetOptions={{ path: "/" }}>
-              <RouterProvider router={router} />
-            </CookiesProvider>
-          </GoogleAnalytics>
-        </Suspense>
-      </TourProvider>
+      <Suspense fallback={<div>Loading...</div>}>
+        <AppProviders>
+          <RouterProvider router={router} />
+        </AppProviders>
+      </Suspense>
     )}
   </React.StrictMode>
 );

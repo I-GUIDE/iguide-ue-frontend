@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { useState } from "react";
 
 import { useOutletContext } from "react-router";
 
@@ -20,6 +20,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { PERMISSIONS } from "../../configs/Permissions";
+import { useAlertModal } from "../../utils/AlertModalProvider";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -36,6 +37,8 @@ export default function DocAdminOps(props) {
 
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated, localUserInfo } = useOutletContext();
+
+  const alertModal = useAlertModal();
 
   if (!localUserInfo || !isAuthenticated) {
     return null;
@@ -71,7 +74,7 @@ export default function DocAdminOps(props) {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error deleting resource");
+      alertModal("Document deletion error", "Failed to delete this document.");
     }
   }
 

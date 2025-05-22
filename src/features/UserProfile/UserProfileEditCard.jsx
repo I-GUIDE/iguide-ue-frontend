@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useOutletContext } from "react-router";
 import AvatarEditor from "react-avatar-editor";
@@ -31,7 +31,7 @@ import {
 import UserProfileEditStatusCard from "./UserProfileEditStatusCard";
 import { updateUser, checkTokens } from "../../utils/UserManager";
 import { dataURLtoFile } from "../../helpers/helper";
-
+import { useAlertModal } from "../../utils/AlertModalProvider";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
@@ -65,6 +65,8 @@ export default function UserProfileEditCard(props) {
   const userProfileEditType = props.userProfileEditType;
 
   const { localUserInfo } = useOutletContext();
+
+  const alertModal = useAlertModal();
 
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
     useState("no-submission");
@@ -122,11 +124,17 @@ export default function UserProfileEditCard(props) {
   function handleProfilePictureUpload(event) {
     const profilePicture = event.target.files[0];
     if (!profilePicture.type.startsWith("image/")) {
-      alert("Please upload an image!");
+      alertModal(
+        "Profile picture upload error",
+        "The file you provided is not an image. Please upload an image."
+      );
       return null;
     }
     if (profilePicture.size > IMAGE_SIZE_LIMIT) {
-      alert("Please upload an image smaller than 5MB!");
+      alertModal(
+        "Profile picture upload error",
+        "The file you provided is too large. Please upload an image smaller than 5MB."
+      );
       return null;
     }
     setProfilePictureFile(profilePicture);
@@ -181,7 +189,10 @@ export default function UserProfileEditCard(props) {
         avatar_url = profilePictureResult["image-urls"];
       } catch (error) {
         console.error("Error:", error);
-        alert("Error updating user profile!");
+        alertModal(
+          "User profile update error",
+          "Failed to update user profile."
+        );
       }
     } else {
       avatar_url = confirmedProfilePictureURL;

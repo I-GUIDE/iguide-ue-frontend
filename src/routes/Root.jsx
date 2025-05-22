@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Outlet } from "react-router";
 import { useCookies } from "react-cookie";
@@ -23,9 +23,11 @@ import {
 } from "../utils/UserManager.jsx";
 import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
+import RouteChangeListener from "../utils/RouteChangeListener.jsx";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
 const COOKIE_SUFFIX = import.meta.env.VITE_COOKIE_SUFFIX;
 const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 
@@ -194,6 +196,17 @@ export default function Root(props) {
   return (
     <StyledEngineProvider injectFirst>
       <NavBar isAuthenticated={isAuthenticated} localUserInfo={localUserInfo} />
+      {/* Update the auth state whenever there is a route change */}
+      <RouteChangeListener
+        onRouteChange={(path) => {
+          const currentIsAuth = USE_DEMO_USER
+            ? true
+            : !!cookies[jwtTokensExistName];
+          setIsAuthenticated(currentIsAuth);
+          DEEP_TEST_MODE &&
+            console.log(`Is auth: ${currentIsAuth}. Path: ${path}`);
+        }}
+      />
       <div id="back-to-top-anchor" />
       {customOutlet ? (
         customOutlet.type === ErrorPage ? (

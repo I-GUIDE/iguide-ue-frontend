@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link as RouterLink } from "react-router";
 
 import Container from "@mui/joy/Container";
@@ -18,6 +18,7 @@ import {
   streamLlmSearchResult,
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
+import { useAlertModal } from "../../utils/AlertModalProvider";
 
 import myIcon from "./smart-logo.svg";
 
@@ -43,7 +44,8 @@ async function getLlmSearchResult(
   chatMessages,
   setChatMessages,
   setWaitingForResponse,
-  setStatus
+  setStatus,
+  alertModal
 ) {
   let result;
   const newId = chatMessages.length + 1;
@@ -62,7 +64,7 @@ async function getLlmSearchResult(
     const newMemoryId = await fetchMemoryIdForNewConversation();
     // When memory id cannot be generated
     if (newMemoryId === "ERROR") {
-      alert("Error initializing I-GUIDE AI.");
+      alertModal("Smart Search error", "Error initializing Smart Search.");
       setWaitingForResponse(false);
       return;
     }
@@ -73,7 +75,10 @@ async function getLlmSearchResult(
   }
 
   if (!result) {
-    alert("Error getting response from I-GUIDE AI.");
+    alertModal(
+      "Smart Search error",
+      "Error getting response from Smart Search."
+    );
     setWaitingForResponse(false);
     return;
   }
@@ -104,6 +109,7 @@ export default function SearchPane() {
   const [svgError, setSvgError] = useState(false);
 
   const scrollRef = useRef(null);
+  const alertModal = useAlertModal();
 
   // Scroll to the bottom whenever the items change
   useEffect(() => {
@@ -174,7 +180,8 @@ export default function SearchPane() {
                 chatMessages,
                 setChatMessages,
                 setWaitingForResponse,
-                setStatus
+                setStatus,
+                alertModal
               );
             }}
           />
@@ -286,7 +293,8 @@ export default function SearchPane() {
                 chatMessages,
                 setChatMessages,
                 setWaitingForResponse,
-                setStatus
+                setStatus,
+                alertModal
               );
             }}
           />

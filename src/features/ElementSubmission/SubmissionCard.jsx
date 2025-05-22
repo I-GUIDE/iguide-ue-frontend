@@ -1,4 +1,5 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
+
 import { useOutletContext, Link as RouterLink } from "react-router";
 
 import Grid from "@mui/material/Grid2";
@@ -45,6 +46,7 @@ import {
   fetchGitHubReadme,
   fetchRepoMetadata,
 } from "../../utils/GitHubFetchMethods";
+import { useAlertModal } from "../../utils/AlertModalProvider";
 
 import ErrorPage from "../../routes/ErrorPage";
 
@@ -219,6 +221,8 @@ export default function SubmissionCard(props) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const alertModal = useAlertModal();
+
   useEffect(() => {
     const checkJWTToken = async () => {
       // If demo user is in use, skip verifying with JWT...
@@ -379,44 +383,54 @@ export default function SubmissionCard(props) {
     }
   }, [selectedSpatialMetadataIndex, spatialMetadataList]);
 
-  const handleVisibilityChange = async (e, newValue) => {
+  async function handleVisibilityChange(e, newValue) {
     if (newValue) {
       TEST_MODE && console.log("Setting visibility to", newValue);
       setVisibility(newValue);
     }
-  };
+  }
 
-  const handleThumbnailImageUpload = (event) => {
+  async function handleThumbnailImageUpload(event) {
     const thumbnailFile = event.target.files[0];
     if (!thumbnailFile.type.startsWith("image/")) {
-      alert("Thumbnail type error: Please upload an image.");
+      await alertModal(
+        "Failed to upload thumbnail",
+        "The file you provided is not an image. Please upload an image."
+      );
+      // Clear the file
+      event.target.value = "";
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
     }
     if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
-      alert("Thumbnail size error: Please upload an image smaller than 5MB.");
+      await alertModal(
+        "Failed to upload thumbnail",
+        "The file you provided is too large. Please upload an image smaller than 5MB."
+      );
+      // Clear the file
+      event.target.value = "";
       setThumbnailImageFile(null);
       setThumbnailImageFileURLs(null);
       return null;
     }
     setThumbnailImageFile(thumbnailFile);
     setThumbnailImageFileURLs(URL.createObjectURL(thumbnailFile));
-  };
+  }
 
   // Related elements...
-  const handleRemovingOneRelatedResource = (idx) => {
+  function handleRemovingOneRelatedResource(idx) {
     const newArray = [...relatedResources];
     newArray.splice(idx, 1);
     setRelatedResources(newArray);
     TEST_MODE && console.log("Removing one, now: ", relatedResources, idx);
-  };
+  }
 
-  const handleRelatedResourceTypeChange = (value) => {
+  function handleRelatedResourceTypeChange(value) {
     setCurrentRelatedResourceType(value);
-  };
+  }
 
-  const handleRelatedResourceTitleChange = (value) => {
+  function handleRelatedResourceTitleChange(value) {
     setCurrentRelatedResourceTitle(value);
     setRelatedResources([
       ...relatedResources,
@@ -425,24 +439,28 @@ export default function SubmissionCard(props) {
     setCurrentRelatedResourceType("");
     setCurrentRelatedResourceTitle("");
     setCurrentSearchTerm("");
-  };
+  }
 
-  const handleRelatedResourceTitleInputChange = (value) => {
+  function handleRelatedResourceTitleInputChange(value) {
     setCurrentSearchTerm(value);
-  };
+  }
 
   // OER external links...
-  const handleAddingOneOerExternalLink = () => {
+  async function handleAddingOneOerExternalLink() {
     if (!currentOerExternalLinkType || currentOerExternalLinkType === "") {
-      alert("Please select an external link type.");
+      await alertModal(
+        "External link error",
+        "Please select an external link type."
+      );
       return;
     }
     if (!currentOerExternalLinkURL || currentOerExternalLinkURL === "") {
-      alert("Please enter a URL.");
+      await alertModal("External link error", "Please enter a URL.");
       return;
     }
     if (!currentOerExternalLinkTitle || currentOerExternalLinkTitle === "") {
-      alert(
+      await alertModal(
+        "External link error",
         'Please enter a link title, or click "->" to fetch the title of the provided URL.'
       );
       return;
@@ -459,20 +477,20 @@ export default function SubmissionCard(props) {
     setCurrentOerExternalLinkURL("");
     setCurrentOerExternalLinkTitle("");
     TEST_MODE && console.log("Added one, now: ", oerExternalLinks);
-  };
+  }
 
-  const handleRemovingOneOerExternalLink = (idx) => {
+  function handleRemovingOneOerExternalLink(idx) {
     const newArray = [...oerExternalLinks];
     newArray.splice(idx, 1);
     setOerExternalLinks(newArray);
     TEST_MODE && console.log("Removing one, now: ", oerExternalLinks);
-  };
+  }
 
-  const handleOerExternalLinkTypeChange = (value) => {
+  function handleOerExternalLinkTypeChange(value) {
     setCurrentOerExternalLinkType(value);
-  };
+  }
 
-  const handleOerExternalLinkSearchTitle = async () => {
+  async function handleOerExternalLinkSearchTitle() {
     const url = currentOerExternalLinkURL;
 
     if (url) {
@@ -480,16 +498,19 @@ export default function SubmissionCard(props) {
         `${USER_BACKEND_URL}/api/url-title/?url=${encodeURIComponent(url)}`
       );
       if (!response.ok) {
-        alert("Retrieving URL title failed. Please manually input the title.");
+        await alertModal(
+          "External link error",
+          "Retrieving URL title failed. Please manually input the title."
+        );
         return;
       }
       const data = await response.json();
       TEST_MODE && console.log("search return", data.title);
       setCurrentOerExternalLinkTitle(data.title);
     }
-  };
+  }
 
-  const handleDOIChange = async (event) => {
+  async function handleDOIChange(event) {
     const val = event.target.value;
     setPublicationDOI(val);
 
@@ -533,11 +554,14 @@ export default function SubmissionCard(props) {
     } else {
       setElementIdWithDuplicateDOI("");
     }
-  };
+  }
 
-  const handleAutofillPublicationInfo = async () => {
+  async function handleAutofillPublicationInfo() {
     if (!publicationDOI || publicationDOI === "") {
-      alert("Please enter the DOI first.");
+      await alertModal(
+        "Publication metadata autofill error",
+        "Please enter the DOI first."
+      );
       return;
     }
 
@@ -552,8 +576,9 @@ export default function SubmissionCard(props) {
 
     // If we couldn't fetch the metadata via Crossref, do this...
     if (metadataDOI === "Publication not found") {
-      alert(
-        "We could not fetch the metadata based on the URL you provided. That could be because the URL (if it's a DOI link) is not registered on Crossref, or the URL you provided is not a DOI link. Please manually input the publication information in the form. Thank you."
+      await alertModal(
+        "Publication not found on Crossref",
+        "We couldn't fetch the metadata. It may not be valid or registered with Crossref. Please enter the publication details manually. Thanks!"
       );
       return;
     }
@@ -582,9 +607,9 @@ export default function SubmissionCard(props) {
     setAuthors(printListWithDelimiter(authorNameList, ","));
     setTitle(metadataDOI["title"]);
     setContents(metadataDOI["abstract"]);
-  };
+  }
 
-  const handleDatasetExternalLinkChange = async (event) => {
+  async function handleDatasetExternalLinkChange(event) {
     const val = event.target.value;
     setDatasetExternalLink(val);
 
@@ -615,9 +640,9 @@ export default function SubmissionCard(props) {
     } else {
       setElementIdWithDuplicateDatasetExternalLink("");
     }
-  };
+  }
 
-  const handleDirectDownloadLinkChange = async (event) => {
+  async function handleDirectDownloadLinkChange(event) {
     const val = event.target.value;
     setDirectDownloadLink(val);
 
@@ -630,9 +655,9 @@ export default function SubmissionCard(props) {
     } else {
       setDirectDownloadLinkError(true);
     }
-  };
+  }
 
-  const handleNotebookGitHubUrlChange = (event) => {
+  function handleNotebookGitHubUrlChange(event) {
     const val = event.target.value;
     setNotebookGitHubUrl(val);
 
@@ -645,9 +670,9 @@ export default function SubmissionCard(props) {
     } else {
       setNotebookGitHubUrlError(true);
     }
-  };
+  }
 
-  const handleRepoLinkChange = async (event) => {
+  async function handleRepoLinkChange(event) {
     const val = event.target.value;
     setGitHubRepoLink(val);
 
@@ -681,14 +706,17 @@ export default function SubmissionCard(props) {
     } else {
       setGitHubRepoLinkError(true);
     }
-  };
+  }
 
   // Autofill spatial metadata
-  const handleAutofillSpatialMetadata = async () => {
+  async function handleAutofillSpatialMetadata() {
     setSelectedSpatialMetadataIndex(-1);
     setSpatialMetadataList([]);
     if (!spatialDescription || spatialDescription === "") {
-      alert("Please enter the spatial metadata first.");
+      await alertModal(
+        "Spatial metadata autofill error",
+        "Please enter the spatial metadata first."
+      );
       return;
     }
 
@@ -697,23 +725,25 @@ export default function SubmissionCard(props) {
     setSpatialMetadataAutofillLoading(false);
 
     if (returnedList === "ERROR") {
-      alert(
+      await alertModal(
+        "Spatial metadata autofill error",
         "The Nominatim API is not available at this moment. Please try again later or manually enter the spatial metadata."
       );
       return;
     }
 
     if (!returnedList || returnedList.length === 0) {
-      alert(
+      await alertModal(
+        "Spatial metadata autofill error",
         "The Nominatim API didn't return any spatial metadata. Please check the input or manually enter the spatial information in the fields below."
       );
       return;
     }
     setSpatialMetadataList(returnedList);
-  };
+  }
 
   // Validate the format of the bounding box input
-  const handleBoundingBoxChange = (event) => {
+  function handleBoundingBoxChange(event) {
     const val = event.target.value;
     setBoundingBox(val);
 
@@ -753,10 +783,10 @@ export default function SubmissionCard(props) {
     } else {
       setBoundingBoxError({ status: false, message: "" });
     }
-  };
+  }
 
   // Validate the format of the centroid input
-  const handleCentroidChange = (event) => {
+  function handleCentroidChange(event) {
     const val = event.target.value;
     setCentroid(val);
 
@@ -786,9 +816,9 @@ export default function SubmissionCard(props) {
     } else {
       setCentroidError({ status: false, message: "" });
     }
-  };
+  }
 
-  const handleLicenseChange = (value) => {
+  function handleLicenseChange(value) {
     setLicenseId(value);
 
     if (value === "other") {
@@ -796,6 +826,7 @@ export default function SubmissionCard(props) {
       setLicenseStatement("");
       setLicenseUrl("");
     }
+
     // Case when the license is not from the dropdown selection
     else if (!ELEMENT_LICENSES_INFO[value]) {
       setLicenseName("");
@@ -808,9 +839,9 @@ export default function SubmissionCard(props) {
       );
       setLicenseUrl(ELEMENT_LICENSES_INFO[value][1]);
     }
-  };
+  }
 
-  const handleSubmit = async (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
     const data = {};
 
@@ -820,7 +851,8 @@ export default function SubmissionCard(props) {
     // When the user forgets to save the new related element, app will ask the user to submit it.
     // 02/27/2025: This case has been prevented through a code update.
     if (currentRelatedResourceTitle && currentRelatedResourceTitle !== "") {
-      alert(
+      await alertModal(
+        "Related element error",
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
       );
       setButtonDisabled(false);
@@ -1165,7 +1197,7 @@ export default function SubmissionCard(props) {
     }
     // Re-enable the submission button. This part, as a fail-safe, is necessary in case of some unexpected early returns.
     setButtonDisabled(false);
-  };
+  }
 
   if (error) {
     return (
@@ -1394,7 +1426,7 @@ export default function SubmissionCard(props) {
                       color="success"
                       startDecorator={<CheckIcon />}
                     >
-                      Format check: Valid {doiLinkType}.
+                      Valid {doiLinkType} format.
                     </Typography>
                   </FormHelperText>
                 )}
