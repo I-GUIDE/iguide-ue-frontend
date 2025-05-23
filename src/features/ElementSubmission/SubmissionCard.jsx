@@ -1102,8 +1102,20 @@ export default function SubmissionCard(props) {
 
     // If the resourceTypeSelected is code, attempt to store readme to the database
     if (resourceTypeSelected === "code" && gitHubRepoLink) {
-      const repoOwner = gitHubRepoLink?.match("github.com/(.*?)/")[1];
-      const repoName = gitHubRepoLink?.match("github.com/.*?/(.+?)($|/)")[1];
+      const repoInfoMatch = gitHubRepoLink?.match(
+        /^https?:\/\/(www\.)?github\.com\/([^\/]+)\/([^\/]+)/
+      );
+
+      // When the GitHub repo link format is invalid
+      if (!repoInfoMatch) {
+        console.error("Error: GitHub repo format is invalid.");
+        setOpenModal(true);
+        setSubmissionStatus("error-cannot-verify-github-repo-status");
+        setButtonDisabled(false);
+        return;
+      }
+      const repoOwner = repoInfoMatch[2];
+      const repoName = repoInfoMatch[3];
 
       TEST_MODE &&
         console.log("Submission: repo owner and name", repoOwner, repoName);
