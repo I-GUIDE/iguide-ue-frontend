@@ -42,9 +42,11 @@ import SpatialMetadataInfoCard from "./SpatialMetadataInfoCard";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
 import { PERMISSIONS } from "../../configs/Permissions";
+
 import {
   fetchGitHubReadme,
   fetchRepoMetadata,
+  verifyFileOnGitHub,
 } from "../../utils/GitHubFetchMethods";
 import { useAlertModal } from "../../utils/AlertModalProvider";
 
@@ -1067,6 +1069,36 @@ export default function SubmissionCard(props) {
     }
 
     TEST_MODE && console.log("data to be submitted", data);
+
+    // If the resourceTypeSelected is notebook, verify if the notebook exists on GitHub
+    if (
+      resourceTypeSelected === "notebook" &&
+      data["notebook-repo"] &&
+      data["notebook-file"]
+    ) {
+      // Remove the leading GitHub domain
+      const ownerAndRepo = data["notebook-repo"]?.replace(
+        /^https?:\/\/(www\.)?github\.com/,
+        ""
+      );
+      const path = data["notebook-file"];
+      TEST_MODE &&
+        console.log("Submission: Notebook verification", ownerAndRepo, path);
+
+      const fileExists = await verifyFileOnGitHub(ownerAndRepo, path);
+      // This is for verifying the GitHub repo
+      if (fileExists === "ERROR") {
+        setOpenModal(true);
+        setSubmissionStatus("error-cannot-verify-github-file-existence");
+        setButtonDisabled(false);
+        return;
+      } else if (!fileExists) {
+        setOpenModal(true);
+        setSubmissionStatus("error-cannot-verify-github-file-existence");
+        setButtonDisabled(false);
+        return;
+      }
+    }
 
     // If the resourceTypeSelected is code, attempt to store readme to the database
     if (resourceTypeSelected === "code" && gitHubRepoLink) {
