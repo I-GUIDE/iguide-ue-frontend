@@ -92,3 +92,36 @@ export async function fetchRepoMetadata(repoOwner, repoName) {
     return "ERROR";
   }
 }
+
+/**
+ * Verify if a file exists on GitHub
+ *
+ * @param {string} ownerAndRepo - The name of the repository owner and repo name
+ * @param {string} path - The name of the path
+ * @returns {Promise<Object>} If the file exists on GitHub
+ * @throws {Error} If the request fails.
+ */
+export async function verifyFileOnGitHub(ownerAndRepo, path) {
+  if (!ownerAndRepo || !path) {
+    return "ERROR";
+  }
+
+  try {
+    // Fetch number of watchers, stars, and forks
+    const response = await fetch(
+      `https://api.github.com/repos/${ownerAndRepo}/contents/${path}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      return "ERROR";
+    }
+
+    return response.status === 200;
+  } catch (error) {
+    TEST_MODE && console.log("Error verifying file with GitHub", error.message);
+    return "ERROR";
+  }
+}
