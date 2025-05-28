@@ -26,5 +26,3 @@ updates:
     ignore:
       - dependency-name: "openid-client"
         versions: ["6.x.x"]  # Ignore openid-client v6 due to major module changes
-      - dependency-name: "react-leaflet"
-        versions: ["5.x.x"]  # Ignore react-leaflet v5 due to React v18 incompatibility
