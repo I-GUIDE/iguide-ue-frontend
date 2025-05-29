@@ -336,25 +336,32 @@ export async function checkTokens() {
     throw new Error(`Error: ${response.status}`);
   }
 
-  const resultsFromJWT = await response.json();
-  const userRoleFromJWT = resultsFromJWT?.role;
-  const userIdFromJWT = resultsFromJWT?.id;
+  const resultFromJWT = await response.json();
+  const userRoleFromJWT = resultFromJWT?.role;
+  const userIdFromJWT = resultFromJWT?.id;
   const userRoleFromDB = await getUserRole(userIdFromJWT);
 
-  TEST_MODE && console.log("checkTokens(): results from JWT", resultsFromJWT);
-  TEST_MODE && console.log("checkTokens(): role from DB", userRoleFromDB);
+  TEST_MODE && console.log("checkTokens: result from JWT", resultFromJWT);
+  TEST_MODE && console.log("checkTokens: user role from DB", userRoleFromDB);
 
   // If user permission from DB is higher (role number lower) than JWT, or userRoleFromDB is undefined, refresh token...
   if (userRoleFromDB < userRoleFromJWT || userRoleFromJWT === undefined) {
     TEST_MODE && console.log("checkTokens(): refreshAccessToken...");
-    await refreshAccessToken();
+    // After refreshing the token, it will return the up-to-date user role
+    const resultFromRefresh = await refreshAccessToken();
+    TEST_MODE &&
+      console.log(
+        "checkTokens: result from refreshAccessToken",
+        resultFromRefresh
+      );
+    return resultFromRefresh;
     // If user permission from DB is lower (role number higher) than JWT, log user out...
   } else if (userRoleFromDB > userRoleFromJWT) {
     console.warn("Logging out due to a role conflict");
     const sessionExpiration = {
       showModal: true,
       message:
-        "We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error: 1001.",
+        "We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error code: 1001.",
     };
     sessionStorage.setItem(
       "iguideSessionExpired",
@@ -362,6 +369,6 @@ export async function checkTokens() {
     );
     userLogout();
   } else {
-    return resultsFromJWT;
+    return resultFromJWT;
   }
 }
