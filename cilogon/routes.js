@@ -108,7 +108,7 @@ function getValidatedRedirectFullURL(redirectDomainId, redirectPath, defaultRedi
 }
 
 // Function to retrieve the role from the "user_dev" index
-const getUserRole = async (userOpenId) => {
+async function getUserRole(userOpenId) {
   const encodedOpenId = encodeURIComponent(userOpenId);
 
   try {
@@ -132,12 +132,12 @@ const getUserRole = async (userOpenId) => {
         id: userOpenId,
       }
     });
-    return "ERROR"
+    return "ERROR";
   }
-};
+}
 
 // Store refresh token in OpenSearch
-const storeRefreshToken = async (client, token, userOpenId) => {
+async function storeRefreshToken(client, token, userOpenId) {
   await client.index({
     index: os_index,
     body: {
@@ -145,20 +145,21 @@ const storeRefreshToken = async (client, token, userOpenId) => {
       userOpenId,
       created_at: new Date(),
     },
+    refresh: 'wait_for',
   });
-};
+}
 
-const generateAccessToken = (user) => {
+function generateAccessToken(user) {
   return jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET, {
     expiresIn: access_token_expiration,
   });
-};
+}
 
-const generateRefreshToken = (user) => {
+function generateRefreshToken(user) {
   return jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRET, {
     expiresIn: refresh_token_expiration,
   });
-};
+}
 
 router.get(
   "/login",
