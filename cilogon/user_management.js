@@ -1,6 +1,7 @@
 const { logger } = require("./logger.js");
 
 const AUTH_API_KEY = process.env.AUTH_API_KEY;
+const USER_BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
 
 /**
  * Add a user
@@ -12,7 +13,7 @@ const AUTH_API_KEY = process.env.AUTH_API_KEY;
  * @return {Promise<Array<Dict>>} information of whether the operation was successful
  * @throws {Error} Throws an error if adding a user failed
  */
-export async function addUser(
+async function addUser(
   openId,
   first_name,
   last_name,
@@ -32,7 +33,7 @@ export async function addUser(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Auth-API-Key": { AUTH_API_KEY }
+        "Auth-API-Key": AUTH_API_KEY
       },
       body: JSON.stringify(user),
     });
@@ -80,7 +81,7 @@ export async function addUser(
  * @param {string} openId OpenID
  * @return {Promise<boolean>} boolean value of whether the user exists
  */
-export async function checkUser(openId) {
+async function checkUser(openId) {
   const encodedOpenId = encodeURIComponent(openId);
 
   try {
@@ -113,7 +114,7 @@ export async function checkUser(openId) {
  * @param {string} openId OpenID
  * @return {Promise<Int>} The user role number. Or the lowest permission if it fails to retrieve user role
  */
-export async function getUserRole(openId) {
+async function getUserRole(openId) {
   const encodedOpenId = encodeURIComponent(openId);
 
   try {
@@ -143,5 +144,10 @@ export async function getUserRole(openId) {
     logger.error({ type: 'Error during retrieving user role', error: error.message });
     throw error;
   }
+}
 
+module.exports = {
+  addUser,
+  checkUser,
+  getUserRole
 }

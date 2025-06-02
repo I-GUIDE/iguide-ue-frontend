@@ -85,6 +85,14 @@ export default function Root(props) {
         return;
       }
 
+      if (userInfoFromToken === "ERROR") {
+        TEST_MODE &&
+          console.log(
+            "Error during checkTokens. User should have been logged out."
+          );
+        return;
+      }
+
       // Get user openid from the token
       const openId = userInfoFromToken.id;
       if (!openId) {
