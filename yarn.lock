@@ -4622,10 +4622,10 @@ read@^4.0.0:
   dependencies:
     mute-stream "^2.0.0"
 
-reagraph@^4.23.1:
-  version "4.23.1"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.23.1.tgz#724dceac3d986e576613d3b51f17d8d539a5edf9"
-  integrity sha512-2sd25SwjZBgtxv7TvftyuH/ftfMSMX0jWcnEoPZGFZpDnLNBq8LENcWsVZ5Dn4H4RPBheNtdRjtc4icM7N5xmw==
+reagraph@^4.24.0:
+  version "4.24.0"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.24.0.tgz#2529a23e296cab04e20747ceca59af05ee447638"
+  integrity sha512-8+YDGbFUJ1qlKEj+pCTSMyGMkrWY6zhNmVG0GYSDWtBh9jAjsjB04IWrvdBX9KYpHh1lqlTUJS4Ypp7TGkusPg==
   dependencies:
     "@react-spring/three" "10.0.1"
     "@react-three/drei" "^10.0.7"
@@ -4648,7 +4648,7 @@ reagraph@^4.23.1:
     hold-event "^0.2.0"
     three "^0.176.0"
     three-stdlib "^2.36.0"
-    zustand "4.3.9"
+    zustand "5.0.5"
 
 refractor@^4.8.0:
   version "4.9.0"
@@ -5348,11 +5348,6 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-use-sync-external-store@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
-  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
-
 use-sync-external-store@^1.2.2, use-sync-external-store@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz#55122e2a3edd2a6c106174c27485e0fd59bcfca0"
@@ -5526,12 +5521,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zustand@4.3.9:
-  version "4.3.9"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.9.tgz#a7d4332bbd75dfd25c6848180b3df1407217f2ad"
-  integrity sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==
-  dependencies:
-    use-sync-external-store "1.2.0"
+zustand@5.0.5, zustand@^5.0.1, zustand@^5.0.3:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.5.tgz#3e236f6a953142d975336d179bc735d97db17e84"
+  integrity sha512-mILtRfKW9xM47hqxGIxCv12gXusoY/xTSHBYApXozR0HmQv299whhBeeAcRy+KrPPybzosvJBCOmVjq6x12fCg==
 
 zustand@^4.3.2:
   version "4.5.6"
@@ -5539,11 +5532,6 @@ zustand@^4.3.2:
   integrity sha512-ibr/n1hBzLLj5Y+yUcU7dYw8p6WnIVzdJbnX+1YpaScvZVF2ziugqHs+LAmHw4lWO9c/zRj+K1ncgWDQuthEdQ==
   dependencies:
     use-sync-external-store "^1.2.2"
-
-zustand@^5.0.1, zustand@^5.0.3:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.5.tgz#3e236f6a953142d975336d179bc735d97db17e84"
-  integrity sha512-mILtRfKW9xM47hqxGIxCv12gXusoY/xTSHBYApXozR0HmQv299whhBeeAcRy+KrPPybzosvJBCOmVjq6x12fCg==
 
 zwitch@^2.0.0:
   version "2.0.4"
