@@ -195,7 +195,10 @@ export default function SearchBar(props) {
                 </IconButton>
               </Tooltip>
             ) : (
-              <Tooltip title="Smart Search coming soon" placement="top">
+              <Tooltip
+                title="Please log in using your academic credential to access Smart Search"
+                placement="top"
+              >
                 <IconButton
                   size="lg"
                   variant="plain"

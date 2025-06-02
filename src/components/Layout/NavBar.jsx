@@ -169,7 +169,7 @@ export default function NavBar(props) {
                     fontWeight="lg"
                     sx={{ px: 1.5, py: 1 }}
                   >
-                    Pre-release
+                    Beta-feature
                   </Typography>
                   <Link
                     href="/smart-search"
@@ -178,7 +178,7 @@ export default function NavBar(props) {
                   >
                     <ListItem sx={{ width: "100%" }}>
                       <ListItemButton onClick={() => setOpen(false)}>
-                        Smart Search (Beta)
+                        Smart Search
                       </ListItemButton>
                     </ListItem>
                   </Link>
@@ -394,7 +394,7 @@ export default function NavBar(props) {
                 fontWeight="lg"
                 sx={{ px: 1.5, py: 1 }}
               >
-                Pre-release
+                Beta-feature
               </Typography>
               <Link
                 href="/smart-search"
@@ -402,7 +402,7 @@ export default function NavBar(props) {
                 sx={{ color: "text.tertiary" }}
               >
                 <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>Smart Search (Beta)</ListItemButton>
+                  <ListItemButton>Smart Search</ListItemButton>
                 </ListItem>
               </Link>
             </>
