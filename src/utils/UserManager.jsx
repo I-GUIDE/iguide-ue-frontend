@@ -165,50 +165,6 @@ export async function fetchUser(uid) {
 }
 
 /**
- * Add a user
- * @param {string} openid the OpenID of the user
- * @param {string} first_name the first name of the user
- * @param {string} last_name the last name of the user
- * @param {string} email the work email of the user
- * @param {string} affiliation the university of organization of the user
- * @param {string} bio a short bio of the user
- * @return {Promise<Array<Dict>>} information of whether the operation was successful
- * @throws {Error} Throws an error if adding a user failed
- */
-export async function addUser(
-  openid,
-  first_name,
-  last_name,
-  email,
-  affiliation,
-  bio
-) {
-  const user = {
-    openid: openid,
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    affiliation: affiliation,
-    bio: bio,
-  };
-
-  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
-  const result = await response.json();
-  return result;
-}
-
-/**
  * Update a user
  * @param {string} uid UserId
  * @param {string} first_name the first name of the user
@@ -344,6 +300,38 @@ export async function checkTokens() {
   TEST_MODE && console.log("checkTokens: result from JWT", resultFromJWT);
   TEST_MODE && console.log("checkTokens: user role from DB", userRoleFromDB);
 
+  // If we cannot get user role from the database, log the user out
+  if (!userRoleFromDB) {
+    const userExists = await checkUser(userIdFromJWT);
+    // Check if user account still exists
+    if (!userExists) {
+      console.warn("Logout: User account has been deactivated.");
+      const sessionExpiration = {
+        showModal: true,
+        message:
+          "Your account has been deactivated. If you have questions, please contact us via the help page. Error code: 1002.",
+      };
+      sessionStorage.setItem(
+        "iguideSessionExpired",
+        JSON.stringify(sessionExpiration)
+      );
+    } else {
+      console.warn("Logging out due to user role undefined");
+      const sessionExpiration = {
+        showModal: true,
+        message:
+          "We encountered an issue. Please log in again. If this issue persists, please contact us via the help page. Error code: 1003.",
+      };
+      sessionStorage.setItem(
+        "iguideSessionExpired",
+        JSON.stringify(sessionExpiration)
+      );
+    }
+
+    await userLogout();
+    return "ERROR";
+  }
+
   // If user permission from DB is higher (role number lower) than JWT, or userRoleFromDB is undefined, refresh token...
   if (userRoleFromDB < userRoleFromJWT || userRoleFromJWT === undefined) {
     TEST_MODE && console.log("checkTokens(): refreshAccessToken...");
@@ -367,7 +355,8 @@ export async function checkTokens() {
       "iguideSessionExpired",
       JSON.stringify(sessionExpiration)
     );
-    userLogout();
+    await userLogout();
+    return "ERROR";
   } else {
     return resultFromJWT;
   }
