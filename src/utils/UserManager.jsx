@@ -165,50 +165,6 @@ export async function fetchUser(uid) {
 }
 
 /**
- * Add a user
- * @param {string} openid the OpenID of the user
- * @param {string} first_name the first name of the user
- * @param {string} last_name the last name of the user
- * @param {string} email the work email of the user
- * @param {string} affiliation the university of organization of the user
- * @param {string} bio a short bio of the user
- * @return {Promise<Array<Dict>>} information of whether the operation was successful
- * @throws {Error} Throws an error if adding a user failed
- */
-export async function addUser(
-  openid,
-  first_name,
-  last_name,
-  email,
-  affiliation,
-  bio
-) {
-  const user = {
-    openid: openid,
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    affiliation: affiliation,
-    bio: bio,
-  };
-
-  const response = await fetchWithAuth(`${USER_BACKEND_URL}/api/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
-  const result = await response.json();
-  return result;
-}
-
-/**
  * Update a user
  * @param {string} uid UserId
  * @param {string} first_name the first name of the user
@@ -302,21 +258,6 @@ export async function deleteUser(uid) {
     console.error("Error deleting user: ", error.message);
     return "ERROR";
   }
-}
-
-/**
- * Verify the existence of a user
- * @param {string} uid OpenID (Only when checking user during authentication) or userId
- * @return {Promise<boolean>} boolean value of whether the user exists
- */
-export async function checkUser(uid) {
-  const encodedUid = encodeURIComponent(uid);
-  const response = await fetch(
-    `${USER_BACKEND_URL}/api/users/${encodedUid}/valid`
-  );
-  const exists = await response.json();
-
-  return exists;
 }
 
 /**

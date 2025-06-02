@@ -9,7 +9,9 @@ const path = require("path");
 const dotenv = require("dotenv");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
+
 const { logger } = require("./logger.js");
+const { addUser, checkUser } = require("./user_management.js");
 
 dotenv.config();
 
@@ -206,16 +208,45 @@ router.get("/cilogon-callback", async (req, res, next) => {
         return res.redirect(`/error/other`);
       }
 
-      // Retrieve user role from OpenSearch
-      const role = await getUserRole(user.sub);
+      const openId = user.sub;
+      const email = user.email;
 
-      // If role returns ERROR, redirect users to the database error page
-      if (role === "ERROR") {
+      // Set user role as undefined, unless it is retrieved from the database
+      let role = undefined;
+
+      try {
+        // Verify if a user exists
+        const userExistsInDB = await checkUser(openId);
+        // If the user doesn't exist, add user
+        if (!userExistsInDB) {
+          const response = await addUser(
+            openId,
+            user.given_name,
+            user.family_name,
+            email,
+            user.idp_name
+          );
+          // Retrieve user role from the response of the endpoint
+          role = response.role;
+        } else {
+          // Retrieve user role from OpenSearch, if the user exists
+          role = await getUserRole(openId);
+        }
+      } catch (error) {
+        logger.error({
+          type: "Error during operations with user database",
+          message: error,
+          user: user
+        });
+      }
+
+      // If role doesn't exist or returns ERROR, redirect users to the database error page
+      if (!role || role === "ERROR") {
         return res.redirect(`/error/database`);
       }
 
       // Generate JWT token with role
-      const userPayload = { id: user.sub, role: role, email: user.email };
+      const userPayload = { id: openId, role: role, email: email };
 
       // Generate tokens
       const accessToken = generateAccessToken(userPayload);

@@ -14,9 +14,7 @@ import Footer from "../components/Layout/Footer.jsx";
 import ErrorPage from "./ErrorPage.jsx";
 
 import {
-  checkUser,
   fetchUser,
-  addUser,
   getUserRole,
   userLogout,
   checkTokens,
@@ -25,7 +23,6 @@ import { PERMISSIONS } from "../configs/Permissions.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 import RouteChangeListener from "../utils/RouteChangeListener.jsx";
 
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
 const COOKIE_SUFFIX = import.meta.env.VITE_COOKIE_SUFFIX;
@@ -65,62 +62,20 @@ export default function Root(props) {
       personalWebsiteLink: "https://i-guide.io",
     };
 
-    // Get user info from the authentication backend using the session cookie
-    async function getUserInfoFromAuth() {
-      try {
-        // Retrieving user information from the auth backend, using credentials
-        const response = await fetch(AUTH_BACKEND_URL + "/userinfo", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Credentials": true,
-          },
-        });
-
-        // If the response is no-good, set user status as logged out
-        if (!response.ok) {
-          setIsAuthenticated(false);
-          userLogout();
-          throw new Error(
-            "Cannot get user info from the authentication backend."
-          );
-        }
-
-        const resObject = await response.json();
-        const userInfoFromAuth = resObject?.userInfo;
-        TEST_MODE &&
-          console.log("User info from the auth backend", userInfoFromAuth);
-        // If userInfo doesn't exist in the auth backend anymore, log the user out
-        if (!userInfoFromAuth) {
-          setIsAuthenticated(false);
-          userLogout();
-        } else {
-          return userInfoFromAuth;
-        }
-      } catch (err) {
-        setIsAuthenticated(false);
-        userLogout();
-        console.log(err);
+    async function setupLocalUserInfo() {
+      // If the demo user mode is on, set the demo user as user
+      if (USE_DEMO_USER) {
+        TEST_MODE && console.log("Using demo user...");
+        setLocalUserInfo(demoLocalUser);
+        return;
       }
-    }
 
-    // Check if the user exists on the local DB, if not, add the user
-    // Save the user information from CILogon to the local DB
-    async function saveUserInfoToDB(userInfo) {
-      const response = await addUser(
-        userInfo.sub,
-        userInfo.given_name,
-        userInfo.family_name,
-        userInfo.email,
-        userInfo.idp_name,
-        ""
-      );
-      TEST_MODE && console.log("Saving user to the database...", response);
-    }
+      // If the user is not authenticated, set local user as null.
+      if (!isAuthenticated) {
+        setLocalUserInfo(null);
+        return;
+      }
 
-    async function handleSetUpUserInfo() {
       // Get user information from the JWT token. Refresh token if needed.
       //   userInfoFromToken will be undefined or null if the token is no longer valid
       const userInfoFromToken = await checkTokens();
@@ -136,18 +91,6 @@ export default function Root(props) {
         console.warn("Token doesn't contain openid. Logging user out...");
         userLogout();
         return;
-      }
-
-      // Check if the user exists on the database
-      const userExistsInDB = await checkUser(openId);
-      if (userExistsInDB) {
-        TEST_MODE && console.log("Found the user from the database");
-      } else {
-        // If the user doesn't exist in the database, get user info from the authentication backend and save to DB
-        TEST_MODE &&
-          console.log("Couldn't find the user from the database", openId);
-        const userInfo = await getUserInfoFromAuth();
-        await saveUserInfoToDB(userInfo);
       }
 
       // Get user information and role from the database
@@ -179,18 +122,7 @@ export default function Root(props) {
       setLocalUserInfo(localUserInfoObject);
     }
 
-    // If the demo user mode is on, set the demo user as user
-    if (USE_DEMO_USER) {
-      TEST_MODE && console.log("Using demo user...");
-      setLocalUserInfo(demoLocalUser);
-    } else {
-      if (isAuthenticated) {
-        handleSetUpUserInfo();
-      } else {
-        // Make sure localUserInfo is null
-        setLocalUserInfo(null);
-      }
-    }
+    setupLocalUserInfo();
   }, [isAuthenticated]);
 
   return (
