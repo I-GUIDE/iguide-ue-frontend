@@ -66,6 +66,9 @@ function hasZoomedOverThreshold(prevZoom, newZoom) {
 
 export default function ElementsMapEventHandler(props) {
   const onFetchElements = props.onFetchElements;
+  const onMapClick = props.onMapClick;
+  const onPopupClose = props.onPopupClose;
+
   const elementsMap = useMapEvents({});
   const lastBoundsRef = useRef(null);
   const lastZoomRef = useRef(null);
@@ -98,6 +101,12 @@ export default function ElementsMapEventHandler(props) {
   }, [elementsMap, onFetchElements]); // Runs once after map is ready
 
   useMapEvents({
+    click: () => {
+      onMapClick();
+    },
+    popupclose: () => {
+      onPopupClose();
+    },
     moveend: () => {
       // Clear any existing debounce timer
       clearTimeout(debounceTimerRef.current);

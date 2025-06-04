@@ -84,11 +84,21 @@ export default function ElementsMapContainer(props) {
       };
 
       setSelectedElement(processedSelectedElementMetadata);
-      // Otherwise, deselect the old one
+      // Otherwise, deselect the old one. This is likely due to clicking the active marker
     } else {
       TEST_MODE && console.log("Deselected element", selectedElementMetadata);
       setSelectedElement(null);
     }
+  }
+
+  function handleDeselectElements() {
+    // Deselect any selected element when the map or popup close button is clicked.
+    TEST_MODE &&
+      console.log(
+        "Deselect element via map click or popup close",
+        selectedElement
+      );
+    setSelectedElement(null);
   }
 
   return (
@@ -104,7 +114,11 @@ export default function ElementsMapContainer(props) {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <ElementsMapEventHandler onFetchElements={handleFetchElements} />
+      <ElementsMapEventHandler
+        onFetchElements={handleFetchElements}
+        onMapClick={handleDeselectElements}
+        onPopupClose={handleDeselectElements}
+      />
       {elements.map((elementMetadata) => (
         <Marker
           key={elementMetadata.id}
