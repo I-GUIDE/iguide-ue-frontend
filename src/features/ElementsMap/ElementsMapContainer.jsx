@@ -1,8 +1,11 @@
-import { MapContainer, TileLayer } from "react-leaflet";
+import { useState } from "react";
+
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
 import ElementsMapEventHandler from "./ElementsMapEventHandler";
+import SimpleInfoCard from "../../components/SimpleInfoCard";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -13,14 +16,32 @@ export default function ElementsMapContainer(props) {
   const maxBoundsViscosity = props.maxBoundsViscosity;
   const minZoom = props.minZoom;
 
+  const [elements, setElements] = useState([]);
+
   async function handleFetchElements(viewboxCoords) {
-    const elements = await retrieveElementsBySpatialMetadata(
+    const returnedElements = await retrieveElementsBySpatialMetadata(
       viewboxCoords.minLon,
       viewboxCoords.maxLon,
       viewboxCoords.minLat,
       viewboxCoords.maxLat
     );
-    TEST_MODE && console.log("Elements returned for Elements Map", elements);
+    // Process elements to create a Leaflet-friendly position
+    const processedReturnedElements = returnedElements.map(
+      (returnedElement) => ({
+        ...returnedElement,
+        // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
+        centroidLeaflet: [
+          returnedElement.centroid[1],
+          returnedElement.centroid[0],
+        ],
+      })
+    );
+    TEST_MODE &&
+      console.log(
+        "Elements returned for Elements Map",
+        processedReturnedElements
+      );
+    setElements(processedReturnedElements);
   }
 
   return (
@@ -37,6 +58,25 @@ export default function ElementsMapContainer(props) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <ElementsMapEventHandler onFetchElements={handleFetchElements} />
+      {elements.map((elementMetadata) => (
+        <Marker
+          key={elementMetadata.id}
+          position={elementMetadata.centroidLeaflet}
+        >
+          <Popup>
+            <SimpleInfoCard
+              cardtype={elementMetadata["resource-type"]}
+              pageId={elementMetadata.id}
+              title={elementMetadata.title}
+              thumbnailImage={elementMetadata["thumbnail-image"]}
+              minHeight="100%"
+              width="100%"
+              openInNewTab
+              showElementType
+            />
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
