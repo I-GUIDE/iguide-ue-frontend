@@ -167,7 +167,7 @@ export default function Home() {
                     <TutorialCard
                       iconImage="/images/homepage/map.png"
                       title="Map"
-                      link="/maps"
+                      link="/elements-map"
                       content="Transform geospatial data to knowledge and insights"
                       bgColor="#fff"
                       inColumn
