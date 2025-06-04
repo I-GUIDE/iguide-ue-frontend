@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -15,7 +15,14 @@ export default function ElementsMap() {
   usePageTitle("Elements Map");
 
   const usCenter = [39.8283, -98.5795];
-  const defaultZoom = 5;
+  const defaultZoom = 6;
+  // Southwest and northeast bounds. Prevent the same map area from showing more than once
+  const maxBounds = [
+    [-85, -179],
+    [85, 179],
+  ];
+  const maxBoundsViscosity = 1.0;
+  const minZoom = 5;
 
   return (
     <CssVarsProvider disableTransitionOnChange>
@@ -44,6 +51,9 @@ export default function ElementsMap() {
             <ElementsMapContainer
               startingCenter={usCenter}
               startingZoom={defaultZoom}
+              maxBounds={maxBounds}
+              maxBoundsViscosity={maxBoundsViscosity}
+              minZoom={minZoom}
             />
           </Suspense>
         </Grid>
