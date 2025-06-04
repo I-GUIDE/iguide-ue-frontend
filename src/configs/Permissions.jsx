@@ -7,6 +7,7 @@ export const PERMISSIONS = {
   edit_oer: 4,
   edit_map: 4,
   access_llm: 8,
+  access_jupyterhub: 8,
   edit_all: 3,
   super_admin: 1,
 };
@@ -31,7 +32,7 @@ export const PERMISSION_DETAIL = {
   8: {
     role_name: "Trusted User",
     description:
-      "You can contribute datasets, notebooks, publications, and code. You also have access to our Smart Search feature powered by large language models.",
+      "You can contribute datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models.",
   },
   10: {
     role_name: "User",

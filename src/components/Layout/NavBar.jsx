@@ -1,4 +1,4 @@
-import { React, useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -70,6 +70,8 @@ export default function NavBar(props) {
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["access_llm"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+  const canAccessJupyterHub =
+    localUserInfo.role <= PERMISSIONS["access_jupyterhub"];
   const isSuperAdmin = localUserInfo.role <= PERMISSIONS["super_admin"];
 
   function toggleDrawer(inOpen) {
@@ -480,19 +482,6 @@ export default function NavBar(props) {
           )}
           <Divider sx={{ my: 1 }} />
           <Link
-            underline="none"
-            component="a"
-            href={JUPYTERHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ color: "text.tertiary" }}
-          >
-            <ListItem sx={{ width: "100%" }}>
-              <ListItemButton>I-GUIDE JupyterHub</ListItemButton>
-            </ListItem>
-          </Link>
-          <Divider sx={{ my: 1 }} />
-          <Link
             to="/contact-us"
             underline="none"
             component={RouterLink}
@@ -772,22 +761,50 @@ export default function NavBar(props) {
                       Help
                     </Button>
                   </Tooltip>
-                  <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
-                    <Button
-                      size="sm"
-                      component="a"
-                      href={JUPYTERHUB_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  {isAuthenticated && canAccessJupyterHub ? (
+                    // If the user is logged in, activate the link to JupyterHub
+                    <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
+                      <Button
+                        size="sm"
+                        component="a"
+                        href={JUPYTERHUB_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Avatar
+                          variant="plain"
+                          alt="jupyterhub"
+                          src="/images/Jupyter-logo.png"
+                          className="tourid-5"
+                          sx={{
+                            "& img": {
+                              objectFit: "contain",
+                              p: "3px",
+                            },
+                          }}
+                        />
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      title="To use I-GUIDE JupyterHub, please log in using your institute email"
+                      variant="solid"
                     >
                       <Avatar
                         variant="plain"
                         alt="jupyterhub"
                         src="/images/Jupyter-logo.png"
                         className="tourid-5"
+                        sx={{
+                          "& img": {
+                            filter: "grayscale(100%)",
+                            objectFit: "contain",
+                            p: "3px",
+                          },
+                        }}
                       />
-                    </Button>
-                  </Tooltip>
+                    </Tooltip>
+                  )}
                   <AuthButton />
                 </ButtonGroup>
               </Stack>
