@@ -779,8 +779,8 @@ export default function NavBar(props) {
                           sx={{
                             "& img": {
                               objectFit: "contain",
-                              p: "3px",
                             },
+                            borderRadius: 0,
                           }}
                         />
                       </Button>
@@ -790,19 +790,23 @@ export default function NavBar(props) {
                       title="To use I-GUIDE JupyterHub, please log in using your institute email"
                       variant="solid"
                     >
-                      <Avatar
-                        variant="plain"
-                        alt="jupyterhub"
-                        src="/images/Jupyter-logo.png"
-                        className="tourid-5"
-                        sx={{
-                          "& img": {
-                            filter: "grayscale(100%)",
-                            objectFit: "contain",
-                            p: "3px",
-                          },
-                        }}
-                      />
+                      <span>
+                        <Button size="sm" disabled>
+                          <Avatar
+                            variant="plain"
+                            alt="jupyterhub"
+                            src="/images/Jupyter-logo.png"
+                            className="tourid-5"
+                            sx={{
+                              "& img": {
+                                filter: "grayscale(100%)",
+                                objectFit: "contain",
+                              },
+                              borderRadius: 0,
+                            }}
+                          />
+                        </Button>
+                      </span>
                     </Tooltip>
                   )}
                   <AuthButton />
