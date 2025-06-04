@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
@@ -17,6 +17,7 @@ export default function ElementsMapContainer(props) {
   const minZoom = props.minZoom;
 
   const [elements, setElements] = useState([]);
+  const [selectedElement, setSelectedElement] = useState();
 
   async function handleFetchElements(viewboxCoords) {
     const returnedElements = await retrieveElementsBySpatialMetadata(
@@ -44,6 +45,39 @@ export default function ElementsMapContainer(props) {
     setElements(processedReturnedElements);
   }
 
+  function handleMarkerClick(selectedElementMetadata) {
+    // When click a new element, select the new element.
+    if (
+      selectedElementMetadata &&
+      selectedElement?.id !== selectedElementMetadata.id
+    ) {
+      TEST_MODE &&
+        console.log(
+          "Selected element",
+          selectedElementMetadata,
+          "Deselected",
+          selectedElement
+        );
+
+      const boundingBoxPolygon =
+        selectedElementMetadata["bounding-box"].coordinates[0];
+      const boundingBoxPolygonForLeaflet = boundingBoxPolygon.map((point) => [
+        point[1],
+        point[0],
+      ]);
+      const processedSelectedElementMetadata = {
+        ...selectedElementMetadata,
+        boundingBoxForLeaflet: boundingBoxPolygonForLeaflet,
+      };
+
+      setSelectedElement(processedSelectedElementMetadata);
+      // Otherwise, deselect the old one
+    } else {
+      TEST_MODE && console.log("Deselected element", selectedElementMetadata);
+      setSelectedElement(null);
+    }
+  }
+
   return (
     <MapContainer
       center={startingCenter}
@@ -62,6 +96,9 @@ export default function ElementsMapContainer(props) {
         <Marker
           key={elementMetadata.id}
           position={elementMetadata.centroidLeaflet}
+          eventHandlers={{
+            click: () => handleMarkerClick(elementMetadata),
+          }}
         >
           <Popup>
             <SimpleInfoCard
@@ -77,6 +114,9 @@ export default function ElementsMapContainer(props) {
           </Popup>
         </Marker>
       ))}
+      {selectedElement && (
+        <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+      )}
     </MapContainer>
   );
 }
