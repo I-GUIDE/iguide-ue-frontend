@@ -240,10 +240,7 @@ export async function retrieveElementsBySpatialMetadata(
   const viewbox = [northwest, northeast, southeast, southwest, northwest];
   const encodedViewbox = encodeURIComponent(JSON.stringify(viewbox));
 
-  TEST_MODE && console.log("Current map bound", viewbox, encodedViewbox);
-
-  // The endpoint is not yet ready to use. Return an empty array as for now.
-  return [];
+  TEST_MODE && console.log("Current map bounds", viewbox);
 
   try {
     const response = await fetch(

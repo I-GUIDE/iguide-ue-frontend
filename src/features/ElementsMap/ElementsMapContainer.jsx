@@ -1,108 +1,149 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
+import ElementsMapEventHandler from "./ElementsMapEventHandler";
+import SimpleInfoCard from "../../components/SimpleInfoCard";
+
+// Get the leaflet icons including markers to work
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL(
+    "leaflet/dist/images/marker-icon-2x.png",
+    import.meta.url
+  ).href,
+  iconUrl: new URL("leaflet/dist/images/marker-icon.png", import.meta.url).href,
+  shadowUrl: new URL("leaflet/dist/images/marker-shadow.png", import.meta.url)
+    .href,
+});
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
-
-// Update elements when the map changes
-function ViewboxUpdater(props) {
-  const setViewboxCoords = props.setViewboxCoords;
-
-  const elementsMap = useMap();
-  const timeoutRef = useRef(null);
-  const debounceInMs = 1500;
-
-  useEffect(() => {
-    const bounds = elementsMap.getBounds();
-    const northEast = bounds.getNorthEast();
-    const southWest = bounds.getSouthWest();
-
-    TEST_MODE && console.log("Initial viewbox:");
-    TEST_MODE && console.log("NE:", northEast.lat, northEast.lng);
-    TEST_MODE && console.log("SW:", southWest.lat, southWest.lng);
-    setViewboxCoords({
-      minLon: southWest.lng,
-      maxLon: northEast.lng,
-      minLat: southWest.lat,
-      maxLat: northEast.lat,
-    });
-  }, [elementsMap, setViewboxCoords]); // Runs once after map is ready
-
-  useEffect(() => {
-    async function handleMapChange() {
-      // Clear previous timeout if the user is still moving the elementsMap
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      // set new timeout for the set debounce
-      timeoutRef.current = setTimeout(() => {
-        const bounds = elementsMap.getBounds();
-        const northEast = bounds.getNorthEast();
-        const southWest = bounds.getSouthWest();
-
-        TEST_MODE && console.log(`Viewbox after ${debounceInMs}ms idle:`);
-        TEST_MODE && console.log("NE:", northEast.lat, northEast.lng);
-        TEST_MODE && console.log("SW:", southWest.lat, southWest.lng);
-        setViewboxCoords({
-          minLon: southWest.lng,
-          maxLon: northEast.lng,
-          minLat: southWest.lat,
-          maxLat: northEast.lat,
-        });
-      }, debounceInMs);
-    }
-
-    elementsMap.on("move", handleMapChange); // triggered on pan or zoom
-    elementsMap.on("zoom", handleMapChange); // optional: include zoom
-
-    // Cleanup on unmount
-    return () => {
-      elementsMap.off("move", handleMapChange);
-      elementsMap.off("zoom", handleMapChange);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [elementsMap, setViewboxCoords]);
-}
 
 export default function ElementsMapContainer(props) {
   const startingCenter = props.startingCenter || [39.8283, -98.5795];
   const startingZoom = props.startingZoom || 5;
+  const maxBounds = props.maxBounds;
+  const maxBoundsViscosity = props.maxBoundsViscosity;
+  const minZoom = props.minZoom;
 
-  const [viewboxCoords, setViewboxCoords] = useState();
+  const [elements, setElements] = useState([]);
+  const [selectedElement, setSelectedElement] = useState();
 
-  useEffect(() => {
-    async function handleMapChange() {
-      const elements = await retrieveElementsBySpatialMetadata(
-        viewboxCoords.minLon,
-        viewboxCoords.maxLon,
-        viewboxCoords.minLat,
-        viewboxCoords.maxLat
+  async function handleFetchElements(viewboxCoords) {
+    const returnedElements = await retrieveElementsBySpatialMetadata(
+      viewboxCoords.minLon,
+      viewboxCoords.maxLon,
+      viewboxCoords.minLat,
+      viewboxCoords.maxLat
+    );
+    // Process elements to create a Leaflet-friendly position
+    const processedReturnedElements = returnedElements.map(
+      (returnedElement) => ({
+        ...returnedElement,
+        // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
+        centroidLeaflet: [
+          returnedElement.centroid[1],
+          returnedElement.centroid[0],
+        ],
+      })
+    );
+    TEST_MODE &&
+      console.log(
+        "Elements returned for Elements Map",
+        processedReturnedElements
       );
-      TEST_MODE && console.log("Elements returned for Elements Map", elements);
-    }
+    setElements(processedReturnedElements);
+  }
 
-    if (viewboxCoords) {
-      handleMapChange();
+  function handleMarkerClick(selectedElementMetadata) {
+    // When click a new element, select the new element.
+    if (
+      selectedElementMetadata &&
+      selectedElement?.id !== selectedElementMetadata.id
+    ) {
+      TEST_MODE &&
+        console.log(
+          "Selected element",
+          selectedElementMetadata,
+          "Deselected",
+          selectedElement
+        );
+
+      const boundingBoxPolygon =
+        selectedElementMetadata["bounding-box"].coordinates[0];
+      const boundingBoxPolygonForLeaflet = boundingBoxPolygon.map((point) => [
+        point[1],
+        point[0],
+      ]);
+      const processedSelectedElementMetadata = {
+        ...selectedElementMetadata,
+        boundingBoxForLeaflet: boundingBoxPolygonForLeaflet,
+      };
+
+      setSelectedElement(processedSelectedElementMetadata);
+      // Otherwise, deselect the old one. This is likely due to clicking the active marker
+    } else {
+      TEST_MODE && console.log("Deselected element", selectedElementMetadata);
+      setSelectedElement(null);
     }
-  }, [viewboxCoords]);
+  }
+
+  function handleDeselectElements() {
+    // Deselect any selected element when the map or popup close button is clicked.
+    TEST_MODE &&
+      console.log(
+        "Deselect element via map click or popup close",
+        selectedElement
+      );
+    setSelectedElement(null);
+  }
 
   return (
     <MapContainer
       center={startingCenter}
       zoom={startingZoom}
+      maxBounds={maxBounds}
+      maxBoundsViscosity={maxBoundsViscosity}
+      minZoom={minZoom}
       style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <ViewboxUpdater setViewboxCoords={setViewboxCoords} />
+      <ElementsMapEventHandler
+        onFetchElements={handleFetchElements}
+        onMapClick={handleDeselectElements}
+        onPopupClose={handleDeselectElements}
+      />
+      {elements.map((elementMetadata) => (
+        <Marker
+          key={elementMetadata.id}
+          position={elementMetadata.centroidLeaflet}
+          eventHandlers={{
+            click: () => handleMarkerClick(elementMetadata),
+          }}
+        >
+          <Popup>
+            <SimpleInfoCard
+              cardtype={elementMetadata["resource-type"]}
+              pageId={elementMetadata.id}
+              title={elementMetadata.title}
+              thumbnailImage={elementMetadata["thumbnail-image"]}
+              minHeight="100%"
+              width="100%"
+              openInNewTab
+              showElementType
+            />
+          </Popup>
+        </Marker>
+      ))}
+      {selectedElement && (
+        <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+      )}
     </MapContainer>
   );
 }
