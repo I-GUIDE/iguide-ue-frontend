@@ -2,10 +2,23 @@ import { useState } from "react";
 
 import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
 import ElementsMapEventHandler from "./ElementsMapEventHandler";
 import SimpleInfoCard from "../../components/SimpleInfoCard";
+
+// Get the leaflet icons including markers to work
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL(
+    "leaflet/dist/images/marker-icon-2x.png",
+    import.meta.url
+  ).href,
+  iconUrl: new URL("leaflet/dist/images/marker-icon.png", import.meta.url).href,
+  shadowUrl: new URL("leaflet/dist/images/marker-shadow.png", import.meta.url)
+    .href,
+});
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
