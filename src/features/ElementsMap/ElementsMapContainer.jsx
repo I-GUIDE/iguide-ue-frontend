@@ -78,7 +78,7 @@ export default function ElementsMapContainer(props) {
         );
 
       const boundingBoxForLeaflet = processPolygon(
-        selectedElementMetadata["bounding-box"].coordinates[0]
+        selectedElementMetadata["bounding-box"].coordinates
       );
       const processedSelectedElementMetadata = {
         ...selectedElementMetadata,

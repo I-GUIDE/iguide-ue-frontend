@@ -23,8 +23,8 @@ export default function InteractiveMap(props) {
     return null;
   }
 
-  const polygonLeaflet = processPolygon(polygon?.coordinates[0]);
-  const boundingBoxLeaflet = processPolygon(boundingBox?.coordinates[0]);
+  const polygonLeaflet = processPolygon(polygon?.coordinates);
+  const boundingBoxLeaflet = processPolygon(boundingBox?.coordinates);
 
   const defaultZoom = 9;
   // Southwest and northeast bounds. Prevent the same map area from showing more than once
