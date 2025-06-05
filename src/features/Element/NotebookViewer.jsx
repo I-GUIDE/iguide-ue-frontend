@@ -151,18 +151,23 @@ export default function NotebookViewer(props) {
       >
         {/* Disable the button if users aren't logged in or don't have the permission */}
         {isAuthenticated && canAccessJupyterHub ? (
-          <Button color="success" size="sm" sx={{ my: 1 }}>
-            <Link
-              underline="none"
-              href={iGuidePlatformUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ color: "inherit" }}
-            >
-              Run This Notebook&nbsp;
-              <ExitToAppIcon />
-            </Link>
-          </Button>
+          <Box sx={{ my: 1 }}>
+            <Button color="success" size="sm">
+              <Link
+                underline="none"
+                href={iGuidePlatformUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: "inherit" }}
+              >
+                Run This Notebook&nbsp;
+                <ExitToAppIcon />
+              </Link>
+            </Button>
+            <Typography level="body-xs" color="success">
+              Open I-GUIDE JupyterHub in a new window.
+            </Typography>
+          </Box>
         ) : (
           <Box sx={{ my: 1 }}>
             <Button color="success" size="sm" disabled>
