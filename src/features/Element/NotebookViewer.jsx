@@ -1,4 +1,4 @@
-import { React } from "react";
+import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import Divider from "@mui/joy/Divider";
@@ -8,6 +8,8 @@ import Button from "@mui/joy/Button";
 import Box from "@mui/joy/Box";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+import { PERMISSIONS } from "../../configs/Permissions";
 
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
@@ -91,6 +93,10 @@ export default function NotebookViewer(props) {
   const notebookFile = props.notebookFile;
   const htmlNotebook = props.htmlNotebook;
 
+  const { isAuthenticated, localUserInfo } = useOutletContext();
+  const canAccessJupyterHub =
+    localUserInfo?.role <= PERMISSIONS["access_jupyterhub"];
+
   if (!htmlNotebook && !notebookFile) {
     return <NotebookUnavailable />;
   }
@@ -143,19 +149,32 @@ export default function NotebookViewer(props) {
         alignItems="flex-end"
         spacing={1}
       >
-        <Button color="success" size="sm" sx={{ my: 1, mx: 0.5 }}>
-          <Link
-            underline="none"
-            href={iGuidePlatformUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ color: "inherit" }}
-          >
-            Run This Notebook&nbsp;
-            <ExitToAppIcon />
-          </Link>
-        </Button>
-        &nbsp;(Separate Login)
+        {/* Disable the button if users aren't logged in or don't have the permission */}
+        {isAuthenticated && canAccessJupyterHub ? (
+          <Button color="success" size="sm" sx={{ my: 1 }}>
+            <Link
+              underline="none"
+              href={iGuidePlatformUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: "inherit" }}
+            >
+              Run This Notebook&nbsp;
+              <ExitToAppIcon />
+            </Link>
+          </Button>
+        ) : (
+          <Box sx={{ my: 1 }}>
+            <Button color="success" size="sm" disabled>
+              Run This Notebook&nbsp;
+              <ExitToAppIcon />
+            </Button>
+            <Typography level="body-xs" color="warning">
+              To run this notebook on I-GUIDE JupyterHub, please log in using
+              your institute email.
+            </Typography>
+          </Box>
+        )}
         {isUsingNbconvert && (
           <Typography color="neutral" level="body-sm" variant="plain">
             Disclaimer: This read-only notebook below was automatically
