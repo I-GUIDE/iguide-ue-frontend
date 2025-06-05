@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -22,6 +22,7 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import InteractiveMap from "../../features/Element/InteractiveMap";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
 
@@ -36,10 +37,15 @@ export default function OERPage() {
   const [contributor, setContributor] = useState([]);
   const [abstract, setAbstract] = useState("");
   const [tags, setTags] = useState([]);
+  const [oerExternalLinks, setOerExternalLinks] = useState([]);
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
-  const [oerExternalLinks, setOerExternalLinks] = useState([]);
+
+  const [centroid, setCentroid] = useState();
+  const [boundingBox, setBoundingBox] = useState();
+  const [polygon, setPolygon] = useState();
+
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
   const [licenseStatement, setLicenseStatement] = useState("");
@@ -78,15 +84,21 @@ export default function OERPage() {
       setContributor(thisElement["contributor"]);
       setAbstract(thisElement.contents);
       setTags(thisElement.tags);
+      setOerExternalLinks(thisElement["oer-external-links"]);
       setThumbnailImage(thisElement["thumbnail-image"]);
       setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setRelatedElements(thisElement["related-elements"]);
-      setOerExternalLinks(thisElement["oer-external-links"]);
+
+      setCentroid(thisElement["spatial-centroid"]);
+      setBoundingBox(thisElement["spatial-bounding-box"]);
+      setPolygon(thisElement["spatial-geometry"]);
+
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
       setLicenseStatement(thisElement["license-statement"]);
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
+
       setIsLoading(false);
     }
     fetchData();
@@ -166,10 +178,15 @@ export default function OERPage() {
             </Grid>
 
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
             <Grid xs={12}>
-              <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
+              <CapsuleList title="Tags" items={tags} />
+              <InteractiveMap
+                centroid={centroid}
+                polygon={polygon}
+                boundingBox={boundingBox}
+              />
             </Grid>
             <Grid xs={12}>
               <RelatedElements relatedElements={relatedElements} />
