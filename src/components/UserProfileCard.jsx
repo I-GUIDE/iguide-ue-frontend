@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { useNavigate } from "react-router";
 
@@ -24,6 +24,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import UserAvatar from "./UserAvatar";
 import { updateUserRole, deleteUser } from "../utils/UserManager";
+import { formatIsoStringToYYYYMMDD } from "../utils/PeriodAgoText";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -32,6 +33,9 @@ export default function UserProfileCard(props) {
   const userFirstName = props.firstName;
   const userLastName = props.lastName;
   const roleFromDB = props.role;
+  const creationTime = props.creationTime;
+
+  const creationTimeYYYYMMDD = formatIsoStringToYYYYMMDD(creationTime);
 
   const navigate = useNavigate();
 
@@ -135,20 +139,31 @@ export default function UserProfileCard(props) {
                 {userFirstName || <Typography color="danger">nfn</Typography>}
               </Typography>
               <Typography level="title-sm">
-                ID: {userId || <Typography color="danger">No ID</Typography>}
-              </Typography>
-              <Typography level="title-sm">
                 Role:{" "}
                 {userRole || <Typography color="danger">No role</Typography>}
               </Typography>
-              <Typography level="title-sm">
-                {userAffiliation || (
-                  <Typography color="danger">No affiliation</Typography>
-                )}
-              </Typography>
-              <Typography level="title-sm">
-                {userEmail || <Typography color="danger">No email</Typography>}
-              </Typography>
+              <Stack direction="column" spacing={0.5}>
+                <Typography level="body-sm">
+                  {userId || <Typography color="danger">No ID</Typography>}
+                </Typography>
+                <Typography level="body-sm">
+                  {userAffiliation || (
+                    <Typography color="danger">No affiliation</Typography>
+                  )}
+                </Typography>
+                <Typography level="body-sm">
+                  {userEmail || (
+                    <Typography color="danger">No email</Typography>
+                  )}
+                </Typography>
+                <Typography level="body-sm">
+                  {creationTimeYYYYMMDD ? (
+                    <Typography>Created on {creationTimeYYYYMMDD}</Typography>
+                  ) : (
+                    <Typography color="danger">No creation time</Typography>
+                  )}
+                </Typography>
+              </Stack>
             </Stack>
           </Stack>
         </CardContent>
