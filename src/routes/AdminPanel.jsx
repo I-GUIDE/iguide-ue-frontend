@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate, useSearchParams, useOutletContext } from "react-router";
 
@@ -64,7 +64,10 @@ export default function AdminPanel() {
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
   const [resultLength, setResultLength] = useState(0);
 
-  const [ranking, setRanking] = useState({ sortBy: "last_name", order: "asc" });
+  const [ranking, setRanking] = useState({
+    sortBy: "created_at",
+    order: "desc",
+  });
   const [filterName, setFilterName] = useState("none");
   const [filterValue, setFilterValue] = useState("");
   const [filter, setFilter] = useState({ filterName: "none", filterValue: "" });
@@ -117,6 +120,18 @@ export default function AdminPanel() {
 
   function handleUserListSortingChange(event, newValue) {
     switch (newValue) {
+      case "creation_asc":
+        setRanking({
+          sortBy: "created_at",
+          order: "asc",
+        });
+        break;
+      case "creation_desc":
+        setRanking({
+          sortBy: "created_at",
+          order: "desc",
+        });
+        break;
       case "last_name_asc":
         setRanking({
           sortBy: "last_name",
@@ -308,10 +323,12 @@ export default function AdminPanel() {
                     >
                       <Typography level="body-xs">Sort by</Typography>
                       <Select
-                        defaultValue="last_name_asc"
+                        defaultValue="creation_desc"
                         onChange={handleUserListSortingChange}
                         sx={{ width: 170 }}
                       >
+                        <Option value="creation_desc">Most Recent</Option>
+                        <Option value="creation_asc">Earliest</Option>
                         <Option value="last_name_asc">Last Name</Option>
                         <Option value="last_name_desc">Last Name (Z-A)</Option>
                         <Option value="first_name_asc">First Name</Option>
@@ -412,6 +429,7 @@ export default function AdminPanel() {
                             affiliation={user.affiliation}
                             email={user.email}
                             avatar={user["avatar-url"]?.low}
+                            creationTime={user["created-at"]}
                           />
                         </Grid>
                       ))}
