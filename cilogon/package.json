@@ -16,7 +16,7 @@
         "express-session": "^1.18.1",
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
-        "multer": "^2.0.0",
+        "multer": "^2.0.1",
         "node-fetch": "3",
         "nodemon": "^3.1.10",
         "openid-client": "^5.7.1",
