@@ -4,9 +4,13 @@ import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
+import {
+  retrieveElementsBySpatialMetadata,
+  fetchSingleElementDetails,
+} from "../../utils/DataRetrieval";
 import ElementsMapEventHandler from "./ElementsMapEventHandler";
 import SimpleInfoCard from "../../components/SimpleInfoCard";
+import { processPoint, processPolygon } from "../../utils/SwitchLatLon";
 
 // Get the leaflet icons including markers to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -28,6 +32,13 @@ export default function ElementsMapContainer(props) {
   const maxBounds = props.maxBounds;
   const maxBoundsViscosity = props.maxBoundsViscosity;
   const minZoom = props.minZoom;
+  const style = props.style || { height: "100%", width: "100%" };
+
+  // If this is true, only display a single element spatial metadata.
+  const elementPageMode = props.elementPageMode;
+  const elementCentroid = props.elementCentroid;
+  const elementBoundingBox = props.elementBoundingBox;
+  const elementGeometry = props.elementGeometry;
 
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState();
@@ -44,10 +55,7 @@ export default function ElementsMapContainer(props) {
       (returnedElement) => ({
         ...returnedElement,
         // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
-        centroidLeaflet: [
-          returnedElement.centroid[1],
-          returnedElement.centroid[0],
-        ],
+        centroidLeaflet: processPoint(returnedElement.centroid.coordinates),
       })
     );
     TEST_MODE &&
@@ -58,7 +66,7 @@ export default function ElementsMapContainer(props) {
     setElements(processedReturnedElements);
   }
 
-  function handleMarkerClick(selectedElementMetadata) {
+  async function handleMarkerClick(selectedElementMetadata) {
     // When click a new element, select the new element.
     if (
       selectedElementMetadata &&
@@ -71,16 +79,19 @@ export default function ElementsMapContainer(props) {
           "Deselected",
           selectedElement
         );
+      const elementDetails = await fetchSingleElementDetails(
+        selectedElementMetadata.id
+      );
+      const geometry = elementDetails?.body["spatial-geometry"];
+      const geometryForLeaflet = processPolygon(geometry.coordinates);
 
-      const boundingBoxPolygon =
-        selectedElementMetadata["bounding-box"].coordinates[0];
-      const boundingBoxPolygonForLeaflet = boundingBoxPolygon.map((point) => [
-        point[1],
-        point[0],
-      ]);
+      const boundingBoxForLeaflet = processPolygon(
+        selectedElementMetadata["bounding-box"].coordinates
+      );
       const processedSelectedElementMetadata = {
         ...selectedElementMetadata,
-        boundingBoxForLeaflet: boundingBoxPolygonForLeaflet,
+        geometryForLeaflet: geometryForLeaflet,
+        boundingBoxForLeaflet: boundingBoxForLeaflet,
       };
 
       setSelectedElement(processedSelectedElementMetadata);
@@ -108,41 +119,57 @@ export default function ElementsMapContainer(props) {
       maxBounds={maxBounds}
       maxBoundsViscosity={maxBoundsViscosity}
       minZoom={minZoom}
-      style={{ height: "100%", width: "100%" }}
+      style={style}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <ElementsMapEventHandler
-        onFetchElements={handleFetchElements}
-        onMapClick={handleDeselectElements}
-        onPopupClose={handleDeselectElements}
-      />
-      {elements.map((elementMetadata) => (
-        <Marker
-          key={elementMetadata.id}
-          position={elementMetadata.centroidLeaflet}
-          eventHandlers={{
-            click: () => handleMarkerClick(elementMetadata),
-          }}
-        >
-          <Popup>
-            <SimpleInfoCard
-              cardtype={elementMetadata["resource-type"]}
-              pageId={elementMetadata.id}
-              title={elementMetadata.title}
-              thumbnailImage={elementMetadata["thumbnail-image"]}
-              minHeight="100%"
-              width="100%"
-              openInNewTab
-              showElementType
-            />
-          </Popup>
-        </Marker>
-      ))}
-      {selectedElement && (
-        <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+      {elementPageMode ? (
+        <>
+          {elementCentroid && <Marker position={elementCentroid} />}
+          {elementGeometry && <Polygon positions={elementGeometry} />}
+          {/* Display bounding box when polygon area is not available */}
+          {!elementGeometry && elementBoundingBox && (
+            <Polygon positions={elementBoundingBox} />
+          )}
+        </>
+      ) : (
+        <>
+          <ElementsMapEventHandler
+            onFetchElements={handleFetchElements}
+            onMapClick={handleDeselectElements}
+            onPopupClose={handleDeselectElements}
+          />
+          {elements.map((elementMetadata) => (
+            <Marker
+              key={elementMetadata.id}
+              position={elementMetadata.centroidLeaflet}
+              eventHandlers={{
+                click: () => handleMarkerClick(elementMetadata),
+              }}
+            >
+              <Popup>
+                <SimpleInfoCard
+                  cardtype={elementMetadata["resource-type"]}
+                  pageId={elementMetadata.id}
+                  title={elementMetadata.title}
+                  thumbnailImage={elementMetadata["thumbnail-image"]}
+                  minHeight="100%"
+                  width="100%"
+                  openInNewTab
+                  showElementType
+                />
+              </Popup>
+            </Marker>
+          ))}
+          {selectedElement &&
+            (selectedElement.geometryForLeaflet ? (
+              <Polygon positions={selectedElement.geometryForLeaflet} />
+            ) : (
+              <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+            ))}
+        </>
       )}
     </MapContainer>
   );

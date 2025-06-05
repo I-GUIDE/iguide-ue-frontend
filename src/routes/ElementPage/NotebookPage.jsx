@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useSearchParams, useOutletContext } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -22,6 +22,7 @@ import RelatedElementsNetwork from "../../features/Element/RelatedElementsNetwor
 import usePageTitle from "../../hooks/usePageTitle";
 import PageNav from "../../components/PageNav";
 import ContributorOps from "../../features/Element/ContributorOps";
+import InteractiveMap from "../../features/Element/InteractiveMap";
 import PrivateElementBanner from "../../features/Element/PrivateElementBanner";
 import LicenseAndFunding from "../../features/Element/LicenseAndFunding";
 
@@ -42,6 +43,11 @@ export default function NotebookPage() {
   const [thumbnailImage, setThumbnailImage] = useState("");
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
   const [relatedElements, setRelatedElements] = useState([]);
+
+  const [centroid, setCentroid] = useState();
+  const [boundingBox, setBoundingBox] = useState();
+  const [geometry, setGeometry] = useState();
+
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
   const [licenseStatement, setLicenseStatement] = useState("");
@@ -86,11 +92,17 @@ export default function NotebookPage() {
       setThumbnailImageCredit(thisElement["thumbnail-credit"]);
       setHtmlNotebook(thisElement["html-notebook"]);
       setRelatedElements(thisElement["related-elements"]);
+
+      setCentroid(thisElement["spatial-centroid"]);
+      setBoundingBox(thisElement["spatial-bounding-box"]);
+      setGeometry(thisElement["spatial-geometry"]);
+
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
       setLicenseStatement(thisElement["license-statement"]);
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
+
       setIsLoading(false);
     }
     fetchData();
@@ -175,6 +187,11 @@ export default function NotebookPage() {
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}
                 htmlNotebook={htmlNotebook}
+              />
+              <InteractiveMap
+                centroid={centroid}
+                geometry={geometry}
+                boundingBox={boundingBox}
               />
             </Grid>
             <Grid xs={12}>
