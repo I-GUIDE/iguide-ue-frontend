@@ -11,7 +11,7 @@ import { processPoint, processPolygon } from "../../utils/SwitchLatLon";
 
 export default function InteractiveMap(props) {
   const centroid = props.centroid;
-  const polygon = props.polygon;
+  const geometry = props.geometry;
   const boundingBox = props.boundingBox;
 
   if (!centroid) {
@@ -23,7 +23,7 @@ export default function InteractiveMap(props) {
     return null;
   }
 
-  const polygonLeaflet = processPolygon(polygon?.coordinates);
+  const geometryLeaflet = processPolygon(geometry?.coordinates);
   const boundingBoxLeaflet = processPolygon(boundingBox?.coordinates);
 
   const defaultZoom = 9;
@@ -58,7 +58,7 @@ export default function InteractiveMap(props) {
             minZoom={minZoom}
             elementPageMode
             elementCentroid={centroidLeaflet}
-            elementPolygon={polygonLeaflet}
+            elementGeometry={geometryLeaflet}
             elementBoundingBox={boundingBoxLeaflet}
             style={{ height: 600, width: "100%" }}
           />

@@ -44,7 +44,7 @@ export default function PublicationPage() {
 
   const [centroid, setCentroid] = useState();
   const [boundingBox, setBoundingBox] = useState();
-  const [polygon, setPolygon] = useState();
+  const [geometry, setGeometry] = useState();
 
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -91,7 +91,7 @@ export default function PublicationPage() {
 
       setCentroid(thisElement["spatial-centroid"]);
       setBoundingBox(thisElement["spatial-bounding-box"]);
-      setPolygon(thisElement["spatial-geometry"]);
+      setGeometry(thisElement["spatial-geometry"]);
 
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -181,7 +181,7 @@ export default function PublicationPage() {
               <CapsuleList title="Tags" items={tags} />
               <InteractiveMap
                 centroid={centroid}
-                polygon={polygon}
+                geometry={geometry}
                 boundingBox={boundingBox}
               />
             </Grid>

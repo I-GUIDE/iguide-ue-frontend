@@ -45,7 +45,7 @@ export default function MapPage() {
 
   const [centroid, setCentroid] = useState();
   const [boundingBox, setBoundingBox] = useState();
-  const [polygon, setPolygon] = useState();
+  const [geometry, setGeometry] = useState();
 
   const [creationTime, setCreationTime] = useState();
   const [updateTime, setUpdateTime] = useState();
@@ -92,7 +92,7 @@ export default function MapPage() {
 
       setCentroid(thisElement["spatial-centroid"]);
       setBoundingBox(thisElement["spatial-bounding-box"]);
-      setPolygon(thisElement["spatial-geometry"]);
+      setGeometry(thisElement["spatial-geometry"]);
 
       setCreationTime(thisElement["created-at"]);
       setUpdateTime(thisElement["updated-at"]);
@@ -186,7 +186,7 @@ export default function MapPage() {
               <StaticMap mapImg={thumbnailImage} />
               <InteractiveMap
                 centroid={centroid}
-                polygon={polygon}
+                geometry={geometry}
                 boundingBox={boundingBox}
               />
             </Grid>

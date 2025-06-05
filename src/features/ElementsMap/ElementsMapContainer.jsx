@@ -4,7 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-import { retrieveElementsBySpatialMetadata } from "../../utils/DataRetrieval";
+import {
+  retrieveElementsBySpatialMetadata,
+  fetchSingleElementDetails,
+} from "../../utils/DataRetrieval";
 import ElementsMapEventHandler from "./ElementsMapEventHandler";
 import SimpleInfoCard from "../../components/SimpleInfoCard";
 import { processPoint, processPolygon } from "../../utils/SwitchLatLon";
@@ -35,7 +38,7 @@ export default function ElementsMapContainer(props) {
   const elementPageMode = props.elementPageMode;
   const elementCentroid = props.elementCentroid;
   const elementBoundingBox = props.elementBoundingBox;
-  const elementPolygon = props.elementPolygon;
+  const elementGeometry = props.elementGeometry;
 
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState();
@@ -63,7 +66,7 @@ export default function ElementsMapContainer(props) {
     setElements(processedReturnedElements);
   }
 
-  function handleMarkerClick(selectedElementMetadata) {
+  async function handleMarkerClick(selectedElementMetadata) {
     // When click a new element, select the new element.
     if (
       selectedElementMetadata &&
@@ -76,12 +79,18 @@ export default function ElementsMapContainer(props) {
           "Deselected",
           selectedElement
         );
+      const elementDetails = await fetchSingleElementDetails(
+        selectedElementMetadata.id
+      );
+      const geometry = elementDetails?.body["spatial-geometry"];
+      const geometryForLeaflet = processPolygon(geometry.coordinates);
 
       const boundingBoxForLeaflet = processPolygon(
         selectedElementMetadata["bounding-box"].coordinates
       );
       const processedSelectedElementMetadata = {
         ...selectedElementMetadata,
+        geometryForLeaflet: geometryForLeaflet,
         boundingBoxForLeaflet: boundingBoxForLeaflet,
       };
 
@@ -119,9 +128,9 @@ export default function ElementsMapContainer(props) {
       {elementPageMode ? (
         <>
           {elementCentroid && <Marker position={elementCentroid} />}
-          {elementPolygon && <Polygon positions={elementPolygon} />}
+          {elementGeometry && <Polygon positions={elementGeometry} />}
           {/* Display bounding box when polygon area is not available */}
-          {!elementPolygon && elementBoundingBox && (
+          {!elementGeometry && elementBoundingBox && (
             <Polygon positions={elementBoundingBox} />
           )}
         </>
@@ -154,9 +163,12 @@ export default function ElementsMapContainer(props) {
               </Popup>
             </Marker>
           ))}
-          {selectedElement && (
-            <Polygon positions={selectedElement.boundingBoxForLeaflet} />
-          )}
+          {selectedElement &&
+            (selectedElement.geometryForLeaflet ? (
+              <Polygon positions={selectedElement.geometryForLeaflet} />
+            ) : (
+              <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+            ))}
         </>
       )}
     </MapContainer>
