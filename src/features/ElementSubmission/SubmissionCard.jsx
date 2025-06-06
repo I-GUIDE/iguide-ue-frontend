@@ -1078,7 +1078,7 @@ export default function SubmissionCard(props) {
     ) {
       // Remove the leading GitHub domain
       const ownerAndRepo = data["notebook-repo"]?.replace(
-        /^https?:\/\/(www\.)?github\.com/,
+        /^https?:\/\/(www\.)?github\.com\//,
         ""
       );
       const path = data["notebook-file"];
