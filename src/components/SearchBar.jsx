@@ -196,7 +196,7 @@ export default function SearchBar(props) {
               </Tooltip>
             ) : (
               <Tooltip
-                title="Please log in using your academic credential to access Smart Search"
+                title="Please log in using your academic email to access Smart Search"
                 placement="top"
               >
                 <IconButton

@@ -26,7 +26,7 @@ export default [
   {
     selector: ".tourid-5",
     content:
-      "Begin your spatial analysis using the power of code by setting up JupyterHub. To use this feature, you need to log in using your institute email.",
+      "Begin your spatial analysis using the power of code by setting up JupyterHub. To use this feature, you need to log in using your academic email.",
     position: "bottom",
   },
   {

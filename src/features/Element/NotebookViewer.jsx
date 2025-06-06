@@ -176,7 +176,7 @@ export default function NotebookViewer(props) {
             </Button>
             <Typography level="body-xs" color="warning">
               To run this notebook on I-GUIDE JupyterHub, please log in using
-              your institute email.
+              your academic email.
             </Typography>
           </Box>
         )}
