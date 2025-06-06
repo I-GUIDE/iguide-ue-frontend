@@ -121,18 +121,19 @@ export default function SearchPane() {
   }, [chatMessages]);
 
   // Load suggested questions for the JSON file
+  // NOTE: create llm-questions.json for your own suggested questions. DO NOT modify example.json
   useEffect(() => {
     (async function () {
       try {
-        const llmSuggestedQuestions = await import(
-          "./configs/llm-questions.json"
-        );
-        setSuggestedQuestions(llmSuggestedQuestions.default);
-      } catch {
-        const deafultLlmSuggestedQuestions = await import(
-          "./configs/llm-questions.example.json"
-        );
-        setSuggestedQuestions(deafultLlmSuggestedQuestions.default);
+        const response = await fetch("/data/llm-questions.json");
+        if (!response.ok) throw new Error("one.json not found");
+        const llmSuggestedQuestions = await response.json();
+        setSuggestedQuestions(llmSuggestedQuestions);
+        // If llm-questions.json doesn't exist, load example.json
+      } catch (error) {
+        const response = await fetch("/data/llm-questions.example.json");
+        const deafultLlmSuggestedQuestions = await response.json();
+        setSuggestedQuestions(deafultLlmSuggestedQuestions);
       }
     })();
   }, []);
