@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
@@ -10,7 +12,9 @@ import Box from "@mui/joy/Box";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 import { PERMISSIONS } from "../../configs/Permissions";
+import { verifyFileOnGitHub } from "../../utils/GitHubFetchMethods";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
 const iFrameStyle = {
@@ -96,6 +100,46 @@ export default function NotebookViewer(props) {
   const { isAuthenticated, localUserInfo } = useOutletContext();
   const canAccessJupyterHub =
     localUserInfo?.role <= PERMISSIONS["access_jupyterhub"];
+  const [notebookStatus, setNotebookStatus] = useState();
+
+  useEffect(() => {
+    async function retrieveInfo(repoUrl, notebookFile) {
+      // Remove the leading GitHub domain
+      const ownerAndRepo = repoUrl.replace(
+        /^https?:\/\/(www\.)?github\.com\//,
+        ""
+      );
+
+      const fileExists = await verifyFileOnGitHub(ownerAndRepo, notebookFile);
+      TEST_MODE &&
+        console.log(
+          "Notebook element: owner and repo",
+          ownerAndRepo,
+          "filename",
+          notebookFile,
+          "File status",
+          fileExists
+        );
+      switch (fileExists) {
+        case true:
+          setNotebookStatus("GOOD");
+          break;
+        case false:
+          setNotebookStatus("NO_GOOD");
+          break;
+        case "RATE_LIMITED":
+          setNotebookStatus("RATE_LIMITED");
+          break;
+        default:
+          setNotebookStatus("ERROR");
+          break;
+      }
+    }
+
+    if (isAuthenticated && canAccessJupyterHub && repoUrl && notebookFile) {
+      retrieveInfo(repoUrl, notebookFile);
+    }
+  }, [canAccessJupyterHub, isAuthenticated, notebookFile, repoUrl]);
 
   if (!htmlNotebook && !notebookFile) {
     return <NotebookUnavailable />;
@@ -151,22 +195,44 @@ export default function NotebookViewer(props) {
       >
         {/* Disable the button if users aren't logged in or don't have the permission */}
         {isAuthenticated && canAccessJupyterHub ? (
+          // If GitHub API says the notebook doesn't exist, gray out the button.
           <Box sx={{ my: 1 }}>
-            <Button color="success" size="sm">
-              <Link
-                underline="none"
-                href={iGuidePlatformUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ color: "inherit" }}
-              >
+            {notebookStatus === "NO_GOOD" ? (
+              <Button color="success" size="sm" disabled>
                 Run This Notebook&nbsp;
                 <ExitToAppIcon />
-              </Link>
-            </Button>
-            <Typography level="body-xs" color="success">
-              Open I-GUIDE JupyterHub in a new window.
-            </Typography>
+              </Button>
+            ) : (
+              <Button color="success" size="sm">
+                <Link
+                  underline="none"
+                  href={iGuidePlatformUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "inherit" }}
+                >
+                  Run This Notebook&nbsp;
+                  <ExitToAppIcon />
+                </Link>
+              </Button>
+            )}
+            {notebookStatus === "GOOD" && (
+              <Typography level="body-xs" color="success">
+                Open I-GUIDE JupyterHub in a new window.
+              </Typography>
+            )}
+            {notebookStatus === "NO_GOOD" && (
+              <Typography level="body-xs" color="danger">
+                This notebook is not available on I-GUIDE JupyterHub.
+              </Typography>
+            )}
+            {notebookStatus === "RATE_LIMITED" ||
+              (notebookStatus === "ERROR" && (
+                <Typography level="body-xs" color="warn">
+                  We currently cannot verify if the notebook is available on
+                  I-GUIDE JupyterHub.
+                </Typography>
+              ))}
           </Box>
         ) : (
           <Box sx={{ my: 1 }}>

@@ -100,12 +100,17 @@ export default function SubmissionStatusCard(props) {
       submissionSucceeded = false;
       break;
 
+    case "error-cannot-find-github-file":
+      submissionStatusText =
+        "Submission failed: Cannot find the notebook on GitHub";
+      subText = `We cannot find the GitHub notebook link you provided. Please ensure
+      the link is correct and the repository is public.`;
+      submissionSucceeded = false;
+      break;
     case "error-cannot-verify-github-file-existence":
       submissionStatusText =
         "Submission failed: Cannot verify if the notebook exists on GitHub";
-      subText = `We cannot verify the GitHub notebook link you provided. Please ensure
-      the link is correct and the repository is public. If the issue persists, the GitHub
-      API may be temporarily unavailable. Please try again later.`;
+      subText = `We cannot verify the GitHub notebook link you provided, due to GitHub API unavailability. Please try again later.`;
       submissionSucceeded = false;
       break;
 
