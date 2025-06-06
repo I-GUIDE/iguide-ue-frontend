@@ -19,6 +19,7 @@ import {
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 import { useAlertModal } from "../../utils/AlertModalProvider";
+import SuggestedQuestions from "./SuggestedQuestions";
 
 import myIcon from "./smart-logo.svg";
 
@@ -104,6 +105,7 @@ export default function SearchPane() {
     USE_LLM_SAMPLE_CHAT ? SampleChatHistory : []
   );
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [suggestedQuestions, setSuggestedQuestions] = useState(null);
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
   const [svgError, setSvgError] = useState(false);
@@ -117,6 +119,36 @@ export default function SearchPane() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  // Load suggested questions for the JSON file
+  useEffect(() => {
+    (async function () {
+      try {
+        const llmSuggestedQuestions = await import(
+          "./configs/llm-questions.json"
+        );
+        setSuggestedQuestions(llmSuggestedQuestions.default);
+      } catch {
+        const deafultLlmSuggestedQuestions = await import(
+          "./configs/llm-questions.example.json"
+        );
+        setSuggestedQuestions(deafultLlmSuggestedQuestions.default);
+      }
+    })();
+  }, []);
+
+  function handleClickSuggestedQuestion(question) {
+    getLlmSearchResult(
+      question,
+      memoryId,
+      setMemoryId,
+      chatMessages,
+      setChatMessages,
+      setWaitingForResponse,
+      setStatus,
+      alertModal
+    );
+  }
 
   // Starting page
   if (chatMessages.length === 0) {
@@ -185,12 +217,16 @@ export default function SearchPane() {
               );
             }}
           />
+          <SuggestedQuestions
+            questions={suggestedQuestions}
+            handleQuestionClick={handleClickSuggestedQuestion}
+          />
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="center"
             spacing={5}
-            sx={{ pt: 5 }}
+            sx={{ pt: 3 }}
           >
             <Typography level="title-md" color="primary" align="center">
               <Link component={RouterLink} to="/search-home">

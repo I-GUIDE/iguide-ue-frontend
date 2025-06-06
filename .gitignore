@@ -83,3 +83,6 @@ package-lock.json
 
 # Ignore the whitelist URL JSON file for login or logout redirection
 redirect-whitelist.json
+
+# Ignore the starting question list
+llm-questions.json
