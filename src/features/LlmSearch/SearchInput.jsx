@@ -82,10 +82,16 @@ export default function SearchInput(props) {
           "--Input-paddingInline": "20px",
         }}
       />
-      <FormHelperText>
-        <Typography level="body-xs" startDecorator={<WarningIcon />}>
-          Smart Search is still under development. Not all responses may be
-          accurate.
+      <FormHelperText
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
+          gap: 1,
+        }}
+      >
+        <Typography level="body-xs" textAlign="center">
+          Smart Search may be wrong sometimes. Always double-check.
         </Typography>
       </FormHelperText>
     </FormControl>

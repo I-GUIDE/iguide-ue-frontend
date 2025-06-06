@@ -19,6 +19,7 @@ import {
   fetchLlmSearchMemoryId,
 } from "../../utils/DataRetrieval";
 import { useAlertModal } from "../../utils/AlertModalProvider";
+import SuggestedQuestions from "./SuggestedQuestions";
 
 import myIcon from "./smart-logo.svg";
 
@@ -104,6 +105,7 @@ export default function SearchPane() {
     USE_LLM_SAMPLE_CHAT ? SampleChatHistory : []
   );
   const [searchInputValue, setSearchInputValue] = useState("");
+  const [suggestedQuestions, setSuggestedQuestions] = useState(null);
   const [waitingForResponse, setWaitingForResponse] = useState(false);
   const [status, setStatus] = useState("");
   const [svgError, setSvgError] = useState(false);
@@ -117,6 +119,37 @@ export default function SearchPane() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  // Load suggested questions for the JSON file
+  // NOTE: create llm-questions.json for your own suggested questions. DO NOT modify example.json
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await fetch("/data/llm-questions.json");
+        if (!response.ok) throw new Error("one.json not found");
+        const llmSuggestedQuestions = await response.json();
+        setSuggestedQuestions(llmSuggestedQuestions);
+        // If llm-questions.json doesn't exist, load example.json
+      } catch (error) {
+        const response = await fetch("/data/llm-questions.example.json");
+        const deafultLlmSuggestedQuestions = await response.json();
+        setSuggestedQuestions(deafultLlmSuggestedQuestions);
+      }
+    })();
+  }, []);
+
+  function handleClickSuggestedQuestion(question) {
+    getLlmSearchResult(
+      question,
+      memoryId,
+      setMemoryId,
+      chatMessages,
+      setChatMessages,
+      setWaitingForResponse,
+      setStatus,
+      alertModal
+    );
+  }
 
   // Starting page
   if (chatMessages.length === 0) {
@@ -185,12 +218,16 @@ export default function SearchPane() {
               );
             }}
           />
+          <SuggestedQuestions
+            questions={suggestedQuestions}
+            handleQuestionClick={handleClickSuggestedQuestion}
+          />
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="center"
             spacing={5}
-            sx={{ pt: 5 }}
+            sx={{ pt: 3 }}
           >
             <Typography level="title-md" color="primary" align="center">
               <Link component={RouterLink} to="/search-home">
