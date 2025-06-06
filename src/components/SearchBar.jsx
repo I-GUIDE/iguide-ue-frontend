@@ -196,19 +196,22 @@ export default function SearchBar(props) {
               </Tooltip>
             ) : (
               <Tooltip
-                title="Please log in using your academic credential to access Smart Search"
+                title="Please log in using your academic email to access Smart Search"
                 placement="top"
               >
-                <IconButton
-                  size="lg"
-                  variant="plain"
-                  sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                >
-                  <Avatar
-                    alt="Smart search button"
-                    src="/images/smart-search-button.png"
-                  />
-                </IconButton>
+                <span>
+                  <IconButton
+                    size="lg"
+                    variant="plain"
+                    disabled
+                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                  >
+                    <Avatar
+                      alt="Smart search button"
+                      src="/images/smart-search-button.png"
+                    />
+                  </IconButton>
+                </span>
               </Tooltip>
             ))}
         </Stack>

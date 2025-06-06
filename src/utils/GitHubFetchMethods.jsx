@@ -115,11 +115,20 @@ export async function verifyFileOnGitHub(ownerAndRepo, path) {
       }
     );
 
-    if (!response.ok) {
-      return "ERROR";
+    switch (response.status) {
+      // Case when the file exists
+      case 200:
+        return true;
+      // Case when the file doesn't exist
+      case 404:
+        return false;
+      // Case when the rate limit hits
+      case 403:
+        return "RATE_LIMITED";
+      default:
+        console.warn(`Unhandled status code from GitHub: ${res.status}`);
+        return "ERROR";
     }
-
-    return response.status === 200;
   } catch (error) {
     TEST_MODE && console.log("Error verifying file with GitHub", error.message);
     return "ERROR";

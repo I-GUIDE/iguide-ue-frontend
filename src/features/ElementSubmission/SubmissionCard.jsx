@@ -1087,14 +1087,14 @@ export default function SubmissionCard(props) {
 
       const fileExists = await verifyFileOnGitHub(ownerAndRepo, path);
       // This is for verifying the GitHub repo
-      if (fileExists === "ERROR") {
+      if (fileExists === "ERROR" || fileExists === "RATE_LIMITED") {
         setOpenModal(true);
         setSubmissionStatus("error-cannot-verify-github-file-existence");
         setButtonDisabled(false);
         return;
-      } else if (!fileExists) {
+      } else if (fileExists === false) {
         setOpenModal(true);
-        setSubmissionStatus("error-cannot-verify-github-file-existence");
+        setSubmissionStatus("error-cannot-find-github-file");
         setButtonDisabled(false);
         return;
       }

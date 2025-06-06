@@ -37,6 +37,6 @@ export const PERMISSION_DETAIL = {
   10: {
     role_name: "User",
     description:
-      "You don't have contribution access yet. Please log in with your school or institute email to enable it. If you believe this is incorrect, please contact us.",
+      "You don't have contribution access yet. Please log in with your academic email to enable it. If you believe this is incorrect, please contact us.",
   },
 };

@@ -787,7 +787,7 @@ export default function NavBar(props) {
                     </Tooltip>
                   ) : (
                     <Tooltip
-                      title="To use I-GUIDE JupyterHub, please log in using your institute email"
+                      title="To use I-GUIDE JupyterHub, please log in using your academic email"
                       variant="solid"
                     >
                       <span>

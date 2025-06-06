@@ -44,9 +44,9 @@ export default function SuggestedQuestions(props) {
   }
 
   return (
-    <Stack sx={{ py: 3 }}>
+    <Stack sx={{ py: 3 }} spacing={1}>
       <Typography align="center" level="title-sm">
-        Some questions you may ask
+        You could ask things like...
       </Typography>
       <Stack direction="row" flexWrap="wrap" justifyContent="center">
         {displayedQuestions.map((question) => (
