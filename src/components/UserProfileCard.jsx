@@ -138,7 +138,7 @@ export default function UserProfileCard(props) {
             <Stack direction="column" spacing={1}>
               <Typography
                 level="h4"
-                sx={{ fontWeight: "bold", lineHeight: "0.5" }}
+                sx={{ fontWeight: "bold", lineHeight: "0.5", pb: 1 }}
               >
                 {userLastName || <Typography color="danger">nln</Typography>},{" "}
                 {userFirstName || <Typography color="danger">nfn</Typography>}

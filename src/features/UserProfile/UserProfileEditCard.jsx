@@ -203,8 +203,6 @@ export default function UserProfileEditCard(props) {
       localUserInfo.id,
       firstNameFromDB,
       lastNameFromDB,
-      email,
-      affiliation,
       bio,
       gitHubLink,
       linkedInLink,
