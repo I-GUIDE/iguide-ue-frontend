@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { useOutletContext } from "react-router";
 
@@ -71,12 +71,7 @@ export default function UserProfile() {
   // Check if the user exists on the local DB, if not, add the user
   useEffect(() => {
     async function checkLocalUserInfo() {
-      if (
-        localUserInfo.first_name &&
-        localUserInfo.last_name &&
-        localUserInfo.email &&
-        localUserInfo.affiliation
-      ) {
+      if (localUserInfo.first_name && localUserInfo.last_name) {
         setLocalUserInfoMissing("good");
       } else {
         setLocalUserInfoMissing("missing");

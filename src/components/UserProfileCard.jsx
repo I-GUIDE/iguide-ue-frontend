@@ -32,6 +32,8 @@ export default function UserProfileCard(props) {
   const userId = props.id;
   const userFirstName = props.firstName;
   const userLastName = props.lastName;
+  const authFirstName = props.authFirstName;
+  const authLastName = props.authLastName;
   const roleFromDB = props.role;
   const creationTime = props.creationTime;
 
@@ -134,10 +136,29 @@ export default function UserProfileCard(props) {
               sx={{ ml: "auto" }}
             />
             <Stack direction="column" spacing={1}>
-              <Typography level="h4" sx={{ fontWeight: "bold" }}>
+              <Typography
+                level="h4"
+                sx={{ fontWeight: "bold", lineHeight: "0.5" }}
+              >
                 {userLastName || <Typography color="danger">nln</Typography>},{" "}
                 {userFirstName || <Typography color="danger">nfn</Typography>}
+                {/* Display first and last name from CILogon if different */}
+                {(authLastName !== userLastName ||
+                  authFirstName !== userFirstName) && (
+                  <Typography level="title-sm">
+                    {" ("}
+                    {authLastName || (
+                      <Typography color="danger">nln</Typography>
+                    )}
+                    ,{" "}
+                    {authFirstName || (
+                      <Typography color="danger">nfn</Typography>
+                    )}
+                    {")"}
+                  </Typography>
+                )}
               </Typography>
+
               <Typography level="title-sm">
                 Role:{" "}
                 {userRole || <Typography color="danger">No role</Typography>}

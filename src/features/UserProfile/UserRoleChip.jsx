@@ -1,16 +1,14 @@
-import * as React from "react";
-
 import Chip from "@mui/joy/Chip";
 import Tooltip from "@mui/joy/Tooltip";
 
 import { PERMISSION_DETAIL } from "../../configs/Permissions";
 
-export default function UserRoleChip(props) {
+export function UserRoleChip(props) {
   const roleNumber = props.roleNumber;
 
   // Don't render when there is no role number passed in or the role number doesn't exist
   if (!roleNumber || !PERMISSION_DETAIL[roleNumber]) {
-    return;
+    return null;
   }
 
   const roleName = PERMISSION_DETAIL[roleNumber]["role_name"];
@@ -23,4 +21,15 @@ export default function UserRoleChip(props) {
       </Chip>
     </Tooltip>
   );
+}
+
+export function userRoleName(roleNumber) {
+  // Don't render when there is no role number passed in or the role number doesn't exist
+  if (!roleNumber || !PERMISSION_DETAIL[roleNumber]) {
+    return "Unassigned";
+  }
+
+  const roleName = PERMISSION_DETAIL[roleNumber]["role_name"];
+
+  return roleName;
 }

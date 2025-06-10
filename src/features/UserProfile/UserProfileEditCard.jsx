@@ -11,6 +11,7 @@ import CardContent from "@mui/joy/CardContent";
 import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
+import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
@@ -21,6 +22,7 @@ import DialogTitle from "@mui/joy/DialogTitle";
 import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
 import ModalDialog from "@mui/joy/ModalDialog";
+import Link from "@mui/joy/Link";
 import { styled } from "@mui/joy/styles";
 
 import {
@@ -33,6 +35,7 @@ import { updateUser, checkTokens } from "../../utils/UserManager";
 import { dataURLtoFile } from "../../helpers/helper";
 import { useAlertModal } from "../../utils/AlertModalProvider";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
+import { userRoleName } from "./UserRoleChip";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -58,34 +61,29 @@ function RequiredFieldIndicator() {
 }
 
 export default function UserProfileEditCard(props) {
-  useEffect(() => {
-    checkTokens();
-  }, []);
-
   const userProfileEditType = props.userProfileEditType;
 
   const { localUserInfo } = useOutletContext();
-
   const alertModal = useAlertModal();
 
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
     useState("no-submission");
 
-  const [firstNameFromDB, setFirstNameFromDB] = useState();
-  const [lastNameFromDB, setLastNameFromDB] = useState();
-  const [emailFromDB, setEmailFromDB] = useState();
-  const [affiliationFromDB, setAffiliationFromDB] = useState();
-  const [bio, setBio] = useState();
+  const [firstNameFromDB, setFirstNameFromDB] = useState("");
+  const [lastNameFromDB, setLastNameFromDB] = useState("");
+  const [emailFromDB, setEmailFromDB] = useState("");
+  const [affiliationFromDB, setAffiliationFromDB] = useState("");
+  const [bio, setBio] = useState("");
+
+  const [roleName, setRoleName] = useState("");
 
   const [gitHubLink, setGitHubLink] = useState("");
   const [linkedInLink, setLinkedInLink] = useState("");
   const [googleScholarLink, setGoogleScholarLink] = useState("");
   const [personalWebsiteLink, setPersonalWebsiteLink] = useState("");
 
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [affiliation, setAffiliation] = useState();
+  const [email, setEmail] = useState("");
+  const [affiliation, setAffiliation] = useState("");
 
   const [profilePictureFile, setProfilePictureFile] = useState();
 
@@ -99,22 +97,25 @@ export default function UserProfileEditCard(props) {
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
-    const getLocalUserInfo = async () => {
+    checkTokens();
+  }, []);
+
+  useEffect(() => {
+    async function getLocalUserInfo() {
       setFirstNameFromDB(localUserInfo["first_name"]);
-      setFirstName(localUserInfo["first_name"]);
       setLastNameFromDB(localUserInfo["last_name"]);
-      setLastName(localUserInfo["last_name"]);
       setEmailFromDB(localUserInfo["email"]);
       setEmail(localUserInfo["email"]);
       setAffiliationFromDB(localUserInfo["affiliation"]);
       setAffiliation(localUserInfo["affiliation"]);
       setBio(localUserInfo["bio"]);
+      setRoleName(userRoleName(localUserInfo["role"]));
       setGitHubLink(localUserInfo["gitHubLink"]);
       setLinkedInLink(localUserInfo["linkedInLink"]);
       setGoogleScholarLink(localUserInfo["googleScholarLink"]);
       setPersonalWebsiteLink(localUserInfo["personalWebsiteLink"]);
       setConfirmedProfilePictureURL(localUserInfo["avatar_url"]);
-    };
+    }
     if (localUserInfo && localUserInfo.id) {
       getLocalUserInfo();
     }
@@ -200,8 +201,8 @@ export default function UserProfileEditCard(props) {
 
     const result = await updateUser(
       localUserInfo.id,
-      firstName,
-      lastName,
+      firstNameFromDB,
+      lastNameFromDB,
       email,
       affiliation,
       bio,
@@ -255,98 +256,75 @@ export default function UserProfileEditCard(props) {
             gap: 2,
           }}
         >
-          {firstNameFromDB ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>First name</FormLabel>
-              <Input name="first_name" disabled value={firstNameFromDB} />
-            </FormControl>
-          ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  First name
-                </Typography>
-              </FormLabel>
-              <Input
-                name="first_name"
-                required
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
-              />
-            </FormControl>
-          )}
-          {lastNameFromDB ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Last name</FormLabel>
-              <Input name="last_name" disabled value={lastNameFromDB} />
-            </FormControl>
-          ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  Last name
-                </Typography>
-              </FormLabel>
-              <Input
-                name="last_name"
-                required
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
-              />
-            </FormControl>
-          )}
-          {emailFromDB ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Email</FormLabel>
-              <Input name="email" disabled value={emailFromDB} />
-            </FormControl>
-          ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  Email
-                </Typography>
-              </FormLabel>
-              <Input
-                name="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </FormControl>
-          )}
-          {affiliationFromDB ? (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>Affiliation</FormLabel>
-              <Input name="affiliation" disabled value={affiliationFromDB} />
-            </FormControl>
-          ) : (
-            <FormControl sx={{ gridColumn: "1/-1" }}>
-              <FormLabel>
-                <Typography
-                  level="title-md"
-                  endDecorator={<RequiredFieldIndicator />}
-                >
-                  Affiliation
-                </Typography>
-              </FormLabel>
-              <Input
-                name="affiliation"
-                required
-                value={affiliation}
-                onChange={(event) => setAffiliation(event.target.value)}
-              />
-            </FormControl>
-          )}
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                First name
+              </Typography>
+            </FormLabel>
+            <Input
+              name="display_first_name"
+              required
+              value={firstNameFromDB}
+              onChange={(event) => setFirstNameFromDB(event.target.value)}
+            />
+          </FormControl>
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>
+              <Typography
+                level="title-md"
+                endDecorator={<RequiredFieldIndicator />}
+              >
+                Last name
+              </Typography>
+            </FormLabel>
+            <Input
+              name="display_last_name"
+              required
+              value={lastNameFromDB}
+              onChange={(event) => setLastNameFromDB(event.target.value)}
+            />
+          </FormControl>
+          <Typography level="body-sm" sx={{ lineHeight: "1" }}>
+            Others will see your name as{" "}
+            <Typography sx={{ fontWeight: "bold" }}>
+              {firstNameFromDB} {lastNameFromDB}
+            </Typography>
+            .
+          </Typography>
+
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Email</FormLabel>
+            <Input name="email" disabled value={emailFromDB} />
+            <FormHelperText>
+              The email is returned by CILogon and cannot be modified.
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl sx={{ gridColumn: "1/-1" }}>
+            <FormLabel>Affiliation</FormLabel>
+            <Input name="affiliation" disabled value={affiliationFromDB} />
+            <FormHelperText>
+              The affiliation is returned by CILogon and cannot be modified.
+            </FormHelperText>
+          </FormControl>
+
+          <Typography level="body-sm">
+            Your current user group is{" "}
+            <Typography sx={{ fontWeight: "bold" }}>{roleName}</Typography>. To
+            request a change, please contact us at{" "}
+            <Link
+              href="mailto:help@i-guide.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              help@i-guide.io
+            </Link>
+            .
+          </Typography>
 
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Upload profile picture {"(< 5MB)"}</FormLabel>

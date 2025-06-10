@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 
 import {
@@ -38,8 +38,8 @@ export default function ContributorProfile() {
       setNumberOfTotalItems(tally);
 
       setContributorInfo({
-        first_name: user["first-name"],
-        last_name: user["last-name"],
+        first_name: user["display-first-name"],
+        last_name: user["display-last-name"],
         email: user["email"],
         affiliation: user["affiliation"],
         bio: user["bio"],

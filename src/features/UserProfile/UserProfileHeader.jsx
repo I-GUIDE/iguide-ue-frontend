@@ -26,7 +26,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import WebIcon from "@mui/icons-material/Web";
 
 import UserAvatar from "../../components/UserAvatar";
-import UserRoleChip from "./UserRoleChip";
+import { UserRoleChip } from "./UserRoleChip";
 import {
   USER_PROFILE_HEADER_HEIGHT,
   UNTRUSTED_AFFILIATIONS,

@@ -192,8 +192,8 @@ export async function updateUser(
   const encodedUid = encodeURIComponent(uid);
   const user = {
     id: encodedUid,
-    first_name: first_name,
-    last_name: last_name,
+    display_first_name: first_name,
+    display_last_name: last_name,
     email: email,
     affiliation: affiliation,
     bio: bio,
