@@ -98,8 +98,22 @@ export default function NavBar(props) {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
           leaveDelay={100}
+          sx={{ maxWidth: 200 }}
           title={
             <List>
+              {localUserInfo.first_name && (
+                <>
+                  <ListItem sx={{ width: "100%" }}>
+                    <Typography
+                      level="title-md"
+                      sx={{ wordBreak: "break-word" }}
+                    >
+                      Hello {localUserInfo.first_name}!
+                    </Typography>
+                  </ListItem>
+                  <ListDivider />
+                </>
+              )}
               <Link
                 to="/user-profile"
                 underline="none"
@@ -599,6 +613,19 @@ export default function NavBar(props) {
                     sx={{ px: 2, py: 1 }}
                   >
                     <List>
+                      {localUserInfo.first_name && (
+                        <>
+                          <ListItem sx={{ width: "100%" }}>
+                            <Typography
+                              level="title-md"
+                              sx={{ wordBreak: "break-word" }}
+                            >
+                              Hello {localUserInfo.first_name}!
+                            </Typography>
+                          </ListItem>
+                          <ListDivider />
+                        </>
+                      )}
                       <Typography
                         level="body-xs"
                         textTransform="uppercase"
