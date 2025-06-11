@@ -94,9 +94,9 @@ export const routes = [
     category: "Search",
   },
   {
-    path: "/elements-map",
+    path: "/element-map",
     element: <ElementsMap />,
-    label: "Elements Map",
+    label: "Element Map",
     category: "Search",
   },
   {
