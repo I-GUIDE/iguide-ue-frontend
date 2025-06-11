@@ -83,7 +83,8 @@ export default function ErrorPage(props) {
       * First name: ${localUserInfo?.["first_name"]},
       * Last name: ${localUserInfo?.["last_name"]},
       * Email: ${localUserInfo?.email},
-      * Affiliation: ${localUserInfo?.affiliation}.
+      * Affiliation: ${localUserInfo?.affiliation},
+      * UserId: ${localUserInfo?.id}.
     `;
   } else {
     msgToBeSent += `

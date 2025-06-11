@@ -180,8 +180,6 @@ export async function updateUser(
   uid,
   first_name,
   last_name,
-  email,
-  affiliation,
   bio,
   gitHubLink,
   linkedInLink,
@@ -192,10 +190,8 @@ export async function updateUser(
   const encodedUid = encodeURIComponent(uid);
   const user = {
     id: encodedUid,
-    first_name: first_name,
-    last_name: last_name,
-    email: email,
-    affiliation: affiliation,
+    display_first_name: first_name,
+    display_last_name: last_name,
     bio: bio,
     gitHubLink: gitHubLink,
     linkedInLink,

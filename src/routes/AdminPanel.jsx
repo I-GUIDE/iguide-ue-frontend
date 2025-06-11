@@ -423,8 +423,10 @@ export default function AdminPanel() {
                         <Grid key={user.id} size={{ xs: 12, lg: 6 }}>
                           <UserProfileCard
                             id={user.id}
-                            firstName={user["first-name"]}
-                            lastName={user["last-name"]}
+                            firstName={user["display-first-name"]}
+                            lastName={user["display-last-name"]}
+                            authFirstName={user["first-name"]}
+                            authLastName={user["last-name"]}
                             role={user.role}
                             affiliation={user.affiliation}
                             email={user.email}
