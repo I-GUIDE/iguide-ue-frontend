@@ -257,7 +257,7 @@ export default function UserProfileEditCard(props) {
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
               <Typography
-                level="title-md"
+                level="title-sm"
                 endDecorator={<RequiredFieldIndicator />}
               >
                 First name
@@ -273,7 +273,7 @@ export default function UserProfileEditCard(props) {
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>
               <Typography
-                level="title-md"
+                level="title-sm"
                 endDecorator={<RequiredFieldIndicator />}
               >
                 Last name
@@ -285,20 +285,22 @@ export default function UserProfileEditCard(props) {
               value={lastNameFromDB}
               onChange={(event) => setLastNameFromDB(event.target.value)}
             />
+            <FormHelperText>
+              <Typography level="body-sm" sx={{ lineHeight: "1" }}>
+                Others will see your name as{" "}
+                <Typography sx={{ fontWeight: "bold" }}>
+                  {firstNameFromDB} {lastNameFromDB}
+                </Typography>
+                .
+              </Typography>
+            </FormHelperText>
           </FormControl>
-          <Typography level="body-sm" sx={{ lineHeight: "1" }}>
-            Others will see your name as{" "}
-            <Typography sx={{ fontWeight: "bold" }}>
-              {firstNameFromDB} {lastNameFromDB}
-            </Typography>
-            .
-          </Typography>
 
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Email</FormLabel>
             <Input name="email" disabled value={emailFromDB} />
             <FormHelperText>
-              The email is returned by CILogon and cannot be modified.
+              The email is set by CILogon and cannot be modified.
             </FormHelperText>
           </FormControl>
 
@@ -306,7 +308,7 @@ export default function UserProfileEditCard(props) {
             <FormLabel>Affiliation</FormLabel>
             <Input name="affiliation" disabled value={affiliationFromDB} />
             <FormHelperText>
-              The affiliation is returned by CILogon and cannot be modified.
+              The affiliation is set by CILogon and cannot be modified.
             </FormHelperText>
           </FormControl>
 
