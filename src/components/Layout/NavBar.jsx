@@ -98,7 +98,7 @@ export default function NavBar(props) {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
           leaveDelay={100}
-          sx={{ maxWidth: 200 }}
+          sx={{ maxWidth: 250 }}
           title={
             <List>
               {localUserInfo.first_name && (
