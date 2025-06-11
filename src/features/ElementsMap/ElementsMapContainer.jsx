@@ -60,7 +60,7 @@ export default function ElementsMapContainer(props) {
     );
     TEST_MODE &&
       console.log(
-        "Elements returned for Elements Map",
+        "Elements returned for Element Map",
         processedReturnedElements
       );
     setElements(processedReturnedElements);

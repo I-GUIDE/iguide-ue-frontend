@@ -12,7 +12,7 @@ const ElementsMapContainer = lazy(() =>
 );
 
 export default function ElementsMap() {
-  usePageTitle("Elements Map");
+  usePageTitle("Element Map");
 
   const usCenter = [39.8283, -98.5795];
   const defaultZoom = 6;

@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   extendTheme as materialExtendTheme,
   ThemeProvider as MaterialCssVarsProvider,
@@ -167,7 +165,7 @@ export default function Home() {
                     <TutorialCard
                       iconImage="/images/homepage/map.png"
                       title="Map"
-                      link="/elements-map"
+                      link="/element-map"
                       content="Transform geospatial data to knowledge and insights"
                       bgColor="#fff"
                       inColumn
