@@ -2,47 +2,47 @@ export default [
   {
     selector: ".tourid-0",
     content:
-      "Welcome to the I-GUIDE Platform, an outlet for exploring and sharing geospatial data via maps, datasets, formal publications and more!",
+      "Welcome to the I-GUIDE Platform — your gateway to exploring and sharing geospatial insights through interactive maps, curated datasets, publications, and more.",
   },
   {
     selector: ".tourid-1",
-    content: "Return home anytime by clicking the I-GUIDE logo.",
+    content: "You can return to the homepage anytime by clicking the I-GUIDE logo.",
   },
   {
     selector: ".tourid-2",
     content:
-      "View additional site information including FAQ and a Getting Started guide on our About page.",
+      "You can find information---including FAQ and a Getting Started guide---on our About page.",
   },
   {
     selector: ".tourid-3",
-    content: "Explore knowledge elements by type from the Nav-bar.",
+    content: "Use the navigation bar to explore knowledge elements by category.",
   },
   {
     selector: ".tourid-4",
     content:
-      "Once logged in, you can manage your profile or contribute knowledge elements by hovering over your user avatar.",
+      "After logging in, hover over your user avatar to manage your profile or contribute knowledge elements.",
     position: "bottom",
   },
   {
     selector: ".tourid-5",
     content:
-      "Begin your spatial analysis using the power of code by setting up JupyterHub. To use this feature, you need to log in using your academic email.",
+      "Harness the power of advanced cyberinfrastructure through our JupyterHub. To access this feature, please log in with your academic email.",
     position: "bottom",
   },
   {
     selector: ".tourid-6",
-    content: "Explore data rich maps to support your research and education.",
+    content: "Explore data-rich maps designed to support your research and educational goals.",
     position: "bottom",
   },
   {
     selector: ".tourid-7",
     content:
-      "Invesitgate the vast web of related knowledge using our connected elements tool.",
+      "Dive into a network of related insights with our Connected Elements tool.",
     position: "bottom",
   },
   {
     selector: ".tourid-8",
     content:
-      "Looking for something specific? Utilize our simple search tool to find anything on the platform!",
+      "Searching for something specific? Use our search tools to quickly find what you need on the platform.",
   },
 ];
