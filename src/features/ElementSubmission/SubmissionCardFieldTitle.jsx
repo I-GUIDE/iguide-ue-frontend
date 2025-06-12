@@ -1,15 +1,12 @@
-import React from "react";
-
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Tooltip from "@mui/joy/Tooltip";
-import Stack from "@mui/joy/Stack";
 
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 
 function RequiredFieldIndicator() {
   return (
-    <Typography color="danger" level="title-lg">
+    <Typography color="danger" level="title-lg" sx={{ pr: 0.5 }}>
       *
     </Typography>
   );
@@ -26,7 +23,7 @@ export default function SubmissionCardFieldTitle(props) {
     <Typography
       level="title-sm"
       endDecorator={
-        <Stack direction="row" spacing={0.5}>
+        <>
           {fieldRequired && <RequiredFieldIndicator />}
           {showTooltip && (
             <Tooltip
@@ -54,7 +51,7 @@ export default function SubmissionCardFieldTitle(props) {
               <InfoOutlined size="lg" />
             </Tooltip>
           )}
-        </Stack>
+        </>
       }
     >
       {props.children}
