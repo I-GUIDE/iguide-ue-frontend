@@ -56,3 +56,32 @@ export function processPolygon(polygon) {
   }
   return polygonCopy;
 }
+
+// Generate deterministic noises to a point
+export function addNoiseToPoint(
+  point,
+  hashId,
+  enabled = false,
+  offsetScale = 1
+) {
+  if (!point) {
+    return null;
+  }
+  if (!enabled || !hashId) {
+    return point;
+  }
+  let hash = 0;
+  for (let i = 0; i < hashId.length; i++) {
+    hash += hashId.charCodeAt(i);
+  }
+
+  const randX = Math.sin(hash) % 1;
+  const randY = Math.sin(hash + 1) % 1;
+  // about 1,000 feet * scale
+  const offset = 0.003 * offsetScale;
+
+  return [
+    point[0] + (randY - 0.5) * 2 * offset,
+    point[1] + (randX - 0.5) * 2 * offset,
+  ];
+}

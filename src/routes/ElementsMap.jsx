@@ -54,6 +54,7 @@ export default function ElementsMap() {
               maxBounds={maxBounds}
               maxBoundsViscosity={maxBoundsViscosity}
               minZoom={minZoom}
+              addNoiseToCentroid
             />
           </Suspense>
         </Grid>
