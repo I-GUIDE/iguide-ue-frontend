@@ -54,13 +54,14 @@ export default function ElementsMapContainer(props) {
       viewboxCoords.maxLat
     );
     // Process elements to create a Leaflet-friendly position
-    const processedReturnedElements = returnedElements.map(
-      (returnedElement) => ({
+    const processedReturnedElements = returnedElements
+      // Filter out elements without centroid
+      .filter((returnedElement) => returnedElement.centroid)
+      .map((returnedElement) => ({
         ...returnedElement,
         // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
         centroidLeaflet: processPoint(returnedElement.centroid?.coordinates),
-      })
-    );
+      }));
     TEST_MODE &&
       console.log(
         "Elements returned for Element Map",
