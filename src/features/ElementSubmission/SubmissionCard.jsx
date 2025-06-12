@@ -2346,7 +2346,7 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Input
                 name="license-statement"
-                value={licenseStatement}
+                value={licenseStatement ?? ""}
                 disabled={!licenseId}
                 onChange={(event) => setLicenseStatement(event.target.value)}
               />
@@ -2357,7 +2357,7 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <Input
                 name="license-url"
-                value={licenseUrl}
+                value={licenseUrl ?? ""}
                 disabled={!licenseId}
                 onChange={(event) => setLicenseUrl(event.target.value)}
               />
@@ -2371,7 +2371,7 @@ export default function SubmissionCard(props) {
               <Input
                 name="funding-agency"
                 placeholder="NSF, USDA, DOD, ..."
-                value={fundingAgency}
+                value={fundingAgency ?? ""}
                 onChange={(event) => setFundingAgency(event.target.value)}
               />
               {fundingAgency && (
