@@ -32,11 +32,7 @@ export default function SuggestedQuestions(props) {
 
   // Getting random questions runs once on page load and every route change
   useEffect(() => {
-    const defaultQuestion = [{ id: "0", query: "What is I-GUIDE Platform?" }];
-    setDisplayedQuestions([
-      ...defaultQuestion,
-      ...getRandomQuestions(suggestedQuestions, 4),
-    ]);
+    setDisplayedQuestions(getRandomQuestions(suggestedQuestions, 3));
   }, [location.pathname, suggestedQuestions]);
 
   if (!suggestedQuestions) {
@@ -44,7 +40,7 @@ export default function SuggestedQuestions(props) {
   }
 
   return (
-    <Stack sx={{ py: 3 }} spacing={1}>
+    <Stack sx={{ py: 1.5 }} spacing={1}>
       <Typography align="center" level="title-sm">
         You could ask things like...
       </Typography>
