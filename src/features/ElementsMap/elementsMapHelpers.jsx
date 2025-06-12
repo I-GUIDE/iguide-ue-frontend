@@ -64,7 +64,10 @@ export function addNoiseToPoint(
   enabled = false,
   offsetScale = 1
 ) {
-  if (!enabled) {
+  if (!point) {
+    return null;
+  }
+  if (!enabled || !hashId) {
     return point;
   }
   let hash = 0;
