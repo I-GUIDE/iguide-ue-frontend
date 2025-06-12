@@ -33,6 +33,9 @@ export default function ElementsMapContainer(props) {
   const maxBoundsViscosity = props.maxBoundsViscosity;
   const minZoom = props.minZoom;
   const style = props.style || { height: "100%", width: "100%" };
+  // Allow defining zooming behavior
+  const scrollWheelZoom =
+    props.scrollWheelZoom === undefined ? true : props.scrollWheelZoom;
 
   // If this is true, only display a single element spatial metadata.
   const elementPageMode = props.elementPageMode;
@@ -55,7 +58,7 @@ export default function ElementsMapContainer(props) {
       (returnedElement) => ({
         ...returnedElement,
         // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
-        centroidLeaflet: processPoint(returnedElement.centroid.coordinates),
+        centroidLeaflet: processPoint(returnedElement.centroid?.coordinates),
       })
     );
     TEST_MODE &&
@@ -83,10 +86,10 @@ export default function ElementsMapContainer(props) {
         selectedElementMetadata.id
       );
       const geometry = elementDetails?.body["spatial-geometry"];
-      const geometryForLeaflet = processPolygon(geometry.coordinates);
+      const geometryForLeaflet = processPolygon(geometry?.coordinates);
 
       const boundingBoxForLeaflet = processPolygon(
-        selectedElementMetadata["bounding-box"].coordinates
+        selectedElementMetadata["bounding-box"]?.coordinates
       );
       const processedSelectedElementMetadata = {
         ...selectedElementMetadata,
@@ -120,6 +123,7 @@ export default function ElementsMapContainer(props) {
       maxBoundsViscosity={maxBoundsViscosity}
       minZoom={minZoom}
       style={style}
+      scrollWheelZoom={scrollWheelZoom}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

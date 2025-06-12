@@ -56,6 +56,7 @@ export default function InteractiveMap(props) {
             maxBounds={maxBounds}
             maxBoundsViscosity={maxBoundsViscosity}
             minZoom={minZoom}
+            scrollWheelZoom={false}
             elementPageMode
             elementCentroid={centroidLeaflet}
             elementGeometry={geometryLeaflet}
