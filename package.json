@@ -38,7 +38,7 @@
     "@babel/core": "^7.27.4",
     "@babel/eslint-parser": "^7.27.5",
     "@babel/preset-react": "^7.27.1",
-    "@types/react": "^19.1.7",
+    "@types/react": "^19.1.8",
     "@vitejs/plugin-react": "^4.5.2",
     "eslint": "^9.28.0",
     "eslint-plugin-react-hooks": "^5.2.0",
