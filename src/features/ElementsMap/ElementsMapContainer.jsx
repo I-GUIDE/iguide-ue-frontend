@@ -10,7 +10,11 @@ import {
 } from "../../utils/DataRetrieval";
 import ElementsMapEventHandler from "./ElementsMapEventHandler";
 import SimpleInfoCard from "../../components/SimpleInfoCard";
-import { processPoint, processPolygon } from "../../utils/SwitchLatLon";
+import {
+  processPoint,
+  processPolygon,
+  addNoiseToPoint,
+} from "./elementsMapHelpers";
 
 // Get the leaflet icons including markers to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -36,6 +40,7 @@ export default function ElementsMapContainer(props) {
   // Allow defining zooming behavior
   const scrollWheelZoom =
     props.scrollWheelZoom === undefined ? true : props.scrollWheelZoom;
+  const addNoiseToCentroid = props.addNoiseToCentroid;
 
   // If this is true, only display a single element spatial metadata.
   const elementPageMode = props.elementPageMode;
@@ -60,7 +65,11 @@ export default function ElementsMapContainer(props) {
       .map((returnedElement) => ({
         ...returnedElement,
         // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
-        centroidLeaflet: processPoint(returnedElement.centroid?.coordinates),
+        centroidLeaflet: addNoiseToPoint(
+          processPoint(returnedElement.centroid?.coordinates),
+          returnedElement.id,
+          addNoiseToCentroid
+        ),
       }));
     TEST_MODE &&
       console.log(

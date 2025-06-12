@@ -7,7 +7,10 @@ import Typography from "@mui/joy/Typography";
 const ElementsMapContainer = lazy(() =>
   import("../ElementsMap/ElementsMapContainer")
 );
-import { processPoint, processPolygon } from "../../utils/SwitchLatLon";
+import {
+  processPoint,
+  processPolygon,
+} from "../ElementsMap/elementsMapHelpers";
 
 export default function InteractiveMap(props) {
   const centroid = props.centroid;
