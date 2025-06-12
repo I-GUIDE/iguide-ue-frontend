@@ -242,16 +242,43 @@ export default function SubmissionCard(props) {
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
-    function parseNumbers(text, numberOfExpectedNumbers, delimiter = ", ") {
-      const regex = /-?\b\d+(\.\d+)?\b/g;
-      const matches = text.match(regex);
-
-      // If the format is incorrect, return empty
-      if (!matches || matches.length !== numberOfExpectedNumbers) {
+    function parseGeometry(coords) {
+      if (!Array.isArray(coords) || coords.length === 0) {
         return "";
       }
-      return matches.join(delimiter);
+
+      const polygonParts = coords.map((ring) => {
+        if (!Array.isArray(ring)) throw new Error("Each ring must be an array");
+        return ring.map((point) => point.join(" ")).join(", ");
+      });
+
+      return `POLYGON((${polygonParts.join("),(")}))`;
     }
+
+    function parseBoundingBox(coords) {
+      if (!Array.isArray(coords) || coords.length === 0) {
+        return "";
+      }
+
+      const west = coords[0][2][1];
+      const east = coords[0][0][1];
+      const south = coords[0][0][0];
+      const north = coords[0][1][0];
+
+      return `${west},${east},${south},${north}`;
+    }
+
+    function parseCentroid(coords) {
+      if (!Array.isArray(coords) || coords.length === 0) {
+        return "";
+      }
+
+      const lon = coords[1];
+      const lat = coords[0];
+
+      return `${lon} ${lat}`;
+    }
+
     const fetchData = async () => {
       const elementObject =
         isPrivateElement === true || isPrivateElement === "true"
@@ -317,9 +344,11 @@ export default function SubmissionCard(props) {
       setContributor(thisElement["contributor"]);
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
-      setGeometry(thisElement["spatial-geometry"]);
-      setBoundingBox(parseNumbers(thisElement["spatial-bounding-box"], 4));
-      setCentroid(parseNumbers(thisElement["spatial-centroid"], 2, " "));
+      setGeometry(parseGeometry(thisElement["spatial-geometry"]?.coordinates));
+      setBoundingBox(
+        parseBoundingBox(thisElement["spatial-bounding-box"]?.coordinates)
+      );
+      setCentroid(parseCentroid(thisElement["spatial-centroid"]?.coordinates));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
