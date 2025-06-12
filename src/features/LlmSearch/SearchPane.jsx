@@ -192,15 +192,6 @@ export default function SearchPane() {
             )}{" "}
             Search
           </Typography>
-          <Typography
-            level="h4"
-            align="center"
-            sx={{
-              p: 3,
-            }}
-          >
-            Hi! What can I help with today?
-          </Typography>
           <SearchInput
             searchInputValue={searchInputValue}
             setSearchInputValue={setSearchInputValue}
@@ -227,7 +218,7 @@ export default function SearchPane() {
             alignItems="center"
             justifyContent="center"
             spacing={5}
-            sx={{ pt: 3 }}
+            sx={{ pt: 1 }}
           >
             <Typography level="title-md" color="primary" align="center">
               <Link component={RouterLink} to="/search-home">
