@@ -273,8 +273,8 @@ export default function SubmissionCard(props) {
         return "";
       }
 
-      const lon = coords[1];
-      const lat = coords[0];
+      const lon = coords[0];
+      const lat = coords[1];
 
       return `${lon} ${lat}`;
     }
