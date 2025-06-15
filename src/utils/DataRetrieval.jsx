@@ -286,6 +286,13 @@ export async function fetchSingleElementDetails(elementId) {
         },
       }
     );
+    if (response.status === 404) {
+      console.error("404 Element not found");
+      return {
+        ok: false,
+        body: `Error: 404 Element not found`,
+      };
+    }
     if (!response.ok) {
       throw new Error(`Failed to fetch element: ${elementId}`);
     }
@@ -322,6 +329,14 @@ export async function fetchSinglePrivateElementDetails(elementId) {
         },
       }
     );
+
+    if (response.status === 404) {
+      console.error("Private element not found");
+      return {
+        ok: false,
+        body: `Error: 404 Private element not found`,
+      };
+    }
     if (!response.ok) {
       throw new Error(`Failed to fetch private element: ${elementId}`);
     }

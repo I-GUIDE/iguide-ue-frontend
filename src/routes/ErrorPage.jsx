@@ -14,8 +14,6 @@ import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 
@@ -30,7 +28,7 @@ import { sendBugToSlack } from "../utils/AutomaticBugReporting";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ErrorPage(props) {
-  const errorStatusText = props.customStatusText;
+  const customStatusText = props.customStatusText;
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo;
 
@@ -43,7 +41,6 @@ export default function ErrorPage(props) {
   let errorType = "";
   let errorMessage = "";
 
-  const errorTitle = "Something went wrong...";
   let errorSubtitle =
     'Please try again later, or you can report this issue to us using the "Contact Us" link.';
 
@@ -61,8 +58,11 @@ export default function ErrorPage(props) {
     errorMessage = error;
   } else {
     errorType = "3";
-    errorMessage = errorStatusText ?? "No error message...";
+    errorMessage = customStatusText ?? "No error message...";
   }
+
+  TEST_MODE &&
+    console.log("Error type", errorType, "Error message", errorMessage);
 
   var currentTime = new Date();
   currentTime.toUTCString();
@@ -137,75 +137,63 @@ export default function ErrorPage(props) {
               pb: 8,
             }}
           >
-            <Card
-              variant="outlined"
-              orientation="horizontal"
+            <Stack
+              spacing={3}
               sx={{
-                "&:hover": {
-                  boxShadow: "md",
-                  borderColor: "neutral.outlinedHoverBorder",
-                },
-                maxWidth: "700px",
+                p: 1,
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
               }}
             >
-              <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
-                <Stack
-                  spacing={3}
-                  sx={{
-                    p: 1,
-                    display: "flex",
-                  }}
+              <Typography level="h3">{errorMessage}</Typography>
+              <Typography level="body-md">{errorSubtitle}</Typography>
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                alignItems="center"
+                justifyContent="center"
+                spacing={1}
+                useFlexGap
+                sx={{ p: 0.5 }}
+              >
+                <Button
+                  component="a"
+                  href="/contact-us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="solid"
+                  color="warning"
+                  size="sm"
+                  endDecorator={<OpenInNewIcon />}
                 >
-                  <Typography level="h2">{errorTitle}</Typography>
-                  <Typography level="body-md">{errorSubtitle}</Typography>
-                  <Stack
-                    direction="row"
-                    flexWrap="wrap"
-                    alignItems="center"
-                    justifyContent="center"
-                    spacing={1}
-                    useFlexGap
-                    sx={{ p: 0.5 }}
-                  >
-                    <Button
-                      component="a"
-                      href="/contact-us"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="solid"
-                      color="warning"
-                      size="sm"
-                      endDecorator={<OpenInNewIcon />}
-                    >
-                      Contact Us
-                    </Button>
-                    <Button
-                      component="a"
-                      href="/"
-                      variant="outlined"
-                      color="neutral"
-                      size="sm"
-                    >
-                      Homepage
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => navigate(-1)}
-                      size="sm"
-                    >
-                      Go Back
-                    </Button>
-                  </Stack>
-                  <SearchBar placeholder="Search elements..." />
-                  <Typography level="title-md" style={{ textAlign: "center" }}>
-                    <Link component={RouterLink} to="/sitemap">
-                      Or see our site map {">"}
-                    </Link>
-                  </Typography>
-                </Stack>
-              </CardContent>
-            </Card>
+                  Contact Us
+                </Button>
+                <Button
+                  component="a"
+                  href="/"
+                  variant="outlined"
+                  color="neutral"
+                  size="sm"
+                >
+                  Homepage
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  size="sm"
+                >
+                  Go Back
+                </Button>
+              </Stack>
+              <SearchBar placeholder="Search elements..." />
+              <Typography level="title-md" style={{ textAlign: "center" }}>
+                <Link component={RouterLink} to="/sitemap">
+                  Or see our site map {">"}
+                </Link>
+              </Typography>
+            </Stack>
           </Grid>
         </Box>
       </Container>
