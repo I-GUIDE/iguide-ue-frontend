@@ -31,6 +31,8 @@ export default function ErrorPage(props) {
   const customStatusText = props.customStatusText;
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo;
+  // Status code displayed on the error page, if status code is not provided, use 500 unless otherwise set in the script below
+  let statusCode = props.statusCode ?? 500;
 
   usePageTitle("Error");
   const navigate = useNavigate();
@@ -47,9 +49,8 @@ export default function ErrorPage(props) {
   // Check error types
   if (isRouteErrorResponse(error)) {
     errorType = "0";
+    statusCode = 404;
     errorMessage = error.error?.message || error.statusText;
-    errorSubtitle =
-      'Please double-check the URL and make sure it is correct, or you can report this issue to us using the "Contact Us" link.';
   } else if (error instanceof Error) {
     errorType = "1";
     errorMessage = `${error.name}: ${error.message}`;
@@ -59,6 +60,11 @@ export default function ErrorPage(props) {
   } else {
     errorType = "3";
     errorMessage = customStatusText ?? "No error message...";
+  }
+
+  if (statusCode === 404) {
+    errorSubtitle =
+      "Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you may have typed the URL incorrectly.";
   }
 
   TEST_MODE &&
@@ -146,7 +152,8 @@ export default function ErrorPage(props) {
                 textAlign: "center",
               }}
             >
-              <Typography level="h3">{errorMessage}</Typography>
+              <Typography level="h1">{statusCode}</Typography>
+              <Typography level="h4">{errorMessage}</Typography>
               <Typography level="body-md">{errorSubtitle}</Typography>
               <Stack
                 direction="row"

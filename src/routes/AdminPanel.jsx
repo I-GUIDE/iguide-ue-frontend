@@ -28,6 +28,7 @@ import UserProfileCard from "../components/UserProfileCard";
 import Header from "../components/Layout/Header";
 import LoginCard from "../components/LoginCard";
 import usePageTitle from "../hooks/usePageTitle";
+import ErrorPage from "./ErrorPage";
 
 import {
   DEFAULT_BODY_HEIGHT,
@@ -259,14 +260,12 @@ export default function AdminPanel() {
 
   if (!canAccess) {
     return (
-      <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-        <JoyCssVarsProvider>
-          <CssBaseline enableColorScheme />
-          <Typography level="title-lg" color="warning">
-            You do not have permission to access this page.
-          </Typography>
-        </JoyCssVarsProvider>
-      </MaterialCssVarsProvider>
+      <ErrorPage
+        statusCode={401}
+        customStatusText={"You are not authorized to access this page."}
+        isAuthenticated={isAuthenticated}
+        localUserInfo={localUserInfo}
+      />
     );
   }
 

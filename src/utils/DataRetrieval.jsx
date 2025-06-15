@@ -290,7 +290,8 @@ export async function fetchSingleElementDetails(elementId) {
       console.error("404 Element not found");
       return {
         ok: false,
-        body: `Error: 404 Element not found`,
+        statusCode: 404,
+        body: `Element not found`,
       };
     }
     if (!response.ok) {
@@ -334,7 +335,8 @@ export async function fetchSinglePrivateElementDetails(elementId) {
       console.error("Private element not found");
       return {
         ok: false,
-        body: `Error: 404 Private element not found`,
+        statusCode: 404,
+        body: `Private element not found`,
       };
     }
     if (!response.ok) {
