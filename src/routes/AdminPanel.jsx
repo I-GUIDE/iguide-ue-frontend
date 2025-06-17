@@ -261,8 +261,8 @@ export default function AdminPanel() {
   if (!canAccess) {
     return (
       <ErrorPage
-        statusCode={401}
-        customStatusText={"You are not authorized to access this page."}
+        statusCode={403}
+        customStatusText={"You don’t have permission to access this page."}
         isAuthenticated={isAuthenticated}
         localUserInfo={localUserInfo}
       />

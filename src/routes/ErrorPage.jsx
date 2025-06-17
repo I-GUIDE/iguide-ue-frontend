@@ -43,7 +43,7 @@ export default function ErrorPage(props) {
   let errorType = "";
   let errorMessage = "";
 
-  let errorSubtitle =
+  let errorExplanation =
     'Please try again later, or you can report this issue to us using the "Contact Us" link.';
 
   // Check error types
@@ -62,8 +62,11 @@ export default function ErrorPage(props) {
     errorMessage = customStatusText ?? "No error message...";
   }
 
-  if (statusCode === 404) {
-    errorSubtitle =
+  if (statusCode === 403) {
+    errorExplanation =
+      "You don't have permission to view this page. If you believe this is a mistake, please contact us for assistance.";
+  } else if (statusCode === 404) {
+    errorExplanation =
       "Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you may have typed the URL incorrectly.";
   }
 
@@ -154,7 +157,7 @@ export default function ErrorPage(props) {
             >
               <Typography level="h1">{statusCode}</Typography>
               <Typography level="h4">{errorMessage}</Typography>
-              <Typography level="body-md">{errorSubtitle}</Typography>
+              <Typography level="body-md">{errorExplanation}</Typography>
               <Stack
                 direction="row"
                 flexWrap="wrap"
