@@ -71,7 +71,7 @@ export default function DatasetPage() {
           : await fetchSingleElementDetails(id);
 
       if (!elementObject.ok) {
-        setError(elementObject.body);
+        setError(elementObject);
         TEST_MODE &&
           console.log(
             "Error from fetchSingle(Private)ElementDetails:",
@@ -115,7 +115,8 @@ export default function DatasetPage() {
   if (error) {
     return (
       <ErrorPage
-        customStatusText={error}
+        statusCode={error.statusCode}
+        customStatusText={error.body}
         isAuthenticated={isAuthenticated}
         localUserInfo={localUserInfo}
       />

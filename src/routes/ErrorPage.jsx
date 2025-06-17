@@ -14,8 +14,6 @@ import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 
@@ -30,9 +28,11 @@ import { sendBugToSlack } from "../utils/AutomaticBugReporting";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ErrorPage(props) {
-  const errorStatusText = props.customStatusText;
+  const customStatusText = props.customStatusText;
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo;
+  // Status code displayed on the error page, if status code is not provided, use 500 unless otherwise set in the script below
+  let statusCode = props.statusCode ?? 500;
 
   usePageTitle("Error");
   const navigate = useNavigate();
@@ -43,16 +43,14 @@ export default function ErrorPage(props) {
   let errorType = "";
   let errorMessage = "";
 
-  const errorTitle = "Something went wrong...";
-  let errorSubtitle =
+  let errorExplanation =
     'Please try again later, or you can report this issue to us using the "Contact Us" link.';
 
   // Check error types
   if (isRouteErrorResponse(error)) {
     errorType = "0";
+    statusCode = 404;
     errorMessage = error.error?.message || error.statusText;
-    errorSubtitle =
-      'Please double-check the URL and make sure it is correct, or you can report this issue to us using the "Contact Us" link.';
   } else if (error instanceof Error) {
     errorType = "1";
     errorMessage = `${error.name}: ${error.message}`;
@@ -61,8 +59,19 @@ export default function ErrorPage(props) {
     errorMessage = error;
   } else {
     errorType = "3";
-    errorMessage = errorStatusText ?? "No error message...";
+    errorMessage = customStatusText ?? "No error message...";
   }
+
+  if (statusCode === 403) {
+    errorExplanation =
+      "You don't have permission to view this page. If you believe this is a mistake, please contact us for assistance.";
+  } else if (statusCode === 404) {
+    errorExplanation =
+      "Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you may have typed the URL incorrectly.";
+  }
+
+  TEST_MODE &&
+    console.log("Error type", errorType, "Error message", errorMessage);
 
   var currentTime = new Date();
   currentTime.toUTCString();
@@ -137,75 +146,64 @@ export default function ErrorPage(props) {
               pb: 8,
             }}
           >
-            <Card
-              variant="outlined"
-              orientation="horizontal"
+            <Stack
+              spacing={3}
               sx={{
-                "&:hover": {
-                  boxShadow: "md",
-                  borderColor: "neutral.outlinedHoverBorder",
-                },
-                maxWidth: "700px",
+                p: 1,
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
               }}
             >
-              <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
-                <Stack
-                  spacing={3}
-                  sx={{
-                    p: 1,
-                    display: "flex",
-                  }}
+              <Typography level="h1">{statusCode}</Typography>
+              <Typography level="h4">{errorMessage}</Typography>
+              <Typography level="body-md">{errorExplanation}</Typography>
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                alignItems="center"
+                justifyContent="center"
+                spacing={1}
+                useFlexGap
+                sx={{ p: 0.5 }}
+              >
+                <Button
+                  component="a"
+                  href="/contact-us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="solid"
+                  color="warning"
+                  size="sm"
+                  endDecorator={<OpenInNewIcon />}
                 >
-                  <Typography level="h2">{errorTitle}</Typography>
-                  <Typography level="body-md">{errorSubtitle}</Typography>
-                  <Stack
-                    direction="row"
-                    flexWrap="wrap"
-                    alignItems="center"
-                    justifyContent="center"
-                    spacing={1}
-                    useFlexGap
-                    sx={{ p: 0.5 }}
-                  >
-                    <Button
-                      component="a"
-                      href="/contact-us"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      variant="solid"
-                      color="warning"
-                      size="sm"
-                      endDecorator={<OpenInNewIcon />}
-                    >
-                      Contact Us
-                    </Button>
-                    <Button
-                      component="a"
-                      href="/"
-                      variant="outlined"
-                      color="neutral"
-                      size="sm"
-                    >
-                      Homepage
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => navigate(-1)}
-                      size="sm"
-                    >
-                      Go Back
-                    </Button>
-                  </Stack>
-                  <SearchBar placeholder="Search elements..." />
-                  <Typography level="title-md" style={{ textAlign: "center" }}>
-                    <Link component={RouterLink} to="/sitemap">
-                      Or see our site map {">"}
-                    </Link>
-                  </Typography>
-                </Stack>
-              </CardContent>
-            </Card>
+                  Contact Us
+                </Button>
+                <Button
+                  component="a"
+                  href="/"
+                  variant="outlined"
+                  color="neutral"
+                  size="sm"
+                >
+                  Homepage
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  size="sm"
+                >
+                  Go Back
+                </Button>
+              </Stack>
+              <SearchBar placeholder="Search elements..." />
+              <Typography level="title-md" style={{ textAlign: "center" }}>
+                <Link component={RouterLink} to="/sitemap">
+                  Or see our site map {">"}
+                </Link>
+              </Typography>
+            </Stack>
           </Grid>
         </Box>
       </Container>

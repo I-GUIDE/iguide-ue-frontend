@@ -156,7 +156,7 @@ export default function SearchPane() {
     return (
       <Box
         sx={{
-          height: NO_HEADER_BODY_HEIGHT,
+          minHeight: NO_HEADER_BODY_HEIGHT,
           width: "100%",
           display: "flex",
           alignItems: "center",
@@ -220,14 +220,9 @@ export default function SearchPane() {
             spacing={5}
             sx={{ pt: 1 }}
           >
-            <Typography level="title-md" color="primary" align="center">
+            <Typography level="title-sm" color="primary" align="center">
               <Link component={RouterLink} to="/search-home">
-                Go back to traditional search
-              </Link>
-            </Typography>
-            <Typography level="title-md" color="primary" align="center">
-              <Link component={RouterLink} to="/">
-                Go back to home page
+                Go to Traditional Search
               </Link>
             </Typography>
           </Stack>
@@ -283,7 +278,15 @@ export default function SearchPane() {
                 {message.sender !== "You" && (
                   <Box
                     component="img"
-                    sx={{ height: 40, mt: 1, px: 2 }}
+                    sx={{
+                      height: 40,
+                      mt: 1,
+                      px: 2,
+                      display: {
+                        xs: "none",
+                        md: "block",
+                      },
+                    }}
                     alt="Logo"
                     src="/images/Logo-favicon.png"
                   />
