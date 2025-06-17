@@ -13,7 +13,6 @@ const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
-import Stack from "@mui/joy/Stack";
 import Grid from "@mui/joy/Grid";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -25,7 +24,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import Header from "../components/Layout/Header";
-import LoginCard from "../components/LoginCard";
+import LoginPage from "./LoginPage";
 import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
 import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
@@ -91,47 +90,7 @@ export default function UserProfile() {
   }
 
   if (!isAuthenticated) {
-    return (
-      <JoyCssVarsProvider disableTransitionOnChange>
-        <CssBaseline />
-        <Header title="Please login to continue" subtitle="" />
-        <Container maxWidth="lg">
-          <Box
-            component="main"
-            sx={{
-              minHeight: DEFAULT_BODY_HEIGHT,
-              display: "grid",
-              gridTemplateColumns: { xs: "auto", md: "100%" },
-              gridTemplateRows: "auto 1fr auto",
-            }}
-          >
-            <Grid
-              container
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              direction="column"
-              sx={{
-                minHeight: DEFAULT_BODY_HEIGHT,
-                backgroundColor: "inherit",
-                px: { xs: 2, md: 4 },
-                pt: 4,
-                pb: 8,
-              }}
-            >
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-              >
-                <LoginCard />
-              </Stack>
-            </Grid>
-          </Box>
-        </Container>
-      </JoyCssVarsProvider>
-    );
+    return <LoginPage />;
   }
 
   if (error) {
