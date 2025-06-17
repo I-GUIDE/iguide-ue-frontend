@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
@@ -197,7 +197,7 @@ export default function MessageBubble(props) {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <Box sx={{ maxWidth: "75%", minWidth: "auto" }}>
+        <Box sx={{ maxWidth: "85%", minWidth: "auto" }}>
           {/* MessageBubble title */}
           <Stack
             direction="row"
