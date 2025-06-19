@@ -226,7 +226,7 @@ export default function SubmissionCard(props) {
   const alertModal = useAlertModal();
 
   useEffect(() => {
-    const checkJWTToken = async () => {
+    async function checkJWTToken() {
       // If demo user is in use, skip verifying with JWT...
       if (USE_DEMO_USER) {
         setUserRoleFromJWT(parseInt(DEMO_USER_ROLE));
@@ -236,7 +236,7 @@ export default function SubmissionCard(props) {
         setUserRoleFromJWT(userInfoFromToken.role);
       }
       setLoading(false);
-    };
+    }
     checkJWTToken();
   }, []);
 
@@ -279,7 +279,7 @@ export default function SubmissionCard(props) {
       return `${lon} ${lat}`;
     }
 
-    const fetchData = async () => {
+    async function fetchData() {
       const elementObject =
         isPrivateElement === true || isPrivateElement === "true"
           ? await fetchSinglePrivateElementDetails(elementId)
@@ -365,7 +365,7 @@ export default function SubmissionCard(props) {
 
       setRelatedResources(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
-    };
+    }
     if (submissionType === "update") {
       fetchData();
     }
@@ -380,7 +380,7 @@ export default function SubmissionCard(props) {
 
   // When the current related element type changes, fetch a list of titles under that type.
   useEffect(() => {
-    const getAllTitlesByElementType = async (resourceType) => {
+    async function getAllTitlesByElementType(resourceType) {
       if (resourceType && resourceType !== "") {
         const returnedTitles = await fetchAllTitlesByElementType(resourceType);
         // Check duplicate titles, otherwise AutoComplete might fail...
@@ -389,7 +389,7 @@ export default function SubmissionCard(props) {
       } else {
         setReturnedRelatedResourceTitle([]);
       }
-    };
+    }
     getAllTitlesByElementType(currentRelatedResourceType);
   }, [currentRelatedResourceType]);
 
@@ -399,7 +399,12 @@ export default function SubmissionCard(props) {
       const selectedSpatialMetadata =
         spatialMetadataList[selectedSpatialMetadataIndex];
       setSpatialCoverage(selectedSpatialMetadata.display_name);
-      setGeometry(selectedSpatialMetadata.geotext);
+      // This replaces "MULTIPOLYGON" with "POLYGON"
+      const geotext = selectedSpatialMetadata.geotext.replace(
+        /^MULTIPOLYGON/,
+        "POLYGON"
+      );
+      setGeometry(geotext);
       const boundingBox = selectedSpatialMetadata.boundingbox;
       if (boundingBox && boundingBox.length === 4) {
         const minLat = boundingBox[0];
@@ -2104,9 +2109,15 @@ export default function SubmissionCard(props) {
                   tooltipTitle="Provide the location name for spatial metadata autofill. It can be a city, landmark, organization, or even a street address."
                   tooltipContent={`Feature powered by Nominatim. Please note that the API may not return the correct result, or may return no result at all.`}
                 >
-                  Enter the location name (only for spatial metadata autofill)
+                  Enter the location name for spatial metadata autofill
                 </SubmissionCardFieldTitle>
               </FormLabel>
+              <FormHelperText>
+                <Typography level="body-xs" color="success" sx={{ pb: 0.5 }}>
+                  We recommend using autofill to help keep your spatial metadata
+                  input in the correct format.
+                </Typography>
+              </FormHelperText>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                 <Grid size="grow">
                   <Input
@@ -2195,6 +2206,11 @@ export default function SubmissionCard(props) {
                   Geometry
                 </SubmissionCardFieldTitle>
               </FormLabel>
+              <FormHelperText>
+                <Typography level="body-xs" sx={{ py: 0.5 }}>
+                  Only POLYGON format is supported at this time.
+                </Typography>
+              </FormHelperText>
               <Textarea
                 placeholder="POLYGON((-80 25,-65 18,-64 33,-80 25))"
                 minRows={4}
