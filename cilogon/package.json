@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "@opensearch-project/opensearch": "^3.5.1",
-        "@slack/web-api": "^7.9.2",
+        "@slack/web-api": "^7.9.3",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "dotenv": "^16.5.0",
