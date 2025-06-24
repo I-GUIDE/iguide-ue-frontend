@@ -1,4 +1,4 @@
-FROM node:20-alpine as build
+FROM node:20.19-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN yarn install
@@ -6,7 +6,7 @@ COPY . .
 RUN yarn build
 
 # Use Nginx as the production server
-FROM nginx:latest as prod
+FROM nginx:1.28.0-alpine-slim AS prod
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY ./nginx-config/nginx.conf /etc/nginx/conf.d/default.conf
 # Copy SSL certificates from the host
