@@ -1,5 +1,5 @@
 # Fetching the minified node image on apline linux
-FROM node:slim
+FROM node:20.19-slim
 
 # Setting up the work directory
 WORKDIR /auth
