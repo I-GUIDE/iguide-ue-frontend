@@ -66,7 +66,7 @@ export default function ElementsMapContainer(props) {
         ...returnedElement,
         // This is important because the centroid returned uses [lat, lon], but react-leaflet uses [lon, lat]
         centroidLeaflet: addNoiseToPoint(
-          processPoint(returnedElement.centroid?.coordinates),
+          processPoint(returnedElement.centroid),
           returnedElement.id,
           addNoiseToCentroid
         ),
@@ -96,10 +96,10 @@ export default function ElementsMapContainer(props) {
         selectedElementMetadata.id
       );
       const geometry = elementDetails?.body["spatial-geometry"];
-      const geometryForLeaflet = processPolygon(geometry?.coordinates);
+      const geometryForLeaflet = processPolygon(geometry);
 
       const boundingBoxForLeaflet = processPolygon(
-        selectedElementMetadata["bounding-box"]?.coordinates
+        selectedElementMetadata["bounding-box"]
       );
       const processedSelectedElementMetadata = {
         ...selectedElementMetadata,

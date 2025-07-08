@@ -20,14 +20,14 @@ export default function InteractiveMap(props) {
   if (!centroid) {
     return null;
   }
-  const centroidLeaflet = processPoint(centroid.coordinates);
+  const centroidLeaflet = processPoint(centroid);
   // Centroid has to be present
   if (!centroidLeaflet) {
     return null;
   }
 
-  const geometryLeaflet = processPolygon(geometry?.coordinates);
-  const boundingBoxLeaflet = processPolygon(boundingBox?.coordinates);
+  const geometryLeaflet = processPolygon(geometry);
+  const boundingBoxLeaflet = processPolygon(boundingBox);
 
   const defaultZoom = 9;
   // Southwest and northeast bounds. Prevent the same map area from showing more than once
