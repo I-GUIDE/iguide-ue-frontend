@@ -1,22 +1,25 @@
 services:
   app:
     image: iguide-ue-frontend-${VITE_ENV}
+    container_name: iguide-ue-react-nginx-${VITE_ENV}
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - auth
     restart: always
 
   auth:
     image: iguide-ue-auth-${VITE_ENV}
+    container_name: iguide-ue-auth-${VITE_ENV}
     volumes:
       - ./cilogon/logs:/app/logs
     build:
       context: ./cilogon/.
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-      - "8443:8443"
+    expose:
+      - "3000"
     restart: always

@@ -6,17 +6,9 @@ const helmet = require('helmet');
 const passport = require('passport')
 const authRoute = require('./routes')
 const http = require("http");
-const https = require('https');
-const router = require("express").Router();
-const fs = require('fs');
 require('dotenv').config();
 const { Issuer, Strategy } = require('openid-client');
 const { logger, httpLogger } = require("./logger.js");
-
-const credentials = {
-  key: fs.readFileSync('credentials/privkey.pem'),
-  cert: fs.readFileSync('credentials/fullchain.pem')
-};
 
 // React frontend URL
 const FRONTEND_URL = process.env.REACT_FRONTEND_URL;
@@ -101,13 +93,7 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
   );
 });
 
-// const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
-
-// httpServer.listen(80, () => {
-//   console.log(`Http Server Running on port 80`)
-// });
-
-httpsServer.listen(8443, () => {
-  logger.info("HTTPS authentication server running on port 8443")
+const httpServer = http.createServer(app);
+httpServer.listen(3000, "0.0.0.0", () => {
+  console.log("Authentication server running on port 3000")
 });
