@@ -242,20 +242,61 @@ export default function SubmissionCard(props) {
 
   // If the submission type is 'update', load the existing element information.
   useEffect(() => {
-    function parseGeometry(coords) {
+    function parseGeometry(geo) {
+      if (!geo) {
+        return "";
+      }
+
+      const coords = geo.coordinates;
+      const type = geo.type;
+
       if (!Array.isArray(coords) || coords.length === 0) {
         return "";
       }
 
-      const polygonParts = coords.map((ring) => {
-        if (!Array.isArray(ring)) throw new Error("Each ring must be an array");
-        return ring.map((point) => point.join(" ")).join(", ");
-      });
+      // Handle polygon cases
+      if (type === "Polygon") {
+        const polygonsWKT = coords.map((ring) => {
+          if (!Array.isArray(ring))
+            throw new Error("POLYGON: Each ring must be an array");
+          return ring.map((point) => point.join(" ")).join(",");
+        });
 
-      return `POLYGON((${polygonParts.join("),(")}))`;
+        return `POLYGON((${polygonsWKT.join("),(")}))`;
+      } else if (type === "MultiPolygon") {
+        // Handle multipolygon cases
+        const multipolygonsWKT = coords.map((polygon) => {
+          // For each ring (outer + holes)
+          const ringsWKT = polygon.map((ring) => {
+            if (!Array.isArray(ring))
+              throw new Error("MULTIPOLYGON: Each ring must be an array");
+            const coords = ring.map((coord) => coord.join(" ")).join(",");
+            return `(${coords})`;
+          });
+          return `(${ringsWKT.join(",")})`;
+        });
+
+        return `MULTIPOLYGON(${multipolygonsWKT.join(",")})`;
+      } else {
+        // All other cases, return blank
+        console.warn("Geometry is not in the polygon or multipolygon format.");
+        return "";
+      }
     }
 
-    function parseBoundingBox(coords) {
+    function parseBoundingBox(bbox) {
+      if (!bbox) {
+        return "";
+      }
+
+      const coords = bbox.coordinates;
+      const type = bbox.type;
+
+      if (type !== "Polygon") {
+        console.warn("Bounding box is not in the polygon format.");
+        return "";
+      }
+
       if (!Array.isArray(coords) || coords.length === 0) {
         return "";
       }
@@ -268,7 +309,19 @@ export default function SubmissionCard(props) {
       return `${west},${east},${south},${north}`;
     }
 
-    function parseCentroid(coords) {
+    function parseCentroid(cent) {
+      if (!cent) {
+        return "";
+      }
+
+      const coords = cent.coordinates;
+      const type = cent.type;
+
+      if (type !== "Point") {
+        console.warn("Centroid is not in the point format.");
+        return "";
+      }
+
       if (!Array.isArray(coords) || coords.length === 0) {
         return "";
       }
@@ -344,11 +397,9 @@ export default function SubmissionCard(props) {
       setContributor(thisElement["contributor"]);
 
       setSpatialCoverage(thisElement["spatial-coverage"] || []);
-      setGeometry(parseGeometry(thisElement["spatial-geometry"]?.coordinates));
-      setBoundingBox(
-        parseBoundingBox(thisElement["spatial-bounding-box"]?.coordinates)
-      );
-      setCentroid(parseCentroid(thisElement["spatial-centroid"]?.coordinates));
+      setGeometry(parseGeometry(thisElement["spatial-geometry"]));
+      setBoundingBox(parseBoundingBox(thisElement["spatial-bounding-box"]));
+      setCentroid(parseCentroid(thisElement["spatial-centroid"]));
       setIsGeoreferenced(thisElement["spatial-georeferenced"]);
       setTemporalCoverage(thisElement["spatial-temporal-coverage"] || []);
       setIndexYears(
@@ -399,12 +450,7 @@ export default function SubmissionCard(props) {
       const selectedSpatialMetadata =
         spatialMetadataList[selectedSpatialMetadataIndex];
       setSpatialCoverage(selectedSpatialMetadata.display_name);
-      // This replaces "MULTIPOLYGON" with "POLYGON"
-      const geotext = selectedSpatialMetadata.geotext.replace(
-        /^MULTIPOLYGON/,
-        "POLYGON"
-      );
-      setGeometry(geotext);
+      setGeometry(selectedSpatialMetadata.geotext);
       const boundingBox = selectedSpatialMetadata.boundingbox;
       if (boundingBox && boundingBox.length === 4) {
         const minLat = boundingBox[0];
@@ -2113,9 +2159,9 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <FormHelperText>
-                <Typography level="body-xs" color="success" sx={{ pb: 0.5 }}>
-                  We recommend using autofill to help keep your spatial metadata
-                  input in the correct format.
+                <Typography level="title-sm" color="success" sx={{ pb: 0.5 }}>
+                  We strongly recommend using autofill to save time and ensure
+                  your spatial metadata follows the correct format.
                 </Typography>
               </FormHelperText>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>
@@ -2208,11 +2254,12 @@ export default function SubmissionCard(props) {
               </FormLabel>
               <FormHelperText>
                 <Typography level="body-xs" sx={{ py: 0.5 }}>
-                  Only POLYGON format is supported at this time.
+                  Only POLYGON and MULTIPOLYGON formats are supported at this
+                  time.
                 </Typography>
               </FormHelperText>
               <Textarea
-                placeholder="POLYGON((-80 25,-65 18,-64 33,-80 25))"
+                placeholder="POLYGON((-80 25,-65 18,-64 33,-80 25)) or MULTIPOLYGON (((-80 25,-65 18,-64 33,-80 25)),((-90 20,-85 15,-70 20,-90 20)))"
                 minRows={4}
                 maxRows={10}
                 value={geometry}
