@@ -1,6 +1,7 @@
 // logger.js
 const pino = require('pino');
 const pinoHttp = require('pino-http');
+require('dotenv').config();
 
 // Get current timestamp for the logging structure
 const currentTime = new Date();

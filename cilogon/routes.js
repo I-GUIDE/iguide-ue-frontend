@@ -6,14 +6,12 @@ const multer = require("multer");
 const { createReadStream, unlinkSync, existsSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
-const dotenv = require("dotenv");
+require('dotenv').config();
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const { logger } = require("./logger.js");
 const { addUser, checkUser } = require("./user_management.js");
-
-dotenv.config();
 
 const router = express.Router();
 
