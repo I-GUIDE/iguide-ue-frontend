@@ -181,7 +181,7 @@ router.get(
   })
 );
 
-router.get("/cilogon-callback", async (req, res, next) => {
+router.get("/callback/cilogon", async (req, res, next) => {
   // Retrieve the redirectURL from session, and then destory the session variable
   const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
   delete req.session.redirectFullURL;
