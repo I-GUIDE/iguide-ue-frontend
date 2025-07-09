@@ -193,10 +193,10 @@ router.get("/callback/cilogon", async (req, res, next) => {
         message: err,
         user: user
       });
-      return res.redirect(`/error/cilogon`);
+      return res.redirect(`/auth/error/cilogon`);
     }
     if (!user) {
-      return res.redirect(`/error/nouser`);
+      return res.redirect(`/auth/error/nouser`);
     }
     req.logIn(user, async function (err) {
       if (err) {
@@ -205,7 +205,7 @@ router.get("/callback/cilogon", async (req, res, next) => {
           message: err,
           user: user
         });
-        return res.redirect(`/error/other`);
+        return res.redirect(`/auth/error/other`);
       }
 
       const openId = user.sub;
@@ -242,7 +242,7 @@ router.get("/callback/cilogon", async (req, res, next) => {
 
       // If role doesn't exist or returns ERROR, redirect users to the database error page
       if (!role || role === "ERROR") {
-        return res.redirect(`/error/database`);
+        return res.redirect(`/auth/error/database`);
       }
 
       // Generate JWT token with role
