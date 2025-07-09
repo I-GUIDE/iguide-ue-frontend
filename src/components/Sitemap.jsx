@@ -22,7 +22,7 @@ import usePageTitle from "../hooks/usePageTitle";
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import { PERMISSIONS } from "../configs/Permissions";
 
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_AUTH_BACKEND_URL;
 
 function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
   const items = {};
@@ -48,7 +48,7 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
     if (!isAuthenticated) {
       items["Authentication"] = [
         {
-          path: `${AUTH_BACKEND_URL}/login`,
+          path: `${AUTH_BACKEND_URL}/auth/login`,
           label: "Login",
           category: "User login",
         },

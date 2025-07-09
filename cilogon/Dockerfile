@@ -2,16 +2,16 @@
 FROM node:20.19-slim
 
 # Setting up the work directory
-WORKDIR /auth
+WORKDIR /app
 
-# Copying all the files in our project
-COPY . .
+# Copying files for yarn install
+COPY package.json yarn.lock ./
 
 # Installing dependencies
 RUN yarn install
 
-# Starting our application
-CMD [ "npx", "nodemon", "-r", "dotenv/config", "auth_server.js" ]
+# Copying all the files in our project
+COPY . .
 
-# Exposing server port
-EXPOSE 3000 8443
+# Starting our application
+CMD [ "node", "--watch", "auth_server.js" ]

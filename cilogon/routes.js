@@ -6,14 +6,12 @@ const multer = require("multer");
 const { createReadStream, unlinkSync, existsSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
-const dotenv = require("dotenv");
+require('dotenv').config();
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const { logger } = require("./logger.js");
 const { addUser, checkUser } = require("./user_management.js");
-
-dotenv.config();
 
 const router = express.Router();
 
@@ -181,7 +179,7 @@ router.get(
   })
 );
 
-router.get("/cilogon-callback", async (req, res, next) => {
+router.get("/callback/cilogon", async (req, res, next) => {
   // Retrieve the redirectURL from session, and then destory the session variable
   const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
   delete req.session.redirectFullURL;
@@ -193,10 +191,10 @@ router.get("/cilogon-callback", async (req, res, next) => {
         message: err,
         user: user
       });
-      return res.redirect(`/error/cilogon`);
+      return res.redirect(`/auth/error/cilogon`);
     }
     if (!user) {
-      return res.redirect(`/error/nouser`);
+      return res.redirect(`/auth/error/nouser`);
     }
     req.logIn(user, async function (err) {
       if (err) {
@@ -205,7 +203,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
           message: err,
           user: user
         });
-        return res.redirect(`/error/other`);
+        return res.redirect(`/auth/error/other`);
       }
 
       const openId = user.sub;
@@ -242,7 +240,7 @@ router.get("/cilogon-callback", async (req, res, next) => {
 
       // If role doesn't exist or returns ERROR, redirect users to the database error page
       if (!role || role === "ERROR") {
-        return res.redirect(`/error/database`);
+        return res.redirect(`/auth/error/database`);
       }
 
       // Generate JWT token with role
@@ -408,6 +406,10 @@ router.get("/error/database", (req, res) => {
     <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
     <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
+});
+
+router.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 const storage = multer.diskStorage({

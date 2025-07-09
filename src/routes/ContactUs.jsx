@@ -33,7 +33,7 @@ import usePageTitle from "../hooks/usePageTitle";
 import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 import { useAlertModal } from "../utils/AlertModalProvider";
 
-const VITE_EXPRESS_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_AUTH_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const VITE_GOOGLE_RECAPTCHA_SITE_KEY = import.meta.env
   .VITE_GOOGLE_RECAPTCHA_SITE_KEY;
@@ -181,7 +181,7 @@ export default function ContactUs() {
     }
     formData.append("contactDetails", JSON.stringify(contactDetails));
 
-    const res = await fetch(`${VITE_EXPRESS_BACKEND_URL}/upload-to-slack`, {
+    const res = await fetch(`${AUTH_BACKEND_URL}/auth/upload-to-slack`, {
       method: "POST",
       body: formData,
     });
@@ -206,7 +206,7 @@ export default function ContactUs() {
       return;
     } else {
       const res = await fetch(
-        `${VITE_EXPRESS_BACKEND_URL}/recaptcha-verification`,
+        `${AUTH_BACKEND_URL}/auth/recaptcha-verification`,
         {
           method: "POST",
           body: JSON.stringify({ recaptchaToken }),
