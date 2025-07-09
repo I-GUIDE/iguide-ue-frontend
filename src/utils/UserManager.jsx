@@ -2,7 +2,7 @@ import { fetchWithAuth, refreshAccessToken } from "./FetcherWithJWT";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
-const AUTH_BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL;
+const AUTH_BACKEND_URL = import.meta.env.VITE_AUTH_BACKEND_URL;
 const ENV = import.meta.env.VITE_ENV;
 
 /**
@@ -13,7 +13,7 @@ export async function userLogin() {
 
   // redirect users to the default page if the login appears at the home page
   if (currentLocation.pathname === "/") {
-    window.open(AUTH_BACKEND_URL + "/login", "_self");
+    window.open(AUTH_BACKEND_URL + "/auth/login", "_self");
     return;
   }
   const redirectURI = currentLocation?.pathname + currentLocation?.search;
@@ -21,7 +21,7 @@ export async function userLogin() {
 
   window.open(
     AUTH_BACKEND_URL +
-      "/login?redirect-path=" +
+      "/auth/login?redirect-path=" +
       encodeURIComponent(redirectURI),
     "_self"
   );
@@ -38,7 +38,7 @@ export async function userLogout() {
   // Log user out with redirect path
   window.open(
     AUTH_BACKEND_URL +
-      "/logout?redirect-path=" +
+      "/auth/logout?redirect-path=" +
       encodeURIComponent(redirectURI),
     "_self"
   );

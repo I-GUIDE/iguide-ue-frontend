@@ -16,7 +16,7 @@ env:
   VITE_TEST_MODE: true
   VITE_DO_NOT_USE_LLM_ENDPOINT: true
   VITE_REACT_FRONTEND_URL: https://localhost
-  VITE_EXPRESS_BACKEND_URL: https://localhost:8443
+  VITE_AUTH_BACKEND_URL: https://localhost
   VITE_DATABASE_BACKEND_URL: https://backend-dev.i-guide.io:3500
   VITE_JUPYTER_TUTORIAL_EID: ${{secrets.VITE_JUPYTER_TUTORIAL_EID}}
 
@@ -24,14 +24,14 @@ env:
   VITE_GA_MEASUREMENT_ID: ${{secrets.VITE_GA_MEASUREMENT_ID}}
 
   REACT_FRONTEND_URL: https://localhost
-  EXPRESS_BACKEND_URL: https://localhost:8443
+  EXPRESS_BACKEND_URL: https://localhost
   REACT_DATABASE_BACKEND_URL: https://backend-dev.i-guide.io:3500
 
   REACT_APP_AUTH_URL: https://cilogon.org
   REACT_APP_AUTH_DISCOVERY_URL: https://cilogon.org/.well-known/openid-configuration
   REACT_APP_IDENTITY_CLIENT_ID: cilogon:/client_id/6
   REACT_APP_IDENTITY_CLIENT_SECRET: ${{secrets.REACT_APP_IDENTITY_CLIENT_SECRET}}
-  REACT_APP_REDIRECT_URL: https://localhost:8443/cilogon-callback
+  REACT_APP_REDIRECT_URL: https://localhost/auth/callback/cilogon
   REACT_APP_LOGOFF_REDIRECT_URL: localhost
 
   JWT_ACCESS_TOKEN_SECRET: ${{secrets.JWT_ACCESS_TOKEN_SECRET}}

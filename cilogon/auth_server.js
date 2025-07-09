@@ -95,5 +95,5 @@ Issuer.discover(DISCOVERY_URL).then(function (oidcIssuer) {
 
 const httpServer = http.createServer(app);
 httpServer.listen(3000, "0.0.0.0", () => {
-  console.log("Authentication server running on port 3000")
+  logger.info("Authentication server running on port 3000");
 });
