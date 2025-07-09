@@ -11,7 +11,7 @@
         "@slack/web-api": "^7.9.3",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
-        "dotenv": "^17.0.1",
+        "dotenv": "^17.2.0",
         "express": "^5.1.0",
         "express-session": "^1.18.1",
         "helmet": "^8.1.0",
