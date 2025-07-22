@@ -31,6 +31,7 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import WarningIcon from "@mui/icons-material/Warning";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
 const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
@@ -162,8 +163,6 @@ export default function SubmissionCard(props) {
   const [directDownloadLinkError, setDirectDownloadLinkError] = useState(false);
   const [dataSize, setDataSize] = useState("");
 
-  const [notebookFile, setNotebookFile] = useState("");
-  const [notebookRepo, setNotebookRepo] = useState("");
   const [notebookGitHubUrl, setNotebookGitHubUrl] = useState("");
   const [notebookGitHubUrlError, setNotebookGitHubUrlError] = useState(false);
 
@@ -379,14 +378,15 @@ export default function SubmissionCard(props) {
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setDataSize(thisElement.dataSize);
 
-      setNotebookGitHubUrl(
-        thisElement["notebook-repo"] +
-          "/blob/main/" +
-          thisElement["notebook-file"]
-      );
-
-      setNotebookFile(thisElement["notebook-file"]);
-      setNotebookRepo(thisElement["notebook-repo"]);
+      if (thisElement["notebook-url"]) {
+        setNotebookGitHubUrl(thisElement["notebook-url"]);
+      } else {
+        setNotebookGitHubUrl(
+          thisElement["notebook-repo"] +
+            "/blob/main/" +
+            thisElement["notebook-file"]
+        );
+      }
 
       setPublicationDOI(thisElement["external-link-publication"]);
 
@@ -743,9 +743,9 @@ export default function SubmissionCard(props) {
     const val = event.target.value;
     setNotebookGitHubUrl(val);
 
-    // Validate if the URL is in the form of https://github.com/{repo}/blob/{branch}/{filename}.ipynb
+    // Validate if the URL is in the form of https://github.com/{username}/{repo}/blob/{branch}/{filepathname}.ipynb
     const validNotebookGitHubUrl = new RegExp(
-      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/blob/(master|main)/([^/]+).ipynb$"
+      "https://(www.)?github.com/([a-zA-Z0-9._-]+)/([a-zA-Z0-9._-]+)/blob/([^/]+)/(.+.ipynb)$"
     );
     if (val === "" || validNotebookGitHubUrl.test(val)) {
       setNotebookGitHubUrlError(false);
@@ -1057,23 +1057,6 @@ export default function SubmissionCard(props) {
     formData.forEach((value, key) => {
       if (key === "authors" || key === "tags" || key === "spatial-index-year") {
         data[key] = value.split(",")?.map((item) => item.trim());
-      } else if (key === "notebook-url") {
-        // Array[0]: the notebook repo url
-        // Array[1]: the notebook filename
-        const notebookUrlArrayWithMainBranch = value.split("/blob/main/");
-        const notebookUrlArrayWithMasterBranch = value.split("/blob/master/");
-
-        if (!notebookUrlArrayWithMainBranch[1]) {
-          data["notebook-repo"] = notebookUrlArrayWithMasterBranch[0];
-          data["notebook-file"] = decodeURIComponent(
-            notebookUrlArrayWithMasterBranch[1]
-          );
-        } else {
-          data["notebook-repo"] = notebookUrlArrayWithMainBranch[0];
-          data["notebook-file"] = decodeURIComponent(
-            notebookUrlArrayWithMainBranch[1]
-          );
-        }
       } else {
         data[key] = value;
       }
@@ -1866,20 +1849,46 @@ export default function SubmissionCard(props) {
                 `}
                     fieldRequired
                   >
-                    Jupyter Notebook GitHub URL
+                    Jupyter Notebook GitHub link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
+                <Typography
+                  level="body-sm"
+                  sx={{ pb: 0.5 }}
+                  startDecorator={<WarningIcon />}
+                >
+                  Please make sure your notebook is on the default branch.&nbsp;
+                  <Link
+                    component="a"
+                    href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches#about-the-default-branch"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    What is a default branch?
+                  </Link>
+                </Typography>
                 <Input
                   required
                   name="notebook-url"
-                  placeholder="https://github.com/<username>/<repo_name>/blob/<main or master>/<notebook_name>.ipynb"
+                  placeholder="https://github.com/<username>/<repo_name>/blob/<branch_name>/<notebook_path_name>.ipynb"
                   value={notebookGitHubUrl}
                   onChange={handleNotebookGitHubUrlChange}
                 />
                 {notebookGitHubUrlError && (
                   <FormHelperText>
                     <InfoOutlined />
-                    The link format is invalid!
+                    The Jupyter Notebook GitHub link format is invalid!
+                  </FormHelperText>
+                )}
+                {!notebookGitHubUrlError && notebookGitHubUrl && (
+                  <FormHelperText>
+                    <Typography
+                      level="title-sm"
+                      color="success"
+                      startDecorator={<CheckIcon />}
+                    >
+                      Valid link!
+                    </Typography>
                   </FormHelperText>
                 )}
               </FormControl>
