@@ -31,6 +31,7 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import WarningIcon from "@mui/icons-material/Warning";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
 const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
@@ -1851,6 +1852,21 @@ export default function SubmissionCard(props) {
                     Jupyter Notebook GitHub link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
+                <Typography
+                  level="body-sm"
+                  sx={{ pb: 0.5 }}
+                  startDecorator={<WarningIcon />}
+                >
+                  Please make sure your notebook is on the default branch.&nbsp;
+                  <Link
+                    component="a"
+                    href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches#about-the-default-branch"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    What is a default branch?
+                  </Link>
+                </Typography>
                 <Input
                   required
                   name="notebook-url"
