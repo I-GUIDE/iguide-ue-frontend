@@ -1,5 +1,3 @@
-import React from "react";
-
 import Box from "@mui/joy/Box";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
@@ -35,14 +33,10 @@ export default function UserProfileEditStatusCard(props) {
       }}
     >
       <Card
-        variant="outlined"
+        variant="plain"
         orientation="horizontal"
         sx={{
           width: "100%",
-          "&:hover": {
-            boxShadow: "md",
-            borderColor: "neutral.outlinedHoverBorder",
-          },
         }}
       >
         <CardContent sx={{ alignItems: "center", textAlign: "center" }}>
