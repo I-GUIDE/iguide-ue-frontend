@@ -64,7 +64,9 @@ export default function NavBar(props) {
   const buttonRef = useRef(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Check if the current user is admin, if yes, allow edit
+  const canAccessHPC =
+    localUserInfo.role <= PERMISSIONS["display_hpc"] &&
+    localUserInfo.affiliation === "ACCESS";
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
   const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
@@ -176,6 +178,35 @@ export default function NavBar(props) {
                   )}
                 </>
               )}
+
+              {canAccessHPC && (
+                <>
+                  <ListDivider />
+                  <Typography
+                    level="body-xs"
+                    textTransform="uppercase"
+                    fontWeight="lg"
+                    sx={{ px: 1.5, py: 1 }}
+                  >
+                    Advanced Resources
+                  </Typography>
+                  <Link
+                    component="a"
+                    href="https://ondemand.anvil.rcac.purdue.edu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none"
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        Anvil HPC
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                </>
+              )}
+
               {canAccessLLMSearch && (
                 <>
                   <ListDivider />
@@ -185,7 +216,7 @@ export default function NavBar(props) {
                     fontWeight="lg"
                     sx={{ px: 1.5, py: 1 }}
                   >
-                    Beta-feature
+                    Beta feature
                   </Typography>
                   <Link
                     href="/smart-search"
@@ -401,6 +432,33 @@ export default function NavBar(props) {
               )}
             </>
           )}
+
+          {canAccessHPC && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              <Typography
+                level="body-xs"
+                textTransform="uppercase"
+                fontWeight="lg"
+                sx={{ px: 1.5, py: 1 }}
+              >
+                Advanced Resources
+              </Typography>
+              <Link
+                component="a"
+                href="https://ondemand.anvil.rcac.purdue.edu"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="none"
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>Anvil HPC</ListItemButton>
+                </ListItem>
+              </Link>
+            </>
+          )}
+
           {canAccessLLMSearch && (
             <>
               <Divider sx={{ my: 1 }} />
@@ -410,7 +468,7 @@ export default function NavBar(props) {
                 fontWeight="lg"
                 sx={{ px: 1.5, py: 1 }}
               >
-                Beta-feature
+                Beta feature
               </Typography>
               <Link
                 href="/smart-search"

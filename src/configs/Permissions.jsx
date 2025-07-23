@@ -4,6 +4,7 @@ export const PERMISSIONS = {
   secure_default_role: 100,
   default_user: 10,
   contribute: 8,
+  display_hpc: 5,
   edit_oer: 4,
   edit_map: 4,
   access_llm: 8,
@@ -26,8 +27,13 @@ export const PERMISSION_DETAIL = {
     description: "You have all permissions EXCEPT user management.",
   },
   4: {
-    role_name: "Trusted User Plus",
+    role_name: "Core Contributor",
     description: "You can contribute to all types of elements.",
+  },
+  5: {
+    role_name: "Trusted User Plus",
+    description:
+      "You can contribute datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to Anvil HPC.",
   },
   8: {
     role_name: "Trusted User",

@@ -337,7 +337,8 @@ export default function AdminPanel() {
                             <Option value={1}>Super Admin (1)</Option>
                             <Option value={2}>Admin (2)</Option>
                             <Option value={3}>Moderator (3)</Option>
-                            <Option value={4}>Trusted User Plus (4)</Option>
+                            <Option value={4}>Core Contributor (4)</Option>
+                            <Option value={5}>Trusted User Plus (5)</Option>
                             <Option value={8}>Trusted User (8)</Option>
                             <Option value={10}>User (10)</Option>
                           </Select>
