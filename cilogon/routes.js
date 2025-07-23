@@ -1,4 +1,5 @@
 const express = require("express");
+var RateLimit = require('express-rate-limit');
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { Client } = require("@opensearch-project/opensearch");
@@ -34,6 +35,16 @@ const slack_channel_id = process.env.SLACK_CHANNEL_ID;
 const slack_api_token = process.env.SLACK_API_TOKEN;
 
 const recaptcha_secret_key = process.env.GOOGLE_RECAPTCHA_SECRET_KEY;
+
+const windowMs = process.env.AUTH_RATE_LIMITER_WINDOW_MS || 15 * 60 * 1000;
+const maxPerWindow = process.env.AUTH_RATE_LIMITER_MAX_PER_WINDOW || 100;
+
+// Rate limiter for the auth endpoint
+var authRateLimiter = RateLimit({
+  windowMs: windowMs,
+  max: maxPerWindow,
+  message: "Too many requests, please try again later.",
+});
 
 const web = new WebClient(slack_api_token);
 
@@ -179,7 +190,7 @@ router.get(
   })
 );
 
-router.get("/callback/cilogon", async (req, res, next) => {
+router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
   // Retrieve the redirectURL from session, and then destory the session variable
   const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
   delete req.session.redirectFullURL;
@@ -304,15 +315,6 @@ router.get("/", (req, res) => {
   res.send(`<h2>Welcome to the homepage of I-GUIDE Platform authentication server.</h2>
     <p>You may login <a href='/login'>here</a> or go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>
     <p>You may also visit our <a href="${FRONTEND_URL}/contact-us">help page</a> if you have any questions.</p>`);
-});
-
-router.get("/auth-validation", function (req, res) {
-  res.header("Content-Type", "application/json");
-  if (req.isAuthenticated()) {
-    res.end(JSON.stringify({ isAuthenticated: true }));
-  } else {
-    res.end(JSON.stringify({ isAuthenticated: false }));
-  }
 });
 
 router.get("/userinfo", (req, res) => {
