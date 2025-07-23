@@ -221,6 +221,10 @@ export default function AdminPanel() {
     return <LoginPage />;
   }
 
+  if (!localUserInfo) {
+    return null;
+  }
+
   if (!canAccess) {
     return (
       <ErrorPage

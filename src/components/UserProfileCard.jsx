@@ -277,7 +277,9 @@ export default function UserProfileCard(props) {
               </Option>
               <Option value={3}>Moderator (3)</Option>
               <Option value={4}>Core Contributor (4)</Option>
-              <Option value={5}>Trusted User Plus (5)</Option>
+              <Option value={5} disabled={userAffiliation !== "ACCESS"}>
+                Trusted User Plus (5)
+              </Option>
               <Option value={8}>Trusted User (8)</Option>
               <Option value={10}>User (10)</Option>
             </Select>
