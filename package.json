@@ -32,7 +32,7 @@
     "react-router": "^7.7.1",
     "react-share": "^5.2.2",
     "react-zoom-pan-pinch": "^3.7.0",
-    "reagraph": "^4.26.0"
+    "reagraph": "^4.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
