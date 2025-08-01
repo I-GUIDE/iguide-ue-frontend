@@ -1117,16 +1117,16 @@
   resolved "https://registry.yarnpkg.com/@react-spring/types/-/types-10.0.1.tgz#749b5d11785555a14179c37b8f9d34c69ae5268d"
   integrity sha512-Fk1wYVAKL+ZTYK+4YFDpHf3Slsy59pfFFvnnTfRjQQFGlyIo4VejPtDs3CbDiuBjM135YztRyZjIH2VbycB+ZQ==
 
-"@react-three/drei@^10.1.2":
-  version "10.1.2"
-  resolved "https://registry.yarnpkg.com/@react-three/drei/-/drei-10.1.2.tgz#3c41a0b19460aee7604067309cebe737147cf85a"
-  integrity sha512-CCcLAqZEvYiUErOcJgGzovY3RH6KgdrqD4ubeAx1nyGbSPLnKR9a8ynYbPdtZhIyiWqGc07z+RYQzpaOfN4ZIA==
+"@react-three/drei@^10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@react-three/drei/-/drei-10.6.1.tgz#c1c9566c8ce541ea05f45c3e8f608578ae288616"
+  integrity sha512-UqqHO+REMgdiyiAVDGDJq6UVh5ABnTIIDw7D4auCl4z6mRk91x+M//S75NkLLiyiPk1epr002sZ4gvw3tZbRAA==
   dependencies:
     "@babel/runtime" "^7.26.0"
     "@mediapipe/tasks-vision" "0.10.17"
     "@monogrid/gainmap-js" "^3.0.6"
     "@use-gesture/react" "^10.3.1"
-    camera-controls "^2.9.0"
+    camera-controls "^3.1.0"
     cross-env "^7.0.3"
     detect-gpu "^5.0.56"
     glsl-noise "^0.0.0"
@@ -1365,11 +1365,6 @@
     "@sigstore/bundle" "^3.1.0"
     "@sigstore/core" "^2.0.0"
     "@sigstore/protobuf-specs" "^0.4.0"
-
-"@storybook/manager-api@^8.6.14":
-  version "8.6.14"
-  resolved "https://registry.yarnpkg.com/@storybook/manager-api/-/manager-api-8.6.14.tgz#1e0740193fbfd4a66e9ff5f75c7f976e16028752"
-  integrity sha512-ez0Zihuy17udLbfHZQXkGqwtep0mSGgHcNzGN7iZrMP1m+VmNo+7aGCJJdvXi7+iU3yq8weXSQFWg5DqWgLS7g==
 
 "@tufjs/canonical-json@2.0.0":
   version "2.0.0"
@@ -1849,10 +1844,10 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camera-controls@^2.8.3, camera-controls@^2.9.0:
-  version "2.10.1"
-  resolved "https://registry.yarnpkg.com/camera-controls/-/camera-controls-2.10.1.tgz#78bc58001a2d5925c29312154ce77d16967dec56"
-  integrity sha512-KnaKdcvkBJ1Irbrzl8XD6WtZltkRjp869Jx8c0ujs9K+9WD+1D7ryBsCiVqJYUqt6i/HR5FxT7RLASieUD+Q5w==
+camera-controls@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/camera-controls/-/camera-controls-3.1.0.tgz#06735c0022020a941e813492499e3c110a890b0a"
+  integrity sha512-w5oULNpijgTRH0ARFJJ0R5ct1nUM3R3WP7/b8A6j9uTGpRfnsypc/RBMPQV8JQDPayUe37p/TZZY1PcUr4czOQ==
 
 caniuse-lite@^1.0.30001688:
   version "1.0.30001707"
@@ -2218,10 +2213,10 @@ electron-to-chromium@^1.5.73:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.128.tgz#8ea537b369c32527b3cc47df7973bffe5d3c2980"
   integrity sha512-bo1A4HH/NS522Ws0QNFIzyPcyUUNV/yyy70Ho1xqfGYzPUme2F/xr4tlEOuM6/A538U1vDA7a4XfCd1CKRegKQ==
 
-ellipsize@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/ellipsize/-/ellipsize-0.5.1.tgz#2ac8bba69b2190d629cc5065a9c2bf28d99f237e"
-  integrity sha512-0jEAyuIRU6U8MN0S5yUqIrkK/AQWkChh642N3zQuGV57s9bsUWYLc0jJOoDIUkZ2sbEL3ySq8xfq71BvG4q3hw==
+ellipsize@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/ellipsize/-/ellipsize-0.6.1.tgz#9cb1d1d0830082355a55a9cfdbe1e6453b3fb3eb"
+  integrity sha512-VEoe+vuqbRoW/CS/1XYjHieVgb/SjMikbzxuxDdG/euU3me74QlrrmPCDwY/TQie3kGGPSLC2+mlFCxh2FdJ+A==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -2850,10 +2845,10 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-
   dependencies:
     react-is "^16.7.0"
 
-hold-event@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/hold-event/-/hold-event-0.2.0.tgz#1e8848ba42fb9098aa55006a5f450589dcaf0564"
-  integrity sha512-rko5P1XgHzy4B0NR0xVHEpWPgj0i23f8Mf8qsOugd1CHvfLR0PyIyy+8TAQQA9v8qAa1OZ4XuCKk04rxmPGHNQ==
+hold-event@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/hold-event/-/hold-event-1.1.2.tgz#4e8916fc939590e3af67fdd77499f0865960b44c"
+  integrity sha512-Bx0A6OBY70cs23orUWk0DuBAAeJjEbmyg8Gnye9+M8+XeWy2CcmRyfiJhTnQQz9s25r9SYjici3URy176MFs5A==
 
 hosted-git-info@^8.0.0, hosted-git-info@^8.0.2:
   version "8.0.2"
@@ -4643,33 +4638,32 @@ read@^4.0.0:
   dependencies:
     mute-stream "^2.0.0"
 
-reagraph@^4.27.0:
-  version "4.27.0"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.27.0.tgz#cbb522fa357a4422aca0843bd779c8eee50e552e"
-  integrity sha512-dDNzZ+lo2eGWrRQlmxbMoDlcaWV5WsFYWvQamiHRkKVeT4LwVwgAz1aC+g9VAtDFrnIdYKS2JE3jQhh8S33RDg==
+reagraph@^4.28.0:
+  version "4.28.0"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.28.0.tgz#8dc2a800de8e73d2400be9833a8ef49425bf167b"
+  integrity sha512-mtEEHD3lBEUmKYeG3o4zUJFSfPa+DD1fwiYAmXdWR63c828zGvw3dc8P5pphfdOxYZQy0YChJfByvkHmPjWOHw==
   dependencies:
     "@react-spring/three" "10.0.1"
-    "@react-three/drei" "^10.1.2"
+    "@react-three/drei" "^10.6.1"
     "@react-three/fiber" "9.1.2"
-    "@storybook/manager-api" "^8.6.14"
     "@use-gesture/react" "^10.3.1"
-    camera-controls "^2.8.3"
+    camera-controls "^3.1.0"
     classnames "^2.5.1"
     d3-array "^3.2.4"
     d3-force-3d "^3.0.6"
     d3-hierarchy "^3.1.2"
     d3-scale "^4.0.2"
-    ellipsize "^0.5.1"
+    ellipsize "^0.6.1"
     graphology "^0.26.0"
     graphology-layout "^0.6.1"
     graphology-layout-forceatlas2 "^0.10.1"
     graphology-layout-noverlap "^0.4.2"
     graphology-metrics "^2.4.0"
     graphology-shortest-path "^2.1.0"
-    hold-event "^0.2.0"
+    hold-event "^1.1.2"
     three "^0.177.0"
     three-stdlib "^2.36.0"
-    zustand "5.0.5"
+    zustand "5.0.6"
 
 refractor@^4.8.0:
   version "4.9.0"
@@ -5542,10 +5536,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zustand@5.0.5, zustand@^5.0.1, zustand@^5.0.3:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.5.tgz#3e236f6a953142d975336d179bc735d97db17e84"
-  integrity sha512-mILtRfKW9xM47hqxGIxCv12gXusoY/xTSHBYApXozR0HmQv299whhBeeAcRy+KrPPybzosvJBCOmVjq6x12fCg==
+zustand@5.0.6, zustand@^5.0.1, zustand@^5.0.3:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-5.0.6.tgz#a2da43d8dc3d31e314279e5baec06297bea70a5c"
+  integrity sha512-ihAqNeUVhe0MAD+X8M5UzqyZ9k3FFZLBTtqo6JLPwV53cbRB/mJwBI0PxcIgqhBBHlEs8G45OTDTMq3gNcLq3A==
 
 zustand@^4.3.2:
   version "4.5.6"
