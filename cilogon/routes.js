@@ -135,10 +135,10 @@ async function getUserRole(userOpenId) {
     }
     const result = await response.json();
     return result.role;
-  } catch (err) {
+  } catch (userRoleError) {
     logger.error({
       type: "Fetch user role failed",
-      message: err,
+      message: userRoleError.message || userRoleError,
       user: {
         id: userOpenId,
       }
@@ -191,98 +191,133 @@ router.get(
 );
 
 router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
-  // Retrieve the redirectURL from session, and then destory the session variable
-  const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
-  delete req.session.redirectFullURL;
+  try {
+    // Retrieve the redirectURL from session, and then destory the session variable
+    const redirectFullURL = req.session.redirectFullURL || `${FRONTEND_URL}/user-profile`;
+    delete req.session.redirectFullURL;
 
-  passport.authenticate("oidc", async (err, user, info) => {
-    if (err) {
-      logger.error({
-        type: "CILogon callback error",
-        message: err,
-        user: user
-      });
-      return res.redirect(`/auth/error/cilogon`);
-    }
-    if (!user) {
-      return res.redirect(`/auth/error/nouser`);
-    }
-    req.logIn(user, async function (err) {
+    passport.authenticate("oidc", async (err, user, info) => {
       if (err) {
         logger.error({
-          type: "req.logIn() error",
-          message: err,
-          user: user
+          type: "OIDC Authentication Error",
+          message: err.message || err,
+          stack: err.stack,
+          user: user || null,
+          info: info || null,
         });
-        return res.redirect(`/auth/error/other`);
+        return res.redirect(`/auth/error/cilogon`);
       }
-
-      const openId = user.sub;
-      const email = user.email;
-
-      // Set user role as undefined, unless it is retrieved from the database
-      let role = undefined;
-
-      try {
-        // Verify if a user exists
-        const userExistsInDB = await checkUser(openId);
-        // If the user doesn't exist, add user
-        if (!userExistsInDB) {
-          const response = await addUser(
-            openId,
-            user.given_name,
-            user.family_name,
-            email,
-            user.idp_name
-          );
-          // Retrieve user role from the response of the endpoint
-          role = response.role;
-        } else {
-          // Retrieve user role from OpenSearch, if the user exists
-          role = await getUserRole(openId);
+      if (!user) {
+        logger.warn({
+          type: "OIDC No User Returned",
+          message: "Authentication succeeded but no user object was returned.",
+          info: info || null,
+        });
+        return res.redirect(`/auth/error/nouser`);
+      }
+      req.logIn(user, async function (loginErr) {
+        if (loginErr) {
+          logger.error({
+            type: "Login Error",
+            message: loginErr.message || loginErr,
+            stack: loginErr.stack,
+            user: user || null,
+          });
+          return res.redirect(`/auth/error/other`);
         }
-      } catch (error) {
-        logger.error({
-          type: "Error during operations with user database",
-          message: error,
-          user: user
-        });
-      }
 
-      // If role doesn't exist or returns ERROR, redirect users to the database error page
-      if (!role || role === "ERROR") {
-        return res.redirect(`/auth/error/database`);
-      }
+        const openId = user.sub;
+        const email = user.email;
 
-      // Generate JWT token with role
-      const userPayload = { id: openId, role: role, email: email };
+        // Set user role as undefined, unless it is retrieved from the database
+        let role = undefined;
 
-      // Generate tokens
-      const accessToken = generateAccessToken(userPayload);
-      const refreshToken = generateRefreshToken(userPayload);
+        try {
+          // Verify if a user exists
+          const userExistsInDB = await checkUser(openId);
+          // If the user doesn't exist, add user
+          if (!userExistsInDB) {
+            const response = await addUser(
+              openId,
+              user.given_name,
+              user.family_name,
+              email,
+              user.idp_name
+            );
+            // Retrieve user role from the response of the endpoint
+            role = response?.role;
+          } else {
+            // Retrieve user role from OpenSearch, if the user exists
+            role = await getUserRole(openId);
+          }
+        } catch (dbError) {
+          logger.error({
+            type: "Database Error",
+            message: dbError.message || dbError,
+            stack: dbError.stack,
+            user: user || null,
+          });
 
-      // Save refresh token in OpenSearch
-      await storeRefreshToken(client, refreshToken, user.sub);
+          return res.redirect(`/auth/error/database`);
+        }
 
-      // Set the tokens in cookies
-      res.cookie(jwt_access_token_name, accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        domain: target_domain,
-        path: "/",
+        // If role doesn't exist or returns ERROR, redirect users to the database error page
+        if (!role || role === "ERROR") {
+          logger.error({
+            type: "Invalid User Role",
+            message: "User role is missing or invalid",
+            user: user || null,
+          });
+          return res.redirect(`/auth/error/database`);
+        }
+
+        try {
+          // Generate JWT token with role
+          const userPayload = { id: openId, role: role, email: email };
+
+          // Generate tokens
+          const accessToken = generateAccessToken(userPayload);
+          const refreshToken = generateRefreshToken(userPayload);
+
+          // Save refresh token in OpenSearch
+          await storeRefreshToken(client, refreshToken, user.sub);
+
+          // Set the tokens in cookies
+          res.cookie(jwt_access_token_name, accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            domain: target_domain,
+            path: "/",
+          });
+          res.cookie(jwt_refresh_token_name, refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            domain: target_domain,
+            path: "/",
+          });
+          res.cookie(jwt_tokens_exist_name, true, { path: "/" });
+          res.redirect(redirectFullURL);
+        } catch (tokenError) {
+          logger.error({
+            type: "Token Handling Error",
+            message: tokenError.message || tokenError,
+            stack: tokenError.stack,
+            user: user || null,
+          });
+          return res.redirect("/auth/error/token");
+        }
       });
-      res.cookie(jwt_refresh_token_name, refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "Strict",
-        domain: target_domain,
-        path: "/",
-      });
-      res.cookie(jwt_tokens_exist_name, true, { path: "/" });
-      res.redirect(redirectFullURL);
+    })(req, res, next);
+  } catch (unexpectedError) {
+    logger.error({
+      type: "Unhandled OIDC Callback Error",
+      message: unexpectedError.message || unexpectedError,
+      stack: unexpectedError.stack,
     });
-  })(req, res, next);
+    return res.redirect("/auth/error/unexpected");
+  }
 });
 
 router.get('/logout', function (req, res) {
@@ -374,10 +409,10 @@ router.post('/recaptcha-verification', async (req, res) => {
 
     const result = await response.json();
     res.send(result)
-  } catch (err) {
+  } catch (recaptchaError) {
     logger.warn({
-      type: "reCAPTCHA failed",
-      message: err
+      type: "reCAPTCHA Error",
+      message: recaptchaError.message || recaptchaError
     });
   }
 })
@@ -406,6 +441,20 @@ router.get("/error/other", (req, res) => {
 router.get("/error/database", (req, res) => {
   res.send(`<h2>We ran into an issue during the authentication.</h2>
     <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
+});
+
+router.get("/error/token", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because we couldn't generate the token that stores your login information.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
+});
+
+router.get("/error/unexpected", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because of an unexpected or unknown error.</p>
     <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
     or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
 });
