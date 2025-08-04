@@ -96,7 +96,8 @@ export const ELEM_VISIBILITY = Object.freeze({
   public: "public",
 });
 
-export const IMAGE_SIZE_LIMIT = 5000000;
+export const IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;
+export const USER_UPLOAD_DATASET_SIZE_LIMIT = 2 * 1024 * 1024 * 1024;
 
 export const NAVBAR_HEIGHT = 70;
 export const HEADER_HEIGHT = 280;
@@ -120,3 +121,6 @@ export const SEARCH_RESULTS_BODY_HEIGHT = `calc(100vh - ${
 
 export const ACCEPTED_IMAGE_TYPES =
   "image/gif, image/jpg, image/jpeg, image/png, image/webp, image/tiff";
+
+export const ACCEPTED_DATASET_TYPES =
+  "text/csv, application/zip, application/x-zip-compressed";

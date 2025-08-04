@@ -178,3 +178,26 @@ export function isValidNumberWithinRange(number, min, max) {
   const parsedNumber = parseFloat(number);
   return !isNaN(parsedNumber) && parsedNumber >= min && parsedNumber <= max;
 }
+
+export function formatFileSize(bytes, decimals = 2) {
+  if (bytes === 0) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const size = bytes / Math.pow(k, i);
+
+  return `${parseFloat(size.toFixed(dm))}${sizes[i]}`;
+}
+
+export async function calculateSHA256(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
+}

@@ -40,6 +40,7 @@ import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTi
 import CapsuleInput from "../../components/CapsuleInput";
 import LoadingCard from "../../components/Layout/LoadingCard";
 import SpatialMetadataInfoCard from "./SpatialMetadataInfoCard";
+import UserDatasetUploader from "./UserDatasetUploader";
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";
@@ -951,6 +952,17 @@ export default function SubmissionCard(props) {
       return;
     }
 
+    if (
+      resourceTypeSelected === "dataset" &&
+      !datasetExternalLink &&
+      !directDownloadLink
+    ) {
+      setOpenModal(true);
+      setSubmissionStatus("error-dataset-both-links-empty");
+      setButtonDisabled(false);
+      return;
+    }
+
     // When the user forgets to save the new educational element link, app will ask the user to submit it
     if (
       (currentOerExternalLinkURL && currentOerExternalLinkURL !== "") ||
@@ -1739,6 +1751,12 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {resourceTypeSelected === "dataset" && (
+              <UserDatasetUploader
+                setDatasetDirectDownloadLink={setDirectDownloadLink}
+                setDatasetSize={setDataSize}
+              />
+            )}
+            {resourceTypeSelected === "dataset" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={
@@ -1746,16 +1764,16 @@ export default function SubmissionCard(props) {
                   elementIdWithDuplicateDatasetExternalLink
                 }
               >
+                <Typography level="title-sm" color="warning" sx={{ pb: 1 }}>
+                  Please provide a dataset host link, a dataset direct download
+                  link, or both.
+                </Typography>
                 <FormLabel>
-                  <SubmissionCardFieldTitle
-                    tooltipTitle="Add a link to the primary page for this dataset"
-                    fieldRequired
-                  >
+                  <SubmissionCardFieldTitle tooltipTitle="Add a link to the primary page for this dataset">
                     Dataset host link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Input
-                  required
                   name="external-link"
                   placeholder="https://example.com"
                   value={datasetExternalLink}
