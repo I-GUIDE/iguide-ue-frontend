@@ -71,6 +71,14 @@ export default function SubmissionStatusCard(props) {
       submissionSucceeded = false;
       break;
 
+    case "error-dataset-both-links-empty":
+      submissionStatusText =
+        "Submission failed: Both dataset host link and direct download link are blank.";
+      subText =
+        "You have to provide at least a dataset host link or a dataset direct download link.";
+      submissionSucceeded = false;
+      break;
+
     case "error-initial-failed-duplicate-doi":
       submissionStatusText = "Submission failed: Duplicate DOI/URL.";
       subText =
