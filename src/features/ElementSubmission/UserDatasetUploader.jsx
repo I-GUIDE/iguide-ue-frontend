@@ -93,15 +93,6 @@ export default function UserDatasetUploader(props) {
       }
 
       try {
-        TEST_MODE &&
-          console.log(
-            "uploadId",
-            uploadId,
-            "chunk number",
-            chunkIdx,
-            "total chunks",
-            totalChunks
-          );
         await uploadChunk(uploadId, fileChunk, chunkIdx, totalChunks);
 
         const currProgress = Math.min(
@@ -135,13 +126,14 @@ export default function UserDatasetUploader(props) {
   async function uploadChunk(uploadId, fileChunk, chunkIdx, totalChunks) {
     const formData = new FormData();
     formData.append("chunk", fileChunk, `chunk-${chunkIdx}.part`);
-    formData.append("chunkIdx", chunkIdx.toString());
+    formData.append("chunkNumber", chunkIdx.toString());
     formData.append("totalChunks", totalChunks.toString());
-    TEST_MODE && console.log("form data for chunk no", chunkIdx);
+
     // Log form content
     for (const pair of formData.entries()) {
       TEST_MODE && console.log("FormData entry:", pair[0], pair[1]);
     }
+
     const response = await fetchWithAuth(
       `${BACKEND_URL_PORT}/api/elements/datasets/upload/chunk/${uploadId}`,
       {
@@ -202,6 +194,8 @@ export default function UserDatasetUploader(props) {
       fileRef.current.value = null;
       setInputKey(Date.now());
     }
+    setDatasetDirectDownloadLink("");
+    setDatasetSize("");
   }
 
   // Handle initialize user dataset upload
@@ -286,7 +280,8 @@ export default function UserDatasetUploader(props) {
     for (let chunkIdx = 0; chunkIdx < totalChunks; chunkIdx++) {
       if (requestCancelRef.current) {
         setUploadStatus("CANCELED");
-        throw new Error("Upload canceled");
+        console.warn("Upload canceled by the user.");
+        return;
       }
 
       const startingByte = chunkIdx * chunkSize;
@@ -294,19 +289,39 @@ export default function UserDatasetUploader(props) {
       const endingByte = Math.min(startingByte + chunkSize, fileSize);
       const fileChunk = datasetFile.slice(startingByte, endingByte);
 
-      await uploadChunksWithRetries(uploadId, fileChunk, chunkIdx, totalChunks);
+      try {
+        await uploadChunksWithRetries(
+          uploadId,
+          fileChunk,
+          chunkIdx,
+          totalChunks
+        );
+      } catch (error) {
+        setUploadStatus("ERROR");
+        throw new Error(error);
+      }
     }
 
     if (requestCancelRef.current) {
       setUploadStatus("CANCELED");
-      throw new Error("Upload canceled after finishing the upload");
+      console.warn(
+        "Upload canceled by the user, after finishing the upload but before completing it."
+      );
+      return;
     }
 
     // Complete upload
     const result = await completeUpload(uploadId);
-    TEST_MODE && console.log("Complete upload", result);
-
     const returnedChecksum = result.checksum;
+
+    TEST_MODE &&
+      console.log(
+        "Upload is complete",
+        result,
+        "local checksum",
+        localChecksum
+      );
+
     if (localChecksum !== returnedChecksum) {
       setUploadStatus("ERROR");
       throw new Error(
@@ -473,11 +488,20 @@ export default function UserDatasetUploader(props) {
                 dataset's direct download link and file size for you.
               </Typography>
               <Typography level="body-xs">
-                If you would like to replace this dataset, click the "Upload
-                your dataset" button above. Your new dataset will replace the
-                existing one. To request removal of a previously uploaded
-                dataset from our database, please contact us.
+                If you would like to start over, click the "Reset" button below.
+                To replace the current dataset, click the "Upload your dataset"
+                button above. Please note that while your new dataset will
+                replace the existing one, previously uploaded datasets are not
+                automatically deleted from our database. To request the removal
+                of a previously uploaded dataset, please contact us.
               </Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleResetUpload}
+              >
+                Reset
+              </Button>
             </Stack>
           )}
           {uploadStatus === "CANCELED" && (
@@ -541,13 +565,14 @@ export default function UserDatasetUploader(props) {
                       mixBlendMode: "difference",
                     }}
                   >
-                    ERROR
+                    ERROR {`${Math.round(uploadProgress)}%`}
                   </Typography>
                 </LinearProgress>
               </Box>
               <Typography level="body-sm" color="danger">
-                We are sorry that your upload was incomplete due to an error.
-                Please click "reset" to try again or contact us about the error.
+                Oops! Something went wrong during your upload. We're unable to
+                complete the process at this time. Please click "Reset" to try
+                again, or reach out to us for assistance with this error.
               </Typography>
               <Button
                 variant="outlined"
