@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 
+import { Link as RouterLink } from "react-router";
+
 import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
@@ -9,6 +11,7 @@ import Button from "@mui/joy/Button";
 import { styled } from "@mui/joy/styles";
 import Stack from "@mui/joy/Stack";
 import LinearProgress from "@mui/joy/LinearProgress";
+import Link from "@mui/joy/Link";
 
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -294,6 +297,18 @@ export default function UserDatasetUploader(props) {
           ref={fileRef}
         />
       </Button>
+      <Typography level="body-xs" sx={{ py: 0.5 }}>
+        By clicking "Upload your dataset", you agree to our{" "}
+        <Link
+          component={RouterLink}
+          to="/contributor-license-agreement"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Contributor License Agreement
+        </Link>
+        .
+      </Typography>
       {fileDetail && (
         <Card sx={{ my: 1 }}>
           <Stack spacing={1}>
