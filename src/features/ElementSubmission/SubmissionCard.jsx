@@ -93,6 +93,9 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
 
+const ENABLE_DATASET_UPLOAD =
+  import.meta.env.VITE_ENABLE_DATASET_UPLOAD === "true";
+
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -1762,7 +1765,8 @@ export default function SubmissionCard(props) {
                 />
               </FormControl>
             )}
-            {resourceTypeSelected === "dataset" && (
+            {/* While the dataset upload feature is under beta, we use ENABLE_DATASET_UPLOAD to control access */}
+            {resourceTypeSelected === "dataset" && ENABLE_DATASET_UPLOAD && (
               <UserDatasetUploader
                 setDatasetDirectDownloadLink={setDirectDownloadLink}
                 setDatasetSize={setDataSize}

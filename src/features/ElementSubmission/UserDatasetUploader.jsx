@@ -12,6 +12,7 @@ import { styled } from "@mui/joy/styles";
 import Stack from "@mui/joy/Stack";
 import LinearProgress from "@mui/joy/LinearProgress";
 import Link from "@mui/joy/Link";
+import Chip from "@mui/joy/Chip";
 
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -277,7 +278,10 @@ export default function UserDatasetUploader(props) {
     <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
       <FormLabel>
         <SubmissionCardFieldTitle tooltipTitle="Upload your own dataset">
-          Upload your own dataset {"(< 2GB)"}
+          <Chip component="span" size="sm" color="primary" sx={{ mr: 0.5 }}>
+            BETA
+          </Chip>
+          Upload your own dataset {"(< 2GB)"}{" "}
         </SubmissionCardFieldTitle>
       </FormLabel>
       <Button
