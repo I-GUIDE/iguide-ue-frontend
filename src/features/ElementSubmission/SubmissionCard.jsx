@@ -1702,6 +1702,18 @@ export default function SubmissionCard(props) {
                   onChange={handleThumbnailImageUpload}
                 />
               </Button>
+              <Typography level="body-xs" sx={{ py: 0.5 }}>
+                By clicking "Upload a thumbnail image", you agree to our{" "}
+                <Link
+                  component={RouterLink}
+                  to="/contributor-license-agreement"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Contributor License Agreement
+                </Link>
+                .
+              </Typography>
               {thumbnailImageFileURLs && (
                 <>
                   <Typography level="title-sm" sx={{ py: 1 }}>
