@@ -163,6 +163,8 @@ export default function SubmissionCard(props) {
   //   the return values from our own dataset host.
   const [datasetInfoFromUserUpload, setDatasetInfoFromUserUpload] =
     useState(false);
+  // This tracks if the dataset is still being uploaded. Submit button will be disabled if it's true.
+  const [datasetUploading, setDatasetUploading] = useState(false);
 
   const [datasetExternalLink, setDatasetExternalLink] = useState("");
   const [datasetExternalLinkError, setDatasetExternalLinkError] =
@@ -227,7 +229,8 @@ export default function SubmissionCard(props) {
   const [licenseUrl, setLicenseUrl] = useState("");
   const [fundingAgency, setFundingAgency] = useState("");
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  // When submittingElement is true, disable the submit button
+  const [submittingElement, setSubmittingElement] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -235,6 +238,17 @@ export default function SubmissionCard(props) {
   const [loading, setLoading] = useState(true);
 
   const alertModal = useAlertModal();
+
+  let submitButtonText = "Submit";
+  if (submissionType === "update") {
+    submitButtonText = "Update";
+  }
+  if (datasetUploading) {
+    submitButtonText = "Uploading Dataset...";
+  }
+  if (submittingElement) {
+    submitButtonText = "Submitting...";
+  }
 
   useEffect(() => {
     async function checkJWTToken() {
@@ -948,7 +962,7 @@ export default function SubmissionCard(props) {
     const data = {};
 
     // Disable the submission button, preventing accidental multiple submissions
-    setButtonDisabled(true);
+    setSubmittingElement(true);
 
     // When the user forgets to save the new related element, app will ask the user to submit it.
     // 02/27/2025: This case has been prevented through a code update.
@@ -957,7 +971,7 @@ export default function SubmissionCard(props) {
         "Related element error",
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -968,7 +982,7 @@ export default function SubmissionCard(props) {
     ) {
       setOpenModal(true);
       setSubmissionStatus("error-dataset-both-links-empty");
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -979,7 +993,7 @@ export default function SubmissionCard(props) {
     ) {
       setOpenModal(true);
       setSubmissionStatus("error-unsaved-oer-link");
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -990,7 +1004,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the duplicate GitHub repository link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1000,7 +1014,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the duplicate DOI/URL link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1010,7 +1024,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the duplicate dataset host link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1020,7 +1034,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid dataset host link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
     if (directDownloadLinkError) {
@@ -1029,7 +1043,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid dataset direct download link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1039,7 +1053,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid GitHub notebook URL."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1049,7 +1063,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid DOI or URL of the publication."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1059,7 +1073,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid GitHub repository link."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1069,7 +1083,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid bounding box format."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1079,7 +1093,7 @@ export default function SubmissionCard(props) {
       setSubmissionStatusText(
         "You cannot submit this element due to the invalid centroid format."
       );
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1148,7 +1162,7 @@ export default function SubmissionCard(props) {
         console.error("Error:", error);
         setOpenModal(true);
         setSubmissionStatus("error-uploading-thumbnail");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
     } else {
@@ -1158,7 +1172,7 @@ export default function SubmissionCard(props) {
     if (!data["thumbnail-image"] || data["thumbnail-image"] === "") {
       setOpenModal(true);
       setSubmissionStatus("error-no-thumbnail");
-      setButtonDisabled(false);
+      setSubmittingElement(false);
       return;
     }
 
@@ -1184,12 +1198,12 @@ export default function SubmissionCard(props) {
       if (fileExists === "ERROR" || fileExists === "RATE_LIMITED") {
         setOpenModal(true);
         setSubmissionStatus("error-cannot-verify-github-file-existence");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       } else if (fileExists === false) {
         setOpenModal(true);
         setSubmissionStatus("error-cannot-find-github-file");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
     }
@@ -1205,7 +1219,7 @@ export default function SubmissionCard(props) {
         console.error("Error: GitHub repo format is invalid.");
         setOpenModal(true);
         setSubmissionStatus("error-cannot-verify-github-repo-status");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
       const repoOwner = repoInfoMatch[2];
@@ -1219,7 +1233,7 @@ export default function SubmissionCard(props) {
       if (repoStatus === "ERROR") {
         setOpenModal(true);
         setSubmissionStatus("error-cannot-verify-github-repo-status");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
       const rawReadme = await fetchGitHubReadme(repoOwner, repoName);
@@ -1252,7 +1266,7 @@ export default function SubmissionCard(props) {
         if (result && result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
-          setButtonDisabled(false);
+          setSubmittingElement(false);
           const futureElementUrl = `/${
             RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
           }/${elementId}${
@@ -1262,14 +1276,14 @@ export default function SubmissionCard(props) {
         } else {
           setOpenModal(true);
           setSubmissionStatus("update-failed");
-          setButtonDisabled(false);
+          setSubmittingElement(false);
           return;
         }
       } catch (error) {
         console.error("Error:", error);
         setOpenModal(true);
         setSubmissionStatus("update-failed");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
     } else if (submissionType === "initial") {
@@ -1317,24 +1331,24 @@ export default function SubmissionCard(props) {
               </Link>
             </Typography>
           );
-          setButtonDisabled(false);
+          setSubmittingElement(false);
           return;
         } else {
           setOpenModal(true);
           setSubmissionStatus("initial-failed");
-          setButtonDisabled(false);
+          setSubmittingElement(false);
           return;
         }
       } catch (error) {
         console.error("Error:", error);
         setOpenModal(true);
         setSubmissionStatus("initial-failed");
-        setButtonDisabled(false);
+        setSubmittingElement(false);
         return;
       }
     }
     // Re-enable the submission button. This part, as a fail-safe, is necessary in case of some unexpected early returns.
-    setButtonDisabled(false);
+    setSubmittingElement(false);
   }
 
   if (error) {
@@ -1777,6 +1791,7 @@ export default function SubmissionCard(props) {
                 setDatasetDirectDownloadLink={setDirectDownloadLink}
                 setDatasetSize={setDataSize}
                 setDatasetInfoFromUserUpload={setDatasetInfoFromUserUpload}
+                setDatasetUploading={setDatasetUploading}
               />
             )}
             {resourceTypeSelected === "dataset" && (
@@ -2516,13 +2531,9 @@ export default function SubmissionCard(props) {
                   type="submit"
                   variant="solid"
                   color="primary"
-                  disabled={buttonDisabled}
+                  disabled={submittingElement || datasetUploading}
                 >
-                  {buttonDisabled
-                    ? "Sending..."
-                    : submissionType === "update"
-                    ? "Update"
-                    : "Submit"}
+                  {submitButtonText}
                 </Button>
                 <Typography level="body-sm">
                   By clicking{" "}
@@ -2550,7 +2561,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("no-submission");
           setSubmissionStatusText("");
           setOpenModal(false);
-          setButtonDisabled(false);
+          setSubmittingElement(false);
         }}
       >
         <ModalDialog size="lg">

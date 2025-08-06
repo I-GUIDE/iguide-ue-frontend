@@ -48,6 +48,7 @@ export default function UserDatasetUploader(props) {
   const setDatasetDirectDownloadLink = props.setDatasetDirectDownloadLink;
   const setDatasetSize = props.setDatasetSize;
   const setDatasetInfoFromUserUpload = props.setDatasetInfoFromUserUpload;
+  const setDatasetUploading = props.setDatasetUploading;
 
   const [uploadStatus, setUploadStatus] = useState("NO_UPLOAD");
   const requestCancelRef = useRef(false);
@@ -132,6 +133,7 @@ export default function UserDatasetUploader(props) {
     }
 
     setUploadStatus("UPLOADING");
+    setDatasetUploading(true);
 
     const datasetFile = fileRef.current;
     const localChecksum = await calculateSHA256(datasetFile);
@@ -151,12 +153,15 @@ export default function UserDatasetUploader(props) {
 
     if (requestCancelRef.current) {
       setUploadStatus("CANCELED");
+      setDatasetUploading(false);
+      console.warn("Upload canceled by the user before the upload starts.");
       return; // Exit if the upload is canceled
     }
 
     for (let chunkIdx = 0; chunkIdx < totalChunks; chunkIdx++) {
       if (requestCancelRef.current) {
         setUploadStatus("CANCELED");
+        setDatasetUploading(false);
         console.warn("Upload canceled by the user.");
         return;
       }
@@ -175,12 +180,14 @@ export default function UserDatasetUploader(props) {
         );
       } catch (error) {
         setUploadStatus("ERROR");
+        setDatasetUploading(false);
         throw new Error(error);
       }
     }
 
     if (requestCancelRef.current) {
       setUploadStatus("CANCELED");
+      setDatasetUploading(false);
       console.warn(
         "Upload canceled by the user, after finishing the upload but before completing it."
       );
@@ -201,6 +208,7 @@ export default function UserDatasetUploader(props) {
 
     if (localChecksum !== returnedChecksum) {
       setUploadStatus("ERROR");
+      setDatasetUploading(false);
       throw new Error(
         "Checksum test failed. File uploaded differs from the user local file."
       );
@@ -211,6 +219,7 @@ export default function UserDatasetUploader(props) {
     setDatasetSize(formatFileSize(fileDetail.size));
 
     setUploadStatus("FINISHED");
+    setDatasetUploading(false);
 
     return result;
   }
@@ -292,6 +301,7 @@ export default function UserDatasetUploader(props) {
         component="label"
         role={undefined}
         tabIndex={-1}
+        disabled={uploadStatus !== "NO_UPLOAD"}
         variant="outlined"
         color="primary"
         name="user-dataset"
@@ -427,11 +437,10 @@ export default function UserDatasetUploader(props) {
               </Typography>
               <Typography level="body-xs">
                 If you would like to start over, click the "Reset" button below.
-                To replace the current dataset, click the "Upload your dataset"
-                button above. Please note that while your new dataset will
-                replace the existing one, previously uploaded datasets are not
-                automatically deleted from our database. To request the removal
-                of a previously uploaded dataset, please contact us.
+                Please note that while your new dataset will replace the
+                existing one, previously uploaded datasets are not automatically
+                deleted from our database. To request the removal of a
+                previously uploaded dataset, please contact us.
               </Typography>
               <Button
                 variant="outlined"
