@@ -158,6 +158,12 @@ export default function SubmissionCard(props) {
   const [authors, setAuthors] = useState("");
   const [contents, setContents] = useState("");
 
+  // This tracks if the dataset info (direct download link & size) is from a user-uploaded dataset.
+  //   direct download link and size will be disabled from editing due to it's autofilled by
+  //   the return values from our own dataset host.
+  const [datasetInfoFromUserUpload, setDatasetInfoFromUserUpload] =
+    useState(false);
+
   const [datasetExternalLink, setDatasetExternalLink] = useState("");
   const [datasetExternalLinkError, setDatasetExternalLinkError] =
     useState(false);
@@ -1770,6 +1776,7 @@ export default function SubmissionCard(props) {
               <UserDatasetUploader
                 setDatasetDirectDownloadLink={setDirectDownloadLink}
                 setDatasetSize={setDataSize}
+                setDatasetInfoFromUserUpload={setDatasetInfoFromUserUpload}
               />
             )}
             {resourceTypeSelected === "dataset" && (
@@ -1791,6 +1798,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="external-link"
+                  disabled={datasetInfoFromUserUpload}
                   placeholder="https://example.com"
                   value={datasetExternalLink}
                   onChange={handleDatasetExternalLinkChange}
@@ -1836,6 +1844,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="direct-download-link"
+                  disabled={datasetInfoFromUserUpload}
                   value={directDownloadLink}
                   onChange={handleDirectDownloadLinkChange}
                 />
@@ -1860,6 +1869,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="size"
+                  disabled={datasetInfoFromUserUpload}
                   value={dataSize}
                   onChange={(event) => setDataSize(event.target.value)}
                 />

@@ -47,6 +47,7 @@ const VisuallyHiddenInput = styled("input")`
 export default function UserDatasetUploader(props) {
   const setDatasetDirectDownloadLink = props.setDatasetDirectDownloadLink;
   const setDatasetSize = props.setDatasetSize;
+  const setDatasetInfoFromUserUpload = props.setDatasetInfoFromUserUpload;
 
   const [uploadStatus, setUploadStatus] = useState("NO_UPLOAD");
   const requestCancelRef = useRef(false);
@@ -71,6 +72,7 @@ export default function UserDatasetUploader(props) {
     }
     setDatasetDirectDownloadLink("");
     setDatasetSize("");
+    setDatasetInfoFromUserUpload(false);
   }
 
   // Handle initialize user dataset upload
@@ -203,6 +205,8 @@ export default function UserDatasetUploader(props) {
         "Checksum test failed. File uploaded differs from the user local file."
       );
     }
+
+    setDatasetInfoFromUserUpload(true);
     setDatasetDirectDownloadLink(result.url);
     setDatasetSize(formatFileSize(fileDetail.size));
 
