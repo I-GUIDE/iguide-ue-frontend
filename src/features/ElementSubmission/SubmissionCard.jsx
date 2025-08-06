@@ -380,7 +380,7 @@ export default function SubmissionCard(props) {
 
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
-      setDataSize(thisElement.dataSize);
+      setDataSize(thisElement.size);
 
       if (thisElement["notebook-url"]) {
         setNotebookGitHubUrl(thisElement["notebook-url"]);
