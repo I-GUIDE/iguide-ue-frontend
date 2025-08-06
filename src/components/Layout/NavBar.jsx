@@ -68,7 +68,6 @@ export default function NavBar(props) {
     localUserInfo.role <= PERMISSIONS["display_hpc"] &&
     localUserInfo.affiliation === "ACCESS";
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
-  const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canEditAllElements = localUserInfo.role <= PERMISSIONS["edit_all"];
   const canAccessLLMSearch = localUserInfo.role <= PERMISSIONS["access_llm"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
@@ -243,19 +242,17 @@ export default function NavBar(props) {
                   >
                     New Contribution
                   </Typography>
-                  {canEditMap && (
-                    <Link
-                      href="/contribution/map"
-                      underline="none"
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton onClick={() => setOpen(false)}>
-                          New Map
-                        </ListItemButton>
-                      </ListItem>
-                    </Link>
-                  )}
+                  <Link
+                    href="/contribution/map"
+                    underline="none"
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        New Map
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                   <Link
                     href="/contribution/dataset"
                     underline="none"
@@ -492,17 +489,15 @@ export default function NavBar(props) {
               >
                 New Contribution
               </Typography>
-              {canEditMap && (
-                <Link
-                  href="/contribution/map"
-                  underline="none"
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton>New Map</ListItemButton>
-                  </ListItem>
-                </Link>
-              )}
+              <Link
+                href="/contribution/map"
+                underline="none"
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>New Map</ListItemButton>
+                </ListItem>
+              </Link>
               <Link
                 href="/contribution/dataset"
                 underline="none"
