@@ -132,7 +132,6 @@ export default function UserProfileHeader(props) {
   }
 
   const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
-  const canEditMap = localUserInfo.role <= PERMISSIONS["edit_map"];
   const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
 
   return (
@@ -412,11 +411,9 @@ export default function UserProfileHeader(props) {
                                 New Educational Resource
                               </MenuItem>
                             )}
-                            {canEditMap && (
-                              <MenuItem component="a" href="/contribution/map">
-                                New Map
-                              </MenuItem>
-                            )}
+                            <MenuItem component="a" href="/contribution/map">
+                              New Map
+                            </MenuItem>
                             <MenuItem component="a" href="/contribution/code">
                               New Code
                             </MenuItem>

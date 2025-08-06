@@ -376,7 +376,7 @@ export default function SubmissionCard(props) {
 
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
-      setDataSize(thisElement.dataSize);
+      setDataSize(thisElement.size);
 
       if (thisElement["notebook-url"]) {
         setNotebookGitHubUrl(thisElement["notebook-url"]);
@@ -1369,10 +1369,6 @@ export default function SubmissionCard(props) {
     localUserInfo.role <= PERMISSIONS["edit_oer"] &&
     (typeof userRoleFromJWT === "undefined" ||
       userRoleFromJWT <= PERMISSIONS["edit_oer"]);
-  const canEditMap =
-    localUserInfo.role <= PERMISSIONS["edit_map"] &&
-    (typeof userRoleFromJWT === "undefined" ||
-      userRoleFromJWT <= PERMISSIONS["edit_map"]);
 
   if (submissionType === "initial") {
     if (!canContribute) {
@@ -1385,16 +1381,6 @@ export default function SubmissionCard(props) {
       TEST_MODE &&
         console.log(
           "Can't contribute OER",
-          localUserInfo.role,
-          userRoleFromJWT
-        );
-      return (
-        <SubmissionStatusCard submissionStatus="error-unauthorized-initial-submission" />
-      );
-    } else if (elementType === "map" && !canEditMap) {
-      TEST_MODE &&
-        console.log(
-          "Can't contribute map",
           localUserInfo.role,
           userRoleFromJWT
         );

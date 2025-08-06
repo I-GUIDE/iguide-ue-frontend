@@ -5,8 +5,7 @@ export const PERMISSIONS = {
   default_user: 10,
   contribute: 8,
   display_hpc: 5,
-  edit_oer: 4,
-  edit_map: 4,
+  edit_oer: 5,
   access_llm: 8,
   access_jupyterhub: 8,
   edit_all: 3,
@@ -33,12 +32,12 @@ export const PERMISSION_DETAIL = {
   5: {
     role_name: "Trusted User Plus",
     description:
-      "You can contribute datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to Anvil HPC.",
+      "You can contribute maps, datasets, notebooks, publications, eduactional resources, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to Anvil HPC.",
   },
   8: {
     role_name: "Trusted User",
     description:
-      "You can contribute datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models.",
+      "You can contribute maps, datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models.",
   },
   10: {
     role_name: "User",
