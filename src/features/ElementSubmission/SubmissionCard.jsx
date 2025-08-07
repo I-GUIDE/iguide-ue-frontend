@@ -1106,6 +1106,12 @@ export default function SubmissionCard(props) {
     data["contents"] = contents;
     data["external-link-publication"] = publicationDOI;
 
+    if (resourceTypeSelected === "dataset") {
+      data["external-link"] = datasetExternalLink;
+      data["direct-download-link"] = directDownloadLink;
+      data["size"] = dataSize;
+    }
+
     if (resourceTypeSelected === "oer") {
       data["oer-external-links"] = oerExternalLinks;
     }
