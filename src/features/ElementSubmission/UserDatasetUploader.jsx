@@ -27,6 +27,7 @@ import {
   singleChunkUpload,
   completeUpload,
   abortUpload,
+  deleteUpload,
 } from "../../utils/ChunkUpload";
 import { formatFileSize, calculateSHA256 } from "../../helpers/helper";
 
@@ -55,6 +56,7 @@ export default function UserDatasetUploader(props) {
   const [fileDetail, setFileDetail] = useState();
   const [uploadProgress, setUploadProgress] = useState(0); // Min: 0, Max: 100
   const [inputKey, setInputKey] = useState(Date.now()); // This allows the same file to be selected again after cancelling
+  const [tempLink, setTempLink] = useState("");
 
   const fileRef = useRef(null);
 
@@ -62,7 +64,15 @@ export default function UserDatasetUploader(props) {
   const retryDelay = 1000;
 
   // Reset upload after a complete upload
-  function resetUpload(resetFileRef = true) {
+  async function resetUpload(resetFileRef = true) {
+    if (tempLink) {
+      try {
+        await deleteUpload(tempLink);
+      } catch (error) {
+        throw new Error("Delete file failed.");
+      }
+    }
+
     setFileDetail(null);
     requestCancelRef.current = false;
     setUploadStatus("NO_UPLOAD");
@@ -71,6 +81,7 @@ export default function UserDatasetUploader(props) {
       fileRef.current.value = null;
       setInputKey(Date.now());
     }
+    setTempLink("");
     setDatasetDirectDownloadLink("");
     setDatasetSize("");
     setDatasetInfoFromUserUpload(false);
@@ -216,6 +227,7 @@ export default function UserDatasetUploader(props) {
 
     setDatasetInfoFromUserUpload(true);
     setDatasetDirectDownloadLink(result.url);
+    setTempLink(result.url);
     setDatasetSize(formatFileSize(fileDetail.size));
 
     setUploadStatus("FINISHED");
@@ -436,18 +448,17 @@ export default function UserDatasetUploader(props) {
                 dataset's direct download link and file size for you.
               </Typography>
               <Typography level="body-xs">
-                If you would like to start over, click the "Reset" button below.
-                Please note that while your new dataset will replace the
-                existing one, previously uploaded datasets are not automatically
-                deleted from our database. To request the removal of a
-                previously uploaded dataset, please contact us.
+                If you would like to start over, click the "Start Over" button
+                below. By clicking this button, your uploaded dataset or file
+                will be removed from our server, and any generated download
+                links will be invalid.
               </Typography>
               <Button
                 variant="outlined"
                 color="primary"
                 onClick={handleResetUpload}
               >
-                Reset
+                Start Over
               </Button>
             </Stack>
           )}
