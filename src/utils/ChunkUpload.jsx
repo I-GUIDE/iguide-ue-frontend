@@ -6,7 +6,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 // Initialize file chunk upload. An uploadId will be returned
 export async function initializeUpload(filename, filesize, filetype) {
   const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/elements/datasets/upload/chunk/init`,
+    `${BACKEND_URL_PORT}/api/elements/datasets/chunk/init`,
     {
       method: "POST",
       headers: {
@@ -46,7 +46,7 @@ export async function singleChunkUpload(
   }
 
   const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/elements/datasets/upload/chunk/${uploadId}`,
+    `${BACKEND_URL_PORT}/api/elements/datasets/chunk/${uploadId}`,
     {
       method: "POST",
       body: formData,
@@ -64,7 +64,7 @@ export async function singleChunkUpload(
 // Finish and verify the upload
 export async function completeUpload(uploadId) {
   const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/elements/datasets/upload/chunk/complete/${uploadId}`,
+    `${BACKEND_URL_PORT}/api/elements/datasets/chunk/complete/${uploadId}`,
     {
       method: "POST",
     }
@@ -81,7 +81,7 @@ export async function completeUpload(uploadId) {
 // Abort the upload in the middle
 export async function abortUpload(uploadId) {
   const response = await fetchWithAuth(
-    `${BACKEND_URL_PORT}/api/elements/datasets/upload/chunk/${uploadId}`,
+    `${BACKEND_URL_PORT}/api/elements/datasets/chunk/${uploadId}`,
     {
       method: "DELETE",
     }
@@ -90,6 +90,29 @@ export async function abortUpload(uploadId) {
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.error || "Failed to abort upload");
+  }
+
+  return await response.json();
+}
+
+// Delete the uploaded file
+export async function deleteUpload(url) {
+  const response = await fetchWithAuth(
+    `${BACKEND_URL_PORT}/api/elements/datasets`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: url,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to delete the uploaded file");
   }
 
   return await response.json();
