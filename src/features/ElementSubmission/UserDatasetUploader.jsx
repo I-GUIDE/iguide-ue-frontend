@@ -17,6 +17,7 @@ import Chip from "@mui/joy/Chip";
 import CheckIcon from "@mui/icons-material/Check";
 
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
+import { useAlertModal } from "../../utils/AlertModalProvider";
 
 import {
   ACCEPTED_DATASET_TYPES,
@@ -59,6 +60,8 @@ export default function UserDatasetUploader(props) {
   const [tempLink, setTempLink] = useState("");
 
   const fileRef = useRef(null);
+
+  const alertModal = useAlertModal();
 
   const maxRetries = 3;
   const retryDelay = 1000;
@@ -106,7 +109,7 @@ export default function UserDatasetUploader(props) {
 
     if (fileSize > USER_UPLOAD_DATASET_SIZE_LIMIT) {
       await alertModal(
-        "Failed to upload datset",
+        "Failed to upload this file",
         "The file you provided is too large. Please upload a file smaller than 2GB."
       );
       // Clear the file
