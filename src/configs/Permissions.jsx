@@ -32,7 +32,7 @@ export const PERMISSION_DETAIL = {
   5: {
     role_name: "Trusted User Plus",
     description:
-      "You can contribute maps, datasets, notebooks, publications, eduactional resources, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to Anvil HPC.",
+      "You can contribute maps, datasets, notebooks, publications, eduactional resources, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to several HPCs.",
   },
   8: {
     role_name: "Trusted User",
