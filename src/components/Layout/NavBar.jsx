@@ -203,6 +203,20 @@ export default function NavBar(props) {
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                  <Link
+                    component="a"
+                    href="https://portal-aces.hprc.tamu.edu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none"
+                    sx={{ color: "text.tertiary" }}
+                  >
+                    <ListItem sx={{ width: "100%" }}>
+                      <ListItemButton onClick={() => setOpen(false)}>
+                        TAMU ACES
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 </>
               )}
 
@@ -451,6 +465,18 @@ export default function NavBar(props) {
               >
                 <ListItem sx={{ width: "100%" }}>
                   <ListItemButton>Anvil HPC</ListItemButton>
+                </ListItem>
+              </Link>
+              <Link
+                component="a"
+                href="https://portal-aces.hprc.tamu.edu"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="none"
+                sx={{ color: "text.tertiary" }}
+              >
+                <ListItem sx={{ width: "100%" }}>
+                  <ListItemButton>TAMU ACES</ListItemButton>
                 </ListItem>
               </Link>
             </>
