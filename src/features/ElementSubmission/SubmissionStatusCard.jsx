@@ -82,7 +82,7 @@ export default function SubmissionStatusCard(props) {
       submissionStatusText =
         "Submission failed: Unsaved educational resource external links";
       subText =
-        'You have an unsaved educational resource external link. Please click the "+" button to save the external link before submitting your contribution!';
+        'You have an unsaved "Educational resource external link" in the submission form. Please click the blue "check" button to save the external link before submitting your element.';
       submissionSucceeded = false;
       break;
 
