@@ -26,6 +26,7 @@ import Stack from "@mui/joy/Stack";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import ModalDialog from "@mui/joy/ModalDialog";
+import Tooltip from "@mui/joy/Tooltip";
 
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
@@ -1884,10 +1885,13 @@ export default function SubmissionCard(props) {
               <Grid sx={{ gridColumn: "1/-1" }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle>
-                    Educational resource external links (Click &#10004; button
-                    to save)
+                    Educational resource external links
                   </SubmissionCardFieldTitle>
                 </FormLabel>
+                <Typography level="title-sm" color="warning" sx={{ py: 0.5 }}>
+                  Please remember to click the &#10004; button to confirm and
+                  save each external link.
+                </Typography>
                 <Table>
                   <thead>
                     <tr>
@@ -1963,15 +1967,17 @@ export default function SubmissionCard(props) {
                         />
                       </td>
                       <td align="left">
-                        <IconButton
-                          aria-label="Search website title"
-                          size="sm"
-                          variant="outlined"
-                          onClick={() => handleOerExternalLinkSearchTitle()}
-                          style={{ marginTop: "4px", cursor: "pointer" }}
-                        >
-                          <ArrowForwardIcon />
-                        </IconButton>
+                        <Tooltip title="Autofill URL title" placement="top">
+                          <IconButton
+                            aria-label="Search website title"
+                            size="sm"
+                            variant="outlined"
+                            onClick={() => handleOerExternalLinkSearchTitle()}
+                            style={{ marginTop: "4px", cursor: "pointer" }}
+                          >
+                            <ArrowForwardIcon />
+                          </IconButton>
+                        </Tooltip>
                       </td>
                       <td align="left">
                         <Input
@@ -1982,16 +1988,21 @@ export default function SubmissionCard(props) {
                         />
                       </td>
                       <td align="left">
-                        <IconButton
-                          aria-label="Save this external link"
-                          size="sm"
-                          variant="soft"
-                          onClick={handleAddingOneOerExternalLink}
-                          style={{ marginTop: "4px", cursor: "pointer" }}
-                          color="primary"
+                        <Tooltip
+                          title="Save this external link"
+                          placement="top"
                         >
-                          <CheckIcon />
-                        </IconButton>
+                          <IconButton
+                            aria-label="Save this external link"
+                            size="sm"
+                            variant="soft"
+                            onClick={handleAddingOneOerExternalLink}
+                            style={{ marginTop: "4px", cursor: "pointer" }}
+                            color="primary"
+                          >
+                            <CheckIcon />
+                          </IconButton>
+                        </Tooltip>
                       </td>
                     </tr>
                   </tbody>
