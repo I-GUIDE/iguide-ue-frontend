@@ -37,18 +37,31 @@ const logger = pino({
   redact: ["user.email", "user.given_name"],
 });
 
+// Handle fatal error through logging and a graceful exit
+function handleFatalError(error, type) {
+  try {
+    logger.fatal(error, `${type} occurred!`);
+  } catch (loggingError) {
+    // Fallback to console if logger fails
+    console.error(`Failed to log ${type}:`, loggingError);
+    console.error(`${type}:`, error);
+  } finally {
+    // Wait to ensure logs are flushed before exiting
+    setTimeout(() => {
+      process.exit(1);
+    }, 100);
+  }
+}
+
 // Handling uncaught exceptions
 process.on('uncaughtException', (err) => {
-  logger.fatal({ err }, 'Uncaught Exception occurred!');
-  // Exit the process after logging the error
-  process.exit(1);
+  handleFatalError(err, 'Uncaught Exception');
 });
 
 // Handling unhandled promise rejections
-process.on('unhandledRejection', (reason, promise) => {
-  logger.fatal({ reason, promise }, 'Unhandled Rejection occurred!');
-  // Exit the process after logging the error
-  process.exit(1);
+process.on('unhandledRejection', (reason) => {
+  const error = reason instanceof Error ? reason : new Error(String(reason));
+  handleFatalError(error, 'Unhandled Promise Rejection');
 });
 
 const httpLogger = pinoHttp({ logger });
