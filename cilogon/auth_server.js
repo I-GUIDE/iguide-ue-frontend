@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const passport = require('passport')
 const authRoute = require('./routes')
 const http = require("http");
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const { Issuer, Strategy } = require('openid-client');
 const { logger, httpLogger } = require("./logger.js");
 

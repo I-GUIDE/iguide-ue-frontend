@@ -7,7 +7,7 @@ const multer = require("multer");
 const { createReadStream, unlinkSync, existsSync } = require("fs");
 const { WebClient } = require("@slack/web-api");
 const path = require("path");
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 

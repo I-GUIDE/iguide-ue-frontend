@@ -1,5 +1,5 @@
 const { logger } = require("./logger.js");
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const AUTH_API_KEY = process.env.AUTH_API_KEY;
 const USER_BACKEND_URL = process.env.REACT_DATABASE_BACKEND_URL;
