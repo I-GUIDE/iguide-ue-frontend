@@ -463,6 +463,16 @@ router.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Crash endpoint for testing and non-prod only
+if (process.env.EXPOSE_CRASH_ENDPOINT === "true" && process.env.ENV !== "prod" && process.env.ENV !== "production") {
+  router.get('/crash', (req, res) => {
+    setTimeout(() => {
+      throw new Error('Simulated authentication backend crash');
+    }, 0);
+    res.send('Crash scheduled.');
+  });
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, "./uploads/"));

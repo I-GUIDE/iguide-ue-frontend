@@ -14,4 +14,4 @@ RUN yarn install
 COPY . .
 
 # Starting our application
-CMD [ "node", "--watch", "auth_server.js" ]
+CMD [ "node", "auth_server.js" ]
