@@ -1,7 +1,7 @@
 // logger.js
 const pino = require('pino');
 const pinoHttp = require('pino-http');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const { WebClient } = require('@slack/web-api');
 
 // Make sure that the slack token has chat.write scope enabled
