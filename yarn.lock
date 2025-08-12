@@ -4638,10 +4638,10 @@ read@^4.0.0:
   dependencies:
     mute-stream "^2.0.0"
 
-reagraph@^4.28.0:
-  version "4.28.0"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.28.0.tgz#8dc2a800de8e73d2400be9833a8ef49425bf167b"
-  integrity sha512-mtEEHD3lBEUmKYeG3o4zUJFSfPa+DD1fwiYAmXdWR63c828zGvw3dc8P5pphfdOxYZQy0YChJfByvkHmPjWOHw==
+reagraph@^4.29.0:
+  version "4.29.0"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.29.0.tgz#32b34bf337bdb3cb272e9cefd427032172a148c0"
+  integrity sha512-r1zikMZca4U7P+GsME5HODfFYIsvO2BbkxK9U+FqFzoFTfK5KPqGBBwt5T6GeBgvx04T82ZXnjJTJjXQULNanA==
   dependencies:
     "@react-spring/three" "10.0.1"
     "@react-three/drei" "^10.6.1"
