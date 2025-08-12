@@ -106,6 +106,37 @@ export function inputExists(input, checkEmptyString = true) {
 }
 
 /**
+ * Sanitize URLs
+ * @param {string} url URL to be sanitized
+ * @param {boolean} [allowingBlob=true] Whether to allow blob objects
+ * @return {string} return the sanitized URL
+ */
+export function sanitizeUrl(url, allowingBlob = true) {
+  try {
+    const parsed = new URL(url);
+    const allowedProtocols = ["http:", "https:"];
+    if (allowingBlob) {
+      allowedProtocols.push("blob:");
+    }
+    const sanitizedURL = allowedProtocols.includes(parsed.protocol)
+      ? parsed.href
+      : "";
+    if (url !== sanitizedURL) {
+      console.warn(
+        "URL differed after sanitation! Original",
+        url,
+        "sanitized",
+        sanitizedURL
+      );
+    }
+
+    return sanitizedURL;
+  } catch {
+    return "";
+  }
+}
+
+/**
  * Remove Markdown and HTML format (Beta)
  *  https://stackoverflow.com/questions/74977041/how-to-remove-markdown-syntax-and-output-only-plain-text-in-flutter
  * @param {string} markdown the input Markdown text
