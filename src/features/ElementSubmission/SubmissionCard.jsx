@@ -75,6 +75,7 @@ import {
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
 import {
+  sanitizeUrl,
   printListWithDelimiter,
   isValidNumberWithinRange,
 } from "../../helpers/helper";
@@ -504,6 +505,7 @@ export default function SubmissionCard(props) {
     const objectUrl = URL.createObjectURL(thumbnailFile);
     setThumbnailImageFileURLs((prev) => {
       if (typeof prev === "string") URL.revokeObjectURL(prev);
+      TEST_MODE && console.log("Set thumbnail image as", objectUrl);
       return objectUrl;
     });
   }
@@ -1698,8 +1700,8 @@ export default function SubmissionCard(props) {
                       // This is necessary to show both the newly uploaded image as well as the returned thumbnail
                       src={
                         typeof thumbnailImageFileURLs === "string"
-                          ? thumbnailImageFileURLs
-                          : thumbnailImageFileURLs.low
+                          ? sanitizeUrl(thumbnailImageFileURLs)
+                          : sanitizeUrl(thumbnailImageFileURLs.low, false)
                       }
                       loading="lazy"
                       alt="thumbnail-preview"
