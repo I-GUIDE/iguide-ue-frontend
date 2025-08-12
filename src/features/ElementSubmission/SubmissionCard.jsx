@@ -1689,7 +1689,7 @@ export default function SubmissionCard(props) {
                 />
               </Button>
               {thumbnailImageFileURLs && (
-                <div>
+                <>
                   <Typography level="title-sm" sx={{ py: 1 }}>
                     Thumbnail preview
                   </Typography>
@@ -1705,7 +1705,7 @@ export default function SubmissionCard(props) {
                       alt="thumbnail-preview"
                     />
                   </AspectRatio>
-                </div>
+                </>
               )}
             </FormControl>
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
