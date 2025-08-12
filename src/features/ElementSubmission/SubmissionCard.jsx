@@ -474,31 +474,38 @@ export default function SubmissionCard(props) {
   }
 
   async function handleThumbnailImageUpload(event) {
-    const thumbnailFile = event.target.files[0];
-    if (!thumbnailFile.type.startsWith("image/")) {
-      await alertModal(
-        "Failed to upload thumbnail",
-        "The file you provided is not an image. Please upload an image."
-      );
-      // Clear the file
-      event.target.value = "";
-      setThumbnailImageFile(null);
-      setThumbnailImageFileURLs(null);
+    const thumbnailFile = event.target.files?.[0];
+    if (!thumbnailFile) {
       return null;
     }
-    if (thumbnailFile.size > IMAGE_SIZE_LIMIT) {
+
+    const isImage = thumbnailFile.type?.startsWith("image/");
+    const isTooLarge = thumbnailFile.size > IMAGE_SIZE_LIMIT;
+
+    if (!isImage || isTooLarge) {
       await alertModal(
         "Failed to upload thumbnail",
-        "The file you provided is too large. Please upload an image smaller than 5MB."
+        isImage
+          ? "The file you provided is not an image. Please upload an image."
+          : "The file you provided is too large. Please upload an image smaller than 5MB."
       );
-      // Clear the file
+
       event.target.value = "";
       setThumbnailImageFile(null);
-      setThumbnailImageFileURLs(null);
+      setThumbnailImageFileURLs((prev) => {
+        if (typeof prev === "string") URL.revokeObjectURL(prev);
+        return null;
+      });
       return null;
     }
+
     setThumbnailImageFile(thumbnailFile);
-    setThumbnailImageFileURLs(URL.createObjectURL(thumbnailFile));
+
+    const objectUrl = URL.createObjectURL(thumbnailFile);
+    setThumbnailImageFileURLs((prev) => {
+      if (typeof prev === "string") URL.revokeObjectURL(prev);
+      return objectUrl;
+    });
   }
 
   // Related elements...
@@ -1683,7 +1690,9 @@ export default function SubmissionCard(props) {
               </Button>
               {thumbnailImageFileURLs && (
                 <div>
-                  <Typography>Thumbnail preview</Typography>
+                  <Typography level="title-sm" sx={{ py: 1 }}>
+                    Thumbnail preview
+                  </Typography>
                   <AspectRatio ratio="1" sx={{ width: 190 }}>
                     <img
                       // This is necessary to show both the newly uploaded image as well as the returned thumbnail
