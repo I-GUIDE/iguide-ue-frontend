@@ -92,8 +92,10 @@ function getValidatedRedirectFullURL(redirectDomainId, redirectPath, defaultRedi
       redirectDomain = domainObject.domain;
     } else {
       logger.warn({
-        type: "Invalid domain id",
-        message: redirectDomainId
+        message: "Redirect domain ID not found in whitelist",
+        type: "InvalidRedirectDomainId",
+        redirectDomainId,
+        whitelistIds: redirect_whitelist.map(d => d.id),
       });
       return defaultRedirectURL;
     }
@@ -126,10 +128,12 @@ async function getUserRole(userOpenId) {
     const response = await fetch(`${BACKEND_URL}/api/users/${encodedOpenId}/role`);
     if (!response.ok) {
       logger.error({
-        type: "Couldn't fetch user role",
-        user: {
-          id: userOpenId,
-        }
+        message: "Failed to fetch user role - non-OK response",
+        type: "UserRoleFetchError",
+        userOpenId,
+        status: response.status,
+        statusText: response.statusText,
+        url: `${BACKEND_URL}/api/users/${encodedOpenId}/role`,
       });
       return 10;
     }
@@ -137,11 +141,11 @@ async function getUserRole(userOpenId) {
     return result.role;
   } catch (userRoleError) {
     logger.error({
-      type: "Fetch user role failed",
-      message: userRoleError.message || userRoleError,
-      user: {
-        id: userOpenId,
-      }
+      message: "Failed to fetch user role - exception thrown",
+      type: "UserRoleFetchException",
+      userOpenId,
+      error: userRoleError.message || userRoleError,
+      stack: userRoleError.stack,
     });
     return "ERROR";
   }
@@ -149,15 +153,26 @@ async function getUserRole(userOpenId) {
 
 // Store refresh token in OpenSearch
 async function storeRefreshToken(client, token, userOpenId) {
-  await client.index({
-    index: os_index,
-    body: {
-      token,
+  try {
+    await client.index({
+      index: os_index,
+      body: {
+        token,
+        userOpenId,
+        created_at: new Date(),
+      },
+      refresh: 'wait_for',
+    });
+  } catch (error) {
+    logger.error({
+      message: "Failed to store refresh token in OpenSearch",
+      type: "OpenSearchIndexError",
       userOpenId,
-      created_at: new Date(),
-    },
-    refresh: 'wait_for',
-  });
+      index: os_index,
+      error: error.message || error,
+      stack: error.stack,
+    });
+  }
 }
 
 function generateAccessToken(user) {
@@ -171,6 +186,12 @@ function generateRefreshToken(user) {
     expiresIn: refresh_token_expiration,
   });
 }
+
+router.get("/", (req, res) => {
+  res.send(`<h2>Welcome to the homepage of I-GUIDE Platform authentication server.</h2>
+    <p>You may login <a href='/login'>here</a> or go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>
+    <p>You may also visit our <a href="${FRONTEND_URL}/contact-us">help page</a> if you have any questions.</p>`);
+});
 
 router.get(
   "/login",
@@ -199,8 +220,9 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
     passport.authenticate("oidc", async (err, user, info) => {
       if (err) {
         logger.error({
-          type: "OIDC Authentication Error",
-          message: err.message || err,
+          message: "OIDC Authentication Error",
+          type: "OIDCAuthError",
+          error: err.message || err,
           stack: err.stack,
           user: user || null,
           info: info || null,
@@ -209,17 +231,24 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
       }
       if (!user) {
         logger.warn({
-          type: "OIDC No User Returned",
-          message: "Authentication succeeded but no user object was returned.",
-          info: info || null,
+          message: "OIDC authentication succeeded but no user returned",
+          type: "OIDCNoUser",
+          info: info ? {
+            name: info.name,
+            message: info.message,
+            error: info.error,
+            error_description: info.error_description,
+            stack: info.stack,
+          } : null,
         });
         return res.redirect(`/auth/error/nouser`);
       }
       req.logIn(user, async function (loginErr) {
         if (loginErr) {
           logger.error({
-            type: "Login Error",
-            message: loginErr.message || loginErr,
+            message: "User login failed after OIDC authentication",
+            type: "OIDCLoginError",
+            error: loginErr.message || loginErr,
             stack: loginErr.stack,
             user: user || null,
           });
@@ -252,8 +281,9 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
           }
         } catch (dbError) {
           logger.error({
-            type: "Database Error",
-            message: dbError.message || dbError,
+            message: "Database access failed during user validation",
+            type: "DatabaseError",
+            error: dbError.message || dbError,
             stack: dbError.stack,
             user: user || null,
           });
@@ -264,8 +294,8 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
         // If role doesn't exist or returns ERROR, redirect users to the database error page
         if (!role || role === "ERROR") {
           logger.error({
-            type: "Invalid User Role",
-            message: "User role is missing or invalid",
+            message: "User role invalid or missing",
+            type: "InvalidUserRole",
             user: user || null,
           });
           return res.redirect(`/auth/error/database`);
@@ -301,8 +331,9 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
           res.redirect(redirectFullURL);
         } catch (tokenError) {
           logger.error({
-            type: "Token Handling Error",
-            message: tokenError.message || tokenError,
+            message: "Token generation or storage failed",
+            type: "TokenHandlingError",
+            error: tokenError.message || tokenError,
             stack: tokenError.stack,
             user: user || null,
           });
@@ -312,8 +343,9 @@ router.get("/callback/cilogon", authRateLimiter, async (req, res, next) => {
     })(req, res, next);
   } catch (unexpectedError) {
     logger.error({
-      type: "Unhandled OIDC Callback Error",
-      message: unexpectedError.message || unexpectedError,
+      message: "Unhandled error in OIDC callback route",
+      type: "UnhandledOIDCCallbackError",
+      error: unexpectedError.message || unexpectedError,
       stack: unexpectedError.stack,
     });
     return res.redirect("/auth/error/unexpected");
@@ -344,12 +376,6 @@ router.get('/logout', function (req, res) {
   req.session.destroy(function (err) {
     res.redirect(redirectFullURL);
   });
-});
-
-router.get("/", (req, res) => {
-  res.send(`<h2>Welcome to the homepage of I-GUIDE Platform authentication server.</h2>
-    <p>You may login <a href='/login'>here</a> or go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>
-    <p>You may also visit our <a href="${FRONTEND_URL}/contact-us">help page</a> if you have any questions.</p>`);
 });
 
 router.get("/userinfo", (req, res) => {
@@ -395,6 +421,68 @@ router.get("/userinfo", (req, res) => {
   }
 });
 
+router.get("/error/cilogon", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get("/error/nouser", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get("/error/other", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get("/error/database", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get("/error/token", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because we couldn't generate the token that stores your login information.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get("/error/unexpected", (req, res) => {
+  res.send(`<h2>We ran into an issue during the authentication.</h2>
+    <p><b>What happened</b>: We couldn't authenticate you because of an unexpected or unknown error.</p>
+    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
+    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.
+    You may also go back to <a href="${FRONTEND_URL}">I-GUIDE Platform homepage</a>.</p>`);
+});
+
+router.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Crash endpoint for testing and non-prod only
+if (process.env.EXPOSE_CRASH_ENDPOINT === "true" && process.env.ENV !== "prod" && process.env.ENV !== "production") {
+  router.get('/crash', (req, res) => {
+    setTimeout(() => {
+      throw new Error('Simulated authentication backend crash');
+    }, 0);
+    res.send('<h2>You just initiated an intentional crash.</h2>');
+  });
+}
+
 router.post('/recaptcha-verification', async (req, res) => {
   const recaptchaToken = req.body;
   try {
@@ -416,62 +504,6 @@ router.post('/recaptcha-verification', async (req, res) => {
     });
   }
 })
-
-router.get("/error/cilogon", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you due to an issue from CILogon.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get("/error/nouser", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you because CILogon didn't return us valid user information.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get("/error/other", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you because of an unknown issue.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get("/error/database", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you because our user database is currently unavailable.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get("/error/token", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you because we couldn't generate the token that stores your login information.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get("/error/unexpected", (req, res) => {
-  res.send(`<h2>We ran into an issue during the authentication.</h2>
-    <p><b>What happened</b>: We couldn't authenticate you because of an unexpected or unknown error.</p>
-    <p><b>What to do</b>: For assistance or to report this issue, please click <a href="${FRONTEND_URL}/contact-us" target="_blank">here</a>
-    or visit ${FRONTEND_URL}/contact-us to access our help page. We're here to help and look forward to resolving this matter for you.</p>`);
-});
-
-router.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
-// Crash endpoint for testing and non-prod only
-if (process.env.EXPOSE_CRASH_ENDPOINT === "true" && process.env.ENV !== "prod" && process.env.ENV !== "production") {
-  router.get('/crash', (req, res) => {
-    setTimeout(() => {
-      throw new Error('Simulated authentication backend crash');
-    }, 0);
-    res.send('Crash scheduled.');
-  });
-}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -21,7 +21,7 @@ async function addUser(
   email,
   affiliation
 ) {
-  const user = {
+  const userPayload = {
     openid: openId,
     first_name: first_name,
     last_name: last_name,
@@ -36,7 +36,7 @@ async function addUser(
         "Content-Type": "application/json",
         "Auth-API-Key": AUTH_API_KEY
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(userPayload),
     });
 
     if (!response.ok) {
@@ -46,13 +46,7 @@ async function addUser(
         status: response.status,
         statusText: response.statusText,
         body: errorBody,
-        user: {
-          openid: openId,
-          first_name: first_name,
-          last_name: last_name,
-          email: email,
-          affiliation: affiliation
-        }
+        user: userPayload,
       });
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
@@ -60,19 +54,18 @@ async function addUser(
     const result = await response.json();
     logger.info({
       type: "Added a new user to the database",
-      user: {
-        openid: openId,
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        affiliation: affiliation
-      }
+      user: userPayload,
     });
 
     // Return the user information, including id and role.
     return result.user;
   } catch (error) {
-    logger.error({ type: 'Error during user creation', error: error.message });
+    logger.error({
+      type: 'Error during user creation',
+      message: error.message || error,
+      stack: error.stack,
+      user: userPayload,
+    });
     throw error;
   }
 }
@@ -105,7 +98,12 @@ async function checkUser(openId) {
     const exists = await response.json();
     return exists;
   } catch (error) {
-    logger.error({ type: 'Error during user validation', error: error.message });
+    logger.error({
+      type: 'Error during user validation',
+      error: error.message || error,
+      stack: error.stack,
+      openid: openId,
+    });
     throw error;
   }
 }
@@ -142,7 +140,12 @@ async function getUserRole(openId) {
 
     return result.role;
   } catch (error) {
-    logger.error({ type: 'Error during retrieving user role', error: error.message });
+    logger.error({
+      type: 'Error during retrieving user role',
+      error: error.message || error,
+      stack: error.stack,
+      openid: openId,
+    });
     throw error;
   }
 }
