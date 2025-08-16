@@ -123,4 +123,4 @@ export const ACCEPTED_IMAGE_TYPES =
   "image/gif, image/jpg, image/jpeg, image/png, image/webp, image/tiff";
 
 export const ACCEPTED_DATASET_TYPES =
-  "text/csv, application/zip, application/x-zip-compressed";
+  ".shp, .shx, .dbf, .prj, .geojson, .json, .kml, .kmz, .gpkg, .gdb, .dxf, .dwg, .csv, .zip";

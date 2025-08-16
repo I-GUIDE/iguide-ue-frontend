@@ -357,7 +357,10 @@ export default function UserDatasetUploader(props) {
     <>
       <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
         <FormLabel>
-          <SubmissionCardFieldTitle tooltipTitle="Upload your own dataset">
+          <SubmissionCardFieldTitle
+            tooltipTitle="Upload your own dataset to our server."
+            tooltipContent={`Accepted file types: ${ACCEPTED_DATASET_TYPES}`}
+          >
             <Chip component="span" size="sm" color="primary" sx={{ mr: 0.5 }}>
               BETA
             </Chip>
