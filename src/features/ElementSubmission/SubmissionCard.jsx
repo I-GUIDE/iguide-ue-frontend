@@ -2533,14 +2533,31 @@ export default function SubmissionCard(props) {
 
             <CardActions sx={{ gridColumn: "1/-1" }}>
               <Stack spacing={1} sx={{ width: "100%" }}>
-                <Button
-                  type="submit"
-                  variant="solid"
-                  color="primary"
-                  disabled={submittingElement || datasetUploading}
-                >
-                  {submitButtonText}
-                </Button>
+                <Stack direction="row" spacing={1}>
+                  {/* Allow users to go back to the element page */}
+                  {submissionType === "update" && (
+                    <Button
+                      component={RouterLink}
+                      to={`/${RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]}/${elementId}`}
+                      variant="soft"
+                      color="primary"
+                      sx={{ flex: 1 }}
+                    >
+                      Go back to element page
+                    </Button>
+                  )}
+
+                  <Button
+                    type="submit"
+                    variant="solid"
+                    color="primary"
+                    disabled={submittingElement || datasetUploading}
+                    sx={{ flex: 1 }}
+                  >
+                    {submitButtonText}
+                  </Button>
+                </Stack>
+
                 <Typography level="body-sm">
                   By clicking{" "}
                   {submissionType === "update" ? "Update" : "Submit"}, you agree
