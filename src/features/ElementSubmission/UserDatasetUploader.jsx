@@ -13,8 +13,12 @@ import Stack from "@mui/joy/Stack";
 import LinearProgress from "@mui/joy/LinearProgress";
 import Link from "@mui/joy/Link";
 import Chip from "@mui/joy/Chip";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import Sheet from "@mui/joy/Sheet";
 
 import CheckIcon from "@mui/icons-material/Check";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import { useAlertModal } from "../../utils/AlertModalProvider";
@@ -46,10 +50,23 @@ const VisuallyHiddenInput = styled("input")`
   width: 1px;
 `;
 
+// Extract filename from the storage URL
+function extractFilename(url) {
+  if (!url) {
+    return "";
+  }
+
+  const filename = url.replace(/\/+$/, "").split("/").pop();
+  TEST_MODE && console.log("Extract filename", filename);
+  return filename;
+}
+
 export default function UserDatasetUploader(props) {
+  const datasetDirectDownloadLink = props.datasetDirectDownloadLink;
   const setDatasetDirectDownloadLink = props.setDatasetDirectDownloadLink;
   const setDatasetSize = props.setDatasetSize;
-  const setDatasetInfoFromUserUpload = props.setDatasetInfoFromUserUpload;
+  const fileUploadedByUser = props.fileUploadedByUser;
+  const setFileUploadedByUser = props.setFileUploadedByUser;
   const setDatasetUploading = props.setDatasetUploading;
 
   const [uploadStatus, setUploadStatus] = useState("NO_UPLOAD");
@@ -59,6 +76,9 @@ export default function UserDatasetUploader(props) {
   const [inputKey, setInputKey] = useState(Date.now()); // This allows the same file to be selected again after cancelling
   const [tempLink, setTempLink] = useState("");
 
+  const [fileDeletionModalOpen, setFileDeletionModalOpen] = useState(false);
+  const [fileDeletionStatus, setFileDeletionStatus] = useState("");
+
   const fileRef = useRef(null);
 
   const alertModal = useAlertModal();
@@ -66,16 +86,11 @@ export default function UserDatasetUploader(props) {
   const maxRetries = 3;
   const retryDelay = 1000;
 
-  // Reset upload after a complete upload
-  async function resetUpload(resetFileRef = true) {
-    if (tempLink) {
-      try {
-        await deleteUpload(tempLink);
-      } catch (error) {
-        throw new Error("Delete file failed.");
-      }
-    }
+  const uploadDatasetButtonDisabled =
+    fileUploadedByUser || uploadStatus !== "NO_UPLOAD";
 
+  // Reset upload When no file needs to be deleted from the server
+  async function resetUpload(resetFileRef = true) {
     setFileDetail(null);
     requestCancelRef.current = false;
     setUploadStatus("NO_UPLOAD");
@@ -87,7 +102,38 @@ export default function UserDatasetUploader(props) {
     setTempLink("");
     setDatasetDirectDownloadLink("");
     setDatasetSize("");
-    setDatasetInfoFromUserUpload(false);
+    setFileUploadedByUser(false);
+    setFileDeletionStatus("");
+  }
+
+  // Request file deletion from the server
+  async function handleDelete() {
+    const fileURL = tempLink || datasetDirectDownloadLink;
+    if (!fileURL) {
+      setFileDeletionStatus("ERROR");
+      return;
+    }
+
+    try {
+      await deleteUpload(fileURL);
+    } catch (error) {
+      setFileDeletionStatus("ERROR");
+      throw new Error("Delete file failed.");
+    }
+
+    setFileDetail(null);
+    requestCancelRef.current = false;
+    setUploadStatus("NO_UPLOAD");
+    setUploadProgress(0);
+    if (fileRef.current) {
+      fileRef.current.value = null;
+      setInputKey(Date.now());
+    }
+    setTempLink("");
+    setDatasetDirectDownloadLink("");
+    setDatasetSize("");
+    setFileUploadedByUser(false);
+    setFileDeletionStatus("GOOD");
   }
 
   // Handle initialize user dataset upload
@@ -228,7 +274,7 @@ export default function UserDatasetUploader(props) {
       );
     }
 
-    setDatasetInfoFromUserUpload(true);
+    setFileUploadedByUser(true);
     setDatasetDirectDownloadLink(result.url);
     setTempLink(result.url);
     setDatasetSize(formatFileSize(fileDetail.size));
@@ -302,250 +348,339 @@ export default function UserDatasetUploader(props) {
     resetUpload(true);
   }
 
-  return (
-    <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
-      <FormLabel>
-        <SubmissionCardFieldTitle tooltipTitle="Upload your own dataset">
-          <Chip component="span" size="sm" color="primary" sx={{ mr: 0.5 }}>
-            BETA
-          </Chip>
-          Upload your own dataset {"(< 2GB)"}{" "}
-        </SubmissionCardFieldTitle>
-      </FormLabel>
-      <Button
-        component="label"
-        role={undefined}
-        tabIndex={-1}
-        disabled={uploadStatus !== "NO_UPLOAD"}
-        variant="outlined"
-        color="primary"
-        name="user-dataset"
-      >
-        Upload your dataset
-        <VisuallyHiddenInput
-          type="file"
-          accept={ACCEPTED_DATASET_TYPES}
-          onChange={handleInitializeUpload}
-          key={inputKey}
-          ref={fileRef}
-        />
-      </Button>
-      <Typography level="body-xs" sx={{ py: 0.5 }}>
-        By clicking "Upload your dataset", you agree to our{" "}
-        <Link
-          component={RouterLink}
-          to="/contributor-license-agreement"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Contributor License Agreement
-        </Link>
-        .
-      </Typography>
-      {fileDetail && (
-        <Card sx={{ my: 1 }}>
-          <Stack spacing={1}>
-            <Typography level="title-md">File information</Typography>
-            <Typography>Filename: {fileDetail.name}</Typography>
-            <Typography>Size: {formatFileSize(fileDetail.size)}</Typography>
-            <Typography>Type: {fileDetail.type}</Typography>
-          </Stack>
+  function closeFileDeletionModal() {
+    setFileDeletionModalOpen(false);
+    setFileDeletionStatus("");
+  }
 
-          {/* Show upload button when upload hasn't started or has canceled */}
-          {uploadStatus === "NO_UPLOAD" && (
-            <Stack direction="row" spacing={1}>
-              <Button
-                variant="solid"
-                color="primary"
-                onClick={handleStartUpload}
-              >
-                Upload
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleResetUpload}
-              >
-                Cancel
-              </Button>
+  return (
+    <>
+      <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
+        <FormLabel>
+          <SubmissionCardFieldTitle tooltipTitle="Upload your own dataset">
+            <Chip component="span" size="sm" color="primary" sx={{ mr: 0.5 }}>
+              BETA
+            </Chip>
+            Upload your own dataset {"(< 2GB)"}{" "}
+          </SubmissionCardFieldTitle>
+        </FormLabel>
+        <Button
+          component="label"
+          role={undefined}
+          tabIndex={-1}
+          disabled={uploadDatasetButtonDisabled}
+          variant="outlined"
+          color="primary"
+          name="user-dataset"
+        >
+          Upload your dataset
+          <VisuallyHiddenInput
+            type="file"
+            accept={ACCEPTED_DATASET_TYPES}
+            onChange={handleInitializeUpload}
+            key={inputKey}
+            ref={fileRef}
+          />
+        </Button>
+        <Typography level="body-xs" sx={{ py: 0.5 }}>
+          By clicking "Upload your dataset", you agree to our{" "}
+          <Link
+            component={RouterLink}
+            to="/contributor-license-agreement"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contributor License Agreement
+          </Link>
+          .
+        </Typography>
+        {fileDetail && (
+          <Card sx={{ my: 1 }}>
+            <Stack spacing={1}>
+              <Typography level="title-md">File information</Typography>
+              <Typography>Filename: {fileDetail.name}</Typography>
+              <Typography>Size: {formatFileSize(fileDetail.size)}</Typography>
+              <Typography>Type: {fileDetail.type}</Typography>
             </Stack>
-          )}
-          {/* Show progress bar when upload is in progress */}
-          {uploadStatus === "UPLOADING" && (
-            <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
-              <Box
-                sx={{
-                  bgcolor: "white",
-                  width: "100%",
-                }}
-              >
-                <LinearProgress
-                  determinate
+
+            {/* Show upload button when upload hasn't started or has canceled */}
+            {uploadStatus === "NO_UPLOAD" && (
+              <Stack direction="row" spacing={1}>
+                <Button
+                  variant="solid"
+                  color="primary"
+                  onClick={handleStartUpload}
+                >
+                  Upload
+                </Button>
+                <Button
                   variant="outlined"
                   color="primary"
-                  size="sm"
-                  value={uploadProgress}
+                  onClick={handleResetUpload}
+                >
+                  Cancel
+                </Button>
+              </Stack>
+            )}
+            {/* Show progress bar when upload is in progress */}
+            {uploadStatus === "UPLOADING" && (
+              <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
+                <Box
                   sx={{
-                    "--LinearProgress-radius": "0px",
-                    "--LinearProgress-progressThickness": "24px",
-                    boxShadow: "sm",
-                    borderColor: "neutral.500",
+                    bgcolor: "white",
+                    width: "100%",
                   }}
                 >
-                  <Typography
-                    level="body-xs"
-                    textColor="white"
+                  <LinearProgress
+                    determinate
+                    variant="outlined"
+                    color="primary"
+                    size="sm"
+                    value={uploadProgress}
                     sx={{
-                      fontWeight: "xl",
-                      mixBlendMode: "exclusion",
+                      "--LinearProgress-radius": "0px",
+                      "--LinearProgress-progressThickness": "24px",
+                      boxShadow: "sm",
+                      borderColor: "neutral.500",
                     }}
                   >
-                    UPLOADING... {`${Math.round(uploadProgress)}%`}
-                  </Typography>
-                </LinearProgress>
-              </Box>
+                    <Typography
+                      level="body-xs"
+                      textColor="white"
+                      sx={{
+                        fontWeight: "xl",
+                        mixBlendMode: "exclusion",
+                      }}
+                    >
+                      UPLOADING... {`${Math.round(uploadProgress)}%`}
+                    </Typography>
+                  </LinearProgress>
+                </Box>
+                <Button
+                  variant="outlined"
+                  color="danger"
+                  onClick={handleAbortUpload}
+                >
+                  Cancel Upload
+                </Button>
+              </Stack>
+            )}
+            {/* Show green progress bar when upload has finished */}
+            {uploadStatus === "FINISHED" && (
+              <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
+                <Box sx={{ bgcolor: "white", width: "100%" }}>
+                  <LinearProgress
+                    determinate
+                    variant="outlined"
+                    color="success"
+                    size="sm"
+                    value={100}
+                    sx={{
+                      "--LinearProgress-radius": "0px",
+                      "--LinearProgress-progressThickness": "24px",
+                      boxShadow: "sm",
+                      borderColor: "neutral.500",
+                    }}
+                  >
+                    <Typography
+                      level="body-xs"
+                      textColor="common.white"
+                      sx={{
+                        fontWeight: "xl",
+                        mixBlendMode: "lighten",
+                      }}
+                    >
+                      UPLOAD FINISHED 100%
+                    </Typography>
+                  </LinearProgress>
+                </Box>
+                <Typography
+                  level="title-sm"
+                  color="success"
+                  startDecorator={<CheckIcon />}
+                >
+                  Your upload is complete. We've automatically filled in the
+                  dataset's direct download link and file size for you.
+                </Typography>
+              </Stack>
+            )}
+            {uploadStatus === "CANCELED" && (
+              <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
+                <Box sx={{ bgcolor: "white", width: "100%" }}>
+                  <LinearProgress
+                    determinate
+                    variant="outlined"
+                    color="danger"
+                    size="sm"
+                    value={uploadProgress}
+                    sx={{
+                      "--LinearProgress-radius": "0px",
+                      "--LinearProgress-progressThickness": "24px",
+                      boxShadow: "sm",
+                      borderColor: "neutral.500",
+                    }}
+                  >
+                    <Typography
+                      level="body-xs"
+                      textColor="common.white"
+                      sx={{
+                        fontWeight: "xl",
+                        mixBlendMode: "difference",
+                      }}
+                    >
+                      UPLOAD CANCELED
+                    </Typography>
+                  </LinearProgress>
+                </Box>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResetUpload}
+                >
+                  Reset
+                </Button>
+              </Stack>
+            )}
+            {uploadStatus === "ERROR" && (
+              <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
+                <Box sx={{ bgcolor: "white", width: "100%" }}>
+                  <LinearProgress
+                    determinate
+                    variant="outlined"
+                    color="danger"
+                    size="sm"
+                    value={uploadProgress}
+                    sx={{
+                      "--LinearProgress-radius": "0px",
+                      "--LinearProgress-progressThickness": "24px",
+                      boxShadow: "sm",
+                      borderColor: "neutral.500",
+                    }}
+                  >
+                    <Typography
+                      level="body-xs"
+                      textColor="common.white"
+                      sx={{
+                        fontWeight: "xl",
+                        mixBlendMode: "difference",
+                      }}
+                    >
+                      ERROR {`${Math.round(uploadProgress)}%`}
+                    </Typography>
+                  </LinearProgress>
+                </Box>
+                <Typography level="body-sm" color="danger">
+                  Oops! Something went wrong during your upload. We're unable to
+                  complete the process at this time. Please click "Reset" to try
+                  again, or reach out to us for assistance with this error.
+                </Typography>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleResetUpload}
+                >
+                  Reset
+                </Button>
+              </Stack>
+            )}
+          </Card>
+        )}
+        {fileUploadedByUser && (
+          <Card sx={{ my: 1 }}>
+            <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
+              <Typography level="body-md">
+                <Typography level="title-md">File uploaded:</Typography>{" "}
+                {fileDetail
+                  ? fileDetail.name
+                  : extractFilename(datasetDirectDownloadLink)}
+              </Typography>
+              <Typography level="body-xs">
+                If you would like to delete or replace this file, click the
+                "Delete this file" button below. By clicking this button, your
+                uploaded dataset or file will be removed from our server, and
+                any generated download links will be invalid.
+              </Typography>
               <Button
                 variant="outlined"
                 color="danger"
-                onClick={handleAbortUpload}
+                onClick={() => setFileDeletionModalOpen(true)}
               >
-                Cancel Upload
+                Delete this file
               </Button>
             </Stack>
-          )}
-          {/* Show green progress bar when upload has finished */}
-          {uploadStatus === "FINISHED" && (
-            <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
-              <Box sx={{ bgcolor: "white", width: "100%" }}>
-                <LinearProgress
-                  determinate
-                  variant="outlined"
-                  color="success"
+          </Card>
+        )}
+      </FormControl>
+      <Modal
+        open={fileDeletionModalOpen}
+        onClose={closeFileDeletionModal}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Sheet
+          variant="outlined"
+          sx={{ maxWidth: 400, borderRadius: "md", p: 3, boxShadow: "lg" }}
+        >
+          <ModalClose />
+          {/* After a successful deletion, hide this section */}
+          {fileDeletionStatus !== "GOOD" && (
+            <Stack spacing={1} sx={{ p: 1 }}>
+              <Typography align="center" level="title-lg">
+                Delete uploaded file
+              </Typography>
+              <Typography align="center" level="title-md">
+                Filename:{" "}
+                {fileDetail
+                  ? fileDetail.name
+                  : extractFilename(datasetDirectDownloadLink)}
+              </Typography>
+              <Typography color="danger" align="center" level="title-sm">
+                Are you sure you would like to delete this file from the server?
+                This action cannot be undone.
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ width: "100%", py: 1 }}>
+                <Button
+                  color="primary"
                   size="sm"
-                  value={100}
-                  sx={{
-                    "--LinearProgress-radius": "0px",
-                    "--LinearProgress-progressThickness": "24px",
-                    boxShadow: "sm",
-                    borderColor: "neutral.500",
-                  }}
+                  sx={{ width: "100%", my: 1 }}
+                  onClick={closeFileDeletionModal}
                 >
-                  <Typography
-                    level="body-xs"
-                    textColor="common.white"
-                    sx={{
-                      fontWeight: "xl",
-                      mixBlendMode: "lighten",
-                    }}
-                  >
-                    UPLOAD FINISHED 100%
-                  </Typography>
-                </LinearProgress>
-              </Box>
-              <Typography
-                level="title-sm"
-                color="success"
-                startDecorator={<CheckIcon />}
-              >
-                Your upload is complete. We've automatically filled in the
-                dataset's direct download link and file size for you.
-              </Typography>
-              <Typography level="body-xs">
-                If you would like to start over, click the "Start Over" button
-                below. By clicking this button, your uploaded dataset or file
-                will be removed from our server, and any generated download
-                links will be invalid.
-              </Typography>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleResetUpload}
-              >
-                Start Over
-              </Button>
-            </Stack>
-          )}
-          {uploadStatus === "CANCELED" && (
-            <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
-              <Box sx={{ bgcolor: "white", width: "100%" }}>
-                <LinearProgress
-                  determinate
-                  variant="outlined"
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
                   color="danger"
                   size="sm"
-                  value={uploadProgress}
-                  sx={{
-                    "--LinearProgress-radius": "0px",
-                    "--LinearProgress-progressThickness": "24px",
-                    boxShadow: "sm",
-                    borderColor: "neutral.500",
-                  }}
+                  sx={{ width: "100%", my: 1 }}
+                  disabled={fileDeletionStatus}
+                  onClick={handleDelete}
                 >
-                  <Typography
-                    level="body-xs"
-                    textColor="common.white"
-                    sx={{
-                      fontWeight: "xl",
-                      mixBlendMode: "difference",
-                    }}
-                  >
-                    UPLOAD CANCELED
-                  </Typography>
-                </LinearProgress>
-              </Box>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleResetUpload}
-              >
-                Reset
-              </Button>
+                  Delete
+                  <DeleteForeverIcon />
+                </Button>
+              </Stack>
             </Stack>
           )}
-          {uploadStatus === "ERROR" && (
-            <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
-              <Box sx={{ bgcolor: "white", width: "100%" }}>
-                <LinearProgress
-                  determinate
-                  variant="outlined"
-                  color="danger"
-                  size="sm"
-                  value={uploadProgress}
-                  sx={{
-                    "--LinearProgress-radius": "0px",
-                    "--LinearProgress-progressThickness": "24px",
-                    boxShadow: "sm",
-                    borderColor: "neutral.500",
-                  }}
-                >
-                  <Typography
-                    level="body-xs"
-                    textColor="common.white"
-                    sx={{
-                      fontWeight: "xl",
-                      mixBlendMode: "difference",
-                    }}
-                  >
-                    ERROR {`${Math.round(uploadProgress)}%`}
-                  </Typography>
-                </LinearProgress>
-              </Box>
-              <Typography level="body-sm" color="danger">
-                Oops! Something went wrong during your upload. We're unable to
-                complete the process at this time. Please click "Reset" to try
-                again, or reach out to us for assistance with this error.
+
+          {fileDeletionStatus === "ERROR" && (
+            <Stack spacing={1} sx={{ p: 1 }}>
+              <Typography color="danger" level="title-md">
+                Failed to delete this file.
               </Typography>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleResetUpload}
-              >
-                Reset
-              </Button>
             </Stack>
           )}
-        </Card>
-      )}
-    </FormControl>
+          {fileDeletionStatus === "GOOD" && (
+            <Stack spacing={1} sx={{ p: 1 }}>
+              <Typography color="success" level="title-md">
+                File successfully deleted.
+              </Typography>
+            </Stack>
+          )}
+        </Sheet>
+      </Modal>
+    </>
   );
 }

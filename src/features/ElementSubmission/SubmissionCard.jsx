@@ -161,8 +161,7 @@ export default function SubmissionCard(props) {
   // This tracks if the dataset info (direct download link & size) is from a user-uploaded dataset.
   //   direct download link and size will be disabled from editing due to it's autofilled by
   //   the return values from our own dataset host.
-  const [datasetInfoFromUserUpload, setDatasetInfoFromUserUpload] =
-    useState(false);
+  const [fileUploadedByUser, setFileUploadedByUser] = useState(false);
   // This tracks if the dataset is still being uploaded. Submit button will be disabled if it's true.
   const [datasetUploading, setDatasetUploading] = useState(false);
 
@@ -403,6 +402,8 @@ export default function SubmissionCard(props) {
       setDatasetExternalLink(thisElement["external-link"]);
       setDirectDownloadLink(thisElement["direct-download-link"]);
       setDataSize(thisElement.size);
+      // Tracks if the dataset was uploaded by users
+      setFileUploadedByUser(thisElement["user-uploaded-dataset"]);
 
       if (thisElement["notebook-url"]) {
         setNotebookGitHubUrl(thisElement["notebook-url"]);
@@ -1794,9 +1795,11 @@ export default function SubmissionCard(props) {
             {/* While the dataset upload feature is under beta, we use ENABLE_DATASET_UPLOAD to control access */}
             {resourceTypeSelected === "dataset" && ENABLE_DATASET_UPLOAD && (
               <UserDatasetUploader
+                datasetDirectDownloadLink={directDownloadLink}
                 setDatasetDirectDownloadLink={setDirectDownloadLink}
                 setDatasetSize={setDataSize}
-                setDatasetInfoFromUserUpload={setDatasetInfoFromUserUpload}
+                fileUploadedByUser={fileUploadedByUser}
+                setFileUploadedByUser={setFileUploadedByUser}
                 setDatasetUploading={setDatasetUploading}
               />
             )}
@@ -1819,7 +1822,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="external-link"
-                  disabled={datasetInfoFromUserUpload}
+                  disabled={fileUploadedByUser}
                   placeholder="https://example.com"
                   value={datasetExternalLink}
                   onChange={handleDatasetExternalLinkChange}
@@ -1865,7 +1868,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="direct-download-link"
-                  disabled={datasetInfoFromUserUpload}
+                  disabled={fileUploadedByUser}
                   value={directDownloadLink}
                   onChange={handleDirectDownloadLinkChange}
                 />
@@ -1890,7 +1893,7 @@ export default function SubmissionCard(props) {
                 </FormLabel>
                 <Input
                   name="size"
-                  disabled={datasetInfoFromUserUpload}
+                  disabled={fileUploadedByUser}
                   value={dataSize}
                   onChange={(event) => setDataSize(event.target.value)}
                 />
