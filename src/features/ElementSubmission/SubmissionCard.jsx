@@ -1816,8 +1816,8 @@ export default function SubmissionCard(props) {
                   link, or both.
                 </Typography>
                 <FormLabel>
-                  <SubmissionCardFieldTitle tooltipTitle="Add a link to the primary page for this dataset">
-                    Dataset host link
+                  <SubmissionCardFieldTitle tooltipTitle="A dataset landing page link directs users to a webpage with details and access to the dataset.">
+                    Dataset landing page link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
                 <Input
@@ -1859,10 +1859,7 @@ export default function SubmissionCard(props) {
                 error={directDownloadLinkError}
               >
                 <FormLabel>
-                  <SubmissionCardFieldTitle
-                    tooltipTitle="If there is a direct download link available for the dataset, indicate it here"
-                    tooltipContent="By direct download link, we mean a link where when you click it it starts the download process for the dataset"
-                  >
+                  <SubmissionCardFieldTitle tooltipTitle="A dataset direct download link lets users download the data file instantly.">
                     Dataset direct download link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
@@ -1885,8 +1882,8 @@ export default function SubmissionCard(props) {
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle
-                    tooltipTitle="Add size information for the dataset here"
-                    tooltipContent="If you know the exact size, add that, otherwise estimate if you can. I.e. is it on the order of megabytes, gigabytes, or terrabytes?"
+                    tooltipTitle="Dataset size refers to the amount of data contained in a dataset."
+                    tooltipContent="Usually measured in units like bytes, kilobytes (KB), megabytes (MB), or gigabytes (GB)."
                   >
                     Dataset size
                   </SubmissionCardFieldTitle>

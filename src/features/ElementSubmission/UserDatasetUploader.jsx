@@ -364,6 +364,11 @@ export default function UserDatasetUploader(props) {
             Upload your own dataset {"(< 2GB)"}{" "}
           </SubmissionCardFieldTitle>
         </FormLabel>
+        <Typography level="body-xs" sx={{ py: 0.5 }}>
+          We currently allow uploading only one file per element. If you have
+          multiple datasets or files, please compress them into a single ZIP
+          archive.
+        </Typography>
         <Button
           component="label"
           role={undefined}
@@ -382,6 +387,11 @@ export default function UserDatasetUploader(props) {
             ref={fileRef}
           />
         </Button>
+        {uploadDatasetButtonDisabled && (
+          <Typography level="title-sm" color="warning" sx={{ py: 0.5 }}>
+            Please remove the uploaded file before uploading a new one.
+          </Typography>
+        )}
         <Typography level="body-xs" sx={{ py: 0.5 }}>
           By clicking "Upload your dataset", you agree to our{" "}
           <Link
@@ -676,6 +686,11 @@ export default function UserDatasetUploader(props) {
             <Stack spacing={1} sx={{ p: 1 }}>
               <Typography color="success" level="title-md">
                 File successfully deleted.
+              </Typography>
+              <Typography color="danger" level="body-sm">
+                Do not forget to click the "Update" button at the bottom of this
+                form to ensure your dataset information is removed from this
+                knowledge element.
               </Typography>
             </Stack>
           )}
