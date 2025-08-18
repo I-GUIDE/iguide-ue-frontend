@@ -1023,7 +1023,7 @@ export default function SubmissionCard(props) {
       setOpenModal(true);
       setSubmissionStatus("error-invalid-inputs");
       setSubmissionStatusText(
-        "You cannot submit this element due to the duplicate dataset host link."
+        "You cannot submit this element due to the duplicate dataset landing page link."
       );
       setSubmittingElement(false);
       return;
@@ -1033,7 +1033,7 @@ export default function SubmissionCard(props) {
       setOpenModal(true);
       setSubmissionStatus("error-invalid-inputs");
       setSubmissionStatusText(
-        "You cannot submit this element due to the invalid dataset host link."
+        "You cannot submit this element due to the invalid dataset landing page link."
       );
       setSubmittingElement(false);
       return;
@@ -1813,8 +1813,8 @@ export default function SubmissionCard(props) {
                 }
               >
                 <Typography level="title-sm" color="warning" sx={{ pb: 1 }}>
-                  Please provide a dataset host link, a dataset direct download
-                  link, or both.
+                  At least one of the following fields is required: a dataset
+                  landing page link or a dataset direct download link.
                 </Typography>
                 <FormLabel>
                   <SubmissionCardFieldTitle tooltipTitle="A dataset landing page link directs users to a webpage with details and access to the dataset.">
@@ -1838,9 +1838,9 @@ export default function SubmissionCard(props) {
                 {elementIdWithDuplicateDatasetExternalLink && (
                   <FormHelperText>
                     <Typography level="title-sm" color="danger">
-                      Error: The dataset host link you entered matches one
-                      already on the I-GUIDE Platform and cannot be submitted
-                      again.&nbsp;
+                      Error: The dataset landing page link you entered matches
+                      one already on the I-GUIDE Platform and cannot be
+                      submitted again.&nbsp;
                       <Link
                         component={RouterLink}
                         to={`/datasets/${elementIdWithDuplicateDatasetExternalLink}`}
@@ -2242,9 +2242,9 @@ export default function SubmissionCard(props) {
                 </SubmissionCardFieldTitle>
               </FormLabel>
               <FormHelperText>
-                <Typography level="title-sm" color="success" sx={{ pb: 0.5 }}>
-                  We strongly recommend using autofill to save time and ensure
-                  your spatial metadata follows the correct format.
+                <Typography level="title-sm" color="warning" sx={{ pb: 0.5 }}>
+                  Use "Autofill metadata" to save time and ensure correct
+                  spatial metadata formatting.
                 </Typography>
               </FormHelperText>
               <Grid container spacing={2} sx={{ flexGrow: 1 }}>

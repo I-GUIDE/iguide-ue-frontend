@@ -382,7 +382,7 @@ export default function UserDatasetUploader(props) {
           color="primary"
           name="user-dataset"
         >
-          Upload your dataset
+          Select your dataset
           <VisuallyHiddenInput
             type="file"
             accept={ACCEPTED_DATASET_TYPES}
@@ -393,11 +393,11 @@ export default function UserDatasetUploader(props) {
         </Button>
         {uploadDatasetButtonDisabled && (
           <Typography level="title-sm" color="warning" sx={{ py: 0.5 }}>
-            Please remove the uploaded file before uploading a new one.
+            Please delete the uploaded file before uploading a new one.
           </Typography>
         )}
         <Typography level="body-xs" sx={{ py: 0.5 }}>
-          By clicking "Upload your dataset", you agree to our{" "}
+          By clicking "Select your dataset", you agree to our{" "}
           <Link
             component={RouterLink}
             to="/contributor-license-agreement"
@@ -410,7 +410,7 @@ export default function UserDatasetUploader(props) {
         </Typography>
         {fileDetail && (
           <Card sx={{ my: 1 }}>
-            <Stack spacing={1}>
+            <Stack spacing={0.5}>
               <Typography level="title-md">File information</Typography>
               <Typography>Filename: {fileDetail.name}</Typography>
               <Typography>Size: {formatFileSize(fileDetail.size)}</Typography>
@@ -421,18 +421,18 @@ export default function UserDatasetUploader(props) {
             {uploadStatus === "NO_UPLOAD" && (
               <Stack direction="row" spacing={1}>
                 <Button
-                  variant="solid"
-                  color="primary"
-                  onClick={handleStartUpload}
-                >
-                  Upload
-                </Button>
-                <Button
                   variant="outlined"
                   color="primary"
                   onClick={handleResetUpload}
                 >
                   Cancel
+                </Button>
+                <Button
+                  variant="solid"
+                  color="primary"
+                  onClick={handleStartUpload}
+                >
+                  Confirm & Upload
                 </Button>
               </Stack>
             )}
@@ -509,7 +509,7 @@ export default function UserDatasetUploader(props) {
                   </LinearProgress>
                 </Box>
                 <Typography
-                  level="title-sm"
+                  level="body-xs"
                   color="success"
                   startDecorator={<CheckIcon />}
                 >
@@ -616,6 +616,7 @@ export default function UserDatasetUploader(props) {
               </Typography>
               <Button
                 variant="outlined"
+                size="sm"
                 color="danger"
                 onClick={() => setFileDeletionModalOpen(true)}
               >
@@ -642,22 +643,18 @@ export default function UserDatasetUploader(props) {
           {/* After a successful deletion, hide this section */}
           {fileDeletionStatus !== "GOOD" && (
             <Stack spacing={1} sx={{ p: 1 }}>
-              <Typography align="center" level="title-lg">
-                Delete uploaded file
-              </Typography>
-              <Typography align="center" level="title-md">
-                Filename:{" "}
+              <Typography level="title-lg">Delete Confirmation</Typography>
+              <Typography level="body-sm">
+                Are you sure you would like to delete "
                 {fileDetail
                   ? fileDetail.name
                   : extractFilename(datasetDirectDownloadLink)}
-              </Typography>
-              <Typography color="danger" align="center" level="title-sm">
-                Are you sure you would like to delete this file from the server?
-                This action cannot be undone.
+                " from the server? This action cannot be undone.
               </Typography>
               <Stack direction="row" spacing={1} sx={{ width: "100%", py: 1 }}>
                 <Button
-                  color="primary"
+                  variant="soft"
+                  color="neutral"
                   size="sm"
                   sx={{ width: "100%", my: 1 }}
                   onClick={closeFileDeletionModal}
