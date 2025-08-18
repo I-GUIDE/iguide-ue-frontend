@@ -62,6 +62,7 @@ function extractFilename(url) {
 }
 
 export default function UserDatasetUploader(props) {
+  const elementId = props.elementId;
   const datasetDirectDownloadLink = props.datasetDirectDownloadLink;
   const setDatasetDirectDownloadLink = props.setDatasetDirectDownloadLink;
   const setDatasetSize = props.setDatasetSize;
@@ -115,7 +116,7 @@ export default function UserDatasetUploader(props) {
     }
 
     try {
-      await deleteUpload(fileURL);
+      await deleteUpload(fileURL, elementId);
     } catch (error) {
       setFileDeletionStatus("ERROR");
       throw new Error("Delete file failed.");
@@ -688,13 +689,19 @@ export default function UserDatasetUploader(props) {
           {fileDeletionStatus === "GOOD" && (
             <Stack spacing={1} sx={{ p: 1 }}>
               <Typography color="success" level="title-md">
-                File successfully deleted.
+                File successfully deleted
               </Typography>
-              <Typography color="danger" level="body-sm">
-                Do not forget to click the "Update" button at the bottom of this
-                form to ensure your dataset information is removed from this
-                knowledge element.
-              </Typography>
+              {elementId ? (
+                <Typography level="body-sm">
+                  We've also removed the dataset direct download link and
+                  dataset size from the element for you. You may now upload
+                  another dataset or file.
+                </Typography>
+              ) : (
+                <Typography level="body-sm">
+                  You may now upload another dataset or file.
+                </Typography>
+              )}
             </Stack>
           )}
         </Sheet>

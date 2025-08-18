@@ -96,7 +96,20 @@ export async function abortUpload(uploadId) {
 }
 
 // Delete the uploaded file
-export async function deleteUpload(url) {
+export async function deleteUpload(url, elementId) {
+  if (!url) {
+    throw new Error("Delete failed: File URL is null.");
+  }
+
+  const body = {
+    url: url,
+    elementId: elementId,
+  };
+  // If elementId is null or undefined, pass...
+  const processedBody = JSON.stringify(body, (key, value) => {
+    return !value ? undefined : value;
+  });
+
   const response = await fetchWithAuth(
     `${BACKEND_URL_PORT}/api/elements/datasets`,
     {
@@ -104,9 +117,7 @@ export async function deleteUpload(url) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        url: url,
-      }),
+      body: processedBody,
     }
   );
 

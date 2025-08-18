@@ -1795,6 +1795,7 @@ export default function SubmissionCard(props) {
             {/* While the dataset upload feature is under beta, we use ENABLE_DATASET_UPLOAD to control access */}
             {resourceTypeSelected === "dataset" && ENABLE_DATASET_UPLOAD && (
               <UserDatasetUploader
+                elementId={elementId}
                 datasetDirectDownloadLink={directDownloadLink}
                 setDatasetDirectDownloadLink={setDirectDownloadLink}
                 setDatasetSize={setDataSize}
