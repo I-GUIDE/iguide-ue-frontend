@@ -1817,7 +1817,7 @@ export default function SubmissionCard(props) {
                   landing page link or a dataset direct download link.
                 </Typography>
                 <FormLabel>
-                  <SubmissionCardFieldTitle tooltipTitle="A dataset landing page link directs users to a webpage with details and access to the dataset.">
+                  <SubmissionCardFieldTitle tooltipTitle="A dataset landing page link directs users to a webpage with details and access to the dataset">
                     Dataset landing page link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
@@ -1860,7 +1860,7 @@ export default function SubmissionCard(props) {
                 error={directDownloadLinkError}
               >
                 <FormLabel>
-                  <SubmissionCardFieldTitle tooltipTitle="A dataset direct download link lets users download the data file instantly.">
+                  <SubmissionCardFieldTitle tooltipTitle="URL that allows users to download the dataset file directly">
                     Dataset direct download link
                   </SubmissionCardFieldTitle>
                 </FormLabel>
@@ -1883,7 +1883,7 @@ export default function SubmissionCard(props) {
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle
-                    tooltipTitle="Dataset size refers to the amount of data contained in a dataset."
+                    tooltipTitle="Dataset file size"
                     tooltipContent="Usually measured in units like bytes, kilobytes (KB), megabytes (MB), or gigabytes (GB)."
                   >
                     Dataset size

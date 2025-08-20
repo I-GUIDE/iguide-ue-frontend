@@ -119,7 +119,7 @@ export default function UserDatasetUploader(props) {
       await deleteUpload(fileURL, elementId);
     } catch (error) {
       setFileDeletionStatus("ERROR");
-      throw new Error("Delete file failed.");
+      throw new Error("Delete dataset failed.");
     }
 
     setFileDetail(null);
@@ -146,7 +146,7 @@ export default function UserDatasetUploader(props) {
       return;
     }
 
-    TEST_MODE && console.log("Selected file", datasetFile);
+    TEST_MODE && console.log("Selected dataset", datasetFile);
     resetUpload(false);
     fileRef.current = datasetFile;
 
@@ -156,8 +156,8 @@ export default function UserDatasetUploader(props) {
 
     if (fileSize > USER_UPLOAD_DATASET_SIZE_LIMIT) {
       await alertModal(
-        "Failed to upload this file",
-        "The file you provided is too large. Please upload a file smaller than 2GB."
+        "Failed to upload this dataset",
+        "The dataset you provided is too large. Please upload a dataset smaller than 2GB."
       );
       // Clear the file
       event.target.value = "";
@@ -271,7 +271,7 @@ export default function UserDatasetUploader(props) {
       setUploadStatus("ERROR");
       setDatasetUploading(false);
       throw new Error(
-        "Checksum test failed. File uploaded differs from the user local file."
+        "Checksum test failed. Dataset file uploaded differs from the user local file."
       );
     }
 
@@ -360,7 +360,7 @@ export default function UserDatasetUploader(props) {
         <FormLabel>
           <SubmissionCardFieldTitle
             tooltipTitle="Upload your own dataset to our server."
-            tooltipContent={`Accepted file types: ${ACCEPTED_DATASET_TYPES}`}
+            tooltipContent={`Accepted dataset file types: ${ACCEPTED_DATASET_TYPES}`}
           >
             <Chip component="span" size="sm" color="primary" sx={{ mr: 0.5 }}>
               BETA
@@ -369,9 +369,9 @@ export default function UserDatasetUploader(props) {
           </SubmissionCardFieldTitle>
         </FormLabel>
         <Typography level="body-xs" sx={{ py: 0.5 }}>
-          We currently allow uploading only one file per element. If you have
-          multiple datasets or files, please compress them into a single ZIP
-          archive.
+          We currently allow uploading only one dataset or archive file per
+          element. If you have multiple datasets, please compress them into a
+          single ZIP archive file.
         </Typography>
         <Button
           component="label"
@@ -393,7 +393,7 @@ export default function UserDatasetUploader(props) {
         </Button>
         {uploadDatasetButtonDisabled && (
           <Typography level="title-sm" color="warning" sx={{ py: 0.5 }}>
-            Please delete the uploaded file before uploading a new one.
+            Please delete the uploaded dataset before uploading a new one.
           </Typography>
         )}
         <Typography level="body-xs" sx={{ py: 0.5 }}>
@@ -409,9 +409,9 @@ export default function UserDatasetUploader(props) {
           .
         </Typography>
         {fileDetail && (
-          <Card sx={{ my: 1 }}>
+          <Card color="primary" sx={{ my: 1 }}>
             <Stack spacing={0.5}>
-              <Typography level="title-md">File information</Typography>
+              <Typography level="title-md">Dataset file information</Typography>
               <Typography>Filename: {fileDetail.name}</Typography>
               <Typography>Size: {formatFileSize(fileDetail.size)}</Typography>
               <Typography>Type: {fileDetail.type}</Typography>
@@ -514,7 +514,7 @@ export default function UserDatasetUploader(props) {
                   startDecorator={<CheckIcon />}
                 >
                   Your upload is complete. We've automatically filled in the
-                  dataset's direct download link and file size for you.
+                  dataset's direct download link and dataset size for you.
                 </Typography>
               </Stack>
             )}
@@ -600,19 +600,19 @@ export default function UserDatasetUploader(props) {
           </Card>
         )}
         {fileUploadedByUser && (
-          <Card sx={{ my: 1 }}>
+          <Card color="primary" sx={{ my: 1 }}>
             <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
               <Typography level="body-md">
-                <Typography level="title-md">File uploaded:</Typography>{" "}
+                <Typography level="title-md">Dataset file uploaded:</Typography>{" "}
                 {fileDetail
                   ? fileDetail.name
                   : extractFilename(datasetDirectDownloadLink)}
               </Typography>
               <Typography level="body-xs">
-                If you would like to delete or replace this file, click the
-                "Delete this file" button below. By clicking this button, your
-                uploaded dataset or file will be removed from our server, and
-                any generated download links will be invalid.
+                If you would like to delete or replace this dataset, click the
+                "Delete this dataset" button below. By clicking this button,
+                your uploaded dataset will be removed from our server, and any
+                generated download links will be invalid.
               </Typography>
               <Button
                 variant="outlined"
@@ -620,7 +620,7 @@ export default function UserDatasetUploader(props) {
                 color="danger"
                 onClick={() => setFileDeletionModalOpen(true)}
               >
-                Delete this file
+                Delete this dataset
               </Button>
             </Stack>
           </Card>
@@ -679,24 +679,24 @@ export default function UserDatasetUploader(props) {
           {fileDeletionStatus === "ERROR" && (
             <Stack spacing={1} sx={{ p: 1 }}>
               <Typography color="danger" level="title-md">
-                Failed to delete this file.
+                Failed to delete this dataset.
               </Typography>
             </Stack>
           )}
           {fileDeletionStatus === "GOOD" && (
             <Stack spacing={1} sx={{ p: 1 }}>
               <Typography color="success" level="title-md">
-                File successfully deleted
+                Dataset successfully deleted
               </Typography>
               {elementId ? (
                 <Typography level="body-sm">
                   We've also removed the dataset direct download link and
                   dataset size from the element for you. You may now upload
-                  another dataset or file.
+                  another dataset.
                 </Typography>
               ) : (
                 <Typography level="body-sm">
-                  You may now upload another dataset or file.
+                  You may now upload another dataset.
                 </Typography>
               )}
             </Stack>
