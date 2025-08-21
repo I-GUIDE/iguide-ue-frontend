@@ -600,6 +600,12 @@ export default function NavBar(props) {
             borderRadius: { xs: 0, lg: 6 },
             boxShadow: 3,
             zIndex: 1100,
+            backgroundColor: {
+              xs: "background.paper",
+              lg: "rgba(255, 255, 255, 0.8)",
+            },
+            backdropFilter: { lg: "blur(6px)" },
+            WebkitBackdropFilter: { lg: "blur(6px)" },
           }}
         >
           <Box
