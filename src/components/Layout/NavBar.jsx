@@ -43,11 +43,11 @@ import { PERMISSIONS } from "../../configs/Permissions";
 const ENV = import.meta.env.VITE_ENV;
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
-const docPages = [
-  ["About Us", "/about"],
+const supportPages = [
   ["Getting Started", "/docs/getting-started"],
-  ["FAQ", "/docs/frequently-asked-questions"],
   ["Tutorials", "/tutorials"],
+  ["FAQ", "/docs/frequently-asked-questions"],
+  ["Contact Us", "/contact-us"],
 ];
 
 const elementPages = [
@@ -108,7 +108,7 @@ export default function NavBar(props) {
                 <Typography level="title-md" sx={{ wordBreak: "break-word" }}>
                   {localUserInfo.first_name
                     ? `Hello ${localUserInfo.first_name}!`
-                    : "Hello!"}
+                    : "Welcome!"}
                 </Typography>
               </ListItem>
               <ListDivider />
@@ -571,17 +571,6 @@ export default function NavBar(props) {
             </>
           )}
           <Divider sx={{ my: 1 }} />
-          <Link
-            to="/contact-us"
-            underline="none"
-            component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
-            <ListItem sx={{ width: "100%" }}>
-              <ListItemButton>Contact Us</ListItemButton>
-            </ListItem>
-          </Link>
-          <Divider sx={{ my: 1 }} />
           <ListItem onClick={userLogout}>Logout</ListItem>
         </List>
       );
@@ -708,42 +697,9 @@ export default function NavBar(props) {
                         >
                           {localUserInfo.first_name
                             ? `Hello ${localUserInfo.first_name}!`
-                            : "Hello!"}
+                            : "Welcome!"}
                         </Typography>
                       </ListItem>
-                      <ListDivider />
-                      <Typography
-                        level="body-xs"
-                        textTransform="uppercase"
-                        fontWeight="lg"
-                        sx={{ px: 1.5, py: 1 }}
-                      >
-                        About
-                      </Typography>
-                      <Link
-                        key={"about"}
-                        to={"/about"}
-                        underline="none"
-                        component={RouterLink}
-                        sx={{ color: "text.tertiary" }}
-                      >
-                        <ListItem sx={{ width: "100%" }}>
-                          <ListItemButton>About Us</ListItemButton>
-                        </ListItem>
-                      </Link>
-                      {docPages?.map((page) => (
-                        <Link
-                          key={page[1]}
-                          to={page[1]}
-                          underline="none"
-                          component={RouterLink}
-                          sx={{ color: "text.tertiary" }}
-                        >
-                          <ListItem sx={{ width: "100%" }}>
-                            <ListItemButton>{page[0]}</ListItemButton>
-                          </ListItem>
-                        </Link>
-                      ))}
                     </List>
                     <Divider sx={{ my: 1 }} />
                     <List>
@@ -753,7 +709,7 @@ export default function NavBar(props) {
                         fontWeight="lg"
                         sx={{ px: 1.5, py: 1 }}
                       >
-                        Elements
+                        Knowledge Elements
                       </Typography>
                       {elementPages?.map((page) => (
                         <Link
@@ -768,6 +724,41 @@ export default function NavBar(props) {
                           </ListItem>
                         </Link>
                       ))}
+                    </List>
+                    <ListDivider />
+                    <List>
+                      <Typography
+                        level="body-xs"
+                        textTransform="uppercase"
+                        fontWeight="lg"
+                        sx={{ px: 1.5, py: 1 }}
+                      >
+                        Support
+                      </Typography>
+                      {supportPages?.map((page) => (
+                        <Link
+                          key={page[1]}
+                          to={page[1]}
+                          underline="none"
+                          component={RouterLink}
+                          sx={{ color: "text.tertiary" }}
+                        >
+                          <ListItem sx={{ width: "100%" }}>
+                            <ListItemButton>{page[0]}</ListItemButton>
+                          </ListItem>
+                        </Link>
+                      ))}
+                      <Link
+                        key="about"
+                        to="/about"
+                        underline="none"
+                        component={RouterLink}
+                        sx={{ color: "text.tertiary" }}
+                      >
+                        <ListItem sx={{ width: "100%" }}>
+                          <ListItemButton>About Us</ListItemButton>
+                        </ListItem>
+                      </Link>
                     </List>
                     <Divider sx={{ my: 1 }} />
                     <AuthInDrawer />
@@ -820,16 +811,30 @@ export default function NavBar(props) {
                     </Tooltip>
                   </Link>
                 </Box>
-                <Box className="tourid-3">
-                  <HoverOverMenuTab menu={elementPages}>
-                    Elements
-                  </HoverOverMenuTab>
-                </Box>
                 <Box className="tourid-2">
-                  <HoverOverMenuTab menu={docPages}>
-                    Documentation
+                  <HoverOverMenuTab menu={elementPages}>
+                    Knowledge Elements
                   </HoverOverMenuTab>
                 </Box>
+                <Box className="tourid-3">
+                  <HoverOverMenuTab menu={supportPages} tabLink="/contact-us">
+                    Support
+                  </HoverOverMenuTab>
+                </Box>
+                <Link
+                  to="/about"
+                  component={RouterLink}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                    sx={{ alignSelf: "center", px: 1.5 }}
+                  >
+                    About Us
+                  </Button>
+                </Link>
               </Stack>
               <Stack
                 direction="row"
@@ -843,21 +848,8 @@ export default function NavBar(props) {
                   orientation="horizontal"
                   size="sm"
                   variant="plain"
-                  spacing="0.1rem"
+                  spacing="0.01rem"
                 >
-                  <Tooltip
-                    title="Questions, help, or bug report"
-                    variant="solid"
-                  >
-                    <Button
-                      size="sm"
-                      component={RouterLink}
-                      to="/contact-us"
-                      color="primary"
-                    >
-                      Help
-                    </Button>
-                  </Tooltip>
                   {isAuthenticated && canAccessJupyterHub ? (
                     // If the user is logged in, activate the link to JupyterHub
                     <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
