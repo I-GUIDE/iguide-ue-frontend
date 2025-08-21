@@ -600,7 +600,19 @@ export default function NavBar(props) {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <AppBar position="sticky" color="inherit">
+        <AppBar
+          color="inherit"
+          sx={{
+            position: "fixed",
+            top: { xs: 0, lg: 10 },
+            left: { lg: "50%" },
+            transform: { lg: "translateX(-50%)" },
+            maxWidth: "lg",
+            borderRadius: { xs: 0, lg: 6 },
+            boxShadow: 3,
+            zIndex: 1100,
+          }}
+        >
           <Box
             sx={{
               height: NAVBAR_HEIGHT,
