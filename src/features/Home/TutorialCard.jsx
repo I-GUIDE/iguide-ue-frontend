@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Link as RouterLink } from "react-router";
 
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -18,63 +16,14 @@ function Img(props) {
         variant="plain"
         objectFit="contain"
         ratio="1"
-        sx={{ width: "60px" }}
+        sx={{
+          width: "60px",
+          transition: "transform 0.5s ease-in-out",
+        }}
       >
         {children}
       </AspectRatio>
     </CardOverflow>
-  );
-}
-
-function Body(props) {
-  const link = props.link;
-  const title = props.title;
-  const content = props.content;
-  const align = props.align;
-
-  return (
-    <CardContent>
-      <Link
-        overlay
-        component={RouterLink}
-        to={link}
-        underline="none"
-        sx={{ color: "text.tertiary" }}
-      >
-        <Stack direction="column" sx={{ p: 0, width: "100%" }}>
-          <Typography
-            level="h4"
-            textColor="#000"
-            align={align}
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: "2",
-              WebkitBoxOrient: "vertical",
-              py: 0.5,
-            }}
-          >
-            {title}
-          </Typography>
-
-          <Typography
-            level="body-sm"
-            align={align}
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: "3",
-              WebkitBoxOrient: "vertical",
-              py: 0.5,
-            }}
-          >
-            {content}
-          </Typography>
-        </Stack>
-      </Link>
-    </CardContent>
   );
 }
 
@@ -96,7 +45,10 @@ export default function TutorialCard(props) {
         bgcolor: bgColor,
         "&:hover": {
           borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-          transform: "translateY(-2px)",
+          // Apply the rotation to the nested component
+          "& .MuiAspectRatio-root": {
+            transform: "rotate(15deg) scale(1.1)",
+          },
         },
         p: 0,
       }}
@@ -106,12 +58,47 @@ export default function TutorialCard(props) {
           <img src={iconImage} loading="lazy" alt="thumbnail" />
         </Img>
       )}
-      <Body
-        link={link}
-        title={title}
-        content={content}
-        align={inColumn ? "center" : "left"}
-      />
+      <CardContent>
+        <Link
+          overlay
+          component={RouterLink}
+          to={link}
+          underline="none"
+          sx={{ color: "text.tertiary" }}
+        >
+          <Stack direction="column" sx={{ p: 0, width: "100%" }}>
+            <Typography
+              level="h4"
+              textColor="#000"
+              align={inColumn ? "center" : "left"}
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: "2",
+                WebkitBoxOrient: "vertical",
+                py: 0.5,
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              level="body-sm"
+              align={inColumn ? "center" : "left"}
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: "3",
+                WebkitBoxOrient: "vertical",
+                py: 0.5,
+              }}
+            >
+              {content}
+            </Typography>
+          </Stack>
+        </Link>
+      </CardContent>
       {!inColumn && (
         <Img>
           <img src={iconImage} loading="lazy" alt="thumbnail" />
