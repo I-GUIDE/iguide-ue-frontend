@@ -10,6 +10,7 @@ import {
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
+
 import AppBar from "@mui/material/AppBar";
 
 import Box from "@mui/joy/Box";
@@ -42,13 +43,14 @@ import { PERMISSIONS } from "../../configs/Permissions";
 const ENV = import.meta.env.VITE_ENV;
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
-const aboutDropdown = [
+const docPages = [
+  ["About Us", "/about"],
   ["Getting Started", "/docs/getting-started"],
   ["FAQ", "/docs/frequently-asked-questions"],
   ["Tutorials", "/tutorials"],
 ];
 
-const pages = [
+const elementPages = [
   ["Maps", "/maps"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
@@ -102,19 +104,14 @@ export default function NavBar(props) {
           sx={{ maxWidth: 250 }}
           title={
             <List>
-              {localUserInfo.first_name && (
-                <>
-                  <ListItem sx={{ width: "100%" }}>
-                    <Typography
-                      level="title-md"
-                      sx={{ wordBreak: "break-word" }}
-                    >
-                      Hello {localUserInfo.first_name}!
-                    </Typography>
-                  </ListItem>
-                  <ListDivider />
-                </>
-              )}
+              <ListItem sx={{ width: "100%" }}>
+                <Typography level="title-md" sx={{ wordBreak: "break-word" }}>
+                  {localUserInfo.first_name
+                    ? `Hello ${localUserInfo.first_name}!`
+                    : "Hello!"}
+                </Typography>
+              </ListItem>
+              <ListDivider />
               <Link
                 to="/user-profile"
                 underline="none"
@@ -145,7 +142,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Admin
@@ -184,7 +181,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Advanced Resources
@@ -226,7 +223,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Beta feature
@@ -251,7 +248,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     New Contribution
@@ -692,19 +689,17 @@ export default function NavBar(props) {
                     sx={{ px: 2, py: 1 }}
                   >
                     <List>
-                      {localUserInfo.first_name && (
-                        <>
-                          <ListItem sx={{ width: "100%" }}>
-                            <Typography
-                              level="title-md"
-                              sx={{ wordBreak: "break-word" }}
-                            >
-                              Hello {localUserInfo.first_name}!
-                            </Typography>
-                          </ListItem>
-                          <ListDivider />
-                        </>
-                      )}
+                      <ListItem sx={{ width: "100%" }}>
+                        <Typography
+                          level="title-md"
+                          sx={{ wordBreak: "break-word" }}
+                        >
+                          {localUserInfo.first_name
+                            ? `Hello ${localUserInfo.first_name}!`
+                            : "Hello!"}
+                        </Typography>
+                      </ListItem>
+                      <ListDivider />
                       <Typography
                         level="body-xs"
                         textTransform="uppercase"
@@ -724,7 +719,7 @@ export default function NavBar(props) {
                           <ListItemButton>About Us</ListItemButton>
                         </ListItem>
                       </Link>
-                      {aboutDropdown?.map((page) => (
+                      {docPages?.map((page) => (
                         <Link
                           key={page[1]}
                           to={page[1]}
@@ -748,7 +743,7 @@ export default function NavBar(props) {
                       >
                         Elements
                       </Typography>
-                      {pages?.map((page) => (
+                      {elementPages?.map((page) => (
                         <Link
                           key={page[1]}
                           to={page[1]}
@@ -806,38 +801,22 @@ export default function NavBar(props) {
                     <Tooltip title="I-GUIDE Platform Home" variant="solid">
                       <Box
                         component="img"
-                        sx={{ height: 40, mt: 1, px: 2 }}
+                        sx={{ height: 40, mt: 1, pl: 2, pr: 3 }}
                         alt="Logo"
                         src="/images/Logo.png"
                       />
                     </Tooltip>
                   </Link>
                 </Box>
-                <Box className="tourid-2">
-                  <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
-                    About
+                <Box className="tourid-3">
+                  <HoverOverMenuTab menu={elementPages}>
+                    Elements
                   </HoverOverMenuTab>
                 </Box>
-                <Box className="tourid-3">
-                  {pages?.map((page) => (
-                    <Link
-                      key={page[1]}
-                      to={page[1]}
-                      underline="none"
-                      component={RouterLink}
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <Button
-                        key={page[0]}
-                        variant="plain"
-                        color="neutral"
-                        size="sm"
-                        sx={{ alignSelf: "center" }}
-                      >
-                        {page[0]}
-                      </Button>
-                    </Link>
-                  ))}
+                <Box className="tourid-2">
+                  <HoverOverMenuTab menu={docPages}>
+                    Documentation
+                  </HoverOverMenuTab>
                 </Box>
               </Stack>
               <Stack
