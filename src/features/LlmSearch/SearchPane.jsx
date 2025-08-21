@@ -13,7 +13,7 @@ import SearchInput from "./SearchInput";
 import Logo from "../../components/Logo";
 import { SampleChatHistory } from "./SampleChatHistory";
 
-import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NAVBAR_HEIGHT, NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
 import {
   streamLlmSearchResult,
   fetchLlmSearchMemoryId,
@@ -161,6 +161,7 @@ export default function SearchPane() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          pt: NAVBAR_HEIGHT / 8,
         }}
       >
         <Container maxWidth="md">
@@ -247,6 +248,7 @@ export default function SearchPane() {
           minHeight: 0,
           px: 2,
           py: 3,
+          pt: NAVBAR_HEIGHT / 8,
           overflowY: "auto",
           flexDirection: "column",
           // Message box bottom fade out

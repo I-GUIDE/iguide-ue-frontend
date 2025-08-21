@@ -603,7 +603,7 @@ export default function NavBar(props) {
         <AppBar
           color="inherit"
           sx={{
-            position: "fixed",
+            position: { xs: "absolute", lg: "fixed" },
             top: { xs: 0, lg: 10 },
             left: { lg: "50%" },
             transform: { lg: "translateX(-50%)" },
@@ -615,7 +615,7 @@ export default function NavBar(props) {
         >
           <Box
             sx={{
-              height: NAVBAR_HEIGHT,
+              height: { xs: NAVBAR_HEIGHT, lg: NAVBAR_HEIGHT - 10 },
               pt: 1,
               mx: 2,
               display: "auto",

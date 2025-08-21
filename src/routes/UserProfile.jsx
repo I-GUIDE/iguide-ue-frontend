@@ -32,6 +32,7 @@ import ElementGrid from "../components/Layout/ElementGrid";
 
 import {
   DEFAULT_BODY_HEIGHT,
+  PT_OFFSET,
   USER_PROFILE_BODY_HEIGHT,
 } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
@@ -144,7 +145,7 @@ export default function UserProfile() {
                   minHeight: USER_PROFILE_BODY_HEIGHT,
                   backgroundColor: "inherit",
                   px: { xs: 2, md: 4 },
-                  pt: 4,
+                  pt: PT_OFFSET,
                   pb: 8,
                 }}
               >

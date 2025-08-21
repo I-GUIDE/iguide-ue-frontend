@@ -22,7 +22,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import usePageTitle from "../hooks/usePageTitle";
 import SearchBar from "../components/SearchBar";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import { sendBugToSlack } from "../utils/AutomaticBugReporting";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -142,7 +142,7 @@ export default function ErrorPage(props) {
               minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

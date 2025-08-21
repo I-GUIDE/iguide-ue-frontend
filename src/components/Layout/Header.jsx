@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
@@ -17,6 +15,7 @@ import {
   HEADER_HEIGHT,
   RESOURCE_TYPE_NAMES_PLURAL,
   RESOURCE_TYPE_NAMES_FOR_URI,
+  NAVBAR_HEIGHT,
 } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 import PageNav from "../PageNav";
@@ -62,7 +61,8 @@ export default function Header(props) {
         <CardCover>
           <img src="/images/header-bg.png" loading="lazy" alt="Gray scale" />
         </CardCover>
-        <CardContent>
+        {/* Translate 80 to "80px" */}
+        <CardContent sx={{ pt: NAVBAR_HEIGHT / 8 }}>
           <Container maxWidth="lg">
             <Stack spacing={3} sx={{ px: 4, py: 2 }}>
               <PageNav

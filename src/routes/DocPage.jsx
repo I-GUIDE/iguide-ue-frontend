@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 
 import { useParams, useOutletContext } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
@@ -13,7 +13,7 @@ import Typography from "@mui/joy/Typography";
 import Divider from "@mui/joy/Divider";
 
 import { fetchADocumentation } from "../utils/DataRetrieval";
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 
 import usePageTitle from "../hooks/usePageTitle";
 import PageNav from "../components/PageNav";
@@ -83,7 +83,7 @@ export default function DocPage() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

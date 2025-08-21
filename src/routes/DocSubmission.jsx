@@ -10,7 +10,7 @@ import LoginPage from "./LoginPage";
 import DocEditCard from "../features/DocSubmission/DocEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 
 export default function DocSubmission() {
   usePageTitle("Create Documentation");
@@ -45,7 +45,7 @@ export default function DocSubmission() {
               minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

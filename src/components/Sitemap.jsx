@@ -19,7 +19,7 @@ import Stack from "@mui/joy/Stack";
 
 import { routes } from "../routes";
 import usePageTitle from "../hooks/usePageTitle";
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import { PERMISSIONS } from "../configs/Permissions";
 
 const AUTH_BACKEND_URL = import.meta.env.VITE_AUTH_BACKEND_URL;
@@ -91,7 +91,7 @@ export default function Sitemap() {
               sx={{
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
-                pt: 4,
+                pt: PT_OFFSET,
                 pb: 8,
               }}
             >
