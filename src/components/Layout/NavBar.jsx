@@ -807,10 +807,23 @@ export default function NavBar(props) {
                     component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
-                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                    <Tooltip
+                      title="I-GUIDE Platform Home"
+                      variant="solid"
+                      enterDelay={500}
+                    >
                       <Box
                         component="img"
-                        sx={{ height: 40, mt: 1, pl: 2, pr: 3 }}
+                        sx={{
+                          height: 40,
+                          mt: 1,
+                          pl: 2,
+                          pr: 3,
+                          transition: "transform 0.3s ease",
+                          "&:hover": {
+                            transform: "scale(1.04)",
+                          },
+                        }}
                         alt="Logo"
                         src="/images/Logo.png"
                       />
