@@ -1,3 +1,5 @@
+// NOTE: After fixing bugs, please don't forget to fix UserProfileButton.jsx due to similarity.
+
 import { useState, useRef } from "react";
 
 import { Link as RouterLink } from "react-router";
@@ -21,7 +23,6 @@ export default function HoverOverMenuTab(props) {
   function handleOpen(event) {
     clearTimeout(timeoutRef.current);
     setAnchorEl(event.currentTarget);
-    setShowMenu(true);
   }
 
   function handleClose() {
