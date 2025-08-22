@@ -1,16 +1,13 @@
-import React from "react";
-
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Stack from "@mui/joy/Stack";
 import Container from "@mui/joy/Container";
-import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
 export default function Maintenance() {
@@ -36,7 +33,7 @@ export default function Maintenance() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

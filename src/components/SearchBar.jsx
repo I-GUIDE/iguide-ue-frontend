@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   useNavigate,
   useOutletContext,
@@ -184,7 +184,7 @@ export default function SearchBar(props) {
                     padding: 0,
                     transition: "all 0.5s ease-in-out",
                     "&:hover": {
-                      transform: "scale(1.3)",
+                      transform: "rotate(15deg) scale(1.2)",
                     },
                   }}
                 >

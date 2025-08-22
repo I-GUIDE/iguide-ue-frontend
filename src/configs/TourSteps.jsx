@@ -6,16 +6,18 @@ export default [
   },
   {
     selector: ".tourid-1",
-    content: "You can return to the homepage anytime by clicking the I-GUIDE logo.",
+    content:
+      "You can always return to the homepage by clicking the I-GUIDE logo.",
   },
   {
     selector: ".tourid-2",
     content:
-      "You can find information---including FAQ and a Getting Started guide---on our About page.",
+      "Here you'll find all our Knowledge Elements by category — the perfect place to start exploring.",
   },
   {
     selector: ".tourid-3",
-    content: "Use the navigation bar to explore knowledge elements by category.",
+    content:
+      "You can report issues or leave comments through our Contact Us page, or visit other pages to get your questions answered.",
   },
   {
     selector: ".tourid-4",
@@ -31,7 +33,8 @@ export default [
   },
   {
     selector: ".tourid-6",
-    content: "Explore data-rich maps designed to support your research and educational goals.",
+    content:
+      "Explore data-rich maps designed to support your research and educational goals.",
     position: "bottom",
   },
   {

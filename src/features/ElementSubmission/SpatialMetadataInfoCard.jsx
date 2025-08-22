@@ -1,5 +1,3 @@
-import React from "react";
-
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -38,9 +36,10 @@ export default function SpatialMetadataInfoCard(props) {
           width: "100%",
           height: "100%",
           "--Card-radius": "15px",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
           "&:hover": {
-            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-            transform: "translateY(-2px)",
+            transform: "scale(1.01)",
+            boxShadow: "xl",
           },
         }}
         onClick={handleSelect}

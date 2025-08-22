@@ -16,7 +16,7 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 
 import SearchBar from "../components/SearchBar";
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NAVBAR_HEIGHT, NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import Logo from "../components/Logo";
 
@@ -43,7 +43,11 @@ export default function SearchHome() {
               <img src="/images/network-bg.png" loading="lazy" alt="" />
             </CardCover>
             <CardContent
-              sx={{ justifyContent: "center", alignItems: "center" }}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                pt: NAVBAR_HEIGHT / 8,
+              }}
             >
               <Container maxWidth="md">
                 <Box

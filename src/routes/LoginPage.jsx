@@ -18,7 +18,7 @@ import Typography from "@mui/joy/Typography";
 
 import { userLogin } from "../utils/UserManager";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 
 export default function LoginPage() {
   return (
@@ -45,7 +45,7 @@ export default function LoginPage() {
                 minHeight: NO_HEADER_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
-                pt: 4,
+                pt: PT_OFFSET,
                 pb: 8,
               }}
             >

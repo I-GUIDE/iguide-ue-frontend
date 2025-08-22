@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 
 import { useTheme, CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -10,7 +10,11 @@ import Typography from "@mui/joy/Typography";
 const ConnectedGraph = lazy(() =>
   import("../features/ConnectedGraph/ConnectedGraph")
 );
-import { NO_HEADER_BODY_HEIGHT, NAVBAR_HEIGHT } from "../configs/VarConfigs";
+import {
+  NO_HEADER_BODY_HEIGHT,
+  NAVBAR_HEIGHT,
+  PT_OFFSET,
+} from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { fetchConnectedGraph } from "../utils/DataRetrieval";
 import { stringTruncator } from "../helpers/helper";
@@ -107,7 +111,7 @@ export default function NetworkVisualizer() {
               minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

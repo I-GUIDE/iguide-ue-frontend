@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -14,7 +14,7 @@ import Typography from "@mui/joy/Typography";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { DocRetriever } from "../utils/DataRetrieval";
 import PageNav from "../components/PageNav";
@@ -66,7 +66,7 @@ export default function Tutorials() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

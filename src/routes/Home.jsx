@@ -37,6 +37,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 import {
   NO_HEADER_BODY_HEIGHT,
   HOME_SEARCH_SEC_HEIGHT,
+  NAVBAR_HEIGHT,
 } from "../configs/VarConfigs";
 
 export default function Home() {
@@ -87,6 +88,7 @@ export default function Home() {
                 justifyContent: "flex-end",
                 alignItems: "center",
                 minHeight: HOME_SEARCH_SEC_HEIGHT,
+                pt: NAVBAR_HEIGHT / 8,
               }}
             >
               <Container maxWidth="md">

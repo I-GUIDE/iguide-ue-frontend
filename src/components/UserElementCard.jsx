@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Link as RouterLink } from "react-router";
 
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -56,9 +54,10 @@ export default function UserElementCard(props) {
         width: "100%",
         height: "100%",
         "--Card-radius": "15px",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-          transform: "translateY(-2px)",
+          transform: "scale(1.01)",
+          boxShadow: "xl",
         },
       }}
     >

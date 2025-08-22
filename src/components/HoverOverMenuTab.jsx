@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -9,11 +9,13 @@ import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import ListItemButton from "@mui/joy/ListItemButton";
 
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+
 export default function HoverOverMenuTab(props) {
   const menu = props.menu;
   const menuBody = props.menuBody;
   const tabName = props.children;
-  const tabLink = props.tabLink;
+  const tabLink = props.tabLink || "#";
 
   const [open, setOpen] = useState(false);
 
@@ -58,7 +60,20 @@ export default function HoverOverMenuTab(props) {
           variant="plain"
           color="neutral"
           size="sm"
-          sx={{ alignSelf: "center" }}
+          sx={{ alignSelf: "center", px: 1.5 }}
+          endDecorator={
+            <span
+              style={{
+                display: "inline-flex",
+                transition: "transform 0.3s ease",
+                transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                transformOrigin: "center",
+                marginLeft: "0px",
+              }}
+            >
+              <KeyboardArrowDown style={{ fontSize: "16px" }} />
+            </span>
+          }
         >
           {tabName}
         </Button>

@@ -7,7 +7,7 @@ import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import { PERMISSIONS } from "../configs/Permissions";
 
 import SearchPane from "../features/LlmSearch/SearchPane";
@@ -49,7 +49,7 @@ export default function LlmSearch() {
                 minHeight: NO_HEADER_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
-                pt: 4,
+                pt: PT_OFFSET,
                 pb: 8,
               }}
             >

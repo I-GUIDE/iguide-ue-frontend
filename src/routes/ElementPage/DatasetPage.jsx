@@ -12,7 +12,7 @@ import {
   fetchSingleElementDetails,
   fetchSinglePrivateElementDetails,
 } from "../../utils/DataRetrieval";
-import { NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../../configs/VarConfigs";
 import { inputExists } from "../../helpers/helper";
 
 import MainContent from "../../features/Element/MainContent";
@@ -143,7 +143,7 @@ export default function DatasetPage() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >

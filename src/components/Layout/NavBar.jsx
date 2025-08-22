@@ -10,6 +10,7 @@ import {
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 const materialTheme = materialExtendTheme();
+
 import AppBar from "@mui/material/AppBar";
 
 import Box from "@mui/joy/Box";
@@ -42,13 +43,14 @@ import { PERMISSIONS } from "../../configs/Permissions";
 const ENV = import.meta.env.VITE_ENV;
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
-const aboutDropdown = [
+const supportPages = [
   ["Getting Started", "/docs/getting-started"],
-  ["FAQ", "/docs/frequently-asked-questions"],
   ["Tutorials", "/tutorials"],
+  ["FAQ", "/docs/frequently-asked-questions"],
+  ["Contact Us", "/contact-us"],
 ];
 
-const pages = [
+const elementPages = [
   ["Maps", "/maps"],
   ["Datasets", "/datasets"],
   ["Notebooks", "/notebooks"],
@@ -102,19 +104,14 @@ export default function NavBar(props) {
           sx={{ maxWidth: 250 }}
           title={
             <List>
-              {localUserInfo.first_name && (
-                <>
-                  <ListItem sx={{ width: "100%" }}>
-                    <Typography
-                      level="title-md"
-                      sx={{ wordBreak: "break-word" }}
-                    >
-                      Hello {localUserInfo.first_name}!
-                    </Typography>
-                  </ListItem>
-                  <ListDivider />
-                </>
-              )}
+              <ListItem sx={{ width: "100%" }}>
+                <Typography level="title-md" sx={{ wordBreak: "break-word" }}>
+                  {localUserInfo.first_name
+                    ? `Hello ${localUserInfo.first_name}!`
+                    : "Welcome!"}
+                </Typography>
+              </ListItem>
+              <ListDivider />
               <Link
                 to="/user-profile"
                 underline="none"
@@ -145,7 +142,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Admin
@@ -184,7 +181,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Advanced Resources
@@ -226,7 +223,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     Beta feature
@@ -251,7 +248,7 @@ export default function NavBar(props) {
                   <Typography
                     level="body-xs"
                     textTransform="uppercase"
-                    fontWeight="lg"
+                    fontWeight="md"
                     sx={{ px: 1.5, py: 1 }}
                   >
                     New Contribution
@@ -574,17 +571,6 @@ export default function NavBar(props) {
             </>
           )}
           <Divider sx={{ my: 1 }} />
-          <Link
-            to="/contact-us"
-            underline="none"
-            component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
-            <ListItem sx={{ width: "100%" }}>
-              <ListItemButton>Contact Us</ListItemButton>
-            </ListItem>
-          </Link>
-          <Divider sx={{ my: 1 }} />
           <ListItem onClick={userLogout}>Logout</ListItem>
         </List>
       );
@@ -603,10 +589,28 @@ export default function NavBar(props) {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <AppBar position="sticky" color="inherit">
+        <AppBar
+          color="inherit"
+          sx={{
+            position: { xs: "absolute", lg: "fixed" },
+            top: { xs: 0, lg: 10 },
+            left: { lg: "50%" },
+            transform: { lg: "translateX(-50%)" },
+            maxWidth: "lg",
+            borderRadius: { xs: 0, lg: 6 },
+            boxShadow: 3,
+            zIndex: 1100,
+            backgroundColor: {
+              xs: "background.paper",
+              lg: "rgba(255, 255, 255, 0.8)",
+            },
+            backdropFilter: { lg: "blur(6px)" },
+            WebkitBackdropFilter: { lg: "blur(6px)" },
+          }}
+        >
           <Box
             sx={{
-              height: NAVBAR_HEIGHT,
+              height: { xs: NAVBAR_HEIGHT, lg: NAVBAR_HEIGHT - 10 },
               pt: 1,
               mx: 2,
               display: "auto",
@@ -692,39 +696,28 @@ export default function NavBar(props) {
                     sx={{ px: 2, py: 1 }}
                   >
                     <List>
-                      {localUserInfo.first_name && (
-                        <>
-                          <ListItem sx={{ width: "100%" }}>
-                            <Typography
-                              level="title-md"
-                              sx={{ wordBreak: "break-word" }}
-                            >
-                              Hello {localUserInfo.first_name}!
-                            </Typography>
-                          </ListItem>
-                          <ListDivider />
-                        </>
-                      )}
+                      <ListItem sx={{ width: "100%" }}>
+                        <Typography
+                          level="title-md"
+                          sx={{ wordBreak: "break-word" }}
+                        >
+                          {localUserInfo.first_name
+                            ? `Hello ${localUserInfo.first_name}!`
+                            : "Welcome!"}
+                        </Typography>
+                      </ListItem>
+                    </List>
+                    <Divider sx={{ my: 1 }} />
+                    <List>
                       <Typography
                         level="body-xs"
                         textTransform="uppercase"
                         fontWeight="lg"
                         sx={{ px: 1.5, py: 1 }}
                       >
-                        About
+                        Knowledge Elements
                       </Typography>
-                      <Link
-                        key={"about"}
-                        to={"/about"}
-                        underline="none"
-                        component={RouterLink}
-                        sx={{ color: "text.tertiary" }}
-                      >
-                        <ListItem sx={{ width: "100%" }}>
-                          <ListItemButton>About Us</ListItemButton>
-                        </ListItem>
-                      </Link>
-                      {aboutDropdown?.map((page) => (
+                      {elementPages?.map((page) => (
                         <Link
                           key={page[1]}
                           to={page[1]}
@@ -738,7 +731,7 @@ export default function NavBar(props) {
                         </Link>
                       ))}
                     </List>
-                    <Divider sx={{ my: 1 }} />
+                    <ListDivider />
                     <List>
                       <Typography
                         level="body-xs"
@@ -746,9 +739,9 @@ export default function NavBar(props) {
                         fontWeight="lg"
                         sx={{ px: 1.5, py: 1 }}
                       >
-                        Elements
+                        Support
                       </Typography>
-                      {pages?.map((page) => (
+                      {supportPages?.map((page) => (
                         <Link
                           key={page[1]}
                           to={page[1]}
@@ -761,6 +754,17 @@ export default function NavBar(props) {
                           </ListItem>
                         </Link>
                       ))}
+                      <Link
+                        key="about"
+                        to="/about"
+                        underline="none"
+                        component={RouterLink}
+                        sx={{ color: "text.tertiary" }}
+                      >
+                        <ListItem sx={{ width: "100%" }}>
+                          <ListItemButton>About Us</ListItemButton>
+                        </ListItem>
+                      </Link>
                     </List>
                     <Divider sx={{ my: 1 }} />
                     <AuthInDrawer />
@@ -803,10 +807,23 @@ export default function NavBar(props) {
                     component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
-                    <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                    <Tooltip
+                      title="I-GUIDE Platform Home"
+                      variant="solid"
+                      enterDelay={500}
+                    >
                       <Box
                         component="img"
-                        sx={{ height: 40, mt: 1, px: 2 }}
+                        sx={{
+                          height: 40,
+                          mt: 1,
+                          pl: 2,
+                          pr: 3,
+                          transition: "transform 0.3s ease",
+                          "&:hover": {
+                            transform: "scale(1.04)",
+                          },
+                        }}
                         alt="Logo"
                         src="/images/Logo.png"
                       />
@@ -814,31 +831,29 @@ export default function NavBar(props) {
                   </Link>
                 </Box>
                 <Box className="tourid-2">
-                  <HoverOverMenuTab menu={aboutDropdown} tabLink="/about">
-                    About
+                  <HoverOverMenuTab menu={elementPages}>
+                    Knowledge Elements
                   </HoverOverMenuTab>
                 </Box>
                 <Box className="tourid-3">
-                  {pages?.map((page) => (
-                    <Link
-                      key={page[1]}
-                      to={page[1]}
-                      underline="none"
-                      component={RouterLink}
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <Button
-                        key={page[0]}
-                        variant="plain"
-                        color="neutral"
-                        size="sm"
-                        sx={{ alignSelf: "center" }}
-                      >
-                        {page[0]}
-                      </Button>
-                    </Link>
-                  ))}
+                  <HoverOverMenuTab menu={supportPages} tabLink="/contact-us">
+                    Support
+                  </HoverOverMenuTab>
                 </Box>
+                <Link
+                  to="/about"
+                  component={RouterLink}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                    sx={{ alignSelf: "center", px: 1.5 }}
+                  >
+                    About Us
+                  </Button>
+                </Link>
               </Stack>
               <Stack
                 direction="row"
@@ -852,21 +867,8 @@ export default function NavBar(props) {
                   orientation="horizontal"
                   size="sm"
                   variant="plain"
-                  spacing="0.1rem"
+                  spacing="0.01rem"
                 >
-                  <Tooltip
-                    title="Questions, help, or bug report"
-                    variant="solid"
-                  >
-                    <Button
-                      size="sm"
-                      component={RouterLink}
-                      to="/contact-us"
-                      color="primary"
-                    >
-                      Help
-                    </Button>
-                  </Tooltip>
                   {isAuthenticated && canAccessJupyterHub ? (
                     // If the user is logged in, activate the link to JupyterHub
                     <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">

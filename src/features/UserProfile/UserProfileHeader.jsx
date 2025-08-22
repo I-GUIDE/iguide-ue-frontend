@@ -30,6 +30,7 @@ import { UserRoleChip } from "./UserRoleChip";
 import {
   USER_PROFILE_HEADER_HEIGHT,
   UNTRUSTED_AFFILIATIONS,
+  NAVBAR_HEIGHT,
 } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
@@ -65,7 +66,13 @@ export default function UserProfileHeader(props) {
               alt="Network with nodes and connections"
             />
           </CardCover>
-          <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
+          <CardContent
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+              pt: NAVBAR_HEIGHT / 8,
+            }}
+          >
             <Container maxWidth="lg">
               <Grid
                 container
@@ -111,7 +118,13 @@ export default function UserProfileHeader(props) {
               alt="Network with nodes and connections"
             />
           </CardCover>
-          <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
+          <CardContent
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+              pt: NAVBAR_HEIGHT / 8,
+            }}
+          >
             <Container maxWidth="lg">
               <Grid
                 container
@@ -152,7 +165,13 @@ export default function UserProfileHeader(props) {
             alt="Network with nodes and connections"
           />
         </CardCover>
-        <CardContent sx={{ justifyContent: "center", alignItems: "center" }}>
+        <CardContent
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            pt: NAVBAR_HEIGHT / 8,
+          }}
+        >
           <Container maxWidth="lg">
             <Grid
               container

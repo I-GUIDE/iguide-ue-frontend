@@ -28,7 +28,11 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { NO_HEADER_BODY_HEIGHT, IMAGE_SIZE_LIMIT } from "../configs/VarConfigs";
+import {
+  NO_HEADER_BODY_HEIGHT,
+  IMAGE_SIZE_LIMIT,
+  PT_OFFSET,
+} from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { sendMessageToSlack } from "../utils/AutomaticBugReporting";
 import { useAlertModal } from "../utils/AlertModalProvider";
@@ -338,7 +342,7 @@ export default function ContactUs() {
             sx={{
               backgroundColor: "inherit",
               px: { xs: 2, md: 4 },
-              pt: 4,
+              pt: PT_OFFSET,
               pb: 8,
             }}
           >
