@@ -69,6 +69,7 @@ export default function HoverOverMenuTab(props) {
         disablePortal
         sx={{
           zIndex: 2000,
+          p: 0.5,
         }}
       >
         {menuBody

@@ -75,6 +75,7 @@ export default function UserProfileButton(props) {
           disablePortal
           sx={{
             zIndex: 2000,
+            p: 0.5,
           }}
         >
           <MenuItem
