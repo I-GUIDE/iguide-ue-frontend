@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import { useOutletContext } from "react-router";
+import { useOutletContext, Link as RouterLink } from "react-router";
 import AvatarEditor from "react-avatar-editor";
 
 import Card from "@mui/joy/Card";
@@ -343,6 +343,18 @@ export default function UserProfileEditCard(props) {
                 onChange={handleProfilePictureUpload}
               />
             </Button>
+            <Typography level="body-xs" sx={{ py: 0.5 }}>
+              By clicking "Upload your profile picture", you agree to our{" "}
+              <Link
+                component={RouterLink}
+                to="/contributor-license-agreement"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contributor License Agreement
+              </Link>
+              .
+            </Typography>
             <Modal
               aria-labelledby="modal-title"
               aria-describedby="modal-desc"

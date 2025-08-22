@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
@@ -12,16 +12,18 @@ import { generateDataAccessCode } from "../../utils/DataAccessCodeGenerator";
 export default function CodeSnippet(props) {
   const directDownloadLink = props.directDownloadLink;
 
-  // Used for generating code styles
-  const accessCodeShell = `
-\`\`\`shell
-${generateDataAccessCode(directDownloadLink, "iguide")}
-\`\`\`
-`;
+  const dataAccessSnippet = generateDataAccessCode(
+    directDownloadLink,
+    "python"
+  );
+  // If data access snippet returns invalid, do not render this component
+  if (dataAccessSnippet === "Invalid Input") {
+    return;
+  }
 
   const accessCodePython = `
 \`\`\`python
-${generateDataAccessCode(directDownloadLink, "python")}
+${dataAccessSnippet}
 \`\`\`
 `;
 
