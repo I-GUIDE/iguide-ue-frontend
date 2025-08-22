@@ -836,7 +836,7 @@ export default function NavBar(props) {
                   </HoverOverMenuTab>
                 </Box>
                 <Box className="tourid-3">
-                  <HoverOverMenuTab menu={supportPages} tabLink="/contact-us">
+                  <HoverOverMenuTab menu={supportPages}>
                     Support
                   </HoverOverMenuTab>
                 </Box>
