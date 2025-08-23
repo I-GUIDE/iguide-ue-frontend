@@ -99,7 +99,7 @@ export const ELEM_VISIBILITY = Object.freeze({
 export const IMAGE_SIZE_LIMIT = 5 * 1024 * 1024;
 export const USER_UPLOAD_DATASET_SIZE_LIMIT = 2 * 1024 * 1024 * 1024;
 
-export const NAVBAR_HEIGHT = 80;
+export const NAVBAR_HEIGHT = 70;
 export const HEADER_HEIGHT = 280 + NAVBAR_HEIGHT;
 export const FOOTER_HEIGHT = 150;
 export const USER_PROFILE_HEADER_HEIGHT = 365 + NAVBAR_HEIGHT;
