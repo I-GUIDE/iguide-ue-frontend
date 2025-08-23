@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Link as RouterLink } from "react-router";
 
 import Divider from "@mui/joy/Divider";
@@ -47,7 +45,18 @@ export default function CapsuleList(props) {
               mx: 0.5,
             }}
           >
-            <Chip variant="outlined" color="neutral" size="md">
+            <Chip
+              variant="outlined"
+              color="neutral"
+              size="md"
+              sx={{
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.03)",
+                  boxShadow: "lg",
+                },
+              }}
+            >
               {item}
             </Chip>
           </Link>
