@@ -56,6 +56,7 @@ export default function UserProfileButton(props) {
           onClick={handleOpen}
           onMouseEnter={handleOpen}
           onMouseLeave={handleClose}
+          className="tourid-4"
         >
           <UserAvatar
             userAvatarUrls={localUserInfo["avatar_url"]}

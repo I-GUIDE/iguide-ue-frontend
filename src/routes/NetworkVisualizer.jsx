@@ -91,7 +91,7 @@ export default function NetworkVisualizer() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Box
           component="main"
           sx={{
@@ -104,13 +104,12 @@ export default function NetworkVisualizer() {
           <Grid
             container
             display="flex"
-            justifyContent="center"
-            alignItems="center"
+            justifyContent="flex-start"
+            alignItems="flex-start"
             direction="column"
             sx={{
               minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
-              px: { xs: 2, md: 4 },
               pt: PT_OFFSET,
               pb: 8,
             }}
@@ -120,22 +119,16 @@ export default function NetworkVisualizer() {
                 zIndex: 9,
                 position: "absolute",
                 top: NAVBAR_HEIGHT + 20,
-                left: 20,
-                background: "rgba(0, 0, 0, .5)",
-                color: "white",
               }}
             >
-              <Box
+              <Typography
+                level="body-xs"
                 sx={{
-                  background: "#fff",
-                  width: "100%",
-                  textAlign: "center",
+                  background: "rgba(256, 256, 256, .4)",
                 }}
               >
-                <Typography level="body-xs">
-                  * Only the elements with connections are displayed.
-                </Typography>
-              </Box>
+                * Only the elements with connections are displayed.
+              </Typography>
             </Box>
             <Suspense fallback={<p>Loading element network...</p>}>
               <ConnectedGraph
@@ -143,10 +136,9 @@ export default function NetworkVisualizer() {
                 edges={edges}
                 draggable
                 elementBoxStyle={{
-                  zIndex: 9,
+                  zIndex: 10,
                   position: "absolute",
-                  top: NAVBAR_HEIGHT + 20,
-                  right: 20,
+                  top: NAVBAR_HEIGHT + 40,
                   background: "rgba(0, 0, 0, .5)",
                   color: "white",
                 }}

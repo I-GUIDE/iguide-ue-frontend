@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { GraphCanvas, useSelection } from "reagraph";
 
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
-import Tooltip from "@mui/joy/Tooltip";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 
@@ -92,28 +91,25 @@ export default function ConnectedGraph(props) {
     <div>
       {selectedElement && selectedElement.id !== elementId && (
         <Box style={elementBoxStyle}>
-          <Tooltip title="Open in new window">
-            <Box
-              sx={{
-                background: "#fff",
-                width: "100%",
-                minWidth: 250,
-                textAlign: "center",
-              }}
-            >
-              <Typography level="title-md">Selected element</Typography>
-              <SimpleInfoCard
-                cardtype={selectedElement.type}
-                pageId={selectedElement.id}
-                title={selectedElement.title}
-                thumbnailImage={selectedElement.thumbnail}
-                minHeight="100%"
-                width="100%"
-                openInNewTab
-                showElementType
-              />
-            </Box>
-          </Tooltip>
+          <Box
+            sx={{
+              background: "#fff",
+              width: "100%",
+              minWidth: 250,
+              textAlign: "center",
+            }}
+          >
+            <Typography level="title-md">Selected element</Typography>
+            <SimpleInfoCard
+              cardtype={selectedElement.type}
+              pageId={selectedElement.id}
+              title={selectedElement.title}
+              thumbnailImage={selectedElement.thumbnail}
+              minHeight="100%"
+              width="100%"
+              showElementType
+            />
+          </Box>
         </Box>
       )}
       <GraphCanvas

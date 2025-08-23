@@ -326,7 +326,7 @@ export default function NavBar(props) {
         >
           <Box
             sx={{
-              height: { xs: NAVBAR_HEIGHT, lg: NAVBAR_HEIGHT - 10 },
+              height: NAVBAR_HEIGHT,
               pt: 1,
               mx: 2,
               display: "auto",
@@ -492,10 +492,18 @@ export default function NavBar(props) {
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
                 >
-                  <Tooltip title="I-GUIDE Platform Home" variant="solid">
+                  <Tooltip title="Home" enterDelay={1500}>
                     <Box
                       component="img"
-                      sx={{ height: 40, mt: 1, px: 2 }}
+                      sx={{
+                        height: 40,
+                        mt: 1,
+                        px: 2,
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                        },
+                      }}
                       alt="Logo"
                       src="/images/Logo.png"
                     />
@@ -523,11 +531,7 @@ export default function NavBar(props) {
                     component={RouterLink}
                     sx={{ color: "text.tertiary" }}
                   >
-                    <Tooltip
-                      title="I-GUIDE Platform Home"
-                      variant="solid"
-                      enterDelay={500}
-                    >
+                    <Tooltip title="Home" enterDelay={1500}>
                       <Box
                         component="img"
                         sx={{
@@ -537,7 +541,7 @@ export default function NavBar(props) {
                           pr: 3,
                           transition: "transform 0.3s ease",
                           "&:hover": {
-                            transform: "scale(1.04)",
+                            transform: "scale(1.05)",
                           },
                         }}
                         alt="Logo"
@@ -590,6 +594,7 @@ export default function NavBar(props) {
                     <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
                       <Button
                         size="sm"
+                        color="neutral"
                         component="a"
                         href={JUPYTERHUB_URL}
                         target="_blank"
