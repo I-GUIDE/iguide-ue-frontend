@@ -19,6 +19,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
 import CopyButton from "./CopyButton";
+import ExpandableTextBlock from "../../components/ExpandableTextBlock";
 import { printListWithDelimiter } from "../../helpers/helper";
 import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
@@ -26,74 +27,6 @@ import { RESOURCE_TYPE_NAMES_PLURAL_FOR_URI } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
-
-function AuthorsDisplay(props) {
-  const authorsList = props.authorsList;
-  if (!authorsList) {
-    return null;
-  }
-
-  const numberOfAuthors = authorsList.length;
-
-  if (numberOfAuthors === 0) return null;
-
-  // When there are too many authors, use tooltip to display the full list
-  if (numberOfAuthors > 10) {
-    return (
-      <Tooltip
-        title={
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              maxWidth: 450,
-              maxHeight: 400,
-              overflow: "hidden",
-              overflowY: "scroll",
-              p: 1,
-            }}
-          >
-            <Typography level="title-md">
-              Author{authorsList.length > 1 && "s"}
-            </Typography>
-            <Typography level="body-md">
-              {printListWithDelimiter(authorsList, ",")}
-            </Typography>
-          </Box>
-        }
-        variant="outlined"
-      >
-        <Typography
-          level="title-md"
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {printListWithDelimiter(authorsList, ",")}
-        </Typography>
-      </Tooltip>
-    );
-  }
-
-  return (
-    <Typography
-      level="title-md"
-      sx={{
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        display: "-webkit-box",
-        WebkitLineClamp: "2",
-        WebkitBoxOrient: "vertical",
-      }}
-    >
-      {printListWithDelimiter(authorsList, ",")}
-    </Typography>
-  );
-}
 
 function ContributorCard(props) {
   const encodedUserId = props.encodedUserId;
@@ -356,7 +289,11 @@ export default function MainContent(props) {
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
-          <AuthorsDisplay authorsList={authors} />
+          <ExpandableTextBlock
+            text={printListWithDelimiter(authors, ",")}
+            expandButtonText="See all authors"
+            collapseButtonText="See fewer authors"
+          />
           {validatedPublicationURL && (
             <Link
               href={validatedPublicationURL}
