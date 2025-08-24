@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router";
+import { useOutletContext } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
@@ -9,7 +9,6 @@ import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
-import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 
@@ -20,67 +19,13 @@ import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
 import CopyButton from "./CopyButton";
 import ExpandableTextBlock from "../../components/ExpandableTextBlock";
+import ContributorCard from "./ContributorCard";
 import { printListWithDelimiter } from "../../helpers/helper";
-import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
 import { RESOURCE_TYPE_NAMES_PLURAL_FOR_URI } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
-
-function ContributorCard(props) {
-  const encodedUserId = props.encodedUserId;
-  const avatar = props.avatar;
-  const userId = props.userId;
-  const name = props.name;
-  const isLoading = props.isLoading;
-  const timePassedText = props.timePassedText;
-
-  return (
-    <Tooltip title="View profile" placement="top">
-      <Link
-        component={RouterLink}
-        to={"/contributor/" + encodedUserId}
-        style={{ textDecoration: "none" }}
-      >
-        <Card
-          variant="plain"
-          orientation="horizontal"
-          sx={{
-            maxHeight: "150px",
-            bgcolor: "#fff",
-            p: 0,
-            "&:hover": {
-              borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-              transform: "translateY(-2px)",
-            },
-            transition: "box-shadow 0.3s ease, transform 0.3s ease",
-          }}
-        >
-          <CardContent>
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={2}
-              sx={{ py: 1 }}
-            >
-              <UserAvatar
-                userAvatarUrls={avatar}
-                userId={userId}
-                avatarResolution="low"
-                isLoading={isLoading}
-              />
-              <Stack direction="column">
-                <Typography level="title-lg">{name}</Typography>
-                <Typography level="body-sm">{timePassedText}</Typography>
-              </Stack>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Link>
-    </Tooltip>
-  );
-}
 
 export default function MainContent(props) {
   const elementId = props.elementId;
