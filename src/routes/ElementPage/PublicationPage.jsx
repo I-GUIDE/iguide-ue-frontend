@@ -179,7 +179,7 @@ export default function PublicationPage() {
             </Grid>
 
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <CapsuleList items={tags} />
               <InteractiveMap
                 centroid={centroid}
                 geometry={geometry}

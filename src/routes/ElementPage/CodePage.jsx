@@ -168,7 +168,6 @@ export default function CodePage() {
                 title={title}
                 authors={authors}
                 contributor={contributor}
-                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 thumbnailImageCredit={thumbnailImageCredit}
@@ -185,7 +184,7 @@ export default function CodePage() {
 
             {/* When the page is narrower than md */}
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <CapsuleList items={tags} />
               <InteractiveMap
                 centroid={centroid}
                 geometry={geometry}

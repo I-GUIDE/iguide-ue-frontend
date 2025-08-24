@@ -1,14 +1,11 @@
-import React from "react";
 import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 
 import SimpleInfoCard from "../../components/SimpleInfoCard";
-
-import "react-multi-carousel/lib/styles.css";
 
 export default function RelatedElements(props) {
   const relatedElements = props.relatedElements;
@@ -42,7 +39,6 @@ export default function RelatedElements(props) {
       <Typography level="h5" fontWeight="lg" mb={1}>
         Related elements
       </Typography>
-      <Divider inset="none" />
       <Carousel responsive={responsive} centerMode>
         {relatedElements?.map((relatedElement) => (
           <Box

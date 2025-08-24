@@ -1,11 +1,10 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 import { useOutletContext, Link as RouterLink } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
-import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
@@ -353,7 +352,7 @@ export default function MainContent(props) {
             </Stack>
           </Stack>
         </Grid>
-        <Grid xs={12} md={8}>
+        <Grid xs={12}>
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
@@ -375,61 +374,68 @@ export default function MainContent(props) {
             </Link>
           )}
         </Grid>
-        <Grid xs={12} md={4}>
-          <Tooltip title={thumbnailImageCredit} placement="top">
-            <AspectRatio
-              variant="outlined"
-              sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+        {thumbnailImage && (
+          <Grid xs={12} sx={{ py: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                maxHeight: 800,
+                height: "100%",
+                overflow: "hidden",
+                border: "1px solid",
+                borderColor: "neutral.outlinedBorder",
+                borderRadius: "xl",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              {thumbnailImage ? (
-                <img
-                  src={
-                    thumbnailImage.medium
-                      ? thumbnailImage.medium
-                      : thumbnailImage
-                  }
-                  loading="lazy"
-                  style={isLoading ? { display: "none" } : null}
-                  alt="thumbnail"
-                />
-              ) : (
-                <img
-                  src={`/default-images/${elementType}.png`}
-                  loading="lazy"
-                  style={isLoading ? { display: "none" } : null}
-                  alt="deafult-thumbnail"
-                />
-              )}
-            </AspectRatio>
-          </Tooltip>
-        </Grid>
+              <img
+                src={
+                  thumbnailImage.medium ? thumbnailImage.medium : thumbnailImage
+                }
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: isLoading ? "none" : "block",
+                }}
+                alt="thumbnail"
+              />
+            </Box>
+            {thumbnailImageCredit && (
+              <Typography level="body-xs">
+                Credit: {thumbnailImageCredit}
+              </Typography>
+            )}
+          </Grid>
+        )}
       </Grid>
       {contentsTitle && (
         <Typography level="h4" sx={{ pt: 2 }}>
           {contentsTitle}
         </Typography>
       )}
-      {useMarkdown ? (
-        <Box sx={{ py: 2 }}>
+      <Box sx={{ pt: 2 }}>
+        {useMarkdown ? (
           <div className="container" data-color-mode="light">
             <Suspense fallback={<p>Loading content...</p>}>
               <MarkdownPreview source={contents} />
             </Suspense>
           </div>
-        </Box>
-      ) : (
-        <Typography
-          level="body-lg"
-          sx={{
-            pt: 2,
-            wordBreak: "break-word",
-            whiteSpace: "pre-wrap",
-            lineHeight: "150%",
-          }}
-        >
-          {contents}
-        </Typography>
-      )}
+        ) : (
+          <Typography
+            level="body-lg"
+            sx={{
+              wordBreak: "break-word",
+              whiteSpace: "pre-wrap",
+              lineHeight: "160%",
+            }}
+          >
+            {contents}
+          </Typography>
+        )}
+      </Box>
     </Stack>
   );
 }

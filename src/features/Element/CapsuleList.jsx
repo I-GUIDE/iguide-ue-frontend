@@ -1,14 +1,11 @@
 import { Link as RouterLink } from "react-router";
 
-import Divider from "@mui/joy/Divider";
-import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import Chip from "@mui/joy/Chip";
 
 export default function CapsuleList(props) {
-  const title = props.title;
   const items = props.items;
 
   // If items object doesn't exist, or it only has one empty item, return null
@@ -22,11 +19,7 @@ export default function CapsuleList(props) {
   });
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
-      <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
-        {title}
-      </Typography>
-      <Divider inset="none" />
+    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 2 }}>
       <Box
         direction="row"
         justifyContent="flex-start"

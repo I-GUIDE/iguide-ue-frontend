@@ -170,7 +170,6 @@ export default function NotebookPage() {
                 title={title}
                 authors={authors}
                 contributor={contributor}
-                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 thumbnailImageCredit={thumbnailImageCredit}
@@ -183,7 +182,7 @@ export default function NotebookPage() {
 
             {/* When the page is narrower than md */}
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <CapsuleList items={tags} />
               <NotebookViewer
                 repoUrl={repoUrl}
                 notebookFile={notebookFile}

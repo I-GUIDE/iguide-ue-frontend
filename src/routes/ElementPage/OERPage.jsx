@@ -182,7 +182,7 @@ export default function OERPage() {
               <OerExternalLinkList oerExternalLinks={oerExternalLinks} />
             </Grid>
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <CapsuleList items={tags} />
               <InteractiveMap
                 centroid={centroid}
                 geometry={geometry}

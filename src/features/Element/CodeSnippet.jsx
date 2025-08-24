@@ -39,7 +39,6 @@ ${dataAccessSnippet}
           >
             Direct Data Access (Python)
           </Typography>
-          <Divider inset="none" />
 
           <div
             className="container"

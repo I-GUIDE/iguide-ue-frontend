@@ -1,6 +1,3 @@
-import React from "react";
-
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import List from "@mui/joy/List";
@@ -89,7 +86,6 @@ export default function OerExternalLinkList(props) {
       <Typography id="" level="h5" fontWeight="lg" mb={1}>
         Additional Materials
       </Typography>
-      <Divider inset="none" />
       <Stack>
         <ExternalSubList title="Slides" list={slides} />
         <ExternalSubList title="Body of Knowledge" list={boks} />

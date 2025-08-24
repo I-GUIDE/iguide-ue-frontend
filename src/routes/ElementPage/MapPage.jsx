@@ -167,7 +167,6 @@ export default function MapPage() {
                 title={title}
                 authors={authors}
                 contributor={contributor}
-                contentsTitle="About"
                 contents={abstract}
                 thumbnailImage={thumbnailImage}
                 thumbnailImageCredit={thumbnailImageCredit}
@@ -180,7 +179,7 @@ export default function MapPage() {
 
             {/* When the page is narrower than md */}
             <Grid xs={12}>
-              <CapsuleList title="Tags" items={tags} />
+              <CapsuleList items={tags} />
               {mapIFrameLink !== thumbnailImage.original && (
                 <MapViewer iframeSrc={mapIFrameLink} />
               )}
