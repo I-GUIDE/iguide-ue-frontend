@@ -1,7 +1,11 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { useParams, useOutletContext } from "react-router";
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+
+import { lazyWithRetryAndReload } from "../helpers/lazyWithRetryAndReload";
+const MarkdownPreview = lazyWithRetryAndReload(() =>
+  import("@uiw/react-markdown-preview")
+);
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";

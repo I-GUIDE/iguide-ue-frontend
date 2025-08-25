@@ -1,8 +1,10 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const MarkdownPreview = lazyWithRetryAndReload(() =>
+  import("@uiw/react-markdown-preview")
+);
 
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";

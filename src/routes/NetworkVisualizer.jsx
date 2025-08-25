@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { useTheme, CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -7,7 +7,8 @@ import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
 
-const ConnectedGraph = lazy(() =>
+import { lazyWithRetryAndReload } from "../helpers/lazyWithRetryAndReload";
+const ConnectedGraph = lazyWithRetryAndReload(() =>
   import("../features/ConnectedGraph/ConnectedGraph")
 );
 import {

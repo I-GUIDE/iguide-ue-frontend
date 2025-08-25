@@ -1,6 +1,9 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const MarkdownPreview = lazyWithRetryAndReload(() =>
+  import("@uiw/react-markdown-preview")
+);
 
 import {
   extendTheme as materialExtendTheme,

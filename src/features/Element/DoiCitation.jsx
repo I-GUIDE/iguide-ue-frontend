@@ -1,6 +1,9 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const MarkdownPreview = lazyWithRetryAndReload(() =>
+  import("@uiw/react-markdown-preview")
+);
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";

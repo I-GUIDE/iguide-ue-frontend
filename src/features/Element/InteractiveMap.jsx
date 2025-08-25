@@ -1,10 +1,11 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-const ElementsMapContainer = lazy(() =>
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const ElementsMapContainer = lazyWithRetryAndReload(() =>
   import("../ElementsMap/ElementsMapContainer")
 );
 import {

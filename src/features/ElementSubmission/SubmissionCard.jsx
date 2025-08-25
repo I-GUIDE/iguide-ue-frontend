@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { useOutletContext, Link as RouterLink } from "react-router";
 
@@ -35,7 +35,10 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import WarningIcon from "@mui/icons-material/Warning";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const HTMLEditor = lazyWithRetryAndReload(() =>
+  import("../../components/HTMLEditor")
+);
 import SubmissionCardFieldTitle from "../ElementSubmission/SubmissionCardFieldTitle";
 import CapsuleInput from "../../components/CapsuleInput";
 import LoadingCard from "../../components/Layout/LoadingCard";

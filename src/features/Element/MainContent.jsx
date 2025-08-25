@@ -1,7 +1,11 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 
 import { useOutletContext } from "react-router";
-const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
+
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const MarkdownPreview = lazyWithRetryAndReload(() =>
+  import("@uiw/react-markdown-preview")
+);
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";

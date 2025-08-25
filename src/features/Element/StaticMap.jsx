@@ -1,15 +1,16 @@
-import React, { lazy, Suspense } from "react";
+import { Suspense } from "react";
 
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
 // Lazy load react-zoom-pan-pinch
-const MiniMap = lazy(() =>
+const MiniMap = lazyWithRetryAndReload(() =>
   import("react-zoom-pan-pinch").then((module) => ({ default: module.MiniMap }))
 );
-const TransformWrapper = lazy(() =>
+const TransformWrapper = lazyWithRetryAndReload(() =>
   import("react-zoom-pan-pinch").then((module) => ({
     default: module.TransformWrapper,
   }))
 );
-const TransformComponent = lazy(() =>
+const TransformComponent = lazyWithRetryAndReload(() =>
   import("react-zoom-pan-pinch").then((module) => ({
     default: module.TransformComponent,
   }))
