@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-import { MapContainer, TileLayer, Marker, Popup, Polygon } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polygon,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -38,8 +45,7 @@ export default function ElementsMapContainer(props) {
   const minZoom = props.minZoom;
   const style = props.style || { height: "100%", width: "100%" };
   // Allow defining zooming behavior
-  const scrollWheelZoom =
-    props.scrollWheelZoom === undefined ? true : props.scrollWheelZoom;
+  const disabledScrollWheelZoom = props.disabledScrollWheelZoom;
   const addNoiseToCentroid = props.addNoiseToCentroid;
 
   // If this is true, only display a single element spatial metadata.
@@ -50,6 +56,20 @@ export default function ElementsMapContainer(props) {
 
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState();
+
+  const [showInstruction, setShowInstruction] = useState(false);
+  const instructionTimeoutRef = useRef(null);
+
+  function handleShowInstruction() {
+    if (instructionTimeoutRef.current) {
+      clearTimeout(instructionTimeoutRef.current);
+    }
+    setShowInstruction(true);
+    // Display the instruction for 2 sec
+    instructionTimeoutRef.current = setTimeout(() => {
+      setShowInstruction(false);
+    }, 2000);
+  }
 
   async function handleFetchElements(viewboxCoords) {
     const returnedElements = await retrieveElementsBySpatialMetadata(
@@ -125,6 +145,84 @@ export default function ElementsMapContainer(props) {
     setSelectedElement(null);
   }
 
+  function ScrollZoomHandler(props) {
+    const onShowInstruction = props.onShowInstruction;
+
+    const map = useMap();
+    const mapRef = useRef(map);
+
+    useEffect(() => {
+      function handleWheel(e) {
+        if (e.ctrlKey || e.metaKey) {
+          mapRef.current.scrollWheelZoom.enable();
+        } else {
+          mapRef.current.scrollWheelZoom.disable();
+          onShowInstruction();
+          e.preventDefault();
+        }
+      }
+
+      const container = mapRef.current.getContainer();
+      container.addEventListener("wheel", handleWheel, { passive: false });
+
+      return () => {
+        container.removeEventListener("wheel", handleWheel);
+      };
+    }, [onShowInstruction]);
+
+    return null;
+  }
+
+  // In element page mode, display the map in a small frame. Disable scrolling unless pressing ctrl or cmd
+  if (elementPageMode) {
+    return (
+      <>
+        <MapContainer
+          center={startingCenter}
+          zoom={startingZoom}
+          maxBounds={maxBounds}
+          maxBoundsViscosity={maxBoundsViscosity}
+          minZoom={minZoom}
+          style={style}
+          scrollWheelZoom={!disabledScrollWheelZoom}
+        >
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {elementCentroid && <Marker position={elementCentroid} />}
+          {elementGeometry && <Polygon positions={elementGeometry} />}
+          {/* Display bounding box when polygon area is not available */}
+          {!elementGeometry && elementBoundingBox && (
+            <Polygon positions={elementBoundingBox} />
+          )}
+          <ScrollZoomHandler onShowInstruction={handleShowInstruction} />
+        </MapContainer>
+        {showInstruction && (
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(0, 0, 0, 0.7)",
+              color: "white",
+              padding: "8px 14px",
+              borderRadius: "4px",
+              fontSize: "14px",
+              zIndex: 1000,
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Hold <strong>Ctrl</strong> (or <strong>⌘</strong> on Mac) to zoom
+            the map
+          </div>
+        )}
+      </>
+    );
+  }
+
   return (
     <MapContainer
       center={startingCenter}
@@ -133,58 +231,45 @@ export default function ElementsMapContainer(props) {
       maxBoundsViscosity={maxBoundsViscosity}
       minZoom={minZoom}
       style={style}
-      scrollWheelZoom={scrollWheelZoom}
+      scrollWheelZoom={!disabledScrollWheelZoom}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {elementPageMode ? (
-        <>
-          {elementCentroid && <Marker position={elementCentroid} />}
-          {elementGeometry && <Polygon positions={elementGeometry} />}
-          {/* Display bounding box when polygon area is not available */}
-          {!elementGeometry && elementBoundingBox && (
-            <Polygon positions={elementBoundingBox} />
-          )}
-        </>
-      ) : (
-        <>
-          <ElementsMapEventHandler
-            onFetchElements={handleFetchElements}
-            onMapClick={handleDeselectElements}
-            onPopupClose={handleDeselectElements}
-          />
-          {elements.map((elementMetadata) => (
-            <Marker
-              key={elementMetadata.id}
-              position={elementMetadata.centroidLeaflet}
-              eventHandlers={{
-                click: () => handleMarkerClick(elementMetadata),
-              }}
-            >
-              <Popup>
-                <SimpleInfoCard
-                  cardtype={elementMetadata["resource-type"]}
-                  pageId={elementMetadata.id}
-                  title={elementMetadata.title}
-                  thumbnailImage={elementMetadata["thumbnail-image"]}
-                  minHeight="100%"
-                  width="100%"
-                  openInNewTab
-                  showElementType
-                />
-              </Popup>
-            </Marker>
-          ))}
-          {selectedElement &&
-            (selectedElement.geometryForLeaflet ? (
-              <Polygon positions={selectedElement.geometryForLeaflet} />
-            ) : (
-              <Polygon positions={selectedElement.boundingBoxForLeaflet} />
-            ))}
-        </>
-      )}
+      <ElementsMapEventHandler
+        onFetchElements={handleFetchElements}
+        onMapClick={handleDeselectElements}
+        onPopupClose={handleDeselectElements}
+      />
+      {elements.map((elementMetadata) => (
+        <Marker
+          key={elementMetadata.id}
+          position={elementMetadata.centroidLeaflet}
+          eventHandlers={{
+            click: () => handleMarkerClick(elementMetadata),
+          }}
+        >
+          <Popup>
+            <SimpleInfoCard
+              cardtype={elementMetadata["resource-type"]}
+              pageId={elementMetadata.id}
+              title={elementMetadata.title}
+              thumbnailImage={elementMetadata["thumbnail-image"]}
+              minHeight="100%"
+              width="100%"
+              openInNewTab
+              showElementType
+            />
+          </Popup>
+        </Marker>
+      ))}
+      {selectedElement &&
+        (selectedElement.geometryForLeaflet ? (
+          <Polygon positions={selectedElement.geometryForLeaflet} />
+        ) : (
+          <Polygon positions={selectedElement.boundingBoxForLeaflet} />
+        ))}
     </MapContainer>
   );
 }
