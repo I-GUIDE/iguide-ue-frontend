@@ -1,16 +1,14 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 
-import { useOutletContext, Link as RouterLink } from "react-router";
+import { useOutletContext } from "react-router";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
-import AspectRatio from "@mui/joy/AspectRatio";
 import Grid from "@mui/joy/Grid";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
 import Box from "@mui/joy/Box";
-import Tooltip from "@mui/joy/Tooltip";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 
@@ -20,135 +18,14 @@ import LinkIcon from "@mui/icons-material/Link";
 import BookmarkButton from "./BookmarkButton";
 import ShareButton from "./ShareButton";
 import CopyButton from "./CopyButton";
+import ExpandableTextBlock from "../../components/ExpandableTextBlock";
+import ContributorCard from "./ContributorCard";
 import { printListWithDelimiter } from "../../helpers/helper";
-import UserAvatar from "../../components/UserAvatar";
 import { PeriodAgoText } from "../../utils/PeriodAgoText";
-import { RESOURCE_TYPE_NAMES_PLURAL_FOR_URI } from "../../configs/VarConfigs";
+import { ELEMENT_TYPE_URI_PLURAL } from "../../configs/VarConfigs";
 
 const REACT_FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 const WEBSITE_TITLE = import.meta.env.VITE_WEBSITE_TITLE;
-
-function AuthorsDisplay(props) {
-  const authorsList = props.authorsList;
-  if (!authorsList) {
-    return null;
-  }
-
-  const numberOfAuthors = authorsList.length;
-
-  if (numberOfAuthors === 0) return null;
-
-  // When there are too many authors, use tooltip to display the full list
-  if (numberOfAuthors > 10) {
-    return (
-      <Tooltip
-        title={
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              maxWidth: 450,
-              maxHeight: 400,
-              overflow: "hidden",
-              overflowY: "scroll",
-              p: 1,
-            }}
-          >
-            <Typography level="title-md">
-              Author{authorsList.length > 1 && "s"}
-            </Typography>
-            <Typography level="body-md">
-              {printListWithDelimiter(authorsList, ",")}
-            </Typography>
-          </Box>
-        }
-        variant="outlined"
-      >
-        <Typography
-          level="title-md"
-          sx={{
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {printListWithDelimiter(authorsList, ",")}
-        </Typography>
-      </Tooltip>
-    );
-  }
-
-  return (
-    <Typography
-      level="title-md"
-      sx={{
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        display: "-webkit-box",
-        WebkitLineClamp: "2",
-        WebkitBoxOrient: "vertical",
-      }}
-    >
-      {printListWithDelimiter(authorsList, ",")}
-    </Typography>
-  );
-}
-
-function ContributorCard(props) {
-  const encodedUserId = props.encodedUserId;
-  const avatar = props.avatar;
-  const userId = props.userId;
-  const name = props.name;
-  const isLoading = props.isLoading;
-  const timePassedText = props.timePassedText;
-
-  return (
-    <Tooltip title="View profile" placement="top">
-      <Link
-        component={RouterLink}
-        to={"/contributor/" + encodedUserId}
-        style={{ textDecoration: "none" }}
-      >
-        <Card
-          variant="plain"
-          orientation="horizontal"
-          sx={{
-            maxHeight: "150px",
-            bgcolor: "#fff",
-            p: 0,
-            "&:hover": {
-              borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-              transform: "translateY(-2px)",
-            },
-            transition: "box-shadow 0.3s ease, transform 0.3s ease",
-          }}
-        >
-          <CardContent>
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={2}
-              sx={{ py: 1 }}
-            >
-              <UserAvatar
-                userAvatarUrls={avatar}
-                userId={userId}
-                avatarResolution="low"
-                isLoading={isLoading}
-              />
-              <Stack direction="column">
-                <Typography level="title-lg">{name}</Typography>
-                <Typography level="body-sm">{timePassedText}</Typography>
-              </Stack>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Link>
-    </Tooltip>
-  );
-}
 
 export default function MainContent(props) {
   const elementId = props.elementId;
@@ -167,7 +44,7 @@ export default function MainContent(props) {
   const updateTime = props.updateTime;
   const isLoading = props.isLoading;
 
-  const elementTypePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[elementType];
+  const elementTypePlural = ELEMENT_TYPE_URI_PLURAL[elementType];
 
   const hasTimestamp = creationTime || updateTime;
   const timePassedText = updateTime
@@ -214,11 +91,18 @@ export default function MainContent(props) {
                 {thumbnailImage ? (
                   <img
                     src={
-                      thumbnailImage.high ? thumbnailImage.high : thumbnailImage
+                      thumbnailImage.medium
+                        ? thumbnailImage.medium
+                        : thumbnailImage
+                    }
+                    srcSet={
+                      thumbnailImage.high
+                        ? thumbnailImage.high
+                        : thumbnailImage + " 2x"
                     }
                     loading="lazy"
                     style={isLoading ? { display: "none" } : null}
-                    alt="thumbnail"
+                    alt="Knowledge element thumbnail"
                   />
                 ) : (
                   <img
@@ -353,17 +237,20 @@ export default function MainContent(props) {
             </Stack>
           </Stack>
         </Grid>
-        <Grid xs={12} md={8}>
+        <Grid xs={12}>
           <Typography level="h2" sx={{ py: 1, wordBreak: "break-word" }}>
             {title}
           </Typography>
-          <AuthorsDisplay authorsList={authors} />
+          <ExpandableTextBlock
+            text={printListWithDelimiter(authors, ",")}
+            expandButtonText="See all authors"
+            collapseButtonText="See fewer authors"
+          />
           {validatedPublicationURL && (
             <Link
               href={validatedPublicationURL}
               target="_blank"
               rel="noopener noreferrer"
-              underline="always"
             >
               <Typography
                 level="body-sm"
@@ -375,61 +262,82 @@ export default function MainContent(props) {
             </Link>
           )}
         </Grid>
-        <Grid xs={12} md={4}>
-          <Tooltip title={thumbnailImageCredit} placement="top">
-            <AspectRatio
-              variant="outlined"
-              sx={{ py: 1, borderRadius: "lg", height: "100%" }}
+        {thumbnailImage && (
+          <Grid xs={12} sx={{ py: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                maxHeight: 500,
+                height: "100%",
+                overflow: "hidden",
+                border: "1px solid",
+                borderColor: "neutral.outlinedBorder",
+                borderRadius: "xl",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              {thumbnailImage ? (
-                <img
-                  src={
-                    thumbnailImage.medium
-                      ? thumbnailImage.medium
-                      : thumbnailImage
-                  }
-                  loading="lazy"
-                  style={isLoading ? { display: "none" } : null}
-                  alt="thumbnail"
-                />
-              ) : (
-                <img
-                  src={`/default-images/${elementType}.png`}
-                  loading="lazy"
-                  style={isLoading ? { display: "none" } : null}
-                  alt="deafult-thumbnail"
-                />
-              )}
-            </AspectRatio>
-          </Tooltip>
-        </Grid>
+              <img
+                src={
+                  thumbnailImage.medium ? thumbnailImage.medium : thumbnailImage
+                }
+                srcSet={
+                  thumbnailImage.high
+                    ? thumbnailImage.high
+                    : thumbnailImage + " 2x"
+                }
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: isLoading ? "none" : "block",
+                }}
+                alt="Knowledge element thumbnail"
+              />
+            </Box>
+            <Link
+              href={thumbnailImage.high ? thumbnailImage.high : thumbnailImage}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Typography level="body-xs">
+                View full image in a new window
+              </Typography>
+            </Link>
+            {thumbnailImageCredit && (
+              <Typography level="body-xs">
+                Credit: {thumbnailImageCredit}
+              </Typography>
+            )}
+          </Grid>
+        )}
       </Grid>
       {contentsTitle && (
         <Typography level="h4" sx={{ pt: 2 }}>
           {contentsTitle}
         </Typography>
       )}
-      {useMarkdown ? (
-        <Box sx={{ py: 2 }}>
+      <Box sx={{ pt: 2 }}>
+        {useMarkdown ? (
           <div className="container" data-color-mode="light">
             <Suspense fallback={<p>Loading content...</p>}>
               <MarkdownPreview source={contents} />
             </Suspense>
           </div>
-        </Box>
-      ) : (
-        <Typography
-          level="body-lg"
-          sx={{
-            pt: 2,
-            wordBreak: "break-word",
-            whiteSpace: "pre-wrap",
-            lineHeight: "150%",
-          }}
-        >
-          {contents}
-        </Typography>
-      )}
+        ) : (
+          <Typography
+            level="body-lg"
+            sx={{
+              wordBreak: "break-word",
+              whiteSpace: "pre-wrap",
+              lineHeight: "160%",
+            }}
+          >
+            {contents}
+          </Typography>
+        )}
+      </Box>
     </Stack>
   );
 }

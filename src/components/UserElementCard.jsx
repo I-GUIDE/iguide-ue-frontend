@@ -20,8 +20,8 @@ import { NumberText } from "../utils/NumberText";
 import ElementDeleteButton from "./ElementDeleteButton";
 import {
   RESOURCE_TYPE_COLORS,
-  RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
+  ELEMENT_TYPE_CAP,
+  ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
 
 export default function UserElementCard(props) {
@@ -34,12 +34,12 @@ export default function UserElementCard(props) {
   const contributor = props.contributor ? props.contributor : {};
   const isPrivateElement = props.isPrivateElement;
 
-  const cardTypePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType];
+  const cardTypePlural = ELEMENT_TYPE_URI_PLURAL[cardType];
   const updateFormUri = `/element-update/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
-  const categoryName = RESOURCE_TYPE_NAMES[cardType];
+  const categoryName = ELEMENT_TYPE_CAP[cardType];
   const uri = `/${cardTypePlural}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;

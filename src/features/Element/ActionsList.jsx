@@ -1,6 +1,3 @@
-import * as React from "react";
-
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
@@ -28,7 +25,6 @@ export default function ActionList(props) {
         <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
           {title}
         </Typography>
-        <Divider inset="none" />
         <Box
           direction="row"
           justifyContent="flex-start"

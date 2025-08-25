@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
 import {
@@ -42,7 +42,7 @@ import { arrayLength } from "../helpers/helper";
 import {
   SEARCH_RESULTS_HEADER_HEIGHT,
   SEARCH_RESULTS_BODY_HEIGHT,
-  RESOURCE_TYPE_NAMES,
+  ELEMENT_TYPE_CAP,
 } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -457,7 +457,7 @@ export default function SearchResults() {
                           value={item[0]}
                           sx={{ flex: "none", scrollSnapAlign: "start" }}
                         >
-                          {`${RESOURCE_TYPE_NAMES[item[0]]} (${item[1]})`}
+                          {`${ELEMENT_TYPE_CAP[item[0]]} (${item[1]})`}
                         </Tab>
                       ))}
                     </TabList>
@@ -476,9 +476,7 @@ export default function SearchResults() {
                       <Typography>
                         Searched "{searchTerm}"
                         {searchCategory !== "any" &&
-                          ' under "' +
-                            RESOURCE_TYPE_NAMES[searchCategory] +
-                            '"'}
+                          ' under "' + ELEMENT_TYPE_CAP[searchCategory] + '"'}
                         ,{" "}
                         {adtlFieldsQuery && (
                           <Typography fontWeight="bold">

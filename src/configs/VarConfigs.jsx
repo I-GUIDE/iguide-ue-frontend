@@ -14,7 +14,7 @@ export const RESOURCE_TYPE_COLORS = {
   any: "neutral",
 };
 
-export const RESOURCE_TYPE_NAMES = {
+export const ELEMENT_TYPE_CAP = {
   dataset: "Dataset",
   datasets: "Dataset",
   notebook: "Notebook",
@@ -30,7 +30,7 @@ export const RESOURCE_TYPE_NAMES = {
   any: "All Types",
 };
 
-export const RESOURCE_TYPE_NAMES_PLURAL = {
+export const ELEMENT_TYPE_CAP_PLURAL = {
   dataset: "Datasets",
   datasets: "Datasets",
   notebook: "Notebooks",
@@ -46,7 +46,7 @@ export const RESOURCE_TYPE_NAMES_PLURAL = {
   any: "All Types",
 };
 
-export const RESOURCE_TYPE_NAMES_FOR_URI = {
+export const ELEMENT_TYPE_URI = {
   dataset: "dataset",
   datasets: "dataset",
   notebook: "notebook",
@@ -61,7 +61,7 @@ export const RESOURCE_TYPE_NAMES_FOR_URI = {
   codes: "code",
 };
 
-export const RESOURCE_TYPE_NAMES_PLURAL_FOR_URI = {
+export const ELEMENT_TYPE_URI_PLURAL = {
   dataset: "datasets",
   datasets: "datasets",
   notebook: "notebooks",

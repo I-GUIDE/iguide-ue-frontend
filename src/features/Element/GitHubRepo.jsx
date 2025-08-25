@@ -1,9 +1,8 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 const MarkdownPreview = lazy(() => import("@uiw/react-markdown-preview"));
 
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Link from "@mui/joy/Link";
 import Chip from "@mui/joy/Chip";
@@ -79,7 +78,6 @@ export default function GitHubRepo(props) {
       <Typography id="repo-access" level="h5" fontWeight="lg" mb={1}>
         GitHub Repository
       </Typography>
-      <Divider inset="none" />
       <Link href={repoLink} target="_blank" rel="noopener noreferrer">
         {repoLink}
       </Link>
