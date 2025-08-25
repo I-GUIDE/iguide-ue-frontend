@@ -91,11 +91,18 @@ export default function MainContent(props) {
                 {thumbnailImage ? (
                   <img
                     src={
-                      thumbnailImage.high ? thumbnailImage.high : thumbnailImage
+                      thumbnailImage.medium
+                        ? thumbnailImage.medium
+                        : thumbnailImage
+                    }
+                    srcSet={
+                      thumbnailImage.high
+                        ? thumbnailImage.high
+                        : thumbnailImage + " 2x"
                     }
                     loading="lazy"
                     style={isLoading ? { display: "none" } : null}
-                    alt="thumbnail"
+                    alt="Knowledge element thumbnail"
                   />
                 ) : (
                   <img
@@ -262,7 +269,7 @@ export default function MainContent(props) {
               sx={{
                 display: "flex",
                 width: "100%",
-                maxHeight: 800,
+                maxHeight: 500,
                 height: "100%",
                 overflow: "hidden",
                 border: "1px solid",
@@ -276,15 +283,29 @@ export default function MainContent(props) {
                 src={
                   thumbnailImage.medium ? thumbnailImage.medium : thumbnailImage
                 }
+                srcSet={
+                  thumbnailImage.high
+                    ? thumbnailImage.high
+                    : thumbnailImage + " 2x"
+                }
                 loading="lazy"
                 style={{
                   width: "100%",
                   height: "auto",
                   display: isLoading ? "none" : "block",
                 }}
-                alt="thumbnail"
+                alt="Knowledge element thumbnail"
               />
             </Box>
+            <Link
+              href={thumbnailImage.high ? thumbnailImage.high : thumbnailImage}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Typography level="body-xs">
+                View full image in a new window
+              </Typography>
+            </Link>
             {thumbnailImageCredit && (
               <Typography level="body-xs">
                 Credit: {thumbnailImageCredit}
