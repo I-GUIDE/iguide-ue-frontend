@@ -251,7 +251,6 @@ export default function MainContent(props) {
               href={validatedPublicationURL}
               target="_blank"
               rel="noopener noreferrer"
-              underline="always"
             >
               <Typography
                 level="body-sm"
