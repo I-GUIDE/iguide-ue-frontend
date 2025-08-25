@@ -12,8 +12,8 @@ import { removeMarkdown } from "../helpers/helper";
 
 import {
   RESOURCE_TYPE_COLORS,
-  RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
+  ELEMENT_TYPE_CAP,
+  ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
 
 export default function SimpleInfoCard(props) {
@@ -30,7 +30,7 @@ export default function SimpleInfoCard(props) {
   const customDomain = props.customDomain;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
-  const categoryName = RESOURCE_TYPE_NAMES[cardType];
+  const categoryName = ELEMENT_TYPE_CAP[cardType];
 
   const contentsWithoutMarkdown = removeMarkdown(contents);
 
@@ -76,12 +76,12 @@ export default function SimpleInfoCard(props) {
           href={
             customDomain +
             "/" +
-            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] +
+            ELEMENT_TYPE_URI_PLURAL[cardType] +
             "/" +
             pageId
           }
           // to is used when react router is used
-          to={"/" + RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType] + "/" + pageId}
+          to={"/" + ELEMENT_TYPE_URI_PLURAL[cardType] + "/" + pageId}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
           sx={{ color: "text.tertiary" }}

@@ -56,8 +56,8 @@ import { useAlertModal } from "../../utils/AlertModalProvider";
 import ErrorPage from "../../routes/ErrorPage";
 
 import {
-  RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
+  ELEMENT_TYPE_CAP,
+  ELEMENT_TYPE_URI_PLURAL,
   OER_EXTERNAL_LINK_TYPES,
   IMAGE_SIZE_LIMIT,
   ELEM_VISIBILITY,
@@ -376,7 +376,7 @@ export default function SubmissionCard(props) {
       TEST_MODE && console.log("Returned element", thisElement);
 
       const elementUrlReturned = `/${
-        RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[thisElement["resource-type"]]
+        ELEMENT_TYPE_URI_PLURAL[thisElement["resource-type"]]
       }/${elementId}${
         thisElement.visibility === ELEM_VISIBILITY.private
           ? "?private-mode=true"
@@ -1275,7 +1275,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("update-succeeded");
           setSubmittingElement(false);
           const futureElementUrl = `/${
-            RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+            ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]
           }/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
@@ -1313,7 +1313,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
             const futureElementUrl = `/${
-              RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]
+              ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]
             }/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
@@ -1444,8 +1444,7 @@ export default function SubmissionCard(props) {
 
   let cardTitle = "";
   if (submissionType === "initial") {
-    cardTitle =
-      "Submit a new " + RESOURCE_TYPE_NAMES[elementType]?.toLowerCase();
+    cardTitle = "Submit a new " + ELEMENT_TYPE_CAP[elementType]?.toLowerCase();
   } else if (submissionType === "update") {
     if (isContributor) {
       cardTitle = "Edit your contribution";
@@ -2164,7 +2163,7 @@ export default function SubmissionCard(props) {
                   {relatedResources?.map((x, i) => (
                     <tr key={i}>
                       <td align="left">
-                        <p>{RESOURCE_TYPE_NAMES[x["resource-type"]]}</p>
+                        <p>{ELEMENT_TYPE_CAP[x["resource-type"]]}</p>
                       </td>
                       <td align="left">
                         <p>{x.title}</p>
@@ -2539,7 +2538,7 @@ export default function SubmissionCard(props) {
                   {submissionType === "update" && (
                     <Button
                       component={RouterLink}
-                      to={`/${RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[resourceTypeSelected]}/${elementId}`}
+                      to={`/${ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]}/${elementId}`}
                       variant="soft"
                       color="primary"
                       sx={{ flex: 1 }}

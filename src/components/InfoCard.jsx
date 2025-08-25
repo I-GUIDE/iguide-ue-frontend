@@ -16,8 +16,8 @@ import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
 import UserAvatar from "./UserAvatar";
 import {
   RESOURCE_TYPE_COLORS,
-  RESOURCE_TYPE_NAMES,
-  RESOURCE_TYPE_NAMES_PLURAL_FOR_URI,
+  ELEMENT_TYPE_CAP,
+  ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
 
 export default function InfoCard(props) {
@@ -33,8 +33,8 @@ export default function InfoCard(props) {
   const openInNewTab = props.openInNewTab;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
-  const categoryName = RESOURCE_TYPE_NAMES[cardType];
-  const categoryNamePlural = RESOURCE_TYPE_NAMES_PLURAL_FOR_URI[cardType];
+  const categoryName = ELEMENT_TYPE_CAP[cardType];
+  const categoryNamePlural = ELEMENT_TYPE_URI_PLURAL[cardType];
   const uri = `/${categoryNamePlural}/${elementId}${
     isPrivateElement ? "?private-mode=true" : ""
   }`;

@@ -13,8 +13,8 @@ import Add from "@mui/icons-material/Add";
 
 import {
   HEADER_HEIGHT,
-  RESOURCE_TYPE_NAMES_PLURAL,
-  RESOURCE_TYPE_NAMES_FOR_URI,
+  ELEMENT_TYPE_CAP_PLURAL,
+  ELEMENT_TYPE_URI,
   NAVBAR_HEIGHT,
 } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
@@ -31,11 +31,9 @@ export default function Header(props) {
   const elementType = props.elementType;
 
   const elementTypeDisplayPlural = elementType
-    ? RESOURCE_TYPE_NAMES_PLURAL[elementType]
+    ? ELEMENT_TYPE_CAP_PLURAL[elementType]
     : "Elements";
-  const elementTypeUri = elementType
-    ? RESOURCE_TYPE_NAMES_FOR_URI[elementType]
-    : "any";
+  const elementTypeUri = elementType ? ELEMENT_TYPE_URI[elementType] : "any";
 
   const contributionText = contribution.text;
   const contributionLink = contribution.link;
