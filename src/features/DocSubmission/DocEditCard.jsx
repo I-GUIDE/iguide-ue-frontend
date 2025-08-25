@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { useOutletContext } from "react-router";
 
@@ -13,7 +13,11 @@ import Button from "@mui/joy/Button";
 import Input from "@mui/joy/Input";
 
 import SubmissionStatusCard from "../ElementSubmission/SubmissionStatusCard";
-const HTMLEditor = lazy(() => import("../../components/HTMLEditor"));
+
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const HTMLEditor = lazyWithRetryAndReload(() =>
+  import("../../components/HTMLEditor")
+);
 
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { checkTokens } from "../../utils/UserManager";

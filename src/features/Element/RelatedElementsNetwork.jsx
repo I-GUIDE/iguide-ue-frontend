@@ -1,16 +1,17 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { useTheme } from "@mui/joy/styles";
 import Box from "@mui/joy/Box";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
-const ConnectedGraph = lazy(() => import("../ConnectedGraph/ConnectedGraph"));
+import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
+const ConnectedGraph = lazyWithRetryAndReload(() =>
+  import("../ConnectedGraph/ConnectedGraph")
+);
 
 import { fetchNeighbors } from "../../utils/DataRetrieval";
 import { stringTruncator } from "../../helpers/helper";
-
-const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function RelatedElementsNetwork(props) {
   const elementId = props.elementId;

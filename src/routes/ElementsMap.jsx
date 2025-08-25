@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -7,7 +7,8 @@ import Grid from "@mui/joy/Grid";
 
 import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
-const ElementsMapContainer = lazy(() =>
+import { lazyWithRetryAndReload } from "../helpers/lazyWithRetryAndReload";
+const ElementsMapContainer = lazyWithRetryAndReload(() =>
   import("../features/ElementsMap/ElementsMapContainer")
 );
 
