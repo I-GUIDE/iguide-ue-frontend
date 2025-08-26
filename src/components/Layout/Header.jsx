@@ -11,15 +11,9 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Add from "@mui/icons-material/Add";
 
-import {
-  HEADER_HEIGHT,
-  ELEMENT_TYPE_CAP_PLURAL,
-  ELEMENT_TYPE_URI,
-  NAVBAR_HEIGHT,
-} from "../../configs/VarConfigs";
+import { HEADER_HEIGHT, NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 import PageNav from "../PageNav";
-import SearchBar from "../SearchBar";
 
 export default function Header(props) {
   const title = props.title ? props.title : "";
@@ -28,12 +22,6 @@ export default function Header(props) {
   const currentPage = props.currentPage;
   const parentPages = props.parentPages;
   const contribution = props.contribution ? props.contribution : {};
-  const elementType = props.elementType;
-
-  const elementTypeDisplayPlural = elementType
-    ? ELEMENT_TYPE_CAP_PLURAL[elementType]
-    : "Elements";
-  const elementTypeUri = elementType ? ELEMENT_TYPE_URI[elementType] : "any";
 
   const contributionText = contribution.text;
   const contributionLink = contribution.link;
@@ -54,7 +42,7 @@ export default function Header(props) {
       <Card
         variant="plain"
         component="li"
-        sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1, p: 1 }}
+        sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1, px: 1 }}
       >
         <CardCover>
           <img src="/images/header-bg.png" loading="lazy" alt="Gray scale" />
@@ -62,21 +50,21 @@ export default function Header(props) {
         {/* Translate 80 to "80px" */}
         <CardContent sx={{ pt: NAVBAR_HEIGHT / 8 }}>
           <Container maxWidth="lg">
-            <Stack spacing={3} sx={{ px: 4, py: 2 }}>
+            <Stack spacing={1.5} sx={{ px: 4, py: 3 }}>
               <PageNav
                 parentPages={parentPages}
                 currentPage={currentPage}
                 fontLevel="body-xs"
-                sx={{ px: 0, pb: { xs: 1, sm: 2.5 } }}
+                sx={{ px: 0 }}
               />
               <Stack
                 direction="row"
                 alignItems="flex-end"
                 justifyContent="space-between"
-                spacing={2}
+                spacing={1.5}
                 sx={{ p: 0 }}
               >
-                <Stack spacing={2} sx={{ p: 0 }}>
+                <Stack spacing={1.5} sx={{ p: 0 }}>
                   {title.length > 30 ? (
                     <Typography
                       level="h3"
@@ -117,21 +105,6 @@ export default function Header(props) {
                   </Tooltip>
                 )}
               </Stack>
-              {elementType && (
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  sx={{
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                  }}
-                >
-                  <SearchBar
-                    placeholder={`Search ${elementTypeDisplayPlural}...`}
-                    searchCategory={elementTypeUri}
-                  />
-                </Stack>
-              )}
             </Stack>
           </Container>
         </CardContent>
