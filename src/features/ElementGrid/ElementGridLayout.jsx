@@ -33,7 +33,6 @@ export default function ElementGridLayout(props) {
         icon={icon}
         currentPage={pageNavName}
         contribution={contribution}
-        elementType={elementType}
       />
       <Container maxWidth="lg">
         <Box
