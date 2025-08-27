@@ -123,7 +123,7 @@ export default function SubmissionCard(props) {
     PERMISSIONS["secure_default_role"]
   );
 
-  const [resourceTypeSelected, setResourceTypeSelected] = useState("");
+  const [selectedElementType, setSelectedElementType] = useState("");
 
   const [visibility, setVisibility] = useState("");
 
@@ -131,15 +131,15 @@ export default function SubmissionCard(props) {
   const [thumbnailImageFileURLs, setThumbnailImageFileURLs] = useState();
   const [thumbnailImageCredit, setThumbnailImageCredit] = useState("");
 
-  const [relatedResources, setRelatedResources] = useState([]);
-  const [returnedRelatedResourceTitle, setReturnedRelatedResourceTitle] =
+  const [relatedElements, setRelatedElements] = useState([]);
+  const [returnedRelatedElementTitle, setReturnedRelatedElementTitle] =
     useState([]);
-  const relatedResourceDropdownLoading =
-    returnedRelatedResourceTitle.length === 0;
+  const relatedElementDropdownLoading =
+    returnedRelatedElementTitle.length === 0;
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
-  const [currentRelatedResourceTitle, setCurrentRelatedResourceTitle] =
+  const [currentRelatedElementTitle, setCurrentRelatedElementTitle] =
     useState("");
-  const [currentRelatedResourceType, setCurrentRelatedResourceType] =
+  const [currentRelatedElementType, setCurrentRelatedElementType] =
     useState("");
 
   const [oerExternalLinks, setOerExternalLinks] = useState([]);
@@ -388,7 +388,7 @@ export default function SubmissionCard(props) {
       setElementURI(elementUrlReturned);
       setVisibility(thisElement.visibility);
       setTitle(thisElement.title);
-      setResourceTypeSelected(thisElement["resource-type"]);
+      setSelectedElementType(thisElement["resource-type"]);
       setTags(
         Array.isArray(thisElement.tags)
           ? thisElement.tags.join(", ")
@@ -444,7 +444,7 @@ export default function SubmissionCard(props) {
       setLicenseUrl(thisElement["license-url"]);
       setFundingAgency(thisElement["funding-agency"]);
 
-      setRelatedResources(thisElement["related-elements"]);
+      setRelatedElements(thisElement["related-elements"]);
       setOerExternalLinks(thisElement["oer-external-links"]);
     }
     if (submissionType === "update") {
@@ -454,25 +454,25 @@ export default function SubmissionCard(props) {
 
   useEffect(() => {
     if (submissionType === "initial") {
-      setResourceTypeSelected(elementType);
+      setSelectedElementType(elementType);
       setVisibility(ELEM_VISIBILITY.public);
     }
   }, [elementType, submissionType]);
 
   // When the current related element type changes, fetch a list of titles under that type.
   useEffect(() => {
-    async function getAllTitlesByElementType(resourceType) {
-      if (resourceType && resourceType !== "") {
-        const returnedTitles = await fetchAllTitlesByElementType(resourceType);
+    async function getAllTitlesByElementType(elementType) {
+      if (elementType && elementType !== "") {
+        const returnedTitles = await fetchAllTitlesByElementType(elementType);
         // Check duplicate titles, otherwise AutoComplete might fail...
         const returnedTitlesUnique = [...new Set(returnedTitles)];
-        setReturnedRelatedResourceTitle(returnedTitlesUnique);
+        setReturnedRelatedElementTitle(returnedTitlesUnique);
       } else {
-        setReturnedRelatedResourceTitle([]);
+        setReturnedRelatedElementTitle([]);
       }
     }
-    getAllTitlesByElementType(currentRelatedResourceType);
-  }, [currentRelatedResourceType]);
+    getAllTitlesByElementType(currentRelatedElementType);
+  }, [currentRelatedElementType]);
 
   // For autofilling the selected metadata
   useEffect(() => {
@@ -539,29 +539,29 @@ export default function SubmissionCard(props) {
   }
 
   // Related elements...
-  function handleRemovingOneRelatedResource(idx) {
-    const newArray = [...relatedResources];
+  function handleRemovingOneRelatedElement(idx) {
+    const newArray = [...relatedElements];
     newArray.splice(idx, 1);
-    setRelatedResources(newArray);
-    TEST_MODE && console.log("Removing one, now: ", relatedResources, idx);
+    setRelatedElements(newArray);
+    TEST_MODE && console.log("Removing one, now: ", relatedElements, idx);
   }
 
-  function handleRelatedResourceTypeChange(value) {
-    setCurrentRelatedResourceType(value);
+  function handleRelatedElementTypeChange(value) {
+    setCurrentRelatedElementType(value);
   }
 
-  function handleRelatedResourceTitleChange(value) {
-    setCurrentRelatedResourceTitle(value);
-    setRelatedResources([
-      ...relatedResources,
-      { "resource-type": currentRelatedResourceType, title: value },
+  function handleRelatedElementTitleChange(value) {
+    setCurrentRelatedElementTitle(value);
+    setRelatedElements([
+      ...relatedElements,
+      { "resource-type": currentRelatedElementType, title: value },
     ]);
-    setCurrentRelatedResourceType("");
-    setCurrentRelatedResourceTitle("");
+    setCurrentRelatedElementType("");
+    setCurrentRelatedElementTitle("");
     setCurrentSearchTerm("");
   }
 
-  function handleRelatedResourceTitleInputChange(value) {
+  function handleRelatedElementTitleInputChange(value) {
     setCurrentSearchTerm(value);
   }
 
@@ -970,7 +970,7 @@ export default function SubmissionCard(props) {
 
     // When the user forgets to save the new related element, app will ask the user to submit it.
     // 02/27/2025: This case has been prevented through a code update.
-    if (currentRelatedResourceTitle && currentRelatedResourceTitle !== "") {
+    if (currentRelatedElementTitle && currentRelatedElementTitle !== "") {
       await alertModal(
         "Related element error",
         'You have an unsaved related element. Please click the "+" button to save the related element before submitting your contribution!'
@@ -980,7 +980,7 @@ export default function SubmissionCard(props) {
     }
 
     if (
-      resourceTypeSelected === "dataset" &&
+      selectedElementType === "dataset" &&
       !datasetExternalLink &&
       !directDownloadLink
     ) {
@@ -1113,24 +1113,24 @@ export default function SubmissionCard(props) {
 
     data.visibility = visibility;
 
-    data["resource-type"] = resourceTypeSelected;
+    data["resource-type"] = selectedElementType;
 
     data.metadata = { created_by: localUserInfo.id };
-    data["related-resources"] = relatedResources;
+    data["related-resources"] = relatedElements;
     data["contents"] = contents;
     data["external-link-publication"] = publicationDOI;
 
-    if (resourceTypeSelected === "dataset") {
+    if (selectedElementType === "dataset") {
       data["external-link"] = datasetExternalLink;
       data["direct-download-link"] = directDownloadLink;
       data["size"] = dataSize;
     }
 
-    if (resourceTypeSelected === "oer") {
+    if (selectedElementType === "oer") {
       data["oer-external-links"] = oerExternalLinks;
     }
 
-    if (resourceTypeSelected === "code") {
+    if (selectedElementType === "code") {
       data["github-repo-link"] = gitHubRepoLink;
     }
 
@@ -1188,9 +1188,9 @@ export default function SubmissionCard(props) {
 
     TEST_MODE && console.log("data to be submitted", data);
 
-    // If the resourceTypeSelected is notebook, verify if the notebook exists on GitHub
+    // If the selectedElementType is notebook, verify if the notebook exists on GitHub
     if (
-      resourceTypeSelected === "notebook" &&
+      selectedElementType === "notebook" &&
       data["notebook-repo"] &&
       data["notebook-file"]
     ) {
@@ -1218,8 +1218,8 @@ export default function SubmissionCard(props) {
       }
     }
 
-    // If the resourceTypeSelected is code, attempt to store readme to the database
-    if (resourceTypeSelected === "code" && gitHubRepoLink) {
+    // If the selectedElementType is code, attempt to store readme to the database
+    if (selectedElementType === "code" && gitHubRepoLink) {
       const repoInfoMatch = gitHubRepoLink?.match(
         /^https?:\/\/(www\.)?github\.com\/([^\/]+)\/([^\/]+)/
       );
@@ -1278,7 +1278,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("update-succeeded");
           setSubmittingElement(false);
           const futureElementUrl = `/${
-            ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]
+            ELEMENT_TYPE_URI_PLURAL[selectedElementType]
           }/${elementId}${
             visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
           }`;
@@ -1316,7 +1316,7 @@ export default function SubmissionCard(props) {
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
             const futureElementUrl = `/${
-              ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]
+              ELEMENT_TYPE_URI_PLURAL[selectedElementType]
             }/${result.elementId}${
               visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
             }`;
@@ -1525,7 +1525,7 @@ export default function SubmissionCard(props) {
             <Typography level="h3" sx={{ pt: 1 }}>
               Element information
             </Typography>
-            {resourceTypeSelected === "publication" && (
+            {selectedElementType === "publication" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={elementIdWithDuplicateDOI || doiLinkError}
@@ -1671,11 +1671,11 @@ export default function SubmissionCard(props) {
                 onChange={(event) => setTags(event.target.value)}
               />
             </FormControl>
-            {resourceTypeSelected === "oer" ? (
+            {selectedElementType === "oer" ? (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle
-                    tooltipTitle="Add a brief summary of the resource"
+                    tooltipTitle="Add a brief summary of the element"
                     tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
                     fieldRequired
                   >
@@ -1690,11 +1690,11 @@ export default function SubmissionCard(props) {
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle
-                    tooltipTitle="Add a brief summary of the resource"
+                    tooltipTitle="Add a brief summary of the element"
                     tooltipContent="Copy official abstract or summary if available. Otherwise, try to keep the description informative and concise."
                     fieldRequired
                   >
-                    {resourceTypeSelected === "publication"
+                    {selectedElementType === "publication"
                       ? "Abstract"
                       : "About"}
                   </SubmissionCardFieldTitle>
@@ -1712,8 +1712,8 @@ export default function SubmissionCard(props) {
             <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
               <FormLabel>
                 <SubmissionCardFieldTitle
-                  tooltipTitle="Add a thumbnail image for the resource"
-                  tooltipContent="You can take a screenshot of a key figure or image from the resource, or submit an image that will help distinguish the resource from other similar ones."
+                  tooltipTitle="Add a thumbnail image for the element"
+                  tooltipContent="You can take a screenshot of a key figure or image from the resource, or submit an image that will help distinguish the element from other similar ones."
                   fieldRequired
                 >
                   Thumbnail image {"(< 5MB)"}
@@ -1780,7 +1780,7 @@ export default function SubmissionCard(props) {
                 }
               />
             </FormControl>
-            {resourceTypeSelected === "map" && (
+            {selectedElementType === "map" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle tooltipTitle="A link to view the map.">
@@ -1795,7 +1795,7 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {/* While the dataset upload feature is under beta, we use ENABLE_DATASET_UPLOAD to control access */}
-            {resourceTypeSelected === "dataset" && ENABLE_DATASET_UPLOAD && (
+            {selectedElementType === "dataset" && ENABLE_DATASET_UPLOAD && (
               <UserDatasetUploader
                 elementId={elementId}
                 datasetDirectDownloadLink={directDownloadLink}
@@ -1806,7 +1806,7 @@ export default function SubmissionCard(props) {
                 setDatasetUploading={setDatasetUploading}
               />
             )}
-            {resourceTypeSelected === "dataset" && (
+            {selectedElementType === "dataset" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={
@@ -1856,7 +1856,7 @@ export default function SubmissionCard(props) {
                 )}
               </FormControl>
             )}
-            {resourceTypeSelected === "dataset" && (
+            {selectedElementType === "dataset" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={directDownloadLinkError}
@@ -1881,7 +1881,7 @@ export default function SubmissionCard(props) {
                 )}
               </FormControl>
             )}
-            {resourceTypeSelected === "dataset" && (
+            {selectedElementType === "dataset" && (
               <FormControl sx={{ gridColumn: "1/-1", py: 0.5 }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle
@@ -1899,7 +1899,7 @@ export default function SubmissionCard(props) {
                 />
               </FormControl>
             )}
-            {resourceTypeSelected === "notebook" && (
+            {selectedElementType === "notebook" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={notebookGitHubUrlError}
@@ -1960,7 +1960,7 @@ export default function SubmissionCard(props) {
               </FormControl>
             )}
             {/* External links */}
-            {resourceTypeSelected === "oer" && (
+            {selectedElementType === "oer" && (
               <Grid sx={{ gridColumn: "1/-1" }}>
                 <FormLabel>
                   <SubmissionCardFieldTitle>
@@ -2088,7 +2088,7 @@ export default function SubmissionCard(props) {
                 </Table>
               </Grid>
             )}
-            {resourceTypeSelected === "code" && (
+            {selectedElementType === "code" && (
               <FormControl
                 sx={{ gridColumn: "1/-1", py: 0.5 }}
                 error={
@@ -2163,7 +2163,7 @@ export default function SubmissionCard(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {relatedResources?.map((x, i) => (
+                  {relatedElements?.map((x, i) => (
                     <tr key={i}>
                       <td align="left">
                         <p>{ELEMENT_TYPE_CAP[x["resource-type"]]}</p>
@@ -2172,10 +2172,10 @@ export default function SubmissionCard(props) {
                         <p>{x.title}</p>
                       </td>
                       <td align="left">
-                        {relatedResources.length !== 0 && (
+                        {relatedElements.length !== 0 && (
                           <DeleteForeverRoundedIcon
                             color="danger"
-                            onClick={() => handleRemovingOneRelatedResource(i)}
+                            onClick={() => handleRemovingOneRelatedElement(i)}
                             style={{
                               marginRight: "10px",
                               marginTop: "4px",
@@ -2190,9 +2190,9 @@ export default function SubmissionCard(props) {
                     <td align="left">
                       <Select
                         placeholder="Type"
-                        value={currentRelatedResourceType ?? ""}
+                        value={currentRelatedElementType ?? ""}
                         onChange={(e, newValue) =>
-                          handleRelatedResourceTypeChange(newValue)
+                          handleRelatedElementTypeChange(newValue)
                         }
                       >
                         <Option value="dataset">Dataset</Option>
@@ -2208,20 +2208,18 @@ export default function SubmissionCard(props) {
                         <Autocomplete
                           placeholder="Type and select from the dropdown"
                           disabled={
-                            !currentRelatedResourceType ||
-                            currentRelatedResourceType === ""
+                            !currentRelatedElementType ||
+                            currentRelatedElementType === ""
                           }
-                          loading={relatedResourceDropdownLoading}
-                          options={returnedRelatedResourceTitle}
-                          value={currentRelatedResourceTitle || null}
+                          loading={relatedElementDropdownLoading}
+                          options={returnedRelatedElementTitle}
+                          value={currentRelatedElementTitle || null}
                           onChange={(e, newValue) =>
-                            handleRelatedResourceTitleChange(newValue)
+                            handleRelatedElementTitleChange(newValue)
                           }
                           inputValue={currentSearchTerm}
                           onInputChange={(e, newInputValue) => {
-                            handleRelatedResourceTitleInputChange(
-                              newInputValue
-                            );
+                            handleRelatedElementTitleInputChange(newInputValue);
                           }}
                         />
                       </FormControl>
@@ -2541,7 +2539,7 @@ export default function SubmissionCard(props) {
                   {submissionType === "update" && (
                     <Button
                       component={RouterLink}
-                      to={`/${ELEMENT_TYPE_URI_PLURAL[resourceTypeSelected]}/${elementId}`}
+                      to={`/${ELEMENT_TYPE_URI_PLURAL[selectedElementType]}/${elementId}`}
                       variant="soft"
                       color="primary"
                       sx={{ flex: 1 }}
