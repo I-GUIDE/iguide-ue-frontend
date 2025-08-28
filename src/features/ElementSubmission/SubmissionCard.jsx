@@ -52,7 +52,6 @@ import { PERMISSIONS } from "../../configs/Permissions";
 import {
   fetchGitHubReadme,
   fetchRepoMetadata,
-  verifyFileOnGitHub,
 } from "../../utils/GitHubFetchMethods";
 import { useAlertModal } from "../../utils/AlertModalProvider";
 
@@ -1188,36 +1187,6 @@ export default function SubmissionCard(props) {
 
     TEST_MODE && console.log("data to be submitted", data);
 
-    // If the selectedElementType is notebook, verify if the notebook exists on GitHub
-    if (
-      selectedElementType === "notebook" &&
-      data["notebook-repo"] &&
-      data["notebook-file"]
-    ) {
-      // Remove the leading GitHub domain
-      const ownerAndRepo = data["notebook-repo"]?.replace(
-        /^https?:\/\/(www\.)?github\.com\//,
-        ""
-      );
-      const path = data["notebook-file"];
-      TEST_MODE &&
-        console.log("Submission: Notebook verification", ownerAndRepo, path);
-
-      const fileExists = await verifyFileOnGitHub(ownerAndRepo, path);
-      // This is for verifying the GitHub repo
-      if (fileExists === "ERROR" || fileExists === "RATE_LIMITED") {
-        setOpenModal(true);
-        setSubmissionStatus("error-cannot-verify-github-file-existence");
-        setSubmittingElement(false);
-        return;
-      } else if (fileExists === false) {
-        setOpenModal(true);
-        setSubmissionStatus("error-cannot-find-github-file");
-        setSubmittingElement(false);
-        return;
-      }
-    }
-
     // If the selectedElementType is code, attempt to store readme to the database
     if (selectedElementType === "code" && gitHubRepoLink) {
       const repoInfoMatch = gitHubRepoLink?.match(
@@ -1271,9 +1240,34 @@ export default function SubmissionCard(props) {
         );
 
         const result = await response.json();
-        TEST_MODE && console.log("Element update msg returned", result.message);
+        TEST_MODE && console.log("Element update return", result);
 
-        if (result && result.message === "Element updated successfully") {
+        if (!result) {
+          console.error("Update: Backend didn't return submission result.");
+          setOpenModal(true);
+          setSubmissionStatus("update-failed");
+          setSubmittingElement(false);
+          return;
+        }
+
+        // When the user attempts to update the notebook element with invalid GitHub link.
+        //   Backend will accept the update but also issue a warning.
+        if (
+          selectedElementType === "notebook" &&
+          result.notebookStatus === false
+        ) {
+          setOpenModal(false);
+          setSubmissionStatus("update-succeeded-notebook-failed");
+          setSubmittingElement(false);
+          const futureElementUrl = `/${
+            ELEMENT_TYPE_URI_PLURAL[selectedElementType]
+          }/${elementId}${
+            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
+          }`;
+          setElementURI(futureElementUrl);
+        }
+
+        if (result.message === "Element updated successfully") {
           setOpenModal(false);
           setSubmissionStatus("update-succeeded");
           setSubmittingElement(false);
@@ -1310,8 +1304,31 @@ export default function SubmissionCard(props) {
         );
 
         const result = await response.json();
-        TEST_MODE && ("initial submission, msg", result);
-        if (result && result.message === "Resource registered successfully") {
+        TEST_MODE && console.log("Initial submission return", result);
+
+        if (!result) {
+          console.error(
+            "Initial submission: Backend didn't return submission result."
+          );
+          setOpenModal(true);
+          setSubmissionStatus("initial-failed");
+          setSubmittingElement(false);
+          return;
+        }
+
+        // When the user attempts to submit the notebook element with invalid GitHub link.
+        //   Backend will reject the submission outright.
+        if (
+          selectedElementType === "notebook" &&
+          result.notebookStatus === false
+        ) {
+          setOpenModal(true);
+          setSubmissionStatus("error-cannot-find-github-file");
+          setSubmittingElement(false);
+          return;
+        }
+
+        if (result.message === "Resource registered successfully") {
           setOpenModal(false);
           setSubmissionStatus("initial-succeeded");
           if (result.elementId) {
