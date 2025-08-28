@@ -1250,26 +1250,18 @@ export default function SubmissionCard(props) {
           return;
         }
 
-        // When the user attempts to update the notebook element with invalid GitHub link.
-        //   Backend will accept the update but also issue a warning.
-        if (
-          selectedElementType === "notebook" &&
-          result.notebookStatus === false
-        ) {
-          setOpenModal(false);
-          setSubmissionStatus("update-succeeded-notebook-failed");
-          setSubmittingElement(false);
-          const futureElementUrl = `/${
-            ELEMENT_TYPE_URI_PLURAL[selectedElementType]
-          }/${elementId}${
-            visibility === ELEM_VISIBILITY.private ? "?private-mode=true" : ""
-          }`;
-          setElementURI(futureElementUrl);
-        }
-
         if (result.message === "Element updated successfully") {
           setOpenModal(false);
-          setSubmissionStatus("update-succeeded");
+          // When the user attempts to update the notebook element with invalid GitHub link.
+          //   Backend will accept the update but also issue a warning.
+          if (
+            selectedElementType === "notebook" &&
+            result.notebookStatus === false
+          ) {
+            setSubmissionStatus("update-succeeded-notebook-failed");
+          } else {
+            setSubmissionStatus("update-succeeded");
+          }
           setSubmittingElement(false);
           const futureElementUrl = `/${
             ELEMENT_TYPE_URI_PLURAL[selectedElementType]

@@ -9,6 +9,8 @@ import Tooltip from "@mui/joy/Tooltip";
 import WarningIcon from "@mui/icons-material/Warning";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function SubmissionStatusCard(props) {
   const submissionStatus = props.submissionStatus;
   const statusText = props.submissionStatusText;
@@ -20,6 +22,8 @@ export default function SubmissionStatusCard(props) {
   let subText = "";
   let isWarning = false;
   let submissionSucceeded;
+
+  TEST_MODE && console.log("Submission status", submissionStatus);
 
   // Do not render the status card if the status is "no-submission"
   if (submissionStatus === "no-submission") {
