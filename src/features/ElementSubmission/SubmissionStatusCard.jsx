@@ -134,8 +134,8 @@ export default function SubmissionStatusCard(props) {
     case "error-cannot-find-github-file":
       submissionStatusText =
         "Submission failed: Cannot find the notebook on GitHub";
-      subText = `We cannot find the GitHub notebook link you provided. Please ensure
-      the link is correct and the repository is public.`;
+      subText = `We couldn't find your notebook using the GitHub link you provided. Please ensure 
+      there are no typos, and that the notebook is public and located on the default branch.`;
       isWarning = true;
       submissionSucceeded = false;
       break;
