@@ -1,0 +1,727 @@
+[
+  {
+    "id": "torchgeo",
+    "title": "Torch Geo",
+    "subtitle": "An open community",
+    "thumbnail-image": "https://raw.githubusercontent.com/torchgeo/torchgeo/main/logo/logo-color.svg",
+    "contents": "TorchGeo: datasets, samplers, transforms, and pre-trained models for geospatial data.",
+    "elements": [
+      {
+        "_id": "a414dd3b-ba33-4a99-bedf-2e18cc8d671c",
+        "title": "AI Agent for Chicago Crime Analysis",
+        "contents": "This notebook walks you through building a \"Code Agent\" capable of performing geographic data analysis. Using the smolagents library from Hugging Face, we'll create an assistant that can analyze real-world crime data from the City of Chicago. The agent will answer plain-English questions by writing and executing Python code, using the geopandas library to perform spatial queries and generate maps to visualize the results.",
+        "authors": ["Yunfan Kang", "Google Gemini"],
+        "tags": ["LLM", "AI Agent"],
+        "resource-type": "notebook",
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-1024px.png"
+        },
+        "spatial-coverage": [],
+        "spatial-geometry": "",
+        "spatial-bounding-box": "",
+        "spatial-centroid": "",
+        "spatial-georeferenced": "",
+        "spatial-temporal-coverage": [],
+        "spatial-index-year": [""],
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        }
+      },
+      {
+        "_id": "43809f1c-7bf4-4f9d-806f-77563a7f71a1",
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        },
+        "contents": "Perplexity Clone",
+        "resource-type": "notebook",
+        "title": "Perplexity Clone",
+        "authors": ["Marcus D. R. Klarqvist"],
+        "tags": ["AI", "RAG"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-1024px.jpg"
+        }
+      },
+      {
+        "click-count": 8,
+        "_id": "510b006e-6ff8-41c0-99ea-b7adda041fe0",
+        "tags": [
+          "Convolutional neural network",
+          "Deep learning",
+          "Remote sensing",
+          "Streamline analysis",
+          "Transfer learning"
+        ],
+        "authors": [
+          "Nattapon Jaroenchai",
+          "Shaowen Wang",
+          "Lawrence V. Stanislawski",
+          "Ethan Shavers",
+          "Zhe Jiang",
+          "Vasit Sagan",
+          "E. Lynn Usery"
+        ],
+        "title": "Transfer Learning with Convolutional Neural Networks for Hydrological Streamline Delineation",
+        "resource-type": "publication",
+        "contents": "Hydrological streamline delineation is critical for effective environmental management, influencing agriculture sustainability, river dynamics, and watershed planning. This study develops a novel approach to combining transfer learning with convolutional neural networks that capitalize on ImageNet pre-trained models to improve the accuracy and transferability of streamline delineation. We evaluate the performance of eleven ImageNet pre-trained models and a baseline model using datasets from Rowan County, NC, and Covington River, VA in the USA. Our results demonstrate that when models are adapted to a new area, the fine-tuned ImageNet pre-trained model exhibits superior predictive accuracy, markedly higher than the models trained from scratch or those only fine-tuned on the same area. Moreover, the ImageNet model achieves better smoothness and connectivity between classified streamline channels. These findings underline the effectiveness of transfer learning in enhancing the delineation of hydrological streamlines across varied geographies, offering a scalable solution for accurate and efficient environmental modelling.",
+        "contributor": {
+          "id": "062a8a5d-73d8-48e9-a6e5-21b1952062b6",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc.jpg",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-150px.jpg",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-765px.jpg"
+          },
+          "name": "Shaowen Wang"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-1024px.png"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      },
+      {
+        "_id": "c9a741c0-aabc-4147-9d72-db21c6b01309",
+        "contributor": {
+          "id": "063883de-1e64-4ad6-9898-1573ae5fbfa7",
+          "avatar-url": null,
+          "name": "Alexander Christopher Michels"
+        },
+        "contents": "In this notebook, we will use PyTorch for a simple linear regression model.",
+        "resource-type": "notebook",
+        "title": "Basics of PyTorch with Simple Linear Regression Model",
+        "authors": ["Alexander Michels"],
+        "tags": ["AI", "introduction", "Machine Learning", "PyTorch"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-1024px.png"
+        }
+      },
+      {
+        "click-count": 137,
+        "_id": "9348f8c7-34b4-484e-9d4e-e5127e624225",
+        "tags": ["Chicago", "geospatial", "historic"],
+        "authors": ["Rand McNally & Co."],
+        "title": "1916 Chicago Map",
+        "resource-type": "dataset",
+        "contents": "Rand McNally & Co.'s new street number guide map of Chicago (1916) from the Harvard Map Collection.",
+        "contributor": {
+          "id": "55c2d496-2b50-479f-b05a-ef854efb87a5",
+          "avatar-url": null,
+          "name": "Rebecca (Becky) Vandewalle"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-1024px.jpg"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      }
+    ]
+  },
+  {
+    "id": "aging-dam",
+    "title": "Aging Dam",
+    "subtitle": "Aging Infrastructure, Rising Risks",
+    "thumbnail-image": {
+      "low": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG/330px-Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG",
+      "medium": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG/960px-Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG",
+      "high": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG/1024px-Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/9/92/Embalse_de_Vega_de_Tera_%28Presa_Rota%29.JPG"
+    },
+    "contents": "Aging dams face structural risks, maintenance challenges, and safety concerns due to decades of wear.",
+    "elements": [
+      {
+        "_id": "a414dd3b-ba33-4a99-bedf-2e18cc8d671c",
+        "title": "AI Agent for Chicago Crime Analysis",
+        "contents": "This notebook walks you through building a \"Code Agent\" capable of performing geographic data analysis. Using the smolagents library from Hugging Face, we'll create an assistant that can analyze real-world crime data from the City of Chicago. The agent will answer plain-English questions by writing and executing Python code, using the geopandas library to perform spatial queries and generate maps to visualize the results.",
+        "authors": ["Yunfan Kang", "Google Gemini"],
+        "tags": ["LLM", "AI Agent"],
+        "resource-type": "notebook",
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-1024px.png"
+        },
+        "spatial-coverage": [],
+        "spatial-geometry": "",
+        "spatial-bounding-box": "",
+        "spatial-centroid": "",
+        "spatial-georeferenced": "",
+        "spatial-temporal-coverage": [],
+        "spatial-index-year": [""],
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        }
+      },
+      {
+        "_id": "43809f1c-7bf4-4f9d-806f-77563a7f71a1",
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        },
+        "contents": "Perplexity Clone",
+        "resource-type": "notebook",
+        "title": "Perplexity Clone",
+        "authors": ["Marcus D. R. Klarqvist"],
+        "tags": ["AI", "RAG"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-1024px.jpg"
+        }
+      },
+      {
+        "click-count": 8,
+        "_id": "510b006e-6ff8-41c0-99ea-b7adda041fe0",
+        "tags": [
+          "Convolutional neural network",
+          "Deep learning",
+          "Remote sensing",
+          "Streamline analysis",
+          "Transfer learning"
+        ],
+        "authors": [
+          "Nattapon Jaroenchai",
+          "Shaowen Wang",
+          "Lawrence V. Stanislawski",
+          "Ethan Shavers",
+          "Zhe Jiang",
+          "Vasit Sagan",
+          "E. Lynn Usery"
+        ],
+        "title": "Transfer Learning with Convolutional Neural Networks for Hydrological Streamline Delineation",
+        "resource-type": "publication",
+        "contents": "Hydrological streamline delineation is critical for effective environmental management, influencing agriculture sustainability, river dynamics, and watershed planning. This study develops a novel approach to combining transfer learning with convolutional neural networks that capitalize on ImageNet pre-trained models to improve the accuracy and transferability of streamline delineation. We evaluate the performance of eleven ImageNet pre-trained models and a baseline model using datasets from Rowan County, NC, and Covington River, VA in the USA. Our results demonstrate that when models are adapted to a new area, the fine-tuned ImageNet pre-trained model exhibits superior predictive accuracy, markedly higher than the models trained from scratch or those only fine-tuned on the same area. Moreover, the ImageNet model achieves better smoothness and connectivity between classified streamline channels. These findings underline the effectiveness of transfer learning in enhancing the delineation of hydrological streamlines across varied geographies, offering a scalable solution for accurate and efficient environmental modelling.",
+        "contributor": {
+          "id": "062a8a5d-73d8-48e9-a6e5-21b1952062b6",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc.jpg",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-150px.jpg",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-765px.jpg"
+          },
+          "name": "Shaowen Wang"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-1024px.png"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      },
+      {
+        "_id": "c9a741c0-aabc-4147-9d72-db21c6b01309",
+        "contributor": {
+          "id": "063883de-1e64-4ad6-9898-1573ae5fbfa7",
+          "avatar-url": null,
+          "name": "Alexander Christopher Michels"
+        },
+        "contents": "In this notebook, we will use PyTorch for a simple linear regression model.",
+        "resource-type": "notebook",
+        "title": "Basics of PyTorch with Simple Linear Regression Model",
+        "authors": ["Alexander Michels"],
+        "tags": ["AI", "introduction", "Machine Learning", "PyTorch"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-1024px.png"
+        }
+      },
+      {
+        "click-count": 137,
+        "_id": "9348f8c7-34b4-484e-9d4e-e5127e624225",
+        "tags": ["Chicago", "geospatial", "historic"],
+        "authors": ["Rand McNally & Co."],
+        "title": "1916 Chicago Map",
+        "resource-type": "dataset",
+        "contents": "Rand McNally & Co.'s new street number guide map of Chicago (1916) from the Harvard Map Collection.",
+        "contributor": {
+          "id": "55c2d496-2b50-479f-b05a-ef854efb87a5",
+          "avatar-url": null,
+          "name": "Rebecca (Becky) Vandewalle"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-1024px.jpg"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      }
+    ]
+  },
+  {
+    "id": "bok",
+    "title": "Body of Knowledge",
+    "subtitle": "Foundations of Expertise and Informed Practice",
+    "thumbnail-image": {
+      "low": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Latin_dictionary.jpg/330px-Latin_dictionary.jpg",
+      "medium": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Latin_dictionary.jpg/960px-Latin_dictionary.jpg",
+      "high": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Latin_dictionary.jpg/1280px-Latin_dictionary.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Latin_dictionary.jpg"
+    },
+    "contents": "Body of knowledge defines essential concepts, skills, and standards within a specific professional field.",
+    "elements": [
+      {
+        "_id": "a414dd3b-ba33-4a99-bedf-2e18cc8d671c",
+        "title": "AI Agent for Chicago Crime Analysis",
+        "contents": "This notebook walks you through building a \"Code Agent\" capable of performing geographic data analysis. Using the smolagents library from Hugging Face, we'll create an assistant that can analyze real-world crime data from the City of Chicago. The agent will answer plain-English questions by writing and executing Python code, using the geopandas library to perform spatial queries and generate maps to visualize the results.",
+        "authors": ["Yunfan Kang", "Google Gemini"],
+        "tags": ["LLM", "AI Agent"],
+        "resource-type": "notebook",
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-1024px.png"
+        },
+        "spatial-coverage": [],
+        "spatial-geometry": "",
+        "spatial-bounding-box": "",
+        "spatial-centroid": "",
+        "spatial-georeferenced": "",
+        "spatial-temporal-coverage": [],
+        "spatial-index-year": [""],
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        }
+      },
+      {
+        "_id": "43809f1c-7bf4-4f9d-806f-77563a7f71a1",
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        },
+        "contents": "Perplexity Clone",
+        "resource-type": "notebook",
+        "title": "Perplexity Clone",
+        "authors": ["Marcus D. R. Klarqvist"],
+        "tags": ["AI", "RAG"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-1024px.jpg"
+        }
+      },
+      {
+        "click-count": 8,
+        "_id": "510b006e-6ff8-41c0-99ea-b7adda041fe0",
+        "tags": [
+          "Convolutional neural network",
+          "Deep learning",
+          "Remote sensing",
+          "Streamline analysis",
+          "Transfer learning"
+        ],
+        "authors": [
+          "Nattapon Jaroenchai",
+          "Shaowen Wang",
+          "Lawrence V. Stanislawski",
+          "Ethan Shavers",
+          "Zhe Jiang",
+          "Vasit Sagan",
+          "E. Lynn Usery"
+        ],
+        "title": "Transfer Learning with Convolutional Neural Networks for Hydrological Streamline Delineation",
+        "resource-type": "publication",
+        "contents": "Hydrological streamline delineation is critical for effective environmental management, influencing agriculture sustainability, river dynamics, and watershed planning. This study develops a novel approach to combining transfer learning with convolutional neural networks that capitalize on ImageNet pre-trained models to improve the accuracy and transferability of streamline delineation. We evaluate the performance of eleven ImageNet pre-trained models and a baseline model using datasets from Rowan County, NC, and Covington River, VA in the USA. Our results demonstrate that when models are adapted to a new area, the fine-tuned ImageNet pre-trained model exhibits superior predictive accuracy, markedly higher than the models trained from scratch or those only fine-tuned on the same area. Moreover, the ImageNet model achieves better smoothness and connectivity between classified streamline channels. These findings underline the effectiveness of transfer learning in enhancing the delineation of hydrological streamlines across varied geographies, offering a scalable solution for accurate and efficient environmental modelling.",
+        "contributor": {
+          "id": "062a8a5d-73d8-48e9-a6e5-21b1952062b6",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc.jpg",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-150px.jpg",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-765px.jpg"
+          },
+          "name": "Shaowen Wang"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-1024px.png"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      },
+      {
+        "_id": "c9a741c0-aabc-4147-9d72-db21c6b01309",
+        "contributor": {
+          "id": "063883de-1e64-4ad6-9898-1573ae5fbfa7",
+          "avatar-url": null,
+          "name": "Alexander Christopher Michels"
+        },
+        "contents": "In this notebook, we will use PyTorch for a simple linear regression model.",
+        "resource-type": "notebook",
+        "title": "Basics of PyTorch with Simple Linear Regression Model",
+        "authors": ["Alexander Michels"],
+        "tags": ["AI", "introduction", "Machine Learning", "PyTorch"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-1024px.png"
+        }
+      },
+      {
+        "click-count": 137,
+        "_id": "9348f8c7-34b4-484e-9d4e-e5127e624225",
+        "tags": ["Chicago", "geospatial", "historic"],
+        "authors": ["Rand McNally & Co."],
+        "title": "1916 Chicago Map",
+        "resource-type": "dataset",
+        "contents": "Rand McNally & Co.'s new street number guide map of Chicago (1916) from the Harvard Map Collection.",
+        "contributor": {
+          "id": "55c2d496-2b50-479f-b05a-ef854efb87a5",
+          "avatar-url": null,
+          "name": "Rebecca (Becky) Vandewalle"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-1024px.jpg"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      }
+    ]
+  },
+  {
+    "id": "data-ethics",
+    "title": "Data Ethics",
+    "subtitle": "Guiding Principles for Responsible Data Use",
+    "thumbnail-image": {
+      "low": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Three_Surveillance_cameras.jpg/330px-Three_Surveillance_cameras.jpg",
+      "medium": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Three_Surveillance_cameras.jpg/960px-Three_Surveillance_cameras.jpg",
+      "high": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Three_Surveillance_cameras.jpg/1260px-Three_Surveillance_cameras.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Three_Surveillance_cameras.jpg"
+    },
+    "contents": "Data ethics ensures responsible, fair, and transparent handling of data across all stages and applications.",
+    "elements": [
+      {
+        "_id": "a414dd3b-ba33-4a99-bedf-2e18cc8d671c",
+        "title": "AI Agent for Chicago Crime Analysis",
+        "contents": "This notebook walks you through building a \"Code Agent\" capable of performing geographic data analysis. Using the smolagents library from Hugging Face, we'll create an assistant that can analyze real-world crime data from the City of Chicago. The agent will answer plain-English questions by writing and executing Python code, using the geopandas library to perform spatial queries and generate maps to visualize the results.",
+        "authors": ["Yunfan Kang", "Google Gemini"],
+        "tags": ["LLM", "AI Agent"],
+        "resource-type": "notebook",
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-1024px.png"
+        },
+        "spatial-coverage": [],
+        "spatial-geometry": "",
+        "spatial-bounding-box": "",
+        "spatial-centroid": "",
+        "spatial-georeferenced": "",
+        "spatial-temporal-coverage": [],
+        "spatial-index-year": [""],
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        }
+      },
+      {
+        "_id": "43809f1c-7bf4-4f9d-806f-77563a7f71a1",
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        },
+        "contents": "Perplexity Clone",
+        "resource-type": "notebook",
+        "title": "Perplexity Clone",
+        "authors": ["Marcus D. R. Klarqvist"],
+        "tags": ["AI", "RAG"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-1024px.jpg"
+        }
+      },
+      {
+        "click-count": 8,
+        "_id": "510b006e-6ff8-41c0-99ea-b7adda041fe0",
+        "tags": [
+          "Convolutional neural network",
+          "Deep learning",
+          "Remote sensing",
+          "Streamline analysis",
+          "Transfer learning"
+        ],
+        "authors": [
+          "Nattapon Jaroenchai",
+          "Shaowen Wang",
+          "Lawrence V. Stanislawski",
+          "Ethan Shavers",
+          "Zhe Jiang",
+          "Vasit Sagan",
+          "E. Lynn Usery"
+        ],
+        "title": "Transfer Learning with Convolutional Neural Networks for Hydrological Streamline Delineation",
+        "resource-type": "publication",
+        "contents": "Hydrological streamline delineation is critical for effective environmental management, influencing agriculture sustainability, river dynamics, and watershed planning. This study develops a novel approach to combining transfer learning with convolutional neural networks that capitalize on ImageNet pre-trained models to improve the accuracy and transferability of streamline delineation. We evaluate the performance of eleven ImageNet pre-trained models and a baseline model using datasets from Rowan County, NC, and Covington River, VA in the USA. Our results demonstrate that when models are adapted to a new area, the fine-tuned ImageNet pre-trained model exhibits superior predictive accuracy, markedly higher than the models trained from scratch or those only fine-tuned on the same area. Moreover, the ImageNet model achieves better smoothness and connectivity between classified streamline channels. These findings underline the effectiveness of transfer learning in enhancing the delineation of hydrological streamlines across varied geographies, offering a scalable solution for accurate and efficient environmental modelling.",
+        "contributor": {
+          "id": "062a8a5d-73d8-48e9-a6e5-21b1952062b6",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc.jpg",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-150px.jpg",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-765px.jpg"
+          },
+          "name": "Shaowen Wang"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-1024px.png"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      },
+      {
+        "_id": "c9a741c0-aabc-4147-9d72-db21c6b01309",
+        "contributor": {
+          "id": "063883de-1e64-4ad6-9898-1573ae5fbfa7",
+          "avatar-url": null,
+          "name": "Alexander Christopher Michels"
+        },
+        "contents": "In this notebook, we will use PyTorch for a simple linear regression model.",
+        "resource-type": "notebook",
+        "title": "Basics of PyTorch with Simple Linear Regression Model",
+        "authors": ["Alexander Michels"],
+        "tags": ["AI", "introduction", "Machine Learning", "PyTorch"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-1024px.png"
+        }
+      },
+      {
+        "click-count": 137,
+        "_id": "9348f8c7-34b4-484e-9d4e-e5127e624225",
+        "tags": ["Chicago", "geospatial", "historic"],
+        "authors": ["Rand McNally & Co."],
+        "title": "1916 Chicago Map",
+        "resource-type": "dataset",
+        "contents": "Rand McNally & Co.'s new street number guide map of Chicago (1916) from the Harvard Map Collection.",
+        "contributor": {
+          "id": "55c2d496-2b50-479f-b05a-ef854efb87a5",
+          "avatar-url": null,
+          "name": "Rebecca (Becky) Vandewalle"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-1024px.jpg"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      }
+    ]
+  },
+  {
+    "id": "geoai",
+    "title": "Geospatial AI",
+    "subtitle": "AI-Powered Insights from Geospatial Data",
+    "thumbnail-image": {
+      "low": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Delicate_Arch_LaSalle.jpg/330px-Delicate_Arch_LaSalle.jpg",
+      "medium": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Delicate_Arch_LaSalle.jpg/960px-Delicate_Arch_LaSalle.jpg",
+      "high": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Delicate_Arch_LaSalle.jpg/1024px-Delicate_Arch_LaSalle.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/1/13/Delicate_Arch_LaSalle.jpg"
+    },
+    "contents": "GeoAI combines geospatial data with AI to analyze patterns, make predictions, and support decision-making.",
+    "elements": [
+      {
+        "_id": "a414dd3b-ba33-4a99-bedf-2e18cc8d671c",
+        "title": "AI Agent for Chicago Crime Analysis",
+        "contents": "This notebook walks you through building a \"Code Agent\" capable of performing geographic data analysis. Using the smolagents library from Hugging Face, we'll create an assistant that can analyze real-world crime data from the City of Chicago. The agent will answer plain-English questions by writing and executing Python code, using the geopandas library to perform spatial queries and generate maps to visualize the results.",
+        "authors": ["Yunfan Kang", "Google Gemini"],
+        "tags": ["LLM", "AI Agent"],
+        "resource-type": "notebook",
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1755881618963-1755103459858_screenshot_2025_08_13_at_11.42.02___am_300px-1024px.png"
+        },
+        "spatial-coverage": [],
+        "spatial-geometry": "",
+        "spatial-bounding-box": "",
+        "spatial-centroid": "",
+        "spatial-georeferenced": "",
+        "spatial-temporal-coverage": [],
+        "spatial-index-year": [""],
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        }
+      },
+      {
+        "_id": "43809f1c-7bf4-4f9d-806f-77563a7f71a1",
+        "contributor": {
+          "id": "fadd645b-457c-4a9b-9e91-ec844e34d922",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2.png",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-150px.png",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722626010560-______2-765px.png"
+          },
+          "name": "Yunfan Kang"
+        },
+        "contents": "Perplexity Clone",
+        "resource-type": "notebook",
+        "title": "Perplexity Clone",
+        "authors": ["Marcus D. R. Klarqvist"],
+        "tags": ["AI", "RAG"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1727985671092-img_2614_2-1024px.jpg"
+        }
+      },
+      {
+        "click-count": 8,
+        "_id": "510b006e-6ff8-41c0-99ea-b7adda041fe0",
+        "tags": [
+          "Convolutional neural network",
+          "Deep learning",
+          "Remote sensing",
+          "Streamline analysis",
+          "Transfer learning"
+        ],
+        "authors": [
+          "Nattapon Jaroenchai",
+          "Shaowen Wang",
+          "Lawrence V. Stanislawski",
+          "Ethan Shavers",
+          "Zhe Jiang",
+          "Vasit Sagan",
+          "E. Lynn Usery"
+        ],
+        "title": "Transfer Learning with Convolutional Neural Networks for Hydrological Streamline Delineation",
+        "resource-type": "publication",
+        "contents": "Hydrological streamline delineation is critical for effective environmental management, influencing agriculture sustainability, river dynamics, and watershed planning. This study develops a novel approach to combining transfer learning with convolutional neural networks that capitalize on ImageNet pre-trained models to improve the accuracy and transferability of streamline delineation. We evaluate the performance of eleven ImageNet pre-trained models and a baseline model using datasets from Rowan County, NC, and Covington River, VA in the USA. Our results demonstrate that when models are adapted to a new area, the fine-tuned ImageNet pre-trained model exhibits superior predictive accuracy, markedly higher than the models trained from scratch or those only fine-tuned on the same area. Moreover, the ImageNet model achieves better smoothness and connectivity between classified streamline channels. These findings underline the effectiveness of transfer learning in enhancing the delineation of hydrological streamlines across varied geographies, offering a scalable solution for accurate and efficient environmental modelling.",
+        "contributor": {
+          "id": "062a8a5d-73d8-48e9-a6e5-21b1952062b6",
+          "avatar-url": {
+            "original": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc.jpg",
+            "low": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-150px.jpg",
+            "high": "https://backend-dev.i-guide.io:3500/user-uploads/avatars/1722048471028-shaowenwang_uiuc-765px.jpg"
+          },
+          "name": "Shaowen Wang"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1722634476675-platform-1024px.png"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      },
+      {
+        "_id": "c9a741c0-aabc-4147-9d72-db21c6b01309",
+        "contributor": {
+          "id": "063883de-1e64-4ad6-9898-1573ae5fbfa7",
+          "avatar-url": null,
+          "name": "Alexander Christopher Michels"
+        },
+        "contents": "In this notebook, we will use PyTorch for a simple linear regression model.",
+        "resource-type": "notebook",
+        "title": "Basics of PyTorch with Simple Linear Regression Model",
+        "authors": ["Alexander Michels"],
+        "tags": ["AI", "introduction", "Machine Learning", "PyTorch"],
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple.png",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-300px.png",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-765px.png",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720207028693-simple-1024px.png"
+        }
+      },
+      {
+        "click-count": 137,
+        "_id": "9348f8c7-34b4-484e-9d4e-e5127e624225",
+        "tags": ["Chicago", "geospatial", "historic"],
+        "authors": ["Rand McNally & Co."],
+        "title": "1916 Chicago Map",
+        "resource-type": "dataset",
+        "contents": "Rand McNally & Co.'s new street number guide map of Chicago (1916) from the Harvard Map Collection.",
+        "contributor": {
+          "id": "55c2d496-2b50-479f-b05a-ef854efb87a5",
+          "avatar-url": null,
+          "name": "Rebecca (Becky) Vandewalle"
+        },
+        "thumbnail-image": {
+          "original": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south.jpg",
+          "low": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-300px.jpg",
+          "medium": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-765px.jpg",
+          "high": "https://backend-dev.i-guide.io:3500/user-uploads/thumbnails/1720216241598-1916_chicago_map___south-1024px.jpg"
+        },
+        "created-at": "2024-09-12T21:05:57.821Z"
+      }
+    ]
+  }
+]
