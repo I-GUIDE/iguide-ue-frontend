@@ -19,6 +19,7 @@ import {
   ELEMENT_TYPE_CAP,
   ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
+import { PeriodAgoText } from "../utils/PeriodAgoText";
 
 export default function InfoCard(props) {
   const thumbnailImage = props.thumbnailImage;
@@ -31,6 +32,7 @@ export default function InfoCard(props) {
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
   const openInNewTab = props.openInNewTab;
+  const contributionTimestamp = props.contributionTimestamp;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = ELEMENT_TYPE_CAP[cardType];
@@ -187,7 +189,13 @@ export default function InfoCard(props) {
                 >
                   {contributorName}
                 </Typography>
-                <Typography level="body-xs">Contributor</Typography>
+                {contributionTimestamp ? (
+                  <Typography level="body-xs">
+                    {PeriodAgoText("Contributed ", contributionTimestamp)}
+                  </Typography>
+                ) : (
+                  <Typography level="body-xs">Contributor</Typography>
+                )}
               </Stack>
             </Stack>
           </Link>

@@ -321,6 +321,7 @@ export default function ElementGrid(props) {
                     contents={element.contents}
                     thumbnailImage={element["thumbnail-image"]}
                     contributor={element["contributor"]}
+                    contributionTimestamp={element["created-at"]}
                     showElementType={showElementType}
                     isPrivateElement={
                       element.visibility === ELEM_VISIBILITY.private
