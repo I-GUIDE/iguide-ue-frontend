@@ -30,7 +30,10 @@ import {
   retrieveBookmarkedElements,
 } from "../../utils/DataRetrieval";
 import { arrayLength } from "../../helpers/helper";
-import { ELEM_VISIBILITY } from "../../configs/VarConfigs";
+import {
+  ELEM_VISIBILITY,
+  RESOURCE_TYPE_COLORS,
+} from "../../configs/VarConfigs";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -55,6 +58,8 @@ export default function ElementGrid(props) {
   const isBookmarkedElement = props.isBookmarkedElement;
   const showUserElementCard = props.showUserElementCard;
   const disableUriChange = props.disableUriChange;
+
+  const categoryColor = RESOURCE_TYPE_COLORS[elementType];
 
   const [elementList, setElementList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -337,7 +342,7 @@ export default function ElementGrid(props) {
           >
             <Pagination
               count={numberOfPages}
-              color="primary"
+              color={categoryColor || "primary"}
               page={currentPage}
               onChange={handlePageClick}
             />
