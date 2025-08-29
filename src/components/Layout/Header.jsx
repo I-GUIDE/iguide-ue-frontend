@@ -50,7 +50,7 @@ export default function Header(props) {
         {/* Translate 80 to "80px" */}
         <CardContent sx={{ pt: NAVBAR_HEIGHT / 8 }}>
           <Container maxWidth="lg">
-            <Stack spacing={1.5} sx={{ px: 4, py: 3 }}>
+            <Stack spacing={1.5} sx={{ px: { xs: 1, md: 2, lg: 4 }, py: 3 }}>
               <PageNav
                 parentPages={parentPages}
                 currentPage={currentPage}

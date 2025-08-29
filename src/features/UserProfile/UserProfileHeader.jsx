@@ -1,5 +1,3 @@
-import React from "react";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
@@ -52,7 +50,8 @@ export default function UserProfileHeader(props) {
           flexWrap: "wrap",
           p: 0,
           m: 0,
-          height: USER_PROFILE_HEADER_HEIGHT,
+          height: "100%",
+          maxHeight: USER_PROFILE_HEADER_HEIGHT,
         }}
       >
         <Card
@@ -175,7 +174,11 @@ export default function UserProfileHeader(props) {
           <Container maxWidth="lg">
             <Grid
               container
-              sx={{ justifyContent: "center", alignItems: "center" }}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                px: { xs: 1, md: 2, lg: 4 },
+              }}
             >
               <Grid xs={12} md={3}>
                 <Stack
@@ -193,7 +196,7 @@ export default function UserProfileHeader(props) {
               <Grid xs={12} md={6}>
                 <Stack
                   direction="column"
-                  sx={{ m: 3 }}
+                  sx={{ m: { md: 3 } }}
                   spacing={2}
                   alignItems={{
                     xs: "center",
@@ -202,7 +205,7 @@ export default function UserProfileHeader(props) {
                 >
                   <Stack
                     direction="column"
-                    sx={{ m: 3 }}
+                    sx={{ m: { md: 3 } }}
                     spacing={0.5}
                     alignItems={{
                       xs: "center",
@@ -211,11 +214,22 @@ export default function UserProfileHeader(props) {
                   >
                     <Stack
                       direction={{ xs: "column", md: "row" }}
-                      sx={{ m: 3 }}
+                      sx={{ m: { md: 3 } }}
                       spacing={1}
                       alignItems="center"
                     >
-                      <Typography level="h1" fontWeight="lg" textColor="#000">
+                      <Typography
+                        level="h2"
+                        fontWeight="lg"
+                        textColor="#000"
+                        textAlign={{ xs: "center", sm: "left" }}
+                        sx={{
+                          fontSize: {
+                            xs: "1.5rem", // h3
+                            sm: "2rem", // h2
+                          },
+                        }}
+                      >
                         {localUserInfo.first_name
                           ? localUserInfo.first_name
                           : "First name unknown"}
@@ -232,14 +246,18 @@ export default function UserProfileHeader(props) {
                       !UNTRUSTED_AFFILIATIONS.includes(
                         localUserInfo.affiliation?.toLowerCase()
                       ) && (
-                        <Typography level="body-lg" fontWeight="sm">
+                        <Typography
+                          level="body-lg"
+                          fontWeight="sm"
+                          textAlign={{ xs: "center", sm: "left" }}
+                        >
                           {localUserInfo.affiliation}
                         </Typography>
                       )}
                   </Stack>
                   <Stack
                     direction="column"
-                    sx={{ m: 3 }}
+                    sx={{ m: { md: 3 } }}
                     spacing={0.5}
                     alignItems={{
                       xs: "center",

@@ -422,7 +422,7 @@ export default function SearchResults() {
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
               sx={{
                 backgroundColor: "inherit",
-                px: { xs: 2, md: 4 },
+                px: { xs: 1, md: 2, lg: 4 },
                 pt: 4,
                 pb: 8,
               }}
@@ -430,9 +430,8 @@ export default function SearchResults() {
               <Stack
                 spacing={2}
                 sx={{
-                  px: { xs: 2, md: 4, width: "100%" },
-                  pt: 2,
                   minHeight: 0,
+                  width: "100%",
                 }}
               >
                 {/* Tabs for filtering element types */}

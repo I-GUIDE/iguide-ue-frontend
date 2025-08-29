@@ -50,7 +50,8 @@ export default function ElementGridLayout(props) {
             direction="column"
             sx={{
               backgroundColor: "inherit",
-              p: 4,
+              px: { xs: 1, md: 2, lg: 4 },
+              py: 4,
             }}
           >
             <ElementGrid
