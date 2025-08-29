@@ -29,12 +29,12 @@ export default function CapsuleList(props) {
       >
         {filteredItems.map((item) => (
           <Tooltip
+            key={item}
             title={`Open tag "${item}"`}
             placement="top"
             enterDelay={1000}
           >
             <Link
-              key={item}
               component={RouterLink}
               to={"/tag/" + item}
               underline="none"
