@@ -409,7 +409,19 @@ export default function UserDatasetUploader(props) {
           .
         </Typography>
         {fileDetail && (
-          <Card color="primary" sx={{ my: 1 }}>
+          <Card
+            color="neutral"
+            variant="soft"
+            sx={{
+              my: 1,
+              "--Card-radius": "15px",
+              overflow: "hidden",
+              boxShadow: `
+                0 1px 2px rgba(0, 0, 0, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.2)
+              `,
+            }}
+          >
             <Stack spacing={0.5}>
               <Typography level="title-md">Dataset file information</Typography>
               <Typography>Filename: {fileDetail.name}</Typography>
@@ -600,7 +612,19 @@ export default function UserDatasetUploader(props) {
           </Card>
         )}
         {fileUploadedByUser && (
-          <Card color="primary" sx={{ my: 1 }}>
+          <Card
+            variant="soft"
+            color="neutral"
+            sx={{
+              my: 1,
+              "--Card-radius": "15px",
+              overflow: "hidden",
+              boxShadow: `
+                0 1px 2px rgba(0, 0, 0, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.2)
+              `,
+            }}
+          >
             <Stack spacing={1} sx={{ alignItems: "flex-start" }}>
               <Typography level="body-md">
                 <Typography level="title-md">Dataset file uploaded:</Typography>{" "}
