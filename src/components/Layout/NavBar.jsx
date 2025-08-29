@@ -464,6 +464,20 @@ export default function NavBar(props) {
                       </Link>
                     ))}
                   </List>
+                  <Divider sx={{ my: 1 }} />
+                  <List>
+                    <Link
+                      key="communities"
+                      to="/communities"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton>Communities</ListItemButton>
+                      </ListItem>
+                    </Link>
+                  </List>
                   <ListDivider />
                   <List>
                     <Typography
@@ -542,6 +556,20 @@ export default function NavBar(props) {
                     Knowledge Elements
                   </HoverOverMenuTab>
                 </Box>
+                <Link
+                  to="/communities"
+                  component={RouterLink}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                    sx={{ alignSelf: "center", px: 1.5 }}
+                  >
+                    Communities
+                  </Button>
+                </Link>
                 <Box className="tourid-3">
                   <HoverOverMenuTab menu={supportPages}>
                     Support

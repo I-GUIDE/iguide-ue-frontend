@@ -20,6 +20,9 @@ import OERPage from "./routes/ElementPage/OERPage";
 import MapPage from "./routes/ElementPage/MapPage";
 import CodePage from "./routes/ElementPage/CodePage";
 
+import Communities from "./routes/Communities";
+import CommunityPage from "./routes/CommunityPage";
+
 import UserProfile from "./routes/UserProfile";
 import UserProfileUpdate from "./routes/UserProfileUpdate";
 import ElementSubmission from "./routes/ElementSubmission";
@@ -162,6 +165,14 @@ export const routes = [
   {
     path: "/code/:id",
     element: <CodePage />,
+  },
+  {
+    path: "/communities",
+    element: <Communities />,
+  },
+  {
+    path: "/communities/:id",
+    element: <CommunityPage />,
   },
   {
     path: "/tag/:id",
