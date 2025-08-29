@@ -94,6 +94,7 @@ export default function CommunityPage(props) {
                     contents={element.contents}
                     thumbnailImage={element["thumbnail-image"]}
                     contributor={element["contributor"]}
+                    contributionTimestamp={element["created-at"]}
                     showElementType
                   />
                 </Grid>
