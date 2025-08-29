@@ -4,6 +4,7 @@ import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
 import Link from "@mui/joy/Link";
 import Chip from "@mui/joy/Chip";
+import Tooltip from "@mui/joy/Tooltip";
 
 export default function CapsuleList(props) {
   const items = props.items;
@@ -27,32 +28,43 @@ export default function CapsuleList(props) {
         spacing={1}
       >
         {filteredItems.map((item) => (
-          <Link
-            key={item}
-            component={RouterLink}
-            to={"/tag/" + item}
-            underline="none"
-            sx={{
-              "--Link-gap": "0.5rem",
-              my: 1,
-              mx: 0.5,
-            }}
+          <Tooltip
+            title={`Open tag "${item}"`}
+            placement="top"
+            enterDelay={1000}
           >
-            <Chip
-              variant="outlined"
-              color="neutral"
-              size="md"
+            <Link
+              key={item}
+              component={RouterLink}
+              to={"/tag/" + item}
+              underline="none"
               sx={{
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                  boxShadow: "lg",
-                },
+                "--Link-gap": "0.5rem",
+                my: 1,
+                mx: 0.5,
               }}
             >
-              {item}
-            </Chip>
-          </Link>
+              <Chip
+                variant="plain"
+                color="neutral"
+                size="md"
+                sx={{
+                  "--Chip-radius": "15px",
+                  overflow: "hidden",
+                  boxShadow:
+                    "0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2)",
+                  transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(1.01) translateY(-1px)",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                  },
+                }}
+              >
+                {item}
+              </Chip>
+            </Link>
+          </Tooltip>
         ))}
       </Box>
     </Stack>
