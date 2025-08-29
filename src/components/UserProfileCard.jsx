@@ -106,12 +106,17 @@ export default function UserProfileCard(props) {
   return (
     <>
       <Card
-        variant="outlined"
+        variant="plain"
         orientation="horizontal"
         sx={{
           width: "100%",
           height: "100%",
           "--Card-radius": "15px",
+          overflow: "hidden",
+          boxShadow: `
+            0 1px 2px rgba(0, 0, 0, 0.3),
+            0 2px 4px rgba(0, 0, 0, 0.2)
+          `,
         }}
       >
         <CardContent

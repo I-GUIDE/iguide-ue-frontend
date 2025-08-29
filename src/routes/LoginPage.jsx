@@ -10,7 +10,6 @@ const materialTheme = materialExtendTheme();
 import Grid from "@mui/material/Grid2";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import CardContent from "@mui/joy/CardContent";
@@ -49,26 +48,42 @@ export default function LoginPage() {
                 pb: 8,
               }}
             >
-              <Typography level="title-lg" sx={{ py: 1 }}>
+              <Typography level="title-md" sx={{ py: 1 }}>
                 You need to log in to access this page
               </Typography>
-              <Button variant="plain" color="success" onClick={userLogin}>
-                <Card variant="outlined" sx={{ width: 320 }}>
-                  <CardOverflow>
-                    <img
-                      src="https://cilogon.org/images/cilogon-ci-64-g.png"
-                      srcSet="https://cilogon.org/images/cilogon-ci-64-g.png 2x"
-                      loading="lazy"
-                      alt="CILogon Service"
-                    />
-                  </CardOverflow>
-                  <CardContent>
-                    <Typography level="title-sm">
-                      Click here to log in
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Button>
+              <Card
+                variant="plain"
+                component="button"
+                onClick={userLogin}
+                sx={{
+                  width: 320,
+                  border: "none",
+                  cursor: "pointer",
+                  "--Card-radius": "15px",
+                  overflow: "hidden",
+                  boxShadow: `
+                    0 1px 2px rgba(0, 0, 0, 0.3),
+                    0 2px 4px rgba(0, 0, 0, 0.2)
+                  `,
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.0) translateY(-2px)",
+                    boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
+                  },
+                }}
+              >
+                <CardOverflow>
+                  <img
+                    src="https://cilogon.org/images/cilogon-ci-64-g.png"
+                    srcSet="https://cilogon.org/images/cilogon-ci-64-g.png 2x"
+                    loading="lazy"
+                    alt="CILogon Service"
+                  />
+                </CardOverflow>
+                <CardContent>
+                  <Typography level="title-sm">Click here to log in</Typography>
+                </CardContent>
+              </Card>
             </Grid>
           </Box>
         </Container>

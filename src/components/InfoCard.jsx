@@ -47,16 +47,21 @@ export default function InfoCard(props) {
 
   return (
     <Card
-      variant="outlined"
+      variant="plain"
       color={categoryColor}
       sx={{
         width: "100%",
         height: "100%",
         "--Card-radius": "15px",
+        overflow: "hidden",
+        boxShadow: `
+          0 1px 2px rgba(0, 0, 0, 0.3),
+          0 2px 4px rgba(0, 0, 0, 0.2)
+        `,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          transform: "scale(1.01)",
-          boxShadow: "xl",
+          transform: "scale(1.015) translateY(-2px)",
+          boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
       }}
     >
@@ -110,7 +115,7 @@ export default function InfoCard(props) {
           sx={{ color: "text.tertiary" }}
         >
           <Typography
-            level="title-md"
+            level="title-lg"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -125,7 +130,7 @@ export default function InfoCard(props) {
           </Typography>
         </Link>
         <Typography
-          level="body-sm"
+          level="title-sm"
           textColor="#4D4F5C"
           sx={{
             overflow: "hidden",
@@ -158,6 +163,7 @@ export default function InfoCard(props) {
       {contributorName && (
         <CardActions>
           <Link
+            color={categoryColor}
             component={RouterLink}
             to={"/contributor/" + encodeURIComponent(contributorUserId)}
           >
