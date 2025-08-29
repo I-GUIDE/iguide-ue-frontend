@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { useNavigate, useSearchParams } from "react-router";
 
@@ -17,12 +17,12 @@ import Grid from "@mui/material/Grid2";
 import Typography from "@mui/joy/Typography";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
-import Pagination from "@mui/material/Pagination";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 
 import InfoCard from "../InfoCard";
 import UserElementCard from "../UserElementCard";
+import Pagination from "./Pagination";
 
 import {
   elementRetriever,

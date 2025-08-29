@@ -24,7 +24,6 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import SearchIcon from "@mui/icons-material/Search";
 import Typography from "@mui/joy/Typography";
-import Pagination from "@mui/material/Pagination";
 import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -35,6 +34,7 @@ import Badge from "@mui/joy/Badge";
 
 import TuneIcon from "@mui/icons-material/Tune";
 
+import Pagination from "../components/Layout/Pagination";
 import AdvancedSearch from "../components/AdvancedSearch";
 import InfoCard from "../components/InfoCard";
 import { DataSearcher } from "../utils/DataRetrieval";
