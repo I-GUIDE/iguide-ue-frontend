@@ -16,7 +16,6 @@ import Stack from "@mui/material/Stack";
 import Container from "@mui/joy/Container";
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
-import Pagination from "@mui/material/Pagination";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Button from "@mui/joy/Button";
@@ -29,6 +28,7 @@ import Header from "../components/Layout/Header";
 import LoginPage from "./LoginPage";
 import usePageTitle from "../hooks/usePageTitle";
 import ErrorPage from "./ErrorPage";
+import Pagination from "../components/Layout/Pagination";
 
 import { DEFAULT_BODY_HEIGHT } from "../configs/VarConfigs";
 import { arrayLength } from "../helpers/helper";

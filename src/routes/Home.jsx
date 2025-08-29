@@ -203,6 +203,7 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
+              px: { xs: 1, md: 2, lg: 4 },
               pt: 4,
               pb: 8,
             }}
