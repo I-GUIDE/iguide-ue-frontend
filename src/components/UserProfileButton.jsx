@@ -52,7 +52,16 @@ export default function UserProfileButton(props) {
           variant="plain"
           color="neutral"
           size="sm"
-          sx={{ alignSelf: "center", px: 1.5 }}
+          aria-label="User menu"
+          sx={{
+            alignSelf: "center",
+            transition: "transform 0.2s ease-in-out",
+            "&:hover": {
+              transform: "scale(1.05)",
+              backgroundColor: "transparent",
+            },
+            px: 0,
+          }}
           onClick={handleOpen}
           onMouseEnter={handleOpen}
           onMouseLeave={handleClose}
@@ -276,6 +285,8 @@ export default function UserProfileButton(props) {
       <Button
         size="sm"
         color="primary"
+        variant="plain"
+        aria-label="Login"
         onClick={userLogin}
         className="tourid-4"
       >
