@@ -18,7 +18,6 @@ import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
-import ButtonGroup from "@mui/joy/ButtonGroup";
 import ListDivider from "@mui/joy/ListDivider";
 import Avatar from "@mui/joy/Avatar";
 import Drawer from "@mui/joy/Drawer";
@@ -325,14 +324,15 @@ export default function NavBar(props) {
             },
             backdropFilter: { lg: "blur(6px)" },
             WebkitBackdropFilter: { lg: "blur(6px)" },
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <Box
             sx={{
               height: NAVBAR_HEIGHT,
-              pt: 1,
-              mx: 2,
-              display: "auto",
+              px: 4,
+              display: "flex",
               bgcolor: "neutral",
             }}
           >
@@ -368,11 +368,11 @@ export default function NavBar(props) {
                 alignItems="center"
               >
                 <Button
-                  size="lg"
+                  size="md"
                   ref={buttonRef}
                   id="composition-button"
                   aria-label="View menu"
-                  aria-controls={"composition-menu"}
+                  aria-controls="composition-menu"
                   aria-haspopup="true"
                   aria-expanded={drawerOpen ? "true" : undefined}
                   variant="plain"
@@ -489,18 +489,17 @@ export default function NavBar(props) {
                     <AuthInDrawer />
                   </Box>
                 </Drawer>
-                <Link
-                  to={"/"}
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
-                >
-                  <Tooltip title="Home" enterDelay={1500}>
+                <Tooltip title="Home" enterDelay={1500}>
+                  <Link
+                    to={"/"}
+                    underline="none"
+                    component={RouterLink}
+                    sx={{ color: "text.tertiary" }}
+                  >
                     <Box
                       component="img"
                       sx={{
                         height: 40,
-                        mt: 1,
                         px: 2,
                         transition: "transform 0.3s ease",
                         "&:hover": {
@@ -510,8 +509,8 @@ export default function NavBar(props) {
                       alt="I-GUIDE logo"
                       src={iguideLogo}
                     />
-                  </Tooltip>
-                </Link>
+                  </Link>
+                </Tooltip>
               </Stack>
             </Stack>
 
@@ -520,7 +519,7 @@ export default function NavBar(props) {
               direction="row"
               justifyContent="space-between"
               alignItems="center"
-              sx={{ display: { xs: "none", lg: "flex" } }}
+              sx={{ display: { xs: "none", lg: "flex" }, width: "100%" }}
             >
               <Stack
                 direction="row"
@@ -528,19 +527,17 @@ export default function NavBar(props) {
                 alignItems="center"
               >
                 <Box className="tourid-1">
-                  <Link
-                    to={"/"}
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <Tooltip title="Home" enterDelay={1500}>
+                  <Tooltip title="Home" enterDelay={1500}>
+                    <Link
+                      to={"/"}
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
                       <Box
                         component="img"
                         sx={{
                           height: 40,
-                          mt: 1,
-                          pl: 2,
                           pr: 3,
                           transition: "transform 0.3s ease",
                           "&:hover": {
@@ -550,8 +547,8 @@ export default function NavBar(props) {
                         alt="I-GUIDE logo"
                         src={iguideLogo}
                       />
-                    </Tooltip>
-                  </Link>
+                    </Link>
+                  </Tooltip>
                 </Box>
                 <Box className="tourid-2">
                   <HoverOverMenuTab menu={elementPages}>
@@ -582,26 +579,52 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-                spacing={0.1}
+                spacing={0.5}
               >
                 <SearchBar placeholder="Search..." />
-                <ButtonGroup
-                  color="primary"
-                  orientation="horizontal"
-                  size="sm"
-                  variant="plain"
-                  spacing="0.01rem"
-                >
-                  {isAuthenticated && canAccessJupyterHub ? (
-                    // If the user is logged in, activate the link to JupyterHub
-                    <Tooltip title="Open I-GUIDE JupyterHub" variant="solid">
+                {isAuthenticated && canAccessJupyterHub ? (
+                  <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={1500}>
+                    <Link
+                      component="a"
+                      href={JUPYTERHUB_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="none"
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <Box
+                        component="img"
+                        className="tourid-5"
+                        sx={{
+                          height: 40,
+                          px: 2,
+                          transition: "transform 0.3s ease",
+                          "&:hover": {
+                            transform: "scale(1.05)",
+                          },
+                        }}
+                        alt="JupyterHub logo"
+                        src={jupyterLogo}
+                      />
+                    </Link>
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    title="To use I-GUIDE JupyterHub, please log in using your academic email"
+                    variant="solid"
+                  >
+                    <span>
                       <Button
                         size="sm"
-                        color="neutral"
-                        component="a"
-                        href={JUPYTERHUB_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        disabled
+                        sx={{
+                          backgroundColor: "transparent",
+                          boxShadow: "none",
+                          "&:disabled": {
+                            backgroundColor: "transparent",
+                            boxShadow: "none",
+                          },
+                        }}
                       >
                         <Avatar
                           variant="plain"
@@ -610,42 +633,20 @@ export default function NavBar(props) {
                           className="tourid-5"
                           sx={{
                             "& img": {
+                              filter: "grayscale(100%)",
                               objectFit: "contain",
                             },
                             borderRadius: 0,
                           }}
                         />
                       </Button>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip
-                      title="To use I-GUIDE JupyterHub, please log in using your academic email"
-                      variant="solid"
-                    >
-                      <span>
-                        <Button size="sm" disabled>
-                          <Avatar
-                            variant="plain"
-                            alt="JupyterHub logo"
-                            src={jupyterLogo}
-                            className="tourid-5"
-                            sx={{
-                              "& img": {
-                                filter: "grayscale(100%)",
-                                objectFit: "contain",
-                              },
-                              borderRadius: 0,
-                            }}
-                          />
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  )}
-                  <UserProfileButton
-                    isAuthenticated={isAuthenticated}
-                    localUserInfo={localUserInfo}
-                  />
-                </ButtonGroup>
+                    </span>
+                  </Tooltip>
+                )}
+                <UserProfileButton
+                  isAuthenticated={isAuthenticated}
+                  localUserInfo={localUserInfo}
+                />
               </Stack>
             </Stack>
           </Box>
