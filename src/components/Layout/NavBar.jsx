@@ -40,6 +40,9 @@ import { userLogin, userLogout } from "../../utils/UserManager";
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 
+import iguideLogo from "../../assets/images/iguide-logo.png";
+import jupyterLogo from "../../assets/images/jupyter-logo.png";
+
 const ENV = import.meta.env.VITE_ENV;
 const JUPYTERHUB_URL = import.meta.env.VITE_JUPYTERHUB_URL;
 
@@ -504,8 +507,8 @@ export default function NavBar(props) {
                           transform: "scale(1.05)",
                         },
                       }}
-                      alt="Logo"
-                      src="/images/Logo.png"
+                      alt="I-GUIDE logo"
+                      src={iguideLogo}
                     />
                   </Tooltip>
                 </Link>
@@ -544,8 +547,8 @@ export default function NavBar(props) {
                             transform: "scale(1.05)",
                           },
                         }}
-                        alt="Logo"
-                        src="/images/Logo.png"
+                        alt="I-GUIDE logo"
+                        src={iguideLogo}
                       />
                     </Tooltip>
                   </Link>
@@ -602,8 +605,8 @@ export default function NavBar(props) {
                       >
                         <Avatar
                           variant="plain"
-                          alt="jupyterhub"
-                          src="/images/Jupyter-logo.png"
+                          alt="JupyterHub logo"
+                          src={jupyterLogo}
                           className="tourid-5"
                           sx={{
                             "& img": {
@@ -623,8 +626,8 @@ export default function NavBar(props) {
                         <Button size="sm" disabled>
                           <Avatar
                             variant="plain"
-                            alt="jupyterhub"
-                            src="/images/Jupyter-logo.png"
+                            alt="JupyterHub logo"
+                            src={jupyterLogo}
                             className="tourid-5"
                             sx={{
                               "& img": {
