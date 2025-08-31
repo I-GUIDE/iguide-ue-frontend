@@ -170,9 +170,6 @@ export const routes = [
   {
     path: "/user-profile",
     element: <UserProfile />,
-    label: "User Profile",
-    category: "User",
-    requireAuth: true,
   },
   {
     path: "/contributor/:id",
@@ -181,9 +178,6 @@ export const routes = [
   {
     path: "/user-profile-update",
     element: <UserProfileUpdate />,
-    label: "Update User Profile",
-    category: "User",
-    requireAuth: true,
   },
   {
     path: "/contribution/:elementType",

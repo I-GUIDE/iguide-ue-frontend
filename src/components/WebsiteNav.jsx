@@ -1,5 +1,3 @@
-import { useOutletContext } from "react-router";
-
 import {
   extendTheme as materialExtendTheme,
   ThemeProvider as MaterialCssVarsProvider,
@@ -15,22 +13,14 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
 import { routes } from "../routes";
-import { PERMISSIONS } from "../configs/Permissions";
 
-const AUTH_BACKEND_URL = import.meta.env.VITE_AUTH_BACKEND_URL;
-
-function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
+function groupRoutesByCategory(routes) {
   const items = {};
-  const isAdmin = localUserInfo?.role <= PERMISSIONS["edit_all"];
 
   for (let i = 0; i < routes.length; i++) {
     const route = routes[i];
 
-    if (
-      !route.label ||
-      (route.requireAuth === true && !isAuthenticated) ||
-      (route.requireAdmin === true && !isAdmin)
-    ) {
+    if (!route.label) {
       continue;
     }
 
@@ -39,29 +29,13 @@ function groupRoutesByCategory(routes, isAuthenticated, localUserInfo) {
     } else {
       items[route.category] = [route];
     }
-
-    if (!isAuthenticated) {
-      items["Authentication"] = [
-        {
-          path: `${AUTH_BACKEND_URL}/auth/login`,
-          label: "Login",
-          category: "User login",
-        },
-      ];
-    }
   }
 
   return items;
 }
 
 export default function WebsiteNav() {
-  const { isAuthenticated, localUserInfo } = useOutletContext();
-
-  const groupedRoutes = groupRoutesByCategory(
-    routes,
-    isAuthenticated,
-    localUserInfo
-  );
+  const groupedRoutes = groupRoutesByCategory(routes);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
