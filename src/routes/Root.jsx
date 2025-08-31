@@ -46,6 +46,11 @@ export default function Root(props) {
   );
   const [localUserInfo, setLocalUserInfo] = useState(null);
 
+  // Scroll bar always appears to prevent layout shifts
+  useEffect(() => {
+    document.documentElement.style.overflowY = "scroll";
+  }, []);
+
   useEffect(() => {
     const demoLocalUser = {
       affiliation: "I-GUIDE",
