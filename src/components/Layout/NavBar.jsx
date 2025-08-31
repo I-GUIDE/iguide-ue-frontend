@@ -31,6 +31,7 @@ import Tooltip from "@mui/joy/Tooltip";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import SearchBar from "../SearchBar";
+import SearchModal from "./SearchModal";
 import HoverOverMenuTab from "../HoverOverMenuTab";
 import UserProfileButton from "../UserProfileButton";
 
@@ -581,7 +582,7 @@ export default function NavBar(props) {
                 alignItems="center"
                 spacing={0.5}
               >
-                <SearchBar placeholder="Search..." />
+                <SearchModal />
                 {isAuthenticated && canAccessJupyterHub ? (
                   <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={1500}>
                     <Link
