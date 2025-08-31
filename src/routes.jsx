@@ -36,7 +36,7 @@ import DocUpdate from "./routes/DocUpdate";
 import DocPage from "./routes/DocPage";
 import ContributorProfile from "./routes/ContributorProfile";
 import ContactUs from "./routes/ContactUs";
-import Sitemap from "./components/Sitemap";
+import Sitemap from "./routes/Sitemap";
 
 import AdminPanel from "./routes/AdminPanel";
 
@@ -51,37 +51,37 @@ export const routes = [
     path: "/about",
     element: <About />,
     label: "About",
-    category: "About I-GUIDE",
+    category: "About",
   },
   {
     path: "/tutorials",
     element: <Tutorials />,
     label: "Tutorials",
-    category: "About I-GUIDE",
+    category: "About",
   },
   {
     path: "/terms-of-use",
     element: <TermsOfUse />,
     label: "Terms of Use",
-    category: "About I-GUIDE",
+    category: "About",
   },
   {
     path: "/contributor-license-agreement",
     element: <LicenseAgreement />,
     label: "Contributor License Agreement",
-    category: "About I-GUIDE",
+    category: "About",
   },
   {
     path: "/contact-us",
     element: <ContactUs />,
     label: "Contact Us",
-    category: "About I-GUIDE",
+    category: "About",
   },
   {
     path: "/search-home",
     element: <SearchHome />,
     label: "Search",
-    category: "Search",
+    category: "Exploration",
   },
   ENABLE_LLM && {
     path: "/smart-search",
@@ -91,13 +91,13 @@ export const routes = [
     path: "/element-network",
     element: <NetworkVisualizer />,
     label: "Element Network",
-    category: "Search",
+    category: "Exploration",
   },
   {
     path: "/element-map",
     element: <ElementsMap />,
     label: "Element Map",
-    category: "Search",
+    category: "Exploration",
   },
   {
     path: "/search",
@@ -107,7 +107,7 @@ export const routes = [
     path: "/maps",
     element: <Maps />,
     label: "Maps",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/maps/:id",
@@ -117,7 +117,7 @@ export const routes = [
     path: "/datasets",
     element: <Datasets />,
     label: "Datasets",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/datasets/:id",
@@ -127,7 +127,7 @@ export const routes = [
     path: "/notebooks",
     element: <Notebooks />,
     label: "Notebooks",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/notebooks/:id",
@@ -137,7 +137,7 @@ export const routes = [
     path: "/publications",
     element: <Publications />,
     label: "Publications",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/publications/:id",
@@ -147,7 +147,7 @@ export const routes = [
     path: "/oers",
     element: <OERs />,
     label: "Educational Resources",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/oers/:id",
@@ -157,7 +157,7 @@ export const routes = [
     path: "/code",
     element: <Codes />,
     label: "Code",
-    category: "Elements",
+    category: "Knowledge Elements",
   },
   {
     path: "/code/:id",
@@ -170,9 +170,6 @@ export const routes = [
   {
     path: "/user-profile",
     element: <UserProfile />,
-    label: "User Profile",
-    category: "User",
-    requireAuth: true,
   },
   {
     path: "/contributor/:id",
@@ -181,9 +178,6 @@ export const routes = [
   {
     path: "/user-profile-update",
     element: <UserProfileUpdate />,
-    label: "Update User Profile",
-    category: "User",
-    requireAuth: true,
   },
   {
     path: "/contribution/:elementType",

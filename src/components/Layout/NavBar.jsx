@@ -31,6 +31,7 @@ import Tooltip from "@mui/joy/Tooltip";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import SearchBar from "../SearchBar";
+import SearchModal from "./SearchModal";
 import HoverOverMenuTab from "../HoverOverMenuTab";
 import UserProfileButton from "../UserProfileButton";
 
@@ -310,20 +311,20 @@ export default function NavBar(props) {
         <AppBar
           color="inherit"
           sx={{
-            position: { xs: "absolute", lg: "fixed" },
-            top: { xs: 0, lg: 10 },
-            left: { lg: "50%" },
-            transform: { lg: "translateX(-50%)" },
+            position: { xs: "absolute", md: "fixed" },
+            top: { xs: 0, md: 10 },
+            left: { md: "50%" },
+            transform: { md: "translateX(-50%)" },
             maxWidth: "lg",
-            borderRadius: { xs: 0, lg: 6 },
+            borderRadius: { xs: 0, md: 6 },
             boxShadow: 3,
             zIndex: 1100,
             backgroundColor: {
               xs: "background.paper",
-              lg: "rgba(255, 255, 255, 0.8)",
+              md: "rgba(255, 255, 255, 0.8)",
             },
-            backdropFilter: { lg: "blur(6px)" },
-            WebkitBackdropFilter: { lg: "blur(6px)" },
+            backdropFilter: { md: "blur(6px)" },
+            WebkitBackdropFilter: { md: "blur(6px)" },
             display: "flex",
             justifyContent: "center",
           }}
@@ -357,161 +358,155 @@ export default function NavBar(props) {
             {/* When page is narrower than 1200px */}
             <Stack
               direction="row"
-              justifyContent="flex-start"
+              justifyContent="space-between"
               alignItems="center"
               spacing={2}
-              sx={{ display: { xs: "flex", lg: "none" } }}
+              sx={{ display: { xs: "flex", md: "none" }, width: "100%" }}
             >
-              <Stack
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
-              >
-                <Button
-                  size="md"
-                  ref={buttonRef}
-                  id="composition-button"
-                  aria-label="View menu"
-                  aria-controls="composition-menu"
-                  aria-haspopup="true"
-                  aria-expanded={drawerOpen ? "true" : undefined}
-                  variant="plain"
-                  color="neutral"
-                  onClick={toggleDrawer(true)}
+              <Tooltip title="Home" enterDelay={1500}>
+                <Link
+                  to={"/"}
+                  underline="none"
+                  component={RouterLink}
+                  sx={{ color: "text.tertiary" }}
                 >
-                  <MenuIcon />
-                </Button>
-                <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
                   <Box
+                    component="img"
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      ml: "auto",
-                      mt: 1,
-                      mr: 2,
+                      height: 40,
+                      px: 2,
+                      transition: "transform 0.3s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                      },
                     }}
+                    alt="I-GUIDE logo"
+                    src={iguideLogo}
+                  />
+                </Link>
+              </Tooltip>
+              <Button
+                size="md"
+                ref={buttonRef}
+                id="composition-button"
+                aria-label="View menu"
+                aria-controls="composition-menu"
+                aria-haspopup="true"
+                aria-expanded={drawerOpen ? "true" : undefined}
+                variant="plain"
+                color="neutral"
+                onClick={toggleDrawer(true)}
+              >
+                <MenuIcon />
+              </Button>
+              <Drawer open={drawerOpen} onClose={toggleDrawer(false)}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                    ml: "auto",
+                    mt: 1,
+                    mr: 2,
+                  }}
+                >
+                  <Typography
+                    component="label"
+                    htmlFor="close-icon"
+                    fontSize="sm"
+                    fontWeight="lg"
+                    sx={{ cursor: "pointer" }}
                   >
+                    Close
+                  </Typography>
+                  <ModalClose id="close-icon" sx={{ position: "initial" }} />
+                </Box>
+                <Box sx={{ px: 2, py: 1 }}>
+                  <SearchBar
+                    onSearch={() => setDrawerOpen(false)}
+                    placeholder="Search..."
+                  />
+                </Box>
+                <Box
+                  onClick={toggleDrawer(false)}
+                  onKeyDown={toggleDrawer(false)}
+                  sx={{ px: 2, py: 1 }}
+                >
+                  <List>
+                    <ListItem sx={{ width: "100%" }}>
+                      <Typography
+                        level="title-md"
+                        sx={{ wordBreak: "break-word" }}
+                      >
+                        {localUserInfo.first_name
+                          ? `Hello ${localUserInfo.first_name}!`
+                          : "Welcome!"}
+                      </Typography>
+                    </ListItem>
+                  </List>
+                  <Divider sx={{ my: 1 }} />
+                  <List>
                     <Typography
-                      component="label"
-                      htmlFor="close-icon"
-                      fontSize="sm"
+                      level="body-xs"
+                      textTransform="uppercase"
                       fontWeight="lg"
-                      sx={{ cursor: "pointer" }}
+                      sx={{ px: 1.5, py: 1 }}
                     >
-                      Close
+                      Knowledge Elements
                     </Typography>
-                    <ModalClose id="close-icon" sx={{ position: "initial" }} />
-                  </Box>
-                  <Box sx={{ px: 2, py: 1 }}>
-                    <SearchBar
-                      onSearch={() => setDrawerOpen(false)}
-                      placeholder="Search..."
-                    />
-                  </Box>
-                  <Box
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}
-                    sx={{ px: 2, py: 1 }}
-                  >
-                    <List>
-                      <ListItem sx={{ width: "100%" }}>
-                        <Typography
-                          level="title-md"
-                          sx={{ wordBreak: "break-word" }}
-                        >
-                          {localUserInfo.first_name
-                            ? `Hello ${localUserInfo.first_name}!`
-                            : "Welcome!"}
-                        </Typography>
-                      </ListItem>
-                    </List>
-                    <Divider sx={{ my: 1 }} />
-                    <List>
-                      <Typography
-                        level="body-xs"
-                        textTransform="uppercase"
-                        fontWeight="lg"
-                        sx={{ px: 1.5, py: 1 }}
-                      >
-                        Knowledge Elements
-                      </Typography>
-                      {elementPages?.map((page) => (
-                        <Link
-                          key={page[1]}
-                          to={page[1]}
-                          underline="none"
-                          component={RouterLink}
-                          sx={{ color: "text.tertiary" }}
-                        >
-                          <ListItem sx={{ width: "100%" }}>
-                            <ListItemButton>{page[0]}</ListItemButton>
-                          </ListItem>
-                        </Link>
-                      ))}
-                    </List>
-                    <ListDivider />
-                    <List>
-                      <Typography
-                        level="body-xs"
-                        textTransform="uppercase"
-                        fontWeight="lg"
-                        sx={{ px: 1.5, py: 1 }}
-                      >
-                        Support
-                      </Typography>
-                      {supportPages?.map((page) => (
-                        <Link
-                          key={page[1]}
-                          to={page[1]}
-                          underline="none"
-                          component={RouterLink}
-                          sx={{ color: "text.tertiary" }}
-                        >
-                          <ListItem sx={{ width: "100%" }}>
-                            <ListItemButton>{page[0]}</ListItemButton>
-                          </ListItem>
-                        </Link>
-                      ))}
+                    {elementPages?.map((page) => (
                       <Link
-                        key="about"
-                        to="/about"
+                        key={page[1]}
+                        to={page[1]}
                         underline="none"
                         component={RouterLink}
                         sx={{ color: "text.tertiary" }}
                       >
                         <ListItem sx={{ width: "100%" }}>
-                          <ListItemButton>About Us</ListItemButton>
+                          <ListItemButton>{page[0]}</ListItemButton>
                         </ListItem>
                       </Link>
-                    </List>
-                    <Divider sx={{ my: 1 }} />
-                    <AuthInDrawer />
-                  </Box>
-                </Drawer>
-                <Tooltip title="Home" enterDelay={1500}>
-                  <Link
-                    to={"/"}
-                    underline="none"
-                    component={RouterLink}
-                    sx={{ color: "text.tertiary" }}
-                  >
-                    <Box
-                      component="img"
-                      sx={{
-                        height: 40,
-                        px: 2,
-                        transition: "transform 0.3s ease",
-                        "&:hover": {
-                          transform: "scale(1.05)",
-                        },
-                      }}
-                      alt="I-GUIDE logo"
-                      src={iguideLogo}
-                    />
-                  </Link>
-                </Tooltip>
-              </Stack>
+                    ))}
+                  </List>
+                  <ListDivider />
+                  <List>
+                    <Typography
+                      level="body-xs"
+                      textTransform="uppercase"
+                      fontWeight="lg"
+                      sx={{ px: 1.5, py: 1 }}
+                    >
+                      Support
+                    </Typography>
+                    {supportPages?.map((page) => (
+                      <Link
+                        key={page[1]}
+                        to={page[1]}
+                        underline="none"
+                        component={RouterLink}
+                        sx={{ color: "text.tertiary" }}
+                      >
+                        <ListItem sx={{ width: "100%" }}>
+                          <ListItemButton>{page[0]}</ListItemButton>
+                        </ListItem>
+                      </Link>
+                    ))}
+                    <Link
+                      key="about"
+                      to="/about"
+                      underline="none"
+                      component={RouterLink}
+                      sx={{ color: "text.tertiary" }}
+                    >
+                      <ListItem sx={{ width: "100%" }}>
+                        <ListItemButton>About Us</ListItemButton>
+                      </ListItem>
+                    </Link>
+                  </List>
+                  <Divider sx={{ my: 1 }} />
+                  <AuthInDrawer />
+                </Box>
+              </Drawer>
             </Stack>
 
             {/* When page is wider than 1200px */}
@@ -519,7 +514,7 @@ export default function NavBar(props) {
               direction="row"
               justifyContent="space-between"
               alignItems="center"
-              sx={{ display: { xs: "none", lg: "flex" }, width: "100%" }}
+              sx={{ display: { xs: "none", md: "flex" }, width: "100%" }}
             >
               <Stack
                 direction="row"
@@ -581,7 +576,7 @@ export default function NavBar(props) {
                 alignItems="center"
                 spacing={0.5}
               >
-                <SearchBar placeholder="Search..." />
+                <SearchModal />
                 {isAuthenticated && canAccessJupyterHub ? (
                   <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={1500}>
                     <Link
