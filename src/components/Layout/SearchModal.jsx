@@ -1,24 +1,48 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
+import Divider from "@mui/joy/Divider";
 
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 import SearchBar from "../SearchBar";
 import WebsiteNav from "../WebsiteNav";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function SearchModal() {
   const [open, setOpen] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (open && searchRef.current) {
+        // searchRef.current might be a wrapper div, so find the input inside
+        const input = searchRef.current.querySelector("input");
+        if (input) {
+          input.focus();
+          TEST_MODE &&
+            console.log(
+              "searchRef.current",
+              searchRef.current,
+              "Input element tagName:",
+              searchRef.current?.tagName
+            );
+        }
+      }
+    }, 1);
+    return () => clearTimeout(timer);
+  }, [open]);
 
   function onClose() {
     setOpen(false);
   }
+
   return (
     <>
       <Button
@@ -58,29 +82,18 @@ export default function SearchModal() {
           aria-describedby="alert-dialog-description"
         >
           <Box sx={{ p: 1 }}>
-            <Stack spacing={5}>
-              <Stack spacing={2}>
-                <Typography level="h3" sx={{ textAlign: "center" }}>
-                  Search Knowledge Elements
-                </Typography>
-                <SearchBar
-                  placeholder="Search..."
-                  showTrendingSearchKeywords
-                  onSearch={() => {
-                    setTimeout(() => setOpen(false), 300);
-                  }}
-                />
-              </Stack>
-              <Stack spacing={2}>
-                <Typography level="h3" sx={{ textAlign: "center" }}>
-                  Explore the Platform
-                </Typography>
-                <WebsiteNav />
-              </Stack>
+            <Stack spacing={1}>
+              <SearchBar
+                placeholder="Search..."
+                showTrendingSearchKeywords
+                onSearch={() => {
+                  setTimeout(() => setOpen(false), 300);
+                }}
+                ref={searchRef}
+              />
+              <Divider />
+              <WebsiteNav />
             </Stack>
-            <Sheet sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-              <Button onClick={onClose}>Close</Button>
-            </Sheet>
           </Box>
         </ModalDialog>
       </Modal>

@@ -51,10 +51,14 @@ export default function WebsiteNav() {
           {Object.entries(groupedRoutes).map(([category, items]) => (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={category}>
               <Stack spacing={1} sx={{ py: 2 }}>
-                <Typography level="title-lg">{category}</Typography>
+                <Typography level="title-md">{category}</Typography>
                 {items.map((item) => (
                   <Link href={item.path} key={item.label}>
-                    <Typography style={{ textAlign: "left" }}>
+                    <Typography
+                      color="primary"
+                      level="body-md"
+                      style={{ textAlign: "left" }}
+                    >
                       {item.label}
                     </Typography>
                   </Link>

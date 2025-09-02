@@ -41,7 +41,7 @@ export default function SpatialMetadataInfoCard(props) {
           `,
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
           "&:hover": {
-            transform: "scale(1.015) translateY(-2px)",
+            transform: "scale(1.01) translateY(-1px)",
             boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
           },
         }}

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import IconButton from "@mui/joy/IconButton";
 import FormControl from "@mui/joy/FormControl";
@@ -7,7 +7,6 @@ import Input from "@mui/joy/Input";
 import Tooltip from "@mui/joy/Tooltip";
 import Typography from "@mui/joy/Typography";
 
-import WarningIcon from "@mui/icons-material/Warning";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 export default function SearchInput(props) {
@@ -39,6 +38,7 @@ export default function SearchInput(props) {
         autoComplete="off"
         disabled={waitingForResponse}
         ref={textAreaRef}
+        autoFocus
         onChange={(e) => {
           setSearchInputValue(e.target.value);
         }}

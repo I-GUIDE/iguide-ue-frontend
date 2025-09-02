@@ -62,7 +62,7 @@ export default function InfoCard(props) {
         `,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          transform: "scale(1.015) translateY(-2px)",
+          transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
       }}
@@ -117,22 +117,23 @@ export default function InfoCard(props) {
           sx={{ color: "text.tertiary" }}
         >
           <Typography
-            level="title-lg"
+            level="title-md"
             sx={{
               overflow: "hidden",
+              fontWeight: "bold",
               textOverflow: "ellipsis",
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
               wordBreak: "break-word",
-              mb: 0.5,
+              lineHeight: 1.5,
             }}
           >
             {title}
           </Typography>
         </Link>
         <Typography
-          level="title-sm"
+          level="body-sm"
           textColor="#4D4F5C"
           sx={{
             overflow: "hidden",
@@ -141,25 +142,26 @@ export default function InfoCard(props) {
             WebkitLineClamp: "1",
             WebkitBoxOrient: "vertical",
             wordBreak: "break-word",
-            mb: 0.5,
           }}
         >
           {printListWithDelimiter(authors, ",")}
         </Typography>
-        <Typography
-          level="body-xs"
-          textColor="#a1a1a1"
-          sx={{
-            display: "-webkit-box",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-            wordBreak: "break-word",
-          }}
-        >
-          {contentsWithoutMarkdown}
-        </Typography>
+        {contentsWithoutMarkdown && (
+          <Typography
+            level="body-xs"
+            textColor="#a1a1a1"
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
+            }}
+          >
+            {contentsWithoutMarkdown}
+          </Typography>
+        )}
       </CardContent>
 
       {contributorName && (
@@ -178,13 +180,14 @@ export default function InfoCard(props) {
               />
               <Stack direction="column">
                 <Typography
-                  level="title-sm"
+                  level="body-xs"
                   sx={{
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
                     WebkitLineClamp: "1",
                     WebkitBoxOrient: "vertical",
+                    fontWeight: 700,
                   }}
                 >
                   {contributorName}
@@ -202,19 +205,17 @@ export default function InfoCard(props) {
         </CardActions>
       )}
 
-      {showElementType && (
+      {showElementType && categoryName && (
         <CardOverflow
           variant="soft"
           color={categoryColor}
           sx={{
-            py: 1,
-            writingMode: "horizontal-rl",
+            py: 0.5,
             alignItems: "center",
             fontSize: "xs",
-            fontWeight: "xl",
+            fontWeight: "lg",
             letterSpacing: "1px",
             textTransform: "uppercase",
-            borderLeft: "1px solid",
             borderColor: "divider",
           }}
         >

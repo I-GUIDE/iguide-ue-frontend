@@ -55,9 +55,7 @@ export default function UserProfileButton(props) {
           aria-label="User menu"
           sx={{
             alignSelf: "center",
-            transition: "transform 0.2s ease-in-out",
             "&:hover": {
-              transform: "scale(1.05)",
               backgroundColor: "transparent",
             },
             px: 0,

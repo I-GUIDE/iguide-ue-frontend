@@ -99,7 +99,9 @@ async function getLlmSearchResult(
   setWaitingForResponse(false);
 }
 
-export default function SearchPane() {
+export default function SearchPane(props) {
+  const initialValue = props.initialValue;
+
   const [memoryId, setMemoryId] = useState("");
   const [chatMessages, setChatMessages] = useState(
     USE_LLM_SAMPLE_CHAT ? SampleChatHistory : []
@@ -119,6 +121,12 @@ export default function SearchPane() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSearchInputValue(initialValue);
+    }
+  }, [initialValue]);
 
   // Load suggested questions for the JSON file
   // NOTE: create llm-questions.json for your own suggested questions. DO NOT modify example.json

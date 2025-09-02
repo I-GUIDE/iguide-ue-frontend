@@ -1,9 +1,5 @@
-import { useState, useEffect } from "react";
-import {
-  useNavigate,
-  useOutletContext,
-  Link as RouterLink,
-} from "react-router";
+import { useState, useEffect, forwardRef } from "react";
+import { useNavigate, useOutletContext } from "react-router";
 
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
@@ -24,12 +20,13 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const TRENDING_SEARCH_TERM_THRESHOLD =
   import.meta.env.VITE_TRENDING_SEARCH_TERM_THRESHOLD || 5;
 
-export default function SearchBar(props) {
+export default forwardRef(function SearchBar(props, ref) {
   const onSearch = props.onSearch ? props.onSearch : () => {};
   const showSmartSearch = props.showSmartSearch;
   const showTrendingSearchKeywords = props.showTrendingSearchKeywords;
   const searchCategory = props.searchCategory || "any";
   const placeholder = props.placeholder;
+  const autoFocus = props.autoFocus;
 
   const { isAuthenticated, localUserInfo } = useOutletContext() || {};
   const canAccessLLMSearch = localUserInfo?.role <= PERMISSIONS["access_llm"];
@@ -39,8 +36,6 @@ export default function SearchBar(props) {
     content: "",
     status: "initial",
   });
-  // Traditional search or LLM search
-  const [searchType, setSearchType] = useState();
 
   const navigate = useNavigate();
 
@@ -76,30 +71,56 @@ export default function SearchBar(props) {
 
   function handleClickTrendingKeyword(e, keyword) {
     setSearchTerm(keyword);
+    onSearch();
     handleSubmit(e, keyword);
   }
 
   // Click the keyword to search directly
   function ClickableKeywordList(props) {
     const keywordList = props.children;
+
+    // When the length is zero..., use invisible placeholder
+    if (!keywordList?.length) {
+      return (
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ py: 1, flexWrap: "wrap", alignItems: "center" }}
+        >
+          {new Array(3).fill(null).map((_, index) => (
+            <Chip
+              key={`placeholder-${index}`}
+              sx={{ visibility: "hidden", pointerEvents: "none" }}
+            >
+              Placeholder
+            </Chip>
+          ))}
+        </Stack>
+      );
+    }
+
     return (
       <Stack
         direction="row"
         spacing={1}
         useFlexGap
-        sx={{ py: 1, flexWrap: "wrap" }}
+        sx={{ py: 1, flexWrap: "wrap", alignItems: "center" }}
       >
-        <Typography>Trending search: </Typography>
-        {keywordList?.map((keyword) => (
-          <Chip
-            key={keyword}
-            onClick={(e) => handleClickTrendingKeyword(e, keyword)}
-          >
-            {keyword}
-          </Chip>
+        <Typography level="title-sm">Trending Now: </Typography>
+        {keywordList.map((keyword) => (
+          <Tooltip key={keyword} title={`Search "${keyword}"`} enterDelay={500}>
+            <Chip onClick={(e) => handleClickTrendingKeyword(e, keyword)}>
+              {keyword}
+            </Chip>
+          </Tooltip>
         ))}
       </Stack>
     );
+  }
+
+  function handleClickSmartSearch() {
+    navigate("/smart-search", { state: { llmInitialValue: searchTerm } });
   }
 
   // Function that handles submit events. If there is a customKeyword passed in,
@@ -108,16 +129,13 @@ export default function SearchBar(props) {
     // Use preventDefault here to prevent the submit event from happening
     //   because we need to set some states below.
     event.preventDefault();
-    if (searchType === "traditional") {
-      setSearchTerm("");
-      navigate(
-        `/search?keyword=${encodeURIComponent(
-          customKeyword || searchTerm
-        )}&type=${searchCategory}`
-      );
-    } else if (searchType === "llm") {
-      console.log("You are searching", searchTerm, "using our LLM search");
-    }
+
+    setSearchTerm("");
+    navigate(
+      `/search?keyword=${encodeURIComponent(
+        customKeyword || searchTerm
+      )}&type=${searchCategory}`
+    );
   }
 
   return (
@@ -143,6 +161,8 @@ export default function SearchBar(props) {
               "--Input-paddingInline": "20px",
             }}
             placeholder={placeholder}
+            ref={ref}
+            autoFocus={autoFocus}
             type="text"
             value={searchTerm}
             onChange={(event) => {
@@ -159,10 +179,7 @@ export default function SearchBar(props) {
                   loading={data.status === "loading"}
                   type="submit"
                   sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                  onClick={() => {
-                    onSearch();
-                    setSearchType("traditional");
-                  }}
+                  onClick={onSearch}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -175,8 +192,7 @@ export default function SearchBar(props) {
                 <IconButton
                   size="lg"
                   variant="plain"
-                  component={RouterLink}
-                  to="/smart-search"
+                  onClick={handleClickSmartSearch}
                   sx={{
                     borderRadius: "50%",
                     minWidth: 0,
@@ -215,7 +231,7 @@ export default function SearchBar(props) {
               </Tooltip>
             ))}
         </Stack>
-        {showTrendingSearchKeywords && trendingSearchKeywords.length > 0 && (
+        {showTrendingSearchKeywords && (
           <ClickableKeywordList>{trendingSearchKeywords}</ClickableKeywordList>
         )}
       </Stack>
@@ -231,4 +247,4 @@ export default function SearchBar(props) {
       </FormControl>
     </form>
   );
-}
+});

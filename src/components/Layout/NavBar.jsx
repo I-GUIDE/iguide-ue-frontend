@@ -363,7 +363,7 @@ export default function NavBar(props) {
               spacing={2}
               sx={{ display: { xs: "flex", md: "none" }, width: "100%" }}
             >
-              <Tooltip title="Home" enterDelay={1500}>
+              <Tooltip title="Home" enterDelay={500}>
                 <Link
                   to={"/"}
                   underline="none"
@@ -375,10 +375,6 @@ export default function NavBar(props) {
                     sx={{
                       height: 40,
                       px: 2,
-                      transition: "transform 0.3s ease",
-                      "&:hover": {
-                        transform: "scale(1.05)",
-                      },
                     }}
                     alt="I-GUIDE logo"
                     src={iguideLogo}
@@ -522,7 +518,7 @@ export default function NavBar(props) {
                 alignItems="center"
               >
                 <Box className="tourid-1">
-                  <Tooltip title="Home" enterDelay={1500}>
+                  <Tooltip title="Home" enterDelay={1000}>
                     <Link
                       to={"/"}
                       underline="none"
@@ -534,10 +530,6 @@ export default function NavBar(props) {
                         sx={{
                           height: 40,
                           pr: 3,
-                          transition: "transform 0.3s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
                         }}
                         alt="I-GUIDE logo"
                         src={iguideLogo}
@@ -564,7 +556,7 @@ export default function NavBar(props) {
                     variant="plain"
                     color="neutral"
                     size="sm"
-                    sx={{ alignSelf: "center", px: 1.5 }}
+                    sx={{ alignSelf: "center", px: 1 }}
                   >
                     About Us
                   </Button>
@@ -578,7 +570,7 @@ export default function NavBar(props) {
               >
                 <SearchModal />
                 {isAuthenticated && canAccessJupyterHub ? (
-                  <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={1500}>
+                  <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={500}>
                     <Link
                       component="a"
                       href={JUPYTERHUB_URL}
@@ -593,10 +585,6 @@ export default function NavBar(props) {
                         sx={{
                           height: 40,
                           px: 2,
-                          transition: "transform 0.3s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
                         }}
                         alt="JupyterHub logo"
                         src={jupyterLogo}
