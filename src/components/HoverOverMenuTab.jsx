@@ -38,7 +38,7 @@ export default function HoverOverMenuTab(props) {
         variant="plain"
         color="neutral"
         size="sm"
-        sx={{ alignSelf: "center", px: 1.5 }}
+        sx={{ alignSelf: "center", px: 1 }}
         endDecorator={
           <span
             style={{
@@ -46,7 +46,7 @@ export default function HoverOverMenuTab(props) {
               transition: "transform 0.3s ease",
               transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
               transformOrigin: "center",
-              marginLeft: "0px",
+              mx: "0px",
             }}
           >
             <KeyboardArrowDown style={{ fontSize: "16px" }} />
