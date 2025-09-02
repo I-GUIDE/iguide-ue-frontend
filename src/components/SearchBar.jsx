@@ -71,6 +71,7 @@ export default forwardRef(function SearchBar(props, ref) {
 
   function handleClickTrendingKeyword(e, keyword) {
     setSearchTerm(keyword);
+    onSearch();
     handleSubmit(e, keyword);
   }
 
