@@ -1,9 +1,5 @@
 import { useState, useEffect, forwardRef } from "react";
-import {
-  useNavigate,
-  useOutletContext,
-  Link as RouterLink,
-} from "react-router";
+import { useNavigate, useOutletContext } from "react-router";
 
 import FormControl from "@mui/joy/FormControl";
 import FormHelperText from "@mui/joy/FormHelperText";
@@ -40,8 +36,6 @@ export default forwardRef(function SearchBar(props, ref) {
     content: "",
     status: "initial",
   });
-  // Traditional search or LLM search
-  const [searchType, setSearchType] = useState();
 
   const navigate = useNavigate();
 
@@ -109,16 +103,13 @@ export default forwardRef(function SearchBar(props, ref) {
     // Use preventDefault here to prevent the submit event from happening
     //   because we need to set some states below.
     event.preventDefault();
-    if (searchType === "traditional") {
-      setSearchTerm("");
-      navigate(
-        `/search?keyword=${encodeURIComponent(
-          customKeyword || searchTerm
-        )}&type=${searchCategory}`
-      );
-    } else if (searchType === "llm") {
-      console.log("You are searching", searchTerm, "using our LLM search");
-    }
+
+    setSearchTerm("");
+    navigate(
+      `/search?keyword=${encodeURIComponent(
+        customKeyword || searchTerm
+      )}&type=${searchCategory}`
+    );
   }
 
   return (
@@ -162,10 +153,7 @@ export default forwardRef(function SearchBar(props, ref) {
                   loading={data.status === "loading"}
                   type="submit"
                   sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                  onClick={() => {
-                    onSearch();
-                    setSearchType("traditional");
-                  }}
+                  onClick={onSearch}
                 >
                   <SearchIcon />
                 </IconButton>
@@ -178,8 +166,6 @@ export default forwardRef(function SearchBar(props, ref) {
                 <IconButton
                   size="lg"
                   variant="plain"
-                  component={RouterLink}
-                  to="/smart-search"
                   sx={{
                     borderRadius: "50%",
                     minWidth: 0,
