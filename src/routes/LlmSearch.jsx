@@ -8,7 +8,7 @@ import Grid from "@mui/joy/Grid";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
 
-import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
+import { PT_OFFSET } from "../configs/VarConfigs";
 import { PERMISSIONS } from "../configs/Permissions";
 
 import SearchPane from "../features/LlmSearch/SearchPane";
@@ -46,7 +46,7 @@ export default function LlmSearch() {
           <Box
             component="main"
             sx={{
-              minHeight: NO_HEADER_BODY_HEIGHT,
+              height: "100vh",
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
@@ -59,7 +59,7 @@ export default function LlmSearch() {
               alignItems="center"
               direction="column"
               sx={{
-                minHeight: NO_HEADER_BODY_HEIGHT,
+                height: "100vh",
                 backgroundColor: "inherit",
                 px: { xs: 2, md: 4 },
                 pt: PT_OFFSET,
@@ -92,7 +92,7 @@ export default function LlmSearch() {
       <Box
         component="main"
         sx={{
-          minHeight: NO_HEADER_BODY_HEIGHT,
+          height: "100vh",
           display: "grid",
           gridTemplateColumns: { xs: "auto", md: "100%" },
           gridTemplateRows: "auto 1fr auto",

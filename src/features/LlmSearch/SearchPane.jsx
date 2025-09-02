@@ -13,7 +13,7 @@ import SearchInput from "./SearchInput";
 import Logo from "../../components/Logo";
 import { SampleChatHistory } from "./SampleChatHistory";
 
-import { NAVBAR_HEIGHT, NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import {
   streamLlmSearchResult,
   fetchLlmSearchMemoryId,
@@ -164,7 +164,7 @@ export default function SearchPane(props) {
     return (
       <Box
         sx={{
-          minHeight: NO_HEADER_BODY_HEIGHT,
+          height: "100vh",
           width: "100%",
           display: "flex",
           alignItems: "center",
@@ -243,7 +243,7 @@ export default function SearchPane(props) {
   return (
     <Sheet
       sx={{
-        height: NO_HEADER_BODY_HEIGHT,
+        height: "100vh",
         display: "flex",
         flexDirection: "column",
         backgroundColor: "#fff",
@@ -255,8 +255,8 @@ export default function SearchPane(props) {
           flex: 1,
           minHeight: 0,
           px: 2,
-          py: 3,
-          pt: NAVBAR_HEIGHT / 8,
+          pb: 3,
+          pt: NAVBAR_HEIGHT / 8 + 2,
           overflowY: "auto",
           flexDirection: "column",
           // Message box bottom fade out
@@ -311,14 +311,14 @@ export default function SearchPane(props) {
           })}
         </Stack>
       </Box>
-      <Box sx={{ px: 2, pb: 3, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ px: 2, py: 0.5, display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "100%", maxWidth: 960 }}>
           {waitingForResponse ? (
-            <Typography level="body-sm" sx={{ pb: 2 }}>
+            <Typography level="body-xs" sx={{ pb: 0.5 }}>
               {status}
             </Typography>
           ) : (
-            <Typography level="body-sm" sx={{ pb: 2 }}>
+            <Typography level="body-xs" sx={{ pb: 0.5 }}>
               &nbsp;
             </Typography>
           )}

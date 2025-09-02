@@ -200,7 +200,9 @@ export default function MessageBubble(props) {
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <Box sx={{ maxWidth: "85%", minWidth: "auto" }}>
+        <Box
+          sx={{ maxWidth: outgoingMessage ? "75%" : "85%", minWidth: "auto" }}
+        >
           {/* MessageBubble title */}
           <Stack
             direction="row"
@@ -220,7 +222,8 @@ export default function MessageBubble(props) {
               variant={outgoingMessage ? "solid" : "outlined"}
               sx={[
                 {
-                  p: 2,
+                  px: 2,
+                  py: 1.5,
                   borderRadius: "lg",
                 },
                 outgoingMessage
