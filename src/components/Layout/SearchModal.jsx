@@ -4,9 +4,9 @@ import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Box from "@mui/joy/Box";
+import Divider from "@mui/joy/Divider";
 
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
@@ -82,30 +82,18 @@ export default function SearchModal() {
           aria-describedby="alert-dialog-description"
         >
           <Box sx={{ p: 1 }}>
-            <Stack spacing={5}>
-              <Stack spacing={2}>
-                <Typography level="h3" sx={{ textAlign: "center" }}>
-                  Search Knowledge Elements
-                </Typography>
-                <SearchBar
-                  placeholder="Search..."
-                  showTrendingSearchKeywords
-                  onSearch={() => {
-                    setTimeout(() => setOpen(false), 300);
-                  }}
-                  ref={searchRef}
-                />
-              </Stack>
-              <Stack spacing={2}>
-                <Typography level="h3" sx={{ textAlign: "center" }}>
-                  Explore the Platform
-                </Typography>
-                <WebsiteNav />
-              </Stack>
+            <Stack spacing={1}>
+              <SearchBar
+                placeholder="Search..."
+                showTrendingSearchKeywords
+                onSearch={() => {
+                  setTimeout(() => setOpen(false), 300);
+                }}
+                ref={searchRef}
+              />
+              <Divider />
+              <WebsiteNav />
             </Stack>
-            <Sheet sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-              <Button onClick={onClose}>Close</Button>
-            </Sheet>
           </Box>
         </ModalDialog>
       </Modal>

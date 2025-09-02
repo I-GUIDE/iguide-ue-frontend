@@ -50,7 +50,7 @@ export const routes = [
   {
     path: "/about",
     element: <About />,
-    label: "About",
+    label: "About Us",
     category: "About",
   },
   {
