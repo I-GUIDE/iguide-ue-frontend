@@ -61,7 +61,7 @@ export default function UserElementCard(props) {
         `,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          transform: "scale(1.015) translateY(-2px)",
+          transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
       }}
@@ -184,16 +184,16 @@ export default function UserElementCard(props) {
         </ElementDeleteButton>
       </CardActions>
 
-      {showElementType && (
+      {showElementType && categoryName && (
         <CardOverflow
           variant="soft"
           color={categoryColor}
           sx={{
-            py: 1,
+            py: 0.5,
             writingMode: "horizontal-rl",
             alignItems: "center",
             fontSize: "xs",
-            fontWeight: "xl",
+            fontWeight: "lg",
             letterSpacing: "1px",
             textTransform: "uppercase",
             borderColor: "divider",

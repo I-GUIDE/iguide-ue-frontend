@@ -302,7 +302,6 @@ export default function ElementGrid(props) {
                     title={element.title}
                     authors={element.authors}
                     tags={element.tags}
-                    contents={element.contents}
                     thumbnailImage={element["thumbnail-image"]}
                     contributor={element["contributor"]}
                     numberOfClicks={element["click-count"]}
@@ -318,7 +317,6 @@ export default function ElementGrid(props) {
                     title={element.title}
                     authors={element.authors}
                     tags={element.tags}
-                    contents={element.contents}
                     thumbnailImage={element["thumbnail-image"]}
                     contributor={element["contributor"]}
                     contributionTimestamp={element["created-at"]}

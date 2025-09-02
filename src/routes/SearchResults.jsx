@@ -555,7 +555,6 @@ export default function SearchResults() {
                         title={result.title}
                         authors={result.authors}
                         tags={result.tags}
-                        contents={result.contents}
                         thumbnailImage={result["thumbnail-image"]}
                         showElementType
                       />

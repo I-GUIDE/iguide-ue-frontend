@@ -96,10 +96,11 @@ export default function ConnectedGraph(props) {
               background: "#fff",
               width: "100%",
               minWidth: 250,
-              textAlign: "center",
             }}
           >
-            <Typography level="title-md">Selected element</Typography>
+            <Typography level="title-md" sx={{ textAlign: "center" }}>
+              Selected element
+            </Typography>
             <SimpleInfoCard
               cardtype={selectedElement.type}
               pageId={selectedElement.id}
