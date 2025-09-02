@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
@@ -13,12 +13,36 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import SearchBar from "../SearchBar";
 import WebsiteNav from "../WebsiteNav";
 
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
+
 export default function SearchModal() {
   const [open, setOpen] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (open && searchRef.current) {
+        // searchRef.current might be a wrapper div, so find the input inside
+        const input = searchRef.current.querySelector("input");
+        if (input) {
+          input.focus();
+          TEST_MODE &&
+            console.log(
+              "searchRef.current",
+              searchRef.current,
+              "Input element tagName:",
+              searchRef.current?.tagName
+            );
+        }
+      }
+    }, 1);
+    return () => clearTimeout(timer);
+  }, [open]);
 
   function onClose() {
     setOpen(false);
   }
+
   return (
     <>
       <Button
@@ -69,6 +93,7 @@ export default function SearchModal() {
                   onSearch={() => {
                     setTimeout(() => setOpen(false), 300);
                   }}
+                  ref={searchRef}
                 />
               </Stack>
               <Stack spacing={2}>

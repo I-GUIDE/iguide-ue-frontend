@@ -131,6 +131,7 @@ export default function Home() {
                       placeholder="Start your exploration..."
                       showTrendingSearchKeywords
                       showSmartSearch
+                      autoFocus
                     />
                   </Box>
                 </Box>

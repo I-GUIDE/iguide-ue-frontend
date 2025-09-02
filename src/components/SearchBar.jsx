@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import {
   useNavigate,
   useOutletContext,
@@ -24,12 +24,13 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const TRENDING_SEARCH_TERM_THRESHOLD =
   import.meta.env.VITE_TRENDING_SEARCH_TERM_THRESHOLD || 5;
 
-export default function SearchBar(props) {
+export default forwardRef(function SearchBar(props, ref) {
   const onSearch = props.onSearch ? props.onSearch : () => {};
   const showSmartSearch = props.showSmartSearch;
   const showTrendingSearchKeywords = props.showTrendingSearchKeywords;
   const searchCategory = props.searchCategory || "any";
   const placeholder = props.placeholder;
+  const autoFocus = props.autoFocus;
 
   const { isAuthenticated, localUserInfo } = useOutletContext() || {};
   const canAccessLLMSearch = localUserInfo?.role <= PERMISSIONS["access_llm"];
@@ -143,6 +144,8 @@ export default function SearchBar(props) {
               "--Input-paddingInline": "20px",
             }}
             placeholder={placeholder}
+            ref={ref}
+            autoFocus={autoFocus}
             type="text"
             value={searchTerm}
             onChange={(event) => {
@@ -231,4 +234,4 @@ export default function SearchBar(props) {
       </FormControl>
     </form>
   );
-}
+});
