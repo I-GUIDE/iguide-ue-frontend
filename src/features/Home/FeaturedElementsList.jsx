@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -73,8 +73,11 @@ export default function FeaturedElementsList(props) {
               {title}
             </Typography>
             <Link component={RouterLink} to={pageLink} color="inherit">
-              <Typography startDecorator={<ArrowForwardIcon />}>
-                View More
+              <Typography
+                level="title-sm"
+                endDecorator={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+              >
+                View All
               </Typography>
             </Link>
           </Stack>
