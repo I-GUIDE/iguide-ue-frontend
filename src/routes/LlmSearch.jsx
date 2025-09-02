@@ -1,4 +1,5 @@
-import { useOutletContext } from "react-router";
+import { useEffect, useState } from "react";
+import { useOutletContext, useLocation, useNavigate } from "react-router";
 
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -19,6 +20,18 @@ export default function LlmSearch() {
   usePageTitle("Smart search");
 
   const { isAuthenticated, localUserInfo } = useOutletContext();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [initialValue, setInitialValue] = useState("");
+
+  useEffect(() => {
+    if (location.state?.llmInitialValue) {
+      setInitialValue(location.state.llmInitialValue);
+      // Destory location.state to prevent being reused
+      navigate(".", { replace: true, state: null });
+    }
+  }, [location.state, navigate]);
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
@@ -85,7 +98,7 @@ export default function LlmSearch() {
           gridTemplateRows: "auto 1fr auto",
         }}
       >
-        <SearchPane />
+        <SearchPane initialValue={initialValue} />
       </Box>
     </CssVarsProvider>
   );

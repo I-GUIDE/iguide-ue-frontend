@@ -97,6 +97,10 @@ export default forwardRef(function SearchBar(props, ref) {
     );
   }
 
+  function handleClickSmartSearch() {
+    navigate("/smart-search", { state: { llmInitialValue: searchTerm } });
+  }
+
   // Function that handles submit events. If there is a customKeyword passed in,
   //   it will use it otherwise use searchTerm
   async function handleSubmit(event, customKeyword) {
@@ -166,6 +170,7 @@ export default forwardRef(function SearchBar(props, ref) {
                 <IconButton
                   size="lg"
                   variant="plain"
+                  onClick={handleClickSmartSearch}
                   sx={{
                     borderRadius: "50%",
                     minWidth: 0,
