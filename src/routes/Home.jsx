@@ -119,6 +119,12 @@ export default function Home() {
                       flexDirection: "row",
                       pt: 0.5,
                       pb: 4,
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1.05rem",
+                        md: "1.2rem",
+                      },
+                      fontWeight: "lg",
                     }}
                     justifyContent="center"
                     align="center"

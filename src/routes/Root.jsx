@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { useCookies } from "react-cookie";
 
 import { StyledEngineProvider } from "@mui/material/styles";
@@ -8,7 +8,6 @@ import Snackbar from "@mui/joy/Snackbar";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Box from "@mui/joy/Box";
 
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
@@ -39,6 +38,11 @@ export default function Root(props) {
   const [cookies] = useCookies();
   const jwtTokensExistName = "iguide-jwt-tokens-exist-" + COOKIE_SUFFIX;
   const [openSnackbar, setOpenSnackbar] = useState(true);
+
+  // Define the routes where Footer should be hidden
+  const location = useLocation();
+  const hideFooterRoutes = ["/smart-search"];
+  const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
 
   // If the JWT tokens exist, set the status as isAuthenticated
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -179,7 +183,7 @@ export default function Root(props) {
       )}
       <ScrollToTop />
       <ClickToTop />
-      <Footer />
+      {shouldShowFooter && <Footer />}
       {/* For displaying notifications or alerts. */}
       {SNACKBAR_MESSAGE && (
         <Snackbar

@@ -6,6 +6,7 @@ import FormHelperText from "@mui/joy/FormHelperText";
 import Input from "@mui/joy/Input";
 import Tooltip from "@mui/joy/Tooltip";
 import Typography from "@mui/joy/Typography";
+import Link from "@mui/joy/Link";
 
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
@@ -87,11 +88,19 @@ export default function SearchInput(props) {
           display: "flex",
           justifyContent: "center",
           width: "100%",
-          gap: 1,
         }}
       >
-        <Typography level="body-xs" textAlign="center">
-          Smart Search may be wrong sometimes. Always double-check.
+        <Typography textAlign="center" sx={{ fontSize: "11px" }}>
+          I-GUIDE Platform{" "}
+          <Link
+            component="a"
+            href="/terms-of-use"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Terms of Use
+          </Link>{" "}
+          apply. Smart Search can make mistakes. Always double-check.
         </Typography>
       </FormHelperText>
     </FormControl>
