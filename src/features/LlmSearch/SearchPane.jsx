@@ -182,19 +182,28 @@ export default function SearchPane(props) {
             }}
           />
           <Typography
-            level="h2"
+            level="h3"
             align="center"
             justifyContent="center"
             sx={{
-              p: 3,
+              p: 2,
             }}
           >
             {!svgError ? (
-              <img
+              <Box
+                component="img"
                 src={myIcon}
-                alt="icon"
+                alt="I-GUIDE"
                 onError={() => setSvgError(true)}
-                style={{ height: "2em" }}
+                sx={{
+                  width: {
+                    xs: "160px",
+                    sm: "180px",
+                    md: "200px",
+                    lg: "220px",
+                  },
+                  height: "auto",
+                }}
               />
             ) : (
               "Smart"
