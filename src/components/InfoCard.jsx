@@ -126,6 +126,7 @@ export default function InfoCard(props) {
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
               wordBreak: "break-word",
+              lineHeight: 1.5,
             }}
           >
             {title}
@@ -145,20 +146,22 @@ export default function InfoCard(props) {
         >
           {printListWithDelimiter(authors, ",")}
         </Typography>
-        <Typography
-          level="body-xs"
-          textColor="#a1a1a1"
-          sx={{
-            display: "-webkit-box",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-            wordBreak: "break-word",
-          }}
-        >
-          {contentsWithoutMarkdown}
-        </Typography>
+        {contentsWithoutMarkdown && (
+          <Typography
+            level="body-xs"
+            textColor="#a1a1a1"
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
+            }}
+          >
+            {contentsWithoutMarkdown}
+          </Typography>
+        )}
       </CardContent>
 
       {contributorName && (
@@ -184,6 +187,7 @@ export default function InfoCard(props) {
                     display: "-webkit-box",
                     WebkitLineClamp: "1",
                     WebkitBoxOrient: "vertical",
+                    fontWeight: 700,
                   }}
                 >
                   {contributorName}
