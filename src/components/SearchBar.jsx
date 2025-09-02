@@ -77,21 +77,42 @@ export default forwardRef(function SearchBar(props, ref) {
   // Click the keyword to search directly
   function ClickableKeywordList(props) {
     const keywordList = props.children;
+
+    // When the length is zero..., use invisible placeholder
+    if (!keywordList?.length) {
+      return (
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ py: 1, flexWrap: "wrap", alignItems: "center" }}
+        >
+          {new Array(3).fill(null).map((_, index) => (
+            <Chip
+              key={`placeholder-${index}`}
+              sx={{ visibility: "hidden", pointerEvents: "none" }}
+            >
+              Placeholder
+            </Chip>
+          ))}
+        </Stack>
+      );
+    }
+
     return (
       <Stack
         direction="row"
         spacing={1}
         useFlexGap
-        sx={{ py: 1, flexWrap: "wrap" }}
+        sx={{ py: 1, flexWrap: "wrap", alignItems: "center" }}
       >
-        <Typography>Trending search: </Typography>
-        {keywordList?.map((keyword) => (
-          <Chip
-            key={keyword}
-            onClick={(e) => handleClickTrendingKeyword(e, keyword)}
-          >
-            {keyword}
-          </Chip>
+        <Typography level="title-sm">Trending Now: </Typography>
+        {keywordList.map((keyword) => (
+          <Tooltip key={keyword} title={`Search "${keyword}"`} enterDelay={500}>
+            <Chip onClick={(e) => handleClickTrendingKeyword(e, keyword)}>
+              {keyword}
+            </Chip>
+          </Tooltip>
         ))}
       </Stack>
     );
@@ -209,7 +230,7 @@ export default forwardRef(function SearchBar(props, ref) {
               </Tooltip>
             ))}
         </Stack>
-        {showTrendingSearchKeywords && trendingSearchKeywords.length > 0 && (
+        {showTrendingSearchKeywords && (
           <ClickableKeywordList>{trendingSearchKeywords}</ClickableKeywordList>
         )}
       </Stack>
