@@ -260,7 +260,21 @@ export default function MessageBubble(props) {
                   style={{ fontFamily: "Arial, sans-serif" }}
                 >
                   <Suspense fallback={<p>Loading message...</p>}>
-                    <MarkdownPreview source={answer} />
+                    <MarkdownPreview
+                      source={answer}
+                      components={{
+                        a: ({ children, href, ...props }) => (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            {...props}
+                          >
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    />
                   </Suspense>
                 </div>
               )}
