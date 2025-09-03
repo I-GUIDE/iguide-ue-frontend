@@ -112,7 +112,7 @@ export default function NavBar(props) {
     }
   };
 
-  const createHandleButtonKeyDown = (index) => (event) => {
+  const createHandleButtonKeyDown = () => (event) => {
     if (event.key === "ArrowRight") {
       openNextNavItem();
     } else if (event.key === "ArrowLeft") {
@@ -673,6 +673,9 @@ export default function NavBar(props) {
                 <UserProfileButton
                   isAuthenticated={isAuthenticated}
                   localUserInfo={localUserInfo}
+                  ref={(el) => (navItemsRef.current[4] = el)}
+                  onKeyDown={createHandleButtonKeyDown(4)}
+                  onMouseEnter={() => setMenuIndex(4)}
                 />
               </Stack>
             </Stack>

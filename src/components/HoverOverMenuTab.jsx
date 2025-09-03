@@ -4,14 +4,19 @@ import { useState, useRef, useEffect, forwardRef } from "react";
 
 import { Link as RouterLink } from "react-router";
 
-import Button from "@mui/joy/Button";
+import MenuButton from "@mui/joy/MenuButton";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
+import Dropdown from "@mui/joy/Dropdown";
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
-const HoverOverMenuTab = forwardRef((props, ref) => {
-  const { menu, menuBody, children, onKeyDown, onMouseEnter } = props;
+export default forwardRef(function HoverOverMenuTab(props, ref) {
+  const menu = props.menu;
+  const menuBody = props.menuBody;
+  const children = props.children;
+  const onKeyDown = props.onKeyDown;
+  const onMouseEnter = props.onMouseEnter;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
@@ -55,8 +60,8 @@ const HoverOverMenuTab = forwardRef((props, ref) => {
   }, [isOpen]);
 
   return (
-    <>
-      <Button
+    <Dropdown>
+      <MenuButton
         ref={ref}
         tabIndex={0} // ensures the button is focusable
         variant="plain"
@@ -85,7 +90,7 @@ const HoverOverMenuTab = forwardRef((props, ref) => {
         onKeyDown={onKeyDown}
       >
         {children}
-      </Button>
+      </MenuButton>
 
       <Menu
         anchorEl={anchorEl}
@@ -115,7 +120,6 @@ const HoverOverMenuTab = forwardRef((props, ref) => {
               </MenuItem>
             ))}
       </Menu>
-    </>
+    </Dropdown>
   );
 });
-export default HoverOverMenuTab;
