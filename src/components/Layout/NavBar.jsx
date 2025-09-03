@@ -588,23 +588,19 @@ export default function NavBar(props) {
                     Support
                   </HoverOverMenuTab>
                 </Box>
-                <Link
+                <Button
+                  ref={(el) => (navItemsRef.current[3] = el)}
                   to="/about"
                   component={RouterLink}
-                  style={{ textDecoration: "none" }}
+                  variant="plain"
+                  color="neutral"
+                  size="sm"
+                  sx={{ alignSelf: "center", px: 1.5 }}
+                  onKeyDown={createHandleButtonKeyDown(3)}
+                  onMouseEnter={() => setMenuIndex(3)}
                 >
-                  <Button
-                    ref={(el) => (navItemsRef.current[3] = el)}
-                    variant="plain"
-                    color="neutral"
-                    size="sm"
-                    sx={{ alignSelf: "center", px: 1.5 }}
-                    onKeyDown={createHandleButtonKeyDown(3)}
-                    onMouseEnter={() => setMenuIndex(3)}
-                  >
-                    About Us
-                  </Button>
-                </Link>
+                  About Us
+                </Button>
               </Stack>
               <Stack
                 direction="row"
