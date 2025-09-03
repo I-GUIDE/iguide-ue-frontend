@@ -67,6 +67,8 @@ export default function NavBar(props) {
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
 
   const buttonRef = useRef(null);
+  const navItemsRef = useRef([]);
+  const [menuIndex, setMenuIndex] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const canAccessHPC =
@@ -91,6 +93,32 @@ export default function NavBar(props) {
       setDrawerOpen(inOpen);
     };
   }
+
+  const openNextNavItem = () => {
+    if (typeof menuIndex === "number") {
+      const nextIndex = (menuIndex + 1) % navItemsRef.current.length;
+      setMenuIndex(nextIndex);
+      navItemsRef.current[nextIndex]?.focus();
+    }
+  };
+
+  const openPrevNavItem = () => {
+    if (typeof menuIndex === "number") {
+      const prevIndex =
+        (menuIndex - 1 + navItemsRef.current.length) %
+        navItemsRef.current.length;
+      setMenuIndex(prevIndex);
+      navItemsRef.current[prevIndex]?.focus();
+    }
+  };
+
+  const createHandleButtonKeyDown = (index) => (event) => {
+    if (event.key === "ArrowRight") {
+      openNextNavItem();
+    } else if (event.key === "ArrowLeft") {
+      openPrevNavItem();
+    }
+  };
 
   // Used when window width is smaller than 1200px
   function AuthInDrawer() {
@@ -524,6 +552,9 @@ export default function NavBar(props) {
                       underline="none"
                       component={RouterLink}
                       sx={{ color: "text.tertiary" }}
+                      ref={(el) => (navItemsRef.current[0] = el)}
+                      onKeyDown={createHandleButtonKeyDown(0)}
+                      onMouseEnter={() => setMenuIndex(0)}
                     >
                       <Box
                         component="img"
@@ -538,12 +569,22 @@ export default function NavBar(props) {
                   </Tooltip>
                 </Box>
                 <Box className="tourid-2">
-                  <HoverOverMenuTab menu={elementPages}>
+                  <HoverOverMenuTab
+                    ref={(el) => (navItemsRef.current[1] = el)}
+                    menu={elementPages}
+                    onKeyDown={createHandleButtonKeyDown(1)}
+                    onMouseEnter={() => setMenuIndex(1)}
+                  >
                     Knowledge Elements
                   </HoverOverMenuTab>
                 </Box>
                 <Box className="tourid-3">
-                  <HoverOverMenuTab menu={supportPages}>
+                  <HoverOverMenuTab
+                    ref={(el) => (navItemsRef.current[2] = el)}
+                    menu={supportPages}
+                    onKeyDown={createHandleButtonKeyDown(2)}
+                    onMouseEnter={() => setMenuIndex(2)}
+                  >
                     Support
                   </HoverOverMenuTab>
                 </Box>
@@ -553,10 +594,13 @@ export default function NavBar(props) {
                   style={{ textDecoration: "none" }}
                 >
                   <Button
+                    ref={(el) => (navItemsRef.current[3] = el)}
                     variant="plain"
                     color="neutral"
                     size="sm"
-                    sx={{ alignSelf: "center", px: 1 }}
+                    sx={{ alignSelf: "center", px: 1.5 }}
+                    onKeyDown={createHandleButtonKeyDown(3)}
+                    onMouseEnter={() => setMenuIndex(3)}
                   >
                     About Us
                   </Button>
