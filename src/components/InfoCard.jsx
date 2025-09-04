@@ -65,6 +65,11 @@ export default function InfoCard(props) {
           transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
+        "&:focus-within": {
+          outline: "2px solid",
+          outlineColor: "var(--joy-palette-primary-500, #1976d2)",
+          outlineOffset: "2px",
+        },
       }}
     >
       <CardOverflow sx={{ overflow: "hidden" }}>
@@ -110,6 +115,7 @@ export default function InfoCard(props) {
         <Link
           overlay
           underline="none"
+          tabIndex={0}
           component={RouterLink}
           to={uri}
           target={openInNewTab && "_blank"}

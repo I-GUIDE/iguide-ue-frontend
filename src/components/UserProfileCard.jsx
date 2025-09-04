@@ -203,6 +203,7 @@ export default function UserProfileCard(props) {
                   component="a"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Open user profile in new page"
                   href={`/contributor/${userId}`}
                 >
                   <ContactPageIcon />
@@ -212,6 +213,7 @@ export default function UserProfileCard(props) {
                 <IconButton
                   color="primary"
                   size="sm"
+                  aria-label="Change user role"
                   onClick={() => setRoleChangeModalOpen(true)}
                 >
                   <AssignmentIndIcon />
@@ -222,6 +224,7 @@ export default function UserProfileCard(props) {
                   color="success"
                   size="sm"
                   component="a"
+                  aria-label="Edit user profile"
                   href="#future-user-edit-page"
                 >
                   <Edit />
@@ -231,6 +234,7 @@ export default function UserProfileCard(props) {
                 <IconButton
                   color="danger"
                   size="sm"
+                  aria-label="Delete this user"
                   // Disable the button if the user is super admin
                   disabled={userRole === 1}
                   onClick={() => setUserDeletionModalOpen(true)}
