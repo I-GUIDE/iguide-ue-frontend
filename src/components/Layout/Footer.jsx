@@ -22,11 +22,7 @@ import { FOOTER_HEIGHT } from "../../configs/VarConfigs";
 export default function Footer() {
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", minHeight: FOOTER_HEIGHT }}>
-      <Card
-        component="li"
-        color="neutural"
-        sx={{ borderRadius: 0, flexGrow: 1 }}
-      >
+      <Card color="neutural" sx={{ borderRadius: 0, flexGrow: 1 }}>
         <CardContent sx={{ justifyContent: "center" }}>
           <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
             <Grid
