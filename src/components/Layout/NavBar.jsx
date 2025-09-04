@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -66,6 +66,7 @@ export default function NavBar(props) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo ? props.localUserInfo : {};
 
+  const firstFocusableRef = useRef(null);
   const buttonRef = useRef(null);
   const navItemsRef = useRef([]);
   const [menuIndex, setMenuIndex] = useState(null);
@@ -90,19 +91,27 @@ export default function NavBar(props) {
       ) {
         return;
       }
+
+      if (event.type === "keydown") {
+        if (event.key === "Escape") {
+          setDrawerOpen(inOpen);
+        }
+        return;
+      }
+
       setDrawerOpen(inOpen);
     };
   }
 
-  const openNextNavItem = () => {
+  function openNextNavItem() {
     if (typeof menuIndex === "number") {
       const nextIndex = (menuIndex + 1) % navItemsRef.current.length;
       setMenuIndex(nextIndex);
       navItemsRef.current[nextIndex]?.focus();
     }
-  };
+  }
 
-  const openPrevNavItem = () => {
+  function openPrevNavItem() {
     if (typeof menuIndex === "number") {
       const prevIndex =
         (menuIndex - 1 + navItemsRef.current.length) %
@@ -110,21 +119,33 @@ export default function NavBar(props) {
       setMenuIndex(prevIndex);
       navItemsRef.current[prevIndex]?.focus();
     }
-  };
+  }
 
-  const createHandleButtonKeyDown = () => (event) => {
-    if (event.key === "ArrowRight") {
-      openNextNavItem();
-    } else if (event.key === "ArrowLeft") {
-      openPrevNavItem();
+  function createHandleButtonKeyDown() {
+    return (event) => {
+      if (event.key === "ArrowRight") {
+        openNextNavItem();
+      } else if (event.key === "ArrowLeft") {
+        openPrevNavItem();
+      }
+    };
+  }
+
+  function handleCloseDrawer(event) {
+    return toggleDrawer(false)(event);
+  }
+
+  useEffect(() => {
+    if (drawerOpen && firstFocusableRef.current) {
+      firstFocusableRef.current.focus();
     }
-  };
+  }, [drawerOpen]);
 
   // Used when window width is smaller than 1200px
   function AuthInDrawer() {
     if (isAuthenticated) {
       return (
-        <List>
+        <>
           <Typography
             level="body-xs"
             textTransform="uppercase"
@@ -133,26 +154,30 @@ export default function NavBar(props) {
           >
             User profile
           </Typography>
-          <Link
-            to="/user-profile"
-            underline="none"
-            component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
-            <ListItem sx={{ width: "100%" }}>
-              <ListItemButton>My Profile</ListItemButton>
-            </ListItem>
-          </Link>
-          <Link
-            to="/user-profile-update"
-            underline="none"
-            component={RouterLink}
-            sx={{ color: "text.tertiary" }}
-          >
-            <ListItem sx={{ width: "100%" }}>
-              <ListItemButton>Update Profile</ListItemButton>
-            </ListItem>
-          </Link>
+          <ListItem role="none" disablePadding>
+            <ListItemButton
+              role="menuitem"
+              aria-label="Go to my profile"
+              component={RouterLink}
+              to="/user-profile"
+              ref={firstFocusableRef}
+              onClick={(e) => toggleDrawer(false)(e)}
+            >
+              My Profile
+            </ListItemButton>
+          </ListItem>
+          <ListItem role="none" disablePadding>
+            <ListItemButton
+              role="menuitem"
+              aria-label="Go to update profile"
+              component={RouterLink}
+              to="/user-profile-update"
+              ref={firstFocusableRef}
+              onClick={(e) => toggleDrawer(false)(e)}
+            >
+              Update Profile
+            </ListItemButton>
+          </ListItem>
           {canEditAllElements && (
             <>
               <Divider sx={{ my: 1 }} />
@@ -164,26 +189,31 @@ export default function NavBar(props) {
               >
                 Admin
               </Typography>
-              <Link
-                href="/new-doc"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Documentation</ListItemButton>
-                </ListItem>
-              </Link>
-              {isSuperAdmin && (
-                <Link
-                  to="/admin-panel"
-                  underline="none"
-                  component={RouterLink}
-                  sx={{ color: "text.tertiary" }}
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Go to new documentation"
+                  component="a"
+                  href="/new-doc"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
                 >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton>Admin Panel</ListItemButton>
-                  </ListItem>
-                </Link>
+                  New Documentation
+                </ListItemButton>
+              </ListItem>
+              {isSuperAdmin && (
+                <ListItem role="none" disablePadding>
+                  <ListItemButton
+                    role="menuitem"
+                    aria-label="Go to Admin Panel"
+                    component="a"
+                    href="/admin-panel"
+                    ref={firstFocusableRef}
+                    onClick={(e) => toggleDrawer(false)(e)}
+                  >
+                    Admin Panel
+                  </ListItemButton>
+                </ListItem>
               )}
             </>
           )}
@@ -199,30 +229,34 @@ export default function NavBar(props) {
               >
                 Advanced Resources
               </Typography>
-              <Link
-                component="a"
-                href="https://ondemand.anvil.rcac.purdue.edu"
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>Anvil HPC</ListItemButton>
-                </ListItem>
-              </Link>
-              <Link
-                component="a"
-                href="https://portal-aces.hprc.tamu.edu"
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>TAMU ACES</ListItemButton>
-                </ListItem>
-              </Link>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Go to Anvil HPC"
+                  component="a"
+                  href="https://ondemand.anvil.rcac.purdue.edu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  Anvil HPC
+                </ListItemButton>
+              </ListItem>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Go to TAMU ACES"
+                  component="a"
+                  href="https://portal-aces.hprc.tamu.edu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  TAMU ACES
+                </ListItemButton>
+              </ListItem>
             </>
           )}
 
@@ -237,15 +271,18 @@ export default function NavBar(props) {
               >
                 Beta feature
               </Typography>
-              <Link
-                href="/smart-search"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>Smart Search</ListItemButton>
-                </ListItem>
-              </Link>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Go to Smart Search"
+                  component="a"
+                  href="/smart-search"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  Smart Search
+                </ListItemButton>
+              </ListItem>
             </>
           )}
           {canContributeElements && (
@@ -259,75 +296,107 @@ export default function NavBar(props) {
               >
                 New Contribution
               </Typography>
-              <Link
-                href="/contribution/map"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Map</ListItemButton>
-                </ListItem>
-              </Link>
-              <Link
-                href="/contribution/dataset"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Dataset</ListItemButton>
-                </ListItem>
-              </Link>
-              <Link
-                href="/contribution/notebook"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Notebook</ListItemButton>
-                </ListItem>
-              </Link>
-              <Link
-                href="/contribution/publication"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Publication</ListItemButton>
-                </ListItem>
-              </Link>
-              {canEditOER && (
-                <Link
-                  href="/contribution/oer"
-                  underline="none"
-                  sx={{ color: "text.tertiary" }}
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Submit a new map element"
+                  component="a"
+                  href="/contribution/map"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
                 >
-                  <ListItem sx={{ width: "100%" }}>
-                    <ListItemButton>New Educational Resource</ListItemButton>
-                  </ListItem>
-                </Link>
-              )}
-              <Link
-                href="/contribution/code"
-                underline="none"
-                sx={{ color: "text.tertiary" }}
-              >
-                <ListItem sx={{ width: "100%" }}>
-                  <ListItemButton>New Code</ListItemButton>
+                  New Map
+                </ListItemButton>
+              </ListItem>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Submit a new dataset element"
+                  component="a"
+                  href="/contribution/dataset"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  New Dataset
+                </ListItemButton>
+              </ListItem>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Submit a new notebook element"
+                  component="a"
+                  href="/contribution/notebook"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  New Notebook
+                </ListItemButton>
+              </ListItem>
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Submit a new publication element"
+                  component="a"
+                  href="/contribution/publication"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  New Publication
+                </ListItemButton>
+              </ListItem>
+              {canEditOER && (
+                <ListItem role="none" disablePadding>
+                  <ListItemButton
+                    role="menuitem"
+                    aria-label="Submit a new educational resource element"
+                    component="a"
+                    href="/contribution/oer"
+                    ref={firstFocusableRef}
+                    onClick={(e) => toggleDrawer(false)(e)}
+                  >
+                    New Educational Resource
+                  </ListItemButton>
                 </ListItem>
-              </Link>
+              )}
+              <ListItem role="none" disablePadding>
+                <ListItemButton
+                  role="menuitem"
+                  aria-label="Submit a new code element"
+                  component="a"
+                  href="/contribution/code"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  New Code
+                </ListItemButton>
+              </ListItem>
             </>
           )}
           <Divider sx={{ my: 1 }} />
-          <ListItem onClick={userLogout}>Logout</ListItem>
-        </List>
+          <ListItem role="none" disablePadding>
+            <ListItemButton
+              role="menuitem"
+              aria-label="Logout"
+              ref={firstFocusableRef}
+              onClick={userLogout}
+            >
+              Logout
+            </ListItemButton>
+          </ListItem>
+        </>
       );
     } else {
       return (
-        <List>
-          <ListItem size="sm" color="primary" onClick={userLogin}>
-            <ListItemButton>Login</ListItemButton>
-          </ListItem>
-        </List>
+        <ListItem role="none" disablePadding>
+          <ListItemButton
+            role="menuitem"
+            aria-label="Login"
+            ref={firstFocusableRef}
+            onClick={userLogin}
+          >
+            Login
+          </ListItemButton>
+        </ListItem>
       );
     }
   }
@@ -452,24 +521,24 @@ export default function NavBar(props) {
                   />
                 </Box>
                 <Box
-                  onClick={toggleDrawer(false)}
-                  onKeyDown={toggleDrawer(false)}
+                  onClick={handleCloseDrawer}
+                  onKeyDown={handleCloseDrawer}
                   sx={{ px: 2, py: 1 }}
                 >
-                  <List>
-                    <ListItem sx={{ width: "100%" }}>
-                      <Typography
-                        level="title-md"
-                        sx={{ wordBreak: "break-word" }}
-                      >
-                        {localUserInfo.first_name
-                          ? `Hello ${localUserInfo.first_name}!`
-                          : "Welcome!"}
-                      </Typography>
-                    </ListItem>
-                  </List>
-                  <Divider sx={{ my: 1 }} />
-                  <List>
+                  <List role="menu">
+                    <Typography
+                      level="title-md"
+                      sx={{
+                        wordBreak: "break-word",
+                        width: "100%",
+                        px: 1.5,
+                      }}
+                    >
+                      {localUserInfo.first_name
+                        ? `Hello ${localUserInfo.first_name}!`
+                        : "Welcome!"}
+                    </Typography>
+                    <Divider sx={{ my: 1 }} />
                     <Typography
                       level="body-xs"
                       textTransform="uppercase"
@@ -478,22 +547,21 @@ export default function NavBar(props) {
                     >
                       Knowledge Elements
                     </Typography>
-                    {elementPages?.map((page) => (
-                      <Link
-                        key={page[1]}
-                        to={page[1]}
-                        underline="none"
-                        component={RouterLink}
-                        sx={{ color: "text.tertiary" }}
-                      >
-                        <ListItem sx={{ width: "100%" }}>
-                          <ListItemButton>{page[0]}</ListItemButton>
-                        </ListItem>
-                      </Link>
+                    {elementPages?.map(([label, path]) => (
+                      <ListItem role="none" key={path} disablePadding>
+                        <ListItemButton
+                          role="menuitem"
+                          aria-label={`Go to ${label}`}
+                          component={RouterLink}
+                          to={path}
+                          ref={firstFocusableRef}
+                          onClick={(e) => toggleDrawer(false)(e)}
+                        >
+                          {label}
+                        </ListItemButton>
+                      </ListItem>
                     ))}
-                  </List>
-                  <ListDivider />
-                  <List>
+                    <ListDivider />
                     <Typography
                       level="body-xs"
                       textTransform="uppercase"
@@ -502,33 +570,35 @@ export default function NavBar(props) {
                     >
                       Support
                     </Typography>
-                    {supportPages?.map((page) => (
-                      <Link
-                        key={page[1]}
-                        to={page[1]}
-                        underline="none"
-                        component={RouterLink}
-                        sx={{ color: "text.tertiary" }}
-                      >
-                        <ListItem sx={{ width: "100%" }}>
-                          <ListItemButton>{page[0]}</ListItemButton>
-                        </ListItem>
-                      </Link>
-                    ))}
-                    <Link
-                      key="about"
-                      to="/about"
-                      underline="none"
-                      component={RouterLink}
-                      sx={{ color: "text.tertiary" }}
-                    >
-                      <ListItem sx={{ width: "100%" }}>
-                        <ListItemButton>About Us</ListItemButton>
+                    {supportPages?.map(([label, path]) => (
+                      <ListItem role="none" key={path} disablePadding>
+                        <ListItemButton
+                          role="menuitem"
+                          aria-label={`Go to ${label}`}
+                          component={RouterLink}
+                          to={path}
+                          ref={firstFocusableRef}
+                          onClick={(e) => toggleDrawer(false)(e)}
+                        >
+                          {label}
+                        </ListItemButton>
                       </ListItem>
-                    </Link>
+                    ))}
+                    <ListItem role="none" disablePadding>
+                      <ListItemButton
+                        role="menuitem"
+                        aria-label={`Go to About Us`}
+                        component={RouterLink}
+                        to="/about"
+                        ref={firstFocusableRef}
+                        onClick={(e) => toggleDrawer(false)(e)}
+                      >
+                        About Us
+                      </ListItemButton>
+                    </ListItem>
+                    <Divider sx={{ my: 1 }} />
+                    <AuthInDrawer />
                   </List>
-                  <Divider sx={{ my: 1 }} />
-                  <AuthInDrawer />
                 </Box>
               </Drawer>
             </Stack>
