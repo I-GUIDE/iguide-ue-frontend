@@ -201,17 +201,16 @@ export default function NotebookViewer(props) {
                 <ExitToAppIcon />
               </Button>
             ) : (
-              <Button color="success" size="sm">
-                <Link
-                  underline="none"
-                  href={iGuidePlatformUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ color: "inherit" }}
-                >
-                  Run This Notebook&nbsp;
-                  <ExitToAppIcon />
-                </Link>
+              <Button
+                color="success"
+                size="sm"
+                component="a"
+                href={iGuidePlatformUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Run This Notebook&nbsp;
+                <ExitToAppIcon />
               </Button>
             )}
             {notebookStatus === "GOOD" && (

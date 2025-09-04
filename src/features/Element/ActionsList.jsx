@@ -2,7 +2,6 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Button from "@mui/joy/Button";
 import Box from "@mui/joy/Box";
-import Link from "@mui/joy/Link";
 
 import CloudDownloadOutlinedIcon from "@mui/icons-material/CloudDownloadOutlined";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -32,32 +31,32 @@ export default function ActionList(props) {
           spacing={1}
         >
           {hasExternalLink && (
-            <Button color="success" size="sm" sx={{ my: 1, mx: 0.5 }}>
-              <Link
-                underline="none"
-                href={externalLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ color: "inherit" }}
-              >
-                {externalLinkText}&nbsp;
-                <ExitToAppIcon />
-              </Link>
+            <Button
+              color="success"
+              size="sm"
+              component="a"
+              href={externalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ my: 1, mx: 0.5 }}
+            >
+              {externalLinkText}&nbsp;
+              <ExitToAppIcon />
             </Button>
           )}
           {hasDirectDownloadLink && (
-            <Button color="warning" size="sm" sx={{ my: 1, mx: 0.5 }}>
-              <Link
-                underline="none"
-                href={directDownloadLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ color: "inherit" }}
-              >
-                {directDownloadLinkText}&nbsp;{hasSize && "(" + size + ")"}
-                &nbsp;
-                <CloudDownloadOutlinedIcon />
-              </Link>
+            <Button
+              color="warning"
+              size="sm"
+              component="a"
+              href={directDownloadLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ my: 1, mx: 0.5 }}
+            >
+              {directDownloadLinkText}&nbsp;{hasSize && "(" + size + ")"}
+              &nbsp;
+              <CloudDownloadOutlinedIcon />
             </Button>
           )}
         </Box>
