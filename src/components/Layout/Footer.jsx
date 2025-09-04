@@ -9,6 +9,7 @@ import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 import CardContent from "@mui/joy/CardContent";
 import Tooltip from "@mui/joy/Tooltip";
+import IconButton from "@mui/joy/IconButton";
 
 import { grey } from "@mui/material/colors";
 import XIcon from "@mui/icons-material/X";
@@ -41,21 +42,23 @@ export default function Footer() {
                   alignItems="center"
                   sx={{ display: "flex" }}
                 >
-                  <Link
-                    href={"https://www.nsf.gov/"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Tooltip title="NSF website" placement="top">
+                  <Tooltip title="Visit NSF website" placement="top">
+                    <Link
+                      href="https://www.nsf.gov/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Visit the National Science Foundation website"
+                      underline="none"
+                      style={{ textDecoration: "none" }}
+                    >
                       <Box
                         component="img"
                         sx={{ height: 55, mx: 1 }}
                         alt="Logo"
                         src="/images/nsf.png"
                       />
-                    </Tooltip>
-                  </Link>
+                    </Link>
+                  </Tooltip>
                 </Stack>
               </Grid>
               <Grid xs={12} sm={10} lg={4}>
@@ -115,78 +118,78 @@ export default function Footer() {
                   spacing={1}
                   sx={{ display: "flex" }}
                 >
-                  <Box sx={{ width: "flex", px: 0.5 }}>
-                    <Link
+                  <Tooltip title="Email I-GUIDE support" placement="top" arrow>
+                    <IconButton
+                      component="a"
                       href="mailto:help@i-guide.io"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
+                      aria-label="Email I-GUIDE support"
+                      sx={{
+                        color: grey[700],
+                        width: "flex",
+                        px: 0.5,
+                      }}
                     >
-                      <Tooltip
-                        title="I-GUIDE support email"
-                        placement="top"
-                        arrow
-                      >
-                        <EmailIcon
-                          aria-label="I-GUIDE support email"
-                          sx={{ color: grey[700] }}
-                        />
-                      </Tooltip>
-                    </Link>
-                  </Box>
-                  <Box sx={{ width: "flex", px: 0.5 }}>
-                    <Link
+                      <EmailIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title="Visit I-GUIDE on YouTube"
+                    placement="top"
+                    arrow
+                  >
+                    <IconButton
+                      component="a"
                       href="https://www.youtube.com/@nsf-iguide"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
+                      aria-label="Visit I-GUIDE on YouTube"
+                      sx={{
+                        color: grey[700],
+                        width: "flex",
+                        px: 0.5,
+                      }}
                     >
-                      <Tooltip
-                        title="I-GUIDE YouTube channel"
-                        placement="top"
-                        arrow
-                      >
-                        <YouTubeIcon
-                          aria-label="I-GUIDE YouTube"
-                          sx={{ color: grey[700] }}
-                        />
-                      </Tooltip>
-                    </Link>
-                  </Box>
-                  <Box sx={{ width: "flex", px: 0.5 }}>
-                    <Link
+                      <YouTubeIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Visit I-GUIDE on X" placement="top" arrow>
+                    <IconButton
+                      component="a"
                       href="https://x.com/NSFiGUIDE"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
+                      aria-label="Visit I-GUIDE on X"
+                      sx={{
+                        color: grey[700],
+                        width: "flex",
+                        px: 0.5,
+                      }}
                     >
-                      <Tooltip title="I-GUIDE X account" placement="top" arrow>
-                        <XIcon
-                          aria-label="I-GUIDE X"
-                          sx={{ color: grey[700] }}
-                        />
-                      </Tooltip>
-                    </Link>
-                  </Box>
-                  <Box sx={{ width: "flex", px: 0.5 }}>
-                    <Link
+                      <XIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title="Visit I-GUIDE on LinkedIn"
+                    placement="top"
+                    arrow
+                  >
+                    <IconButton
+                      component="a"
                       href="https://www.linkedin.com/company/nsf-i-guide/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
+                      aria-label="Visit I-GUIDE on LinkedIn"
+                      sx={{
+                        color: grey[700],
+                        width: "flex",
+                        px: 0.5,
+                      }}
                     >
-                      <Tooltip
-                        title="I-GUIDE LinkedIn profile"
-                        placement="top"
-                        arrow
-                      >
-                        <LinkedInIcon
-                          aria-label="I-GUIDE LinkedIn"
-                          sx={{ color: grey[700] }}
-                        />
-                      </Tooltip>
-                    </Link>
-                  </Box>
+                      <LinkedInIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Stack>
               </Grid>
               <Grid xs={12}>
