@@ -332,7 +332,6 @@ export default forwardRef(function HoverOverMenuTab(props, ref) {
         size="sm"
         color="primary"
         variant="plain"
-        aria-label="Login"
         onClick={userLogin}
         className="tourid-4"
       >

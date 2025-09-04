@@ -157,7 +157,6 @@ export default function NavBar(props) {
           <ListItem role="none" disablePadding>
             <ListItemButton
               role="menuitem"
-              aria-label="Go to my profile"
               component={RouterLink}
               to="/user-profile"
               ref={firstFocusableRef}
@@ -169,7 +168,6 @@ export default function NavBar(props) {
           <ListItem role="none" disablePadding>
             <ListItemButton
               role="menuitem"
-              aria-label="Go to update profile"
               component={RouterLink}
               to="/user-profile-update"
               ref={firstFocusableRef}
@@ -192,7 +190,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Go to new documentation"
                   component="a"
                   href="/new-doc"
                   ref={firstFocusableRef}
@@ -205,7 +202,6 @@ export default function NavBar(props) {
                 <ListItem role="none" disablePadding>
                   <ListItemButton
                     role="menuitem"
-                    aria-label="Go to Admin Panel"
                     component="a"
                     href="/admin-panel"
                     ref={firstFocusableRef}
@@ -232,7 +228,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Go to Anvil HPC"
                   component="a"
                   href="https://ondemand.anvil.rcac.purdue.edu"
                   target="_blank"
@@ -246,7 +241,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Go to TAMU ACES"
                   component="a"
                   href="https://portal-aces.hprc.tamu.edu"
                   target="_blank"
@@ -274,7 +268,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Go to Smart Search"
                   component="a"
                   href="/smart-search"
                   ref={firstFocusableRef}
@@ -299,7 +292,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Submit a new map element"
                   component="a"
                   href="/contribution/map"
                   ref={firstFocusableRef}
@@ -311,7 +303,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Submit a new dataset element"
                   component="a"
                   href="/contribution/dataset"
                   ref={firstFocusableRef}
@@ -323,7 +314,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Submit a new notebook element"
                   component="a"
                   href="/contribution/notebook"
                   ref={firstFocusableRef}
@@ -335,7 +325,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Submit a new publication element"
                   component="a"
                   href="/contribution/publication"
                   ref={firstFocusableRef}
@@ -348,7 +337,6 @@ export default function NavBar(props) {
                 <ListItem role="none" disablePadding>
                   <ListItemButton
                     role="menuitem"
-                    aria-label="Submit a new educational resource element"
                     component="a"
                     href="/contribution/oer"
                     ref={firstFocusableRef}
@@ -361,7 +349,6 @@ export default function NavBar(props) {
               <ListItem role="none" disablePadding>
                 <ListItemButton
                   role="menuitem"
-                  aria-label="Submit a new code element"
                   component="a"
                   href="/contribution/code"
                   ref={firstFocusableRef}
@@ -376,7 +363,6 @@ export default function NavBar(props) {
           <ListItem role="none" disablePadding>
             <ListItemButton
               role="menuitem"
-              aria-label="Logout"
               ref={firstFocusableRef}
               onClick={userLogout}
             >
@@ -390,7 +376,6 @@ export default function NavBar(props) {
         <ListItem role="none" disablePadding>
           <ListItemButton
             role="menuitem"
-            aria-label="Login"
             ref={firstFocusableRef}
             onClick={userLogin}
           >
@@ -462,7 +447,8 @@ export default function NavBar(props) {
             >
               <Tooltip title="Home" enterDelay={500}>
                 <Link
-                  to={"/"}
+                  aria-label="Go back to I-GUIDE Platform homepage"
+                  to="/"
                   underline="none"
                   component={RouterLink}
                   sx={{ color: "text.tertiary" }}
@@ -551,7 +537,6 @@ export default function NavBar(props) {
                       <ListItem role="none" key={path} disablePadding>
                         <ListItemButton
                           role="menuitem"
-                          aria-label={`Go to ${label}`}
                           component={RouterLink}
                           to={path}
                           ref={firstFocusableRef}
@@ -574,7 +559,6 @@ export default function NavBar(props) {
                       <ListItem role="none" key={path} disablePadding>
                         <ListItemButton
                           role="menuitem"
-                          aria-label={`Go to ${label}`}
                           component={RouterLink}
                           to={path}
                           ref={firstFocusableRef}
@@ -587,7 +571,6 @@ export default function NavBar(props) {
                     <ListItem role="none" disablePadding>
                       <ListItemButton
                         role="menuitem"
-                        aria-label={`Go to About Us`}
                         component={RouterLink}
                         to="/about"
                         ref={firstFocusableRef}
@@ -618,7 +601,8 @@ export default function NavBar(props) {
                 <Box className="tourid-1">
                   <Tooltip title="Home" enterDelay={1000}>
                     <Link
-                      to={"/"}
+                      to="/"
+                      aria-label="Go back to I-GUIDE Platform homepage"
                       underline="none"
                       component={RouterLink}
                       sx={{ color: "text.tertiary" }}
@@ -682,6 +666,7 @@ export default function NavBar(props) {
                 {isAuthenticated && canAccessJupyterHub ? (
                   <Tooltip title="Open I-GUIDE JupyterHub" enterDelay={500}>
                     <Link
+                      aria-label="Open I-GUIDE JupyterHub in a new window"
                       component="a"
                       href={JUPYTERHUB_URL}
                       target="_blank"
