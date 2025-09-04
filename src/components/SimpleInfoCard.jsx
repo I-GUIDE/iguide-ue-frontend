@@ -87,35 +87,28 @@ export default function SimpleInfoCard(props) {
             pageId
           }
           tabIndex={0}
+          aria-label={`View details for ${title}`}
           // to is used when react router is used
           to={"/" + ELEMENT_TYPE_URI_PLURAL[cardType] + "/" + pageId}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
           sx={{ color: "text.tertiary" }}
         >
-          <Stack
-            spacing={1}
+          <Typography
+            level="title-sm"
+            textColor="#000"
             sx={{
-              justifyContent: "center",
-              alignItems: "flex-start",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              fontWeight: "lg",
+              display: "-webkit-box",
+              WebkitLineClamp: "3",
+              WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
             }}
           >
-            <Typography
-              level="title-sm"
-              textColor="#000"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                fontWeight: "lg",
-                display: "-webkit-box",
-                WebkitLineClamp: "3",
-                WebkitBoxOrient: "vertical",
-                wordBreak: "break-word",
-              }}
-            >
-              {title}
-            </Typography>
-          </Stack>
+            {title}
+          </Typography>
         </Link>
       </CardContent>
       {showElementType && categoryName && (

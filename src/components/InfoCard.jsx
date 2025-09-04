@@ -116,6 +116,7 @@ export default function InfoCard(props) {
           overlay
           underline="none"
           tabIndex={0}
+          aria-label={`View details for ${title}`}
           component={RouterLink}
           to={uri}
           target={openInNewTab && "_blank"}

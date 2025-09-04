@@ -111,6 +111,7 @@ export default function UserElementCard(props) {
         <Link
           overlay
           underline="none"
+          aria-label={`View details for ${title}`}
           component={RouterLink}
           to={uri}
           tabIndex={0}
