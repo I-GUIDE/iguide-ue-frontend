@@ -5,7 +5,6 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 
-import { NO_HEADER_BODY_HEIGHT } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { lazyWithRetryAndReload } from "../helpers/lazyWithRetryAndReload";
 const ElementsMapContainer = lazyWithRetryAndReload(() =>
@@ -31,7 +30,7 @@ export default function ElementsMap() {
       <Box
         component="main"
         sx={{
-          minHeight: NO_HEADER_BODY_HEIGHT,
+          height: "100vh",
           display: "grid",
           gridTemplateColumns: { xs: "auto", md: "100%" },
           gridTemplateRows: "auto 1fr auto",
@@ -44,7 +43,7 @@ export default function ElementsMap() {
           alignItems="center"
           direction="column"
           sx={{
-            minHeight: NO_HEADER_BODY_HEIGHT,
+            height: "100vh",
             backgroundColor: "inherit",
           }}
         >

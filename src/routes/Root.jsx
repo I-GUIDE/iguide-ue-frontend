@@ -41,7 +41,7 @@ export default function Root(props) {
 
   // Define the routes where Footer should be hidden
   const location = useLocation();
-  const hideFooterRoutes = ["/smart-search"];
+  const hideFooterRoutes = ["/smart-search", "/element-map"];
   const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
 
   // If the JWT tokens exist, set the status as isAuthenticated
