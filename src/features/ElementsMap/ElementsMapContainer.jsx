@@ -23,6 +23,7 @@ import {
   processPolygon,
   addNoiseToPoint,
 } from "./elementsMapHelpers";
+import SmartZoomBounds from "./SmartZoomBounds";
 
 // Get the leaflet icons including markers to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -198,6 +199,14 @@ export default function ElementsMapContainer(props) {
           <TileLayer
             attribution={mapAttribution}
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {/* Automatically zoom the map based on the component location or covered area */}
+          <SmartZoomBounds
+            marker={elementCentroid}
+            polygon={elementGeometry}
+            boundingBox={elementBoundingBox}
+            fallbackCenter={startingCenter}
+            fallbackZoom={startingZoom}
           />
           {elementCentroid && <Marker position={elementCentroid} />}
           {elementGeometry && <Polygon positions={elementGeometry} />}
