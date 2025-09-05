@@ -18,11 +18,12 @@ export default function ContributorCard(props) {
   const timePassedText = props.timePassedText;
 
   return (
-    <Tooltip title="View profile" placement="top">
+    <Tooltip title={`View ${name}'s profile`} placement="top">
       <Link
         component={RouterLink}
         to={"/contributor/" + encodedUserId}
         style={{ textDecoration: "none" }}
+        aria-label={`View ${name}'s profile`}
       >
         <Card
           variant="plain"

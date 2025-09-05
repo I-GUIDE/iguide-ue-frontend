@@ -69,7 +69,6 @@ export default function Home() {
         >
           <Card
             variant="plain"
-            component="li"
             sx={{
               bgcolor: "#fff",
               borderRadius: 0,
@@ -214,7 +213,10 @@ export default function Home() {
                     backgroundColor: "inherit",
                   }}
                 >
-                  <Typography level="h3" textColor="#000">
+                  <Typography
+                    textColor="#000"
+                    sx={{ fontSize: 22, fontWeight: "bold" }}
+                  >
                     What to Do Next?
                   </Typography>
                   <Stack

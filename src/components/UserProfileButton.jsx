@@ -1,12 +1,14 @@
 // NOTE: After fixing bugs, please don't forget to fix HoverOverMenuTab.jsx due to similarity.
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 
 import { Link as RouterLink } from "react-router";
 
 import Button from "@mui/joy/Button";
 import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
+import MenuButton from "@mui/joy/MenuButton";
+import Dropdown from "@mui/joy/Dropdown";
 
 import Typography from "@mui/joy/Typography";
 import Divider from "@mui/joy/Divider";
@@ -15,14 +17,18 @@ import { userLogin, userLogout } from "../utils/UserManager";
 import UserAvatar from "./UserAvatar";
 import { PERMISSIONS } from "../configs/Permissions";
 
-export default function UserProfileButton(props) {
+export default forwardRef(function HoverOverMenuTab(props, ref) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo;
+
+  const onKeyDown = props.onKeyDown;
+  const onMouseEnter = props.onMouseEnter;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
 
   const timeoutRef = useRef(null);
+  const menuItemsRef = useRef([]);
 
   const canAccessHPC =
     localUserInfo.role <= PERMISSIONS["display_hpc"] &&
@@ -45,10 +51,33 @@ export default function UserProfileButton(props) {
     }, 100);
   }
 
+  function handleMenuKeyDown(event, index) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const nextIndex = (index + 1) % menuItemsRef.current.length;
+      menuItemsRef.current[nextIndex]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const prevIndex =
+        (index - 1 + menuItemsRef.current.length) % menuItemsRef.current.length;
+      menuItemsRef.current[prevIndex]?.focus();
+    } else if (event.key === "Escape") {
+      setAnchorEl(null);
+      ref?.current?.focus();
+    }
+  }
+
+  // Focus the first menu item when menu opens
+  useEffect(() => {
+    if (isOpen && menuItemsRef.current.length > 0) {
+      menuItemsRef.current[0]?.focus();
+    }
+  }, [isOpen]);
+
   if (isAuthenticated) {
     return (
-      <>
-        <Button
+      <Dropdown>
+        <MenuButton
           variant="plain"
           color="neutral"
           size="sm"
@@ -61,8 +90,12 @@ export default function UserProfileButton(props) {
             px: 0,
           }}
           onClick={handleOpen}
-          onMouseEnter={handleOpen}
+          onMouseEnter={(e) => {
+            handleOpen(e);
+            if (onMouseEnter) onMouseEnter();
+          }}
           onMouseLeave={handleClose}
+          onKeyDown={onKeyDown}
           className="tourid-4"
         >
           <UserAvatar
@@ -71,7 +104,7 @@ export default function UserProfileButton(props) {
             avatarResolution="low"
             isLoading={Object.keys(localUserInfo).length === 0}
           />
-        </Button>
+        </MenuButton>
 
         <Menu
           anchorEl={anchorEl}
@@ -86,23 +119,21 @@ export default function UserProfileButton(props) {
             p: 0.5,
           }}
         >
-          <MenuItem
-            disabled
-            sx={{ width: "100%" }}
-            onClick={() => setAnchorEl(null)}
+          <Typography
+            level="title-md"
+            sx={{ wordBreak: "break-word", px: 1.5, py: 1 }}
           >
-            <Typography level="title-md" sx={{ wordBreak: "break-word" }}>
-              {localUserInfo.first_name
-                ? `Hello ${localUserInfo.first_name}!`
-                : "Welcome!"}
-            </Typography>
-          </MenuItem>
+            {localUserInfo.first_name
+              ? `Hello ${localUserInfo.first_name}!`
+              : "Welcome!"}
+          </Typography>
           <Divider sx={{ my: 0.5 }} />
           <MenuItem
             to="/user-profile"
             component={RouterLink}
             sx={{ width: "100%" }}
             onClick={() => setAnchorEl(null)}
+            onKeyDown={(e) => handleMenuKeyDown(e, 0)}
           >
             My Profile
           </MenuItem>
@@ -111,6 +142,7 @@ export default function UserProfileButton(props) {
             component={RouterLink}
             sx={{ width: "100%" }}
             onClick={() => setAnchorEl(null)}
+            onKeyDown={(e) => handleMenuKeyDown(e, 1)}
           >
             Update Profile
           </MenuItem>
@@ -130,6 +162,7 @@ export default function UserProfileButton(props) {
                 href="/new-doc"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 2)}
               >
                 New Documentation
               </MenuItem>
@@ -139,6 +172,7 @@ export default function UserProfileButton(props) {
                   component={RouterLink}
                   sx={{ width: "100%" }}
                   onClick={() => setAnchorEl(null)}
+                  onKeyDown={(e) => handleMenuKeyDown(e, 3)}
                 >
                   Admin Panel
                 </MenuItem>
@@ -163,6 +197,7 @@ export default function UserProfileButton(props) {
                 rel="noopener noreferrer"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 4)}
               >
                 Anvil HPC
               </MenuItem>
@@ -173,6 +208,7 @@ export default function UserProfileButton(props) {
                 rel="noopener noreferrer"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 5)}
               >
                 TAMU ACES
               </MenuItem>
@@ -194,6 +230,7 @@ export default function UserProfileButton(props) {
                 href="/smart-search"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 6)}
               >
                 Smart Search
               </MenuItem>
@@ -215,6 +252,7 @@ export default function UserProfileButton(props) {
                 href="/contribution/map"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 7)}
               >
                 New Map
               </MenuItem>
@@ -223,6 +261,7 @@ export default function UserProfileButton(props) {
                 href="/contribution/dataset"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 8)}
               >
                 New Dataset
               </MenuItem>
@@ -231,6 +270,7 @@ export default function UserProfileButton(props) {
                 href="/contribution/notebook"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 9)}
               >
                 New Notebook
               </MenuItem>
@@ -239,6 +279,7 @@ export default function UserProfileButton(props) {
                 href="/contribution/publication"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 10)}
               >
                 New Publication
               </MenuItem>
@@ -248,6 +289,7 @@ export default function UserProfileButton(props) {
                   href="/contribution/oer"
                   sx={{ width: "100%" }}
                   onClick={() => setAnchorEl(null)}
+                  onKeyDown={(e) => handleMenuKeyDown(e, 11)}
                 >
                   New Educational Resource
                 </MenuItem>
@@ -257,6 +299,7 @@ export default function UserProfileButton(props) {
                 href="/contribution/code"
                 sx={{ width: "100%" }}
                 onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 12)}
               >
                 New Code
               </MenuItem>
@@ -268,15 +311,20 @@ export default function UserProfileButton(props) {
             component={RouterLink}
             sx={{ width: "100%" }}
             onClick={() => setAnchorEl(null)}
+            onKeyDown={(e) => handleMenuKeyDown(e, 13)}
           >
             Contact Us
           </MenuItem>
           <Divider sx={{ my: 0.5 }} />
-          <MenuItem sx={{ width: "100%" }} onClick={userLogout}>
+          <MenuItem
+            sx={{ width: "100%" }}
+            onClick={userLogout}
+            onKeyDown={(e) => handleMenuKeyDown(e, 14)}
+          >
             Logout
           </MenuItem>
         </Menu>
-      </>
+      </Dropdown>
     );
   } else {
     return (
@@ -284,7 +332,6 @@ export default function UserProfileButton(props) {
         size="sm"
         color="primary"
         variant="plain"
-        aria-label="Login"
         onClick={userLogin}
         className="tourid-4"
       >
@@ -292,4 +339,4 @@ export default function UserProfileButton(props) {
       </Button>
     );
   }
-}
+});

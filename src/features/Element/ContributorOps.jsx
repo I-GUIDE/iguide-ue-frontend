@@ -1,11 +1,8 @@
-import * as React from "react";
-
 import { useOutletContext } from "react-router";
 
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";
-import Link from "@mui/joy/Link";
-import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
@@ -41,19 +38,18 @@ export default function ContributorOps(props) {
 
   return (
     <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <Button size="sm" variant="soft" color="primary">
-        <Link
-          aria-label="Edit this element"
-          underline="none"
+      <Tooltip title="Edit this element" placement="top" arrow>
+        <IconButton
+          size="sm"
+          variant="soft"
+          color="primary"
           component="a"
           href={updateFormUri}
-          sx={{ color: "inherit" }}
+          aria-label="Edit this element"
         >
-          <Tooltip title="Edit this element" placement="top" arrow>
-            <EditIcon />
-          </Tooltip>
-        </Link>
-      </Button>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
       <ElementDeleteButton
         color="danger"
         variant="soft"

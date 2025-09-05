@@ -48,6 +48,11 @@ export default function SimpleInfoCard(props) {
           transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
+        "&:focus-within": {
+          outline: "2px solid",
+          outlineColor: "var(--joy-palette-primary-500, #1976d2)",
+          outlineOffset: "2px",
+        },
       }}
     >
       <CardOverflow>
@@ -81,35 +86,29 @@ export default function SimpleInfoCard(props) {
             "/" +
             pageId
           }
+          tabIndex={0}
+          aria-label={`View details for ${title}`}
           // to is used when react router is used
           to={"/" + ELEMENT_TYPE_URI_PLURAL[cardType] + "/" + pageId}
           target={openInNewTab ? "_blank" : null}
           rel={openInNewTab ? "noopener noreferrer" : null}
           sx={{ color: "text.tertiary" }}
         >
-          <Stack
-            spacing={1}
+          <Typography
+            level="title-sm"
+            textColor="#000"
             sx={{
-              justifyContent: "center",
-              alignItems: "flex-start",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              fontWeight: "lg",
+              display: "-webkit-box",
+              WebkitLineClamp: "3",
+              WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
             }}
           >
-            <Typography
-              level="title-sm"
-              textColor="#000"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                fontWeight: "lg",
-                display: "-webkit-box",
-                WebkitLineClamp: "3",
-                WebkitBoxOrient: "vertical",
-                wordBreak: "break-word",
-              }}
-            >
-              {title}
-            </Typography>
-          </Stack>
+            {title}
+          </Typography>
         </Link>
       </CardContent>
       {showElementType && categoryName && (

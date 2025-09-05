@@ -69,13 +69,16 @@ export default function FeaturedElementsList(props) {
               alignItems: "center",
             }}
           >
-            <Typography level="h3" startDecorator={icon}>
+            <Typography
+              startDecorator={icon}
+              sx={{ fontSize: 22, fontWeight: 600 }}
+            >
               {title}
             </Typography>
             <Link component={RouterLink} to={pageLink} color="inherit">
               <Typography
-                level="title-sm"
-                endDecorator={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+                endDecorator={<ArrowForwardIcon sx={{ fontSize: 18 }} />}
+                sx={{ fontSize: 16, fontWeight: 500 }}
               >
                 View All
               </Typography>

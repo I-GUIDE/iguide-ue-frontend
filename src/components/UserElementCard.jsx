@@ -64,6 +64,11 @@ export default function UserElementCard(props) {
           transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
+        "&:focus-within": {
+          outline: "2px solid",
+          outlineColor: "var(--joy-palette-primary-500, #1976d2)",
+          outlineOffset: "2px",
+        },
       }}
     >
       <CardOverflow>
@@ -106,8 +111,10 @@ export default function UserElementCard(props) {
         <Link
           overlay
           underline="none"
+          aria-label={`View details for ${title}`}
           component={RouterLink}
           to={uri}
+          tabIndex={0}
           sx={{ color: "text.tertiary" }}
         >
           <Typography
@@ -146,24 +153,16 @@ export default function UserElementCard(props) {
           </Typography>
         </Tooltip>
         <Divider orientation="vertical" />
-        <Button size="sm" variant="plain" color="primary">
-          <Link
-            aria-label="Edit this element"
-            underline="none"
-            component="a"
-            href={updateFormUri}
-            sx={{ color: "inherit" }}
-          >
-            <Typography
-              startDecorator={<EditIcon />}
-              level="title-sm"
-              color="primary"
-            >
-              Edit
-            </Typography>
-          </Link>
+        <Button
+          size="sm"
+          variant="plain"
+          color="primary"
+          component="a"
+          href={updateFormUri}
+          startDecorator={<EditIcon />}
+        >
+          Edit
         </Button>
-
         <Divider orientation="vertical" />
         <ElementDeleteButton
           variant="plain"
