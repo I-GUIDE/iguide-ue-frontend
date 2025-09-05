@@ -6,16 +6,13 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/joy/Grid";
 import Container from "@mui/joy/Container";
 import Typography from "@mui/joy/Typography";
+import Link from "@mui/joy/Link";
 
 import { lazyWithRetryAndReload } from "../helpers/lazyWithRetryAndReload";
 const ConnectedGraph = lazyWithRetryAndReload(() =>
   import("../features/ConnectedGraph/ConnectedGraph")
 );
-import {
-  NO_HEADER_BODY_HEIGHT,
-  NAVBAR_HEIGHT,
-  PT_OFFSET,
-} from "../configs/VarConfigs";
+import { NAVBAR_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 import { fetchConnectedGraph } from "../utils/DataRetrieval";
 import { stringTruncator } from "../helpers/helper";
@@ -96,7 +93,7 @@ export default function NetworkVisualizer() {
         <Box
           component="main"
           sx={{
-            minHeight: NO_HEADER_BODY_HEIGHT,
+            height: "100vh",
             display: "grid",
             gridTemplateColumns: { xs: "auto", md: "100%" },
             gridTemplateRows: "auto 1fr auto",
@@ -109,7 +106,7 @@ export default function NetworkVisualizer() {
             alignItems="flex-start"
             direction="column"
             sx={{
-              minHeight: NO_HEADER_BODY_HEIGHT,
+              height: "100vh",
               backgroundColor: "inherit",
               pt: PT_OFFSET,
               pb: 8,
@@ -145,6 +142,37 @@ export default function NetworkVisualizer() {
                 }}
               />
             </Suspense>
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 5,
+                left: 0,
+                right: 0,
+                px: 2,
+                textAlign: "right",
+              }}
+            >
+              <Typography
+                sx={{
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                  display: "inline-block",
+                  px: 1,
+                  fontSize: "11px",
+                  borderRadius: "sm",
+                }}
+              >
+                I-GUIDE Platform{" "}
+                <Link
+                  component="a"
+                  href="/terms-of-use"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Terms of Use
+                </Link>{" "}
+                apply.
+              </Typography>
+            </Box>
           </Grid>
         </Box>
       </Container>
