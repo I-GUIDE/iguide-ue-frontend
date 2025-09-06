@@ -112,7 +112,6 @@ export default forwardRef(function HoverOverMenuTab(props, ref) {
                 component={RouterLink}
                 to={item[1]}
                 key={item[0]}
-                ref={(el) => (menuItemsRef.current[index] = el)}
                 onClick={() => setAnchorEl(null)}
                 onKeyDown={(e) => handleMenuKeyDown(e, index)}
               >
