@@ -20,6 +20,7 @@ import {
   ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
 import { PeriodAgoText } from "../utils/PeriodAgoText";
+import UserProfileTooltip from "./UserProfileTooltip";
 
 export default function InfoCard(props) {
   const thumbnailImage = props.thumbnailImage;
@@ -173,42 +174,44 @@ export default function InfoCard(props) {
 
       {contributorName && (
         <CardActions>
-          <Link
-            color={categoryColor}
-            component={RouterLink}
-            to={"/contributor/" + encodeURIComponent(contributorUserId)}
-          >
-            <Stack direction="row" alignItems="center" spacing={1.5}>
-              <UserAvatar
-                size={30}
-                userAvatarUrls={contributorAvatar}
-                userId={contributorUserId}
-                avatarResolution="low"
-              />
-              <Stack direction="column">
-                <Typography
-                  level="body-xs"
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: "1",
-                    WebkitBoxOrient: "vertical",
-                    fontWeight: 700,
-                  }}
-                >
-                  {contributorName}
-                </Typography>
-                {contributionTimestamp ? (
-                  <Typography level="body-xs">
-                    {PeriodAgoText("Contributed ", contributionTimestamp)}
+          <UserProfileTooltip userId={contributorUserId}>
+            <Link
+              color={categoryColor}
+              component={RouterLink}
+              to={"/contributor/" + encodeURIComponent(contributorUserId)}
+            >
+              <Stack direction="row" alignItems="center" spacing={1.5}>
+                <UserAvatar
+                  size={30}
+                  userAvatarUrls={contributorAvatar}
+                  userId={contributorUserId}
+                  avatarResolution="low"
+                />
+                <Stack direction="column">
+                  <Typography
+                    level="body-xs"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "1",
+                      WebkitBoxOrient: "vertical",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {contributorName}
                   </Typography>
-                ) : (
-                  <Typography level="body-xs">Contributor</Typography>
-                )}
+                  {contributionTimestamp ? (
+                    <Typography level="body-xs">
+                      {PeriodAgoText("Contributed ", contributionTimestamp)}
+                    </Typography>
+                  ) : (
+                    <Typography level="body-xs">Contributor</Typography>
+                  )}
+                </Stack>
               </Stack>
-            </Stack>
-          </Link>
+            </Link>
+          </UserProfileTooltip>
         </CardActions>
       )}
 

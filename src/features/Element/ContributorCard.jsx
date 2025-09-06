@@ -4,10 +4,10 @@ import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
 import Card from "@mui/joy/Card";
-import Tooltip from "@mui/joy/Tooltip";
 import CardContent from "@mui/joy/CardContent";
 
 import UserAvatar from "../../components/UserAvatar";
+import UserProfileTooltip from "../../components/UserProfileTooltip";
 
 export default function ContributorCard(props) {
   const encodedUserId = props.encodedUserId;
@@ -18,28 +18,28 @@ export default function ContributorCard(props) {
   const timePassedText = props.timePassedText;
 
   return (
-    <Tooltip title={`View ${name}'s profile`} placement="top">
-      <Link
-        component={RouterLink}
-        to={"/contributor/" + encodedUserId}
-        style={{ textDecoration: "none" }}
-        aria-label={`View ${name}'s profile`}
+    <Link
+      component={RouterLink}
+      to={"/contributor/" + encodedUserId}
+      style={{ textDecoration: "none" }}
+      aria-label={`View ${name}'s profile`}
+    >
+      <Card
+        variant="plain"
+        orientation="horizontal"
+        sx={{
+          maxHeight: "150px",
+          bgcolor: "#fff",
+          p: 0,
+          "&:hover": {
+            borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
+            transform: "translateY(-2px)",
+          },
+          transition: "box-shadow 0.3s ease, transform 0.3s ease",
+        }}
       >
-        <Card
-          variant="plain"
-          orientation="horizontal"
-          sx={{
-            maxHeight: "150px",
-            bgcolor: "#fff",
-            p: 0,
-            "&:hover": {
-              borderColor: "theme.vars.palette.primary.outlinedHoverBorder",
-              transform: "translateY(-2px)",
-            },
-            transition: "box-shadow 0.3s ease, transform 0.3s ease",
-          }}
-        >
-          <CardContent>
+        <CardContent>
+          <UserProfileTooltip userId={userId}>
             <Stack
               direction="row"
               alignItems="center"
@@ -57,9 +57,9 @@ export default function ContributorCard(props) {
                 <Typography level="body-sm">{timePassedText}</Typography>
               </Stack>
             </Stack>
-          </CardContent>
-        </Card>
-      </Link>
-    </Tooltip>
+          </UserProfileTooltip>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
