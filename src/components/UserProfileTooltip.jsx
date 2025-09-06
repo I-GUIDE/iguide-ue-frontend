@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import Tooltip from "@mui/joy/Tooltip";
 import { fetchUser, getUserRole } from "../utils/UserManager";
@@ -10,6 +10,10 @@ export default function UserProfileTooltip(props) {
   const children = props.children;
   const userId = props.userId;
   const enterDelay = props.enterDelay || 1000;
+  const leaveDelay = props.leaveDelay || 300;
+
+  const timer = useRef(null);
+  const isHoveringTooltip = useRef(false);
 
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState();
@@ -24,12 +28,10 @@ export default function UserProfileTooltip(props) {
     setUserData({
       first_name: user["display-first-name"],
       last_name: user["display-last-name"],
-      email: user["email"],
       affiliation: user["affiliation"],
       bio: user["bio"],
       avatar_url: user["avatar-url"],
       role: role,
-      openid: user["openid"],
       id: user["id"],
       gitHubLink: user.gitHubLink,
       linkedInLink: user.linkedInLink,
@@ -40,27 +42,56 @@ export default function UserProfileTooltip(props) {
     setIsLoading(false);
   }
 
-  function handleClose() {
-    setOpen(false);
+  function handleTriggerMouseEnter() {
+    timer.current = setTimeout(async function () {
+      await getUserInformation(userId);
+      setOpen(true);
+    }, enterDelay);
   }
 
-  async function handleOpen() {
-    await getUserInformation(userId);
-    setOpen(true);
+  function handleTriggerMouseLeave() {
+    clearTimeout(timer.current);
+    setTimeout(function () {
+      if (!isHoveringTooltip.current) {
+        setOpen(false);
+      }
+    }, leaveDelay);
+  }
+
+  function handleTooltipMouseEnter() {
+    isHoveringTooltip.current = true;
+    clearTimeout(timer.current);
+  }
+
+  function handleTooltipMouseLeave() {
+    isHoveringTooltip.current = false;
+    setOpen(false);
   }
 
   return (
     <Tooltip
       open={open}
-      onClose={handleClose}
-      onOpen={handleOpen}
-      enterDelay={enterDelay}
-      leaveDelay={300}
       variant="outlined"
-      title={<UserPreviewCard user={userData} />}
+      disableHoverListener
+      disableInteractive={false}
       arrow
+      title={
+        <div
+          onMouseEnter={handleTooltipMouseEnter}
+          onMouseLeave={handleTooltipMouseLeave}
+          style={{ pointerEvents: "auto" }}
+        >
+          <UserPreviewCard user={userData} />
+        </div>
+      }
     >
-      {children}
+      <span
+        onMouseEnter={handleTriggerMouseEnter}
+        onMouseLeave={handleTriggerMouseLeave}
+        style={{ display: "inline-block" }}
+      >
+        {children}
+      </span>
     </Tooltip>
   );
 }
