@@ -154,7 +154,7 @@ export default function NavBar(props) {
           >
             User profile
           </Typography>
-          <ListItem role="none" disablePadding>
+          <ListItem role="none">
             <ListItemButton
               role="menuitem"
               component={RouterLink}
@@ -165,7 +165,7 @@ export default function NavBar(props) {
               My Profile
             </ListItemButton>
           </ListItem>
-          <ListItem role="none" disablePadding>
+          <ListItem role="none">
             <ListItemButton
               role="menuitem"
               component={RouterLink}
@@ -187,7 +187,7 @@ export default function NavBar(props) {
               >
                 Admin
               </Typography>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -199,7 +199,7 @@ export default function NavBar(props) {
                 </ListItemButton>
               </ListItem>
               {isSuperAdmin && (
-                <ListItem role="none" disablePadding>
+                <ListItem role="none">
                   <ListItemButton
                     role="menuitem"
                     component="a"
@@ -225,7 +225,7 @@ export default function NavBar(props) {
               >
                 Advanced Resources
               </Typography>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -238,7 +238,7 @@ export default function NavBar(props) {
                   Anvil HPC
                 </ListItemButton>
               </ListItem>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -265,7 +265,7 @@ export default function NavBar(props) {
               >
                 Beta feature
               </Typography>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -289,7 +289,7 @@ export default function NavBar(props) {
               >
                 New Contribution
               </Typography>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -300,7 +300,7 @@ export default function NavBar(props) {
                   New Map
                 </ListItemButton>
               </ListItem>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -311,7 +311,7 @@ export default function NavBar(props) {
                   New Dataset
                 </ListItemButton>
               </ListItem>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -322,7 +322,7 @@ export default function NavBar(props) {
                   New Notebook
                 </ListItemButton>
               </ListItem>
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -334,7 +334,7 @@ export default function NavBar(props) {
                 </ListItemButton>
               </ListItem>
               {canEditOER && (
-                <ListItem role="none" disablePadding>
+                <ListItem role="none">
                   <ListItemButton
                     role="menuitem"
                     component="a"
@@ -346,7 +346,7 @@ export default function NavBar(props) {
                   </ListItemButton>
                 </ListItem>
               )}
-              <ListItem role="none" disablePadding>
+              <ListItem role="none">
                 <ListItemButton
                   role="menuitem"
                   component="a"
@@ -360,7 +360,7 @@ export default function NavBar(props) {
             </>
           )}
           <Divider sx={{ my: 1 }} />
-          <ListItem role="none" disablePadding>
+          <ListItem role="none">
             <ListItemButton
               role="menuitem"
               ref={firstFocusableRef}
@@ -373,7 +373,7 @@ export default function NavBar(props) {
       );
     } else {
       return (
-        <ListItem role="none" disablePadding>
+        <ListItem role="none">
           <ListItemButton
             role="menuitem"
             ref={firstFocusableRef}
@@ -534,7 +534,7 @@ export default function NavBar(props) {
                       Knowledge Elements
                     </Typography>
                     {elementPages?.map(([label, path]) => (
-                      <ListItem role="none" key={path} disablePadding>
+                      <ListItem role="none" key={path}>
                         <ListItemButton
                           role="menuitem"
                           component={RouterLink}
@@ -556,7 +556,7 @@ export default function NavBar(props) {
                       Support
                     </Typography>
                     {supportPages?.map(([label, path]) => (
-                      <ListItem role="none" key={path} disablePadding>
+                      <ListItem role="none" key={path}>
                         <ListItemButton
                           role="menuitem"
                           component={RouterLink}
@@ -568,7 +568,7 @@ export default function NavBar(props) {
                         </ListItemButton>
                       </ListItem>
                     ))}
-                    <ListItem role="none" disablePadding>
+                    <ListItem role="none">
                       <ListItemButton
                         role="menuitem"
                         component={RouterLink}
