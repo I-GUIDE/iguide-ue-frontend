@@ -17,7 +17,7 @@ import { userLogin, userLogout } from "../utils/UserManager";
 import UserAvatar from "./UserAvatar";
 import { PERMISSIONS } from "../configs/Permissions";
 
-export default forwardRef(function HoverOverMenuTab(props, ref) {
+export default forwardRef(function UserProfileButton(props, ref) {
   const isAuthenticated = props.isAuthenticated;
   const localUserInfo = props.localUserInfo;
 
@@ -87,7 +87,7 @@ export default forwardRef(function HoverOverMenuTab(props, ref) {
             "&:hover": {
               backgroundColor: "transparent",
             },
-            px: 0,
+            px: 1,
           }}
           onClick={handleOpen}
           onMouseEnter={(e) => {
