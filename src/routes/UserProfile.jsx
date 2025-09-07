@@ -164,10 +164,10 @@ export default function UserProfile() {
         <CssBaseline enableColorScheme />
         {localUserInfo && (
           <UserProfileHeader
-            localUserInfo={localUserInfo}
+            userInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
             loading={localUserInfoLoading}
-            allowProfileOps
+            managementView
           />
         )}
         <Container maxWidth="lg">

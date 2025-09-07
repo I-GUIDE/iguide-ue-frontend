@@ -20,7 +20,7 @@ import ElementGrid from "../components/Layout/ElementGrid";
 
 import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
-import { fetchUser } from "../utils/UserManager";
+import { fetchUser, getUserRole } from "../utils/UserManager";
 
 export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
@@ -34,6 +34,7 @@ export default function ContributorProfile() {
   useEffect(() => {
     async function getContributorInfo(uid) {
       const user = await fetchUser(uid);
+      const role = await getUserRole(uid);
       const tally = await getNumberOfContributions(uid);
       setNumberOfTotalItems(tally);
 
@@ -46,6 +47,7 @@ export default function ContributorProfile() {
         avatar_url: user["avatar-url"],
         openid: user["openid"],
         id: user["id"],
+        role: role,
         gitHubLink: user.gitHubLink,
         linkedInLink: user.linkedInLink,
         googleScholarLink: user.googleScholarLink,
@@ -68,7 +70,7 @@ export default function ContributorProfile() {
         <CssBaseline enableColorScheme />
         {contributorInfo && (
           <UserProfileHeader
-            localUserInfo={contributorInfo}
+            userInfo={contributorInfo}
             contributionCount={numberOfTotalItems}
             loading={contributorInfoLoading}
             hideEmail
