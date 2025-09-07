@@ -64,7 +64,7 @@ export default function UserElementCard(props) {
           transform: "scale(1.01) translateY(-1px)",
           boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
         },
-        "&:focus-within": {
+        "&:focus-within:has(:focus-visible)": {
           outline: "2px solid",
           outlineColor: "var(--joy-palette-primary-500, #1976d2)",
           outlineOffset: "2px",
