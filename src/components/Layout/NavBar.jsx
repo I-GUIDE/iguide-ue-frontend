@@ -597,6 +597,7 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
+                spacing={1}
               >
                 <Box className="tourid-1">
                   <Tooltip title="Home" enterDelay={1000}>
@@ -614,7 +615,7 @@ export default function NavBar(props) {
                         component="img"
                         sx={{
                           height: 40,
-                          pr: 3,
+                          px: 1,
                         }}
                         alt="I-GUIDE logo"
                         src={iguideLogo}
@@ -649,7 +650,7 @@ export default function NavBar(props) {
                   variant="plain"
                   color="neutral"
                   size="sm"
-                  sx={{ alignSelf: "center", px: 1.5 }}
+                  sx={{ alignSelf: "center", px: 1 }}
                   onKeyDown={createHandleButtonKeyDown(3)}
                   onMouseEnter={() => setMenuIndex(3)}
                 >
@@ -660,7 +661,7 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-                spacing={0.5}
+                spacing={1}
               >
                 <SearchModal />
                 {isAuthenticated && canAccessJupyterHub ? (
@@ -679,7 +680,7 @@ export default function NavBar(props) {
                         className="tourid-5"
                         sx={{
                           height: 40,
-                          px: 2,
+                          px: 1,
                         }}
                         alt="JupyterHub logo"
                         src={jupyterLogo}
