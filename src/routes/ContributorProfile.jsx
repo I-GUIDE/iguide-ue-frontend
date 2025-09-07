@@ -18,7 +18,7 @@ import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGrid from "../components/Layout/ElementGrid";
 
-import { PT_OFFSET, USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
+import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 import { fetchUser } from "../utils/UserManager";
 
@@ -90,8 +90,7 @@ export default function ContributorProfile() {
                 minHeight: USER_PROFILE_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 1, md: 2, lg: 4 },
-                pt: PT_OFFSET,
-                pb: 8,
+                py: 4,
               }}
             >
               <ElementGrid

@@ -188,8 +188,7 @@ export default function UserProfile() {
                 minHeight: USER_PROFILE_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 1, md: 2, lg: 4 },
-                pt: 4,
-                pb: 8,
+                py: 4,
               }}
             >
               <Typography level="title-lg" sx={{ textAlign: "center", mb: 1 }}>

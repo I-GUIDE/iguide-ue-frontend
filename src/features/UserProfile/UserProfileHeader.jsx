@@ -187,8 +187,8 @@ export default function UserProfileHeader(props) {
                   <UserAvatar
                     userAvatarUrls={localUserInfo["avatar_url"]}
                     userId={localUserInfo.id}
-                    size={150}
-                    avatarResolution="low"
+                    size={200}
+                    avatarResolution="high"
                     isLoading={!localUserInfo}
                   />
                 </Stack>
