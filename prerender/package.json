@@ -1,0 +1,10 @@
+{
+  "name": "prerender",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "dependencies": {
+    "prerender": "^5.21.6",
+    "prerender-memory-cache": "^1.0.2"
+  }
+}
