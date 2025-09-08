@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
-// Lazy load react-zoom-pan-pinch
+
 const MiniMap = lazyWithRetryAndReload(() =>
   import("react-zoom-pan-pinch").then((module) => ({ default: module.MiniMap }))
 );
@@ -29,7 +29,7 @@ export default function StaticMap(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
         Pannable Map
       </Typography>

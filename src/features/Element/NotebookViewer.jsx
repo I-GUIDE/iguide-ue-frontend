@@ -62,7 +62,7 @@ function NotebookUnavailable(props) {
 
   if (!notebookLink) {
     return (
-      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Stack spacing={2} sx={{ py: 3 }}>
         <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
           Notebook Viewer
         </Typography>
@@ -75,7 +75,7 @@ function NotebookUnavailable(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
         Notebook Viewer
       </Typography>
@@ -181,7 +181,7 @@ export default function NotebookViewer(props) {
   iGuidePlatformUrl = getOpenWithUrl(repoUrl, notebookFile);
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
         Notebook Viewer
       </Typography>

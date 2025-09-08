@@ -1,5 +1,3 @@
-import React from "react";
-
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Link from "@mui/joy/Link";
@@ -14,7 +12,7 @@ export default function LicenseAndFunding(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       {licenseStatement && (
         <Typography level="body-sm">
           {licenseStatement}

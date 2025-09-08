@@ -78,7 +78,7 @@ export default function DocAdminOps(props) {
   }
 
   return (
-    <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
+    <Stack direction="row" spacing={1} sx={{ py: 1 }}>
       <Tooltip title="Edit this documentation" placement="top" arrow>
         <IconButton
           aria-label="Edit this documentation"

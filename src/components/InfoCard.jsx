@@ -13,7 +13,6 @@ import IconButton from "@mui/joy/IconButton";
 import LockIcon from "@mui/icons-material/Lock";
 
 import { printListWithDelimiter, removeMarkdown } from "../helpers/helper";
-import UserAvatar from "./UserAvatar";
 import {
   RESOURCE_TYPE_COLORS,
   ELEMENT_TYPE_CAP,
@@ -46,7 +45,6 @@ export default function InfoCard(props) {
 
   const contributorUserId = contributor.id;
   const contributorName = contributor.name;
-  const contributorAvatar = contributor["avatar-url"];
 
   return (
     <Card
@@ -61,10 +59,12 @@ export default function InfoCard(props) {
           0 1px 2px rgba(0, 0, 0, 0.3),
           0 2px 4px rgba(0, 0, 0, 0.2)
         `,
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        transition: "transform 0.4s ease, box-shadow 0.3s ease",
         "&:hover": {
-          transform: "scale(1.01) translateY(-1px)",
-          boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
+          boxShadow: `
+            0 4px 8px rgba(0, 0, 0, 0.25),
+            0 12px 24px rgba(0, 0, 0, 0.2)
+          `,
         },
         "&:focus-within:has(:focus-visible)": {
           outline: "2px solid",
@@ -131,7 +131,7 @@ export default function InfoCard(props) {
               fontWeight: "bold",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: "3",
+              WebkitLineClamp: "4",
               WebkitBoxOrient: "vertical",
               wordBreak: "break-word",
               lineHeight: 1.5,
@@ -173,45 +173,36 @@ export default function InfoCard(props) {
       </CardContent>
 
       {contributorName && (
-        <CardActions>
-          <UserProfileTooltip userId={contributorUserId}>
-            <Link
-              color={categoryColor}
-              component={RouterLink}
-              to={"/contributor/" + encodeURIComponent(contributorUserId)}
+        <CardActions sx={{ pb: 0 }}>
+          <Stack direction="column">
+            <Typography
+              level="body-xs"
+              sx={{
+                whiteSpace: "normal",
+                overflowWrap: "break-word",
+                wordBreak: "break-word",
+                overflow: "visible",
+                textOverflow: "unset",
+              }}
             >
-              <Stack direction="row" alignItems="center" spacing={1.5}>
-                <UserAvatar
-                  size={30}
-                  userAvatarUrls={contributorAvatar}
-                  userId={contributorUserId}
-                  avatarResolution="low"
-                />
-                <Stack direction="column">
-                  <Typography
-                    level="body-xs"
-                    sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "1",
-                      WebkitBoxOrient: "vertical",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {contributorName}
-                  </Typography>
-                  {contributionTimestamp ? (
-                    <Typography level="body-xs">
-                      {PeriodAgoText("Contributed ", contributionTimestamp)}
-                    </Typography>
-                  ) : (
-                    <Typography level="body-xs">Contributor</Typography>
-                  )}
-                </Stack>
-              </Stack>
-            </Link>
-          </UserProfileTooltip>
+              By{" "}
+              <UserProfileTooltip userId={contributorUserId} enterDelay={500}>
+                <Link
+                  color="neutral"
+                  component={RouterLink}
+                  to={"/contributor/" + encodeURIComponent(contributorUserId)}
+                  sx={{
+                    textDecoration: "none",
+                    fontWeight: 700,
+                  }}
+                >
+                  {contributorName}
+                </Link>
+              </UserProfileTooltip>
+              {contributionTimestamp &&
+                PeriodAgoText(" • ", contributionTimestamp)}
+            </Typography>
+          </Stack>
         </CardActions>
       )}
 

@@ -78,7 +78,7 @@ export default function GitHubRepo(props) {
   }, [repoLink, repoReadmeFromDB]);
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography id="repo-access" level="h5" fontWeight="lg" mb={1}>
         GitHub Repository
       </Typography>

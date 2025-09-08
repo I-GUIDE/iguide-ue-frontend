@@ -82,7 +82,7 @@ export default function OerExternalLinkList(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography id="" level="h5" fontWeight="lg" mb={1}>
         Additional Materials
       </Typography>

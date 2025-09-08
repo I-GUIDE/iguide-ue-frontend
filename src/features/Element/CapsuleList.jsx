@@ -20,7 +20,7 @@ export default function CapsuleList(props) {
   });
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 2 }}>
+    <Stack spacing={2} sx={{ py: 2 }}>
       <Box
         direction="row"
         justifyContent="flex-start"
