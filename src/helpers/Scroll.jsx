@@ -53,7 +53,12 @@ export function ClickToTop() {
         <Box
           onClick={handleClick}
           role="presentation"
-          sx={{ position: "fixed", bottom: 170, right: 20 }}
+          sx={{
+            position: "fixed",
+            bottom: 170,
+            right: 20,
+            zIndex: (theme) => theme.zIndex.tooltip + 1000,
+          }}
         >
           {children}
         </Box>
