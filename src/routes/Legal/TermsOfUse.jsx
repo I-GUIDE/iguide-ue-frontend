@@ -33,7 +33,7 @@ export default function TermsOfUse() {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             sx={{
               backgroundColor: "inherit",
-              px: { xs: 2, md: 4 },
+              px: { xs: 1, md: 3, lg: 6 },
               pt: PT_OFFSET,
               pb: 8,
             }}

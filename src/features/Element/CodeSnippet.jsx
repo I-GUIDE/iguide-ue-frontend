@@ -31,7 +31,7 @@ ${dataAccessSnippet}
 
   if (directDownloadLink && directDownloadLink !== "") {
     return (
-      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Stack spacing={2} sx={{ py: 3 }}>
         <Box>
           <Typography
             id="download-jupyterhub"

@@ -58,7 +58,7 @@ export default function DoiCitation(props) {
   }
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography level="h5" fontWeight="lg" mb={1}>
           Cite this publication

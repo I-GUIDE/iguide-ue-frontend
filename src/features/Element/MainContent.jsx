@@ -77,7 +77,7 @@ export default function MainContent(props) {
 
   if (useOERLayout) {
     return (
-      <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Stack sx={{ py: 3 }}>
         <Grid
           container
           rowSpacing={2}
@@ -203,7 +203,7 @@ export default function MainContent(props) {
   }
 
   return (
-    <Stack sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack sx={{ py: 3 }}>
       <Grid
         container
         rowSpacing={2}
