@@ -50,10 +50,6 @@ export default function MainContent(props) {
 
   const elementTypePlural = ELEMENT_TYPE_URI_PLURAL[elementType];
 
-  const hasTimestamp = creationTime || updateTime;
-  const timePassedText = updateTime
-    ? PeriodAgoText("Updated ", updateTime)
-    : PeriodAgoText("Contributed ", creationTime);
   const contributorAvatar = contributor["avatar-url"];
   const contributorName = contributor.name;
   const contributorUserId = contributor.id;
@@ -136,36 +132,43 @@ export default function MainContent(props) {
             </Card>
           </Grid>
           <Grid xs={12}>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              justifyContent={{ xs: "center", sm: "space-between" }}
-              alignItems={{ xs: "flex-start", sm: "center" }}
-            >
-              {contributorName && (
-                <ContributorCard
-                  encodedUserId={encodedUserId}
-                  userId={contributorUserId}
-                  name={contributorName}
-                  avatar={contributorAvatar}
-                  isLoading={isLoading}
-                  timePassedText={hasTimestamp ? timePassedText : "Contributor"}
-                />
-              )}
-              <Stack direction="row" spacing={1}>
-                <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-                <CopyButton
-                  textToCopy={shareUrl}
-                  tooltipText="Copy element URL"
-                  successText="Element URL copied!"
-                  icon={<LinkIcon />}
-                />
-                {isAuthenticated && (
-                  <BookmarkButton
-                    elementId={elementId}
-                    elementType={elementType}
+            <Stack spacing={0.5}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                justifyContent={{ xs: "center", sm: "space-between" }}
+                alignItems={{ xs: "flex-start", sm: "center" }}
+              >
+                {contributorName && (
+                  <ContributorCard
+                    encodedUserId={encodedUserId}
+                    userId={contributorUserId}
+                    name={contributorName}
+                    avatar={contributorAvatar}
+                    isLoading={isLoading}
                   />
                 )}
+                <Stack direction="row" spacing={1}>
+                  <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+                  <CopyButton
+                    textToCopy={shareUrl}
+                    tooltipText="Copy element URL"
+                    successText="Element URL copied!"
+                    icon={<LinkIcon />}
+                  />
+                  {isAuthenticated && (
+                    <BookmarkButton
+                      elementId={elementId}
+                      elementType={elementType}
+                    />
+                  )}
+                </Stack>
               </Stack>
+              <Typography level="body-xs">
+                {PeriodAgoText("Updated ", updateTime)}
+              </Typography>
+              <Typography level="body-xs">
+                {PeriodAgoText("Contributed ", creationTime)}
+              </Typography>
             </Stack>
           </Grid>
         </Grid>
@@ -209,36 +212,43 @@ export default function MainContent(props) {
         sx={{ py: 2 }}
       >
         <Grid xs={12}>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            justifyContent={{ xs: "center", sm: "space-between" }}
-            alignItems={{ xs: "flex-start", sm: "center" }}
-          >
-            {contributorName && (
-              <ContributorCard
-                encodedUserId={encodedUserId}
-                userId={contributorUserId}
-                name={contributorName}
-                avatar={contributorAvatar}
-                isLoading={isLoading}
-                timePassedText={hasTimestamp ? timePassedText : "Contributor"}
-              />
-            )}
-            <Stack direction="row" spacing={1}>
-              <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
-              <CopyButton
-                textToCopy={shareUrl}
-                tooltipText="Copy element URL"
-                successText="Element URL copied!"
-                icon={<LinkIcon />}
-              />
-              {isAuthenticated && (
-                <BookmarkButton
-                  elementId={elementId}
-                  elementType={elementType}
+          <Stack>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              justifyContent={{ xs: "center", sm: "space-between" }}
+              alignItems={{ xs: "flex-start", sm: "center" }}
+            >
+              {contributorName && (
+                <ContributorCard
+                  encodedUserId={encodedUserId}
+                  userId={contributorUserId}
+                  name={contributorName}
+                  avatar={contributorAvatar}
+                  isLoading={isLoading}
                 />
               )}
+              <Stack direction="row" spacing={1}>
+                <ShareButton shareUrl={shareUrl} shareTitle={shareTitle} />
+                <CopyButton
+                  textToCopy={shareUrl}
+                  tooltipText="Copy element URL"
+                  successText="Element URL copied!"
+                  icon={<LinkIcon />}
+                />
+                {isAuthenticated && (
+                  <BookmarkButton
+                    elementId={elementId}
+                    elementType={elementType}
+                  />
+                )}
+              </Stack>
             </Stack>
+            <Typography level="body-sm">
+              {PeriodAgoText("Updated ", updateTime)}
+            </Typography>
+            <Typography level="body-sm">
+              {PeriodAgoText("Contributed ", creationTime)}
+            </Typography>
           </Stack>
         </Grid>
         <Grid xs={12}>
