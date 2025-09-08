@@ -19,6 +19,8 @@ export default function UserProfileTooltip(props) {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
+  const isMobile = useRef(isTouchDevice());
+
   async function getUserInformation(uid) {
     const user = await fetchUser(uid);
     const numberOfContributions = await getNumberOfContributions(uid);
@@ -43,6 +45,8 @@ export default function UserProfileTooltip(props) {
   }
 
   function handleTriggerMouseEnter() {
+    if (isMobile.current) return;
+
     timer.current = setTimeout(async function () {
       await getUserInformation(userId);
       setOpen(true);
@@ -50,6 +54,8 @@ export default function UserProfileTooltip(props) {
   }
 
   function handleTriggerMouseLeave() {
+    if (isMobile.current) return;
+
     clearTimeout(timer.current);
     setTimeout(function () {
       if (!isHoveringTooltip.current) {
@@ -68,11 +74,21 @@ export default function UserProfileTooltip(props) {
     setOpen(false);
   }
 
+  // Decide if this is a mobile device, if yes, tooltip will be disabled
+  function isTouchDevice() {
+    return (
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.msMaxTouchPoints > 0
+    );
+  }
+
   return (
     <Tooltip
       open={open}
       variant="outlined"
       disableHoverListener
+      disableTouchListener
       disableInteractive={false}
       arrow
       title={
