@@ -13,7 +13,7 @@ import SearchInput from "./SearchInput";
 import Logo from "../../components/Logo";
 import { SampleChatHistory } from "./SampleChatHistory";
 
-import { NAVBAR_HEIGHT, NO_HEADER_BODY_HEIGHT } from "../../configs/VarConfigs";
+import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
 import {
   streamLlmSearchResult,
   fetchLlmSearchMemoryId,
@@ -99,7 +99,9 @@ async function getLlmSearchResult(
   setWaitingForResponse(false);
 }
 
-export default function SearchPane() {
+export default function SearchPane(props) {
+  const initialValue = props.initialValue;
+
   const [memoryId, setMemoryId] = useState("");
   const [chatMessages, setChatMessages] = useState(
     USE_LLM_SAMPLE_CHAT ? SampleChatHistory : []
@@ -119,6 +121,12 @@ export default function SearchPane() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSearchInputValue(initialValue);
+    }
+  }, [initialValue]);
 
   // Load suggested questions for the JSON file
   // NOTE: create llm-questions.json for your own suggested questions. DO NOT modify example.json
@@ -156,7 +164,7 @@ export default function SearchPane() {
     return (
       <Box
         sx={{
-          minHeight: NO_HEADER_BODY_HEIGHT,
+          height: "100vh",
           width: "100%",
           display: "flex",
           alignItems: "center",
@@ -174,19 +182,28 @@ export default function SearchPane() {
             }}
           />
           <Typography
-            level="h2"
+            level="h3"
             align="center"
             justifyContent="center"
             sx={{
-              p: 3,
+              p: 2,
             }}
           >
             {!svgError ? (
-              <img
+              <Box
+                component="img"
                 src={myIcon}
-                alt="icon"
+                alt="I-GUIDE"
                 onError={() => setSvgError(true)}
-                style={{ height: "2em" }}
+                sx={{
+                  width: {
+                    xs: "160px",
+                    sm: "180px",
+                    md: "200px",
+                    lg: "220px",
+                  },
+                  height: "auto",
+                }}
               />
             ) : (
               "Smart"
@@ -235,7 +252,7 @@ export default function SearchPane() {
   return (
     <Sheet
       sx={{
-        height: NO_HEADER_BODY_HEIGHT,
+        height: "100vh",
         display: "flex",
         flexDirection: "column",
         backgroundColor: "#fff",
@@ -247,8 +264,8 @@ export default function SearchPane() {
           flex: 1,
           minHeight: 0,
           px: 2,
-          py: 3,
-          pt: NAVBAR_HEIGHT / 8,
+          pb: 3,
+          pt: NAVBAR_HEIGHT / 8 + 2,
           overflowY: "auto",
           flexDirection: "column",
           // Message box bottom fade out
@@ -303,14 +320,14 @@ export default function SearchPane() {
           })}
         </Stack>
       </Box>
-      <Box sx={{ px: 2, pb: 3, display: "flex", justifyContent: "center" }}>
+      <Box sx={{ px: 2, py: 0.5, display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "100%", maxWidth: 960 }}>
           {waitingForResponse ? (
-            <Typography level="body-sm" sx={{ pb: 2 }}>
+            <Typography level="body-xs" sx={{ pb: 0.5 }}>
               {status}
             </Typography>
           ) : (
-            <Typography level="body-sm" sx={{ pb: 2 }}>
+            <Typography level="body-xs" sx={{ pb: 0.5 }}>
               &nbsp;
             </Typography>
           )}

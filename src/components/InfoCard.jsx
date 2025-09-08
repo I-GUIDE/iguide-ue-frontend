@@ -19,6 +19,8 @@ import {
   ELEMENT_TYPE_CAP,
   ELEMENT_TYPE_URI_PLURAL,
 } from "../configs/VarConfigs";
+import { PeriodAgoText } from "../utils/PeriodAgoText";
+import UserProfileTooltip from "./UserProfileTooltip";
 
 export default function InfoCard(props) {
   const thumbnailImage = props.thumbnailImage;
@@ -31,6 +33,7 @@ export default function InfoCard(props) {
   const showElementType = props.showElementType;
   const isPrivateElement = props.isPrivateElement;
   const openInNewTab = props.openInNewTab;
+  const contributionTimestamp = props.contributionTimestamp;
 
   const categoryColor = RESOURCE_TYPE_COLORS[cardType];
   const categoryName = ELEMENT_TYPE_CAP[cardType];
@@ -47,16 +50,26 @@ export default function InfoCard(props) {
 
   return (
     <Card
-      variant="outlined"
+      variant="plain"
       color={categoryColor}
       sx={{
         width: "100%",
         height: "100%",
         "--Card-radius": "15px",
+        overflow: "hidden",
+        boxShadow: `
+          0 1px 2px rgba(0, 0, 0, 0.3),
+          0 2px 4px rgba(0, 0, 0, 0.2)
+        `,
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         "&:hover": {
-          transform: "scale(1.01)",
-          boxShadow: "xl",
+          transform: "scale(1.01) translateY(-1px)",
+          boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
+        },
+        "&:focus-within:has(:focus-visible)": {
+          outline: "2px solid",
+          outlineColor: "var(--joy-palette-primary-500, #1976d2)",
+          outlineOffset: "2px",
         },
       }}
     >
@@ -103,6 +116,8 @@ export default function InfoCard(props) {
         <Link
           overlay
           underline="none"
+          tabIndex={0}
+          aria-label={`View details for ${title}`}
           component={RouterLink}
           to={uri}
           target={openInNewTab && "_blank"}
@@ -113,12 +128,13 @@ export default function InfoCard(props) {
             level="title-md"
             sx={{
               overflow: "hidden",
+              fontWeight: "bold",
               textOverflow: "ellipsis",
               display: "-webkit-box",
               WebkitLineClamp: "3",
               WebkitBoxOrient: "vertical",
               wordBreak: "break-word",
-              mb: 0.5,
+              lineHeight: 1.5,
             }}
           >
             {title}
@@ -134,73 +150,82 @@ export default function InfoCard(props) {
             WebkitLineClamp: "1",
             WebkitBoxOrient: "vertical",
             wordBreak: "break-word",
-            mb: 0.5,
           }}
         >
           {printListWithDelimiter(authors, ",")}
         </Typography>
-        <Typography
-          level="body-xs"
-          textColor="#a1a1a1"
-          sx={{
-            display: "-webkit-box",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            WebkitLineClamp: "2",
-            WebkitBoxOrient: "vertical",
-            wordBreak: "break-word",
-          }}
-        >
-          {contentsWithoutMarkdown}
-        </Typography>
+        {contentsWithoutMarkdown && (
+          <Typography
+            level="body-xs"
+            textColor="#a1a1a1"
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              WebkitLineClamp: "2",
+              WebkitBoxOrient: "vertical",
+              wordBreak: "break-word",
+            }}
+          >
+            {contentsWithoutMarkdown}
+          </Typography>
+        )}
       </CardContent>
 
       {contributorName && (
         <CardActions>
-          <Link
-            component={RouterLink}
-            to={"/contributor/" + encodeURIComponent(contributorUserId)}
-          >
-            <Stack direction="row" alignItems="center" spacing={1.5}>
-              <UserAvatar
-                size={30}
-                userAvatarUrls={contributorAvatar}
-                userId={contributorUserId}
-                avatarResolution="low"
-              />
-              <Stack direction="column">
-                <Typography
-                  level="title-sm"
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: "1",
-                    WebkitBoxOrient: "vertical",
-                  }}
-                >
-                  {contributorName}
-                </Typography>
-                <Typography level="body-xs">Contributor</Typography>
+          <UserProfileTooltip userId={contributorUserId}>
+            <Link
+              color={categoryColor}
+              component={RouterLink}
+              to={"/contributor/" + encodeURIComponent(contributorUserId)}
+            >
+              <Stack direction="row" alignItems="center" spacing={1.5}>
+                <UserAvatar
+                  size={30}
+                  userAvatarUrls={contributorAvatar}
+                  userId={contributorUserId}
+                  avatarResolution="low"
+                />
+                <Stack direction="column">
+                  <Typography
+                    level="body-xs"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "1",
+                      WebkitBoxOrient: "vertical",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {contributorName}
+                  </Typography>
+                  {contributionTimestamp ? (
+                    <Typography level="body-xs">
+                      {PeriodAgoText("Contributed ", contributionTimestamp)}
+                    </Typography>
+                  ) : (
+                    <Typography level="body-xs">Contributor</Typography>
+                  )}
+                </Stack>
               </Stack>
-            </Stack>
-          </Link>
+            </Link>
+          </UserProfileTooltip>
         </CardActions>
       )}
 
-      {showElementType && (
+      {showElementType && categoryName && (
         <CardOverflow
           variant="soft"
           color={categoryColor}
           sx={{
-            py: 1,
-            writingMode: "horizontal-rl",
+            py: 0.5,
             alignItems: "center",
             fontSize: "xs",
-            fontWeight: "xl",
+            fontWeight: "lg",
             letterSpacing: "1px",
             textTransform: "uppercase",
-            borderLeft: "1px solid",
             borderColor: "divider",
           }}
         >

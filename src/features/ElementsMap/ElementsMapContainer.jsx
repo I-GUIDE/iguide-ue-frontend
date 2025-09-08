@@ -7,6 +7,7 @@ import {
   Popup,
   Polygon,
   useMap,
+  ZoomControl,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -22,6 +23,7 @@ import {
   processPolygon,
   addNoiseToPoint,
 } from "./elementsMapHelpers";
+import SmartZoomBounds from "./SmartZoomBounds";
 
 // Get the leaflet icons including markers to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -59,6 +61,13 @@ export default function ElementsMapContainer(props) {
 
   const [showInstruction, setShowInstruction] = useState(false);
   const instructionTimeoutRef = useRef(null);
+
+  const mapAttribution = `
+    I-GUIDE Platform  
+    <a href="/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of Use</a> apply. 
+    &copy; <a href="https://osm.org/copyright" target="_blank" rel="noopener noreferrer">
+    OpenStreetMap</a> contributors.
+  `;
 
   function handleShowInstruction() {
     if (instructionTimeoutRef.current) {
@@ -180,6 +189,7 @@ export default function ElementsMapContainer(props) {
         <MapContainer
           center={startingCenter}
           zoom={startingZoom}
+          zoomControl={false} // Disable the default zoom control
           maxBounds={maxBounds}
           maxBoundsViscosity={maxBoundsViscosity}
           minZoom={minZoom}
@@ -187,8 +197,16 @@ export default function ElementsMapContainer(props) {
           scrollWheelZoom={!disabledScrollWheelZoom}
         >
           <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution={mapAttribution}
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {/* Automatically zoom the map based on the component location or covered area */}
+          <SmartZoomBounds
+            marker={elementCentroid}
+            polygon={elementGeometry}
+            boundingBox={elementBoundingBox}
+            fallbackCenter={startingCenter}
+            fallbackZoom={startingZoom}
           />
           {elementCentroid && <Marker position={elementCentroid} />}
           {elementGeometry && <Polygon positions={elementGeometry} />}
@@ -197,6 +215,7 @@ export default function ElementsMapContainer(props) {
             <Polygon positions={elementBoundingBox} />
           )}
           <ScrollZoomHandler onShowInstruction={handleShowInstruction} />
+          <ZoomControl position="bottomright" />
         </MapContainer>
         {showInstruction && (
           <div
@@ -227,6 +246,7 @@ export default function ElementsMapContainer(props) {
     <MapContainer
       center={startingCenter}
       zoom={startingZoom}
+      zoomControl={false} // Disable the default zoom control
       maxBounds={maxBounds}
       maxBoundsViscosity={maxBoundsViscosity}
       minZoom={minZoom}
@@ -234,7 +254,7 @@ export default function ElementsMapContainer(props) {
       scrollWheelZoom={!disabledScrollWheelZoom}
     >
       <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        attribution={mapAttribution}
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <ElementsMapEventHandler
@@ -270,6 +290,7 @@ export default function ElementsMapContainer(props) {
         ) : (
           <Polygon positions={selectedElement.boundingBoxForLeaflet} />
         ))}
+      <ZoomControl position="bottomright" />
     </MapContainer>
   );
 }

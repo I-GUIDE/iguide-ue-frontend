@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Link as RouterLink } from "react-router";
 
@@ -69,12 +69,18 @@ export default function FeaturedElementsList(props) {
               alignItems: "center",
             }}
           >
-            <Typography level="h3" startDecorator={icon}>
+            <Typography
+              startDecorator={icon}
+              sx={{ fontSize: 22, fontWeight: 600 }}
+            >
               {title}
             </Typography>
             <Link component={RouterLink} to={pageLink} color="inherit">
-              <Typography startDecorator={<ArrowForwardIcon />}>
-                View More
+              <Typography
+                endDecorator={<ArrowForwardIcon sx={{ fontSize: 18 }} />}
+                sx={{ fontSize: 16, fontWeight: 500 }}
+              >
+                View All
               </Typography>
             </Link>
           </Stack>
@@ -94,7 +100,6 @@ export default function FeaturedElementsList(props) {
                   cardtype={featuredElement["resource-type"]}
                   elementId={featuredElement.id}
                   title={featuredElement.title}
-                  contents={featuredElement.contents}
                   thumbnailImage={featuredElement["thumbnail-image"]}
                 />
               </Grid>

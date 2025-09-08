@@ -69,7 +69,6 @@ export default function Home() {
         >
           <Card
             variant="plain"
-            component="li"
             sx={{
               bgcolor: "#fff",
               borderRadius: 0,
@@ -119,6 +118,12 @@ export default function Home() {
                       flexDirection: "row",
                       pt: 0.5,
                       pb: 4,
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1.05rem",
+                        md: "1.2rem",
+                      },
+                      fontWeight: "lg",
                     }}
                     justifyContent="center"
                     align="center"
@@ -131,6 +136,7 @@ export default function Home() {
                       placeholder="Start your exploration..."
                       showTrendingSearchKeywords
                       showSmartSearch
+                      autoFocus
                     />
                   </Box>
                 </Box>
@@ -143,57 +149,47 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
-              py: 4,
+              py: 6,
             }}
           >
             <Container maxWidth="lg">
               <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
+                direction={{ xs: "column", md: "row" }}
+                spacing={{ xs: 6, md: 12 }}
                 sx={{
                   backgroundColor: "inherit",
                 }}
               >
-                <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  spacing={{ xs: "50px", md: "100px" }}
-                  sx={{
-                    backgroundColor: "inherit",
-                    py: "50px",
-                  }}
-                >
-                  <Box className="tourid-6">
-                    <TutorialCard
-                      iconImage="/images/homepage/map.png"
-                      title="Map"
-                      link="/element-map"
-                      content="Transform geospatial data to knowledge and insights"
-                      bgColor="#fff"
-                      inColumn
-                    />
-                  </Box>
-                  <Box className="tourid-7">
-                    <TutorialCard
-                      iconImage="/images/homepage/network.png"
-                      title="Connect"
-                      link="/element-network"
-                      content="Gain holistic understanding of linked knowledge elements"
-                      bgColor="#fff"
-                      inColumn
-                    />
-                  </Box>
-                  <Box className="tourid-8">
-                    <TutorialCard
-                      iconImage="/images/homepage/search.png"
-                      title="Discover"
-                      link="/search-home"
-                      content="Seek new convergence knowledge through intelligent search"
-                      bgColor="#fff"
-                      inColumn
-                    />
-                  </Box>
-                </Stack>
+                <Box className="tourid-6">
+                  <TutorialCard
+                    iconImage="/images/homepage/map.png"
+                    title="Map"
+                    link="/element-map"
+                    content="Transform geospatial data to knowledge and insights"
+                    bgColor="#fff"
+                    inColumn
+                  />
+                </Box>
+                <Box className="tourid-7">
+                  <TutorialCard
+                    iconImage="/images/homepage/network.png"
+                    title="Connect"
+                    link="/element-network"
+                    content="Gain holistic understanding of linked knowledge elements"
+                    bgColor="#fff"
+                    inColumn
+                  />
+                </Box>
+                <Box className="tourid-8">
+                  <TutorialCard
+                    iconImage="/images/homepage/search.png"
+                    title="Discover"
+                    link="/search-home"
+                    content="Seek new convergence knowledge through intelligent search"
+                    bgColor="#fff"
+                    inColumn
+                  />
+                </Box>
               </Stack>
             </Container>
           </Box>
@@ -203,93 +199,97 @@ export default function Home() {
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
-              pt: 4,
-              pb: 8,
+              px: { xs: 1, md: 2, lg: 4 },
+              py: 6,
             }}
           >
             <Container maxWidth="lg">
-              <Stack
-                direction="column"
-                alignItems="center"
-                spacing={4}
-                sx={{
-                  backgroundColor: "inherit",
-                  py: "50px",
-                }}
-              >
-                <Typography level="h3" textColor="#000">
-                  What to do next?
-                </Typography>
+              <Stack spacing={6}>
                 <Stack
-                  direction={{ xs: "column", md: "row" }}
-                  spacing={{ xs: 4, md: 10 }}
+                  direction="column"
+                  alignItems="center"
+                  spacing={4}
+                  sx={{
+                    backgroundColor: "inherit",
+                  }}
                 >
-                  <TutorialCard
-                    iconImage="/images/homepage/verify.png"
-                    title="Register"
-                    content="Become a member of the I-GUIDE community"
-                    link="/user-profile"
-                    bgColor="#fafafa"
+                  <Typography
+                    textColor="#000"
+                    sx={{ fontSize: 22, fontWeight: "bold" }}
+                  >
+                    What to Do Next?
+                  </Typography>
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    spacing={{ xs: 4, md: 10 }}
+                  >
+                    <TutorialCard
+                      iconImage="/images/homepage/verify.png"
+                      title="Register"
+                      content="Become a member of the I-GUIDE community"
+                      link="/user-profile"
+                      bgColor="#fafafa"
+                    />
+                    <TutorialCard
+                      iconImage="/images/homepage/reading-book.png"
+                      title="Learn"
+                      content="Explore the power of I-GUIDE Platform"
+                      link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
+                      bgColor="#fafafa"
+                    />
+                    <TutorialCard
+                      iconImage="/images/homepage/jigsaw.png"
+                      title="Contribute"
+                      content="Share your knowledge with our community"
+                      link="/user-profile"
+                      bgColor="#fafafa"
+                    />
+                  </Stack>
+                </Stack>
+                <Stack direction="column" spacing={2}>
+                  <FeaturedElementsList
+                    icon={<MapIcon />}
+                    title="Maps"
+                    pageLink="/maps"
+                    type="map"
+                    limit={4}
                   />
-                  <TutorialCard
-                    iconImage="/images/homepage/reading-book.png"
-                    title="Learn"
-                    content="Explore the power of I-GUIDE Platform"
-                    link={"/notebooks/" + JUPYTER_TUTORIAL_EID}
-                    bgColor="#fafafa"
+                  <FeaturedElementsList
+                    icon={<DatasetIcon />}
+                    title="Datasets"
+                    pageLink="/datasets"
+                    type="dataset"
+                    limit={4}
                   />
-                  <TutorialCard
-                    iconImage="/images/homepage/jigsaw.png"
-                    title="Contribute"
-                    content="Share your knowledge with our community"
-                    link="/user-profile"
-                    bgColor="#fafafa"
+                  <FeaturedElementsList
+                    icon={<CodeIcon />}
+                    title="Notebooks"
+                    pageLink="/notebooks"
+                    type="notebook"
+                    limit={4}
+                  />
+                  <FeaturedElementsList
+                    icon={<ArticleIcon />}
+                    title="Publications"
+                    pageLink="/publications"
+                    type="publication"
+                    limit={4}
+                  />
+                  <FeaturedElementsList
+                    icon={<SchoolIcon />}
+                    title="Educational Resources"
+                    pageLink="/oers"
+                    type="oer"
+                    limit={4}
+                  />
+                  <FeaturedElementsList
+                    icon={<GitHubIcon />}
+                    title="Code"
+                    pageLink="/code"
+                    type="code"
+                    limit={4}
                   />
                 </Stack>
-              </Stack>
-              <Stack direction="column" spacing={2}>
-                <FeaturedElementsList
-                  icon={<MapIcon />}
-                  title="Maps"
-                  pageLink="/maps"
-                  type="map"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<DatasetIcon />}
-                  title="Datasets"
-                  pageLink="/datasets"
-                  type="dataset"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<CodeIcon />}
-                  title="Notebooks"
-                  pageLink="/notebooks"
-                  type="notebook"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<ArticleIcon />}
-                  title="Publications"
-                  pageLink="/publications"
-                  type="publication"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<SchoolIcon />}
-                  title="Educational Resources"
-                  pageLink="/oers"
-                  type="oer"
-                  limit={4}
-                />
-                <FeaturedElementsList
-                  icon={<GitHubIcon />}
-                  title="Code"
-                  pageLink="/code"
-                  type="code"
-                  limit={4}
-                />
               </Stack>
             </Container>
           </Box>

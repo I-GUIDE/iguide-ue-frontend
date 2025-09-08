@@ -11,7 +11,6 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
 import Tooltip from "@mui/joy/Tooltip";
 
@@ -80,37 +79,33 @@ export default function DocAdminOps(props) {
 
   return (
     <Stack direction="row" spacing={1} sx={{ px: { xs: 2, md: 4 }, py: 1 }}>
-      <IconButton
-        aria-label="Edit this doc"
-        size="sm"
-        variant="soft"
-        color="primary"
-      >
-        <Link
-          underline="none"
+      <Tooltip title="Edit this documentation" placement="top" arrow>
+        <IconButton
+          aria-label="Edit this documentation"
+          size="sm"
+          variant="soft"
+          color="primary"
+          component="a"
           href={"/doc-update/" + docId}
-          sx={{ color: "inherit" }}
         >
-          <Tooltip title="Edit this documentation" placement="top" arrow>
-            <EditIcon />
-          </Tooltip>
-        </Link>
-      </IconButton>
-      <IconButton
-        aria-label="Delete this doc"
-        color="danger"
-        variant="soft"
-        size="sm"
-        onClick={() => {
-          setDeleteMetadataTitle(title);
-          setDeleteMetadataId(docId);
-          TEST_MODE && console.log("Attempting to delete:", title, docId);
-        }}
-      >
-        <Tooltip title="Delete this documentation" placement="top" arrow>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Delete this documentation" placement="top" arrow>
+        <IconButton
+          aria-label="Delete this documentation"
+          color="danger"
+          variant="soft"
+          size="sm"
+          onClick={() => {
+            setDeleteMetadataTitle(title);
+            setDeleteMetadataId(docId);
+            TEST_MODE && console.log("Attempting to delete:", title, docId);
+          }}
+        >
           <DeleteForeverIcon />
-        </Tooltip>
-      </IconButton>
+        </IconButton>
+      </Tooltip>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}
         onClose={() => {

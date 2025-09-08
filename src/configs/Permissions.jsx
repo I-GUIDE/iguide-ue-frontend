@@ -15,33 +15,47 @@ export const PERMISSIONS = {
 export const PERMISSION_DETAIL = {
   1: {
     role_name: "Super Admin",
+    role_name_public: "Moderator",
     description: "You have all permissions and privileges.",
+    color: "primary",
   },
   2: {
     role_name: "Admin",
+    role_name_public: "Moderator",
     description: "You have all permissions EXCEPT user management.",
+    color: "primary",
   },
   3: {
     role_name: "Moderator",
+    role_name_public: "Moderator",
     description: "You have all permissions EXCEPT user management.",
+    color: "primary",
   },
   4: {
     role_name: "Core Contributor",
+    role_name_public: "Core Contributor",
     description: "You can contribute to all types of elements.",
+    color: "warning",
   },
   5: {
     role_name: "Trusted User Plus",
+    role_name_public: "Trusted User Plus",
     description:
       "You can contribute maps, datasets, notebooks, publications, eduactional resources, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models. If you use ACCESS to log in, you will have access to several HPCs.",
+    color: "success",
   },
   8: {
     role_name: "Trusted User",
+    role_name_public: "Trusted User",
     description:
       "You can contribute maps, datasets, notebooks, publications, and code. You can access I-GUIDE JupyterHub. You also have access to our Smart Search feature powered by large language models.",
+    color: "success",
   },
   10: {
     role_name: "User",
+    role_name_public: "User",
     description:
       "You don't have contribution access yet. Please log in with your academic email to enable it. If you believe this is incorrect, please contact us.",
+    color: "neutral",
   },
 };

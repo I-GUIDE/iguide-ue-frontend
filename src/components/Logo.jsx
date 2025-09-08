@@ -1,8 +1,7 @@
-import React from "react";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Chip from "@mui/joy/Chip";
+import Box from "@mui/joy/Box";
 
 export default function Logo(props) {
   const sx = props.sx;
@@ -19,7 +18,7 @@ export default function Logo(props) {
       justifyContent="center"
     >
       <Stack
-        direction={{ sx: "column", sm: "row" }}
+        direction="row"
         spacing={0}
         sx={{
           justifyContent: "center",
@@ -27,8 +26,34 @@ export default function Logo(props) {
         }}
         className="tourid-0"
       >
-        <img src="/images/iguide-word-color.png" alt="I-GUIDE" />
-        <img src="/images/platform-word-gray.png" alt="Platform" />
+        <Box
+          component="img"
+          src="/images/iguide-word-color.png"
+          alt="I-GUIDE"
+          sx={{
+            width: {
+              xs: "120px",
+              sm: "150px",
+              md: "200px",
+              lg: "250px",
+            },
+            height: "auto",
+          }}
+        />
+        <Box
+          component="img"
+          src="/images/platform-word-gray.png"
+          alt="Platform"
+          sx={{
+            width: {
+              xs: "120px",
+              sm: "150px",
+              md: "200px",
+              lg: "250px",
+            },
+            height: "auto",
+          }}
+        />
       </Stack>
     </Typography>
   );

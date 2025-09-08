@@ -11,6 +11,7 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
 
 import { fetchWithAuth } from "../utils/FetcherWithJWT";
 import { PERMISSIONS } from "../configs/Permissions";
@@ -81,21 +82,21 @@ export default function ElementDeleteButton(props) {
 
   return (
     <>
-      <Button
-        aria-label="Delete this element"
-        color={color}
-        variant={variant}
-        size={size}
-        onClick={() => {
-          setDeleteMetadataTitle(title);
-          setDeleteMetadataId(elementId);
-          TEST_MODE && console.log("Attempting to delete:", title, elementId);
-        }}
-      >
-        <Tooltip title={tooltipTitle} placement="top" arrow>
+      <Tooltip title={tooltipTitle} placement="top" arrow>
+        <IconButton
+          aria-label="Delete this element"
+          color={color}
+          variant={variant}
+          size={size}
+          onClick={() => {
+            setDeleteMetadataTitle(title);
+            setDeleteMetadataId(elementId);
+            TEST_MODE && console.log("Attempting to delete:", title, elementId);
+          }}
+        >
           {children}
-        </Tooltip>
-      </Button>
+        </IconButton>
+      </Tooltip>
       <Modal
         open={!!deleteMetadataTitle && !!deleteMetadataId}
         onClose={() => {

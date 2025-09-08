@@ -164,10 +164,10 @@ export default function UserProfile() {
         <CssBaseline enableColorScheme />
         {localUserInfo && (
           <UserProfileHeader
-            localUserInfo={localUserInfo}
+            userInfo={localUserInfo}
             contributionCount={numberOfTotalItems}
             loading={localUserInfoLoading}
-            allowProfileOps
+            managementView
           />
         )}
         <Container maxWidth="lg">
@@ -187,9 +187,8 @@ export default function UserProfile() {
               sx={{
                 minHeight: USER_PROFILE_BODY_HEIGHT,
                 backgroundColor: "inherit",
-                px: { xs: 2, md: 4 },
-                pt: 4,
-                pb: 8,
+                px: { xs: 1, md: 2, lg: 4 },
+                py: 4,
               }}
             >
               <Typography level="title-lg" sx={{ textAlign: "center", mb: 1 }}>

@@ -1,5 +1,3 @@
-import React from "react";
-
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import Container from "@mui/joy/Container";
@@ -35,15 +33,15 @@ import {
 import { PERMISSIONS } from "../../configs/Permissions";
 
 export default function UserProfileHeader(props) {
-  const localUserInfo = props.localUserInfo;
-  const allowProfileOps = props.allowProfileOps;
+  const userInfo = props.userInfo;
+  const managementView = props.managementView;
   const contributionCount = props.contributionCount
     ? props.contributionCount
     : 0;
   const loading = props.loading;
   const hideEmail = props.hideEmail;
 
-  // When the localUserInfo is still loading...
+  // When the userInfo is still loading...
   if (loading) {
     return (
       <Box
@@ -52,7 +50,8 @@ export default function UserProfileHeader(props) {
           flexWrap: "wrap",
           p: 0,
           m: 0,
-          height: USER_PROFILE_HEADER_HEIGHT,
+          height: "100%",
+          maxHeight: USER_PROFILE_HEADER_HEIGHT,
         }}
       >
         <Card
@@ -96,7 +95,7 @@ export default function UserProfileHeader(props) {
   }
 
   // If the user info from the local DB is still not available, wait...
-  if (!localUserInfo) {
+  if (!userInfo) {
     return (
       <Box
         sx={{
@@ -144,8 +143,8 @@ export default function UserProfileHeader(props) {
     );
   }
 
-  const canEditOER = localUserInfo.role <= PERMISSIONS["edit_oer"];
-  const canContributeElements = localUserInfo.role <= PERMISSIONS["contribute"];
+  const canEditOER = userInfo.role <= PERMISSIONS["edit_oer"];
+  const canContributeElements = userInfo.role <= PERMISSIONS["contribute"];
 
   return (
     <Box
@@ -175,25 +174,29 @@ export default function UserProfileHeader(props) {
           <Container maxWidth="lg">
             <Grid
               container
-              sx={{ justifyContent: "center", alignItems: "center" }}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                px: { xs: 1, md: 2, lg: 4 },
+              }}
             >
               <Grid xs={12} md={3}>
                 <Stack
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
                   <UserAvatar
-                    userAvatarUrls={localUserInfo["avatar_url"]}
-                    userId={localUserInfo.id}
-                    size={150}
-                    avatarResolution="low"
-                    isLoading={!localUserInfo}
+                    userAvatarUrls={userInfo["avatar_url"]}
+                    userId={userInfo.id}
+                    size={200}
+                    avatarResolution="high"
+                    isLoading={!userInfo}
                   />
                 </Stack>
               </Grid>
               <Grid xs={12} md={6}>
                 <Stack
                   direction="column"
-                  sx={{ m: 3 }}
+                  sx={{ m: { md: 3 } }}
                   spacing={2}
                   alignItems={{
                     xs: "center",
@@ -202,7 +205,7 @@ export default function UserProfileHeader(props) {
                 >
                   <Stack
                     direction="column"
-                    sx={{ m: 3 }}
+                    sx={{ m: { md: 3 } }}
                     spacing={0.5}
                     alignItems={{
                       xs: "center",
@@ -211,43 +214,63 @@ export default function UserProfileHeader(props) {
                   >
                     <Stack
                       direction={{ xs: "column", md: "row" }}
-                      sx={{ m: 3 }}
-                      spacing={1}
+                      sx={{ m: { md: 3 } }}
+                      spacing={0.5}
                       alignItems="center"
+                      flexWrap="wrap"
                     >
-                      <Typography level="h1" fontWeight="lg" textColor="#000">
-                        {localUserInfo.first_name
-                          ? localUserInfo.first_name
+                      <Typography
+                        level="h2"
+                        fontWeight="lg"
+                        textColor="#000"
+                        textAlign={{ xs: "center", sm: "left" }}
+                        sx={{
+                          fontSize: {
+                            xs: "1.5rem", // h3
+                            sm: "2rem", // h2
+                          },
+                        }}
+                      >
+                        {userInfo.first_name
+                          ? userInfo.first_name
                           : "First name unknown"}
                         &nbsp;
-                        {localUserInfo.last_name
-                          ? localUserInfo.last_name
+                        {userInfo.last_name
+                          ? userInfo.last_name
                           : "Last name unknown"}
                       </Typography>
-                      <UserRoleChip roleNumber={localUserInfo.role} />
+                      <UserRoleChip
+                        roleNumber={userInfo.role}
+                        usePublicRoleName={!managementView}
+                        disabledTooltip={!managementView}
+                      />
                     </Stack>
 
                     {/* Don't show user affiliation if it's in the untrusted affiliation list */}
-                    {localUserInfo.affiliation &&
+                    {userInfo.affiliation &&
                       !UNTRUSTED_AFFILIATIONS.includes(
-                        localUserInfo.affiliation?.toLowerCase()
+                        userInfo.affiliation?.toLowerCase()
                       ) && (
-                        <Typography level="body-lg" fontWeight="sm">
-                          {localUserInfo.affiliation}
+                        <Typography
+                          level="body-lg"
+                          fontWeight="sm"
+                          textAlign={{ xs: "center", sm: "left" }}
+                        >
+                          {userInfo.affiliation}
                         </Typography>
                       )}
                   </Stack>
                   <Stack
                     direction="column"
-                    sx={{ m: 3 }}
+                    sx={{ m: { md: 3 } }}
                     spacing={0.5}
                     alignItems={{
                       xs: "center",
                       md: "flex-start",
                     }}
                   >
-                    {localUserInfo.bio &&
-                      (localUserInfo["bio"].length > 100 ? (
+                    {userInfo.bio &&
+                      (userInfo["bio"].length > 100 ? (
                         <Tooltip
                           title={
                             <Box
@@ -261,7 +284,7 @@ export default function UserProfileHeader(props) {
                             >
                               <Typography level="title-sm">Bio</Typography>
                               <Typography level="body-sm">
-                                {localUserInfo.bio}
+                                {userInfo.bio}
                               </Typography>
                             </Box>
                           }
@@ -278,7 +301,7 @@ export default function UserProfileHeader(props) {
                               WebkitBoxOrient: "vertical",
                             }}
                           >
-                            {localUserInfo.bio}
+                            {userInfo.bio}
                           </Typography>
                         </Tooltip>
                       ) : (
@@ -293,12 +316,12 @@ export default function UserProfileHeader(props) {
                             WebkitBoxOrient: "vertical",
                           }}
                         >
-                          {localUserInfo.bio}
+                          {userInfo.bio}
                         </Typography>
                       ))}
-                    {localUserInfo.email && !hideEmail && (
+                    {userInfo.email && !hideEmail && (
                       <Link
-                        href={"mailto:" + localUserInfo.email}
+                        href={"mailto:" + userInfo.email}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -307,19 +330,19 @@ export default function UserProfileHeader(props) {
                           fontWeight="lg"
                           color="primary"
                         >
-                          {localUserInfo.email}
+                          {userInfo.email}
                         </Typography>
                       </Link>
                     )}
                     <Stack direction="row" spacing={1.5} sx={{ py: 0.5 }}>
-                      {localUserInfo.gitHubLink && (
+                      {userInfo.gitHubLink && (
                         <Tooltip
                           title="User GitHub profile"
                           variant="solid"
                           arrow
                         >
                           <Link
-                            href={localUserInfo.gitHubLink}
+                            href={userInfo.gitHubLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ textDecoration: "none" }}
@@ -328,14 +351,14 @@ export default function UserProfileHeader(props) {
                           </Link>
                         </Tooltip>
                       )}
-                      {localUserInfo.linkedInLink && (
+                      {userInfo.linkedInLink && (
                         <Tooltip
                           title="User LinkedIn profile"
                           variant="solid"
                           arrow
                         >
                           <Link
-                            href={localUserInfo.linkedInLink}
+                            href={userInfo.linkedInLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ textDecoration: "none" }}
@@ -344,14 +367,14 @@ export default function UserProfileHeader(props) {
                           </Link>
                         </Tooltip>
                       )}
-                      {localUserInfo.googleScholarLink && (
+                      {userInfo.googleScholarLink && (
                         <Tooltip
                           title="User Google Scholar profile"
                           variant="solid"
                           arrow
                         >
                           <Link
-                            href={localUserInfo.googleScholarLink}
+                            href={userInfo.googleScholarLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ textDecoration: "none" }}
@@ -360,14 +383,14 @@ export default function UserProfileHeader(props) {
                           </Link>
                         </Tooltip>
                       )}
-                      {localUserInfo.personalWebsiteLink && (
+                      {userInfo.personalWebsiteLink && (
                         <Tooltip
                           title="User personal website"
                           variant="solid"
                           arrow
                         >
                           <Link
-                            href={localUserInfo.personalWebsiteLink}
+                            href={userInfo.personalWebsiteLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ textDecoration: "none" }}
@@ -379,7 +402,7 @@ export default function UserProfileHeader(props) {
                     </Stack>
                   </Stack>
 
-                  {allowProfileOps && (
+                  {managementView && (
                     <Stack
                       direction={{ xs: "column", sm: "row" }}
                       spacing={2}
