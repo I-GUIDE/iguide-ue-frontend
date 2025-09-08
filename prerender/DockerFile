@@ -1,38 +1,6 @@
-# FROM node:18-slim
-
-# # Install Chrome + dependencies using modern approach
-# RUN apt-get update && apt-get install -y wget gnupg ca-certificates \
-#     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
-#     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
-#        > /etc/apt/sources.list.d/google-chrome.list \
-#     && apt-get update && apt-get install -y \
-#        google-chrome-stable \
-#        fonts-liberation libasound2 libatk1.0-0 libatk-bridge2.0-0 \
-#        libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxext6 \
-#        libxfixes3 libxrandr2 libgbm1 libgtk-3-0 libnss3 libxss1 \
-#        xdg-utils libxshmfence1 \
-#        --no-install-recommends \
-#     && rm -rf /var/lib/apt/lists/*
-
-# WORKDIR /usr/src/app
-
-# # Copy package files if they exist, otherwise copy just server.js
-# COPY package.json yarn.lock ./
-# RUN if [ -f package.json ]; then yarn install --frozen-lockfile; fi
-
-# COPY . .
-
-# RUN useradd -m prerender && chown -R prerender:prerender /usr/src/app
-# USER prerender
-
-# EXPOSE 8000
-# CMD ["node", "server.js"]
-
-
 FROM browserless/chrome
 USER root
 
-# Install Node.js and yarn
 RUN apt-get update && apt-get install -y curl \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \

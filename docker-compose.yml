@@ -27,7 +27,6 @@ services:
   prerender:
     image: iguide-ue-prerender-${VITE_ENV}
     container_name: iguide-ue-prerender-nginx-${VITE_ENV}
-    # network_mode: host # Add this line
     build:
       context: ./prerender/.
       dockerfile: Dockerfile
