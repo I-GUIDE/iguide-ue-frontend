@@ -20,7 +20,7 @@ import ElementGrid from "../components/Layout/ElementGrid";
 
 import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
-import { fetchUser, getUserRole } from "../utils/UserManager";
+import { fetchUser } from "../utils/UserManager";
 
 export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
@@ -34,20 +34,17 @@ export default function ContributorProfile() {
   useEffect(() => {
     async function getContributorInfo(uid) {
       const user = await fetchUser(uid);
-      const role = await getUserRole(uid);
       const tally = await getNumberOfContributions(uid);
       setNumberOfTotalItems(tally);
 
       setContributorInfo({
         first_name: user["display-first-name"],
         last_name: user["display-last-name"],
-        email: user["email"],
-        affiliation: user["affiliation"],
-        bio: user["bio"],
+        affiliation: user.affiliation,
+        bio: user.bio,
         avatar_url: user["avatar-url"],
-        openid: user["openid"],
-        id: user["id"],
-        role: role,
+        id: user.id,
+        role: user.role,
         gitHubLink: user.gitHubLink,
         linkedInLink: user.linkedInLink,
         googleScholarLink: user.googleScholarLink,
