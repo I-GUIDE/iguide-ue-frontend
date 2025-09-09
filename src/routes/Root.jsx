@@ -13,13 +13,7 @@ import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
 import ErrorPage from "./ErrorPage.jsx";
 
-import {
-  fetchUser,
-  getUserRole,
-  userLogout,
-  checkTokens,
-} from "../utils/UserManager.jsx";
-import { PERMISSIONS } from "../configs/Permissions.jsx";
+import { fetchUser, userLogout, checkTokens } from "../utils/UserManager.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 import RouteChangeListener from "../utils/RouteChangeListener.jsx";
 
@@ -119,13 +113,9 @@ export default function Root(props) {
 
       // Get user information and role from the database
       const returnedLocalUser = await fetchUser(openId);
-      const userRole = await getUserRole(openId);
-      // Make sure the function returns a number, otherwise assign 10
-      returnedLocalUser.role =
-        typeof userRole === "number" ? userRole : PERMISSIONS["default_user"];
-
       TEST_MODE &&
         console.log("Local user returned from the database", returnedLocalUser);
+
       const localUserInfoObject = {
         affiliation: returnedLocalUser.affiliation,
         avatar_url: returnedLocalUser["avatar-url"],

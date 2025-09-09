@@ -1,10 +1,12 @@
 import { useState, useRef } from "react";
 
 import Tooltip from "@mui/joy/Tooltip";
-import { fetchUser, getUserRole } from "../utils/UserManager";
+import { fetchUser } from "../utils/UserManager";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 
 import UserPreviewCard from "./UserPreviewCard";
+
+const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function UserProfileTooltip(props) {
   const children = props.children;
@@ -24,17 +26,21 @@ export default function UserProfileTooltip(props) {
   async function getUserInformation(uid) {
     const user = await fetchUser(uid);
     const numberOfContributions = await getNumberOfContributions(uid);
-    const role = await getUserRole(uid);
-    console.log("User returned", user, numberOfContributions, role);
+    TEST_MODE &&
+      console.log("User returned", user, "elements", numberOfContributions);
+
+    if (!user) {
+      return;
+    }
 
     setUserData({
       first_name: user["display-first-name"],
       last_name: user["display-last-name"],
-      affiliation: user["affiliation"],
-      bio: user["bio"],
+      affiliation: user.affiliation,
+      bio: user.bio,
       avatar_url: user["avatar-url"],
-      role: role,
-      id: user["id"],
+      role: user.role,
+      id: user.id,
       gitHubLink: user.gitHubLink,
       linkedInLink: user.linkedInLink,
       googleScholarLink: user.googleScholarLink,
