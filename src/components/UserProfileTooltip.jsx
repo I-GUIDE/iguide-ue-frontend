@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 import Tooltip from "@mui/joy/Tooltip";
-import { fetchUser } from "../utils/UserManager";
+import { fetchUser, getUserRole } from "../utils/UserManager";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 
 import UserPreviewCard from "./UserPreviewCard";
@@ -25,6 +25,7 @@ export default function UserProfileTooltip(props) {
 
   async function getUserInformation(uid) {
     const user = await fetchUser(uid);
+    const userRole = await getUserRole(uid);
     const numberOfContributions = await getNumberOfContributions(uid);
     TEST_MODE &&
       console.log("User returned", user, "elements", numberOfContributions);
@@ -39,7 +40,7 @@ export default function UserProfileTooltip(props) {
       affiliation: user.affiliation,
       bio: user.bio,
       avatar_url: user["avatar-url"],
-      role: user.role,
+      role: userRole,
       id: user.id,
       gitHubLink: user.gitHubLink,
       linkedInLink: user.linkedInLink,
