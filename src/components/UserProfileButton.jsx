@@ -234,6 +234,15 @@ export default forwardRef(function UserProfileButton(props, ref) {
               >
                 Smart Search
               </MenuItem>
+              <MenuItem
+                component="a"
+                href="/user-profile"
+                sx={{ width: "100%" }}
+                onClick={() => setAnchorEl(null)}
+                onKeyDown={(e) => handleMenuKeyDown(e, 6)}
+              >
+                Request DOI
+              </MenuItem>
             </>
           )}
           {canContributeElements && (

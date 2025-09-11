@@ -528,6 +528,28 @@ export default function UserDatasetUploader(props) {
                   Your upload is complete. We've automatically filled in the
                   dataset's direct download link and dataset size for you.
                 </Typography>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: "center" }}
+                >
+                  <Chip variant="solid" size="md" color="danger">
+                    NEW
+                  </Chip>
+                  <Typography level="title-sm">
+                    Are you interested in requesting a DOI for this dataset?
+                    Please read our{" "}
+                    <Link
+                      component={RouterLink}
+                      to="/docs/i-guide-doi-issuance-guideline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      guideline
+                    </Link>{" "}
+                    to see how to request and what to expect.
+                  </Typography>
+                </Stack>
               </Stack>
             )}
             {uploadStatus === "CANCELED" && (

@@ -276,6 +276,17 @@ export default function NavBar(props) {
                   Smart Search
                 </ListItemButton>
               </ListItem>
+              <ListItem role="none">
+                <ListItemButton
+                  role="menuitem"
+                  component="a"
+                  href="/user-profile"
+                  ref={firstFocusableRef}
+                  onClick={(e) => toggleDrawer(false)(e)}
+                >
+                  Request DOI
+                </ListItemButton>
+              </ListItem>
             </>
           )}
           {canContributeElements && (

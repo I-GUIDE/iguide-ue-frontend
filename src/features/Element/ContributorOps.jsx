@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router";
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";
 import IconButton from "@mui/joy/IconButton";
+import Button from "@mui/joy/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
@@ -38,6 +39,15 @@ export default function ContributorOps(props) {
 
   return (
     <Stack direction="row" spacing={1} sx={{ py: 1 }}>
+      <Button
+        size="sm"
+        variant="soft"
+        color="warning"
+        component="a"
+        href={updateFormUri}
+      >
+        Request DOI
+      </Button>
       <Tooltip title="Edit this element" placement="top" arrow>
         <IconButton
           size="sm"

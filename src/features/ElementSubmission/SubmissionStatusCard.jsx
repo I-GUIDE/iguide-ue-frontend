@@ -250,14 +250,24 @@ export default function SubmissionStatusCard(props) {
               </>
             )}
             {submissionSucceeded && elementURI && (
-              <Button
-                component="a"
-                href={elementURI}
-                variant="solid"
-                color="primary"
-              >
-                View element
-              </Button>
+              <>
+                <Button
+                  component="a"
+                  href={elementURI}
+                  variant="solid"
+                  color="primary"
+                >
+                  View element
+                </Button>
+                <Button
+                  component="a"
+                  href={elementURI}
+                  variant="outlined"
+                  color="warning"
+                >
+                  Request DOI
+                </Button>
+              </>
             )}
           </Stack>
         </CardContent>
