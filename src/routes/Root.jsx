@@ -127,7 +127,7 @@ export default function Root(props) {
         last_name: returnedLocalUser["display-last-name"],
         openid: returnedLocalUser.openid,
         id: returnedLocalUser.id,
-        role: user.role,
+        role: returnedLocalUser.role,
         gitHubLink: returnedLocalUser.gitHubLink,
         linkedInLink: returnedLocalUser.linkedInLink,
         googleScholarLink: returnedLocalUser.googleScholarLink,
