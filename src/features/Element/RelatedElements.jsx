@@ -58,7 +58,7 @@ export default function RelatedElements(props) {
       : relatedElements.slice(0, numberOfElementsVisibleWithoutExpansion);
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
         Related elements
       </Typography>

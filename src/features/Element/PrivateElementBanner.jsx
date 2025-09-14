@@ -1,5 +1,3 @@
-import React from "react";
-
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import LockIcon from "@mui/icons-material/Lock";
@@ -13,7 +11,7 @@ export default function PrivateElementBanner(props) {
   }
 
   return (
-    <Stack sx={{ px: { xs: 2, md: 4 }, pt: 1 }}>
+    <Stack sx={{ pt: 1 }}>
       <Typography
         variant="soft"
         color="warning"

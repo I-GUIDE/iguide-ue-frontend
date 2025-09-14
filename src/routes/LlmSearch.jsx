@@ -61,7 +61,7 @@ export default function LlmSearch() {
               sx={{
                 height: "100vh",
                 backgroundColor: "inherit",
-                px: { xs: 2, md: 4 },
+                px: { xs: 1, md: 3, lg: 6 },
                 pt: PT_OFFSET,
                 pb: 8,
               }}

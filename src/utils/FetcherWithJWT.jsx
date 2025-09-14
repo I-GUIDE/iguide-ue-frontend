@@ -26,6 +26,8 @@ export async function fetchWithAuth(url, options = {}) {
     credentials: "include", // Ensure cookies are sent with the request
   });
 
+  TEST_MODE && console.log("Fetch with JWT returned", res);
+
   // Case: access token expired, try using the refresh token
   if (res.status === 401) {
     TEST_MODE && console.log("Token expired, try to refresh");
@@ -37,8 +39,12 @@ export async function fetchWithAuth(url, options = {}) {
       ...options,
       credentials: "include",
     });
-    // Case: access token missing
-  } else if (res.status === 403) {
+
+    TEST_MODE && console.log("Fetch retry returned", res);
+  }
+
+  // Case: access token missing
+  if (res.status === 403) {
     alert("Invalid credential: You don't have permission to access this page!");
   }
 

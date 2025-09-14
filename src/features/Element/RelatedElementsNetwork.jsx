@@ -94,7 +94,7 @@ export default function RelatedElementsNetwork(props) {
 
   return (
     <Suspense fallback={<div>Loading related element graph...</div>}>
-      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Stack spacing={2} sx={{ py: 3 }}>
         <Typography level="h5" fontWeight="lg" mb={1}>
           {tabTitle}
         </Typography>
@@ -103,7 +103,7 @@ export default function RelatedElementsNetwork(props) {
             display: "flex",
             flexWrap: "wrap",
             border: "solid 1px #e1e1e1",
-            height: 700,
+            height: { xs: 400, md: 700 },
             width: "100%",
             position: "relative",
           }}

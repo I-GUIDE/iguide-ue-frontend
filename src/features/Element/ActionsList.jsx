@@ -20,7 +20,7 @@ export default function ActionList(props) {
 
   if (hasExternalLink || hasDirectDownloadLink) {
     return (
-      <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+      <Stack spacing={2} sx={{ py: 3 }}>
         <Typography id="notebook-tags" level="h5" fontWeight="lg" mb={1}>
           {title}
         </Typography>

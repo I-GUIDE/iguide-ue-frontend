@@ -70,12 +70,14 @@ export default function UserPreviewCard(props) {
           <UserRoleChip roleNumber={role} usePublicRoleName disabledTooltip />
         </Stack>
 
-        <Link component={RouterLink} to={`/contributor/${userId}`}>
-          <Typography level="title-sm">
-            {numberOfContributions} contribution
-            {numberOfContributions > 1 && "s"}
-          </Typography>
-        </Link>
+        {numberOfContributions > 0 && (
+          <Link component={RouterLink} to={`/contributor/${userId}`}>
+            <Typography level="title-sm">
+              {numberOfContributions} contribution
+              {numberOfContributions > 1 && "s"}
+            </Typography>
+          </Link>
+        )}
 
         <Typography level="body-sm">{affiliation}</Typography>
 

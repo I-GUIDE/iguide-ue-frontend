@@ -15,7 +15,6 @@ export default function ContributorCard(props) {
   const userId = props.userId;
   const name = props.name;
   const isLoading = props.isLoading;
-  const timePassedText = props.timePassedText;
 
   return (
     <Link
@@ -54,7 +53,7 @@ export default function ContributorCard(props) {
               />
               <Stack direction="column">
                 <Typography level="title-lg">{name}</Typography>
-                <Typography level="body-sm">{timePassedText}</Typography>
+                <Typography level="body-xs">Contributor</Typography>
               </Stack>
             </Stack>
           </UserProfileTooltip>

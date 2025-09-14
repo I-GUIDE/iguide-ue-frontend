@@ -48,7 +48,7 @@ export default function ElementUpdate() {
             sx={{
               minHeight: NO_HEADER_BODY_HEIGHT,
               backgroundColor: "inherit",
-              px: { xs: 2, md: 4 },
+              px: { xs: 1, md: 3, lg: 6 },
               pt: PT_OFFSET,
               pb: 8,
             }}

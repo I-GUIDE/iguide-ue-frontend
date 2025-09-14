@@ -223,9 +223,8 @@ export default function UserProfileCard(props) {
                 <IconButton
                   color="success"
                   size="sm"
-                  component="a"
                   aria-label="Edit user profile"
-                  href="#future-user-edit-page"
+                  disabled
                 >
                   <Edit />
                 </IconButton>

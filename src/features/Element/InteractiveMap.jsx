@@ -40,7 +40,7 @@ export default function InteractiveMap(props) {
   const minZoom = 5;
 
   return (
-    <Stack spacing={2} sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+    <Stack spacing={2} sx={{ py: 3 }}>
       <Typography level="h5" fontWeight="lg" mb={1}>
         Interactive Map
       </Typography>
@@ -49,6 +49,7 @@ export default function InteractiveMap(props) {
           display: "flex",
           flexWrap: "wrap",
           border: "solid 1px #e1e1e1",
+          height: { xs: 400, md: 600 },
           width: "100%",
           position: "relative",
         }}
@@ -65,7 +66,7 @@ export default function InteractiveMap(props) {
             elementCentroid={centroidLeaflet}
             elementGeometry={geometryLeaflet}
             elementBoundingBox={boundingBoxLeaflet}
-            style={{ height: 600, width: "100%" }}
+            style={{ height: "100%", width: "100%" }}
           />
         </Suspense>
       </Box>
