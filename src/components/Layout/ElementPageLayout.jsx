@@ -50,6 +50,8 @@ import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
 
+import Meta from "../Meta";
+
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function ElementPageLayout(props) {
@@ -184,6 +186,9 @@ export default function ElementPageLayout(props) {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
+
+      <Meta title={title} description={abstract} imageUrl={thumbnailImage} />
+
       <Container maxWidth="lg">
         <Box
           component="main"
