@@ -39,6 +39,7 @@ import {
   HOME_SEARCH_SEC_HEIGHT,
   NAVBAR_HEIGHT,
 } from "../configs/VarConfigs";
+import Meta from "../components/Meta";
 
 export default function Home() {
   usePageTitle("", true);
@@ -56,6 +57,11 @@ export default function Home() {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <Meta
+        title={"I-GUIDE landing"}
+        description="Discover, connect, map"
+        imageUrl="https://platform.i-guide.io/images/iguide-word-color.png"
+      />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box
