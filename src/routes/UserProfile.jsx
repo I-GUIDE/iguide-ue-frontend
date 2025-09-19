@@ -24,7 +24,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 import Header from "../components/Layout/Header";
-import LoginPage from "./LoginPage";
+import LoginCard from "../components/LoginCard";
 import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
 import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
@@ -91,7 +91,7 @@ export default function UserProfile() {
   }
 
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return <LoginCard />;
   }
 
   if (error) {

@@ -13,7 +13,7 @@ import { PERMISSIONS } from "../configs/Permissions";
 
 import SearchPane from "../features/LlmSearch/SearchPane";
 import usePageTitle from "../hooks/usePageTitle";
-import LoginPage from "./LoginPage";
+import LoginCard from "../components/LoginCard";
 import ErrorPage from "./ErrorPage";
 
 export default function LlmSearch() {
@@ -35,7 +35,7 @@ export default function LlmSearch() {
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return <LoginCard />;
   }
 
   if (!localUserInfo) {
