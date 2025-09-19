@@ -413,8 +413,8 @@ export default function NavBar(props) {
         >
           <Box
             sx={{
-              height: NAVBAR_HEIGHT,
-              px: 3,
+              height: { xs: NAVBAR_HEIGHT, md: NAVBAR_HEIGHT - 10 },
+              px: 2,
               display: "flex",
               bgcolor: "neutral",
             }}
@@ -597,7 +597,7 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-                spacing={3}
+                spacing={2}
               >
                 <Box className="tourid-1">
                   <Tooltip title="Home" enterDelay={1000}>
@@ -613,9 +613,7 @@ export default function NavBar(props) {
                     >
                       <Box
                         component="img"
-                        sx={{
-                          height: 40,
-                        }}
+                        sx={{ height: 40 }}
                         alt="I-GUIDE logo"
                         src={iguideLogo}
                       />
