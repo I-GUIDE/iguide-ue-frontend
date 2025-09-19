@@ -321,7 +321,7 @@ export default forwardRef(function UserProfileButton(props, ref) {
             onClick={userLogout}
             onKeyDown={(e) => handleMenuKeyDown(e, 14)}
           >
-            Logout
+            Log Out
           </MenuItem>
         </Menu>
       </Dropdown>
@@ -331,11 +331,12 @@ export default forwardRef(function UserProfileButton(props, ref) {
       <Button
         size="sm"
         color="primary"
-        variant="plain"
+        variant="solid"
         onClick={userLogin}
+        sx={{ borderRadius: "999px", px: 2, py: 1 }}
         className="tourid-4"
       >
-        Login
+        Sign In
       </Button>
     );
   }

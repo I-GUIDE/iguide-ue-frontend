@@ -366,7 +366,7 @@ export default function NavBar(props) {
               ref={firstFocusableRef}
               onClick={userLogout}
             >
-              Logout
+              Log Out
             </ListItemButton>
           </ListItem>
         </>
@@ -379,7 +379,7 @@ export default function NavBar(props) {
             ref={firstFocusableRef}
             onClick={userLogin}
           >
-            Login
+            Sign In
           </ListItemButton>
         </ListItem>
       );
@@ -414,7 +414,7 @@ export default function NavBar(props) {
           <Box
             sx={{
               height: NAVBAR_HEIGHT,
-              px: 4,
+              px: 3,
               display: "flex",
               bgcolor: "neutral",
             }}
@@ -597,7 +597,7 @@ export default function NavBar(props) {
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
-                spacing={1}
+                spacing={3}
               >
                 <Box className="tourid-1">
                   <Tooltip title="Home" enterDelay={1000}>
@@ -615,7 +615,6 @@ export default function NavBar(props) {
                         component="img"
                         sx={{
                           height: 40,
-                          px: 1,
                         }}
                         alt="I-GUIDE logo"
                         src={iguideLogo}
@@ -623,39 +622,41 @@ export default function NavBar(props) {
                     </Link>
                   </Tooltip>
                 </Box>
-                <Box className="tourid-2">
-                  <HoverOverMenuTab
-                    ref={(el) => (navItemsRef.current[1] = el)}
-                    menu={elementPages}
-                    onKeyDown={createHandleButtonKeyDown(1)}
-                    onMouseEnter={() => setMenuIndex(1)}
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Box className="tourid-2">
+                    <HoverOverMenuTab
+                      ref={(el) => (navItemsRef.current[1] = el)}
+                      menu={elementPages}
+                      onKeyDown={createHandleButtonKeyDown(1)}
+                      onMouseEnter={() => setMenuIndex(1)}
+                    >
+                      Knowledge Elements
+                    </HoverOverMenuTab>
+                  </Box>
+                  <Box className="tourid-3">
+                    <HoverOverMenuTab
+                      ref={(el) => (navItemsRef.current[2] = el)}
+                      menu={supportPages}
+                      onKeyDown={createHandleButtonKeyDown(2)}
+                      onMouseEnter={() => setMenuIndex(2)}
+                    >
+                      Support
+                    </HoverOverMenuTab>
+                  </Box>
+                  <Button
+                    ref={(el) => (navItemsRef.current[3] = el)}
+                    to="/about"
+                    component={RouterLink}
+                    variant="plain"
+                    color="neutral"
+                    size="sm"
+                    sx={{ alignSelf: "center", px: 1, py: 1 }}
+                    onKeyDown={createHandleButtonKeyDown(3)}
+                    onMouseEnter={() => setMenuIndex(3)}
                   >
-                    Knowledge Elements
-                  </HoverOverMenuTab>
-                </Box>
-                <Box className="tourid-3">
-                  <HoverOverMenuTab
-                    ref={(el) => (navItemsRef.current[2] = el)}
-                    menu={supportPages}
-                    onKeyDown={createHandleButtonKeyDown(2)}
-                    onMouseEnter={() => setMenuIndex(2)}
-                  >
-                    Support
-                  </HoverOverMenuTab>
-                </Box>
-                <Button
-                  ref={(el) => (navItemsRef.current[3] = el)}
-                  to="/about"
-                  component={RouterLink}
-                  variant="plain"
-                  color="neutral"
-                  size="sm"
-                  sx={{ alignSelf: "center", px: 1 }}
-                  onKeyDown={createHandleButtonKeyDown(3)}
-                  onMouseEnter={() => setMenuIndex(3)}
-                >
-                  About Us
-                </Button>
+                    About Us
+                  </Button>
+                </Stack>
               </Stack>
               <Stack
                 direction="row"

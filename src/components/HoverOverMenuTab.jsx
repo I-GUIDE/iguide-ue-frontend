@@ -67,7 +67,7 @@ export default forwardRef(function HoverOverMenuTab(props, ref) {
         variant="plain"
         color="neutral"
         size="sm"
-        sx={{ alignSelf: "center", px: 1 }}
+        sx={{ alignSelf: "center", px: 1, py: 1 }}
         endDecorator={
           <span
             style={{
