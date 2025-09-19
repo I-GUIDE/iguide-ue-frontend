@@ -379,7 +379,7 @@ export default function NavBar(props) {
             ref={firstFocusableRef}
             onClick={userLogin}
           >
-            Sign In
+            Sign In with CILogon
           </ListItemButton>
         </ListItem>
       );
