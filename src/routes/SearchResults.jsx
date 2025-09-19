@@ -42,6 +42,7 @@ import {
   SEARCH_RESULTS_HEADER_HEIGHT,
   SEARCH_RESULTS_BODY_HEIGHT,
   ELEMENT_TYPE_CAP,
+  PT_OFFSET,
 } from "../configs/VarConfigs";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -317,45 +318,22 @@ export default function SearchResults() {
               <img src="/images/network-bg.png" loading="lazy" alt="" />
             </CardCover>
             <CardContent
-              sx={{ justifyContent: "center", alignItems: "center" }}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                pt: PT_OFFSET,
+              }}
             >
               <Container maxWidth="md">
-                <Typography
-                  level="h1"
-                  textColor={"#000"}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                    py: 1.5,
-                  }}
-                  justifyContent="center"
-                >
-                  <Stack
-                    direction={{ sx: "column", sm: "row" }}
-                    spacing={0}
-                    sx={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src="/images/iguide-word-color.png"
-                      loading="lazy"
-                      alt="I-GUIDE"
-                    />
-                    <img
-                      src="/images/platform-word-gray.png"
-                      loading="lazy"
-                      alt="Platform"
-                    />
-                  </Stack>
-                </Typography>
                 <form onSubmit={handleSubmit} id="demo">
                   <Input
                     key="search"
                     variant="outlined"
-                    sx={{ "--Input-decoratorChildHeight": "45px" }}
+                    sx={{
+                      "--Input-decoratorChildHeight": "50px",
+                      "--Input-radius": "40px",
+                      "--Input-paddingInline": "20px",
+                    }}
                     placeholder="Search..."
                     type="text"
                     required
@@ -435,10 +413,12 @@ export default function SearchResults() {
                     defaultValue="any"
                     value={searchCategory}
                     onChange={handleSelectChange}
-                    sx={{ width: "100%" }}
+                    sx={{ width: "100%", bgcolor: "transparent" }}
                   >
                     <TabList
                       sx={{
+                        px: 0.5,
+                        pt: 0.5,
                         overflow: "auto",
                         scrollSnapType: "x mandatory",
                         "&::-webkit-scrollbar": { display: "none" },
