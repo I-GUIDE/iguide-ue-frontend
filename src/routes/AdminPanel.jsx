@@ -25,7 +25,7 @@ import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
 
 import UserProfileCard from "../components/UserProfileCard";
 import Header from "../components/Layout/Header";
-import LoginPage from "./LoginPage";
+import LoginCard from "../components/LoginCard";
 import usePageTitle from "../hooks/usePageTitle";
 import ErrorPage from "./ErrorPage";
 import Pagination from "../components/Layout/Pagination";
@@ -218,7 +218,7 @@ export default function AdminPanel() {
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return <LoginCard />;
   }
 
   if (!localUserInfo) {

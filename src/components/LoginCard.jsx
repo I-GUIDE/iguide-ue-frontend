@@ -19,7 +19,7 @@ import { userLogin } from "../utils/UserManager";
 
 import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 
-export default function LoginPage() {
+export default function LoginCard() {
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
@@ -49,7 +49,7 @@ export default function LoginPage() {
               }}
             >
               <Typography level="title-md" sx={{ py: 1 }}>
-                You need to log in to access this page
+                You need to sign in to access this page
               </Typography>
               <Card
                 variant="plain"
@@ -65,10 +65,12 @@ export default function LoginPage() {
                     0 1px 2px rgba(0, 0, 0, 0.3),
                     0 2px 4px rgba(0, 0, 0, 0.2)
                   `,
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  transition: "transform 0.4s ease, box-shadow 0.3s ease",
                   "&:hover": {
-                    transform: "scale(1.0) translateY(-2px)",
-                    boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
+                    boxShadow: `
+                      0 4px 8px rgba(0, 0, 0, 0.25),
+                      0 12px 24px rgba(0, 0, 0, 0.2)
+                    `,
                   },
                 }}
               >
@@ -81,7 +83,9 @@ export default function LoginPage() {
                   />
                 </CardOverflow>
                 <CardContent>
-                  <Typography level="title-sm">Click here to log in</Typography>
+                  <Typography level="title-sm">
+                    Click here to sign in
+                  </Typography>
                 </CardContent>
               </Card>
             </Grid>

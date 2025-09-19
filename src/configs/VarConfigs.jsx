@@ -103,7 +103,7 @@ export const NAVBAR_HEIGHT = 70;
 export const HEADER_HEIGHT = 210 + NAVBAR_HEIGHT;
 export const FOOTER_HEIGHT = 150;
 export const USER_PROFILE_HEADER_HEIGHT = 365 + NAVBAR_HEIGHT;
-export const SEARCH_RESULTS_HEADER_HEIGHT = 250 + NAVBAR_HEIGHT;
+export const SEARCH_RESULTS_HEADER_HEIGHT = 150 + NAVBAR_HEIGHT;
 export const HOME_SEARCH_SEC_HEIGHT = 300 + NAVBAR_HEIGHT;
 
 export const DEFAULT_BODY_HEIGHT = `calc(100vh - ${
@@ -118,7 +118,7 @@ export const SEARCH_RESULTS_BODY_HEIGHT = `calc(100vh - ${
 }px)`;
 
 // This is used for offsetting navbar height for the following contents
-export const PT_OFFSET = NAVBAR_HEIGHT / 8 + 4;
+export const PT_OFFSET = NAVBAR_HEIGHT / 8 + 2;
 
 export const ACCEPTED_IMAGE_TYPES =
   "image/gif, image/jpg, image/jpeg, image/png, image/webp, image/tiff";

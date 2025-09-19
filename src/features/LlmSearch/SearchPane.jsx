@@ -10,7 +10,6 @@ import Link from "@mui/joy/Link";
 
 import MessageBubble from "./MessageBubble";
 import SearchInput from "./SearchInput";
-import Logo from "../../components/Logo";
 import { SampleChatHistory } from "./SampleChatHistory";
 
 import { NAVBAR_HEIGHT } from "../../configs/VarConfigs";
@@ -173,14 +172,6 @@ export default function SearchPane(props) {
         }}
       >
         <Container maxWidth="md">
-          <Logo
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-start",
-              py: 1.5,
-            }}
-          />
           <Typography
             level="h3"
             align="center"

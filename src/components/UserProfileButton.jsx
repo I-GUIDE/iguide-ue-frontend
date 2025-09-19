@@ -9,6 +9,7 @@ import Menu from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
 import MenuButton from "@mui/joy/MenuButton";
 import Dropdown from "@mui/joy/Dropdown";
+import Tooltip from "@mui/joy/Tooltip";
 
 import Typography from "@mui/joy/Typography";
 import Divider from "@mui/joy/Divider";
@@ -87,7 +88,7 @@ export default forwardRef(function UserProfileButton(props, ref) {
             "&:hover": {
               backgroundColor: "transparent",
             },
-            px: 1,
+            px: 0,
           }}
           onClick={handleOpen}
           onMouseEnter={(e) => {
@@ -321,22 +322,25 @@ export default forwardRef(function UserProfileButton(props, ref) {
             onClick={userLogout}
             onKeyDown={(e) => handleMenuKeyDown(e, 14)}
           >
-            Logout
+            Log Out
           </MenuItem>
         </Menu>
       </Dropdown>
     );
   } else {
     return (
-      <Button
-        size="sm"
-        color="primary"
-        variant="plain"
-        onClick={userLogin}
-        className="tourid-4"
-      >
-        Login
-      </Button>
+      <Tooltip title="You'll be redirected to CILogon to sign in with your institution">
+        <Button
+          size="sm"
+          color="primary"
+          variant="solid"
+          onClick={userLogin}
+          sx={{ borderRadius: "999px", px: 2, py: 1 }}
+          className="tourid-4"
+        >
+          Sign In
+        </Button>
+      </Tooltip>
     );
   }
 });

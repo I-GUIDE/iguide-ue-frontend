@@ -48,7 +48,7 @@ export default function SearchModal() {
       <Button
         variant="soft"
         color="neutral"
-        startDecorator={<SearchRoundedIcon />}
+        startDecorator={<SearchRoundedIcon sx={{ height: "25px" }} />}
         sx={{
           borderRadius: "20px",
           minWidth: "140px",

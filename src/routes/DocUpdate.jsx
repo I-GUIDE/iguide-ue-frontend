@@ -6,7 +6,7 @@ import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
 import Grid from "@mui/joy/Grid";
 
-import LoginPage from "./LoginPage";
+import LoginCard from "../components/LoginCard";
 import DocEditCard from "../features/DocSubmission/DocEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -20,7 +20,7 @@ export default function DocUpdate() {
 
   // If the user is not authenticated/logged in, they will be redirected to the login page
   if (!isAuthenticated) {
-    return <LoginPage />;
+    return <LoginCard />;
   }
 
   return (
