@@ -26,8 +26,10 @@ import ElementSubmission from "./routes/ElementSubmission";
 import ElementUpdate from "./routes/ElementUpdate";
 import About from "./routes/About";
 import Tutorials from "./routes/Tutorials";
+
 import TermsOfUse from "./routes/Legal/TermsOfUse";
 import LicenseAgreement from "./routes/Legal/LicenseAgreement";
+import CookiePolicy from "./routes/Legal/CookiePolicy";
 
 import NetworkVisualizer from "./routes/NetworkVisualizer";
 import ElementsMap from "./routes/ElementsMap";
@@ -69,6 +71,12 @@ export const routes = [
     path: "/contributor-license-agreement",
     element: <LicenseAgreement />,
     label: "Contributor License Agreement",
+    category: "About",
+  },
+  {
+    path: "/cookie-policy",
+    element: <CookiePolicy />,
+    label: "Cookie Policy",
     category: "About",
   },
   {
