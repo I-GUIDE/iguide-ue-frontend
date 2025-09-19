@@ -207,6 +207,9 @@ export default function Footer() {
                   <Link component={RouterLink} to="/contact-us">
                     <Typography level="body-xs">Contact Us</Typography>
                   </Link>
+                  <Link component={RouterLink} to="/cookie-policy">
+                    <Typography level="body-xs">Cookie Policy</Typography>
+                  </Link>
                   <Link component={RouterLink} to="/terms-of-use">
                     <Typography level="body-xs">Terms of Use</Typography>
                   </Link>
