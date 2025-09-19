@@ -24,7 +24,6 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import SearchIcon from "@mui/icons-material/Search";
 import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
@@ -330,11 +329,6 @@ export default function SearchResults() {
                     alignItems: "flex-start",
                     py: 1.5,
                   }}
-                  endDecorator={
-                    <Chip component="span" color="primary" size="sm">
-                      BETA
-                    </Chip>
-                  }
                   justifyContent="center"
                 >
                   <Stack

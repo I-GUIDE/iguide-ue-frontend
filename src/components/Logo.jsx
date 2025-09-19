@@ -1,22 +1,12 @@
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
 import Box from "@mui/joy/Box";
 
 export default function Logo(props) {
   const sx = props.sx;
+
   return (
-    <Typography
-      level="h1"
-      textColor={"#000"}
-      sx={sx}
-      endDecorator={
-        <Chip component="span" size="sm" color="primary">
-          BETA
-        </Chip>
-      }
-      justifyContent="center"
-    >
+    <Typography level="h1" textColor={"#000"} sx={sx} justifyContent="center">
       <Stack
         direction="row"
         spacing={0}
