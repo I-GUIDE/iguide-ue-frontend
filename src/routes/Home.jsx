@@ -57,11 +57,6 @@ export default function Home() {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-      <Meta
-        title={"I-GUIDE landing"}
-        description="Discover, connect, map"
-        imageUrl="/images/Logo-favicon.png"
-      />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box

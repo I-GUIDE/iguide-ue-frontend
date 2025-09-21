@@ -187,7 +187,11 @@ export default function ElementPageLayout(props) {
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
 
-      <Meta title={title} description={abstract} imageUrl={thumbnailImage} />
+      <Meta
+        title={title}
+        description={abstract}
+        imageUrl={thumbnailImage.original}
+      />
 
       <Container maxWidth="lg">
         <Box
