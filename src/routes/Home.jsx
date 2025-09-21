@@ -60,7 +60,7 @@ export default function Home() {
       <Meta
         title={"I-GUIDE landing"}
         description="Discover, connect, map"
-        imageUrl="https://platform.i-guide.io/images/iguide-word-color.png"
+        imageUrl="/images/Logo-favicon.png"
       />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
