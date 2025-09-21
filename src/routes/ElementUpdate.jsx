@@ -11,6 +11,7 @@ import SubmissionCard from "../features/ElementSubmission/SubmissionCard";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
+import Meta from "../components/Meta";
 
 export default function ElementUpdate() {
   usePageTitle("Update Contribution");
@@ -29,6 +30,7 @@ export default function ElementUpdate() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
+      <Meta />
       <Container maxWidth="lg">
         <Box
           component="main"

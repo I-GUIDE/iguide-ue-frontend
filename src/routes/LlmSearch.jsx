@@ -88,6 +88,7 @@ export default function LlmSearch() {
 
   return (
     <CssVarsProvider disableTransitionOnChange>
+      <Meta />
       <CssBaseline />
       <Box
         component="main"

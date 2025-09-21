@@ -11,6 +11,7 @@ import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 
 import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
+import Meta from "../components/Meta";
 
 export default function UserProfileUpdate() {
   usePageTitle("Update User Profile");
@@ -25,6 +26,7 @@ export default function UserProfileUpdate() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
+      <Meta />
       <Container maxWidth="lg">
         <Box
           component="main"

@@ -48,6 +48,7 @@ export default function Tutorials() {
 
   return (
     <CssVarsProvider disableTransitionOnChange>
+      <Meta />
       <CssBaseline />
       <Container maxWidth="md">
         <Box

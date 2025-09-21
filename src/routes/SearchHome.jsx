@@ -25,6 +25,7 @@ export default function SearchHome() {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <Meta />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box

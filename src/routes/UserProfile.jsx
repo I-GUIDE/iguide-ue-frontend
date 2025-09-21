@@ -36,6 +36,7 @@ import {
   USER_PROFILE_BODY_HEIGHT,
 } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
+import Meta from "../components/Meta";
 
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -99,6 +100,7 @@ export default function UserProfile() {
       <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
+          <Meta />
           <Header title={"Error: " + error.message} />
           <Container maxWidth="lg">
             <Box

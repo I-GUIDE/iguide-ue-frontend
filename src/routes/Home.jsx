@@ -57,6 +57,7 @@ export default function Home() {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <Meta />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box

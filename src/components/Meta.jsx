@@ -2,11 +2,16 @@ import { Helmet } from "react-helmet-async";
 
 const VITE_PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
-export default function Meta({ type, title, description, imageUrl }) {
+export default function Meta({
+  type = "website",
+  title = "I-GUIDE Platform",
+  description = "Harnessing the Geospatial Data Revolution to Empower Convergence Science",
+  imageUrl = "/images/Logo-favicon.png",
+}) {
   return (
     <Helmet>
       <meta property="og:url" content={window.location.href} />
-      <meta property="og:type" content={type ?? "website"} />
+      <meta property="og:type" content={type} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imageUrl} />
