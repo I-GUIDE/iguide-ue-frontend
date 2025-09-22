@@ -18,7 +18,7 @@
     "@reactour/tour": "^3.8.0",
     "@uiw/react-markdown-preview": "^5.1.5",
     "jdenticon": "^3.3.0",
-    "jodit-react": "^5.2.22",
+    "jodit-react": "^5.2.25",
     "leaflet": "1.9.4",
     "prop-types": "^15.8.1",
     "react": "^19.1.1",
