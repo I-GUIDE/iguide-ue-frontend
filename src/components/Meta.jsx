@@ -14,8 +14,6 @@ const defaultMeta = {
 };
 
 export const MetaProvider = ({ children }) => {
-  const { setMetaTags } = useHelmet();
-
   const [pageMeta, setPageMeta] = useState({
     type: "website",
     title: "I-GUIDE Platform",
@@ -24,19 +22,27 @@ export const MetaProvider = ({ children }) => {
     imageUrl: "/images/Logo-favicon.png",
   });
 
-  useEffect(() => {
-    setMetaTags([
-      { property: "og:title", content: pageMeta.title },
-      { property: "og:description", content: pageMeta.abstract },
-      { property: "og:image", content: pageMeta.imageUrl },
-      { property: "og:url", content: window.location.href },
-      { property: "og:type", content: pageMeta.type },
+  function updateMetaTag(attr, attrValue, content) {
+    let element = document.head.querySelector(`meta[${attr}="${attrValue}"]`);
+    if (!element) {
+      element = document.createElement("meta");
+      element.setAttribute(attr, attrValue);
+      document.head.appendChild(element);
+    }
+    element.setAttribute("content", content);
+  }
 
-      { name: "twitter:title", content: pageMeta.title },
-      { name: "twitter:description", content: pageMeta.abstract },
-      { name: "twitter:image", content: thumbnailImage.original },
-      { name: "twitter:card", content: pageMeta.imageUrl },
-    ]);
+  useEffect(() => {
+    updateMetaTag("property", "og:title", pageMeta.title);
+    updateMetaTag("property", "og:description", pageMeta.description);
+    updateMetaTag("property", "og:image", pageMeta.imageUrl);
+    updateMetaTag("property", "og:url", window.location.href);
+    updateMetaTag("property", "og:type", pageMeta.type);
+
+    updateMetaTag("name", "twitter:title", pageMeta.title);
+    updateMetaTag("name", "twitter:description", pageMeta.description);
+    updateMetaTag("name", "twitter:image", pageMeta.imageUrl);
+    updateMetaTag("name", "twitter:card", "summary_large_image");
   }, [pageMeta]);
 
   return (
