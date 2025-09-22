@@ -11,7 +11,6 @@ import Stack from "@mui/joy/Stack";
 import usePageTitle from "../hooks/usePageTitle";
 import { NO_HEADER_BODY_HEIGHT, PT_OFFSET } from "../configs/VarConfigs";
 import WebsiteNav from "../components/WebsiteNav";
-import Meta from "../components/Meta";
 
 export default function Sitemap() {
   usePageTitle("Site Map");
@@ -19,7 +18,6 @@ export default function Sitemap() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Container maxWidth="lg">
         <Box
           component="main"

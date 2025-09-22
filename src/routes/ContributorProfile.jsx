@@ -21,7 +21,6 @@ import ElementGrid from "../components/Layout/ElementGrid";
 import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 import { fetchUser } from "../utils/UserManager";
-import Meta from "../components/Meta";
 
 export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
@@ -65,7 +64,6 @@ export default function ContributorProfile() {
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
-        <Meta />
         <CssBaseline enableColorScheme />
         {contributorInfo && (
           <UserProfileHeader

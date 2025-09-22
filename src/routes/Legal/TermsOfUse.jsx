@@ -16,7 +16,6 @@ export default function TermsOfUse() {
 
   return (
     <CssVarsProvider disableTransitionOnChange>
-      <Meta />
       <CssBaseline />
       <Container maxWidth="md">
         <Box

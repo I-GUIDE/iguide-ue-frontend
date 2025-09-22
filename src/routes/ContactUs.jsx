@@ -325,7 +325,6 @@ export default function ContactUs() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Container maxWidth="md">
         <Box
           component="main"

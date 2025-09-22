@@ -49,8 +49,7 @@ import OerExternalLinkList from "../../features/Element/OerExternalLinkList";
 import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
-
-import Meta from "../Meta";
+import { useMeta } from "../Meta";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -106,6 +105,8 @@ export default function ElementPageLayout(props) {
   const { isAuthenticated, localUserInfo } = useOutletContext();
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
+
+  const { pageMeta, setPageMeta } = useMeta();
 
   useEffect(() => {
     async function fetchData() {
@@ -166,6 +167,14 @@ export default function ElementPageLayout(props) {
       setFundingAgency(thisElement["funding-agency"]);
 
       setIsLoading(false);
+
+      setPageMeta({
+        ...pageMeta,
+        title: thisElement.title,
+        description: thisElement.description,
+        imageUrl: thisElement.thumbnailImage.original,
+        type: "website",
+      });
     }
     fetchData();
   }, [isPrivateElement, id]);
@@ -186,13 +195,6 @@ export default function ElementPageLayout(props) {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-
-      <Meta
-        title={title}
-        description={abstract}
-        imageUrl={thumbnailImage.original}
-      />
-
       <Container maxWidth="lg">
         <Box
           component="main"

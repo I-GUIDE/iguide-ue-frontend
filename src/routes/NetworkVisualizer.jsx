@@ -89,7 +89,6 @@ export default function NetworkVisualizer() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Container maxWidth="lg">
         <Box
           component="main"

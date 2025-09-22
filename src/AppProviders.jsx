@@ -8,20 +8,23 @@ import { AlertModalProvider } from "./utils/AlertModalProvider";
 import SessionExpirationModal from "./components/SessionExpirationModal";
 
 import { HelmetProvider } from "react-helmet-async";
+import { MetaProvider } from "./components/Meta";
 
 export function AppProviders({ children }) {
   return (
     <HelmetProvider>
-      <AlertModalProvider>
-        <TourProvider steps={TourSteps} showBadge={false}>
-          <GoogleAnalytics>
-            <CookiesProvider defaultSetOptions={{ path: "/" }}>
-              <SessionExpirationModal />
-              {children}
-            </CookiesProvider>
-          </GoogleAnalytics>
-        </TourProvider>
-      </AlertModalProvider>
+      <MetaProvider>
+        <AlertModalProvider>
+          <TourProvider steps={TourSteps} showBadge={false}>
+            <GoogleAnalytics>
+              <CookiesProvider defaultSetOptions={{ path: "/" }}>
+                <SessionExpirationModal />
+                {children}
+              </CookiesProvider>
+            </GoogleAnalytics>
+          </TourProvider>
+        </AlertModalProvider>
+      </MetaProvider>
     </HelmetProvider>
   );
 }

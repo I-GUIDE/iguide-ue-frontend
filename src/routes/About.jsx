@@ -45,7 +45,6 @@ export default function About() {
 
   return (
     <CssVarsProvider disableTransitionOnChange>
-      <Meta />
       <CssBaseline />
       <Container maxWidth="md">
         <Box

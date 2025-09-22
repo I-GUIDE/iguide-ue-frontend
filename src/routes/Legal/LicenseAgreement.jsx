@@ -17,7 +17,6 @@ export default function LicenseAgreement() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Container maxWidth="md">
         <Box
           component="main"

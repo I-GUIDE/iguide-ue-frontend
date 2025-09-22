@@ -39,7 +39,6 @@ import {
   HOME_SEARCH_SEC_HEIGHT,
   NAVBAR_HEIGHT,
 } from "../configs/VarConfigs";
-import Meta from "../components/Meta";
 
 export default function Home() {
   usePageTitle("", true);
@@ -57,7 +56,6 @@ export default function Home() {
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-      <Meta />
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
         <Box

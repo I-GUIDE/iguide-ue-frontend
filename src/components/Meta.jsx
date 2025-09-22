@@ -1,27 +1,49 @@
-import { Helmet } from "react-helmet-async";
-
+import { useHelmet } from "react-helmet-async";
 const VITE_PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
-export default function Meta({
-  type = "website",
-  title = "I-GUIDE Platform",
-  description = "Harnessing the Geospatial Data Revolution to Empower Convergence Science",
-  imageUrl = "/images/Logo-favicon.png",
-}) {
-  return (
-    <Helmet>
-      <meta property="og:url" content={window.location.href} />
-      <meta property="og:type" content={type} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={imageUrl} />
+import { createContext, useContext, useEffect, useState } from "react";
 
-      <meta name="twitter:card" content={imageUrl} />
-      <meta property="twitter:domain" content={VITE_PUBLIC_URL} />
-      <meta property="twitter:url" content={window.location.href} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={imageUrl}></meta>
-    </Helmet>
+const MetaContext = createContext();
+
+const defaultMeta = {
+  type: "website",
+  title: "I-GUIDE Platform",
+  description:
+    "Harnessing the Geospatial Data Revolution to Empower Convergence Science",
+  imageUrl: "/images/Logo-favicon.png",
+};
+
+export const MetaProvider = ({ children }) => {
+  const { setMetaTags } = useHelmet();
+
+  const [pageMeta, setPageMeta] = useState({
+    type: "website",
+    title: "I-GUIDE Platform",
+    description:
+      "Harnessing the Geospatial Data Revolution to Empower Convergence Science",
+    imageUrl: "/images/Logo-favicon.png",
+  });
+
+  useEffect(() => {
+    setMetaTags([
+      { property: "og:title", content: pageMeta.title },
+      { property: "og:description", content: pageMeta.abstract },
+      { property: "og:image", content: pageMeta.imageUrl },
+      { property: "og:url", content: window.location.href },
+      { property: "og:type", content: pageMeta.type },
+
+      { name: "twitter:title", content: pageMeta.title },
+      { name: "twitter:description", content: pageMeta.abstract },
+      { name: "twitter:image", content: thumbnailImage.original },
+      { name: "twitter:card", content: pageMeta.imageUrl },
+    ]);
+  }, [pageMeta]);
+
+  return (
+    <MetaContext.Provider value={{ pageMeta, setPageMeta }}>
+      {children}
+    </MetaContext.Provider>
   );
-}
+};
+
+export const useMeta = () => useContext(MetaContext);

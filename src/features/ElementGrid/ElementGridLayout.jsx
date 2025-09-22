@@ -12,7 +12,6 @@ import {
   DEFAULT_BODY_HEIGHT,
   ELEMENT_TYPE_URI_PLURAL,
 } from "../../configs/VarConfigs";
-import Meta from "../../components/Meta";
 
 export default function ElementGridLayout(props) {
   const elementType = props.elementType;
@@ -28,7 +27,6 @@ export default function ElementGridLayout(props) {
   return (
     <JoyCssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Header
         title={title}
         subtitle={subtitle}

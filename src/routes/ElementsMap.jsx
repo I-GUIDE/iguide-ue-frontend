@@ -27,7 +27,6 @@ export default function ElementsMap() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <Meta />
       <Box
         component="main"
         sx={{
