@@ -2486,17 +2486,17 @@ jdenticon@^3.3.0:
   dependencies:
     canvas-renderer "~2.2.0"
 
-jodit-react@^5.2.22:
-  version "5.2.22"
-  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-5.2.22.tgz#447f8901521e4bd4abf8125f5a0113b7346ccb97"
-  integrity sha512-4kqTt/1ochw8PmeYvK4eqnva8fgIylCW5ltn5/Ky4bRyYHL73Mfmgc0d+El/SV50oZQVXj0oPxvmuHlPsH3bYg==
+jodit-react@^5.2.25:
+  version "5.2.25"
+  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-5.2.25.tgz#966a47f8792c6da004f5e22986e4fc64f401f847"
+  integrity sha512-BbzNgLnnIGS8vTxxohxkcWGp9YxpQB1Sy7TU1RyMLxWDoa6pN4dTCvYvriUqY70QrRPOQBkGn6QInd3RM8n8Gg==
   dependencies:
-    jodit "^4.6.6"
+    jodit "^4.6.12"
 
-jodit@^4.6.6:
-  version "4.6.6"
-  resolved "https://registry.yarnpkg.com/jodit/-/jodit-4.6.6.tgz#fb53a505872d7dff57cb7fe6473d7e861d89f070"
-  integrity sha512-zbZTI8I4e7Pw0idO2v+6zk1Zmtr17QrCGzuMTj5XZUMVuRt5A/S/RoVHLan4vxrwU6mXIvMmsU7DXKlkfLO12w==
+jodit@^4.6.12:
+  version "4.6.12"
+  resolved "https://registry.yarnpkg.com/jodit/-/jodit-4.6.12.tgz#486984eabb4b018c6940030c7a30d2181ecec1ce"
+  integrity sha512-6TbeTHTenUORMFzgSruRRevggk+q3rtt/EuSvXwN2aA6Vd0OgI0fadU6D6sPP2LXujtkftOipA3KZM8yZp8i3Q==
   dependencies:
     autobind-decorator "^2.4.0"
 
