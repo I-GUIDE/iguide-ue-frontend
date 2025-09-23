@@ -402,11 +402,11 @@ export default function NavBar(props) {
             boxShadow: 3,
             zIndex: 1100,
             backgroundColor: {
-              xs: "background.paper",
+              xs: "rgba(255, 255, 255, 0.95)",
               md: "rgba(255, 255, 255, 0.8)",
             },
-            backdropFilter: { md: "blur(6px)" },
-            WebkitBackdropFilter: { md: "blur(6px)" },
+            backdropFilter: { xs: "none", md: "blur(5px)" },
+            WebkitBackdropFilter: { xs: "none", md: "blur(5px)" },
             display: "flex",
             justifyContent: "center",
           }}

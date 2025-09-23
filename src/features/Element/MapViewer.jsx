@@ -31,7 +31,7 @@ export default function MapViewer(props) {
         to visit the map's website.
       </Typography>
       <div className="standards-page">
-        <iframe style={iFrameStyle} src={iframeSrc}></iframe>
+        <iframe style={iFrameStyle} src={iframeSrc} title="Static map" />
       </div>
     </Stack>
   );

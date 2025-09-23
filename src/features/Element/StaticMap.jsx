@@ -33,13 +33,15 @@ export default function StaticMap(props) {
       <Typography level="h5" fontWeight="lg" mb={1}>
         Pannable Map
       </Typography>
-      <Typography color="neutral" level="body-xs" variant="plain">
-        Click{" "}
-        <Link href={mapImg.original} target="_blank" rel="noopener noreferrer">
-          here
-        </Link>{" "}
-        to view the map in new window.
-      </Typography>
+      <Link
+        level="body-xs"
+        href={mapImg.original}
+        target="_blank"
+        rel="noopener noreferrer"
+        color="neutral"
+      >
+        View the map in new window
+      </Link>
       <Box
         sx={{
           display: "flex",

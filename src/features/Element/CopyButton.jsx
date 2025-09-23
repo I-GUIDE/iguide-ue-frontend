@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import Tooltip from "@mui/joy/Tooltip";
 import Box from "@mui/joy/Box";
@@ -52,6 +52,7 @@ export default function CopyButton(props) {
             size="sm"
             color={copied ? "success" : "neutral"}
             onClick={() => copyText(textToCopy)}
+            aria-label={copied ? "Copied!" : "Copy to clipboard"}
           >
             {icon}
           </IconButton>

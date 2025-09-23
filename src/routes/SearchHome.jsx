@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   extendTheme as materialExtendTheme,
   ThemeProvider as MaterialCssVarsProvider,
@@ -36,7 +34,6 @@ export default function SearchHome() {
         >
           <Card
             variant="plain"
-            component="li"
             sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
           >
             <CardCover>

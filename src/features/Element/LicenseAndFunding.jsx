@@ -20,7 +20,12 @@ export default function LicenseAndFunding(props) {
             <Typography>
               {" "}
               View license{" "}
-              <Link href={licenseUrl} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={licenseUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="always"
+              >
                 here
               </Link>
               .

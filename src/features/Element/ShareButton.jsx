@@ -1,5 +1,3 @@
-import React from "react";
-
 import Tooltip from "@mui/joy/Tooltip";
 import Box from "@mui/joy/Box";
 import IconButton from "@mui/joy/IconButton";
@@ -42,6 +40,7 @@ export default function ShareButton(props) {
             slotProps={{
               root: { variant: "outlined", color: "neutral", size: "sm" },
             }}
+            aria-label="Share this element"
           >
             <ShareIcon />
           </MenuButton>

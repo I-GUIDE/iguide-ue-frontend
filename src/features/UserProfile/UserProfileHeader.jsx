@@ -54,10 +54,7 @@ export default function UserProfileHeader(props) {
           maxHeight: USER_PROFILE_HEADER_HEIGHT,
         }}
       >
-        <Card
-          component="li"
-          sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
-        >
+        <Card sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
           <CardCover>
             <img
               src="/images/network-bg.png"
@@ -106,10 +103,7 @@ export default function UserProfileHeader(props) {
           height: USER_PROFILE_HEADER_HEIGHT,
         }}
       >
-        <Card
-          component="li"
-          sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
-        >
+        <Card sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
           <CardCover>
             <img
               src="/images/network-bg.png"
@@ -156,7 +150,7 @@ export default function UserProfileHeader(props) {
         minHeight: USER_PROFILE_HEADER_HEIGHT,
       }}
     >
-      <Card component="li" sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
+      <Card sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}>
         <CardCover>
           <img
             src="/images/network-bg.png"
@@ -474,10 +468,19 @@ export default function UserProfileHeader(props) {
                     spacing={1}
                     alignItems="center"
                   >
-                    <Typography level="h1" fontWeight="lg" textColor={"#000"}>
+                    <Typography
+                      level="title-lg"
+                      fontWeight="lg"
+                      textColor="#000"
+                      fontSize="45px"
+                    >
                       {contributionCount}
                     </Typography>
-                    <Typography level="h4" fontWeight="lg" textColor={"#000"}>
+                    <Typography
+                      level="title-lg"
+                      fontWeight="lg"
+                      textColor="#000"
+                    >
                       Contribution{contributionCount > 1 && "s"}
                     </Typography>
                   </Stack>

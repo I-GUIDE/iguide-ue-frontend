@@ -250,6 +250,7 @@ export default function NotebookViewer(props) {
               href="https://nbconvert.readthedocs.io/en/latest/"
               target="_blank"
               rel="noopener noreferrer"
+              underline="always"
             >
               nbconvert
             </Link>
@@ -259,7 +260,11 @@ export default function NotebookViewer(props) {
       </Box>
 
       <div className="standards-page">
-        <iframe style={iFrameStyle} src={notebookUrl}></iframe>
+        <iframe
+          style={iFrameStyle}
+          src={notebookUrl}
+          title="Jupyter Notebook"
+        />
       </div>
     </Stack>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Tooltip from "@mui/joy/Tooltip";
 import Box from "@mui/joy/Box";
@@ -65,6 +65,7 @@ export default function BookmarkButton(props) {
           disabled={isBookmarked === undefined}
           color={isBookmarked ? "success" : "neutral"}
           onClick={() => handleBookmarking(isBookmarked)}
+          aria-label={isBookmarked ? "Bookmarked" : "Bookmark this element"}
         >
           {isBookmarked ? <BookmarkAddedIcon /> : <BookmarkAddIcon />}
         </IconButton>

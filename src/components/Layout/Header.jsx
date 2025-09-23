@@ -41,7 +41,6 @@ export default function Header(props) {
     >
       <Card
         variant="plain"
-        component="li"
         sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1, px: 1 }}
       >
         <CardCover>
