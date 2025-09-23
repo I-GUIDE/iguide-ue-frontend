@@ -5,7 +5,7 @@ import { MetaContext } from "./MetaContext";
 
 const FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 
-const defaultMeta = {
+export const defaultMeta = {
   type: "website",
   title: "I-GUIDE Platform",
   description:

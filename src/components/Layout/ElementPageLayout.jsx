@@ -50,6 +50,7 @@ import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
 import { useMeta } from "../../meta/MetaContext";
+import { defaultMeta } from "../../meta/MetaProvider";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -106,7 +107,7 @@ export default function ElementPageLayout(props) {
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
 
-  const { resetPageMeta, setPageMeta } = useMeta();
+  const { setPageMeta } = useMeta();
 
   useEffect(() => {
     async function fetchData() {
@@ -180,9 +181,9 @@ export default function ElementPageLayout(props) {
 
     // Reset pageMeta to default
     return function () {
-      return resetPageMeta();
+      return setPageMeta(defaultMeta);
     };
-  }, [isPrivateElement, id, setPageMeta, resetPageMeta]);
+  }, [isPrivateElement, id, setPageMeta]);
 
   usePageTitle(title);
 
