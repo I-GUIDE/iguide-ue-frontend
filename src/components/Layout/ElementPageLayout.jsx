@@ -49,7 +49,7 @@ import OerExternalLinkList from "../../features/Element/OerExternalLinkList";
 import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
-import { useMeta } from "../Meta";
+import { useMeta, defaultMeta } from "../Meta";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -168,15 +168,17 @@ export default function ElementPageLayout(props) {
 
       setIsLoading(false);
 
-      setPageMeta({
-        ...pageMeta,
+      setPageMeta((prev) => ({
+        ...prev,
         title: thisElement.title,
-        description: thisElement.description,
-        imageUrl: thisElement.thumbnailImage.original,
-        type: "website",
-      });
+        description: thisElement.contents,
+        imageUrl: thisElement["thumbnail-image"].original,
+        url: window.location.href,
+      }));
     }
     fetchData();
+
+    return () => setPageMeta(defaultMeta);
   }, [isPrivateElement, id]);
 
   usePageTitle(title);
