@@ -8,7 +8,7 @@ import { AlertModalProvider } from "./utils/AlertModalProvider";
 import SessionExpirationModal from "./components/SessionExpirationModal";
 
 import { HelmetProvider } from "react-helmet-async";
-import { MetaProvider } from "./components/Meta";
+import { MetaProvider } from "./meta/MetaProvider";
 
 export function AppProviders({ children }) {
   return (

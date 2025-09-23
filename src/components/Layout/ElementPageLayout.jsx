@@ -49,7 +49,7 @@ import OerExternalLinkList from "../../features/Element/OerExternalLinkList";
 import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
-import { useMeta, defaultMeta } from "../Meta";
+import { useMeta } from "../../meta/MetaContext";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -106,7 +106,7 @@ export default function ElementPageLayout(props) {
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
 
-  const { pageMeta, setPageMeta } = useMeta();
+  const { resetPageMeta, setPageMeta } = useMeta();
 
   useEffect(() => {
     async function fetchData() {
@@ -172,14 +172,17 @@ export default function ElementPageLayout(props) {
         ...prev,
         title: thisElement.title,
         description: thisElement.contents,
-        imageUrl: thisElement["thumbnail-image"].original,
+        imageUrl: thisElement["thumbnail-image"]?.medium,
         url: window.location.href,
       }));
     }
     fetchData();
 
-    return () => setPageMeta(defaultMeta);
-  }, [isPrivateElement, id]);
+    // Reset pageMeta to default
+    return function () {
+      return resetPageMeta();
+    };
+  }, [isPrivateElement, id, setPageMeta, resetPageMeta]);
 
   usePageTitle(title);
 
