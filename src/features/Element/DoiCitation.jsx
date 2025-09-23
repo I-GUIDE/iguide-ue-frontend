@@ -1,13 +1,9 @@
-import { useState, useEffect, Suspense } from "react";
-
-import { lazyWithRetryAndReload } from "../../helpers/lazyWithRetryAndReload";
-const MarkdownPreview = lazyWithRetryAndReload(() =>
-  import("@uiw/react-markdown-preview")
-);
+import { useState, useEffect } from "react";
 
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import Tooltip from "@mui/joy/Tooltip";
+import Link from "@mui/joy/Link";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
@@ -44,10 +40,25 @@ export default function DoiCitation(props) {
       const doiReturned = metadata.DOI;
 
       const citationForCopy = `${authors}. "${title}." ${journal} ${volume}(${issue}) (${year}): ${pageRange}. https://doi.org/${doiReturned}`;
-      const generatedCitation = `${authors}. "${title}." *${journal}* ${volume}(${issue}) (${year}): ${pageRange}. https://doi.org/${doiReturned}`;
 
-      setCitation(generatedCitation);
       setCitationCopy(citationForCopy);
+      setCitation(
+        <Typography>
+          {authors}.&nbsp;"
+          {title}."&nbsp;
+          <em>{journal}</em>&nbsp;
+          {volume}({issue})&nbsp;({year}):&nbsp;
+          {pageRange}.&nbsp;
+          <Link
+            href={`https://doi.org/${doiReturned}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            underline="always"
+          >
+            {`https://doi.org/${doiReturned}`}
+          </Link>
+        </Typography>
+      );
     }
 
     retrieveInfo(doi);
@@ -73,11 +84,7 @@ export default function DoiCitation(props) {
           icon={<ContentCopyIcon />}
         />
       </Stack>
-      <div className="container" data-color-mode="light">
-        <Suspense fallback={<p>Loading citation...</p>}>
-          <MarkdownPreview source={citation} />
-        </Suspense>
-      </div>
+      {citation}
     </Stack>
   );
 }

@@ -280,6 +280,7 @@ export default function ElementGrid(props) {
               defaultValue="newest"
               onChange={handleSortingChange}
               sx={{ width: 150 }}
+              aria-label="Select element sorting methods"
             >
               <Option value="newest">Newest</Option>
               <Option value="most-popular">Most Popular</Option>

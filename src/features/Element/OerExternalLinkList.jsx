@@ -56,26 +56,23 @@ export default function OerExternalLinkList(props) {
     }
 
     return (
-      <List marker="disc">
+      <List marker="disc" sx={{ pl: 2 }}>
         <ListItem>
           <Typography level="title-md">{title}</Typography>
         </ListItem>
-        <List marker="circle">
-          <Stack>
-            {list?.map((item, idx) => (
+        <List marker="circle" sx={{ pl: 4 }}>
+          {list?.map((item, idx) => (
+            <ListItem key={idx}>
               <Link
-                key={idx}
                 target="_blank"
                 rel="noopener noreferrer"
                 href={item.url}
                 sx={{ color: "text.tertiary" }}
               >
-                <ListItem>
-                  <Typography level="body-md">{item.title}</Typography>
-                </ListItem>
+                <Typography level="body-md">{item.title}</Typography>
               </Link>
-            ))}
-          </Stack>
+            </ListItem>
+          ))}
         </List>
       </List>
     );

@@ -311,7 +311,6 @@ export default function SearchResults() {
         >
           <Card
             variant="plain"
-            component="li"
             sx={{ borderRadius: 0, minWidth: 300, flexGrow: 1 }}
           >
             <CardCover>
