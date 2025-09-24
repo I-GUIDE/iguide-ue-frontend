@@ -92,6 +92,7 @@ export default function ContributorProfile() {
         )}
         <Container maxWidth="lg">
           <Box
+            component="main"
             sx={{
               minHeight: USER_PROFILE_BODY_HEIGHT,
               display: "grid",
