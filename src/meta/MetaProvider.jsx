@@ -62,7 +62,6 @@ export function MetaProvider({ children }) {
   return (
     <MetaContext.Provider value={{ resetPageMeta, setPageMeta }}>
       <Helmet>
-        <title>{memorizedMeta.title}</title>
         <meta name="description" content={memorizedMeta.description} />
 
         {/* Twitter */}
