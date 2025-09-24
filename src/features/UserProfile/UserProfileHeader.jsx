@@ -31,6 +31,7 @@ import {
   NAVBAR_HEIGHT,
 } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
+import { formatIsoStringToMMMYYYY } from "../../utils/PeriodAgoText";
 
 export default function UserProfileHeader(props) {
   const userInfo = props.userInfo;
@@ -40,6 +41,8 @@ export default function UserProfileHeader(props) {
     : 0;
   const loading = props.loading;
   const hideEmail = props.hideEmail;
+
+  const userCreationTime = formatIsoStringToMMMYYYY(userInfo?.createdAt);
 
   // When the userInfo is still loading...
   if (loading) {
@@ -209,7 +212,7 @@ export default function UserProfileHeader(props) {
                     <Stack
                       direction={{ xs: "column", md: "row" }}
                       sx={{ m: { md: 3 } }}
-                      spacing={0.5}
+                      spacing={1}
                       alignItems="center"
                       flexWrap="wrap"
                     >
@@ -239,6 +242,11 @@ export default function UserProfileHeader(props) {
                         disabledTooltip={!managementView}
                       />
                     </Stack>
+                    {userCreationTime && (
+                      <Typography level="body-xs">
+                        User since {userCreationTime}
+                      </Typography>
+                    )}
 
                     {/* Don't show user affiliation if it's in the untrusted affiliation list */}
                     {userInfo.affiliation &&
@@ -246,14 +254,15 @@ export default function UserProfileHeader(props) {
                         userInfo.affiliation?.toLowerCase()
                       ) && (
                         <Typography
-                          level="body-lg"
-                          fontWeight="sm"
+                          level="title-md"
+                          fontWeight="lg"
                           textAlign={{ xs: "center", sm: "left" }}
                         >
                           {userInfo.affiliation}
                         </Typography>
                       )}
                   </Stack>
+
                   <Stack
                     direction="column"
                     sx={{ m: { md: 3 } }}
@@ -286,7 +295,6 @@ export default function UserProfileHeader(props) {
                         >
                           <Typography
                             level="body-sm"
-                            fontWeight="lg"
                             sx={{
                               overflow: "hidden",
                               textOverflow: "ellipsis",
@@ -301,7 +309,6 @@ export default function UserProfileHeader(props) {
                       ) : (
                         <Typography
                           level="body-sm"
-                          fontWeight="lg"
                           sx={{
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -328,72 +335,73 @@ export default function UserProfileHeader(props) {
                         </Typography>
                       </Link>
                     )}
-                    <Stack direction="row" spacing={1.5} sx={{ py: 0.5 }}>
-                      {userInfo.gitHubLink && (
-                        <Tooltip
-                          title="User GitHub profile"
-                          variant="solid"
-                          arrow
+                  </Stack>
+
+                  <Stack direction="row" spacing={1.5} sx={{ py: 0.5 }}>
+                    {userInfo.gitHubLink && (
+                      <Tooltip
+                        title="User GitHub profile"
+                        variant="solid"
+                        arrow
+                      >
+                        <Link
+                          href={userInfo.gitHubLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "none" }}
                         >
-                          <Link
-                            href={userInfo.gitHubLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <GitHubIcon sx={{ color: grey[800] }} />
-                          </Link>
-                        </Tooltip>
-                      )}
-                      {userInfo.linkedInLink && (
-                        <Tooltip
-                          title="User LinkedIn profile"
-                          variant="solid"
-                          arrow
+                          <GitHubIcon sx={{ color: grey[800] }} />
+                        </Link>
+                      </Tooltip>
+                    )}
+                    {userInfo.linkedInLink && (
+                      <Tooltip
+                        title="User LinkedIn profile"
+                        variant="solid"
+                        arrow
+                      >
+                        <Link
+                          href={userInfo.linkedInLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "none" }}
                         >
-                          <Link
-                            href={userInfo.linkedInLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <LinkedInIcon sx={{ color: grey[800] }} />
-                          </Link>
-                        </Tooltip>
-                      )}
-                      {userInfo.googleScholarLink && (
-                        <Tooltip
-                          title="User Google Scholar profile"
-                          variant="solid"
-                          arrow
+                          <LinkedInIcon sx={{ color: grey[800] }} />
+                        </Link>
+                      </Tooltip>
+                    )}
+                    {userInfo.googleScholarLink && (
+                      <Tooltip
+                        title="User Google Scholar profile"
+                        variant="solid"
+                        arrow
+                      >
+                        <Link
+                          href={userInfo.googleScholarLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "none" }}
                         >
-                          <Link
-                            href={userInfo.googleScholarLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <GoogleIcon sx={{ color: grey[800] }} />
-                          </Link>
-                        </Tooltip>
-                      )}
-                      {userInfo.personalWebsiteLink && (
-                        <Tooltip
-                          title="User personal website"
-                          variant="solid"
-                          arrow
+                          <GoogleIcon sx={{ color: grey[800] }} />
+                        </Link>
+                      </Tooltip>
+                    )}
+                    {userInfo.personalWebsiteLink && (
+                      <Tooltip
+                        title="User personal website"
+                        variant="solid"
+                        arrow
+                      >
+                        <Link
+                          href={userInfo.personalWebsiteLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ textDecoration: "none" }}
                         >
-                          <Link
-                            href={userInfo.personalWebsiteLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none" }}
-                          >
-                            <WebIcon sx={{ color: grey[800] }} />
-                          </Link>
-                        </Tooltip>
-                      )}
-                    </Stack>
+                          <WebIcon sx={{ color: grey[800] }} />
+                        </Link>
+                      </Tooltip>
+                    )}
                   </Stack>
 
                   {managementView && (

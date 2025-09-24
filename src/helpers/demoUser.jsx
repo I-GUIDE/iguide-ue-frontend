@@ -21,6 +21,7 @@ export const demoUser = {
   linkedInLink: "https://linkedin.com",
   googleScholarLink: "https://scholar.google.com",
   personalWebsiteLink: "https://i-guide.io",
+  createdAt: "2024-07-04T00:00:00.000Z",
   aliases: [
     {
       firstName: "Happy",
