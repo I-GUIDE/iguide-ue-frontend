@@ -26,7 +26,6 @@ export default function LoginCard() {
         <CssBaseline />
         <Container maxWidth="lg">
           <Box
-            component="main"
             sx={{
               minHeight: NO_HEADER_BODY_HEIGHT,
               display: "grid",

@@ -62,9 +62,7 @@ export default function Home() {
           component="main"
           sx={{
             minHeight: NO_HEADER_BODY_HEIGHT,
-            display: "grid",
-            gridTemplateColumns: { xs: "auto", md: "100%" },
-            gridTemplateRows: "auto 1fr auto",
+            display: "block",
           }}
         >
           <Card
@@ -92,7 +90,6 @@ export default function Home() {
             >
               <Container maxWidth="md">
                 <Box
-                  component="main"
                   sx={{
                     height: "25%",
                     display: "grid",
