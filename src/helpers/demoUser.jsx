@@ -9,7 +9,7 @@ export const demoUser = {
     high: "/images/Logo.png",
   },
   bio: "NSF I-GUIDE enhances STEM participation for underserved populations through innovative education and community partnerships.",
-  email: "user@example.com",
+  email: "happy.person@example.com",
   auth_first_name: "Happy",
   auth_last_name: "Person",
   first_name: "Personne",
@@ -24,11 +24,19 @@ export const demoUser = {
   aliases: [
     {
       firstName: "Happy",
-      email: "user@example.com",
+      email: "happy.person@example.com",
       lastName: "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
       affiliation: "I-GUIDE",
       isPrimary: true,
+    },
+    {
+      firstName: "Joyful",
+      email: "joyful.human@example.com",
+      lastName: "Human",
+      openid: "http://cilogon.org/serverD/users/do-not-use2",
+      affiliation: "NSF",
+      isPrimary: false,
     },
   ],
 };
