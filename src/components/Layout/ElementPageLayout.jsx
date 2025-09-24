@@ -49,6 +49,8 @@ import OerExternalLinkList from "../../features/Element/OerExternalLinkList";
 import GitHubRepo from "../../features/Element/GitHubRepo";
 
 import ErrorPage from "../../routes/ErrorPage";
+import { useMeta } from "../../meta/MetaContext";
+import { defaultMeta } from "../../meta/MetaProvider";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
@@ -104,6 +106,8 @@ export default function ElementPageLayout(props) {
   const { isAuthenticated, localUserInfo } = useOutletContext();
   const [pageParam, setPageParam] = useSearchParams();
   const isPrivateElement = pageParam.get("private-mode");
+
+  const { setPageMeta } = useMeta();
 
   useEffect(() => {
     async function fetchData() {
@@ -164,9 +168,22 @@ export default function ElementPageLayout(props) {
       setFundingAgency(thisElement["funding-agency"]);
 
       setIsLoading(false);
+
+      setPageMeta((prev) => ({
+        ...prev,
+        title: thisElement.title,
+        description: thisElement.contents,
+        imageUrl: thisElement["thumbnail-image"]?.high,
+        url: window.location.href,
+      }));
     }
     fetchData();
-  }, [isPrivateElement, id]);
+
+    // Reset pageMeta to default
+    return function () {
+      return setPageMeta(defaultMeta);
+    };
+  }, [isPrivateElement, id, setPageMeta]);
 
   usePageTitle(title);
 

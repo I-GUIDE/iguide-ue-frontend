@@ -7,17 +7,24 @@ import { AlertModalProvider } from "./utils/AlertModalProvider";
 
 import SessionExpirationModal from "./components/SessionExpirationModal";
 
+import { HelmetProvider } from "react-helmet-async";
+import { MetaProvider } from "./meta/MetaProvider";
+
 export function AppProviders({ children }) {
   return (
-    <AlertModalProvider>
-      <TourProvider steps={TourSteps} showBadge={false}>
-        <GoogleAnalytics>
-          <CookiesProvider defaultSetOptions={{ path: "/" }}>
-            <SessionExpirationModal />
-            {children}
-          </CookiesProvider>
-        </GoogleAnalytics>
-      </TourProvider>
-    </AlertModalProvider>
+    <HelmetProvider>
+      <MetaProvider>
+        <AlertModalProvider>
+          <TourProvider steps={TourSteps} showBadge={false}>
+            <GoogleAnalytics>
+              <CookiesProvider defaultSetOptions={{ path: "/" }}>
+                <SessionExpirationModal />
+                {children}
+              </CookiesProvider>
+            </GoogleAnalytics>
+          </TourProvider>
+        </AlertModalProvider>
+      </MetaProvider>
+    </HelmetProvider>
   );
 }
