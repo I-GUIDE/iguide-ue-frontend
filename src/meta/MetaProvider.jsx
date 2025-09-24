@@ -69,22 +69,22 @@ export function MetaProvider({ children }) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content={stringTruncator(memorizedMeta.title, 0, 55)}
+          content={stringTruncator(memorizedMeta.title, 0, 57)}
         />
         <meta
           name="twitter:description"
-          content={stringTruncator(memorizedMeta.description, 0, 100)}
+          content={stringTruncator(memorizedMeta.description, 0, 137)}
         />
         <meta name="twitter:image" content={memorizedMeta.image} />
 
         {/* Open Graph */}
         <meta
           property="og:title"
-          content={stringTruncator(memorizedMeta.title, 0, 55)}
+          content={stringTruncator(memorizedMeta.title, 0, 57)}
         />
         <meta
           property="og:description"
-          content={stringTruncator(memorizedMeta.description, 0, 100)}
+          content={stringTruncator(memorizedMeta.description, 0, 137)}
         />
         <meta property="og:type" content={memorizedMeta.type} />
         <meta property="og:image" content={memorizedMeta.image} />
