@@ -15,6 +15,7 @@ import WebIcon from "@mui/icons-material/Web";
 
 import UserAvatar from "./UserAvatar";
 import { UserRoleChip } from "../features/UserProfile/UserRoleChip";
+import { UNTRUSTED_AFFILIATIONS } from "../configs/VarConfigs";
 
 export default function UserPreviewCard(props) {
   const user = props.user;
@@ -70,7 +71,17 @@ export default function UserPreviewCard(props) {
           <UserRoleChip roleNumber={role} usePublicRoleName disabledTooltip />
         </Stack>
 
-        <Typography level="title-sm">{affiliation}</Typography>
+        {affiliation &&
+          (UNTRUSTED_AFFILIATIONS.includes(affiliation?.toLowerCase()) ? (
+            <Typography level="body-sm">
+              Signed up with{" "}
+              <Typography fontWeight="lg">{affiliation}</Typography>
+            </Typography>
+          ) : (
+            <Typography level="title-sm" fontWeight="lg">
+              {affiliation}
+            </Typography>
+          ))}
 
         {numberOfContributions > 0 && (
           <Link component={RouterLink} to={`/contributor/${userId}`}>

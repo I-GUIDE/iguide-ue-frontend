@@ -89,6 +89,7 @@ export const UNTRUSTED_AFFILIATIONS = [
   "github",
   "microsoft",
   "orcid",
+  "access",
 ];
 
 export const ELEM_VISIBILITY = Object.freeze({

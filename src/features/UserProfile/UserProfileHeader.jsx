@@ -248,11 +248,21 @@ export default function UserProfileHeader(props) {
                       </Typography>
                     )}
 
-                    {/* Don't show user affiliation if it's in the untrusted affiliation list */}
+                    {/* Show "Signed up with" if the affiliation is in the untrusted list */}
                     {userInfo.affiliation &&
-                      !UNTRUSTED_AFFILIATIONS.includes(
+                      (UNTRUSTED_AFFILIATIONS.includes(
                         userInfo.affiliation?.toLowerCase()
-                      ) && (
+                      ) ? (
+                        <Typography
+                          level="body-md"
+                          textAlign={{ xs: "center", sm: "left" }}
+                        >
+                          Signed up with{" "}
+                          <Typography fontWeight="lg">
+                            {userInfo.affiliation}
+                          </Typography>
+                        </Typography>
+                      ) : (
                         <Typography
                           level="title-md"
                           fontWeight="lg"
@@ -260,7 +270,7 @@ export default function UserProfileHeader(props) {
                         >
                           {userInfo.affiliation}
                         </Typography>
-                      )}
+                      ))}
                   </Stack>
 
                   <Stack
