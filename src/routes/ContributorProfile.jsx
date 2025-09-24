@@ -21,6 +21,8 @@ import ElementGrid from "../components/Layout/ElementGrid";
 import { USER_PROFILE_BODY_HEIGHT } from "../configs/VarConfigs";
 import { getNumberOfContributions } from "../utils/DataRetrieval";
 import { fetchUser } from "../utils/UserManager";
+import { useMeta } from "../meta/MetaContext";
+import { defaultMeta } from "../meta/MetaProvider";
 
 export default function ContributorProfile() {
   const userId = decodeURIComponent(useParams().id);
@@ -28,6 +30,8 @@ export default function ContributorProfile() {
   const [contributorInfo, setContributorInfo] = useState({});
   const [contributorInfoLoading, setContributorInfoLoading] = useState(true);
   const [numberOfTotalItems, setNumberOfTotalItems] = useState(0);
+
+  const { setPageMeta } = useMeta();
 
   // When users select a new page or when there is a change of total items,
   //   retrieve the data
@@ -51,9 +55,22 @@ export default function ContributorProfile() {
         personalWebsiteLink: user.personalWebsiteLink,
       });
       setContributorInfoLoading(false);
+
+      setPageMeta((prev) => ({
+        ...prev,
+        title: `${user["display-first-name"]} ${user["display-last-name"]}`,
+        description: user.affiliation,
+        imageUrl: user["avatar-url"]?.high,
+        url: window.location.href,
+      }));
     }
     getContributorInfo(userId);
-  }, [userId]);
+
+    // Reset pageMeta to default
+    return function () {
+      return setPageMeta(defaultMeta);
+    };
+  }, [setPageMeta, userId]);
 
   const pageTitle = contributorInfo.first_name
     ? contributorInfo.first_name + " " + contributorInfo.last_name

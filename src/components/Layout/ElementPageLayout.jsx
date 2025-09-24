@@ -173,7 +173,7 @@ export default function ElementPageLayout(props) {
         ...prev,
         title: thisElement.title,
         description: thisElement.contents,
-        imageUrl: thisElement["thumbnail-image"]?.medium,
+        imageUrl: thisElement["thumbnail-image"]?.high,
         url: window.location.href,
       }));
     }
