@@ -1,7 +1,7 @@
 # Redirect HTTP to HTTPS
 server {
   listen 80;
-  server_name dev.i-guide.io;
+  server_name ${SERVER_NAME};
   return 301 https://$host$request_uri;
 }
 
@@ -82,7 +82,7 @@ map $uri $prerender {
 # HTTPS server
 server {
   listen 443 ssl;
-	server_name dev.i-guide.io;
+	server_name ${SERVER_NAME};
 
 	ssl_certificate /etc/nginx/ssl/fullchain.pem;
 	ssl_certificate_key /etc/nginx/ssl/privkey.pem;
@@ -126,6 +126,6 @@ server {
     proxy_hide_header Cache-Control;
     add_header        Cache-Control "private,max-age=600,must-revalidate";
     resolver          127.0.0.11 valid=30s ipv6=off;
-    proxy_pass        http://prerender:8000/render?url=https://iguide-prerender.cis220065.projects.jetstream-cloud.org$request_uri;
+    proxy_pass        http://prerender:8000/render?url=${PRERENDER_URL}$request_uri;
   }
 }

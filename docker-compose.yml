@@ -11,6 +11,9 @@ services:
     depends_on:
       - auth
     restart: always
+    environment:
+      SERVER_NAME: ${VITE_SERVER_NAME}
+      PRERENDER_URL: ${VITE_REACT_FRONTEND_URL}
 
   auth:
     image: iguide-ue-auth-${VITE_ENV}
