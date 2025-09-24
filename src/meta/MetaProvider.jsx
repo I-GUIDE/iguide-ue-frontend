@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 
 import { MetaContext } from "./MetaContext";
+import { stringTruncator } from "../helpers/helper";
 
 const FRONTEND_URL = import.meta.env.VITE_REACT_FRONTEND_URL;
 
@@ -64,18 +65,30 @@ export function MetaProvider({ children }) {
         <title>{memorizedMeta.title}</title>
         <meta name="description" content={memorizedMeta.description} />
 
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={stringTruncator(memorizedMeta.title, 0, 55)}
+        />
+        <meta
+          name="twitter:description"
+          content={stringTruncator(memorizedMeta.description, 0, 100)}
+        />
+        <meta name="twitter:image" content={memorizedMeta.image} />
+
         {/* Open Graph */}
-        <meta property="og:title" content={memorizedMeta.title} />
-        <meta property="og:description" content={memorizedMeta.description} />
+        <meta
+          property="og:title"
+          content={stringTruncator(memorizedMeta.title, 0, 55)}
+        />
+        <meta
+          property="og:description"
+          content={stringTruncator(memorizedMeta.description, 0, 100)}
+        />
         <meta property="og:type" content={memorizedMeta.type} />
         <meta property="og:image" content={memorizedMeta.image} />
         <meta property="og:url" content={memorizedMeta.url} />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={memorizedMeta.title} />
-        <meta name="twitter:description" content={memorizedMeta.description} />
-        <meta name="twitter:image" content={memorizedMeta.image} />
 
         {/* canonical */}
         <link rel="canonical" href={memorizedMeta.url} />
