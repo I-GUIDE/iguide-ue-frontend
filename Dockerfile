@@ -8,9 +8,10 @@ RUN yarn build
 # Use Nginx as the production server
 FROM nginx:1.28.0-alpine-slim AS prod
 COPY --from=build /app/dist /usr/share/nginx/html
-# COPY ./nginx-config/nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy config template
 COPY ./nginx-config/nginx.conf.template /etc/nginx/templates/nginx.conf.template
+
 # Copy SSL certificates from the host
 # NOTE: Make sure the location has the latest .pem files
 COPY ./nginx-config/fullchain.pem /etc/nginx/ssl/fullchain.pem
