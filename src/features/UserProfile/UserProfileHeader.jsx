@@ -32,6 +32,7 @@ import {
 } from "../../configs/VarConfigs";
 import { PERMISSIONS } from "../../configs/Permissions";
 import { formatIsoStringToMMMYYYY } from "../../utils/PeriodAgoText";
+import ExpandableTextBlock from "../../components/ExpandableTextBlock";
 
 export default function UserProfileHeader(props) {
   const userInfo = props.userInfo;
@@ -282,54 +283,15 @@ export default function UserProfileHeader(props) {
                       md: "flex-start",
                     }}
                   >
-                    {userInfo.bio &&
-                      (userInfo["bio"].length > 100 ? (
-                        <Tooltip
-                          title={
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                maxWidth: 450,
-                                justifyContent: "center",
-                                p: 1,
-                              }}
-                            >
-                              <Typography level="title-sm">Bio</Typography>
-                              <Typography level="body-sm">
-                                {userInfo.bio}
-                              </Typography>
-                            </Box>
-                          }
-                          variant="outlined"
-                        >
-                          <Typography
-                            level="body-sm"
-                            sx={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              display: "-webkit-box",
-                              WebkitLineClamp: { xs: "3", md: "2" },
-                              WebkitBoxOrient: "vertical",
-                            }}
-                          >
-                            {userInfo.bio}
-                          </Typography>
-                        </Tooltip>
-                      ) : (
-                        <Typography
-                          level="body-sm"
-                          sx={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: "2",
-                            WebkitBoxOrient: "vertical",
-                          }}
-                        >
-                          {userInfo.bio}
-                        </Typography>
-                      ))}
+                    {userInfo.bio && (
+                      <ExpandableTextBlock
+                        text={userInfo.bio}
+                        numberOfLines={3}
+                        expandButtonText="View Full Bio"
+                        collapseButtonText="View Less"
+                        textLevel="body-sm"
+                      />
+                    )}
                     {userInfo.email && !hideEmail && (
                       <Link
                         href={"mailto:" + userInfo.email}
