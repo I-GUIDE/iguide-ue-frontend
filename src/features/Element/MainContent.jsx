@@ -311,7 +311,11 @@ export default function MainContent(props) {
               />
             </Box>
             <Link
-              href={thumbnailImage.high ? thumbnailImage.high : thumbnailImage}
+              href={
+                thumbnailImage.original
+                  ? thumbnailImage.original
+                  : thumbnailImage
+              }
               target="_blank"
               rel="noopener noreferrer"
             >
