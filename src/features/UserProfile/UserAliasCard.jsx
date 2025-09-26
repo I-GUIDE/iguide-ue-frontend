@@ -31,7 +31,7 @@ export default function UserAliasCard(props) {
 
   const affiliation = userAlias.affiliation;
   const email = userAlias.email;
-  const isPrimary = userAlias.isPrimary;
+  const isPrimary = userAlias["is-primary"];
 
   return (
     <Box position="relative" width="100%" height="100%">

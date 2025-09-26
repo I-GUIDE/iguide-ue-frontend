@@ -26,20 +26,20 @@ export const demoUser = {
   createdAt: "2024-07-04T00:00:00.000Z",
   aliases: [
     {
-      firstName: "Happy",
+      "first-name": "Happy",
       email: "happy.person@example.com",
-      lastName: "Person",
+      "last-name": "Person",
       openid: "http://cilogon.org/serverE/users/do-not-use",
       affiliation: "I-GUIDE",
-      isPrimary: true,
+      "is-primary": true,
     },
     {
-      firstName: "Joyful",
+      "first-name": "Joyful",
       email: "joyful.human@example.com",
-      lastName: "Human",
+      "last-name": "Human",
       openid: "http://cilogon.org/serverD/users/do-not-use2",
       affiliation: "National Science Foundation (NSF)",
-      isPrimary: false,
+      "is-primary": false,
     },
   ],
 };
