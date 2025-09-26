@@ -16,6 +16,7 @@ export default function UserAvatar(props) {
   const userFirstName = props.userFirstName;
   const userLastName = props.userLastName;
   const size = props.size;
+  const sizeWithoutAvatarUrl = props.sizeWithoutAvatarUrl || size;
   const avatarResolution = props.avatarResolution || "high";
   const isLoading = props.isLoading;
 
@@ -31,7 +32,6 @@ export default function UserAvatar(props) {
   if (!userAvatarUrls) {
     return (
       <Avatar
-        variant="outlined"
         alt={`${userFirstName} ${userLastName} profile`}
         src={
           typeof userAvatarUrls === "string"
@@ -39,9 +39,9 @@ export default function UserAvatar(props) {
             : userAvatarUrls?.[avatarResolution]
         }
         sx={{
-          width: size,
-          height: size,
-          fontSize: size * 0.4,
+          width: sizeWithoutAvatarUrl,
+          height: sizeWithoutAvatarUrl,
+          fontSize: sizeWithoutAvatarUrl * 0.4,
           color: fontColor,
           bgcolor: bgColor,
           fontWeight: "lg",
@@ -54,14 +54,13 @@ export default function UserAvatar(props) {
 
   return (
     <Avatar
-      variant="outlined"
       alt={`${userFirstName} ${userLastName} profile`}
       src={
         typeof userAvatarUrls === "string"
           ? userAvatarUrls
           : userAvatarUrls[avatarResolution]
       }
-      sx={{ width: size, height: size }}
+      sx={{ width: size, height: size, bgcolor: "#fff" }}
     >
       {initials}
     </Avatar>
