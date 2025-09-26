@@ -53,6 +53,7 @@ export default function ContributorProfile() {
         linkedInLink: user.linkedInLink,
         googleScholarLink: user.googleScholarLink,
         personalWebsiteLink: user.personalWebsiteLink,
+        createdAt: user["created-at"],
       });
       setContributorInfoLoading(false);
 

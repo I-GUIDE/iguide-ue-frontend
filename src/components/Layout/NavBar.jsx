@@ -173,7 +173,7 @@ export default function NavBar(props) {
               ref={firstFocusableRef}
               onClick={(e) => toggleDrawer(false)(e)}
             >
-              Update Profile
+              Edit Profile
             </ListItemButton>
           </ListItem>
           {canEditAllElements && (

@@ -38,11 +38,25 @@ export function PeriodAgoText(pretext, pastTimestamp) {
 export function formatIsoStringToYYYYMMDD(isoString) {
   const date = new Date(isoString);
 
+  if (!isValidDate(date)) {
+    return;
+  }
+
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const day = String(date.getUTCDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+}
+
+export function formatIsoStringToMMMYYYY(isoString) {
+  const date = new Date(isoString);
+
+  if (!isValidDate(date)) {
+    return;
+  }
+
+  return date.toLocaleDateString("en-US", { year: "numeric", month: "long" });
 }
 
 function isValidDate(date) {

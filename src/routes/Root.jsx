@@ -16,6 +16,7 @@ import ErrorPage from "./ErrorPage.jsx";
 import { fetchUser, userLogout, checkTokens } from "../utils/UserManager.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 import RouteChangeListener from "../utils/RouteChangeListener.jsx";
+import { demoUser as demoLocalUser } from "../helpers/demoUser.jsx";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
@@ -24,8 +25,6 @@ const SNACKBAR_MESSAGE = import.meta.env.VITE_SNACKBAR_MESSAGE;
 
 // Demo user setting
 const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
-const DEMO_USERID = import.meta.env.VITE_DEMO_USERID;
-const DEMO_USER_ROLE = parseInt(import.meta.env.VITE_DEMO_USER_ROLE);
 
 export default function Root(props) {
   const customOutlet = props.customOutlet;
@@ -54,28 +53,10 @@ export default function Root(props) {
   }, []);
 
   useEffect(() => {
-    const demoLocalUser = {
-      affiliation: "I-GUIDE",
-      avatar_url: "/images/Logo.png",
-      bio: "NSF I-GUIDE enhances STEM participation for underserved populations through innovative education and community partnerships.",
-      email: "user@example.com",
-      auth_first_name: "Happy",
-      auth_last_name: "Person",
-      first_name: "Personne",
-      last_name: "Heureuse",
-      openid: "http://cilogon.org/serverE/users/do-not-use",
-      id: DEMO_USERID,
-      role: DEMO_USER_ROLE,
-      gitHubLink: "https://github.com",
-      linkedInLink: "https://linkedin.com",
-      googleScholarLink: "https://scholar.google.com",
-      personalWebsiteLink: "https://i-guide.io",
-    };
-
     async function setupLocalUserInfo() {
       // If the demo user mode is on, set the demo user as user
       if (USE_DEMO_USER) {
-        TEST_MODE && console.log("Using demo user...");
+        TEST_MODE && console.log("Using demo user...", demoLocalUser);
         setLocalUserInfo(demoLocalUser);
         return;
       }
@@ -132,6 +113,8 @@ export default function Root(props) {
         linkedInLink: returnedLocalUser.linkedInLink,
         googleScholarLink: returnedLocalUser.googleScholarLink,
         personalWebsiteLink: returnedLocalUser.personalWebsiteLink,
+        createdAt: returnedLocalUser["created-at"],
+        aliases: returnedLocalUser.aliases,
       };
 
       TEST_MODE && console.log("localUserInfo to be set", localUserInfoObject);

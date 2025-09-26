@@ -89,6 +89,7 @@ export const UNTRUSTED_AFFILIATIONS = [
   "github",
   "microsoft",
   "orcid",
+  "access",
 ];
 
 export const ELEM_VISIBILITY = Object.freeze({
@@ -102,7 +103,7 @@ export const USER_UPLOAD_DATASET_SIZE_LIMIT = 2 * 1024 * 1024 * 1024;
 export const NAVBAR_HEIGHT = 70;
 export const HEADER_HEIGHT = 210 + NAVBAR_HEIGHT;
 export const FOOTER_HEIGHT = 150;
-export const USER_PROFILE_HEADER_HEIGHT = 365 + NAVBAR_HEIGHT;
+export const USER_PROFILE_HEADER_HEIGHT = 335 + NAVBAR_HEIGHT;
 export const SEARCH_RESULTS_HEADER_HEIGHT = 150 + NAVBAR_HEIGHT;
 export const HOME_SEARCH_SEC_HEIGHT = 300 + NAVBAR_HEIGHT;
 

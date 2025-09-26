@@ -2,9 +2,11 @@ import { useState, useRef, useEffect } from "react";
 
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
 
 export default function ExpandableTextBlock(props) {
   const text = props.text;
+  const textLevel = props.textLevel || "title-sm";
   const numberOfLines = props.numberOfLines || 2;
   const expandButtonText = props.expandButtonText || "Expand";
   const collapseButtonText = props.collapseButtonText || "Collapse";
@@ -29,6 +31,7 @@ export default function ExpandableTextBlock(props) {
     <Box>
       <Typography
         ref={textRef}
+        level={textLevel}
         sx={{
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",
@@ -41,26 +44,15 @@ export default function ExpandableTextBlock(props) {
         {text}
       </Typography>
       {showExpand && (
-        <Typography
-          level="title-sm"
+        <Button
           color="primary"
+          size="xs"
+          variant="plain"
           onClick={() => setExpanded(!expanded)}
-          sx={{
-            display: "inline",
-            cursor: "pointer",
-            userSelect: "none",
-            "&:hover": {
-              textDecoration: "underline",
-            },
-          }}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ")
-              () => setExpanded(!expanded);
-          }}
+          sx={{ p: 0 }}
         >
           {expanded ? collapseButtonText : expandButtonText}
-        </Typography>
+        </Button>
       )}
     </Box>
   );
