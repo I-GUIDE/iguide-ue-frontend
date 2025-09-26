@@ -3460,10 +3460,10 @@ react@^19.1.1:
   resolved "https://registry.yarnpkg.com/react/-/react-19.1.1.tgz#06d9149ec5e083a67f9a1e39ce97b06a03b644af"
   integrity sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==
 
-reagraph@^4.30.4:
-  version "4.30.4"
-  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.30.4.tgz#1fa3765b213da5d11dcfb4a93e3c9f2469d8dc99"
-  integrity sha512-Dz574+Pfcjt3RAD9VQK4nh4f4PxsXpFi3WN6Q+msGquxYYwSHdAAS18/MalUJG7diPmq2pvdBmt8p77dfIGD4A==
+reagraph@^4.30.5:
+  version "4.30.5"
+  resolved "https://registry.yarnpkg.com/reagraph/-/reagraph-4.30.5.tgz#a2535fa974c4ad74a4fde3b8d1ac2f98efcc75b3"
+  integrity sha512-Qem77aGELiMZN4oHff3bNMkvJgCj0MIdfyb1zGhJcK89HLU5vkrcI4t5sNL+4N7r8T+5E966D/w5DumEigl+6A==
   dependencies:
     "@react-spring/three" "10.0.1"
     "@react-three/drei" "^10.6.1"
