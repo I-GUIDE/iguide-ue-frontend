@@ -56,7 +56,7 @@ export default function Root(props) {
     async function setupLocalUserInfo() {
       // If the demo user mode is on, set the demo user as user
       if (USE_DEMO_USER) {
-        TEST_MODE && console.log("Using demo user...");
+        TEST_MODE && console.log("Using demo user...", demoLocalUser);
         setLocalUserInfo(demoLocalUser);
         return;
       }

@@ -13,7 +13,7 @@ const materialTheme = materialExtendTheme();
 
 import Box from "@mui/joy/Box";
 import Container from "@mui/joy/Container";
-import Grid from "@mui/joy/Grid";
+import Grid from "@mui/material/Grid2";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
@@ -29,6 +29,7 @@ import UserProfileHeader from "../features/UserProfile/UserProfileHeader";
 import UserProfileEditCard from "../features/UserProfile/UserProfileEditCard";
 import usePageTitle from "../hooks/usePageTitle";
 import ElementGrid from "../components/Layout/ElementGrid";
+import UserAliases from "../features/UserProfile/UserAliases";
 
 import {
   DEFAULT_BODY_HEIGHT,
@@ -173,17 +174,26 @@ export default function UserProfile() {
         <Container maxWidth="lg">
           <Box
             component="main"
+            gap={1}
             sx={{
               minHeight: USER_PROFILE_BODY_HEIGHT,
               display: "grid",
               gridTemplateColumns: { xs: "auto", md: "100%" },
               gridTemplateRows: "auto 1fr auto",
+              py: 4,
             }}
           >
+            {localUserInfo && (
+              <UserAliases
+                userInfo={localUserInfo}
+                loading={localUserInfoLoading}
+              />
+            )}
             <Grid
               container
               display="flex"
               direction="column"
+              gap={1}
               sx={{
                 minHeight: USER_PROFILE_BODY_HEIGHT,
                 backgroundColor: "inherit",
@@ -191,8 +201,8 @@ export default function UserProfile() {
                 py: 4,
               }}
             >
-              <Typography level="title-lg" sx={{ textAlign: "center", mb: 1 }}>
-                Element Options
+              <Typography level="title-md" sx={{ textAlign: "center" }}>
+                Your Contributions and Bookmarks
               </Typography>
               <Tabs
                 aria-label="Search-filter-by-types"

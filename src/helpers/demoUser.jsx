@@ -36,7 +36,7 @@ export const demoUser = {
       email: "joyful.human@example.com",
       lastName: "Human",
       openid: "http://cilogon.org/serverD/users/do-not-use2",
-      affiliation: "NSF",
+      affiliation: "National Science Foundation (NSF)",
       isPrimary: false,
     },
   ],
