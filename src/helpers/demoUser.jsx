@@ -8,7 +8,9 @@ export const demoUser = {
     low: "/images/Logo.png",
     high: "/images/Logo.png",
   },
-  bio: "NSF I-GUIDE enhances STEM participation for underserved populations through innovative education and community partnerships.",
+  bio: `The I-GUIDE Platform provides an open science and collaborative environment 
+    for geospatial data-intensive convergence research and education focused on sustainability 
+    and resilience challenges and enabled by advanced cyberGIS and cyberinfrastructure.`,
   email: "happy.person@example.com",
   auth_first_name: "Happy",
   auth_last_name: "Person",

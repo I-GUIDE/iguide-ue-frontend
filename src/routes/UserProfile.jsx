@@ -42,7 +42,7 @@ const USE_DEMO_USER = import.meta.env.VITE_USE_DEMO_USER === "true";
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 
 export default function UserProfile() {
-  usePageTitle("User Profile");
+  usePageTitle("My Profile");
 
   // OutletContext retrieving the user object to display user info
   const { isAuthenticated, localUserInfo } = useOutletContext();
@@ -184,10 +184,12 @@ export default function UserProfile() {
             }}
           >
             {localUserInfo && (
-              <UserAliases
-                userInfo={localUserInfo}
-                loading={localUserInfoLoading}
-              />
+              <Box sx={{ px: { xs: 1, md: 2, lg: 4 }, py: 1 }}>
+                <UserAliases
+                  userInfo={localUserInfo}
+                  loading={localUserInfoLoading}
+                />
+              </Box>
             )}
             <Grid
               container
@@ -195,7 +197,6 @@ export default function UserProfile() {
               direction="column"
               gap={1}
               sx={{
-                minHeight: USER_PROFILE_BODY_HEIGHT,
                 backgroundColor: "inherit",
                 px: { xs: 1, md: 2, lg: 4 },
                 py: 4,

@@ -145,7 +145,7 @@ export default forwardRef(function UserProfileButton(props, ref) {
             onClick={() => setAnchorEl(null)}
             onKeyDown={(e) => handleMenuKeyDown(e, 1)}
           >
-            Update Profile
+            Edit Profile
           </MenuItem>
           {canEditAllElements && (
             <>

@@ -7,15 +7,8 @@ import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Button from "@mui/joy/Button";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import Dropdown from "@mui/joy/Dropdown";
-import MenuItem from "@mui/joy/MenuItem";
 import Link from "@mui/joy/Link";
 import Tooltip from "@mui/joy/Tooltip";
-
-import EditIcon from "@mui/icons-material/Edit";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 
 import { grey } from "@mui/material/colors";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -180,18 +173,31 @@ export default function UserProfileHeader(props) {
             >
               <Grid xs={12} md={3}>
                 <Stack
+                  spacing={2}
                   sx={{ m: 2, justifyContent: "center", alignItems: "center" }}
                 >
                   <UserAvatar
                     userAvatarUrls={userInfo["avatar_url"]}
                     userId={userInfo.id}
-                    size={200}
+                    // For user profile page, make the avatar smaller for the edit button
+                    size={managementView ? 170 : 200}
                     avatarResolution="high"
                     isLoading={!userInfo}
                   />
+                  {managementView && (
+                    <Button
+                      component="a"
+                      href="/user-profile-update"
+                      variant="outlined"
+                      size="sm"
+                      color="neutral"
+                    >
+                      Edit Profile
+                    </Button>
+                  )}
                 </Stack>
               </Grid>
-              <Grid xs={12} md={6}>
+              <Grid xs={12} md={7}>
                 <Stack
                   direction="column"
                   sx={{ m: { md: 3 } }}
@@ -276,8 +282,7 @@ export default function UserProfileHeader(props) {
 
                   <Stack
                     direction="column"
-                    sx={{ m: { md: 3 } }}
-                    spacing={0.5}
+                    spacing={1}
                     alignItems={{
                       xs: "center",
                       md: "flex-start",
@@ -286,7 +291,7 @@ export default function UserProfileHeader(props) {
                     {userInfo.bio && (
                       <ExpandableTextBlock
                         text={userInfo.bio}
-                        numberOfLines={3}
+                        numberOfLines={2}
                         expandButtonText="View Full Bio"
                         collapseButtonText="View Less"
                         textLevel="body-sm"
@@ -375,72 +380,9 @@ export default function UserProfileHeader(props) {
                       </Tooltip>
                     )}
                   </Stack>
-
-                  {managementView && (
-                    <Stack
-                      direction={{ xs: "column", sm: "row" }}
-                      spacing={2}
-                      justifyContent={{ xs: "center", sm: "flex-start" }}
-                      sx={{ py: 2 }}
-                    >
-                      <Button
-                        component="a"
-                        href="/user-profile-update"
-                        variant="outlined"
-                        size="sm"
-                        color="success"
-                        endDecorator={<EditIcon />}
-                      >
-                        Edit
-                      </Button>
-                      {canContributeElements && (
-                        <Dropdown>
-                          <MenuButton
-                            variant="outlined"
-                            size="sm"
-                            color="warning"
-                            endDecorator={<LibraryAddIcon />}
-                          >
-                            New Element
-                          </MenuButton>
-                          <Menu placement="bottom-end" color="primary">
-                            <MenuItem
-                              component="a"
-                              href="/contribution/dataset"
-                            >
-                              New Dataset
-                            </MenuItem>
-                            <MenuItem
-                              component="a"
-                              href="/contribution/notebook"
-                            >
-                              New Notebook
-                            </MenuItem>
-                            <MenuItem
-                              component="a"
-                              href="/contribution/publication"
-                            >
-                              New Publication
-                            </MenuItem>
-                            {canEditOER && (
-                              <MenuItem component="a" href="/contribution/oer">
-                                New Educational Resource
-                              </MenuItem>
-                            )}
-                            <MenuItem component="a" href="/contribution/map">
-                              New Map
-                            </MenuItem>
-                            <MenuItem component="a" href="/contribution/code">
-                              New Code
-                            </MenuItem>
-                          </Menu>
-                        </Dropdown>
-                      )}
-                    </Stack>
-                  )}
                 </Stack>
               </Grid>
-              <Grid xs={12} md={3}>
+              <Grid xs={12} md={2}>
                 {contributionCount > 0 && (
                   <Stack
                     direction="column"
