@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
 
 export default function ExpandableTextBlock(props) {
   const text = props.text;
@@ -43,27 +44,15 @@ export default function ExpandableTextBlock(props) {
         {text}
       </Typography>
       {showExpand && (
-        <Typography
-          level={textLevel}
+        <Button
           color="primary"
-          fontWeight="lg"
+          size="xs"
+          variant="plain"
           onClick={() => setExpanded(!expanded)}
-          sx={{
-            display: "inline",
-            cursor: "pointer",
-            userSelect: "none",
-            "&:hover": {
-              textDecoration: "underline",
-            },
-          }}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ")
-              () => setExpanded(!expanded);
-          }}
+          sx={{ p: 0 }}
         >
           {expanded ? collapseButtonText : expandButtonText}
-        </Typography>
+        </Button>
       )}
     </Box>
   );

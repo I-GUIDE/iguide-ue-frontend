@@ -23,9 +23,8 @@ import {
   UNTRUSTED_AFFILIATIONS,
   NAVBAR_HEIGHT,
 } from "../../configs/VarConfigs";
-import { PERMISSIONS } from "../../configs/Permissions";
 import { formatIsoStringToMMMYYYY } from "../../utils/PeriodAgoText";
-import ExpandableTextBlock from "../../components/ExpandableTextBlock";
+import TextBlockModal from "../../components/TextBlockModal";
 
 export default function UserProfileHeader(props) {
   const userInfo = props.userInfo;
@@ -133,9 +132,6 @@ export default function UserProfileHeader(props) {
       </Box>
     );
   }
-
-  const canEditOER = userInfo.role <= PERMISSIONS["edit_oer"];
-  const canContributeElements = userInfo.role <= PERMISSIONS["contribute"];
 
   return (
     <Box
@@ -289,11 +285,11 @@ export default function UserProfileHeader(props) {
                     }}
                   >
                     {userInfo.bio && (
-                      <ExpandableTextBlock
+                      <TextBlockModal
                         text={userInfo.bio}
+                        modalTitle={`About ${userInfo.first_name} ${userInfo.last_name}`}
                         numberOfLines={2}
-                        expandButtonText="View Full Bio"
-                        collapseButtonText="View Less"
+                        modalButtonText="View Full Bio"
                         textLevel="body-sm"
                       />
                     )}
