@@ -36,6 +36,7 @@ import { dataURLtoFile } from "../../helpers/helper";
 import { useAlertModal } from "../../utils/AlertModalProvider";
 import { fetchWithAuth } from "../../utils/FetcherWithJWT";
 import { userRoleName } from "./UserRoleChip";
+import UserAvatar from "../../components/UserAvatar";
 
 const USER_BACKEND_URL = import.meta.env.VITE_DATABASE_BACKEND_URL;
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
@@ -69,6 +70,7 @@ export default function UserProfileEditCard(props) {
   const [userProfileSubmissionStatus, setUserProfileSubmissionStatus] =
     useState("no-submission");
 
+  const [userId, setUserId] = useState("");
   const [firstNameFromDB, setFirstNameFromDB] = useState("");
   const [lastNameFromDB, setLastNameFromDB] = useState("");
   const [emailFromDB, setEmailFromDB] = useState("");
@@ -102,6 +104,7 @@ export default function UserProfileEditCard(props) {
 
   useEffect(() => {
     async function getLocalUserInfo() {
+      setUserId(localUserInfo.id);
       setFirstNameFromDB(localUserInfo["first_name"]);
       setLastNameFromDB(localUserInfo["last_name"]);
       setEmailFromDB(localUserInfo["email"]);
@@ -421,7 +424,7 @@ export default function UserProfileEditCard(props) {
                 </DialogActions>
               </ModalDialog>
             </Modal>
-            {confirmedProfilePictureURL && (
+            {confirmedProfilePictureURL ? (
               <Stack sx={{ width: "50%" }}>
                 <Typography>Profile picture preview</Typography>
                 <AspectRatio
@@ -442,6 +445,16 @@ export default function UserProfileEditCard(props) {
                     }
                   />
                 </AspectRatio>
+              </Stack>
+            ) : (
+              <Stack sx={{ width: "50%" }}>
+                <Typography>Your default profile picture</Typography>
+                <UserAvatar
+                  userId={userId}
+                  userFirstName={firstNameFromDB}
+                  userLastName={lastNameFromDB}
+                  size={100}
+                />
               </Stack>
             )}
           </FormControl>
