@@ -11,6 +11,7 @@ const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 export default function UserProfileTooltip(props) {
   const children = props.children;
   const userId = props.userId;
+  const userInfo = props.userInfo;
   const enterDelay = props.enterDelay || 1000;
   const leaveDelay = props.leaveDelay || 300;
 
@@ -24,7 +25,8 @@ export default function UserProfileTooltip(props) {
   const isMobile = useRef(isTouchDevice());
 
   async function getUserInformation(uid) {
-    const user = await fetchUser(uid);
+    // If userInfo is passed, no need to fetch user
+    const user = userInfo || (await fetchUser(uid));
     const numberOfContributions = await getNumberOfContributions(uid);
     TEST_MODE &&
       console.log("User returned", user, "elements", numberOfContributions);

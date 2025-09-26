@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { Link as RouterLink } from "react-router";
 
 import Typography from "@mui/joy/Typography";
@@ -8,6 +10,7 @@ import CardContent from "@mui/joy/CardContent";
 
 import UserAvatar from "../../components/UserAvatar";
 import UserProfileTooltip from "../../components/UserProfileTooltip";
+import { fetchUser } from "../../utils/UserManager";
 
 export default function ContributorCard(props) {
   const encodedUserId = props.encodedUserId;
@@ -15,6 +18,17 @@ export default function ContributorCard(props) {
   const userId = props.userId;
   const name = props.name;
   const isLoading = props.isLoading;
+
+  const [contributorInfo, setContributorInfo] = useState();
+
+  useEffect(() => {
+    async function getContributorInfo(uid) {
+      const user = await fetchUser(uid);
+
+      setContributorInfo(user);
+    }
+    getContributorInfo(userId);
+  }, [userId]);
 
   return (
     <Link
@@ -38,7 +52,7 @@ export default function ContributorCard(props) {
         }}
       >
         <CardContent>
-          <UserProfileTooltip userId={userId}>
+          <UserProfileTooltip userId={userId} userInfo={contributorInfo}>
             <Stack
               direction="row"
               alignItems="center"
@@ -48,6 +62,8 @@ export default function ContributorCard(props) {
               <UserAvatar
                 userAvatarUrls={avatar}
                 userId={userId}
+                userFirstName={contributorInfo?.["display-first-name"]}
+                userLastName={contributorInfo?.["display-last-name"]}
                 avatarResolution="low"
                 isLoading={isLoading}
               />
