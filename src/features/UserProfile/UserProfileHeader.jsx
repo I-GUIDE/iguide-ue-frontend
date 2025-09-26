@@ -178,7 +178,8 @@ export default function UserProfileHeader(props) {
                     userFirstName={userInfo.first_name}
                     userLastName={userInfo.last_name}
                     // For user profile page, make the avatar smaller for the edit button
-                    size={160}
+                    size={180}
+                    sizeWithoutAvatarUrl={150}
                     avatarResolution="high"
                     isLoading={!userInfo}
                   />

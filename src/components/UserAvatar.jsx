@@ -44,7 +44,8 @@ export default function UserAvatar(props) {
           fontSize: sizeWithoutAvatarUrl * 0.4,
           color: fontColor,
           bgcolor: bgColor,
-          fontWeight: "lg",
+          fontWeight: 600,
+          fontFamily: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif`,
         }}
       >
         {initials}
