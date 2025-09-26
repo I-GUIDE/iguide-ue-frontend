@@ -53,6 +53,8 @@ export default function UserPreviewCard(props) {
             size={50}
             userAvatarUrls={avatar}
             userId={userId}
+            userFirstName={user.first_name}
+            userLastName={user.last_name}
             avatarResolution="low"
           />
         </Link>

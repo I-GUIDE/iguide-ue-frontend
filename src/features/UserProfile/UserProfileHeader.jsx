@@ -175,6 +175,8 @@ export default function UserProfileHeader(props) {
                   <UserAvatar
                     userAvatarUrls={userInfo["avatar_url"]}
                     userId={userInfo.id}
+                    userFirstName={userInfo.first_name}
+                    userLastName={userInfo.last_name}
                     // For user profile page, make the avatar smaller for the edit button
                     size={managementView ? 170 : 200}
                     avatarResolution="high"

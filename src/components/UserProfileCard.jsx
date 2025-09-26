@@ -137,6 +137,8 @@ export default function UserProfileCard(props) {
             <UserAvatar
               userAvatarUrls={userAvatar}
               userId={userId}
+              userFirstName={userFirstName}
+              userLastName={userLastName}
               size="75px"
               sx={{ ml: "auto" }}
             />

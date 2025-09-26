@@ -102,6 +102,8 @@ export default forwardRef(function UserProfileButton(props, ref) {
           <UserAvatar
             userAvatarUrls={localUserInfo["avatar_url"]}
             userId={localUserInfo.id}
+            userFirstName={localUserInfo.first_name}
+            userLastName={localUserInfo.last_name}
             avatarResolution="low"
             isLoading={Object.keys(localUserInfo).length === 0}
           />
