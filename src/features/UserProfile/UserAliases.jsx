@@ -8,6 +8,7 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Sheet from "@mui/joy/Sheet";
 import Chip from "@mui/joy/Chip";
+import Link from "@mui/joy/Link";
 
 import UserAliasCard from "./UserAliasCard";
 
@@ -79,9 +80,18 @@ export default function UserAliases(props) {
               What is a linked CILogon identity?
             </Typography>
             <Typography level="body-md">
-              CILogon allows you to sign in using trusted identity providers
-              like your university, ORCID, or Google. This section lists all
-              identities linked to your I-GUIDE Platform account.
+              <Link
+                component="a"
+                href="https://www.cilogon.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                fontWeight="lg"
+              >
+                CILogon
+              </Link>{" "}
+              allows you to sign in using trusted identity providers like your
+              university, ORCID, or Google. This section lists all identities
+              linked to your I-GUIDE Platform account.
             </Typography>
             <Typography level="body-md">
               The name of your{" "}
