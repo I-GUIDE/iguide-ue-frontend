@@ -4,10 +4,6 @@ import { Outlet, useLocation } from "react-router";
 import { useCookies } from "react-cookie";
 
 import { StyledEngineProvider } from "@mui/material/styles";
-import Snackbar from "@mui/joy/Snackbar";
-import Button from "@mui/joy/Button";
-import Stack from "@mui/joy/Stack";
-import Typography from "@mui/joy/Typography";
 
 import NavBar from "../components/Layout/NavBar.jsx";
 import Footer from "../components/Layout/Footer.jsx";
@@ -17,6 +13,7 @@ import { fetchUser, userLogout, checkTokens } from "../utils/UserManager.jsx";
 import { ScrollToTop, ClickToTop } from "../helpers/Scroll.jsx";
 import RouteChangeListener from "../utils/RouteChangeListener.jsx";
 import { demoUser as demoLocalUser } from "../helpers/demoUser.jsx";
+import NotificationSnackbar from "../components/NotificationSnackbar.jsx";
 
 const TEST_MODE = import.meta.env.VITE_TEST_MODE;
 const DEEP_TEST_MODE = import.meta.env.VITE_DEEP_TEST_MODE;
@@ -30,7 +27,6 @@ export default function Root(props) {
   const customOutlet = props.customOutlet;
   const [cookies] = useCookies();
   const jwtTokensExistName = "iguide-jwt-tokens-exist-" + COOKIE_SUFFIX;
-  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   // Define the routes where Footer should be hidden
   const location = useLocation();
@@ -163,37 +159,7 @@ export default function Root(props) {
       {shouldShowFooter && <Footer />}
       {/* For displaying notifications or alerts. */}
       {SNACKBAR_MESSAGE && (
-        <Snackbar
-          open={openSnackbar}
-          variant="soft"
-          color="danger"
-          size="md"
-          onClose={(event, reason) => {
-            if (reason === "clickaway") {
-              return;
-            }
-            setOpenSnackbar(false);
-          }}
-        >
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <Typography level="title-sm">{SNACKBAR_MESSAGE}</Typography>
-            <Button
-              variant="plain"
-              color="danger"
-              onClick={() => setOpenSnackbar(false)}
-            >
-              Close
-            </Button>
-          </Stack>
-        </Snackbar>
+        <NotificationSnackbar snackbarMessage={SNACKBAR_MESSAGE} />
       )}
     </StyledEngineProvider>
   );
